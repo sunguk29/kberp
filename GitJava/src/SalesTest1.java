@@ -15,6 +15,7 @@ public class SalesTest1 {
 		System.out.println("김민재");
 		System.out.println("김민재22");
 		System.out.println("김민재33");
+		System.out.println("김민재44");
 		
 		System.out.println("testtesttesttesttesttesttesttesttest");
 		System.out.println("lasttest2");
