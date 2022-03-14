@@ -16,6 +16,7 @@ public class SalesTest1 {
 		
 		System.out.println("testtesttesttesttesttesttesttesttest");
 		System.out.println("lasttest2");
+		System.out.println("lastlasttest");
 		
 	}
 
