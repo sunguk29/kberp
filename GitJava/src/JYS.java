@@ -1,6 +1,6 @@
 
 public class JYS {
 	public static void main(String[] args) {
-		System.out.println("123123123しししし");
+		System.out.println("12312けいし");
 	}
 }
