@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+
+public class Test2 {
+
+	public static void main(String[] args) {
+		System.out.println("Hello!java!");
+	}
+
+}
+=======
 
 public class Test2 {
 	public static void main(String[] args) {
@@ -7,3 +17,4 @@ public class Test2 {
 	}
 
 }
+>>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
