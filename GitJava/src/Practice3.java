@@ -12,6 +12,8 @@ public class Practice3 {
 		System.out.println("abcdefg");
 		System.out.println("abcdefgh");
 		
+		System.out.println("abcdefgh¤²¤²");
+		
 	}
 
 }
