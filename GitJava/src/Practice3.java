@@ -9,6 +9,8 @@ public class Practice3 {
 		
 		System.out.println("¤¾¤¾");
 		
+		System.out.println("abcdefg");
+		
 	}
 
 }
