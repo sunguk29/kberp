@@ -7,6 +7,14 @@ public class Practice3 {
 		System.out.println("ばば");
 		System.out.println("ばば");
 		
+		System.out.println("ぞぞ");
+		
+		System.out.println("abcdefg");
+		System.out.println("abcdefgh");
+		
+		System.out.println("abcdefghげげ");
+		System.out.println("abcdefghげげ");
+		
 	}
 
 }
