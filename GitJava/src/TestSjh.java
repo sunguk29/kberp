@@ -5,7 +5,7 @@ public class TestSjh {
 		// TODO Auto-generated method stub
 		System.out.println("재현연습");
 		System.out.println("재현연습");
-
+		System.out.println("된건가");
 	}
 
 }
