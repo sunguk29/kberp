@@ -15,7 +15,7 @@ public class SalesTest1 {
 
 		
 		System.out.println("testtesttesttesttesttesttesttesttesttest");
-		System.out.println("lasttest");
+		System.out.println("lasttest2");
 		
 	}
 
