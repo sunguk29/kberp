@@ -13,6 +13,7 @@ public class Practice3 {
 		System.out.println("abcdefgh");
 		
 		System.out.println("abcdefghげげ");
+		System.out.println("abcdefghげげ");
 		
 	}
 
