@@ -25,6 +25,7 @@ public class SalesTest1 {
 		System.out.println("teststst");
 		
 		System.out.println("틈새 테스트");
+		System.out.println("틈새 테스트2");
 		
 	}
 
