@@ -7,6 +7,8 @@ public class Practice3 {
 		System.out.println("ばば");
 		System.out.println("ばば");
 		
+		System.out.println("ぞぞ");
+		
 	}
 
 }
