@@ -2,7 +2,7 @@
 public class TestKmh {
 
 	public static void main(String[] args) {
-		System.out.println("Test중입니다");
+		System.out.println("Test중입니다11");
 
 	}
 
