@@ -17,6 +17,7 @@ public class SalesTest1 {
 		System.out.println("testtesttesttesttesttesttesttesttest");
 		System.out.println("lasttest2");
 		System.out.println("lasttest");
+		System.out.println("내가 작업중이던 파일 뭔가 많이 씀");
 		
 	}
 
