@@ -5,6 +5,7 @@ public class Practice3 {
 		System.out.println("연습3번째");
 		
 		System.out.println("ㅠㅠ");
+		System.out.println("ㅠㅠ");
 		
 	}
 
