@@ -9,7 +9,7 @@ public class SalesTest1 {
 		System.out.println("또 추가해보기");
 		
 		System.out.println("영업 화팅~!");
-		System.out.println("merge test");
+		System.out.println("merge test2");
 	}
 
 }
