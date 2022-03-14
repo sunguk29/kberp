@@ -22,6 +22,8 @@ public class SalesTest1 {
 		System.out.println("내가 작업중이던 파일 뭔가 많이 씀");
 		System.out.println("teststst");
 		
+		System.out.println("틈새 테스트");
+		
 	}
 
 }
