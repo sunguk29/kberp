@@ -8,6 +8,11 @@ public class SalesTest1 {
 		System.out.println("넵!!!!!!!!!!!!!!!!!!!");
 		System.out.println("또 추가해보기");
 		System.out.println("테스트 테스트");
+
+		
+		System.out.println("영업 화팅~!");
+		System.out.println("test2222");
+
 	}
 
 }
