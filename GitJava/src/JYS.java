@@ -1,6 +1,8 @@
 
 public class JYS {
 	public static void main(String[] args) {
-		System.out.println("12312¤±¤¤¤·");
+		System.out.println("12312ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
+		System.out.println("êµ¿ ã…‹ã…‹");
+		System.out.println("êµ¿ ã…‹ã…‹");
 	}
 }
