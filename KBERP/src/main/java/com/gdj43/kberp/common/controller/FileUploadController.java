@@ -158,7 +158,7 @@ public class FileUploadController {
 	}
 	
 	@RequestMapping(value = "/imageUpload", method = RequestMethod.POST)
-	public void editorImageUpload(HttpServletRequest request, HttpServletResponse response,
+	public void editorImageUploadAjax(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam MultipartFile upload, ModelAndView modelAndView) throws Throwable {
 		PrintWriter printWriter = null;
 		try {

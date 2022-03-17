@@ -47,5 +47,4 @@
 	
 	<!-- AOP -->
 	<aop:aspectj-autoproxy />
-	<beans:bean id="commonAop" class="com.gdj43.kberp.common.controller.CommonAOP" /> 
 </beans:beans>

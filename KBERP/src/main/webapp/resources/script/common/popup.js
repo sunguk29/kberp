@@ -39,7 +39,6 @@ function makeAlert(title, contents, event) {
 		
 		$("#popup" + depth).fadeIn("fast");
 		
-
 		$("#popup" + depth + "Btn1").off("click");
 		$("#popup" + depth + "Btn1").on("click", function(){
 			if(event != null) {

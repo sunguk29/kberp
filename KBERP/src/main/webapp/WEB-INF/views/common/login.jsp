@@ -112,6 +112,7 @@ $(document).ready(function() {
 	$("#loginForm").on("keypress", "input", function(event) {
 		if(event.keyCode == 13) {
 			$(".cmn_btn").click();
+			$(this).blur();
 			return false;
 		}
 	});
