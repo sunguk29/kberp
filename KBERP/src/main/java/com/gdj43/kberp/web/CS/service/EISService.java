@@ -3,10 +3,10 @@ package com.gdj43.kberp.web.CS.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gdj43.kberp.web.CS.dao.IFaqDao;
+import com.gdj43.kberp.web.CS.dao.IEISDao;
 
 @Service
-public class FaqService implements IFaqService {
+public class EISService implements IEISService {
 	@Autowired
-	public IFaqDao iFaqDao;
+	public IEISDao ieisd;
 }

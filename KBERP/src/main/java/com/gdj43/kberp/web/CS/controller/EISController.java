@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.gdj43.kberp.common.service.IPagingService;
-import com.gdj43.kberp.web.CS.service.ICmbnService;
+import com.gdj43.kberp.web.CS.service.IEISService;
 
 @Controller
-public class CmbnController {
+public class EISController {
 	@Autowired
-	public ICmbnService ics;
+	public IEISService ieiss;
 	
 	@Autowired
 	public IPagingService ips;
