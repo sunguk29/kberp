@@ -1,7 +1,12 @@
 package com.gdj43.kberp.web.sales.controller;
 
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.gdj43.kberp.web.common.service.ICommonService;
 import com.gdj43.kberp.web.sales.service.ISchdlService;
@@ -13,4 +18,12 @@ public class SchdlController {
 	
 	@Autowired
 	public ISchdlService iscService;
+	
+	@RequestMapping(value = "/schdl")
+	public ModelAndView schdl(@RequestParam HashMap<String, String> params, ModelAndView mav) {
+		
+		mav.setViewName("sales/schdl");
+		
+		return mav;
+	}
 }
