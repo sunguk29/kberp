@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class InqryDao implements IInqryDao {
+public class FaqDao implements IFaqDao {
 	@Autowired
 	public SqlSession sqlSession;
 }

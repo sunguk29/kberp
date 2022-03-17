@@ -1,5 +1,10 @@
 package com.gdj43.kberp.web.CS.service;
 
-public class InqryService {
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.gdj43.kberp.web.CS.dao.IInqryDao;
+
+public class InqryService implements IInqryService {
+	@Autowired
+	public IInqryDao iInqryDao;
 }
