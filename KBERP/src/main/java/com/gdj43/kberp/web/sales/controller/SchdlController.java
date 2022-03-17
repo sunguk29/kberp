@@ -22,7 +22,7 @@ public class SchdlController {
 	@RequestMapping(value = "/salesSchdl")
 	public ModelAndView schdl(@RequestParam HashMap<String, String> params, ModelAndView mav) {
 		
-		mav.setViewName("sales/saleSchdl");
+		mav.setViewName("sales/salesSchdl");
 		
 		return mav;
 	}
