@@ -8,5 +8,5 @@ import com.gdj43.kberp.web.CS.service.ICallCntrService;
 @Controller
 public class CallCntrController {
 	@Autowired
-	public ICallCntrService iCCS;
+	public ICallCntrService iccs;
 }
