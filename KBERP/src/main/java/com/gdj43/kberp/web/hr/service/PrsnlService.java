@@ -8,5 +8,5 @@ import com.gdj43.kberp.web.hr.dao.IPrsnlDao;
 @Service
 public class PrsnlService implements IPrsnlService {
 	@Autowired
-	public IPrsnlDao ipd;
+	public IPrsnlDao iPrsnlDao;
 }
