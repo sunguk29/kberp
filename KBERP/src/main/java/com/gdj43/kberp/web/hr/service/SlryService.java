@@ -3,10 +3,10 @@ package com.gdj43.kberp.web.hr.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gdj43.kberp.web.hr.dao.IHRDao;
+import com.gdj43.kberp.web.hr.dao.ISlryDao;
 
 @Service
-public class HRService implements IHRService {
+public class SlryService implements ISlryService {
 	@Autowired
-	public IHRDao ihd;
+	public ISlryDao iSlryDao;
 }

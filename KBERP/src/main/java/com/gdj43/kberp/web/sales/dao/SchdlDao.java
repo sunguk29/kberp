@@ -1,11 +1,11 @@
-package com.gdj43.kberp.web.CS.dao;
+package com.gdj43.kberp.web.sales.dao;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CmbnDao implements ICmbnDao{
-	@Autowired 
-	public SqlSession sqlsession;
+public class SchdlDao implements ISchdlDao {
+	@Autowired
+	public SqlSession sqlSession;
 }
