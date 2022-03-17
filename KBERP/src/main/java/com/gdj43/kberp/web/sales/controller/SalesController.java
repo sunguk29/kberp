@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.gdj43.kberp.web.common.service.ICommonService;
 
 @Controller
-public class salesController {
+public class SalesController {
 	@Autowired
 	public ICommonService iCommonService;
 	
