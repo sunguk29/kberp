@@ -10,7 +10,7 @@ import com.gdj43.kberp.web.GW.service.IElctrncAprvlService;
 @Controller
 public class ClndrController {
 	
-	@Autowired IElctrncAprvlService iElctrncAprvlService;
+	
 	
 	@RequestMapping(value = "/clndr")
 	public ModelAndView clndr(ModelAndView mav) {

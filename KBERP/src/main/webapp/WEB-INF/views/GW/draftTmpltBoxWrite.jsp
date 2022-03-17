@@ -20,7 +20,7 @@
 	justify-content: flex-end;
 }
 
-.save {
+#writeBtn {
 	width: 100px;
 	height: 30px;
 	font-size: 14px;
@@ -32,7 +32,7 @@
 	
 }
 
-.cncl {
+#cancelBtn {
 	width: 100px;
 	height: 30px;
 	font-size: 14px;
@@ -223,8 +223,8 @@ $(document).ready(function() {
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="board_a">
-				<span class="save">저장/결재</span>
-				<span class="cncl">닫기</span>
+				<input type = "button" id="writeBtn" value="저장">
+				<input type = "button" id="cancelBtn" value="취소">
 			</div>
 			
 			<div class="dcmnt_tlte">
