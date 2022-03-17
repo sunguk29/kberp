@@ -10,5 +10,4 @@ public class salesController {
 	@Autowired
 	public ICommonService iCommonService;
 	
-	
 }
