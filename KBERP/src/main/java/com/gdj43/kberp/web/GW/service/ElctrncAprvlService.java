@@ -14,3 +14,4 @@ public class ElctrncAprvlService {
 }
 
 //unsatisfy dependency exception -> 서버 설정 오류, Bean(Controller, Service, Repository) 생성 오류, Bean을 잘못 썻거나
+//브런치 커밋 테스트
