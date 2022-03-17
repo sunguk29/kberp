@@ -246,8 +246,44 @@ $(document).ready(function() {
 	});
 });
 
+function reloadList() {
+	var params = $("#actionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "clntCmpnyListAjax",
+		data : params,
+		dataType : "json",
+		seuccess : function(res) {
+			
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	});
+	
+}
+
 function drawList(list) {
 	var html = "";
+	<tbody>
+	<tr>
+		<td rowspan="3">010</td>
+		<td>CC012</td>
+		<td>S 등급</td>
+		<td rowspan="3"><img class="deal" alt="거래"
+			src="../../images/sales/hands.png" /> <span class="deal_cnt">2건</span>
+		</td>
+	</tr>
+	<tr>
+		<td>파트너사</td>
+		<td>호구 전자</td>
+	</tr>
+	<tr>
+		<td>12.000.000.000원</td>
+		<td>서울특별시 가나다대로 12길</td>
+	</tr>
+	</tbody>
 }
 </script>
 </head>
@@ -354,24 +390,6 @@ function drawList(list) {
 							<th></th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td rowspan="3">010</td>
-							<td>CC012</td>
-							<td>S 등급</td>
-							<td rowspan="3"><img class="deal" alt="거래"
-								src="../../images/sales/hands.png" /> <span class="deal_cnt">2건</span>
-							</td>
-						</tr>
-						<tr>
-							<td>파트너사</td>
-							<td>호구 전자</td>
-						</tr>
-						<tr>
-							<td>12.000.000.000원</td>
-							<td>서울특별시 가나다대로 12길</td>
-						</tr>
-					</tbody>
 				</table>
 				<div class="body_bottom">
 					<div class="board_bottom">
