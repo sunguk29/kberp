@@ -4,10 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.gdj43.kberp.web.common.service.ICommonService;
+import com.gdj43.kberp.web.sales.service.ISchdlService;
 
 @Controller
-public class SalesController {
+public class SchdlController {
 	@Autowired
-	public ICommonService iCommonService;
+	public ICommonService  iCommonService;
 	
+	@Autowired
+	public ISchdlService iscService;
 }
