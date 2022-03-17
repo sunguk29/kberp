@@ -36,7 +36,8 @@
 	<select id="getLeftMenu" parameterType="hashmap" resultType="hashmap">
 		SELECT M.MENU_NUM, M.MENU_NAME, M.SUPER_MENU_NUM, M.ADRS, M.ADD_PRMTR, M.DEPTH, M.CNT, M.MENU_FLOW, M.MENU_TYPE
 		FROM (
-		SELECT M.MENU_NUM, M.MENU_NAME, M.SUPER_MENU_NUM, M.ADRS, M.ADD_PRMTR, M.DEPTH, NVL(TM.CNT, 0) AS CNT,
+		SELECT M.MENU_NUM, M.MENU_NAME, M.SUPER_MENU_NUM, M.ADRS, M.ADD_PRMTR, M.DEPTH,
+			   DECODE(M.MENU_NUM, 22, NVL(TM.CNT, 0) + B.BCNT, NVL(TM.CNT, 0)) AS CNT,
 		       SUBSTR(SYS_CONNECT_BY_PATH(M.MENU_NUM, ','), 2) AS MENU_FLOW, 'M' AS MENU_TYPE
 		FROM MENU M INNER JOIN MENU_ATHRTY MA
 		                    ON M.MENU_NUM = MA.MENU_NUM
@@ -49,13 +50,17 @@
 		                                                AND MA.ATHRTY_NUM = #{athrtyNum}
 		                             GROUP BY M.SUPER_MENU_NUM) TM
 		                         ON M.MENU_NUM = TM.SUPER_MENU_NUM
+		            LEFT OUTER JOIN (SELECT COUNT(*) AS BCNT
+		            				 FROM BOARD_ADMNSTRTN
+		            				 WHERE DEL_CHECK = 1) B
+		            			 ON 1 = 1
 		WHERE 1 = 1
 		START WITH DEPTH = 1
 		CONNECT BY PRIOR M.MENU_NUM = M.SUPER_MENU_NUM) M
         WHERE M.MENU_FLOW LIKE #{top} || '%'
         UNION ALL
         SELECT BOARD_ADMNSTRTN_NUM AS MENU_NUM, CTGRY_NAME AS MENU_NAME, 
-               22 AS SUPER_MENU_NUM, 'board' AS ADRS, BOARD_ADMNSTRTN_NUM AS ADD_PRMTR, 3 AS DEPTH, 0 AS CNT,
+               22, 'board', BOARD_ADMNSTRTN_NUM AS ADD_PRMTR, 3, 0,
                '21,22,' || BOARD_ADMNSTRTN_NUM AS MENU_FLOW, 'B' AS MENU_TYPE
         FROM BOARD_ADMNSTRTN
         WHERE DEL_CHECK = 1

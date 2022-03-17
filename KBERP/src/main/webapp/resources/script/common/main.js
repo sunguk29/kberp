@@ -4,15 +4,15 @@
  * top 및 left메뉴 핸들링
  */
 $(document).ready(function() {
-	$(".cont_wrap").slimScroll({
-		width : $(".cont_wrap").width() + "px",
-	    height : ($(".left_area").height() - 90) + "px",
+	$(".right_area_wrap").slimScroll({
+		width : $(".right_area").width() + "px",
+	    height : $(".right_area").height() + "px"
 	});
 	
 	$(window).resize(function(){
-		$(".cont_wrap").slimScroll({
-			width : $(".cont_wrap").width() + "px",
-		    height : ($(".left_area").height() - 90) + "px",
+		$(".right_area_wrap").slimScroll({
+			width : $(".right_area").width() + "px",
+			height : $(".right_area").height() + "px"
 		});
 	});
 	
@@ -29,6 +29,8 @@ $(document).ready(function() {
 		
 		$("#menuNum").val(1);
 		
+		$("#menuType").val("B");
+		
 		$("#locationForm").attr("action", "board");
 		
 		$("#locationForm").submit();
@@ -38,6 +40,12 @@ $(document).ready(function() {
 	$(".left_area").on("click", ".menu_depth2_area, .menu_depth2_single_area,  .menu_depth3", function() {
 		if($(this).is("[adrs]")) {
 			$("#menuNum").val($(this).attr("menunum"));
+			
+			if($(this).attr("adrs") == "board") {
+				$("#menuType").val("B");
+			} else {
+				$("#menuType").val("M");
+			}
 			
 			$("#locationForm").attr("action", $(this).attr("adrs"));
 			
@@ -54,6 +62,12 @@ $(document).ready(function() {
 		$("#top").val($(this).attr("topnum"));
 		
 		$("#menuNum").val($(this).attr("menunum"));
+		
+		if($(this).attr("adrs") == "board") {
+			$("#menuType").val("B");
+		} else {
+			$("#menuType").val("M");
+		}
 		
 		$("#locationForm").attr("action", $(this).attr("adrs"));
 		
@@ -87,7 +101,7 @@ function drawLeftMenu(menu) {
 	for(var i = 0 ; i < menu.length ; i++) {
 		if(menu[i].DEPTH == 2) { // 2DEPTH
 			if(menu[i].CNT == 0) { // 단일메뉴
-				if(menu[i].MENU_NUM == $("#menuNum").val()) {
+				if(menu[i].MENU_TYPE == $("#menuType").val() && menu[i].MENU_NUM == $("#menuNum").val()) {
 					html += "<div class=\"menu_depth2_on\">";
 				} else {
 					html += "<div class=\"menu_depth2\">";
@@ -107,7 +121,7 @@ function drawLeftMenu(menu) {
 				// 3DEPTH
 				for(var j = 0 ; j < menu.length ; j++) {
 					if(menu[j].DEPTH == 3 && menu[i].MENU_NUM == menu[j].SUPER_MENU_NUM) {
-						if(menu[j].MENU_NUM == $("#menuNum").val()) { //현재 메뉴 구분
+						if(menu[j].MENU_TYPE == $("#menuType").val() && menu[j].MENU_NUM == $("#menuNum").val()) { //현재 메뉴 구분
 							secDepthCheck = true;
 							html += "<div class=\"menu_depth3_on\" menunum=\"" + menu[j].MENU_NUM + "\" adrs=\"" + menu[j].ADRS + "\">";
 						} else {

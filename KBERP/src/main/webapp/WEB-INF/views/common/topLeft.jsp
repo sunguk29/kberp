@@ -8,6 +8,7 @@
 <form action="#" id="locationForm" method="post">
 	<input type="hidden" id="top" name="top" value="${param.top}" />
 	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 </form>
 <!-- Top Bar -->
 <div class="top_area">
@@ -70,6 +71,7 @@
 	</div>
 	<!-- Contents -->
 	<div class="right_area">
+		<div class="right_area_wrap">
 		<div class="navi_bar">
 			Home
 			<div class="navi_next"></div>

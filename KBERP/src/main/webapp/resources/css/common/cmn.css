@@ -6,6 +6,7 @@ html, body {
 	height: 100%;
 	font-family: 고딕;
 	min-width: 1400px;
+	overflow: hidden;
 }
 
 .top_area, .left_area, .cmn_btn, .cmn_btn_ml, .cmn_btn_mr, .cmn_btn_mb, .page_btn, .page_btn_on {

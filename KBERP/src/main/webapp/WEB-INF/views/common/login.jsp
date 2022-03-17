@@ -122,6 +122,7 @@ $(document).ready(function() {
 	<form action="sample" id="locationForm" method="post">
 		<input type="hidden" id="top" name="top" value="21" />
 		<input type="hidden" id="menuNum" name="menuNum" value="1" />
+		<input type="hidden" id="menuType" name="menuType" value="B" />
 	</form>
     <div class = "login">
     	<div class="logo_area">
@@ -130,8 +131,8 @@ $(document).ready(function() {
 			</div>
     	</div>
     	<form action="#" id="loginForm" method="post">
-        <input type="text" class="input" id="loginId" name="id" placeholder="사원번호" value="2022000001"/>
-        <input type="password" class="input" id="loginPw" name="pw" placeholder="비밀번호" value="1234"/>
+        <input type="text" class="input" id="loginId" name="id" placeholder="사원번호"/>
+        <input type="password" class="input" id="loginPw" name="pw" placeholder="비밀번호"/>
         </form>
         <div class="cmn_btn">로그인</div>
         <div class="text">GDJ43 - TeamProject</div>
