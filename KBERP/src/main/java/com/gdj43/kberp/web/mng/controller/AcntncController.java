@@ -8,6 +8,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 
+/*** 회계 메뉴 ***/
+
 @Controller
 public class AcntncController {
 	
