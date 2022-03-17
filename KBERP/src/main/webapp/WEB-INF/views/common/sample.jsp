@@ -64,6 +64,8 @@ $(document).ready(function() {
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
 		<c:param name="menuNum">${param.menuNum}</c:param>
+		<%-- board로 이동하는 경우 B 나머지는 M --%>
+		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
 	<!-- 내용영역 -->
 	<div class="cont_wrap">

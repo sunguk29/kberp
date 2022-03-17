@@ -23,6 +23,7 @@ public class CommonAOP {
 	
 	@Pointcut("execution(* com.gdj43.kberp..*Controller.*(..))"
 			+ "&&!execution(* com.gdj43.kberp..*Controller.*Ajax(..))"
+			+ "&&!execution(* com.gdj43.kberp..*Controller.loc(..))"
 			+ "&&!execution(* com.gdj43.kberp..*Controller.*login*(..))"
 			+ "&&!execution(* com.gdj43.kberp..*Controller.*logout*(..))")
 	public void testAOP() {}
@@ -48,13 +49,13 @@ public class CommonAOP {
 				String athrtyTypeNum = iCommonService.getStringData("common.menuAthrtyCheck", params);
 				
 				if(athrtyTypeNum == null || athrtyTypeNum.equals("0")) {
-					mav.setViewName("redirect:logout");
+					mav.setViewName("redirect:loc");
 				} else {
 					mav = (ModelAndView) joinPoint.proceed(); //기존 이벤트 처리 행위를 이어서 진행
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				mav.setViewName("redirect:logout");
+				mav.setViewName("redirect:loc");
 			}
 		} else {
 			mav.setViewName("redirect:login");

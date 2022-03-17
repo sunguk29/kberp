@@ -72,12 +72,4 @@
 	<!-- Contents -->
 	<div class="right_area">
 		<div class="right_area_wrap">
-		<div class="navi_bar">
-			Home
-			<div class="navi_next"></div>
-			경영관리
-			<div class="navi_next"></div>
-			프로젝트 투입관리
-			<div class="navi_next"></div>
-			프로젝트 관리
-		</div>
+		<div class="navi_bar"></div>

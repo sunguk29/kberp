@@ -75,8 +75,12 @@ public class CommonController {
 	}
 	
 	@RequestMapping({"/", "/login"})
-	public ModelAndView login(ModelAndView mav) {
-		mav.setViewName("common/login");
+	public ModelAndView login(HttpSession session, ModelAndView mav) {
+		if(session.getAttribute("sEmpNum") != null) {
+			mav.setViewName("redirect:loc");
+		} else {
+			mav.setViewName("common/login");
+		}
 		
 		return mav;
 	}
@@ -88,7 +92,6 @@ public class CommonController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		try {
-			// 1234 : gia21ZAyls3rclb6ug8Eqw==
 			//패스워드 암호화
 			params.put("pw", Utils.encryptAES128(params.get("pw")));
 
@@ -124,6 +127,44 @@ public class CommonController {
 		mav.setViewName("redirect:login");
 		
 		return mav;
+	}
+	
+	@RequestMapping(value = "/loc")
+	public ModelAndView loc(HttpSession session, ModelAndView mav) {
+		if(session.getAttribute("sEmpNum") != null) {
+			mav.setViewName("common/loc");
+		} else {
+			mav.setViewName("redirect:login");
+		}
+		
+		return mav;
+	}
+	
+	/**
+	* getCmnCodeAjax - 공통코드 취득용
+	* - params필수사항 -
+	* mainCtgrNum - 대분류코드
+	*/
+	@RequestMapping(value = "/getCmnCodeAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String getCmnCodeAjax(@RequestParam HashMap<String, String> params, HttpSession session) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			List<HashMap<String, String>> codeList = iCommonService.getDataList("common.getCmnCode", params);
+			
+			modelMap.put("codeList", codeList);
+			
+			modelMap.put("res", CommonProperties.RESULT_SUCCESS);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			modelMap.put("res", CommonProperties.RESULT_ERROR);
+		}
+		
+		
+		return mapper.writeValueAsString(modelMap);
 	}
 	
 	@RequestMapping(value = "/sample")

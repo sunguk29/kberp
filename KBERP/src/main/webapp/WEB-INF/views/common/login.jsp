@@ -69,10 +69,11 @@
 <script type="text/javascript" src="resources/script/common/util.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+	/* 
 	if('${sEmpNum}' != '') {
 		$("#locationForm").submit();
 	}
-	
+	 */
 	$(".cmn_btn").on("click", function() {
 		if(checkEmpty("#loginId")) {
 			makeAlert("로그인 안내", "사원번호를 입력해 주세요.", function() {
@@ -92,7 +93,7 @@ $(document).ready(function() {
 				data : params,
 				success : function(result) {
 					if(result.res == "SUCCESS") {
-						$("#locationForm").submit();
+						location.href = "loc";
 					} else if(result.res == "FAILED") {
 						makeAlert("로그인 실패", "아이디나 비밀번호가 틀렸습니다.");
 					} else {
@@ -119,11 +120,11 @@ $(document).ready(function() {
 </head>
 </head>
 <body>
-	<form action="sample" id="locationForm" method="post">
+	<!-- <form action="sample" id="locationForm" method="post">
 		<input type="hidden" id="top" name="top" value="21" />
 		<input type="hidden" id="menuNum" name="menuNum" value="1" />
 		<input type="hidden" id="menuType" name="menuType" value="B" />
-	</form>
+	</form> -->
     <div class = "login">
     	<div class="logo_area">
 	    	<div class="logo">
