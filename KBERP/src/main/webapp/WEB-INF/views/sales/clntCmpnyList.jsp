@@ -245,6 +245,10 @@ $(document).ready(function() {
 		});
 	});
 });
+
+function drawList(list) {
+	
+}
 </script>
 </head>
 <body>
