@@ -11,7 +11,7 @@
 <c:import url="/header"></c:import>
 <style type="text/css">
 /* 가로 사이즈 조정용 */
-.cont_wrap {
+.cont_wrap { 
 	width: 900px;
 }
 /* 개인 작업 영역 */
