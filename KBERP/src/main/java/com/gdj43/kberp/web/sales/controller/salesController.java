@@ -9,4 +9,6 @@ import com.gdj43.kberp.web.common.service.ICommonService;
 public class salesController {
 	@Autowired
 	public ICommonService iCommonService;
+	
+	
 }
