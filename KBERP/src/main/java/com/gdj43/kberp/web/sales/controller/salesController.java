@@ -12,7 +12,7 @@ public class salesController {
 	@Autowired
 	public ICommonService iCommonService;
 	
-	@RequestMapping(value = "/salestest2")
+	@RequestMapping(value = "/salestest22")
 	public ModelAndView salestest(ModelAndView mav) {
 		return mav;
 	}
