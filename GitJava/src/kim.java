@@ -5,6 +5,7 @@ public class kim {
 		System.out.println("업로드 되보셈");
 		System.out.println("elipse rst");
 		System.out.println("됨?");
+		System.out.println("test");
 	}
 
 }
