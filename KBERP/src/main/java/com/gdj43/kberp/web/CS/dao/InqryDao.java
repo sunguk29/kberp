@@ -1,5 +1,5 @@
 package com.gdj43.kberp.web.CS.dao;
 
-public interface ICSDao {
+public class InqryDao {
 
 }
