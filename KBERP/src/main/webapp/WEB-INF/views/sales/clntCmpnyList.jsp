@@ -247,7 +247,7 @@ $(document).ready(function() {
 });
 
 function drawList(list) {
-	
+	var html = "";
 }
 </script>
 </head>
