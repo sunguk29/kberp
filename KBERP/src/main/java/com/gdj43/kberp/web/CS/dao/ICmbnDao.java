@@ -1,5 +1,5 @@
 package com.gdj43.kberp.web.CS.dao;
 
-public class CStest {
+public interface ICmbnDao {
 
 }
