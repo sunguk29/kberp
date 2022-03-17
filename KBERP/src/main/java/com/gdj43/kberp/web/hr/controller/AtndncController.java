@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.gdj43.kberp.common.service.IPagingService;
-import com.gdj43.kberp.web.hr.service.ISlryService;
+import com.gdj43.kberp.web.hr.service.IAtndncService;
 
-/***** 급여 관련 메뉴 *****/
+/***** 근태 관련 메뉴 *****/
 
 @Controller
-public class SlryController {
+public class AtndncController {
 	@Autowired
-	public ISlryService iSlryService;
+	public IAtndncService iAtndncService;
 	
 	@Autowired
 	public IPagingService ips;
