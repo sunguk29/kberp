@@ -19,10 +19,10 @@ public class SchdlController {
 	@Autowired
 	public ISchdlService iscService;
 	
-	@RequestMapping(value = "/schdl")
+	@RequestMapping(value = "/salesSchdl")
 	public ModelAndView schdl(@RequestParam HashMap<String, String> params, ModelAndView mav) {
 		
-		mav.setViewName("sales/schdl");
+		mav.setViewName("sales/saleSchdl");
 		
 		return mav;
 	}

@@ -12,7 +12,7 @@
 <style type="text/css">
 /* 가로 사이즈 조정용 */
 .cont_wrap {
-	width: 900px;
+	width: 1013px;
 }
 /* 개인 작업 영역 */
 .body {
