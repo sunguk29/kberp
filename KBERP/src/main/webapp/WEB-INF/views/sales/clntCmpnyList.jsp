@@ -253,6 +253,11 @@ $(document).ready(function() {
 
 		reloadList();
 	});
+	
+	$("#addBtn").on("clikc", function() {
+		$("#actionForm").attr("action", "clntCmpnyReg");
+		$("#actionForm").submit();
+	});
 });
 
 function reloadList() {
@@ -284,7 +289,7 @@ function drawList(list) {
 		html += "<td>" + data.GRADE_NAME + " 등급</td>";
 		html += "<td rowspan=\"3\">";
 		html += "<img class=\"deal\" alt=\"거래\" src=\"resources/images/sales/hands.png\" />";
-		html += "<span class=\"deal_cnt\">" + data.CNT + "</span>";
+		html += "<span class=\"deal_cnt\">" + data.CNTRCT_CNT + "</span>";
 		html += "</td>";
 		html += "</tr>";
 		html += "<tr>";
@@ -412,7 +417,7 @@ function drawPaging(pb) {
 					</tbody>
 				</table>
 				<div class="SearchResult">
-					<h3>고객사 (검색결과: 377건)</h3>
+					<h3>고객사 (검색결과: ${CNT}건)</h3>
 				</div>
 				<table class="list_table">
 					<colgroup>

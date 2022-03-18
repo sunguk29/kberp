@@ -65,5 +65,13 @@ public class ClntMngController {
 		
 		return mapper.writeValueAsString(modelMap);
 	}
+	
+	@RequestMapping(value = "/clntCmpnyReg")
+	public ModelAndView clntCmpnyReg(ModelAndView mav) {
+		
+		mav.setViewName("sales/clntCmpnyReg");
+		
+		return mav;
+	}
 
 }
