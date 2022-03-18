@@ -159,7 +159,7 @@ function makePopup(option) {
 			
 			if(Object.keys(option).includes("draggable")) {
 				if(option.draggable) {
-					$("#popup" + depth).draggable();
+					$("#popup" + depth).draggable({containment: "body"});
 				}
 			}
 			
