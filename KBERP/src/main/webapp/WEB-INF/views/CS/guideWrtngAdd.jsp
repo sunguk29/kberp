@@ -53,7 +53,7 @@ $(document).ready(function() {
 	$("#alertBtn").on("click", function() {
 		makeAlert("하이", "내용임");
 	});
-	$("#btn1Btn").on("click", function() {
+	$("#addBtn").on("click", function() {
 		makePopup({
 			depth : 1,
 			bg : true,
@@ -107,7 +107,7 @@ $(document).ready(function() {
                         <td><textarea name = content cols=85 rows=20 placeholder="내용을 입력하세요"></textarea></td>
                         </tr>
                         </table>
-					<div class="cmn_btn_ml" id="btn1Btn">등록</div>
+					<div class="cmn_btn_ml" id="addBtn">등록</div>
 		</div>
 	</div>
 	<!-- bottom -->
