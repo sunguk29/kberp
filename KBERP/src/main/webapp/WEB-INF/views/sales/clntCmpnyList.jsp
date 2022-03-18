@@ -248,6 +248,10 @@ $(document).ready(function() {
 	
 	reloadList();
 	
+	$("#addBtn").on("click", function() {
+		
+	});
+	
 });
 
 function reloadList() {
@@ -258,8 +262,8 @@ function reloadList() {
 		url : "clntCmpnyListAjax",
 		data : params,
 		dataType : "json",
-		seuccess : function(res) {
-			drawList(res);
+		success : function() {
+			drawList();
 		},
 		error : function(req) {
 			console.log(req.responseText);
@@ -268,11 +272,11 @@ function reloadList() {
 	
 }
 
-function drawList(list) {
+function drawList() {
 	var html = "";
 	
-	for(var data of list) {
-		html += "<tbody>";
+/* 	for(var data of list) {
+ 		html += "<tbody>";
 		html += "<tr>";
 		html += "<td rowspan=\"3\">1</td>";
 		html += "<td>" + data.GRADE_NAME + " 등급</td>";
@@ -285,10 +289,13 @@ function drawList(list) {
 		html += "<td>12.000.000.000원</td>";
 		html += "<td>서울특별시 가나다대로 12길</td>";
 		html += "</tr>";
-		html += "</tbody>";
-	}
+		html += "</tbody>"; 
+	} */
+	html += "<tr>";
+	html += "<td>" + hi + "</td>";
+	html += "</tr>";
 	
-	$("table").html(html);
+	$(".cont_table").html(html);
 
 }
 </script>
@@ -397,6 +404,8 @@ function drawList(list) {
 						</tr>
 					</thead>
 				</table>
+				<table class="cont_table">
+				</table>
 				<div class="body_bottom">
 					<div class="board_bottom">
 						<div class="pgn_area">
@@ -410,7 +419,7 @@ function drawList(list) {
 							<div class="page_btn page_next">next</div>
 							<div class="page_btn page_last">last</div>
 						</div>
-						<div class="cmn_btn">등록</div>
+						<div class="cmn_btn" id="addBtn">등록</div>
 					</div>
 				</div>
 			</div>
