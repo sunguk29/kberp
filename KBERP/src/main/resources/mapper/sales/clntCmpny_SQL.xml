@@ -3,24 +3,33 @@
 <mapper namespace="clntCmpny">
 
 	<select id="getClntCmpntList" parameterType="hashmap" resultType="hashmap">
-		SELECT ROW_NUMBER() OVER(ORDER BY CC.CLNT_CMPNY_NUM DESC) AS RNUM,
-		       CC.CLNT_CMPNY_NUM, CCG.GRADE_NAME, CCC.CLNT_CMPNY_CLSFY_NAME, CC.CLNT_CMPNY_NAME,
-		       CC.RVN, CC.ADRS, CCNT.CNT
-		FROM CLNT_CMPNY CC INNER JOIN CLNT_CMPNY_GRADE CCG
-		                           ON CC.GRADE_NUM = CCG.GRADE_NUM 
-		                   INNER JOIN CLNT_CMPNY_CLSFY CCC
-		                           ON CC.CLNT_CMPNY_CLSFY_NUM = CCC.CLNT_CMPNY_CLSFY_NUM
-		                   INNER JOIN ( SELECT CC.CLNT_CMPNY_NAME, COUNT(*) AS CNT
-		                                FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
-		                                                           ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
-		                                                   INNER JOIN LEAD L
-		                                                           ON L.CLNT_NUM = EC.CLNT_CMPNY_NUM
-		                                                   INNER JOIN SALES S
-		                                                           ON S.LEAD_NUM = L.LEAD_NUM
-		                                                   INNER JOIN CNTRCT C
-		                                                           ON C.SALES_NUM = S.SALES_NUM
-		                                GROUP BY CC.CLNT_CMPNY_NAME ) CCNT
-		                           ON CC.CLNT_CMPNY_NAME = CCNT.CLNT_CMPNY_NAME
+		SELECT CC.CLNT_CMPNY_NUM, CC.GRADE_NAME, CC.CLNT_CMPNY_CLSFY_NAME, CC.CLNT_CMPNY_NAME,
+		       CC.RVN, CC.ADRS, CC.CNT
+		FROM(   SELECT ROW_NUMBER() OVER(ORDER BY CC.CLNT_CMPNY_NUM DESC) AS RNUM,
+		               CC.CLNT_CMPNY_NUM, CCG.GRADE_NAME, CCC.CLNT_CMPNY_CLSFY_NAME, CC.CLNT_CMPNY_NAME,
+		               CC.RVN, CC.ADRS, CCNT.CNT
+		        FROM CLNT_CMPNY CC INNER JOIN CLNT_CMPNY_GRADE CCG
+		                                   ON CC.GRADE_NUM = CCG.GRADE_NUM 
+		                           INNER JOIN CLNT_CMPNY_CLSFY CCC
+		                                   ON CC.CLNT_CMPNY_CLSFY_NUM = CCC.CLNT_CMPNY_CLSFY_NUM
+		                           INNER JOIN ( SELECT CC.CLNT_CMPNY_NAME, COUNT(*) AS CNT
+		                                        FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
+		                                                                   ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
+		                                                           INNER JOIN LEAD L
+		                                                                   ON L.CLNT_NUM = EC.CLNT_CMPNY_NUM
+		                                                           INNER JOIN SALES S
+		                                                                   ON S.LEAD_NUM = L.LEAD_NUM
+		                                                           INNER JOIN CNTRCT C
+		                                                                   ON C.SALES_NUM = S.SALES_NUM
+		                                        GROUP BY CC.CLNT_CMPNY_NAME ) CCNT
+		                                   ON CC.CLNT_CMPNY_NAME = CCNT.CLNT_CMPNY_NAME ) CC
+		WHERE CC.RNUM BETWEEN #{startCount} AND #{endCount}
+	</select>
+	
+	<select id="clntCmpnyCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM CLNT_CMPNY
+		WHERE 1 = 1
 	</select>
 	
 </mapper>
