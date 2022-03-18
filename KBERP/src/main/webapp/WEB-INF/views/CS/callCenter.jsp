@@ -507,26 +507,6 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
 	$("#btn2Btn").on("click", function() {
 		makePopup({
 			bg : false,
@@ -608,8 +588,8 @@ $(document).ready(function() {
 		    		<div class="mid_area">
 						<div class="cnsl_note_top">
 							<div class="cnsl_note">상담노트</div>
-							<div class="cmn_btn"><img alt="부서별연락처" src="images/cmn/call.png" id="imgs"></div>
-							<div class="cmn_btn"><img alt="대응가이드" src="images/cmn/call_guide.png" id="imgs"></div>
+							<div class="cmn_btn"><img alt="부서별연락처" src="resources/images/CS/call.png" id="imgs"></div>
+							<div class="cmn_btn"><img alt="대응가이드" src="resources/images/CS/call_guide.png" id="imgs"></div>
 						</div>
 						<div class="mid_row1">
 							<div class="cnsl_type">상담유형</div>
