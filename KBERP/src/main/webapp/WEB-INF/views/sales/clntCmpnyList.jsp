@@ -247,24 +247,23 @@ function drawList(list) {
 	var html = "";
 	
  	for(var data of list) {
- 		html += "<tbody>";
 		html += "<tr>";
-		html += "<td rowspan=\"3\">" + data.CLNT_CMPNY_NUM + "</td>";
-		html += "<td>" + data.GRADE_NAME + " 등급</td>";
+		html += "<td rowspan=\"3\">" + data.RNUM + "</td>";
+		html += "<td>" + data.CLNT_CMPNY_NUM + "</td>";
+		html += "<td>" + data.GRADE_NAME + "등급</td>";
 		html += "<td rowspan=\"3\">";
 		html += "<img class=\"deal\" alt=\"거래\" src=\"resources/images/sales/hands.png\" />";
-		html += "<span class=\"deal_cnt\">" + data.CNTRCT_CNT + "</span>";
+		html += "<span class=\"deal_cnt\">2건</span>";
 		html += "</td>";
 		html += "</tr>";
 		html += "<tr>";
 		html += "<td>" + data.CLNT_CMPNY_CLSFY_NAME + "</td>";
-		html += "<td>" + data.CLNT_CMPNT_NAME + "</td>";
+		html += "<td>" + data.CLNT_CMPNY_NAME + "</td>";
 		html += "</tr>";
 		html += "<tr>";
 		html += "<td>" + data.RVN + "</td>";
 		html += "<td>" + data.ADRS + "</td>";
 		html += "</tr>";
-		html += "</tbody>"; 
 	}
 	
 	$(".cont_table").html(html);
@@ -411,8 +410,8 @@ function drawPaging(pb) {
 							<th></th>
 						</tr>
 					</thead>
+					<tbody class="list_table cont_table"></tbody>
 				</table>
-				<table class="cont_table"></table>
 				<div class="body_bottom">
 					<div class="board_bottom">
 						<div class="pgn_area"></div>

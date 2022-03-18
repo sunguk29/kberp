@@ -269,7 +269,7 @@ function drawPaging(pb) {
 	
 	html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
 	if($("#page").val() == "1") {
-		html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
+		html += "<div page=\"1\" class=\"page_btn page_p	rev\">prev</div>";
 	} else {
 		html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
 	}
