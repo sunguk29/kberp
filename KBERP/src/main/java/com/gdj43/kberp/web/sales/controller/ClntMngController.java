@@ -1,6 +1,7 @@
 package com.gdj43.kberp.web.sales.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,8 @@ public class ClntMngController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/atbListAjax",
-			method = RequestMethod.POST, 
-			produces = "text/json;charset=UTF-8")
+	@RequestMapping(value = "/atbListAjax", method = RequestMethod.POST, 
+					produces = "text/json;charset=UTF-8")
 	@ResponseBody 
 	public String atbListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
 		
@@ -38,7 +38,11 @@ public class ClntMngController {
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		return mapper.writeValueAsString(modelMap); 
+		List<HashMap<String, String>> list = iCommonService.getDataList("common.getClntCmpntList", params);
+		
+		modelMap.put("list", list);
+		
+		return mapper.writeValueAsString(modelMap);
 	}
 
 }
