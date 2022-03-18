@@ -252,12 +252,12 @@ function drawList(list) {
 		html += "<td>" + data.EMAIL + "</td>";
 		html += "</tr>";
 		html += "<tr>";
-			<td>삼성전자</td>
+			/* <td>삼성전자</td>
 			<td>김호구</td>
 			<td>010-1234-5678</td>
 		</tr>
 		<tr></tr>	
-	</tbody>
+	</tbody> */
 	}
 	
 	$(".list_table").html(html);
