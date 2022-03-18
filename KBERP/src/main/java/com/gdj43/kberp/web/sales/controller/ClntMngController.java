@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -119,6 +120,37 @@ public class ClntMngController {
 		mav.setViewName("sales/clntCmpnyReg");
 		
 		return mav;
+	}
+	
+	@RequestMapping(value = "/clntCmpnyMngAction/{gbn}", method = RequestMethod.POST,
+					produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String clntCmpnyMngAction(@RequestParam HashMap<String, String> params, 
+									 @PathVariable String gbn) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			switch(gbn) {
+			case "insert" :
+				iCommonService.insertData("clntCmpnyMng.getClntCmpnyAdd", params);
+				break;
+			case "update" :
+				
+				break;
+			case "delete" :
+				
+				break;
+			}
+			modelMap.put("res", "success");
+		} catch (Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "faild");
+		}
+
+		return mapper.writeValueAsString(modelMap);
 	}
 
 }

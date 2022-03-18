@@ -14,7 +14,7 @@
 .cont_wrap {
 	width: 1013px;
 }
-/* 개인 작업 영역 */
+
 .body {
 	display: block;
 	background-color: white;
@@ -29,25 +29,7 @@
 	height: 100%;
 	margin: 40px auto;
 }
-.popup_bg {
-	/* 숨김용 */
-	 display: none; 
-}
-.popup {
-	/* 숨김용 */
-	 display: none; 
-	 
-	/* 크기변경용 */
-	width: 600px;
-	height: 400px;
-	top: calc(50% - 200px); /* 높이 반  */
-	left: calc(50% - 300px); /* 너비 반 */
-}
 
-.popup_cont {
-	/* 내용 변경용 */
-	font-size: 10.5pt;
-}
 /* 개인 작업 영역 */
 table{	
 	border: 1px;
@@ -251,8 +233,78 @@ $(document).ready(function() {
 	$("#listBtn").on("click", function() {
 		$("#listForm").submit();
 	});
+	
+	$("#addBtn").on("click", function() {
+		if(checkEmpty("#cc_name")) {
+			alert("고객사를 입력하세요.");
+			$("#cc_name").focus();
+		} else if(checkEmpty("#cc_clsfy")) {
+			alert("고객사 분류를 선택하세요.");
+			$("#cc_clsfy").focus();
+		} else if(checkEmpty("#cc_grade")) {
+			alert("고객사 등급을 선택하세요.");
+			$("#cc_grade").focus();
+		} else if(checkEmpty("#zip_code_num")) {
+			alert("우편번호를 입력하세요.");
+			$("#zip_code_num").focus();
+		} else if(checkEmpty("#adrs")) {
+			alert("주소를 입력하세요.");
+			$("#adrs").focus();
+		} else if(checkEmpty("#dtl_adrs")) {
+			alert("상세주소를 입력하세요.");
+			$("#dtl_adrs").focus();
+		} else if(checkEmpty("#rnv")) {
+			alert("매출를 입력하세요.");
+			$("#rnv").focus();
+		} else if(checkEmpty("#rp")) {
+			alert("인지경로를 선택하세요.");
+			$("#rp").focus();
+		} else {
+			var addForm = $("#addForm");
+			
+			addForm.ajaxForm({
+				success : function(res) {
+					if(res.fileName.length > 0) {
+						$("#attFile").val(res.fileName[0]);
+					}
+					
+					var params = $("#writeForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "clntCmpnyMngAction/insert",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							if(res.res == "success") {
+								location.href = "clntCmpnyList";
+							} else {
+								alert("등록중 문제가 발생하였습니다.");
+							}
+						},
+						error : function(request, status, error) {
+							console.log(request.responseText);
+						}
+					});
+					
+				},
+				error : function(req) {
+					console.log(req.responseText);
+				}
+			});
+			
+			addForm.submit(); 
+		}
+	});
 });
 
+function checkEmpty(sel) {
+	if($.trim($(sel).val()) == "") {
+		return true;
+	} else {
+		return false;
+	}
+}
 </script>
 </head>
 <body>
@@ -274,7 +326,7 @@ $(document).ready(function() {
 		<div class="page_title_bar">
 			<div class="page_title_text">고객사 등록</div>
 			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
-			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" />
+			<img alt="등록버튼" src="resources/images/sales/save.png" class="btnImg" id="addBtn" />
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
@@ -285,93 +337,97 @@ $(document).ready(function() {
 						<col width="200" />
 						<col width="auto" />
 					</colgroup>
-					<tbody>
-						<tr>
-							<td><input type="button" class="btn" value="고객사 *"
-								readonly="readonly" /></td>
-							<td><input type="text" class="txt" /></td>
-						</tr>
-						<tr height="40">
-							<td><input type="button" class="btn" value="고객사 분류 *" /></td>
-							<td><select class="txt">
-									<optgroup>
-										<option>선택하세요</option>
-										<option>거래고객사</option>
-										<option>파트너사</option>
-										<option>해지고객사</option>
-										<option>정지고객사</option>
-										<option>외국고객사</option>
-										<option>기타</option>
-									</optgroup>
-							</select></td>
-						</tr>
-						<tr height="40">
-							<td><input type="button" class="btn" value="등급" /></td>
-							<td><select class="txt">
-									<optgroup>
-										<option>선택하세요</option>
-										<option>S</option>
-										<option>A</option>
-										<option>B</option>
-										<option>C</option>
-										<option>D</option>
-									</optgroup>
-							</select></td>
-						</tr>
-						<tr height="40">
-							<td><input type="button" class="btn" value="사업자번호" /></td>
-							<td><input type="text" class="txt" /></td>
-						</tr>
-						<tr height="40">
-							<td><input type="button" class="btn" value="대표" /></td>
-							<td><input type="text" class="txt" /></td>
-						</tr>
-						<tr height="40">
-							<td><input type="button" class="btn" value="유선번호" /></td>
-							<td><input type="text" class="txt" /></td>
-						</tr>
-						<tr height="40">
-							<td><input type="button" class="btn" value="팩스번호" /></td>
-							<td><input type="text" class="txt" /></td>
-						</tr>
-						<tr height="40">
-							<td><input type="button" class="btn" value="웹사이트" /></td>
-							<td><input type="text" class="txt" /></td>
-						</tr>
-						<tr height="40">
-							<td rowspan="2"><input type="button" class="address"
-								value="주소 *" /></td>
-							<td><input type="text" class="txt_ad" readonly="readonly"
-								disabled="disabled" /> <img class="btnImg" alt="돋보기"
-								src="resources/images/sales/mg.png" /></td>
-						</tr>
-						<tr height="40">
-							<td><input type="text" class="txt" placeholder="상세주소" /></td>
-						</tr>
-						<tr height="40">
-							<td><input type="button" class="btn" value="매출(년)*" /></td>
-							<td><input type="text" class="txt" /></td>
-						</tr>
-						<tr height="40">
-							<td><input type="button" class="btn" value="인지경로"></td>
-							<td><select class="txt">
-									<optgroup>
-										<option>자사홈페이지</option>
-										<option>인터넷검색</option>
-										<option>지인소개</option>
-										<option>세미나</option>
-										<option>전화</option>
-									</optgroup>
-							</select></td>
-						</tr>
-					</tbody>
-				</table>
-				<!-- 첨부자료 -->
-				<div class="rvn_txt">
-					첨부자료 (0) <input type=file name='file1' style='display: none;' />
-					<img class="plus_btn" src="resources/images/sales/plus.png" border='0' />
-				</div>
-				<div class="cntrct_box_in"></div>
+					<form action="imageUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
+						<tbody>
+							<tr>
+								<td><input type="button" class="btn" value="고객사 *" readonly="readonly" /></td>
+								<td><input type="text" class="txt" id="cc_name" name="cc_name" /></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="고객사 분류 *" /></td>
+								<td><select class="txt" id="cc_clsfy" name="cc_clsfy">
+										<optgroup>
+											<option>선택하세요</option>
+											<option>거래고객사</option>
+											<option>파트너사</option>
+											<option>해지고객사</option>
+											<option>정지고객사</option>
+											<option>외국고객사</option>
+											<option>기타</option>
+										</optgroup>
+								</select></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="등급 *" /></td>
+								<td><select class="txt" id="cc_grade" name="cc_grade">
+										<optgroup>
+											<option>선택하세요</option>
+											<option>S</option>
+											<option>A</option>
+											<option>B</option>
+											<option>C</option>
+											<option>D</option>
+										</optgroup>
+								</select></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="사업자번호" /></td>
+								<td><input type="text" class="txt" id="br_num" name="br_num" /></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="대표" /></td>
+								<td><input type="text" class="txt" id="c_name" name="c_name" /></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="유선번호" /></td>
+								<td><input type="text" class="txt" id="phone_num" name="phone_num" /></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="팩스번호" /></td>
+								<td><input type="text" class="txt" id="fax" name="fax" /></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="웹사이트" /></td>
+								<td><input type="text" class="txt" id="hmpg" name="hmpg" /></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="우편번호" /></td>
+								<td><input type="text" class="txt" id="zip_code_num" name="zip_code_num" /></td>
+							</tr>
+							<tr height="40">
+								<td rowspan="2"><input type="button" class="address" value="주소 *" /></td>
+								<td><input type="text" class="txt_ad" id="adrs" name="adrs" readonly="readonly" disabled="disabled" /> 
+								<img class="btnImg" alt="돋보기" src="resources/images/sales/mg.png" /></td>
+							</tr>
+							<tr height="40">
+								<td><input type="text" class="txt" placeholder="상세주소 *" id="dtl_adrs" name="dtl_adrs"/></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="매출(년)*" /></td>
+								<td><input type="text" class="txt" id="rnv" name="rvn" /></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="인지경로"></td>
+								<td><select class="txt" id="rp" name="rp">
+										<optgroup>
+											<option value="0">자사홈페이지</option>
+											<option value="1">인터넷검색</option>
+											<option value="2">지인소개</option>
+											<option value="3">세미나</option>
+											<option value="4">전화</option>
+											<option value="5">기타</option>
+										</optgroup>
+								</select></td>
+							</tr>
+						</tbody>
+					</table>
+					<!-- 첨부자료 -->
+					<div class="rvn_txt">
+						첨부자료 (0) <input type=file name='file1' style='display: none;' />
+						<img class="plus_btn" src="resources/images/sales/plus.png" border='0' />
+					</div>
+					<div class="cntrct_box_in"></div>
+				</form>
 			</div>
 		</div>
 			<!-- bottom -->

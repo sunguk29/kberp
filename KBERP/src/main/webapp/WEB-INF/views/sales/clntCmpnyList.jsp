@@ -14,7 +14,7 @@
 .cont_wrap {
 	width: 1013px;
 }
-/* 개인 작업 영역 */
+
 .body {
 	display: block;
 	background-color: white;
@@ -30,6 +30,8 @@
 	height: 100%;
 	margin: 40px auto;
 }
+
+/* 개인 작업 영역 */
 
 /* sts */
 .sts {
