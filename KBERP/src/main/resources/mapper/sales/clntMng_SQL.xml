@@ -3,28 +3,14 @@
 <mapper namespace="clntCmpnyMng">
 
 	<select id="getClntCmpntList" parameterType="hashmap" resultType="hashmap">
-		SELECT CC.CLNT_CMPNY_NUM, CC.GRADE_NAME, CC.CLNT_CMPNY_CLSFY_NAME, CC.CLNT_CMPNY_NAME,
-		       CC.RVN, CC.ADRS, CC.CNTRCT_CNT
-		FROM(   SELECT ROW_NUMBER() OVER(ORDER BY CC.CLNT_CMPNY_NUM DESC) AS RNUM,
-		               CC.CLNT_CMPNY_NUM, CCG.GRADE_NAME, CCC.CLNT_CMPNY_CLSFY_NAME, CC.CLNT_CMPNY_NAME,
-		               CC.RVN, CC.ADRS, CCNT.CNT AS CNTRCT_CNT
+		SELECT CC.RNUM, CC.CLNT_CMPNY_NUM, CC.GRADE_NAME, CC.CLNT_CMPNY_CLSFY_NAME, CC.CLNT_NAME, CC.ADRS
+		FROM (  SELECT ROW_NUMBER() OVER(ORDER BY CLNT_CMPNY_NUM DESC) AS RNUM, CLNT_CMPNY_NUM, CCG.GRADE_NAME, CCC.CLNT_CMPNY_CLSFY_NAME,
+		               CLNT_NAME, RVN, ADRS || DTL_ADRS AS ADRS
 		        FROM CLNT_CMPNY CC INNER JOIN CLNT_CMPNY_GRADE CCG
-		                                   ON CC.GRADE_NUM = CCG.GRADE_NUM 
+		                                   ON CC.GRADE_NUM = CCG.GRADE_NUM
 		                           INNER JOIN CLNT_CMPNY_CLSFY CCC
-		                                   ON CC.CLNT_CMPNY_CLSFY_NUM = CCC.CLNT_CMPNY_CLSFY_NUM
-		                           INNER JOIN ( SELECT CC.CLNT_CMPNY_NAME, COUNT(*) AS CNT
-		                                        FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
-		                                                                   ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
-		                                                           INNER JOIN LEAD L
-		                                                                   ON L.CLNT_NUM = EC.CLNT_CMPNY_NUM
-		                                                           INNER JOIN SALES S
-		                                                                   ON S.LEAD_NUM = L.LEAD_NUM
-		                                                           INNER JOIN CNTRCT C
-		                                                                   ON C.SALES_NUM = S.SALES_NUM
-		                                        GROUP BY CC.CLNT_CMPNY_NAME ) CCNT
-		                                   ON CC.CLNT_CMPNY_NAME = CCNT.CLNT_CMPNY_NAME ) CC
-		WHERE CC.RNUM BETWEEN #{startCount} AND #{endCount}
-		AND 1 = 1
+		                                   ON CC.CLNT_CMPNY_CLSFY_NUM = CCC.CLNT_CMPNY_CLSFY_NUM ) CC
+		WHERE CC.RNUM BETWEEN 1 AND 5
 	</select>
 	
 	<select id="clntCmpnyCnt" parameterType="hashmap" resultType="Integer">
@@ -51,9 +37,9 @@
 	<insert id="getClntCmpnyAdd" parameterType="hashmap">
 		INSERT INTO CLNT_CMPNY(CLNT_CMPNY_NUM, CLNT_CMPNY_CLSFY_NUM, GRADE_NUM, RCGNTN_PATH_NUM,
 		                      CLNT_CMPNY_NAME, BSNSMN_RGSTRTN_NUM, CLNT_NAME, PHONE_NUM, FAX, HMPG, ZIP_CODE_NUM,
-		                      ADRS, DTL_ADRS, RVN)
+		                      ADRS, DTL_ADRS, RVN, EMP_NUM)
 		VALUES(CLNT_CMPNY_SEQ.NEXTVAL, #{cc_clsfy}, #{cc_grade}, #{rp}, #{cc_name}, #{br_num}, #{c_name}, 
-			   #{phone_num}, #{fax}, #{hmpg}, #{zip_code_num}, #{adrs}, #{dtl_adrs}, #{rvn})
+			   #{phone_num}, #{fax}, #{hmpg}, #{zip_code_num}, #{adrs}, #{dtl_adrs}, #{rvn}, #{sEmpNum})
 	</insert>
 	
 </mapper>

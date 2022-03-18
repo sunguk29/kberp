@@ -428,6 +428,7 @@ function checkEmpty(sel) {
 						<img class="plus_btn" src="resources/images/sales/plus.png" border='0' />
 					</div>
 					<div class="cntrct_box_in"></div> -->
+					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
 				</form>
 			</div>
 		</div>

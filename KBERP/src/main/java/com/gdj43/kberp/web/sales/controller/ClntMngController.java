@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -126,7 +128,8 @@ public class ClntMngController {
 					produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String clntCmpnyMngAction(@RequestParam HashMap<String, String> params, 
-									 @PathVariable String gbn) throws Throwable {
+									 @PathVariable String gbn,
+									 HttpSession session) throws Throwable {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
