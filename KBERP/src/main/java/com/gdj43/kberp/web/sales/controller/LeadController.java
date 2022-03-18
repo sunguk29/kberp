@@ -69,4 +69,12 @@ public class LeadController {
 		
 		return mapper.writeValueAsString(modelMap);
 	}
+	
+	@RequestMapping(value = "/leadAdd")
+	public ModelAndView leadAdd(ModelAndView mav) {
+		
+		mav.setViewName("sales/leadAdd");
+		
+		return mav;
+	}
 }

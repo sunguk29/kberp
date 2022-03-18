@@ -330,14 +330,14 @@ hr { /* 구분선 */
 								<td><input type="button" class="btn" value="고객명 *" readonly="readonly"/></td>
 								<td>
 									<input type="text" class="txt" />
-									<img class="btnImg_in" alt="팝업" src="../../images/sales/popup.png" />
+									<img class="btnImg_in" alt="팝업" src="resources/images/sales/popup.png" />
 								</td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="고객사 *" readonly="readonly"/></td>
 								<td>
 									<input type="text" class="txt" />
-									<img class="btnImg_in" alt="팝업" src="../../images/sales/popup.png" />
+									<img class="btnImg_in" alt="팝업" src="resources/images/sales/popup.png" />
 								</td>
 							</tr>
 							<tr>
@@ -378,7 +378,7 @@ hr { /* 구분선 */
 					<!-- 첨부자료 -->
 					<div class="rvn_txt"> 첨부자료 (0)
 						<input type=file name='file1' style='display: none;' /> 
-						<img class="plus_btn" src="../../images/sales/plus.png" border='0' onclick="document.all.file1.click();" > 
+						<img class="plus_btn" src="resources/images/sales/plus.png" border='0' onclick="document.all.file1.click();" > 
 					</div>
 					<div class="cntrct_box_in"></div>
 				</div> <!-- bodyWrap end -->
