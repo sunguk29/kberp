@@ -244,6 +244,10 @@ $(document).ready(function() {
 			}]
 		});
 	});
+	
+	
+	reloadList();
+	
 });
 
 function reloadList() {
@@ -270,8 +274,8 @@ function drawList(list) {
 	for(var data of list) {
 		html += "<tbody>";
 		html += "<tr>";
-		html += "<td rowspan=\"3\">010</td>";
-		html += "<td>S 등급</td>";
+		html += "<td rowspan=\"3\">1</td>";
+		html += "<td>" + data.GRADE_NAME + " 등급</td>";
 		html += "<td rowspan=\"3\"><img class=\"deal\" alt=\"거래\" src=\"../../images/sales/hands.png\" /><span class=\"deal_cnt\">2건</span></td>";
 		html += "</tr>";
 		html += "<tr>";
