@@ -198,7 +198,12 @@ $(document).ready(function() {
 		</div>
 	</div>
 	
-	<form action="guideWrtngAdd" id="actionForm" method="post"></form>
+	<!-- 글쓰기 form -->
+	<form action="guideWrtngAdd" id="actionForm" method="post">
+	<input type="hidden" name="top" value="${param.top}">
+		<input type="hidden" name="menuNum" value="${param.menuNum}">
+		<input type="hidden" name="menuType" value="${param.menuType}">
+	</form>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>
