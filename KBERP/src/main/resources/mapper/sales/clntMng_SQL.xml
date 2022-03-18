@@ -23,8 +23,8 @@
 		                                                                   ON C.SALES_NUM = S.SALES_NUM
 		                                        GROUP BY CC.CLNT_CMPNY_NAME ) CCNT
 		                                   ON CC.CLNT_CMPNY_NAME = CCNT.CLNT_CMPNY_NAME ) CC
-										   AND CC.RNUM BETWEEN #{startCount} AND #{endCount}
-		WHERE 1 = 1
+		WHERE CC.RNUM BETWEEN #{startCount} AND #{endCount}
+		AND 1 = 1
 	</select>
 	
 	<select id="clntCmpnyCnt" parameterType="hashmap" resultType="Integer">
