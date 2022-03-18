@@ -643,10 +643,6 @@ $(document).ready(function() {
 				<div class="bottom_1">
 					<div class="cnsl_rcrd_header">
 						<div class="cnsl_rcrd">상담이력</div>
-						<div class="cnsl_rcrd_srch_text_wrap">
-							<input type="text" />
-						</div>
-						<div class="cmn_btn_ml">검색</div>
 					</div>
 					<div class="cnsl_rcrd_cont">
 						<table class="cnsl_rcrd_table">
