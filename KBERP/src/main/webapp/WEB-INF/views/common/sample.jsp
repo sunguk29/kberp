@@ -45,6 +45,7 @@ $(document).ready(function() {
 			bgClose : false,
 			title : "버튼두개팝업",
 			contents : "내용임",
+			draggable : true,
 			buttons : [{
 				name : "하나",
 				func:function() {

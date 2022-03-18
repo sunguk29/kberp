@@ -21,7 +21,13 @@ public class FaqController {
 		
 	mav.setViewName("CS/faq");
 	
-	
 	return mav;
+	}
+	
+	@RequestMapping(value = "/faqAdd")
+	public ModelAndView faqAdd(ModelAndView mav) {
+		
+		mav.setViewName("CS/faqAdd");
+		return mav;
 	}
 }
