@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gdj43.kberp.common.bean.PagingBean;
+import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 
 @Controller
@@ -20,9 +22,18 @@ public class ClntMngController {
 	@Autowired
 	public ICommonService iCommonService;
 	
+	@Autowired
+	public IPagingService iPagingService;
+	
 	@RequestMapping(value = "/clntCmpnyList")
 	public ModelAndView clntCmpnyList(@RequestParam HashMap<String, String> params, 
 									  ModelAndView mav) {
+		
+		if(params.get("page") == null || params.get("page") == "") {
+			params.put("page", "1");
+		}
+		
+		mav.addObject("page", params.get("page"));
 		
 		mav.setViewName("sales/clntCmpnyList");
 		
@@ -38,10 +49,19 @@ public class ClntMngController {
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
+		int cnt = iCommonService.getIntData("clntCmpny.clntCmpnyCnt", params);
+		
+		PagingBean pb = 
+				iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
+		
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
 		List<HashMap<String, String>> list = 
-				iCommonService.getDataList("common.getClntCmpntList", params);
+				iCommonService.getDataList("clntCmpny.getClntCmpntList", params);
 		
 		modelMap.put("list", list);
+		modelMap.put("pb", pb);
 		
 		return mapper.writeValueAsString(modelMap);
 	}

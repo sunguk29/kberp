@@ -507,17 +507,40 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#call_btn").on("click", function() {
+	$("#guide_btn").on("click", function() {
+		var html = "";
+		
 		makePopup({
 			bg : false,
 			bgClose : false,
 			width: 510,
 			height: 300,
-			title : "버튼두개팝업",
-			contents : "",
-			contentsEvent : function() {
-				$("#popup1").draggable();
-			},
+			title : "대응가이드",
+			contents : html,
+			draggable : true,
+			buttons : [{
+				name : "닫기",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}]
+		});
+	});
+});
+
+$(document).ready(function() {
+	$("#call_btn").on("click", function() {
+		var html = "";
+		
+		makePopup({
+			bg : false,
+			bgClose : false,
+			width: 510,
+			height: 300,
+			title : "안내/부서별연락",
+			contents : html,
+			draggable : true,
 			buttons : [{
 				name : "닫기",
 				func:function() {
@@ -592,7 +615,7 @@ $(document).ready(function() {
 						<div class="cnsl_note_top">
 							<div class="cnsl_note">상담노트</div>
 							<div class="cmn_btn" id="call_btn"><img alt="부서별연락처" src="resources/images/CS/call.png" id="imgs"></div>
-							<div class="cmn_btn"><img alt="대응가이드" src="resources/images/CS/call_guide.png" id="imgs"></div>
+							<div class="cmn_btn" id="guide_btn"><img alt="대응가이드" src="resources/images/CS/call_guide.png" id="imgs"></div>
 						</div>
 						<div class="mid_row1">
 							<div class="cnsl_type">상담유형</div>

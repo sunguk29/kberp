@@ -57,12 +57,12 @@ $(document).ready(function() {
 		makePopup({
 			depth : 1,
 			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
+			title : "등록",
+			width: 400,
+			height: 220,
+			contents : "등록이 완료 되었습니다",
 			buttons : {
-				name : "하나",
+				name : "확인",
 				func:function() {
 					console.log("One!");
 					closePopup();
@@ -70,23 +70,7 @@ $(document).ready(function() {
 			}
 		});
 	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
-	});
+
 });
 </script>
 </head>
@@ -123,7 +107,7 @@ $(document).ready(function() {
                         <td><textarea name = content cols=85 rows=20 placeholder="내용을 입력하세요"></textarea></td>
                         </tr>
                         </table>
-                    <div class="cmn_btn_ml">등록</div>
+					<div class="cmn_btn_ml" id="btn1Btn">등록</div>
 		</div>
 	</div>
 	<!-- bottom -->
