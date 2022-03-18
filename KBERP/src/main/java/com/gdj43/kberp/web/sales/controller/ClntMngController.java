@@ -29,10 +29,10 @@ public class ClntMngController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/atbListAjax", method = RequestMethod.POST, 
+	@RequestMapping(value = "/clntCmpnyListAjax", method = RequestMethod.POST, 
 					produces = "text/json;charset=UTF-8")
 	@ResponseBody 
-	public String atbListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+	public String clntCmpnyListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
