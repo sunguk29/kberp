@@ -303,6 +303,9 @@ function drawPaging(pb) {
 <body>
 <form action="#" id="actionForm" method="post">
 	<input type="hidden" id="page" name="page" value="${page}" />
+	<input type="hidden" name="top" value="${param.top}" />
+	<input type="hidden" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">

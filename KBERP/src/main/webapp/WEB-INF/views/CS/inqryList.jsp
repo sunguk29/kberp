@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 1:1문의</title>
+<title>카카오뱅크 ERP Sample</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -45,7 +45,6 @@ $(document).ready(function() {
 			bgClose : false,
 			title : "버튼두개팝업",
 			contents : "내용임",
-			draggable : true,
 			buttons : [{
 				name : "하나",
 				func:function() {
@@ -202,7 +201,7 @@ $(document).ready(function() {
 					<div class="page_btn page_next">next</div>
 					<div class="page_btn page_last">last</div>
 				</div>
-				<div class="cmn_btn_ml" id="writeBtn">글쓰기</div>
+				<div class="cmn_btn_ml">글쓰기</div>
 			</div>
 		</div>
 	</div>

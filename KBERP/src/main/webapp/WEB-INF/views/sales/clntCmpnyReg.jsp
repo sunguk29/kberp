@@ -49,9 +49,6 @@
 	font-size: 10.5pt;
 }
 /* 개인 작업 영역 */
-.txt:hover {
-	cursor: pointer;
-}
 table{	
 	border: 1px;
 	width: 927px;
@@ -135,7 +132,7 @@ td:nth-child(1), td:nth-child(3){
 	vertical-align: middle;
 	width: 18px;
 	height: 18px;
-	background-image: url("../../images/sales/downarrow.png");
+	background-image: url("resources/images/sales/downarrow.png");
 	background-size: 18px 18px;
 	float: right;
 	margin-top: 7.5px;
@@ -145,7 +142,7 @@ td:nth-child(1), td:nth-child(3){
 	vertical-align: middle;
 	width: 18px;
 	height: 18px;
-	background-image: url("../../images/sales/up_arrow.png");
+	background-image: url("resources/images/sales/up_arrow.png");
 	background-size: 18px 18px;
 	float: right;
 	margin-top: 7.5px;
@@ -183,135 +180,8 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 70px;
 	text-align: center;
 }
-.hands{
-	display: inline-block;
-	vertical-align: middle;
-	width: 48px;
-	height: 48px;
-	background-image: url("../../images/sales/hands.png");
-	background-size: 48px 48px;
-	margin-right: 10px;
-}
 .boldname{
 	font-weight: bold;
-}
-
-/* 의견 */
-.bx { /* 스크롤때문에 div 박스 추가 */
-	width: 860px;
-	height: 305px;
-	margin-left: 47.5px;
-	overflow-y: auto;
-}
-hr { /* 구분선 */
-	margin-bottom: 10px;
-}
-.bot_title { 
-	font-size: 11pt;
-}
-textarea {
-	width: 757px;
-	height: 52px;
-	font-size: 10.5pt;
-	white-space: pre-wrap;
-	resize: none;
-	font-family: "맑은 고딕";
-	display: inline-block;
-	vertical-align: top;
-	outline: none;
-}
-.subm {
-	margin-left: 14px;
-	width: 35px;
-	height: 56px;
-	line-height: 56px;
-}
-.OpinionBox {
-	width: 830px;
-	height: 70px;
-	font-size: 10pt;
-	border: 1px solid gray;
-	border-top-left-radius: 12px;
-	border-top-right-radius: 12px;
-	border-bottom-left-radius: 12px;
-	border-bottom-right-radius: 12px;
-	margin-bottom: 5px;
-	background-color: #F2F2F2;
-}
-.name {
-	margin-top: 3px;
-	font-weight: bold;
-	padding-top: 5px;
-	padding-left: 20px;
-}
-.txtOp, .dt, .del {
-	padding-left: 20px;
-}
-.dt {
-	padding-right: 590px;
-}
-.del:hover {
-	cursor: pointer;
-	color: #F2CB05;
-}
-.dt, .del {
-	display: inline-block;
-	vertical-align: top;
-	font-size: 9pt;
-	color: gray;
-}
-.opBox {
-	width: 860px;
-	height: 56px;
-	margin: 15px 0px 5px 47.5px;
-}
-/* 히스토리 */
-.dwon_icon {
-	display:inline-block;
-	vertical-align: middle;
-	width: 24px;
-	height: 24px;
-	background-image: url("../../images/sales/downarrow.png");
-	background-size: 24px 24px;
-	float: right;
-	margin-top: 3px;
-}
-.dwon_icon:hover {
-	cursor: pointer;
-}
-.side_btn_area {
-	display: inline-block;
-	vertical-align: top;
-	text-align: right;
-	width: 827px;
-	height: 30px;
-	margin-left: 100px;
-	line-height: 30px;
-}
-
-.save_btn, .list_btn {
-	display: inline-block;
-	vertical-align: top;
-	width: 30px;
-	height: 30px;
-	line-height: 30px;
-	font-size: 11pt;
-	font-weight: bold;
-	margin: 0px 5px;
-	border-radius: 2px;
-	cursor: pointer;
-	color: #7b7b7b;
-}
-.mgtop {
-	margin-top: 50px;
-}
-.sc_title {
-	width: 927px;
-	height: 30px;
-	font-size: 16px;
-	font-weight: bold;
-	line-height: 30px;
-	background-color: #F2CB05;
 }
 /* 팝업 버튼 */
 .btn_pos {
@@ -355,7 +225,7 @@ textarea {
 	vertical-align: middle;
 	width: 18px;
 	height: 18px;
-	background-image: url("../../images/sales/plus.png");
+	background-image: url("resources/images/sales/plus.png");
 	background-size: 18px 18px;
 	float: right;
 	margin-right: 5px;
@@ -366,7 +236,7 @@ textarea {
 	vertical-align: middle;
 	width: 18px;
 	height: 18px;
-	background-image: url("../../images/sales/plus.png");
+	background-image: url("resources/images/sales/plus.png");
 	background-size: 18px 18px;
 	float: right;
 	margin-right: 7px;
@@ -378,14 +248,19 @@ textarea {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
+	$("#listBtn").on("click", function() {
+		$("#listForm").submit();
+	});
 });
 
 </script>
 </head>
 <body>
-<form action="#" id="actionForm" method="post">
-	<input type="hidden" id="page" name="page" value="${param.page}" />
+<form action="clntCmpnyList" id="listForm" method="post">
+	<input type="hidden" id="page" name="page" value="${page}" />
+	<input type="hidden" name="top" value="${param.top}" />
+	<input type="hidden" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -398,8 +273,8 @@ $(document).ready(function() {
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">고객사 등록</div>
-			<img alt="목록버튼" src="../../images/sales/list.png" class="btnImg" />
-			<img alt="저장버튼" src="../../images/sales/save.png" class="btnImg" />
+			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
+			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" />
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
@@ -468,7 +343,7 @@ $(document).ready(function() {
 								value="주소 *" /></td>
 							<td><input type="text" class="txt_ad" readonly="readonly"
 								disabled="disabled" /> <img class="btnImg" alt="돋보기"
-								src="../../images/sales/mg.png" /></td>
+								src="resources/images/sales/mg.png" /></td>
 						</tr>
 						<tr height="40">
 							<td><input type="text" class="txt" placeholder="상세주소" /></td>
@@ -493,9 +368,8 @@ $(document).ready(function() {
 				</table>
 				<!-- 첨부자료 -->
 				<div class="rvn_txt">
-					첨부자료 (0) <input type=file name='file1' style='display: none;' /> <img
-						class="plus_btn" src="../../images/sales/plus.png" border='0'
-						onclick="document.all.file1.click();">
+					첨부자료 (0) <input type=file name='file1' style='display: none;' />
+					<img class="plus_btn" src="resources/images/sales/plus.png" border='0' />
 				</div>
 				<div class="cntrct_box_in"></div>
 			</div>
