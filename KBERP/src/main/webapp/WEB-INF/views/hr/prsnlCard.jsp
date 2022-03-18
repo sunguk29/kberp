@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 안내글</title>
+<title>카카오뱅크 ERP - 인사기록카드</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -70,7 +70,7 @@ $(document).ready(function() {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">안내글</div>
+			<div class="page_title_text">프로젝트 관리</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
 				<select class="srch_sel">
@@ -106,74 +106,74 @@ $(document).ready(function() {
 				</thead>
 				<tbody>
 					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td>10</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>백종훈 대리</td>
+						<td>2021-12-01</td>
+						<td>3</td>
 					</tr>
 					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td>10</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>백종훈 대리</td>
+						<td>2021-12-01</td>
+						<td>3</td>
 					</tr>
 					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td>10</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>백종훈 대리</td>
+						<td>2021-12-01</td>
+						<td>3</td>
 					</tr>
 					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td>10</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>백종훈 대리</td>
+						<td>2021-12-01</td>
+						<td>3</td>
 					</tr>
 					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td>10</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>백종훈 대리</td>
+						<td>2021-12-01</td>
+						<td>3</td>
 					</tr>
 					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td>10</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>백종훈 대리</td>
+						<td>2021-12-01</td>
+						<td>3</td>
 					</tr>
 					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-				<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td>10</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>백종훈 대리</td>
+						<td>2021-12-01</td>
+						<td>3</td>
 					</tr>
 					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td>10</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>백종훈 대리</td>
+						<td>2021-12-01</td>
+						<td>3</td>
 					</tr>
 					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td>10</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>백종훈 대리</td>
+						<td>2021-12-01</td>
+						<td>3</td>
+					</tr>
+					<tr>
+						<td>10</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>백종훈 대리</td>
+						<td>2021-12-01</td>
+						<td>3</td>
 					</tr>
 				</tbody>
 			</table>
@@ -190,6 +190,9 @@ $(document).ready(function() {
 					<div class="page_btn page_last">last</div>
 				</div>
 				<div class="cmn_btn_ml">글쓰기</div>
+				<div class="cmn_btn_ml" id="alertBtn">알림</div>
+				<div class="cmn_btn_ml" id="btn1Btn">버튼1개</div>
+				<div class="cmn_btn_ml" id="btn2Btn">버튼2개</div>
 			</div>
 		</div>
 	</div>
