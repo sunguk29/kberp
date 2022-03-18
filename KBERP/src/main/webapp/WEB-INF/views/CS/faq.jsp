@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>faq</title>
 </head>
 <body>
-테스트2222233333
+
 </body>
 </html>

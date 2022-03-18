@@ -17,4 +17,13 @@ public class elctrncAprvlController {
 		return mav;
 		
 	}
+	
+	@RequestMapping(value="/draftTmpltBoxWrite")
+	public ModelAndView draftTmpltBoxWrite(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		mav.setViewName("GW/draftTmpltBoxWrite");
+		
+		return mav;
+		
+	}
 }
