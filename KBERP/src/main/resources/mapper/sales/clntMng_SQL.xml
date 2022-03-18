@@ -49,7 +49,7 @@
 	</select>
 	
 	<insert id="getClntCmpnyAdd" parameterType="hashmap">
-		INSERT INTO CLNT_CMNT(CLNT_CMPNY_NUM, CLNT_CMPNY_CLSFY_NUM, GRADE_NUM, RCHNTN_PATH_NUM,
+		INSERT INTO CLNT_CMPNY(CLNT_CMPNY_NUM, CLNT_CMPNY_CLSFY_NUM, GRADE_NUM, RCHNTN_PATH_NUM,
 		                      CLNT_CMPNY_NAME, BSNSMN_RGSTRTN_NUM, CLNT_NAME, PHONE_NUM, FAX, HMPG, ZIP_CODE_NUM,
 		                      ADRS, DTL_ADRS, RVN)
 		VALUES(CLNT_CMPNY_SEQ.NEXTVAL, #{cc_clsfy}, #{cc_grade}, #{rp}, #{cc_name}, #{br_num}, #{c_name}, 

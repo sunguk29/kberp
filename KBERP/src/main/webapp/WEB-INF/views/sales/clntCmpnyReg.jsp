@@ -39,12 +39,12 @@ table{
 td:nth-child(2), td:nth-child(4){
 	border-bottom: 1px solid #d7d7d7;
 }
-tr:nth-child(10) > td:nth-child(1){
+tr:nth-child(11) > td:nth-child(1){
 	border-bottom: 1px solid #d7d7d7;
 }
-tr:nth-child(9) > td:nth-child(2){
+/* tr:nth-child(9) > td:nth-child(2){
 	background-color: #F2F2F2;
-}
+} */
 td:nth-child(1), td:nth-child(3){
 	text-align: center;
 }
@@ -77,7 +77,7 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 33px;
 	border: none;
 }
-.txt_ad {
+/* .txt_ad {
 	height: 30px;
 	width: 679px;
 	padding: 0 5px;
@@ -90,7 +90,7 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 33px;
 	border: none;
 	background-color: #F2F2F2;
-}
+} */
 
 .btnImg{
 	width : 30px;
@@ -253,9 +253,9 @@ $(document).ready(function() {
 		} else if(checkEmpty("#dtl_adrs")) {
 			alert("상세주소를 입력하세요.");
 			$("#dtl_adrs").focus();
-		} else if(checkEmpty("#rnv")) {
+		} else if(checkEmpty("#rvn")) {
 			alert("매출를 입력하세요.");
-			$("#rnv").focus();
+			$("#rvn").focus();
 		} else if(checkEmpty("#rp")) {
 			alert("인지경로를 선택하세요.");
 			$("#rp").focus();
@@ -348,12 +348,12 @@ function checkEmpty(sel) {
 								<td><select class="txt" id="cc_clsfy" name="cc_clsfy">
 										<optgroup>
 											<option>선택하세요</option>
-											<option>거래고객사</option>
-											<option>파트너사</option>
-											<option>해지고객사</option>
-											<option>정지고객사</option>
-											<option>외국고객사</option>
-											<option>기타</option>
+											<option value="0">거래고객사</option>
+											<option value="1">파트너사</option>
+											<option value="2">해지고객사</option>
+											<option value="3">정지고객사</option>
+											<option value="4">외국고객사</option>
+											<option value="5">기타</option>
 										</optgroup>
 								</select></td>
 							</tr>
@@ -362,11 +362,11 @@ function checkEmpty(sel) {
 								<td><select class="txt" id="cc_grade" name="cc_grade">
 										<optgroup>
 											<option>선택하세요</option>
-											<option>S</option>
-											<option>A</option>
-											<option>B</option>
-											<option>C</option>
-											<option>D</option>
+											<option value="0">S</option>
+											<option value="1">A</option>
+											<option value="2">B</option>
+											<option value="3">C</option>
+											<option value="4">D</option>
 										</optgroup>
 								</select></td>
 							</tr>
@@ -396,15 +396,15 @@ function checkEmpty(sel) {
 							</tr>
 							<tr height="40">
 								<td rowspan="2"><input type="button" class="address" value="주소 *" /></td>
-								<td><input type="text" class="txt_ad" id="adrs" name="adrs" readonly="readonly" disabled="disabled" /> 
-								<img class="btnImg" alt="돋보기" src="resources/images/sales/mg.png" /></td>
+								<td><input type="text" class="txt" id="adrs" name="adrs" /></td>
+								<!-- <img class="btnImg" alt="돋보기" src="resources/images/sales/mg.png" /></td> -->
 							</tr>
 							<tr height="40">
-								<td><input type="text" class="txt" placeholder="상세주소 *" id="dtl_adrs" name="dtl_adrs"/></td>
+								<td><input type="text" class="txt" placeholder="상세주소" id="dtl_adrs" name="dtl_adrs"/></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="매출(년)*" /></td>
-								<td><input type="text" class="txt" id="rnv" name="rvn" /></td>
+								<td><input type="text" class="txt" id="rvn" name="rvn" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="인지경로"></td>
@@ -422,12 +422,12 @@ function checkEmpty(sel) {
 						</tbody>
 					</table>
 					<!-- 첨부자료 -->
-					<div class="rvn_txt">
+					<!-- <div class="rvn_txt">
 						첨부자료 (0) <input type="file" name="att" />
 						<input type="hidden" id="attFile" name="attFile" />
 						<img class="plus_btn" src="resources/images/sales/plus.png" border='0' />
 					</div>
-					<div class="cntrct_box_in"></div>
+					<div class="cntrct_box_in"></div> -->
 				</form>
 			</div>
 		</div>
