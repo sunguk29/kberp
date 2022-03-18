@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP Sample</title>
+<title>지출결의서관리 목록</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -14,7 +14,21 @@
 .cont_wrap {
 	width: 900px;
 }
+
 /* 개인 작업 영역 */
+.srch_month {
+	display: inline-block;
+	vertical-align: top;
+	height: 27px;
+}
+
+.mnthly_slct:focus {
+	outline: 2px solid #F2CB05;
+}
+
+.board_table tbody td {
+	color: black;
+}
 
 </style>
 <script type="text/javascript">
@@ -68,131 +82,121 @@ $(document).ready(function() {
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
 	<!-- 내용영역 -->
-	<div class="cont_wrap">
-		<div class="page_title_bar">
-			<div class="page_title_text">프로젝트 관리</div>
-			<!-- 검색영역 선택적 사항 -->
-			<div class="page_srch_area">
-				<select class="srch_sel">
-					<option>제목</option>
-					<option>내용</option>
-					<option>작성자</option>
-				</select>
-				<div class="srch_text_wrap">
-					<input type="text" />
+	<div class="right_area">
+		<!-- 내용영역 -->
+		<div class="cont_wrap">
+			<div class="page_title_bar">
+				<div class="page_title_text">지출결의서관리 목록</div>
+				<div class="page_srch_area">
+					<input type="month" class="srch_month">
+					
+					<div class="srch_text_wrap">
+						<input type="text" placeholder="사원명" />
+					</div>
+					<div class="cmn_btn_ml">검색</div>
 				</div>
-				<div class="cmn_btn_ml">검색</div>
 			</div>
-		</div>
-		<!-- 해당 내용에 작업을 진행하시오. -->
-		<div class="cont_area">
-			<!-- 여기부터 쓰면 됨 -->
-			<table class="board_table">
-				<colgroup>
-					<col width="100"/>
-					<col width="400"/>
-					<col width="150"/>
-					<col width="150"/>
-					<col width="100"/>
-				</colgroup>
-				<thead>
-					<tr>
-						<th>No</th>
-						<th>제목</th>
-						<th>작성자</th>
-						<th>작성일</th>
-						<th>조회수</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-				</tbody>
-			</table>
-			<div class="board_bottom">
-				<div class="pgn_area">
-					<div class="page_btn page_first">first</div>
-					<div class="page_btn page_prev">prev</div>
-					<div class="page_btn_on">1</div>
-					<div class="page_btn">2</div>
-					<div class="page_btn">3</div>
-					<div class="page_btn">4</div>
-					<div class="page_btn">5</div>
-					<div class="page_btn page_next">next</div>
-					<div class="page_btn page_last">last</div>
+			<!-- 해당 내용에 작업을 진행하시오. -->
+			<div class="cont_area">
+				<!-- 여기부터 쓰면 됨 -->
+				<div>
+					<table class="board_table">
+						<colgroup>
+							<col width="180">
+							<col width="180">
+							<col width="180">
+							<col width="180">
+							<col width="180">
+						</colgroup>
+						<thead>
+							<tr>
+								<th>귀속연월</th>
+								<th>사원명</th>
+								<th>개인 지출 합계</th>
+								<th>법인 지출 합계</th>
+								<th>총 합계</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>2022.01</td>
+								<td class="board_table_hover">홍길동</td>
+								<td>150,000원</td>
+								<td>150,000원</td>
+								<td>300,000원</td>
+							</tr>
+							<tr>
+								<td>2022.01</td>
+								<td class="board_table_hover">김철수</td>
+								<td>150,000원</td>
+								<td>150,000원</td>
+								<td>300,000원</td>
+							</tr>
+							<tr>
+								<td>2022.01</td>
+								<td class="board_table_hover">고길동</td>
+								<td>150,000원</td>
+								<td>150,000원</td>
+								<td>300,000원</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="board_bottom">
+						<div class="pgn_area">
+							<div class="page_btn page_first">first</div>
+							<div class="page_btn page_prev">prev</div>
+							<div class="page_btn_on">1</div>
+							<div class="page_btn">2</div>
+							<div class="page_btn">3</div>
+							<div class="page_btn">4</div>
+							<div class="page_btn">5</div>
+							<div class="page_btn page_next">next</div>
+							<div class="page_btn page_last">last</div>
+						</div>
+					</div>
 				</div>
-				<div class="cmn_btn_ml">글쓰기</div>
-				<div class="cmn_btn_ml" id="alertBtn">알림</div>
-				<div class="cmn_btn_ml" id="btn1Btn">버튼1개</div>
-				<div class="cmn_btn_ml" id="btn2Btn">버튼2개</div>
 			</div>
 		</div>
 	</div>
