@@ -606,9 +606,7 @@ $(document).ready(function() {
 			}]
 		});
 	});
-});
 
-$(document).ready(function() {
 	$("#call_btn").on("click", function() {
 		var html = "";
 		
@@ -629,9 +627,7 @@ $(document).ready(function() {
 			}]
 		});
 	});
-});
 
-$(document).ready(function() {
 	$("#searchBtn").on("click", function() {
 		var html = "";
 		
