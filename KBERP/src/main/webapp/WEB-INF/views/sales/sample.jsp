@@ -45,6 +45,9 @@ $(document).ready(function() {
 			bgClose : false,
 			title : "버튼두개팝업",
 			contents : "내용임",
+			contentsEvent : function() {
+				$("#popup1").draggable();
+			},
 			buttons : [{
 				name : "하나",
 				func:function() {
