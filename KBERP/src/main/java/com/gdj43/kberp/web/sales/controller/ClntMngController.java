@@ -105,5 +105,20 @@ public class ClntMngController {
 	
 	return mapper.writeValueAsString(modelMap);
 	}
+	
+	@RequestMapping(value = "/clntCmpnyReg")
+	public ModelAndView clntCmpnyReg(@RequestParam HashMap<String, String> params, 
+									  ModelAndView mav) {
+		
+		if(params.get("page") == null || params.get("page") == "") {
+			params.put("page", "1");
+		}
+		
+		mav.addObject("page", params.get("page"));
+		
+		mav.setViewName("sales/clntCmpnyReg");
+		
+		return mav;
+	}
 
 }

@@ -265,7 +265,7 @@ function drawList(list) {
 		html += "</tbody>"; 
 	}
 	
-	$(".list_table").html(html);
+	$(".cont_table").html(html);
 
 }
 
@@ -407,6 +407,7 @@ function drawPaging(pb) {
 						</tr>
 					</thead>
 				</table>
+				<table class="cont_table"></table>
 				<div class="body_bottom">
 					<div class="board_bottom">
 						<div class="pgn_area"></div>
