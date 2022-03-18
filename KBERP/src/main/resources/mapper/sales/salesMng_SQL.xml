@@ -23,7 +23,7 @@
 		                    INNER JOIN CLNT_CMPNY CC
 		                            ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
 		      ) SS
-		WHERE SS.SALES_NUM BETWEEN #{startCount} AND #{endCount}
+		WHERE SS.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
 </mapper>

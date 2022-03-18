@@ -402,7 +402,6 @@ function reloadList() {
 		data : params,
 		dataType : "json",
 		success : function(res) {
-			cosole.log(res);
 			drawList(res.list);
 			drawPaging(res.pb);
 		},
@@ -437,13 +436,13 @@ function drawList(list) {
 		html += "</colgroup>";
 		html += "<tbody>";
 		html += "<tr height=\"10\">";
-		html += "<td class=\"colNum2\" rowspan="3">영업기회</td>";
+		html += "<td class=\"colNum2\" rowspan=\"3\">영업기회</td>";
 		html += "<td class=\"a\"></td>";
-		html += "<td class=\"colNum3\" rowspan="3">제안</td>";
+		html += "<td class=\"colNum3\" rowspan=\"3\">제안</td>";
 		html += "<td class=\"a\"></td>";
-		html += "<td class=\"colNum4\" rowspan="3">견적</td>";
+		html += "<td class=\"colNum4\" rowspan=\"3\">견적</td>";
 		html += "<td class=\"a\"></td>";
-		html += "<td class=\"colNum6\" rowspan="3">계약</td>";
+		html += "<td class=\"colNum6\" rowspan=\"3\">계약</td>";
 		html += "</tr>";
 		html += "<tr height=\"10\">";
 		html += "<td class=\"stick1\"></td>";
