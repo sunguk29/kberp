@@ -52,7 +52,7 @@
 	vertical-align: middle;
 	width: 30px;
 	height: 40px;
-	background-image: url('./images/cmn/dwnld_icon.png');
+	background-image: url('resources/images/mng/dwnld_icon.png');
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 20px;
@@ -82,17 +82,19 @@ $(document).ready(function() {
 		makePopup({
 			depth : 1,
 			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
+			width : 300,
+			height : 150,
+			title : "삭제",
+			contents : "삭제하시겠습니까?",
+			buttons : [{
+				name : "삭제",
 				func:function() {
 					console.log("One!");
 					closePopup();
 				}
-			}
+			}, {
+				name : "취소"
+			}]
 		});
 	});
 	$("#btn2Btn").on("click", function() {
@@ -185,7 +187,7 @@ $(document).ready(function() {
 				<div class="btn_wrap">
 					<div class="cmn_btn">목록</div>
 					<div class="cmn_btn_ml">수정</div>
-					<div class="cmn_btn_ml">삭제</div>
+					<div class="cmn_btn_ml" id="btn1Btn">삭제</div>
 				</div>
 			</div>
 		</div>
