@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="clntCmpny">
+<mapper namespace="clntCmpnyMng">
 
 	<select id="getClntCmpntList" parameterType="hashmap" resultType="hashmap">
 		SELECT CC.CLNT_CMPNY_NUM, CC.GRADE_NAME, CC.CLNT_CMPNY_CLSFY_NAME, CC.CLNT_CMPNY_NAME,
@@ -34,11 +34,12 @@
 	</select>
 	
 	<select id="getClntList" parameterType="hashmap" resultType="hashmap">
-		SELECT ROW_NUMBER() OVER(ORDER BY EC.CLNT_NUM DESC) AS RNUM, EC.CLNT_NUM, EC.DEPT, EC.DUTY,
-		       EC.EMAIL, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL 
-		FROM ENTRPRS_CLNT EC INNER JOIN CLNT_CMPNY CC
-		                             ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
-		WHERE 1 = 1
+		SELECT C.CLNT_NUM, C.DEPT, C.DUTY, C.EMAIL, C.CLNT_CMPNY_NAME, C.CLNT_NAME, C.MBL
+		FROM(  SELECT ROW_NUMBER() OVER(ORDER BY EC.CLNT_NUM DESC) AS RNUM, EC.CLNT_NUM, EC.DEPT, EC.DUTY,
+		              EC.EMAIL, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL 
+		       FROM ENTRPRS_CLNT EC INNER JOIN CLNT_CMPNY CC
+		                                    ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM ) C
+		WHERE C.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
 	<select id="clntCnt" parameterType="hashmap" resultType="Integer">

@@ -265,7 +265,7 @@ function drawList(list) {
 		html += "</tbody>"; 
 	}
 	
-	$("#cont_table").html(html);
+	$(".list_table").html(html);
 
 }
 
@@ -314,7 +314,7 @@ function drawPaging(pb) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">프로젝트 관리</div>
+			<div class="page_title_text">고객사 목록</div>
 			<!-- 검색영역 선택적 사항 -->
 
 		</div>
@@ -407,7 +407,6 @@ function drawPaging(pb) {
 						</tr>
 					</thead>
 				</table>
-				<table id="cont_table"></table>
 				<div class="body_bottom">
 					<div class="board_bottom">
 						<div class="pgn_area"></div>

@@ -62,7 +62,7 @@ public class LeadController {
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
-		List<HashMap<String, String>> list = iCommonService.getDataList("lead.getleadList", params);
+		List<HashMap<String, String>> list = iCommonService.getDataList("lead.getLeadList", params);
 		
 		modelMap.put("list", list);
 		modelMap.put("pb", pb);

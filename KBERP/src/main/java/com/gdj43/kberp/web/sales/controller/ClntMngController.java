@@ -49,7 +49,7 @@ public class ClntMngController {
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		int cnt = iCommonService.getIntData("clntCmpny.clntCmpnyCnt", params);
+		int cnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyCnt", params);
 		
 		PagingBean pb = 
 				iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
@@ -58,7 +58,7 @@ public class ClntMngController {
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
 		List<HashMap<String, String>> list = 
-				iCommonService.getDataList("clntCmpny.getClntCmpntList", params);
+				iCommonService.getDataList("clntCmpnyMng.getClntCmpntList", params);
 		
 		modelMap.put("list", list);
 		modelMap.put("pb", pb);
@@ -89,7 +89,7 @@ public class ClntMngController {
 	
 	Map<String, Object> modelMap = new HashMap<String, Object>();
 	
-	int cnt = iCommonService.getIntData("clnt.clntCnt", params);
+	int cnt = iCommonService.getIntData("clntCmpnyMng.clntCnt", params);
 	
 	PagingBean pb = 
 			iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
@@ -98,7 +98,7 @@ public class ClntMngController {
 	params.put("endCount", Integer.toString(pb.getEndCount()));
 	
 	List<HashMap<String, String>> list = 
-			iCommonService.getDataList("clnt.getClntList", params);
+			iCommonService.getDataList("clntCmpnyMng.getClntList", params);
 	
 	modelMap.put("list", list);
 	modelMap.put("pb", pb);

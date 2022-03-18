@@ -227,11 +227,10 @@ function reloadList() {
 	
 	$.ajax({
 		type : "post",
-		url : "",
+		url : "clntListAjax",
 		data : params,
 		dataType : "json",
 		success : function(res) {
-			drawList(res.list);
 			drawPaging(res.pb);
 		},
 		error : function(req) {
@@ -245,10 +244,23 @@ function drawList(list) {
 	var html = "";
 	
  	for(var data of list) {
- 		
+ 		html += "<tbody>";
+		html += "<tr>";
+		html += "<td rowspan=\"3\">" + data.RNUM + "</td>";
+		html += "<td>" + data.CLNT_NUM + "</td>";
+		html += "<td>" + data.DEPT + "/" + data.DUTY + "</td>";
+		html += "<td>" + data.EMAIL + "</td>";
+		html += "</tr>";
+		html += "<tr>";
+			<td>삼성전자</td>
+			<td>김호구</td>
+			<td>010-1234-5678</td>
+		</tr>
+		<tr></tr>	
+	</tbody>
 	}
 	
-	$("#cont_table").html(html);
+	$(".list_table").html(html);
 
 }
 
@@ -297,7 +309,7 @@ function drawPaging(pb) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">프로젝트 관리</div>
+			<div class="page_title_text">고객 목록</div>
 			<!-- 검색영역 선택적 사항 -->
 
 		</div>
@@ -344,7 +356,7 @@ function drawPaging(pb) {
 									<option>고객사명</option>
 							</select></td>
 							<td><img class="asc_btn cmn_btn" alt="등록버튼"
-								src="../../images/sales/asc.png" /></td>
+								src="resources/images/sales/asc.png" /></td>
 							<td colspan="7"></td>
 						</tr>
 					</tbody>
@@ -375,22 +387,7 @@ function drawPaging(pb) {
 						</tr>
 						<tr></tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td rowspan="3">001</td>
-							<td>CL012</td>
-							<td>전략 3팀 / 대리</td>
-							<td>ho9ho9@gmail.com</td>
-						</tr>
-						<tr>
-							<td>삼성전자</td>
-							<td>김호구</td>
-							<td>010-1234-5678</td>
-						</tr>
-						<tr></tr>
-					</tbody>
 				</table>
-				<table id="cont_table"></table>
 				<div class="body_bottom">
 					<div class="board_bottom">
 						<div class="pgn_area"></div>
