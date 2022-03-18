@@ -23,4 +23,19 @@ public class CmbnController {
 		
 		return mav;
 	}
+	
+	@RequestMapping(value="strgBox")
+	public ModelAndView strgBox(ModelAndView mav) {
+		
+		mav.setViewName("CS/strgBox");
+		return mav;
+	}
+	
+	@RequestMapping(value="guideWrtngAdd")
+	public ModelAndView guideWrtngAdd(ModelAndView mav) {
+		
+		mav.setViewName("CS/guideWrtngAdd");
+		return mav;
+	}
+	
 }
