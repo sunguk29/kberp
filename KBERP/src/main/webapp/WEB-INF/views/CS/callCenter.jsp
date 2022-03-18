@@ -588,8 +588,8 @@ $(document).ready(function() {
 		    		<div class="mid_area">
 						<div class="cnsl_note_top">
 							<div class="cnsl_note">상담노트</div>
-							<div class="cmn_btn"><img alt="부서별연락처" src="images/cmn/call.png" id="imgs"></div>
-							<div class="cmn_btn"><img alt="대응가이드" src="images/cmn/call_guide.png" id="imgs"></div>
+							<div class="cmn_btn"><img alt="부서별연락처" src="resources/images/CS/call.png" id="imgs"></div>
+							<div class="cmn_btn"><img alt="대응가이드" src="resources/images/CS/call_guide.png" id="imgs"></div>
 						</div>
 						<div class="mid_row1">
 							<div class="cnsl_type">상담유형</div>
