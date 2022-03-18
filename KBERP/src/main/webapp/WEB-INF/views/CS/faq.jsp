@@ -91,10 +91,10 @@ $(document).ready(function() {
 			<!-- 여기부터 쓰면 됨 -->
 			<table class="board_table">
 				<colgroup>
-					<col width="90"/>
-					<col width="90"/>
-					<col width="400"/>
-					<col width="150"/>
+					<col width="50"/>
+					<col width="140"/>
+					<col width="450"/>
+					<col width="100"/>
 					<col width="100"/>
 				</colgroup>
 				<thead>
@@ -109,72 +109,72 @@ $(document).ready(function() {
 				<tbody>
 					<tr>
 						<td>99</td>
-						<td>카테고리</td>
+						<td>입출금/예적금</td>
 						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>김ㅇㅇ</td>
+						<td>김**</td>
 						<td>2022-12-01</td>
 					</tr>
 					<tr>
 						<td>98</td>
-						<td>카테고리</td>
+						<td>입출금/예적금</td>
 						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>김ㅇㅇ</td>
+						<td>김**</td>
 						<td>2022-12-01</td>
 					</tr>
 					<tr>
 						<td>97</td>
-						<td>카테고리</td>
+						<td>입출금/예적금</td>
 						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>김ㅇㅇ</td>
+						<td>김**</td>
 						<td>2022-12-01</td>
 					</tr>
 					<tr>
 						<td>96</td>
-						<td>카테고리</td>
+						<td>입출금/예적금</td>
 						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>김ㅇㅇ</td>
+						<td>김**</td>
 						<td>2022-12-01</td>
 					</tr>
 					<tr>
 						<td>95</td>
-						<td>카테고리</td>
+						<td>인증/보안</td>
 						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>김ㅇㅇ</td>
+						<td>김**</td>
 						<td>2022-12-01</td>
 					</tr>
 					<tr>
 						<td>94</td>
-						<td>카테고리</td>
+						<td>인증/보안</td>
 						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>김ㅇㅇ</td>
+						<td>김**</td>
 						<td>2022-12-01</td>
 					</tr>
 					<tr>
 						<td>93</td>
-						<td>카테고리</td>
+						<td>인증/보안</td>
 						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>김ㅇㅇ</td>
+						<td>김**</td>
 						<td>2022-12-01</td>
 					</tr>
 					<tr>
 						<td>92</td>
-						<td>카테고리</td>
+						<td>앱이용</td>
 						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>김ㅇㅇ</td>
+						<td>김**</td>
 						<td>2022-12-01</td>
 					</tr>
 					<tr>
 						<td>91</td>
-						<td>카테고리</td>
+						<td>앱이용</td>
 						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>이ㅇㅇ</td>
+						<td>이**</td>
 						<td>2022-12-01</td>
 					</tr>
 					<tr>
 						<td>90</td>
-						<td>카테고리</td>
+						<td>앱이용</td>
 						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>이ㅇㅇ</td>
+						<td>이**</td>
 						<td>2022-12-01</td>
 					</tr>
 				</tbody>
