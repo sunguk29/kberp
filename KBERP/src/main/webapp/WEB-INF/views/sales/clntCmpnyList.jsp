@@ -255,7 +255,7 @@ function reloadList() {
 		data : params,
 		dataType : "json",
 		seuccess : function(res) {
-			
+			drawList(res);
 		},
 		error : function(req) {
 			console.log(req.responseText);
@@ -266,24 +266,27 @@ function reloadList() {
 
 function drawList(list) {
 	var html = "";
-	<tbody>
-	<tr>
-		<td rowspan="3">010</td>
-		<td>CC012</td>
-		<td>S 등급</td>
-		<td rowspan="3"><img class="deal" alt="거래"
-			src="../../images/sales/hands.png" /> <span class="deal_cnt">2건</span>
-		</td>
-	</tr>
-	<tr>
-		<td>파트너사</td>
-		<td>호구 전자</td>
-	</tr>
-	<tr>
-		<td>12.000.000.000원</td>
-		<td>서울특별시 가나다대로 12길</td>
-	</tr>
-	</tbody>
+	
+	for(var data of list) {
+		html += "<tbody>";
+		html += "<tr>";
+		html += "<td rowspan=\"3\">010</td>";
+		html += "<td>S 등급</td>";
+		html += "<td rowspan=\"3\"><img class=\"deal\" alt=\"거래\" src=\"../../images/sales/hands.png\" /><span class=\"deal_cnt\">2건</span></td>";
+		html += "</tr>";
+		html += "<tr>";
+		html += "<td>파트너사</td>";
+		html += "<td>호구 전자</td>";
+		html += "</tr>";
+		html += "<tr>";
+		html += "<td>12.000.000.000원</td>";
+		html += "<td>서울특별시 가나다대로 12길</td>";
+		html += "</tr>";
+		html += "</tbody>";
+	}
+	
+	$("table").html(html);
+
 }
 </script>
 </head>
