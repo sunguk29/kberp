@@ -13,12 +13,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 
 @Controller
 public class ClntMngController {
 	@Autowired
 	public ICommonService iCommonService;
+	
+	@Autowired
+	public IPagingService iPagingService;
 	
 	@RequestMapping(value = "/clntCmpnyList")
 	public ModelAndView clntCmpnyList(@RequestParam HashMap<String, String> params, 
