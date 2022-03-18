@@ -15,8 +15,169 @@
 	width: 900px;
 }
 /* 개인 작업 영역 */
+/* 팝업 */
+
+.popup_style{
+	height: 30px;
+	margin-top: 20px;
+	margin-bottom: 15px;
+	margin-left: 30px;
+	font-size: 9pt;
+}
+
+.slct_type{
+	width: 100px;
+	height: 30px;
+	position: absolute;
+	left: calc(50% - 140px);
+	font-size: 9pt;
+}
+.star{
+	font-size: 9pt;
+	color: blue;
+}
+#popup_title, #popup_place {
+	position: absolute;
+	left: calc(50% - 140px);
+	width: 360px;
+	height: 25px;
+	font-size: 9pt;
+}
+#popup_start_time, #popup_end_time{
+	position: absolute;
+	left: calc(50% - 140px);
+	width: 160px;
+	height: 25px;
+	text-align: center;
+	font-size: 9pt;
+}
+
+.popup_time{
+	position: absolute;
+	left: calc(50% + 45px);
+	width: 177px;
+	height: 27px;
+	font-size: 9pt;
+	text-align: center;
+}
+.popup_dtl_cont{
+	vertical-align:top;
+	width: 475px;
+	height: 160px;
+	font-size: 9pt;
+	margin-bottom: 15px;
+	margin-left: 30px;
+}
+.dtl_cont{
+	display: inline-block;
+	vertical-align: top;
+	position: absolute;
+	left: calc(50% - 140px);
+	font-size: 9pt;
+	resize: none;
+	width: 360px;
+	height: 150px;
+}
+#ctgry_user{
+	display:none;
+	position: absolute;
+	left: calc(50% - 20px);
+	font-size: 9pt;
+	width: 130px;
+	height: 25px;
+}
+#allday{
+	position: absolute;
+	left: calc(50% - 145px);
+	font-size: 9pt;
+	width: 17px;
+	height: 17px;
+}
+
 #fullCalendarArea {
 	font-size: 11pt;
+	position:absolute;
+	top: 155px;
+	left: 170px;
+	display:inline-block;
+	width: 1000px;
+	height: 600px;
+}
+.fc-sat { 
+	color:#002AFF;
+ }      
+.fc-sun{
+	color:#E31B23; 
+	}     
+
+
+#side_bar{
+	position:absolute;
+	top: 200px;
+	width: 150px;
+	height: 550px;
+	border: 1px solid #000;
+}
+#new_schdl{
+	position:absolute;
+	top: 140px;
+	width: 152px;
+	height: 40px;
+}
+
+.schdl_type {
+	width: 130px;
+	height: 120px;
+	margin: 10px;
+	border-bottom: 1px solid silver;
+}
+.schdl_ctgry{
+	width: 130px;
+	height: 265px;
+	margin: 10px;
+	border-bottom: 1px solid silver;
+}
+.today{
+	width: 130px;
+	height: 120px;
+	margin: 10px;
+}
+.side_bar_title{
+	font-size: 12pt;
+	margin: 10px 0 5px 12px;
+}
+.type_box, .ctgry_box{
+	margin: 8px;
+}
+.type_label{
+	font-size: 10pt;
+}
+
+.today > div{
+	width: 130px;
+	height: 100px;
+}
+.today > div > div{
+	margin-bottom: 5px;
+	font-size: 9pt;
+	border: 1px solid #000;
+	padding: 5px;
+}
+.today_schdl{
+	margin-top: 15px;
+}
+.dnr{
+	background-color: #e9e1f4;
+}
+.bsns{
+	background-color: #add8d3;
+
+}
+
+.schdl_ctgry>label:hover, #new_schdl:hover,
+.schdl_type>label:hover {
+	
+	cursor: pointer;
 }
 </style>
 <!-- Fullcalendar css -->
@@ -55,7 +216,7 @@ $(document).ready(function() {
           {
         	  title: '풀캘린더 적용',
               start: '2022-03-17',
-              color : '#BFA0ED', // 기타 옵션들
+              color : '#BFA0ED',
 			  textColor : 'black',
             },
         ];
@@ -78,7 +239,7 @@ $(document).ready(function() {
 
 	    	  //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
 
-	    	  //alert('Current view: ' + view.name);
+	    	 //alert('Current view: ' + view.name);
 	      }
 	});
 	
@@ -164,6 +325,78 @@ $(document).ready(function() {
 			}
 		}
 	});
+	$("#new_schdl").on("click", function () {
+		var html = "";
+		
+		html += "<div class=\"popup_style\">";
+		html += "<span>일정 종류</span><span class=\"star\"> *</span>";
+		html += "<select class=\"slct_type\">";
+		html += "<option>개인</option>";
+		html += "<option>팀</option>";
+		html += "				<option>전사</option>";
+		html += "</select>";
+		html += "				</div>";
+		html += "			<div class=\"popup_style\">";
+		html += "				<span>제목</span><span class=\"star\"> *</span>";
+		html += "				<input type=\"text\" id=\"popup_title\">";
+		html += "			</div>";
+		html += "			<div class=\"popup_style\">";
+		html += "				<span>위치</span>";
+		html += "				<input type=\"text\" id=\"popup_place\">";
+		html += "			</div>";
+		html += "			<div class=\"popup_style\">";
+		html += "				<span>시작 시간</span>";
+		html += "				<input type=\"date\" id=\"popup_start_time\"> <input type=\"time\" class=\"popup_time\">";
+		html += "			</div>";		
+		html += "			<div class=\"popup_style\">";
+		html += "				<span>종료 시간</span>";
+		html += "				<input type=\"date\" id=\"popup_end_time\"> <input type=\"time\"class=\"popup_time\">";			
+		html += "			</div>";
+		html += "			<div class=\"popup_dtl_cont\">";
+		html += "				<span>상세내용</span>";
+		html += "				<textarea rows=\"10\" cols=\"57\" class=\"dtl_cont\"></textarea>";			
+		html += "			</div>";
+		html += "			<div class=\"popup_style\">";
+		html += "				<span>범주</span><span class=\"star\"> *</span>";
+		html += "				<select class=\"slct_type\">";
+		html += "					<option>전체</option>";
+		html += "					<option>업무</option>";
+		html += "					<option>휴가</option>";
+		html += "					<option>교육</option>";
+		html += "					<option>회의</option>";
+		html += "					<option>회식</option>";
+		html += "					<option>출장</option>";
+		html += "					<option>개발</option>";
+		html += "					<option>사용자지정</option>";
+		html += "				</select>";
+		html += "				<input type=\"text\" placeholder=\"사용자 지정\"id=\"ctgry_user\">";
+		html += "			</div>";
+		html += "			<div class=\"popup_style\">";
+		html += "				<span>종일 일정</span>";
+		html += "				<input type=\"checkbox\" id=\"allday\">";		
+		html += "	</div>";
+		
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "일정등록",
+			contents : html,
+			width : 540,
+			height : 620,
+			buttons : [{
+				name : "저장",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "취소"
+			}]
+		});
+		
+		
+	});
+	
 });
 </script>
 </head>
@@ -184,6 +417,38 @@ $(document).ready(function() {
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
+			<input type="button" value="일정 등록" id="new_schdl">
+	<div id="side_bar">
+		<div class="schdl_type">
+			<h5 class="side_bar_title">일정</h5>
+			<input type="checkbox" class="type_box" id="solo"><label for="solo" class="type_label">개인 일정</label><br>
+			<input type="checkbox" class="type_box" id="team"><label for="team" class="type_label">팀 일정</label><br>
+			<input type="checkbox" class="type_box" id="all"><label for="all" class="type_label">전사 일정</label>
+			
+		</div>
+		<div class="schdl_ctgry">
+			<h5 class="side_bar_title">범주</h5>
+			<input type="checkbox" class="ctgry_box" id="business"><label for="business" class="type_label">업무</label><br>
+			<input type="checkbox" class="ctgry_box" id="leave"><label for="leave" class="type_label">휴가</label><br>
+			<input type="checkbox" class="ctgry_box" id="education"><label for="education" class="type_label">교육</label><br>
+			<input type="checkbox" class="ctgry_box" id="meeting"><label for="meeting" class="type_label">회의</label><br>
+			<input type="checkbox" class="ctgry_box" id="dinner"><label for="dinner" class="type_label">회식</label><br>
+			<input type="checkbox" class="ctgry_box" id="business_trip"><label for="business_trip" class="type_label">출장</label><br>
+			<input type="checkbox" class="ctgry_box" id="development"><label for="development" class="type_label">개발</label><br>
+			<input type="checkbox" class="ctgry_box" id="user"><label for="user" class="type_label">사용자 지정</label>
+			
+			
+		</div>
+		
+		<div class="today">		
+			<h5 class="side_bar_title">오늘 할 일</h5>
+			<div class="today_schdl">
+				<div class="bsns">오전 11:00 가나다라···	</div>
+				<div class="dnr">오후 5:00 가나다라···	</div>
+			</div>
+		</div>
+		
+	</div>
 			<div id="fullCalendarArea"></div>
 		</div>
 	</div>

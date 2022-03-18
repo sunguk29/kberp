@@ -507,20 +507,23 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#btn2Btn").on("click", function() {
+	$("#call_btn").on("click", function() {
 		makePopup({
 			bg : false,
 			bgClose : false,
+			width: 510,
+			height: 300,
 			title : "버튼두개팝업",
-			contents : "내용임",
+			contents : "",
+			contentsEvent : function() {
+				$("#popup1").draggable();
+			},
 			buttons : [{
-				name : "하나",
+				name : "닫기",
 				func:function() {
 					console.log("One!");
 					closePopup();
 				}
-			}, {
-				name : "둘닫기"
 			}]
 		});
 	});
@@ -588,7 +591,7 @@ $(document).ready(function() {
 		    		<div class="mid_area">
 						<div class="cnsl_note_top">
 							<div class="cnsl_note">상담노트</div>
-							<div class="cmn_btn"><img alt="부서별연락처" src="resources/images/CS/call.png" id="imgs"></div>
+							<div class="cmn_btn" id="call_btn"><img alt="부서별연락처" src="resources/images/CS/call.png" id="imgs"></div>
 							<div class="cmn_btn"><img alt="대응가이드" src="resources/images/CS/call_guide.png" id="imgs"></div>
 						</div>
 						<div class="mid_row1">

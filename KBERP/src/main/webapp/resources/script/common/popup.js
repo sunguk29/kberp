@@ -69,8 +69,9 @@ function makeAlert(title, contents, event) {
  * title - 제목
  * contents - 내용
  * contentsEvent - 내용 추가이벤트
- * buttons - 버튼추가(배열옵션객체 : 버튼다수, 옵션객체 : 버튼한개)
  * 
+ * buttons - 버튼추가(배열옵션객체 : 버튼다수, 옵션객체 : 버튼한개)
+ * draggable - 드래그 가능여부(true : 가능, flase : 불가능-기본값)
  * - buttons 옵션정보 -
  * name - 버튼명
  * func - 동작이벤트
@@ -154,6 +155,12 @@ function makePopup(option) {
 			
 			if(Object.keys(option).includes("contentsEvent")) {
 				option.contentsEvent.call();
+			}
+			
+			if(Object.keys(option).includes("draggable")) {
+				if(option.draggable) {
+					$("#popup" + depth).draggable({containment: "body"});
+				}
 			}
 			
 			$("#popup" + depth).css("z-index", depth * 120);
