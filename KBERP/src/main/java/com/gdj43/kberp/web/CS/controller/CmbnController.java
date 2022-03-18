@@ -23,4 +23,11 @@ public class CmbnController {
 		
 		return mav;
 	}
+	
+	@RequestMapping(value="strgBox")
+	public ModelAndView strgBox(ModelAndView mav) {
+		
+		mav.setViewName("CS/strgBox");
+		return mav;
+	}
 }

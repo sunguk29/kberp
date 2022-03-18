@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 안내글</title>
+<title>카카오뱅크 보관함</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -70,7 +70,7 @@ $(document).ready(function() {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">안내글</div>
+			<div class="page_title_text">보관함</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
 				<select class="srch_sel">
