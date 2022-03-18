@@ -363,7 +363,7 @@ function drawList(list) {
 									<option>고객사명</option>
 							</select></td>
 							<td>
-								<img class="asc_btn cmn_btn" alt="등록버튼" src="./images/asc.png" />
+								<img class="asc_btn cmn_btn" alt="등록버튼" src="images/sales/asc.png" />
 							</td>
 						</tr>
 					</tbody>
