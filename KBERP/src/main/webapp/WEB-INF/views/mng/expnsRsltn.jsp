@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP Sample</title>
+<title>지출결의서 상세보기</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -14,7 +14,63 @@
 .cont_wrap {
 	width: 900px;
 }
+
 /* 개인 작업 영역 */
+.expns_rsltn_dtl_view {
+	border-collapse: collapse;
+	font-size: 10.5pt;
+	margin-bottom: 15px;
+}
+
+.expns_rsltn_dtl_view tbody td {
+	border: 1px solid #DDDDDD;
+	height: 40px;
+}
+
+.expns_rsltn_dtl_view td:nth-child(1) {
+	text-align: center;
+	font-size: 11pt;
+	font-weight: bold;
+	background-color: #F2F2F2;
+}
+
+.expns_rsltn_dtl_view td:nth-child(2) {
+	padding-left: 15px;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.btn_wrap {
+	display: inline-block;
+	vertical-align: top;
+	text-align: right;
+	width: 850px;
+}
+
+.atchd_file {
+	display: inline-block;
+	vertical-align: middle;
+	width: 30px;
+	height: 40px;
+	background-image: url('resources/images/mng/dwnld_icon.png');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 20px;
+	cursor: pointer;
+	position: relative;
+}
+
+.file_name {
+	display: inline-block;
+	vertical-align: middle;
+	font-weight: bold;
+}
+
+.file_name:hover {
+	color: #4B94F2;
+	text-decoration: underline;
+	cursor: pointer;
+}
 
 </style>
 <script type="text/javascript">
@@ -26,17 +82,19 @@ $(document).ready(function() {
 		makePopup({
 			depth : 1,
 			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
+			width : 300,
+			height : 150,
+			title : "삭제",
+			contents : "삭제하시겠습니까?",
+			buttons : [{
+				name : "삭제",
 				func:function() {
 					console.log("One!");
 					closePopup();
 				}
-			}
+			}, {
+				name : "취소"
+			}]
 		});
 	});
 	$("#btn2Btn").on("click", function() {
@@ -68,131 +126,69 @@ $(document).ready(function() {
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
 	<!-- 내용영역 -->
-	<div class="cont_wrap">
-		<div class="page_title_bar">
-			<div class="page_title_text">프로젝트 관리</div>
-			<!-- 검색영역 선택적 사항 -->
-			<div class="page_srch_area">
-				<select class="srch_sel">
-					<option>제목</option>
-					<option>내용</option>
-					<option>작성자</option>
-				</select>
-				<div class="srch_text_wrap">
-					<input type="text" />
-				</div>
-				<div class="cmn_btn_ml">검색</div>
+	<div class="right_area">
+		<!-- 내용영역 -->
+		<div class="cont_wrap">
+			<div class="page_title_bar">
+				<div class="page_title_text">지출결의서 상세보기</div>
+				<!-- 검색영역 선택적 사항 -->
 			</div>
-		</div>
-		<!-- 해당 내용에 작업을 진행하시오. -->
-		<div class="cont_area">
-			<!-- 여기부터 쓰면 됨 -->
-			<table class="board_table">
-				<colgroup>
-					<col width="100"/>
-					<col width="400"/>
-					<col width="150"/>
-					<col width="150"/>
-					<col width="100"/>
-				</colgroup>
-				<thead>
-					<tr>
-						<th>No</th>
-						<th>제목</th>
-						<th>작성자</th>
-						<th>작성일</th>
-						<th>조회수</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-				</tbody>
-			</table>
-			<div class="board_bottom">
-				<div class="pgn_area">
-					<div class="page_btn page_first">first</div>
-					<div class="page_btn page_prev">prev</div>
-					<div class="page_btn_on">1</div>
-					<div class="page_btn">2</div>
-					<div class="page_btn">3</div>
-					<div class="page_btn">4</div>
-					<div class="page_btn">5</div>
-					<div class="page_btn page_next">next</div>
-					<div class="page_btn page_last">last</div>
+			<!-- 해당 내용에 작업을 진행하시오. -->
+			<div class="cont_area">
+				<!-- 여기부터 쓰면 됨 -->
+				<table class="expns_rsltn_dtl_view">
+					<colgroup>
+						<col width="150" />
+						<col width="700" />
+					</colgroup>
+					<tbody>
+						<tr>
+							<td>작성일자</td>
+							<td>2022-01-27</td>
+						</tr>
+						<tr>
+							<td>전표번호</td>
+							<td>000000001234</td>
+						</tr>
+						<tr>
+							<td>계정명</td>
+							<td>출장비</td>
+						</tr>
+						<tr>
+							<td>지출처</td>
+							<td>코레일</td>
+						</tr>
+						<tr>
+							<td>지출금액</td>
+							<td>100,000원</td>
+						</tr>
+						<tr>
+							<td>지출일시</td>
+							<td>2022-01-27</td>
+						</tr>
+						<tr>
+							<td>지출유형</td>
+							<td>개인카드</td>
+						</tr>
+						<tr>
+							<td>비고</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>첨부파일</td>
+							<td>
+								<div class="atchd_file"></div>
+								<div class="file_name">영수증.jpg</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div class="btn_wrap">
+					<div class="cmn_btn">목록</div>
+					<div class="cmn_btn_ml">수정</div>
+					<div class="cmn_btn_ml" id="btn1Btn">삭제</div>
 				</div>
-				<div class="cmn_btn_ml">글쓰기</div>
-				<div class="cmn_btn_ml" id="alertBtn">알림</div>
-				<div class="cmn_btn_ml" id="btn1Btn">버튼1개</div>
-				<div class="cmn_btn_ml" id="btn2Btn">버튼2개</div>
 			</div>
 		</div>
 	</div>
