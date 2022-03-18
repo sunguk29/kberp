@@ -316,6 +316,124 @@ table {
 	background-color: #F2F2F2;
 }
 </style>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#alertBtn").on("click", function() {
+		makeAlert("하이", "내용임");
+	});
+	$("#btn1Btn").on("click", function() {
+		makePopup({
+			depth : 1,
+			bg : true,
+			width : 400,
+			height : 300,
+			title : "버튼하나팝업",
+			contents : "내용임",
+			buttons : {
+				name : "하나",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}
+		});
+	});
+	$("#btn2Btn").on("click", function() {
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "버튼두개팝업",
+			contents : "내용임",
+			buttons : [{
+				name : "하나",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "둘닫기"
+			}]
+		});
+	});
+	
+	
+	reloadList();
+});
+
+function reloadList() {
+	var params = $("#actionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "salesListAjax",
+		data : params,
+		dataType : "json",
+		success : function(res) {
+			cosole.log(res);
+			drawList(res.list);
+		},
+		error : function(request, status, error) {
+			console.log(request.responseText);
+		}
+	});
+}
+
+
+
+function drawList(list) {
+	var html = "";
+	
+	for(var data of list) {
+		html += "<div class=\"sledding\">" + data.PRGRS_STS_NUM + "</div>"
+		html += "<div class=\"salesOpportunityName\">" + data.LEAD_NAME + "</div>"
+		html += "<div class=\"opt\"></div>"
+		html += "<table cellspacing=\"0\">"
+		html += "<colgroup>"
+		html += "<col width=\"120\" />"
+		html += "<col width=\"25\" />"
+		html += "<col width=\"120\" />"
+		html += "<col width=\"25\" />"
+		html += "<col width=\"120\" />"
+		html += "<col width=\"25\" />"
+		html += "<col width=\"120\" />"
+		html += "<col width=\"25\" />"
+		html += "<col width=\"120\" />"
+		html += "<col width=\"25\" />"					
+		html += "<col width=\"120\" />"							
+		html += "</colgroup>"
+		html += "<tbody>"
+		html += "<tr height=\"10\">"
+		html += "<td class=\"colNum2\" rowspan="3">영업기회</td>"
+		html += "<td class=\"a\"></td>"
+		html += "<td class=\"colNum3\" rowspan="3">제안</td>"
+		html += "<td class=\"a\"></td>"
+		html += "<td class=\"colNum4\" rowspan="3">견적</td>"
+		html += "<td class=\"a\"></td>"
+		html += "<td class=\"colNum6\" rowspan="3">계약</td>"
+		html += "</tr>"
+		html += "<tr height=\"10\">"
+		html += "<td class=\"stick1\"></td>"
+		html += "<td class=\"stick2\"></td>"
+		html += "<td class=\"stick3\"></td>"
+		html += "</tr>"
+		html += "<tr height=\"10\">"
+		html += "<td class=\"a\"></td>"
+		html += "<td class=\"a\"></td>"
+		html += "<td class=\"a\"></td>"
+		html += "</tr>"
+		html += "</tbody>"
+		html += "</table>"
+		html += "<div class=\"cliimg\"></div>"
+		html += "<div class=\"client\">" + CLNT_CMPNY_NAME + " / " + CLNT_NAME + "</div>"
+		html += "<div class=\"fs\">예상매출: 12,000,000원</div>"
+		html += "<div class=\"pic\">" + data.EMP_NAME + "</div>"
+		
+	}
+	$(".salesOpportunity").html(html);
+}
+
+
+</script>
 </head>
 <body>
 	<!-- top & left -->
