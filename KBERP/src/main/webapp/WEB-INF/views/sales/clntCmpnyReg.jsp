@@ -268,7 +268,7 @@ $(document).ready(function() {
 						$("#attFile").val(res.fileName[0]);
 					}
 					
-					var params = $("#writeForm").serialize();
+					var params = $("#addForm").serialize();
 					
 					$.ajax({
 						type : "post",
@@ -423,7 +423,8 @@ function checkEmpty(sel) {
 					</table>
 					<!-- 첨부자료 -->
 					<div class="rvn_txt">
-						첨부자료 (0) <input type=file name='file1' style='display: none;' />
+						첨부자료 (0) <input type="file" name="att" />
+						<input type="hidden" id="attFile" name="attFile" />
 						<img class="plus_btn" src="resources/images/sales/plus.png" border='0' />
 					</div>
 					<div class="cntrct_box_in"></div>
