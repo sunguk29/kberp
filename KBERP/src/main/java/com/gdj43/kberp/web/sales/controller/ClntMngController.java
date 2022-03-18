@@ -28,6 +28,12 @@ public class ClntMngController {
 	public ModelAndView clntCmpnyList(@RequestParam HashMap<String, String> params, 
 									  ModelAndView mav) {
 		
+		if(params.get("page") == null || params.get("page") == "") {
+			params.put("page", "1");
+		}
+		
+		mav.addObject("page", params.get("page"));
+		
 		mav.setViewName("sales/clntCmpnyList");
 		
 		return mav;
@@ -43,7 +49,7 @@ public class ClntMngController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		List<HashMap<String, String>> list = 
-				iCommonService.getDataList("common.getClntCmpntList", params);
+				iCommonService.getDataList("clntCmpny.getClntCmpntList", params);
 		
 		modelMap.put("list", list);
 		
