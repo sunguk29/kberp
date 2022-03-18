@@ -276,7 +276,6 @@ function drawList(list) {
 		html += "<tr>";
 		html += "<td rowspan=\"3\">1</td>";
 		html += "<td>" + data.GRADE_NAME + " 등급</td>";
-		html += "<td rowspan=\"3\"><img class=\"deal\" alt=\"거래\" src=\"../../images/sales/hands.png\" /><span class=\"deal_cnt\">2건</span></td>";
 		html += "</tr>";
 		html += "<tr>";
 		html += "<td>파트너사</td>";
@@ -365,7 +364,6 @@ function drawList(list) {
 							</select></td>
 							<td><img class="asc_btn cmn_btn" alt="등록버튼"
 								src="../../images/sales/asc.png" /></td>
-							<td></td>
 						</tr>
 					</tbody>
 				</table>
