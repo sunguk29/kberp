@@ -23,7 +23,8 @@
 		                                                                   ON C.SALES_NUM = S.SALES_NUM
 		                                        GROUP BY CC.CLNT_CMPNY_NAME ) CCNT
 		                                   ON CC.CLNT_CMPNY_NAME = CCNT.CLNT_CMPNY_NAME ) CC
-		WHERE CC.RNUM BETWEEN #{startCount} AND #{endCount}
+										   AND CC.RNUM BETWEEN #{startCount} AND #{endCount}
+		WHERE 1 = 1
 	</select>
 	
 	<select id="clntCmpnyCnt" parameterType="hashmap" resultType="Integer">
@@ -33,7 +34,11 @@
 	</select>
 	
 	<select id="getClntList" parameterType="hashmap" resultType="hashmap">
-				
+		SELECT ROW_NUMBER() OVER(ORDER BY EC.CLNT_NUM DESC) AS RNUM, EC.CLNT_NUM, EC.DEPT, EC.DUTY,
+		       EC.EMAIL, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL 
+		FROM ENTRPRS_CLNT EC INNER JOIN CLNT_CMPNY CC
+		                             ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
+		WHERE 1 = 1
 	</select>
 	
 	<select id="clntCnt" parameterType="hashmap" resultType="Integer">
