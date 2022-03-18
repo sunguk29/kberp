@@ -278,7 +278,7 @@ function drawList(list) {
 		html += "<td>" + data.GRADE_NAME + " 등급</td>";
 		html += "<td rowspan=\"3\">";
 		html += "<img class=\"deal\" alt=\"거래\" src=\"resources/images/sales/hands.png\" />";
-		html += "<span class=\"deal_cnt\">2건</span>";
+		html += "<span class=\"deal_cnt\">" + data.CNT + "</span>";
 		html += "</td>";
 		html += "</tr>";
 		html += "<tr>";
@@ -305,6 +305,7 @@ function drawList(list) {
 		<c:param name="menuNum">${param.menuNum}</c:param>
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
+		<c:param name="page">${page}</c:param>
 	</c:import>
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
