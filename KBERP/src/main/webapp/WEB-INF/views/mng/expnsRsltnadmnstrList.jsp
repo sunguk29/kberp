@@ -70,10 +70,86 @@ $(document).ready(function() {
 			}]
 		});
 	});
+	
+	// 목록 조회
+	reloadList();
+	
+	
+	
+	
 });
+
+function reloadList() { // 목록 조회용 + 페이징 조회용
+	var params = $("#actionForm").serialize();
+	
+	$.ajax({
+		type : "post", // 전송 형태
+		url : "expnsRsltnadmnstrAjax", // 통신 주소
+		dataType : "json", // 받을 데이터 형태
+		data : params, // 보낼 데이터. 보낼 것이 없으면 안 씀
+		success : function(res) { // 성공 시 실행 함수. 인자는 받아온 데이터
+			drawList(res.list);
+			drawPaging(res.pb);
+		},
+		error : function(request, status, error) { // 문제 발생 시 실행 함수
+			console.log(request.responseText); // 결과 텍스트
+		}
+	});
+}
+
+function drawList(list) {
+	var html = "";
+	
+	for(var data of list) {
+		html += "<tr no=\"" + data.DATE_HR + "\">";
+		html += "<td>" + data.DATE_HR + "\"</td>";
+		html += "<td class=\"board_table_hover\">" + data.EMP_NUM + "</td>";
+		html += "<td>" + 150,000원 + "</td>";
+		html += "<td>" + 150,000원 + "</td>";
+		html += "<td>" + 300,000원 + "</td>";
+		html += "</tr>";
+	}
+	$("tbody").html(html);
+}
+
+function drawPaging(pb) {
+	var html = "";
+	
+	html += "<div class=\"page_btn page_first\" page=\"1\">first</div>";
+	if($("#page").val() == "1") {
+		html += "<div class=\"page_btn page_prev\" page=1>prev</div>";
+	} else {
+		html += "<div class=\"page_btn page_prev\" page=\"" + ($"#page").val() * 1 - 1 + "\">prev</div>";		
+	}
+	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
+		if($("#page").val() == i) {
+			html += "<div class=\"page_btn_on\" page=\"" + i + "\">" + i + "</div>";
+		} else {
+			html += "<div class=\"page_btn\" page=\"" + i + "\">" + i + "</div>";
+		}
+	}
+	if($("#page").val() == pb.maxPcount) {
+		html += "<div class=\"page_btn page_next\" page=\"" + pb.maxPcount + "\">next</div>";		
+	} else {
+		html += "<div class=\"page_btn page_next\" page=\"" + ($("#page").val() * 1 + 1) + "\">next</div>";				
+	}
+	html += "<div class=\"page_btn page_last\">last</div>";
+	
+	$("#pgn_area").html(html);
+	
+}
+
 </script>
 </head>
 <body>
+	<form action="#" id="actionForm" method="post">
+		<input type="hidden" id="no" name="no" />
+		<input type="hidden" id="page" name="page" value="${page}" />
+	</form>
+
+
+
+
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -118,82 +194,11 @@ $(document).ready(function() {
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>2022.01</td>
-								<td class="board_table_hover">홍길동</td>
-								<td>150,000원</td>
-								<td>150,000원</td>
-								<td>300,000원</td>
-							</tr>
-							<tr>
-								<td>2022.01</td>
-								<td class="board_table_hover">김철수</td>
-								<td>150,000원</td>
-								<td>150,000원</td>
-								<td>300,000원</td>
-							</tr>
-							<tr>
-								<td>2022.01</td>
-								<td class="board_table_hover">고길동</td>
-								<td>150,000원</td>
-								<td>150,000원</td>
-								<td>300,000원</td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
 						</tbody>
 					</table>
 					<div class="board_bottom">
 						<div class="pgn_area">
-							<div class="page_btn page_first">first</div>
-							<div class="page_btn page_prev">prev</div>
-							<div class="page_btn_on">1</div>
-							<div class="page_btn">2</div>
-							<div class="page_btn">3</div>
-							<div class="page_btn">4</div>
-							<div class="page_btn">5</div>
-							<div class="page_btn page_next">next</div>
-							<div class="page_btn page_last">last</div>
+						
 						</div>
 					</div>
 				</div>
