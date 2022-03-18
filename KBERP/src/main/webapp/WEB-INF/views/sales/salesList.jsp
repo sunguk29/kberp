@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP : 영업관리</title>
+<title>영업관리</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -325,6 +325,7 @@ table {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
+
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
@@ -944,7 +945,7 @@ table {
 		</div> <!-- cont_area end -->
 	</div><!-- cont_wrap end -->
 </div> <!-- right_area end  -->
-<!-- bottom -->
-<c:import url="/bottom"></c:import>
+	<!-- bottom -->
+	<c:import url="/bottom"></c:import>
 </body>
 </html>
