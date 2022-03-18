@@ -255,7 +255,7 @@ function reloadList() {
 		data : params,
 		dataType : "json",
 		seuccess : function(res) {
-			
+			drawList(res);
 		},
 		error : function(req) {
 			console.log(req.responseText);
@@ -266,6 +266,32 @@ function reloadList() {
 
 function drawList(list) {
 	var html = "";
+	
+	for(var data of list) {
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+		html += "";
+	}
+	
 	<tbody>
 	<tr>
 		<td rowspan="3">010</td>

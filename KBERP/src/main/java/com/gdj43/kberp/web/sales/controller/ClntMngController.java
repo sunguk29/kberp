@@ -38,7 +38,8 @@ public class ClntMngController {
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		List<HashMap<String, String>> list = iCommonService.getDataList("common.getClntCmpntList", params);
+		List<HashMap<String, String>> list = 
+				iCommonService.getDataList("common.getClntCmpntList", params);
 		
 		modelMap.put("list", list);
 		
