@@ -32,4 +32,14 @@
 		WHERE 1 = 1
 	</select>
 	
+	<select id="getClntList" parameterType="hashmap" resultType="hashmap">
+				
+	</select>
+	
+	<select id="clntCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM ENTRPRS_CLNT
+		WHERE 1 = 1
+	</select>
+	
 </mapper>

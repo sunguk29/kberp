@@ -66,12 +66,44 @@ public class ClntMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	@RequestMapping(value = "/clntCmpnyReg")
-	public ModelAndView clntCmpnyReg(ModelAndView mav) {
+	@RequestMapping(value = "/clntList")
+	public ModelAndView clntList(@RequestParam HashMap<String, String> params, 
+								 ModelAndView mav) {
 		
-		mav.setViewName("sales/clntCmpnyReg");
+		if(params.get("page") == null || params.get("page") == "") {
+			params.put("page", "1");
+		}
+		
+		mav.addObject("page", params.get("page"));
+		
+		mav.setViewName("sales/clntList");
 		
 		return mav;
+	}
+	@RequestMapping(value = "/clntListAjax", method = RequestMethod.POST, 
+			produces = "text/json;charset=UTF-8")
+	@ResponseBody 
+	public String clntListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+	
+	ObjectMapper mapper = new ObjectMapper();
+	
+	Map<String, Object> modelMap = new HashMap<String, Object>();
+	
+	int cnt = iCommonService.getIntData("clnt.clntCnt", params);
+	
+	PagingBean pb = 
+			iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
+	
+	params.put("startCount", Integer.toString(pb.getStartCount()));
+	params.put("endCount", Integer.toString(pb.getEndCount()));
+	
+	List<HashMap<String, String>> list = 
+			iCommonService.getDataList("clnt.getClntList", params);
+	
+	modelMap.put("list", list);
+	modelMap.put("pb", pb);
+	
+	return mapper.writeValueAsString(modelMap);
 	}
 
 }
