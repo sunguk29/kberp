@@ -70,10 +70,10 @@ public class LeadController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	@RequestMapping(value = "/leadAdd")
+	@RequestMapping(value = "/leadReg")
 	public ModelAndView leadAdd(ModelAndView mav) {
 		
-		mav.setViewName("sales/leadAdd");
+		mav.setViewName("sales/leadReg");
 		
 		return mav;
 	}

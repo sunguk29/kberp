@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>리드관리</title>
+<title>카카오 ERP - 리드목록</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -146,6 +146,7 @@
 	background-color: #fff;
 	padding: 5px 0px;
 }
+/*----- 팝업 CSS 끝 ----- */
 .body {
 	display: block;
 	background-color: white;
@@ -272,7 +273,7 @@ select {
 	margin: 0px;
 	padding: 0px;	
 }
-.findEmp_box2:focus {
+input:focus {
 	outline:none;
 }
 .findEmp_box:hover {
@@ -490,7 +491,7 @@ $(document).ready(function() {
 	
 	$("#writeBtn").on("click", function() {
 		
-		$("#actionForm").attr("action", "leadAdd")
+		$("#actionForm").attr("action", "leadReg")
 		$("#actionForm").submit();
 	});
 }); 

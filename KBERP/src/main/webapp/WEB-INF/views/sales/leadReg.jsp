@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>리드등록</title>
+<title>카카오 ERP - 리드등록</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -14,6 +14,138 @@
 .cont_wrap {
 	width: 1013px;;
 }
+/* 팝업 조회영역 */
+.popup_title_mid {
+	width: calc(100% + 20px);
+    height: 70px;
+    margin: -10px 0px 0px -10px;
+	background-color: #F2F2F2;
+	font-size: 11pt;
+	padding-bottom: 3px;
+	border-bottom: 1px solid #d7d7d7;
+}
+.ptm_left {
+	display: inline-block;
+	vertical-align: top;
+	width: 100px;
+	height: 70px;
+}
+.ptm_left_top, .ptm_left_bot {
+	width: 100px;
+	height: 35px;
+	line-height: 35px;
+	text-align: right;
+	font-size: 15px;
+	font-weight: bold;
+}
+.ptm_mid {
+	display: inline-block;
+	vertical-align: top;
+	width: 150px;
+	height: 70px;
+}
+.ptm_mid_top, .ptm_mid_bot {
+	width: 150px;
+	height: 35px;
+	line-height: 35px;
+	text-align: center;
+}
+.sel_size {
+	width: 130px;
+	height: 25px;
+	outline: none;
+}
+.ptm_mid_right {
+	display: inline-block;
+	vertical-align: top;
+	width: 240px;
+	height: 70px;
+}
+.ptm_mid_right_top, .ptm_mid_right_bot {
+	width: 240px;
+	height: 35px;
+	line-height: 35px;
+	text-align: center;
+}
+.text_size {
+	width: 230px;
+	height: 19px;
+	outline: none;
+}
+.ptm_right {
+	display: inline-block;
+	vertical-align: top;
+	width: 94px;
+	height: 100%;
+}
+.ptm_right_top {
+	width: 94px;
+	height: 32px;
+	text-align: center;
+}
+.ptm_right_bot {
+	width: 94px;
+	height: 32px;
+	margin-top: 5px;
+	text-align: center;
+}
+/* 팝업 내용 */
+.popup_cc_box_left {
+   display: inline-block;
+   vertical-align: top;
+   width: 120px;
+   height: 50px;
+}
+.popup_cc_box_right {
+   display: inline-block;
+   width: 400px;
+   height: 50px;
+   font-size: 14px;
+   line-height: 50px;
+}
+.popup_box_in {
+   width: calc(100% - 4px);
+   height: 50px;
+   border: 2px solid #d7d7d7;
+   border-radius: 3px;
+   background-color: #F2F2F2;
+   margin-bottom: 5px;
+}
+.popup_box_in:hover {
+   cursor: pointer;
+   border: 2px solid #2E83F2;
+}
+.company {
+   display: inline-block;
+   width: 42px;
+   height: 25px;
+   background-image: url("resources/images/sales/usericon.png");
+   background-size: 42px 25px;
+   margin-top: 13px;
+   margin-left: 45px;
+}
+.boldname{
+	margin-left: 30px;
+	font-weight: bold;
+}
+.mg_wid {
+	margin-left: 50px;
+}
+/* 팝업 내용 배경색 */
+.pc_back {
+	background-color: #fff;
+}
+
+/* 팝업 페이징 */
+.board_bottom2 {
+	height: 30px;
+	position: relative;
+	text-align: right;
+	background-color: #fff;
+	padding: 5px 0px;
+}
+/*----- 팝업 CSS 끝 ----- */
+
 .body {
 	display: block;
 	background-color: white;
@@ -137,7 +269,7 @@ td:nth-child(1) {
 	vertical-align: middle;
 	width: 18px;
 	height: 18px;
-	background-image: url("../../images/sales/plus.png");
+	background-image: url("resources/images/sales/plus.png");
 	background-size: 18px 18px;
 	float: right;
 	margin-right: 5px;
@@ -200,7 +332,7 @@ hr { /* 구분선 */
 	vertical-align: middle;
 	width: 18px;
 	height: 18px;
-	background-image: url("../../images/sales/downarrow.png");
+	background-image: url("resources/images/sales/downarrow.png");
 	background-size: 18px 18px;
 	float: right;
 	margin-top: 7.5px;
@@ -210,7 +342,7 @@ hr { /* 구분선 */
 	vertical-align: middle;
 	width: 18px;
 	height: 18px;
-	background-image: url("../../images/sales/plus.png");
+	background-image: url("resources/images/sales/plus.png");
 	background-size: 18px 18px;
 	float: right;
 	margin-top: 7.5px;
@@ -221,7 +353,7 @@ hr { /* 구분선 */
 	vertical-align: middle;
 	width: 18px;
 	height: 18px;
-	background-image: url("../../images/sales/up_arrow.png");
+	background-image: url("resources/images/sales/up_arrow.png");
 	background-size: 18px 18px;
 	float: right;
 	margin-top: 7.5px;
@@ -273,7 +405,7 @@ hr { /* 구분선 */
 	vertical-align: middle;
 	width: 18px;
 	height: 18px;
-	background-image: url("../../images/sales/plus.png");
+	background-image: url("resources/images/sales/plus.png");
 	background-size: 18px 18px;
 	float: right;
 	margin-right: 5px;
@@ -284,7 +416,7 @@ hr { /* 구분선 */
 	vertical-align: middle;
 	width: 18px;
 	height: 18px;
-	background-image: url("../../images/sales/plus.png");
+	background-image: url("resources/images/sales/plus.png");
 	background-size: 18px 18px;
 	float: right;
 	margin-right: 7px;
@@ -294,8 +426,111 @@ hr { /* 구분선 */
 	cursor: pointer;
 }
 </style>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#listBtn").on("click", function() {
+		$("#listForm").submit();
+	});	
+	
+	$("#btnImg_in").on("click", function() {
+		var html = "";
+		
+	 	html += "<div class=\"popup_title_mid\">"; 
+		html += "<div class=\"ptm_left\">";
+		html += "<div class=\"ptm_left_top\">팀분류</div>";
+		html +=	"<div class=\"ptm_left_bot\">사원분류</div>";		
+		html += "</div>";
+		html += "<div class=\"ptm_mid\">";
+		html +=	"<div class=\"ptm_mid_top\">";
+		html +=	"<select class=\"sel_size\">"
+		html +=		"<option>영업1팀</option>";
+		html +=		"<option>영업2팀</option>";
+		html +=		"<option>영업3팀</option>";
+		html +=	"</select>";
+		html +=	"</div>";		
+		html +=	"<div class=\"ptm_mid_bot\">";
+		html +=	"<select class=\"sel_size\">";
+		html +=		"<option>사원번호</option>";
+		html +=		"<option>사원명</option>";
+		html +=	"</select>";
+		html +=	"</div>";	
+		html += "</div>";
+		html += "<div class=\"ptm_mid_right\">";
+		html +=	"<div class=\"ptm_mid_right_top\"></div>";
+		html +=	"<div class=\"ptm_mid_right_bot\">";
+		html +=	"<input type=\"text\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" />";
+		html +=	"</div>";
+		html += "</div>";
+		html += "<div class=\"ptm_right\">";
+		html +=	"<div class=\"ptm_right_top\"></div>";
+		html +=	"<div class=\"ptm_right_bot\">";
+		html +=	"<div class=\"cmn_btn\">검색</div>";
+		html +=	"</div>";
+		html +=	"</div>";
+		html += "</div>";
+		html += "<div class=\"popup_cont pc_back\">";
+		html +=	"<div class=\"popup_box_in\">";
+		html +=	"<div class=\"popup_cc_box_left\">";
+		html +=	"<span class=\"company\"></span>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_cc_box_right\">";
+		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
+		html +=	"<span class=\"mg_wid\">영업1팀</span>";
+		html +=	"</div>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_box_in\">";
+		html +=	"<div class=\"popup_cc_box_left\">";
+		html +=	"<span class=\"company\"></span>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_cc_box_right\">";
+		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
+		html +=	"<span class=\"mg_wid\">영업1팀</span>";
+		html +=	"</div>";
+		html +=	"</div>";
+		html += "<div class=\"board_bottom2\">";
+		html +=	"<div class=\"pgn_area\">";
+		html +=	"<div class=\"page_btn page_first\">first</div>";
+		html +=	"<div class=\"page_btn page_prev\">prev</div>";
+		html +=	"<div class=\"page_btn_on\">1</div>";
+		html +=	"<div class=\"page_btn\">2</div>";
+		html +=	"<div class=\"page_btn\">3</div>";
+		html +=	"<div class=\"page_btn\">4</div>";
+		html +=	"<div class=\"page_btn\">5</div>";
+		html +=	"<div class=\"page_btn page_next\">next</div>";
+		html +=	"<div class=\"page_btn page_last\">last</div>";
+		html +=	"</div>";
+		html +=	"</div>";
+		html +=	"</div>";
+		
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "담당자 조회",
+			contents : html,
+			width : 600,
+			height : 500,
+			buttons : [{
+				name : "등록",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "취소"
+			}]
+		});
+	});	
+});
+</script>
 </head>
 <body>
+<form action="leadList" id="listForm" method="post">
+	<input type="hidden" name="page" value="${param.page}" />
+	<input type="hidden" id="no" name="no" />
+	<input type="hidden" name="top" value="${param.top}" />
+	<input type="hidden" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />
+</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -307,7 +542,7 @@ hr { /* 구분선 */
 		<div class="page_title_bar">
 			<div class="page_title_text">리드 등록</div>
 			<!-- 검색영역 선택적 사항 -->
-			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" />
+			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
 			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" />
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -369,7 +604,7 @@ hr { /* 구분선 */
 								<td><input type="button" class="btn" value="담당자 *" readonly="readonly"/></td>
 								<td>
 									<input type="text" class="txt" />
-									<img class="btnImg_in" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
+									<img class="btnImg_in" id="btnImg_in" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
 								</td>
 							</tr>
 							

@@ -12,7 +12,7 @@
 		                    INNER JOIN CLNT_CMPNY CC
 		                            ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM ) LL
 		
-		WHERE LL.LEAD_NUM BETWEEN #{startCount} AND #{endCount}
+		WHERE LL.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
 	<select id="getLeadCnt" resultType="Integer" parameterType="hashmap">
