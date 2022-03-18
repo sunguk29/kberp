@@ -29,16 +29,17 @@ public class ClntMngController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/atbListAjax", method = RequestMethod.POST, 
+	@RequestMapping(value = "/clntCmpnyListAjax", method = RequestMethod.POST, 
 					produces = "text/json;charset=UTF-8")
 	@ResponseBody 
-	public String atbListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+	public String clntCmpnyListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		List<HashMap<String, String>> list = iCommonService.getDataList("common.getClntCmpntList", params);
+		List<HashMap<String, String>> list = 
+				iCommonService.getDataList("common.getClntCmpntList", params);
 		
 		modelMap.put("list", list);
 		
