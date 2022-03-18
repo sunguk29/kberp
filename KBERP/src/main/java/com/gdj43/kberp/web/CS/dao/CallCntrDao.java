@@ -16,6 +16,4 @@ public class CallCntrDao implements ICallCntrDao {
 	public List<HashMap<String, String>> getCallCenter(HashMap<String, String> params) throws Throwable {
 		return sqlSession.selectList("CC.getCallCenter", params);
 	}
-	
-
 }
