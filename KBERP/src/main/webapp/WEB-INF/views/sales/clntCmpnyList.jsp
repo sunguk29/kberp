@@ -248,10 +248,6 @@ $(document).ready(function() {
 	
 	reloadList();
 	
-	$("#addBtn").on("click", function() {
-		
-	});
-	
 });
 
 function reloadList() {
@@ -262,8 +258,8 @@ function reloadList() {
 		url : "clntCmpnyListAjax",
 		data : params,
 		dataType : "json",
-		success : function() {
-			drawList();
+		success : function(res) {
+			drawList(res);
 		},
 		error : function(req) {
 			console.log(req.responseText);
@@ -272,32 +268,34 @@ function reloadList() {
 	
 }
 
-function drawList() {
+function drawList(list) {
 	var html = "";
 	
-/* 	for(var data of list) {
+ 	for(var data of list) {
  		html += "<tbody>";
 		html += "<tr>";
-		html += "<td rowspan=\"3\">1</td>";
+		html += "<td rowspan=\"3\">" + data.CLNT_CMPNY_NUM + "</td>";
 		html += "<td>" + data.GRADE_NAME + " 등급</td>";
+		html += "<td rowspan=\"3\">";
+		html += "<img class=\"deal\" alt=\"거래\" src=\"resources/images/sales/hands.png\" />";
+		html += "<span class=\"deal_cnt\">2건</span>";
+		html += "</td>";
 		html += "</tr>";
 		html += "<tr>";
-		html += "<td>파트너사</td>";
-		html += "<td>호구 전자</td>";
+		html += "<td>" + data.CLNT_CMPNY_CLSFY_NAME + "</td>";
+		html += "<td>" + data.CLNT_CMPNT_NAME + "</td>";
 		html += "</tr>";
 		html += "<tr>";
-		html += "<td>12.000.000.000원</td>";
-		html += "<td>서울특별시 가나다대로 12길</td>";
+		html += "<td>" + data.RVN + "</td>";
+		html += "<td>" + data.ADRS + "</td>";
 		html += "</tr>";
 		html += "</tbody>"; 
-	} */
-	html += "<tr>";
-	html += "<td>" + hi + "</td>";
-	html += "</tr>";
+	}
 	
-	$(".cont_table").html(html);
+	$("#cont_table").html(html);
 
 }
+
 </script>
 </head>
 <body>
@@ -404,8 +402,7 @@ function drawList() {
 						</tr>
 					</thead>
 				</table>
-				<table class="cont_table">
-				</table>
+				<table id="cont_table"></table>
 				<div class="body_bottom">
 					<div class="board_bottom">
 						<div class="pgn_area">
