@@ -362,8 +362,9 @@ function drawList(list) {
 									<option>매출</option>
 									<option>고객사명</option>
 							</select></td>
-							<td><img class="asc_btn cmn_btn" alt="등록버튼"
-								src="./images/asc.png" /></td>
+							<td>
+								<img class="asc_btn cmn_btn" alt="등록버튼" src="./images/asc.png" />
+							</td>
 						</tr>
 					</tbody>
 				</table>
