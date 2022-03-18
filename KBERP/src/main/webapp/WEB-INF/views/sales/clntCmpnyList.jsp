@@ -327,7 +327,7 @@ function drawPaging(pb) {
 	}
 	html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
 	
-	$("#pgn_area").html(html);
+	$(".pgn_area").html(html);
 
 }
 
