@@ -19,6 +19,10 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	$("#writeBtn").on("click", function(){
+		$("#actionForm").submit(); 	
+	});
+	
 	$("#alertBtn").on("click", function() {
 		makeAlert("하이", "내용임");
 	});
@@ -189,10 +193,12 @@ $(document).ready(function() {
 					<div class="page_btn page_next">next</div>
 					<div class="page_btn page_last">last</div>
 				</div>
-				<div class="cmn_btn_ml">글쓰기</div>
+				<div class="cmn_btn_ml" id="writeBtn">글쓰기</div>
 			</div>
 		</div>
 	</div>
+	
+	<form action="guideWrtngAdd" id="actionForm" method="post"></form>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>
