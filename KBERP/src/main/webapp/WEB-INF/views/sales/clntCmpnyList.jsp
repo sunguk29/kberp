@@ -212,7 +212,7 @@ $(document).ready(function() {
 	
 	reloadList();
 	
-	$("#pgn_area").on("click", "div", function() {
+	$(".pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
 
 		reloadList();
