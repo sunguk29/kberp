@@ -15,6 +15,91 @@
 	width: 1100px;
 }
 /* 개인 작업 영역 */
+/* 콜센터 고객정보 검색 팝업 */
+#srch_txt{
+	display: inline-block;
+	vertical-align:top;
+	width: 100px;
+}
+#srch_btn{
+	display: inline-block;
+	vertical-align:top;
+	width: 38px;
+	height: 22px;
+	margin-right: 20px;
+	font-size: 8pt;
+	font-weight: bold;
+	text-align: center;
+}
+
+.name_box{
+	display: inline-block;
+	vertical-align: top;
+	width: 55px;
+	height: 20px;
+	font-size: 9pt;
+	font-weight: bold;
+	text-align: center;
+	background-color: #F2CB05;
+	border-radius: 2px;
+	margin-top: 3px;
+}
+.srch_slct{
+	width: 100%;
+	height: 20px;
+	text-align: right;
+	font-size: 12pt;
+}
+.srch_cont{
+	display: inline-block;
+	vertical-align: top;
+	width: 380px;
+	height: 280px;
+	background-color: white;
+	margin-top: 7px;
+	overflow: auto;
+}
+.clnt_srch_table {
+	display: inline-table;
+	border-collapse: collapse;
+	width: 100%;
+	margin-bottom: 15px;
+}
+.clnt_srch_table thead tr {
+	background-color: #f4d541;
+	height: 30px;
+	font-size: 10pt;
+}
+.clnt_srch_table tbody tr {
+	border-bottom: 1px solid #d7d7d7;
+	height: 25px;
+	text-align: center;
+	color: #7b7b7b;
+	font-size: 9pt;
+}
+.clnt_srch_table thead tr{
+	position: sticky;
+	top: 0px;
+}
+
+.clnt_srch_table tbody tr {
+	color: #222222;
+	cursor: pointer;
+}
+
+.clnt_srch_table tbody tr:hover {
+	color: #4B94F2;
+	text-decoration: underline;
+}
+
+/* 저장 팝업 */
+.save_cont{
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	line-height: 110px;
+}
+
 /* 내용부분 위 아래 영역 나누기 */
 .call_area {
 	display: inline-block;
@@ -527,9 +612,7 @@ $(document).ready(function() {
 			}]
 		});
 	});
-});
 
-$(document).ready(function() {
 	$("#call_btn").on("click", function() {
 		var html = "";
 		
@@ -547,6 +630,115 @@ $(document).ready(function() {
 					console.log("One!");
 					closePopup();
 				}
+			}]
+		});
+	});
+
+	$("#searchBtn").on("click", function() {
+		var html = "";
+		
+		html += "<div class=\"srch_slct\">";
+		html += "<input type=\"text\" placeholder=\"\" id=\"srch_txt\"/>"
+		html += "<input type=\"button\" value=\"검색\" id=\"srch_btn\">"
+		html += "<div class=\"name_box\">정렬순서</div>"
+		html += "<select id=\"clnt_slct\">"
+		html += "	<option value=\"이름\">이름</option>"
+		html += "	<option value=\"등급\">등급</option>"
+		html += "	<option value=\"전화번호\">전화번호</option>"
+		html += "	<option value=\"최근상담일\">최근상담일</option>"
+		html += "</select>"
+		html += "</div>"
+		html += "<div class=\"srch_cont\">"
+		html += "	<table class=\"clnt_srch_table\">"
+		html += "	<colgroup>"
+		html += "		<col width=\"100\"/>"
+		html += "		<col width=\"100\"/>"
+		html += "		<col width=\"200\"/>"
+		html += "		<col width=\"150\"/>"
+		html += "	</colgroup>"
+		html += "	<thead>"
+		html += "		<tr>"
+		html += "			<th>이름</th>"
+		html += "			<th>등급</th>"
+		html += "			<th>전화번호</th>"
+		html += "			<th>최근상담일</th>"
+		html += "		</tr>"
+		html += "	</thead>"
+		html += "	<tbody>"
+		html += "		<tr>"
+		html += "			<td></td>"
+		html += "			<td></td>"
+		html += "			<td></td>"
+		html += "			<td></td>"
+		html += "		</tr>"
+		html += "	</tbody>"
+		html += "	</table>"
+		html += "</div>"
+		
+		makePopup({
+			bg : false,
+			bgClose : false,
+			width: 400,
+			height: 400,
+			title : "고객 검색 결과",
+			contents : html,
+			draggable : true,
+			buttons : [{
+				name : "닫기",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}]
+		});
+	});
+	
+	$(".cmn_btn_mr").on("click", function() {
+		
+		var html = "";
+		
+		html += "<div class=\"save_cont\">지금까지의 내용을 저장 하시겠습니까?</div>"
+		
+		makePopup({
+			depth : 1,
+			bg : true,
+			width : 400,
+			height : 220,
+			title : "저장",
+			contents : html,
+			buttons :  [{
+				name : "취소",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "확인"
+			}]
+		});
+	});
+	
+	$(".note_cmn_btn_mr").on("click", function() {
+		
+		var html = "";
+		
+		html += "<div class=\"save_cont\">지금까지의 내용을 저장 하시겠습니까?</div>"
+		
+		makePopup({
+			depth : 1,
+			bg : true,
+			width : 400,
+			height : 220,
+			title : "저장",
+			contents : html,
+			buttons :  [{
+				name : "취소",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "확인"
 			}]
 		});
 	});
@@ -579,9 +771,9 @@ $(document).ready(function() {
 						<div class="clnt_info_Header">
 							<div class="clnt_info">고객정보</div>
 							<div class="srch_text_wrap clnt_srch">
-								<input type="text" />
+								<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
 							</div>
-							<div class="cmn_btn_ml">검색</div>
+							<div class="cmn_btn_ml" id="searchBtn">검색</div>
 						</div>
 		    			<div class="clnt_info_cont_row1">	  
 			    			<div class="clnt_name">고객명</div>

@@ -19,10 +19,20 @@ public class AcntncController {
 	@Autowired
 	public IPagingService iPagingService;
 	
-	@RequestMapping(value = "/expnsRsltn")
+	// 지출결의서 상세보기
+	@RequestMapping(value = "/expnsRsltnDtlView")
 	public ModelAndView expnsRsltn(ModelAndView mav) {
 		
-		mav.setViewName("mng/expnsRsltn");
+		mav.setViewName("mng/expnsRsltnDtlView");
+		
+		return mav;
+	}
+	
+	// 지출결의서관리
+	@RequestMapping(value = "/expnsRsltnadmnstr")
+	public ModelAndView expnsRsltnadmnstr(ModelAndView mav) {
+		
+		mav.setViewName("mng/expnsRsltnadmnstrList");
 		
 		return mav;
 	}

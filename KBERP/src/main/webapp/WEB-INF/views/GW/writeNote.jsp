@@ -15,14 +15,112 @@
 	width: 900px;
 }
 /* 개인 작업 영역 */
+.note {
+	display: inline-block;
+	vertical-align : top;
+	width: 900px;
+	height: 500px;
+	border: 1px solid #000;
+}
+.title {
+	display: inline-block;
+	vertical-align: top;
+	width: 900px;
+	height: 50px;
+	text-indent: 35px;
+	line-height: 50px;
+	background-image: url('./images/note.png');
+	background-size: 18px 18px;
+	background-repeat: no-repeat;
+	background-position: 10px 16px;
+	font-size: 17px;
+	font-weight: bold;
+}
+.title_bar {
+	display: inline-block;
+	vertical-align: top;
+	width: 900px;
+	height: 3px;
+	background-color: #4B94F2;
+}
 
+.guide {
+	display: table-cell;
+	vertical-align: middle;
+	width: 900px;
+	height: 50px;
+	background-color: #F2CB05;
+	font-size: 12px;
+	text-align: center;
+	/*padding-left: 10px;*/
+}
+
+.cont {
+	border-top: 1px solid black;
+}
+
+.rcpnt {
+	display: inline-block;
+	vertical-align: top;
+	width: 100px;
+	height: 50px;
+	background-color: #dadada;
+	text-align: center;
+	line-height: 50px;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+.emp {
+	display: inline-block;
+	vertical-align: top;
+	margin-top: 12px;
+	margin-left: 6px;
+}
+
+.rcpnt_btn {
+	display: inline-block;
+	vertical-align: top;
+	margin-top: 12px;
+	margin-left: 11px;
+}
+
+.write {
+	resize: none;
+	width: 895px;
+	height: 235px;
+}
+
+.file {
+	display: inline-block;
+	width: 180px;
+}
+
+.file_on {
+	display: inline-block;
+}
+
+.note_bottom {
+	text-align: right;
+	margin-top: 50px;
+	margin-right: 15px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
+	$(".rcpnt_btn").on("click", function() {
+		var html = "";
+		
+		html += "<div class=\"popup\"><div class=\"popup_title\">받는사람<div class=\"popup_cont\">조직도<div class=\"popup_btn_area\"><div class=\"cmn_btn_mr\">추가<div class=\"cmn_btn_mr\">취소</div></div></div></div></div></div>";
+	    html += "<div class=\"popup_bg\"></div>";
+		
+		$("body").append(html);
+		
+		$(".popup, .popup_bg").hide();
+		$(".popup, .popup_bg").fadeIn();
 	});
-	$("#btn1Btn").on("click", function() {
+	
+	$("#sendBtn").on("click", function() {
 		makePopup({
 			depth : 1,
 			bg : true,
@@ -39,7 +137,8 @@ $(document).ready(function() {
 			}
 		});
 	});
-	$("#btn2Btn").on("click", function() {
+	
+	$("#cnlBtn").on("click", function() {
 		makePopup({
 			bg : false,
 			bgClose : false,
@@ -70,129 +169,41 @@ $(document).ready(function() {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">프로젝트 관리</div>
-			<!-- 검색영역 선택적 사항 -->
-			<div class="page_srch_area">
-				<select class="srch_sel">
-					<option>제목</option>
-					<option>내용</option>
-					<option>작성자</option>
-				</select>
-				<div class="srch_text_wrap">
-					<input type="text" />
-				</div>
-				<div class="cmn_btn_ml">검색</div>
-			</div>
+			<div class="page_title_text">쪽지쓰기</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
-			<table class="board_table">
-				<colgroup>
-					<col width="100"/>
-					<col width="400"/>
-					<col width="150"/>
-					<col width="150"/>
-					<col width="100"/>
-				</colgroup>
-				<thead>
-					<tr>
-						<th>No</th>
-						<th>제목</th>
-						<th>작성자</th>
-						<th>작성일</th>
-						<th>조회수</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-				</tbody>
-			</table>
-			<div class="board_bottom">
-				<div class="pgn_area">
-					<div class="page_btn page_first">first</div>
-					<div class="page_btn page_prev">prev</div>
-					<div class="page_btn_on">1</div>
-					<div class="page_btn">2</div>
-					<div class="page_btn">3</div>
-					<div class="page_btn">4</div>
-					<div class="page_btn">5</div>
-					<div class="page_btn page_next">next</div>
-					<div class="page_btn page_last">last</div>
+			<div class="note">
+				<div class="title">쪽지쓰기
+					<div class="title_bar"></div>
 				</div>
-				<div class="cmn_btn_ml">글쓰기</div>
-				<div class="cmn_btn_ml" id="alertBtn">알림</div>
-				<div class="cmn_btn_ml" id="btn1Btn">버튼1개</div>
-				<div class="cmn_btn_ml" id="btn2Btn">버튼2개</div>
+				<div class="guide">※ 받는 사람은 직접 입력이 가능합니다.<br/>
+								  (단, 입력 시 '이름(ID) 또는 ID'로 입력을 해야 하며,
+								  구분자로 , 또는 엔터값을 허용합니다.)
+				</div>
+				<div class="cont">
+					<div class="rcpnt">받는사람</div>
+					<div class="emp">
+						<input type="text" size="95" />
+					</div>
+					<div class="rcpnt_btn">
+						<input type="button" value="받는사람">
+					</div>
+				</div>
+				<textarea placeholder="내용을 입력하세요." class="write"></textarea>
+				<div class="atchmnt">
+					<div class="file">
+						<input type = "file"/>
+					</div>
+					<div class="file_on">
+						<input type="text" size="95"/>
+					</div>
+				</div>
+				<div class="note_bottom">
+					<div class="cmn_btn_ml" id="sendBtn">보내기</div>
+					<div class="cmn_btn_ml" id="cnlBtn">취소</div>
+				</div>
 			</div>
 		</div>
 	</div>
