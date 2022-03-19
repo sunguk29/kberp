@@ -16,8 +16,18 @@ public class EventController {
 	@Autowired
 	public IPagingService iPagingService;
 	
+	/* 
+	 현재 진행중인 event 목록글 보여주는 페이지
+	 * */
 	@RequestMapping(value="/prgrsEvent")
 	public ModelAndView prgrsEvent(ModelAndView mav) {
+		
+		// 1. Service 로부터 현재 진행중인 list 받아오기 => Model에 집어넣기
+		// mav.addObject()
+		
+		// 1.1 EventService 구현
+		// 1.2 DAO 구현
+		// 1.3 Mapper (쿼리) 구현
 		
 		mav.setViewName("CS/prgrsEvent");
 		
