@@ -259,7 +259,6 @@ th:nth-child(1), th:nth-child(2) {
 	height: 39.5px;
 	text-align: center;
 	border-right: 1px solid #5555; 
-
 }
 th:nth-child(3) {
 	width: 120px;
