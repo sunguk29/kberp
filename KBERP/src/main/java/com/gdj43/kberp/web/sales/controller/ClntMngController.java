@@ -17,7 +17,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.common.service.ICommonService;
-import com.gdj43.kberp.web.sales.service.IClntMngService;
 
 @Controller
 public class ClntMngController {
@@ -25,10 +24,6 @@ public class ClntMngController {
 	public ICommonService iCommonService;
 	@Autowired
 	public IPagingService iPagingService;
-	@Autowired
-	public IClntMngService iClntMngService;
-	
-	
 	
 	@RequestMapping(value = "/clntCmpnyList")
 	public ModelAndView clntCmpnyList(@RequestParam HashMap<String, String> params, 
@@ -139,7 +134,7 @@ public class ClntMngController {
 		try {
 			switch(gbn) {
 			case "insert" :
-				iClntMngService.insertClntMng(params);
+				
 				break;
 			case "update" :
 				

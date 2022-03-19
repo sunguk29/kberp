@@ -222,12 +222,6 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-	$(".pgn_area").on("click", "div", function() {
-		$("#page").val($(this).attr("page"));
-		
-		reloadList();
-	});
-	
 });
 
 function reloadList() {
