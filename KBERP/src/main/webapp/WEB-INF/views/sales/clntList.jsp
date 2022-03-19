@@ -269,16 +269,16 @@ function drawPaging(pb) {
 	
 	html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
 	if($("#page").val() == "1") {
-		html += "<div page=\"1\" class=\"page_btn page_p	rev\">prev</div>";
+		html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
 	} else {
 		html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
 	}
 	
 	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
 		if($("#page").val() == i) {
-			html += "<div class=\"page_btn_on\">" + i + "</div>";
+			html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
 		} else {
-			html += "<div class=\"page_btn\">" + i + "</div>";
+			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
 		}
 	}
 	
@@ -292,7 +292,6 @@ function drawPaging(pb) {
 	$(".pgn_area").html(html);
 
 }
-
 </script>
 </head>
 <body>
