@@ -21,45 +21,7 @@
 $(document).ready(function() {
 	$("#writeBtn").on("click", function(){
 		$("#actionForm").submit(); 	
-	});
-	
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
-	});
+	});	
 });
 </script>
 </head>

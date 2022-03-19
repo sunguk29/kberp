@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="salesMng">
+
+	<!-- 총 게시글 수 -->
+	<select id="salesListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SALES
+		WHERE 1 = 1
+	</select>
+	
+	<!-- 영업관리 리스트 -->
+	<select id="getSalesList" parameterType="hashmap" resultType="hashmap">
+		SELECT SS.PRGRS_STS_NUM, SS.LEAD_NAME, SS.CLNT_CMPNY_NAME, SS.CLNT_NAME, SS.EMP_NAME
+		FROM ( SELECT S.SALES_NUM, S.PRGRS_STS_NUM, L.LEAD_NAME, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NAME,
+		              ROW_NUMBER() OVER(ORDER BY SALES_NUM DESC) AS RNUM
+		       FROM SALES S INNER JOIN EMP E
+		                            ON S.MNGR_EMP_NUM = E.EMP_NUM
+		                    INNER JOIN LEAD L
+		                            ON S.LEAD_NUM = L.LEAD_NUM
+		                    INNER JOIN ENTRPRS_CLNT EC
+		                            ON EC.CLNT_NUM = L.CLNT_NUM
+		                    INNER JOIN CLNT_CMPNY CC
+		                            ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
+		      ) SS
+		WHERE SS.RNUM BETWEEN #{startCount} AND #{endCount}
+	</select>
+	
+</mapper>

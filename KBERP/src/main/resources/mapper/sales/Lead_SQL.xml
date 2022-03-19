@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="blank">
+<mapper namespace="lead">
+	<select id="getLeadList" resultType="hashmap" parameterType="hashmap">
+		SELECT LL.LEAD_NUM, LL.CLNT_CMPNY_NAME, LL.CLNT_NAME, LL.EMP_NAME, LL.LEAD_NAME, LL.PRGRS_STS_NUM, LL.RGSTRTN_DATE
+		FROM (  SELECT L.LEAD_NUM, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NAME, L.LEAD_NAME, L.PRGRS_STS_NUM,
+		               TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE, ROW_NUMBER() OVER(ORDER BY LEAD_NUM DESC) AS RNUM
+		        FROM LEAD L INNER JOIN EMP E
+		                            ON L.MNGR_EMP_NUM = E.EMP_NUM
+		                    INNER JOIN ENTRPRS_CLNT EC
+		                            ON L.CLNT_NUM = EC.CLNT_NUM
+		                    INNER JOIN CLNT_CMPNY CC
+		                            ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM ) LL
+		
+		WHERE LL.RNUM BETWEEN #{startCount} AND #{endCount}
+	</select>
+	
+	<select id="getLeadCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM LEAD
+		WHERE 1 = 1
+	</select>
 </mapper>

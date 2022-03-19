@@ -6,19 +6,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>faq</title>
+<title>카카오뱅크 ERP Sample</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
-<style type = "text/css">
+<style type="text/css">
 /* 가로 사이즈 조정용 */
 .cont_wrap {
 	width: 900px;
 }
-
 /* 개인 작업 영역 */
 
 </style>
-<script type = "text/javascript">
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#alertBtn").on("click", function() {
@@ -62,7 +60,7 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-<!-- top & left -->
+	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
 		<c:param name="menuNum">${param.menuNum}</c:param>
@@ -72,7 +70,7 @@ $(document).ready(function() {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">FAQ</div>
+			<div class="page_title_text">1:1 문의</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
 				<select class="srch_sel">
@@ -92,8 +90,9 @@ $(document).ready(function() {
 			<table class="board_table">
 				<colgroup>
 					<col width="50"/>
-					<col width="140"/>
+					<col width="150"/>
 					<col width="450"/>
+					<col width="100"/>
 					<col width="100"/>
 					<col width="100"/>
 				</colgroup>
@@ -104,78 +103,89 @@ $(document).ready(function() {
 						<th>제목</th>
 						<th>작성자</th>
 						<th>작성일</th>
+						<th>답변상태</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td>99</td>
-						<td>입출금/예적금</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>김**</td>
-						<td>2022-12-01</td>
+						<td>10</td>
+						<td>인터넷뱅킹</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>조**</td>
+						<td>2021-12-01</td>
+						<td>대기</td>
 					</tr>
 					<tr>
-						<td>98</td>
-						<td>입출금/예적금</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
+						<td>10</td>
+						<td>인터넷뱅킹</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
 						<td>김**</td>
-						<td>2022-12-01</td>
+						<td>2021-12-01</td>
+						<td>대기</td>
 					</tr>
 					<tr>
-						<td>97</td>
-						<td>입출금/예적금</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>김**</td>
-						<td>2022-12-01</td>
-					</tr>
-					<tr>
-						<td>96</td>
-						<td>입출금/예적금</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>김**</td>
-						<td>2022-12-01</td>
-					</tr>
-					<tr>
-						<td>95</td>
-						<td>인증/보안</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>김**</td>
-						<td>2022-12-01</td>
-					</tr>
-					<tr>
-						<td>94</td>
-						<td>인증/보안</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>김**</td>
-						<td>2022-12-01</td>
-					</tr>
-					<tr>
-						<td>93</td>
-						<td>인증/보안</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>김**</td>
-						<td>2022-12-01</td>
-					</tr>
-					<tr>
-						<td>92</td>
-						<td>앱이용</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>김**</td>
-						<td>2022-12-01</td>
-					</tr>
-					<tr>
-						<td>91</td>
-						<td>앱이용</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
+						<td>10</td>
+						<td>인터넷뱅킹</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
 						<td>이**</td>
-						<td>2022-12-01</td>
+						<td>2021-12-01</td>
+						<td>대기</td>
 					</tr>
 					<tr>
-						<td>90</td>
-						<td>앱이용</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
+						<td>10</td>
+						<td>인터넷뱅킹</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>박**</td>
+						<td>2021-12-01</td>
+						<td>대기</td>
+					</tr>
+					<tr>
+						<td>10</td>
+						<td>인터넷뱅킹</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>최**</td>
+						<td>2021-12-01</td>
+						<td>대기</td>
+					</tr>
+					<tr>
+						<td>10</td>
+						<td>인터넷뱅킹</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>정**</td>
+						<td>2021-12-01</td>
+						<td>대기</td>
+					</tr>
+					<tr>
+						<td>10</td>
+						<td>인터넷뱅킹</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>조**</td>
+						<td>2021-12-01</td>
+						<td>완료</td>
+					</tr>
+					<tr>
+						<td>10</td>
+						<td>인터넷뱅킹</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>김**</td>
+						<td>2021-12-01</td>
+						<td>완료</td>
+					</tr>
+					<tr>
+						<td>10</td>
+						<td>인터넷뱅킹</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
 						<td>이**</td>
-						<td>2022-12-01</td>
+						<td>2021-12-01</td>
+						<td>완료</td>
+					</tr>
+					<tr>
+						<td>10</td>
+						<td>인터넷뱅킹</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>박**</td>
+						<td>2021-12-01</td>
+						<td>완료</td>
 					</tr>
 				</tbody>
 			</table>
@@ -195,12 +205,6 @@ $(document).ready(function() {
 			</div>
 		</div>
 	</div>
-	
-	<!-- 글쓰기 -->
-<form action="faqAdd" id="actionForm" method="post">
-	
-</form>
-	
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

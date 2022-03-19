@@ -1,4 +1,4 @@
-package com.gdj43.kberp.web.mng.controller;
+package com.gdj43.kberp.web.sales.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,64 +17,60 @@ import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 
-/*** 회계 메뉴 ***/
-
+// ************** 영업관리 ************** //
 @Controller
-public class AcntncController {
-	
+public class SalesMngController {
 	@Autowired
 	public ICommonService iCommonService;
 	
 	@Autowired
 	public IPagingService iPagingService;
 	
-	// 지출결의서 상세보기
-	@RequestMapping(value = "/expnsRsltnDtlView")
-	public ModelAndView expnsRsltn(ModelAndView mav) {
+	@RequestMapping(value = "/salesList")
+	public ModelAndView salesList(@RequestParam HashMap<String, String> params, ModelAndView mav) {
 		
-		mav.setViewName("mng/expnsRsltnDtlView");
-		
-		return mav;
-	}
-	
-	// 지출결의서관리 목록
-	@RequestMapping(value = "/expnsRsltnadmnstr")
-	public ModelAndView expnsRsltnadmnstr(@RequestParam HashMap<String, String >params, ModelAndView mav) {
-		
-		if(params.get("page") == null || params.get("page") == "") {
+		if (params.get("page") == null || params.get("page") == "") {
 			params.put("page", "1");
 		}
-		
+
 		mav.addObject("page", params.get("page"));
 		
-		mav.setViewName("mng/expnsRsltnadmnstrList");
+		mav.setViewName("sales/salesList");
 		
 		return mav;
 	}
 	
-	// 지출결의서관리 목록 ajax
-	@RequestMapping(value = "/expnsRsltnadmnstrAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@RequestMapping(value = "/salesListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	
 	@ResponseBody
-	public String expnsRsltnadmnstrAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+	public String salesListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		// 총 게시글 수
-		int cnt = iCommonService.getIntData("expnsRsltnadmnstr.getExpnsCnt", params);
+		int cnt = iCommonService.getIntData("salesMng.salesListCnt", params);
 		
-		// 페이징 계산
 		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
 		
+		// 데이터 시작, 종료 할당
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
-		List<HashMap<String, String>> list = iCommonService.getDataList("expnsRsltnadmnstr.getExpnsList", params);
+		// 목록 조회
+		List<HashMap<String, String>> list = iCommonService.getDataList("salesMng.getSalesList", params);
 		
-		modelMap.put("list", list); 
-		modelMap.put("pb", pb); 
+		modelMap.put("list", list);
+		modelMap.put("pb", pb);
 		
 		return mapper.writeValueAsString(modelMap);
 	}
-
 }
+
+
+
+
+
+
+
