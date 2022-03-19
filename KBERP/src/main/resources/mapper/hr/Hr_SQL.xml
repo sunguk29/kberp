@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hr">
+<select id="getApntmList" resultType="hashmap" parameterType="hashmap">
+	SELECT A.RNUM, E.EMP_NAME, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, A.START_DATE, AP.APRVL_STS
+	FROM ( SELECT APNTM_NUM, APNTM_DVSN_NUM, EMP_NUM, DEPT_NUM, RANK_NUM, TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE , 
+	              APRVL_NUM, ROW_NUMBER() OVER(ORDER BY APNTM_NUM DESC) AS RNUM
+	        FROM APNTM )A INNER JOIN EMP E
+	                            ON A.EMP_NUM = E.EMP_NUM
+	                      INNER JOIN DEPT D
+	                            ON A.DEPT_NUM = D.DEPT_NUM
+	                      INNER JOIN RANK R
+	                            ON A.RANK_NUM = R.RANK_NUM
+	                      LEFT OUTER JOIN APRVL_LINE AP
+	                            ON A.APRVL_NUM = AP.APRVL_NUM
+  </select>
 </mapper>
