@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP - 고객사</title>
+<title>카카오뱅크 ERP - 고객</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -14,7 +14,7 @@
 .cont_wrap {
 	width: 1013px;
 }
-
+/* 개인 작업 영역 */
 .body {
 	display: block;
 	background-color: white;
@@ -31,8 +31,6 @@
 	margin: 40px auto;
 }
 
-/* 개인 작업 영역 */
-
 /* sts */
 .sts {
 	display: inline-block;
@@ -45,10 +43,10 @@
 .sts_list {
 	display: inline-block;
 	vertical-align: middle;
-	width: 110px;
-	margin: 0 5px;
+	width: 130px;
+	margin: 0 30px;
 	padding: 8px 5px;
-	font-size: 9pt;
+	font-size: 10pt;
 	text-align: center;
 	background-color: #f2f2f2;
 	border-radius: 5px;
@@ -59,8 +57,8 @@
    background-color: #F2B705;
 }
 .sts_list:active {
-   width: 110px;
-   margin: 0 5px;
+   width: 130pxpx;
+   margin: 0 30px;
    padding: 8px 5px;
    background-color: #F2CB05;
    cursor: pointer;
@@ -86,7 +84,7 @@
 	height: 50px;
 }
 
-.srch_table tr:nth-child(3) {
+.srch_table tr:nth-child(2) {
 	height: 45px;
 	border-top: 0.5px solid #d7d7d7;
 }
@@ -212,7 +210,7 @@ $(document).ready(function() {
 	
 	reloadList();
 	
-	$(".pgn_area").on("click", "div", function() {
+	$("#pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
 
 		reloadList();
@@ -222,13 +220,6 @@ $(document).ready(function() {
 		$("#actionForm").attr("action", "clntCmpnyReg");
 		$("#actionForm").submit();
 	});
-	
-	$(".pgn_area").on("click", "div", function() {
-		$("#page").val($(this).attr("page"));
-
-		reloadList();
-	});
-	
 });
 
 function reloadList() {
@@ -236,11 +227,10 @@ function reloadList() {
 	
 	$.ajax({
 		type : "post",
-		url : "clntCmpnyListAjax",
+		url : "clntListAjax",
 		data : params,
 		dataType : "json",
 		success : function(res) {
-			drawList(res.list);
 			drawPaging(res.pb);
 		},
 		error : function(req) {
@@ -254,26 +244,23 @@ function drawList(list) {
 	var html = "";
 	
  	for(var data of list) {
+ 		html += "<tbody>";
 		html += "<tr>";
 		html += "<td rowspan=\"3\">" + data.RNUM + "</td>";
-		html += "<td>" + data.CLNT_CMPNY_NUM + "</td>";
-		html += "<td>" + data.GRADE_NAME + "등급</td>";
-		html += "<td rowspan=\"3\">";
-		html += "<img class=\"deal\" alt=\"거래\" src=\"resources/images/sales/hands.png\" />";
-		html += "<span class=\"deal_cnt\">2건</span>";
-		html += "</td>";
+		html += "<td>" + data.CLNT_NUM + "</td>";
+		html += "<td>" + data.DEPT + "/" + data.DUTY + "</td>";
+		html += "<td>" + data.EMAIL + "</td>";
 		html += "</tr>";
 		html += "<tr>";
-		html += "<td>" + data.CLNT_CMPNY_CLSFY_NAME + "</td>";
-		html += "<td>" + data.CLNT_CMPNY_NAME + "</td>";
-		html += "</tr>";
-		html += "<tr>";
-		html += "<td>" + data.RVN + "</td>";
-		html += "<td>" + data.ADRS + "</td>";
-		html += "</tr>";
+			/* <td>삼성전자</td>
+			<td>김호구</td>
+			<td>010-1234-5678</td>
+		</tr>
+		<tr></tr>	
+	</tbody> */
 	}
 	
-	$(".cont_table").html(html);
+	$(".list_table").html(html);
 
 }
 
@@ -282,16 +269,16 @@ function drawPaging(pb) {
 	
 	html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
 	if($("#page").val() == "1") {
-		html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
+		html += "<div page=\"1\" class=\"page_btn page_p	rev\">prev</div>";
 	} else {
 		html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
 	}
 	
 	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
 		if($("#page").val() == i) {
-			html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
+			html += "<div class=\"page_btn_on\">" + i + "</div>";
 		} else {
-			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
+			html += "<div class=\"page_btn\">" + i + "</div>";
 		}
 	}
 	
@@ -311,9 +298,6 @@ function drawPaging(pb) {
 <body>
 <form action="#" id="actionForm" method="post">
 	<input type="hidden" id="page" name="page" value="${page}" />
-	<input type="hidden" name="top" value="${param.top}" />
-	<input type="hidden" name="menuNum" value="${param.menuNum}" />
-	<input type="hidden" name="menuType" value="${param.menuType}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -325,7 +309,7 @@ function drawPaging(pb) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">고객사 목록</div>
+			<div class="page_title_text">고객 목록</div>
 			<!-- 검색영역 선택적 사항 -->
 
 		</div>
@@ -333,91 +317,76 @@ function drawPaging(pb) {
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="bodyWrap">
-				<div class="sts">
-					<div class="sts_list">전체 : 377건</div>
-					<div class="sts_list">파트너사 : 123건</div>
-					<div class="sts_list">거래고객사 : 235건</div>
-					<div class="sts_list">해지고객사 : 15건</div>
-					<div class="sts_list">정지고객사 : 2건</div>
-					<div class="sts_list">외국파트너사 : 2건</div>
-					<div class="sts_list">기타 : 2건</div>
-				</div>
 				<div class="tLine"></div>
+				<!-- class="sts" end -->
+
+				<!-- srch_table -->
 				<table class="srch_table">
+
 					<colgroup>
-						<col width="130" />
-						<col width="130" />
-						<col width="320" />
-						<col width="220" />
+						<col width="90" />
+						<col width="60" />
+						<col width="40" />
+						<col width="60" />
+						<col width="60" />
+						<col width="60" />
+						<col width="60" />
+						<col width="60" />
+						<col width="0" />
+						<col width="55" />
 					</colgroup>
 					<tbody>
-						<tr>
-							<td><span class="srch_name">고객사분류</span></td>
-							<td><select>
-									<option>전체</option>
-									<option>파트너사</option>
-									<option>거래고객사</option>
-									<option>해지고객사</option>
-									<option>정지고객사</option>
-									<option>외국파트너사</option>
-									<option>기타</option>
-							</select></td>
-							<td></td>
-							<td></td>
-						</tr>
 						<tr>
 							<td><span class="srch_name">검색어</span></td>
 							<td><select>
 									<option>선택안함</option>
+									<option>고객명</option>
 									<option>고객사명</option>
-									<option>고객사번호</option>
+									<option>고객번호</option>
 							</select></td>
-							<td><input type="text" class="srch_msg"
+							<td colspan="3"><input type="text" class="srch_msg"
 								placeholder="검색 조건을 선택한 후 입력해주세요." /></td>
-							<td><span class="cmn_btn">검색</span></td>
+							<td colspan="5"><span class="cmn_btn">검색</span></td>
 						</tr>
 						<tr>
 							<td><span class="srch_name">정렬</span></td>
 							<td><select>
 									<option selected="selected">선택안함</option>
-									<option>매출</option>
+									<option>고객명</option>
 									<option>고객사명</option>
 							</select></td>
-							<td>
-								<img class="asc_btn cmn_btn" alt="등록버튼" src="resources/images/sales/asc.png" />
-							</td>
+							<td><img class="asc_btn cmn_btn" alt="등록버튼"
+								src="resources/images/sales/asc.png" /></td>
+							<td colspan="7"></td>
 						</tr>
 					</tbody>
 				</table>
 				<div class="SearchResult">
-					<h3>고객사 (검색결과: ${CNT}건)</h3>
+					<h3>고객 (검색결과: 83건)</h3>
 				</div>
+				<!-- list_table -->
 				<table class="list_table">
+					<!-- col=4 -->
 					<colgroup>
-						<col width="80">
+						<col width="70">
 						<col width="90">
-						<col width="290">
-						<col width="80">
+						<col width="150">
+						<col width="150">
 					</colgroup>
 					<thead>
 						<tr>
-							<th rowspan="3">글번호</th>
-							<th>고객사번호</th>
-							<th>고객사 등급</th>
-							<th></th>
+							<th rowspan="2">글번호</th>
+							<th>고객번호</th>
+							<th>부서 / 직책</th>
+							<th>이메일</th>
 						</tr>
 						<tr>
-							<th>고객사 분류</th>
 							<th>고객사명</th>
-							<th>거래횟수</th>
+							<th>고객명</th>
+							<th>전화번호</th>
 						</tr>
-						<tr>
-							<th>매출</th>
-							<th>주소</th>
-							<th></th>
-						</tr>
+						<tr></tr>
 					</thead>
-					<tbody class="list_table cont_table"></tbody>
 				</table>
 				<div class="body_bottom">
 					<div class="board_bottom">

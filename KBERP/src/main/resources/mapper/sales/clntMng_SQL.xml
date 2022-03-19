@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="clntCmpnyMng">
+
+	<select id="getClntCmpntList" parameterType="hashmap" resultType="hashmap">
+		SELECT CC.RNUM, CC.CLNT_CMPNY_NUM, CC.GRADE_NAME, CC.CLNT_CMPNY_CLSFY_NAME, CC.CLNT_CMPNY_NAME, CC.ADRS, CC.RVN
+		FROM (  SELECT ROW_NUMBER() OVER(ORDER BY CC.CLNT_CMPNY_NUM DESC) AS RNUM, CC.CLNT_CMPNY_NUM, CCG.GRADE_NAME, CCC.CLNT_CMPNY_CLSFY_NAME,
+		               CC.CLNT_CMPNY_NAME, CC.RVN, CC.ADRS || CC.DTL_ADRS AS ADRS
+		        FROM CLNT_CMPNY CC INNER JOIN CLNT_CMPNY_GRADE CCG
+		                                   ON CC.GRADE_NUM = CCG.GRADE_NUM
+		                           INNER JOIN CLNT_CMPNY_CLSFY CCC
+		                                   ON CC.CLNT_CMPNY_CLSFY_NUM = CCC.CLNT_CMPNY_CLSFY_NUM ) CC
+		WHERE CC.RNUM BETWEEN #{startCount} AND #{endCount}
+	</select>
+	
+	<select id="clntCmpnyCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM CLNT_CMPNY
+		WHERE 1 = 1
+	</select>
+	
+	<select id="getClntList" parameterType="hashmap" resultType="hashmap">
+		SELECT C.CLNT_NUM, C.DEPT, C.DUTY, C.EMAIL, C.CLNT_CMPNY_NAME, C.CLNT_NAME, C.MBL
+		FROM(  SELECT ROW_NUMBER() OVER(ORDER BY EC.CLNT_NUM DESC) AS RNUM, EC.CLNT_NUM, EC.DEPT, EC.DUTY,
+		              EC.EMAIL, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL 
+		       FROM ENTRPRS_CLNT EC INNER JOIN CLNT_CMPNY CC
+		                                    ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM ) C
+		WHERE C.RNUM BETWEEN #{startCount} AND #{endCount}
+	</select>
+	
+	<select id="clntCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM ENTRPRS_CLNT
+		WHERE 1 = 1
+	</select>
+	
+	<insert id="getClntCmpnyAdd" parameterType="hashmap">
+		INSERT INTO CLNT_CMPNY(CLNT_CMPNY_NUM, CLNT_CMPNY_CLSFY_NUM, GRADE_NUM, RCGNTN_PATH_NUM,
+		                      CLNT_CMPNY_NAME, BSNSMN_RGSTRTN_NUM, CLNT_NAME, PHONE_NUM, FAX, HMPG, ZIP_CODE_NUM,
+		                      ADRS, DTL_ADRS, RVN, EMP_NUM)
+		VALUES(CLNT_CMPNY_SEQ.NEXTVAL, #{cc_clsfy}, #{cc_grade}, #{rp}, #{cc_name}, #{br_num}, #{c_name}, 
+			   #{phone_num}, #{fax}, #{hmpg}, #{zip_code_num}, #{adrs}, #{dtl_adrs}, #{rvn}, #{sEmpNum})
+	</insert>
+	
+</mapper>

@@ -13,4 +13,20 @@ public class NoteController {
 		
 		return mav;
 	}
+	
+	@RequestMapping(value = "/rcvdNoteBox")
+	public ModelAndView rcvdNoteBox(ModelAndView mav) {
+		
+		mav.setViewName("GW/rcvdNoteBox");
+		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/sentNoteBox")
+	public ModelAndView sentNoteBox(ModelAndView mav) {
+		
+		mav.setViewName("GW/sentNoteBox");
+		
+		return mav;
+	}
 }

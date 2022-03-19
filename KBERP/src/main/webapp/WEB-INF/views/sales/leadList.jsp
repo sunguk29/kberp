@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>리드관리</title>
+<title>카카오 ERP - 리드목록</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -15,6 +15,138 @@
 	width: 1013px;
 }
 /* 개인 작업 영역 */
+
+/* 팝업 조회영역 */
+.popup_title_mid {
+	width: calc(100% + 20px);
+    height: 70px;
+    margin: -10px 0px 0px -10px;
+	background-color: #F2F2F2;
+	font-size: 11pt;
+	padding-bottom: 3px;
+	border-bottom: 1px solid #d7d7d7;
+}
+.ptm_left {
+	display: inline-block;
+	vertical-align: top;
+	width: 100px;
+	height: 70px;
+}
+.ptm_left_top, .ptm_left_bot {
+	width: 100px;
+	height: 35px;
+	line-height: 35px;
+	text-align: right;
+	font-size: 15px;
+	font-weight: bold;
+}
+.ptm_mid {
+	display: inline-block;
+	vertical-align: top;
+	width: 150px;
+	height: 70px;
+}
+.ptm_mid_top, .ptm_mid_bot {
+	width: 150px;
+	height: 35px;
+	line-height: 35px;
+	text-align: center;
+}
+.sel_size {
+	width: 130px;
+	height: 25px;
+	outline: none;
+}
+.ptm_mid_right {
+	display: inline-block;
+	vertical-align: top;
+	width: 240px;
+	height: 70px;
+}
+.ptm_mid_right_top, .ptm_mid_right_bot {
+	width: 240px;
+	height: 35px;
+	line-height: 35px;
+	text-align: center;
+}
+.text_size {
+	width: 230px;
+	height: 19px;
+	outline: none;
+}
+.ptm_right {
+	display: inline-block;
+	vertical-align: top;
+	width: 94px;
+	height: 100%;
+}
+.ptm_right_top {
+	width: 94px;
+	height: 32px;
+	text-align: center;
+}
+.ptm_right_bot {
+	width: 94px;
+	height: 32px;
+	margin-top: 5px;
+	text-align: center;
+}
+/* 팝업 내용 */
+.popup_cc_box_left {
+   display: inline-block;
+   vertical-align: top;
+   width: 120px;
+   height: 50px;
+}
+.popup_cc_box_right {
+   display: inline-block;
+   width: 400px;
+   height: 50px;
+   font-size: 14px;
+   line-height: 50px;
+}
+.popup_box_in {
+   width: calc(100% - 4px);
+   height: 50px;
+   border: 2px solid #d7d7d7;
+   border-radius: 3px;
+   background-color: #F2F2F2;
+   margin-bottom: 5px;
+}
+.popup_box_in:hover {
+   cursor: pointer;
+   border: 2px solid #2E83F2;
+}
+.company {
+   display: inline-block;
+   width: 42px;
+   height: 25px;
+   background-image: url("resources/images/sales/usericon.png");
+   background-size: 42px 25px;
+   margin-top: 13px;
+   margin-left: 45px;
+}
+.boldname{
+	margin-left: 30px;
+	font-weight: bold;
+}
+.mg_wid {
+	margin-left: 50px;
+}
+/* 팝업 내용 배경색 */
+.pc_back {
+	background-color: #fff;
+}
+
+/* 팝업 페이징 */
+.board_bottom2 {
+	height: 30px;
+	position: relative;
+	text-align: right;
+	background-color: #fff;
+	padding: 5px 0px;
+}
+/*----- 팝업 CSS 끝 ----- */
 .body {
 	display: block;
 	background-color: white;
@@ -127,22 +259,44 @@ select {
 .findEmp_box {
 	background-color: white;
 	border : 1px solid #858585;
-	height: 22px;
-	width: 160px;
+	height: 18px;
+	width: 180px;
 	border-radius : 1px;
-	text-align: right;
+	padding: 2px;
+}
+.findEmp_box2 {
+	background-color: white;
+	display:inline-block;
+	vertical-align:top;
+	height: 18px;
+	width: 150px;
+	margin: 0px;
+	padding: 0px;	
+}
+input:focus {
+	outline:none;
 }
 .findEmp_box:hover {
 	cursor: pointer;
 }
-.findEmp_box:active {
+/* .findEmp_box:active {
 	background-color : white;
 	outline : 1.5px solid #222222;
-}
+} */
 .userIcon{
 	height: 15px;
 	margin-top: 3px;
 	margin-right : 5px;
+}
+.userIcon2 {
+	width: 18px;
+	height: 18px;
+	display: inline-block;
+	vertical-align: middle;
+	background-image: url(resources/images/sales/usericon.png);
+	background-size: 18px 18px;
+	background-repeat: no-repeat;
+	padding-bottom: 5px;
 }
 /*---------  검색결과 : n건 --------- */
 .SearchResult { /* 영업기회 검색결과 */
@@ -225,8 +379,203 @@ select {
 	background-color: #2e83f2;
 }
 </style>
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	$(".userIcon2").on("click", function() {
+		var html = "";
+		
+	 	html += "<div class=\"popup_title_mid\">"; 
+		html += "<div class=\"ptm_left\">";
+		html += "<div class=\"ptm_left_top\">팀분류</div>";
+		html +=	"<div class=\"ptm_left_bot\">사원분류</div>";		
+		html += "</div>";
+		html += "<div class=\"ptm_mid\">";
+		html +=	"<div class=\"ptm_mid_top\">";
+		html +=	"<select class=\"sel_size\">"
+		html +=		"<option>영업1팀</option>";
+		html +=		"<option>영업2팀</option>";
+		html +=		"<option>영업3팀</option>";
+		html +=	"</select>";
+		html +=	"</div>";		
+		html +=	"<div class=\"ptm_mid_bot\">";
+		html +=	"<select class=\"sel_size\">";
+		html +=		"<option>사원번호</option>";
+		html +=		"<option>사원명</option>";
+		html +=	"</select>";
+		html +=	"</div>";	
+		html += "</div>";
+		html += "<div class=\"ptm_mid_right\">";
+		html +=	"<div class=\"ptm_mid_right_top\"></div>";
+		html +=	"<div class=\"ptm_mid_right_bot\">";
+		html +=	"<input type=\"text\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" />";
+		html +=	"</div>";
+		html += "</div>";
+		html += "<div class=\"ptm_right\">";
+		html +=	"<div class=\"ptm_right_top\"></div>";
+		html +=	"<div class=\"ptm_right_bot\">";
+		html +=	"<div class=\"cmn_btn\">검색</div>";
+		html +=	"</div>";
+		html +=	"</div>";
+		html += "</div>";
+		html += "<div class=\"popup_cont pc_back\">";
+		html +=	"<div class=\"popup_box_in\">";
+		html +=	"<div class=\"popup_cc_box_left\">";
+		html +=	"<span class=\"company\"></span>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_cc_box_right\">";
+		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
+		html +=	"<span class=\"mg_wid\">영업1팀</span>";
+		html +=	"</div>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_box_in\">";
+		html +=	"<div class=\"popup_cc_box_left\">";
+		html +=	"<span class=\"company\"></span>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_cc_box_right\">";
+		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
+		html +=	"<span class=\"mg_wid\">영업1팀</span>";
+		html +=	"</div>";
+		html +=	"</div>";
+		html += "<div class=\"board_bottom2\">";
+		html +=	"<div class=\"pgn_area\">";
+		html +=	"<div class=\"page_btn page_first\">first</div>";
+		html +=	"<div class=\"page_btn page_prev\">prev</div>";
+		html +=	"<div class=\"page_btn_on\">1</div>";
+		html +=	"<div class=\"page_btn\">2</div>";
+		html +=	"<div class=\"page_btn\">3</div>";
+		html +=	"<div class=\"page_btn\">4</div>";
+		html +=	"<div class=\"page_btn\">5</div>";
+		html +=	"<div class=\"page_btn page_next\">next</div>";
+		html +=	"<div class=\"page_btn page_last\">last</div>";
+		html +=	"</div>";
+		html +=	"</div>";
+		html +=	"</div>";
+		
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "담당자 조회",
+			contents : html,
+			width : 600,
+			height : 500,
+			buttons : [{
+				name : "등록",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "취소"
+			}]
+		});
+	});
+	
+	// 목록 조회
+	reloadList();
+	
+	$(".list_table tbody").on("click", "tr", function() {
+		$("#no").val($(this).attr("no"));
+		
+		$("#actionForm").attr("action", "lead");
+		$("#actionForm").submit();
+	});
+	
+	$("#pgn_area").on("click", "div", function() {
+		
+		$("#page").val($(this).attr("page"));
+		
+		reloadList();
+		
+	});
+	
+	$("#writeBtn").on("click", function() {
+		
+		$("#actionForm").attr("action", "leadReg")
+		$("#actionForm").submit();
+	});
+}); 
+
+function reloadList() {
+	var params = $("#actionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "leadListAjax",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			drawList(res.list);
+			drawPaging(res.pb);
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	});	
+}
+//리스트
+function drawList(list) {
+	var html = "";
+	
+	for(var data of list) {
+		html += "<tr no=\"" + data.LEAD_NUM + "\">";
+		html += "<td rowspan=\"3\">" + data.LEAD_NUM + "</td>";
+		html += "<td>" + LD + data.LEAD_NUM + "</td>";
+		html += "<td>" + CLNT_CMPNY_NAME / CLNT_NAME + "</td>";
+		html += "<td></td>";
+		html += "</tr>";
+		html += "<tr>";
+		html += "<td>" + EMP_NAME + "</td>";
+		html += "<td>" + LEAD_NAME + "</td>";
+		html += "<td><span class=\"sales_psbl_btn\"> 50 % </span></td>";
+		html += "</tr>";
+		html += "<tr>";
+		html += "<td>" + PRGRS_STS_NUM + "</td>";
+		html += "<td>" + RGSTRTN_DATE + "</td>";
+		html += "<td></td>";
+		html += "</tr>";
+	}
+	
+	$(".list_table tbody").html(html);
+}
+
+function drawPaging(pb) {
+	var html = "";
+	
+	html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
+	if($("#page").val() == "1") {
+		html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
+	} else {
+		html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
+	}
+	
+	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
+		if($("#page").val() == i) {
+			html += "<div class=\"page_btn_on\">" + i + "</div>";
+		} else {
+			html += "<div class=\"page_btn\">" + i + "</div>";
+		}
+	}
+	
+	if($("#page").val() == pb.maxPcount) {
+		html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_next\">next</div>";
+	} else {
+		html += "<div page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</div>";
+	}
+	html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
+	
+	$(".pgn_area").html(html);
+}
+</script>
 </head>
 <body>
+<form action="#" id="actionForm" method="post">
+	<input type="hidden" id="page" name="page" value="${page}" />
+	<input type="hidden" id="no" name="no" />
+	<input type="hidden" name="top" value="${param.top}" />
+	<input type="hidden" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />	
+</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -243,9 +592,7 @@ select {
 			<!-- 해당 내용에 작업을 진행하시오. -->
 			<div class="cont_area">
 				<!-- 여기부터 쓰면 됨 -->
-				<div class="body">
 					<!-- 검색영역 -->
-
 					<div class="bodyWrap">
 						<!-- sts : 상품현황 -->
 						<div class="sts">
@@ -259,7 +606,6 @@ select {
 
 						<!-- srch_table -->
 						<table class="srch_table">
-
 							<colgroup>
 								<col width="80" />
 								<col width="60" />
@@ -273,8 +619,7 @@ select {
 								<col width="55" />
 							</colgroup>
 							<tbody>
-								<!-- col=10 -->
-								
+								<!-- col=10 -->							
 								<tr>
 									<td>
 										<span class="srch_name">가능 여부</span>
@@ -310,7 +655,8 @@ select {
 									</td>
 									<td colspan="7">
 										<div class="findEmp_box">
-											<img class="userIcon" src="../../images/sales/usericon.png">
+											<input type="text" maxlength="20" class="findEmp_box2" style="border:0 solid black" />
+											<span class="userIcon2"></span>
 										</div>										
 									</td>
 								</tr>
@@ -374,7 +720,7 @@ select {
 										</select>
 									</td>
 									<td>
-										<img class="asc_btn cmn_btn" alt="등록버튼" src="../../images/sales/asc.png" />
+										<img class="asc_btn cmn_btn" alt="등록버튼" src="resources/images/sales/asc.png" />
 									</td>
 									<td colspan="7"></td>
 								</tr>
@@ -408,32 +754,18 @@ select {
 									<th></th>
 								</tr>
 							</thead>
-							<tbody>
-							</tbody>
+							<tbody></tbody>
 						</table>
 						<div class="body_bottom">
 							<div class="board_bottom">
-								<div class="pgn_area">
-									<div class="page_btn page_first">first</div>
-									<div class="page_btn page_prev">prev</div>
-									<div class="page_btn_on">1</div>
-									<div class="page_btn">2</div>
-									<div class="page_btn">3</div>
-									<div class="page_btn">4</div>
-									<div class="page_btn">5</div>
-									<div class="page_btn page_next">next</div>
-									<div class="page_btn page_last">last</div>
-								</div>
-								<div class="cmn_btn">등록</div>
+								<div class="pgn_area"></div>
+								<div class="cmn_btn" id="writeBtn"> 등록</div>
 							</div>
 						</div>
 					</div>
-					<!-- class="bodyWrap" end -->
 				</div>
 				<!-- class="body" end -->
 			</div>
-		</div>
-	</div>
 <!-- bottom -->
 <c:import url="/bottom"></c:import>
 </body>

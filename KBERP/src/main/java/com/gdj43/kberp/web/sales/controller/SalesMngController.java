@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gdj43.kberp.common.bean.PagingBean;
+import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 
 // ************** 영업관리 ************** //
@@ -21,8 +23,17 @@ public class SalesMngController {
 	@Autowired
 	public ICommonService iCommonService;
 	
+	@Autowired
+	public IPagingService iPagingService;
+	
 	@RequestMapping(value = "/salesList")
 	public ModelAndView salesList(@RequestParam HashMap<String, String> params, ModelAndView mav) {
+		
+		if (params.get("page") == null || params.get("page") == "") {
+			params.put("page", "1");
+		}
+
+		mav.addObject("page", params.get("page"));
 		
 		mav.setViewName("sales/salesList");
 		
@@ -38,10 +49,28 @@ public class SalesMngController {
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		List<HashMap<String, String>> list = iCommonService.getDataList("common.getSalesList", params);
+		// 총 게시글 수
+		int cnt = iCommonService.getIntData("salesMng.salesListCnt", params);
+		
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
+		
+		// 데이터 시작, 종료 할당
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		// 목록 조회
+		List<HashMap<String, String>> list = iCommonService.getDataList("salesMng.getSalesList", params);
 		
 		modelMap.put("list", list);
+		modelMap.put("pb", pb);
 		
 		return mapper.writeValueAsString(modelMap);
 	}
 }
+
+
+
+
+
+
+

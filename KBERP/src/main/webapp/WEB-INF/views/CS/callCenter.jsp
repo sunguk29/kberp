@@ -92,7 +92,13 @@
 	text-decoration: underline;
 }
 
-
+/* 저장 팝업 */
+.save_cont{
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	line-height: 110px;
+}
 
 /* 내용부분 위 아래 영역 나누기 */
 .call_area {
@@ -606,9 +612,7 @@ $(document).ready(function() {
 			}]
 		});
 	});
-});
 
-$(document).ready(function() {
 	$("#call_btn").on("click", function() {
 		var html = "";
 		
@@ -629,9 +633,7 @@ $(document).ready(function() {
 			}]
 		});
 	});
-});
 
-$(document).ready(function() {
 	$("#searchBtn").on("click", function() {
 		var html = "";
 		
@@ -687,6 +689,56 @@ $(document).ready(function() {
 					console.log("One!");
 					closePopup();
 				}
+			}]
+		});
+	});
+	
+	$(".cmn_btn_mr").on("click", function() {
+		
+		var html = "";
+		
+		html += "<div class=\"save_cont\">지금까지의 내용을 저장 하시겠습니까?</div>"
+		
+		makePopup({
+			depth : 1,
+			bg : true,
+			width : 400,
+			height : 220,
+			title : "저장",
+			contents : html,
+			buttons :  [{
+				name : "취소",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "확인"
+			}]
+		});
+	});
+	
+	$(".note_cmn_btn_mr").on("click", function() {
+		
+		var html = "";
+		
+		html += "<div class=\"save_cont\">지금까지의 내용을 저장 하시겠습니까?</div>"
+		
+		makePopup({
+			depth : 1,
+			bg : true,
+			width : 400,
+			height : 220,
+			title : "저장",
+			contents : html,
+			buttons :  [{
+				name : "취소",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "확인"
 			}]
 		});
 	});

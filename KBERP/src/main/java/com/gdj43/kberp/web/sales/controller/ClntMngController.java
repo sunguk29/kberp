@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,7 +52,7 @@ public class ClntMngController {
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		int cnt = iCommonService.getIntData("clntCmpny.clntCmpnyCnt", params);
+		int cnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyCnt", params);
 		
 		PagingBean pb = 
 				iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
@@ -58,7 +61,7 @@ public class ClntMngController {
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
 		List<HashMap<String, String>> list = 
-				iCommonService.getDataList("clntCmpny.getClntCmpntList", params);
+				iCommonService.getDataList("clntCmpnyMng.getClntCmpntList", params);
 		
 		modelMap.put("list", list);
 		modelMap.put("pb", pb);
@@ -66,12 +69,94 @@ public class ClntMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
+	@RequestMapping(value = "/clntList")
+	public ModelAndView clntList(@RequestParam HashMap<String, String> params, 
+								 ModelAndView mav) {
+		
+		if(params.get("page") == null || params.get("page") == "") {
+			params.put("page", "1");
+		}
+		
+		mav.addObject("page", params.get("page"));
+		
+		mav.setViewName("sales/clntList");
+		
+		return mav;
+	}
+	@RequestMapping(value = "/clntListAjax", method = RequestMethod.POST, 
+			produces = "text/json;charset=UTF-8")
+	@ResponseBody 
+	public String clntListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+	
+	ObjectMapper mapper = new ObjectMapper();
+	
+	Map<String, Object> modelMap = new HashMap<String, Object>();
+	
+	int cnt = iCommonService.getIntData("clntCmpnyMng.clntCnt", params);
+	
+	PagingBean pb = 
+			iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
+	
+	params.put("startCount", Integer.toString(pb.getStartCount()));
+	params.put("endCount", Integer.toString(pb.getEndCount()));
+	
+	List<HashMap<String, String>> list = 
+			iCommonService.getDataList("clntCmpnyMng.getClntList", params);
+	
+	modelMap.put("list", list);
+	modelMap.put("pb", pb);
+	
+	return mapper.writeValueAsString(modelMap);
+	}
+	
 	@RequestMapping(value = "/clntCmpnyReg")
-	public ModelAndView clntCmpnyReg(ModelAndView mav) {
+	public ModelAndView clntCmpnyReg(@RequestParam HashMap<String, String> params, 
+									  ModelAndView mav) {
+		
+		if(params.get("page") == null || params.get("page") == "") {
+			params.put("page", "1");
+		}
+		
+		mav.addObject("page", params.get("page"));
 		
 		mav.setViewName("sales/clntCmpnyReg");
 		
 		return mav;
+	}
+	
+	@RequestMapping(value = "/clntCmpnyMngAction/{gbn}", method = RequestMethod.POST,
+					produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String clntCmpnyMngAction(@RequestParam HashMap<String, String> params, 
+									 @PathVariable String gbn) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			switch(gbn) {
+			case "insert" :
+				int cnt = iCommonService.insertData("clntCmpnyMng.getClntCmpnyAdd", params);
+				if(cnt == 1) {
+					modelMap.put("res", "success");
+				} else {
+					modelMap.put("res", "faild");
+				}
+				break;
+			case "update" :
+				
+				break;
+			case "delete" :
+				
+				break;
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "error");
+		}
+
+		return mapper.writeValueAsString(modelMap);
 	}
 
 }
