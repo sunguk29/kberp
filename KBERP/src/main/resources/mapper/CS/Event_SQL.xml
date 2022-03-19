@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ev">
+
+	<select id="getEventList" resultType="hashmap" parameterType="hashmap">
+		SELECT EVENT.EVENT_NUM, EVENT.EMP_NUM, event_title, event_cont, write_date, event_hits, del_check
+		FROM EVENT
+		ORDER BY EVENT.EVENT_NUM DESC
+<!-- 		WHERE SELL.RNUM BETWEEN #{startCount} AND #{endCount} -->
+	</select>
+	
+	<select id="getEvent" resultType="hashmap" parameterType="hashmap">
+		SELECT EVENT.EVENT_NUM, EVENT.EMP_NUM, event_title, event_cont, write_date, event_hits, del_check
+		FROM EVENT
+		WHERE EVENT.EVENT_NUM = #{no}
+	</select>
 </mapper>

@@ -128,8 +128,7 @@ public class ClntMngController {
 					produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String clntCmpnyMngAction(@RequestParam HashMap<String, String> params, 
-									 @PathVariable String gbn,
-									 HttpSession session) throws Throwable {
+									 @PathVariable String gbn) throws Throwable {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -138,7 +137,12 @@ public class ClntMngController {
 		try {
 			switch(gbn) {
 			case "insert" :
-				iCommonService.insertData("clntCmpnyMng.getClntCmpnyAdd", params);
+				int cnt = iCommonService.insertData("clntCmpnyMng.getClntCmpnyAdd", params);
+				if(cnt == 1) {
+					modelMap.put("res", "success");
+				} else {
+					modelMap.put("res", "faild");
+				}
 				break;
 			case "update" :
 				
@@ -147,10 +151,9 @@ public class ClntMngController {
 				
 				break;
 			}
-			modelMap.put("res", "success");
 		} catch (Throwable e) {
 			e.printStackTrace();
-			modelMap.put("res", "faild");
+			modelMap.put("res", "error");
 		}
 
 		return mapper.writeValueAsString(modelMap);

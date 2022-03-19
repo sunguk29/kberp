@@ -222,6 +222,13 @@ $(document).ready(function() {
 		$("#actionForm").attr("action", "clntCmpnyReg");
 		$("#actionForm").submit();
 	});
+	
+	$(".pgn_area").on("click", "div", function() {
+		$("#page").val($(this).attr("page"));
+
+		reloadList();
+	});
+	
 });
 
 function reloadList() {
@@ -282,9 +289,9 @@ function drawPaging(pb) {
 	
 	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
 		if($("#page").val() == i) {
-			html += "<div class=\"page_btn_on\">" + i + "</div>";
+			html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
 		} else {
-			html += "<div class=\"page_btn\">" + i + "</div>";
+			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
 		}
 	}
 	
