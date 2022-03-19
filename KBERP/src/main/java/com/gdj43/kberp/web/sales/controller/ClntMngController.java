@@ -134,7 +134,7 @@ public class ClntMngController {
 		try {
 			switch(gbn) {
 			case "insert" :
-				
+				iCommonService.insertData("clntCmpnyMng.getClntCmpnyAdd", params);
 				break;
 			case "update" :
 				

@@ -15,6 +15,7 @@
 	width: 1013px;
 }
 
+/* 개인 작업 영역 */
 .body {
 	display: block;
 	background-color: white;
@@ -31,7 +32,6 @@
 	margin: 40px auto;
 }
 
-/* 개인 작업 영역 */
 /* sts */
 .sts {
 	display: inline-block;
@@ -218,14 +218,13 @@ $(document).ready(function() {
 	});
 	
 	$("#addBtn").on("click", function() {
-		$("#actionForm").attr("action", "clntCmpnyReg");
-		$("#actionForm").submit();
+		$("#addForm").submit();
 	});
 	
 });
 
 function reloadList() {
-	var params = $("#actionForm").serialize();
+	var params = $("#addForm").serialize();
 	
 	$.ajax({
 		type : "post",
@@ -329,30 +328,30 @@ function drawPaging(pb) {
 </script>
 </head>
 <body>
-<form action="#" id="actionForm" method="post">
+<form action="clntCmpnyReg" id="addForm" method="post">
 	<input type="hidden" id="page" name="page" value="${page}" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 </form>
-<!-- top & left -->
-<c:import url="/topLeft">
-	<c:param name="top">${param.top}</c:param>
-	<c:param name="menuNum">${param.menuNum}</c:param>
-	<%-- board로 이동하는 경우 B 나머지는 M --%>
-	<c:param name="menuType">${param.menuType}</c:param>
-</c:import>
-<!-- 내용영역 -->
-<div class="cont_wrap">
-	<div class="page_title_bar">
-		<div class="page_title_text">고객사 목록</div>
-		<!-- 검색영역 선택적 사항 -->
-
-	</div>
-	<!-- 해당 내용에 작업을 진행하시오. -->
-	<div class="cont_area">
-		<!-- 여기부터 쓰면 됨 -->
-		<div class="bodyWrap">
+	<!-- top & left -->
+	<c:import url="/topLeft">
+		<c:param name="top">${param.top}</c:param>
+		<c:param name="menuNum">${param.menuNum}</c:param>
+		<%-- board로 이동하는 경우 B 나머지는 M --%>
+		<c:param name="menuType">${param.menuType}</c:param>
+	</c:import>
+	<!-- 내용영역 -->
+	<div class="cont_wrap">
+		<div class="page_title_bar">
+			<div class="page_title_text">고객사 목록</div>
+			<!-- 검색영역 선택적 사항 -->
+			
+		</div>
+		<!-- 해당 내용에 작업을 진행하시오. -->
+		<div class="cont_area">
+			<!-- 여기부터 쓰면 됨 -->
+			<div class="bodyWrap">
 			<div class="sts">
 				<div class="sts_list">전체 : 377건</div>
 				<div class="sts_list">파트너사 : 123건</div>
@@ -419,9 +418,10 @@ function drawPaging(pb) {
 					<div class="cmn_btn" id="addBtn">등록</div>
 				</div>
 			</div>
+			</div>
 		</div>
 	</div>
-		<!-- bottom -->
-<c:import url="/bottom"></c:import>
+	<!-- bottom -->
+	<c:import url="/bottom"></c:import>
 </body>
 </html>
