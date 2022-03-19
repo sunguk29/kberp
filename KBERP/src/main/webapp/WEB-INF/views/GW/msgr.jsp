@@ -231,6 +231,7 @@
 	margin-left: 9pt;
 	font-size: 11pt;
 	border: none;
+	
 }
 
 table {
