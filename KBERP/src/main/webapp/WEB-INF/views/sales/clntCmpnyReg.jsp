@@ -264,10 +264,10 @@ $(document).ready(function() {
 			
 			addForm.ajaxForm({
 				success : function(res) {
+					// 물리파일명 보관
 					if(res.fileName.length > 0) {
 						$("#attFile").val(res.fileName[0]);
 					}
-					
 					var params = $("#addForm").serialize();
 					
 					$.ajax({
@@ -286,14 +286,14 @@ $(document).ready(function() {
 							console.log(request.responseText);
 						}
 					});
-					
 				},
 				error : function(req) {
 					console.log(req.responseText);
 				}
 			});
 			
-			addForm.submit(); 
+			addForm.submit();
+			
 		}
 	});
 });
