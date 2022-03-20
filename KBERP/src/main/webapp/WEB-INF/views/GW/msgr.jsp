@@ -61,7 +61,7 @@
 	display : inline-block;
 	width : 30px;
 	height : 30px;
-	background-image: url("../images/write.png");
+	background-image: url("images/write.png");
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
 	background-size: 20pt;
@@ -137,7 +137,7 @@
 	border : 0px solid;
 	padding : 2px;
 	font-size : 14pt;
-	background-image: url("./GW/images/alarm.png");
+	background-image: url("../images/alarm.png");
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
 	background-size: 25pt;
