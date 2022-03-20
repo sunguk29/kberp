@@ -61,7 +61,7 @@
 	display : inline-block;
 	width : 30px;
 	height : 30px;
-	background-image: url("images/write.png");
+	background-image: url("/images/write.png");
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
 	background-size: 20pt;
