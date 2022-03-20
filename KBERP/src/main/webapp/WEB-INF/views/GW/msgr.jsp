@@ -362,9 +362,6 @@ $(document).ready(function() {
 		html +=	"			</table>                                                        ";
 		html +=	"		</div>                                                              ";
 		
-		
-		
-		
 		makePopup({
 			bg : true,
 			bgClose : false,
@@ -382,8 +379,28 @@ $(document).ready(function() {
 				name : "취소"
 			}]
 		});
+	}); // main msgr btn
+	
+	$("#chat_list1").on("click", function() {
+		
+		$.ajax({
+			type : "post",
+			url : "chatRoomAjax",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				console.log(res);
+		
+			},
+			error : function(request, status, error) { 
+				console(request.responseText); 
+		})
+		
 	});
-});
+	
+
+	
+}); // ready 
 </script>
 </head>
 <body>
