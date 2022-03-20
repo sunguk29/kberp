@@ -233,7 +233,7 @@ $(document).ready(function() {
 	
 	$("#listBtn").on("click", function() {
 		makePopup({
-			bg : false,
+			bg : true,
 			bgClose : false,
 			title : "알림",
 			contents : "나가면 저장되지않습니다, 나가시겠습니까?",
@@ -255,27 +255,27 @@ $(document).ready(function() {
 	
 	$("#addBtn").on("click", function() {
 		if(checkEmpty("#ccName")) {
-			makeAlert("알림", "고객사를 입력하세요");
+			makeAlert("필수 항목 알림", "고객사를 입력하세요");
 		} else if(checkEmpty("#ccClsfy")) {
-			makeAlert("알림", "대표를 입력하세요");
+			makeAlert("필수 항목 알림", "대표를 입력하세요");
 			$("#ccClsfy").focus();
 		} else if(checkEmpty("#ccGrade")) {
-			makeAlert("알림", "등급을 선택하세요");
+			makeAlert("필수 항목 알림", "등급을 선택하세요");
 			$("#ccGrade").focus();
 		} else if(checkEmpty("#zipCodeNum")) {
-			makeAlert("알림", "우편번호를 입력하세요");
+			makeAlert("필수 항목 알림", "우편번호를 입력하세요");
 			$("#zipCodeNum").focus();
 		} else if(checkEmpty("#adrs")) {
-			makeAlert("알림", "주소를 입력하세요");
+			makeAlert("필수 항목 알림", "주소를 입력하세요");
 			$("#adrs").focus();
 		} else if(checkEmpty("#dtlAdrs")) {
-			makeAlert("알림", "상세주소를 입력하세요");
+			makeAlert("필수 항목 알림", "상세주소를 입력하세요");
 			$("#dtlAdrs").focus();
 		} else if(checkEmpty("#rvn")) {
-			makeAlert("알림", "매출를 입력하세요");
+			makeAlert("필수 항목 알림", "매출를 입력하세요");
 			$("#rvn").focus();
 		} else if(checkEmpty("#rp")) {
-			makeAlert("알림", "인지경로를 선택하세요");
+			makeAlert("필수 항목 알림", "인지경로를 선택하세요");
 			$("#rp").focus();
 		} else {
 			makePopup({
