@@ -119,10 +119,10 @@
 }
 .company {
    display: inline-block;
-   width: 42px;
+   width: 25px;
    height: 25px;
-   background-image: url("resources/images/sales/usericon.png");
-   background-size: 42px 25px;
+   background-size: 25px 25px;
+   background-repeat: no-repeat;
    margin-top: 13px;
    margin-left: 45px;
 }
@@ -284,16 +284,10 @@ input:focus {
 	outline : 1.5px solid #222222;
 } */
 .userIcon{
-	height: 15px;
-	margin-top: 3px;
-	margin-right : 5px;
-}
-.userIcon2 {
 	width: 18px;
 	height: 18px;
 	display: inline-block;
 	vertical-align: middle;
-	background-image: url(resources/images/sales/usericon.png);
 	background-size: 18px 18px;
 	background-repeat: no-repeat;
 	padding-bottom: 5px;
@@ -382,7 +376,7 @@ input:focus {
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	$(".userIcon2").on("click", function() {
+	$(".userIcon").on("click", function() {
 		var html = "";
 		
 	 	html += "<div class=\"popup_title_mid\">"; 
@@ -421,7 +415,7 @@ $(document).ready(function() {
 		html += "<div class=\"popup_cont pc_back\">";
 		html +=	"<div class=\"popup_box_in\">";
 		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span class=\"company\"></span>";
+		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
 		html +=	"</div>";
 		html +=	"<div class=\"popup_cc_box_right\">";
 		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
@@ -430,7 +424,34 @@ $(document).ready(function() {
 		html +=	"</div>";
 		html +=	"<div class=\"popup_box_in\">";
 		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span class=\"company\"></span>";
+		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_cc_box_right\">";
+		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
+		html +=	"<span class=\"mg_wid\">영업1팀</span>";
+		html +=	"</div>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_box_in\">";
+		html +=	"<div class=\"popup_cc_box_left\">";
+		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_cc_box_right\">";
+		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
+		html +=	"<span class=\"mg_wid\">영업1팀</span>";
+		html +=	"</div>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_box_in\">";
+		html +=	"<div class=\"popup_cc_box_left\">";
+		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_cc_box_right\">";
+		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
+		html +=	"<span class=\"mg_wid\">영업1팀</span>";
+		html +=	"</div>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_box_in\">";
+		html +=	"<div class=\"popup_cc_box_left\">";
+		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
 		html +=	"</div>";
 		html +=	"<div class=\"popup_cc_box_right\">";
 		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
@@ -656,7 +677,7 @@ function drawPaging(pb) {
 									<td colspan="7">
 										<div class="findEmp_box">
 											<input type="text" maxlength="20" class="findEmp_box2" style="border:0 solid black" />
-											<span class="userIcon2"></span>
+											<span><img alt="담당자이미지" class="userIcon" src="resources/images/sales/usericon.png"> </span>
 										</div>										
 									</td>
 								</tr>
@@ -681,9 +702,9 @@ function drawPaging(pb) {
 									<td></td>
 									<td></td>
 									<td colspan="8">
-										<input type="date" />
+										<input type="date" style="font-family : 맑은 고딕;" />
 										~
-										<input type="date" />
+										<input type="date" style="font-family : 맑은 고딕;" />
 									</td>
 								</tr>
 								<tr>
