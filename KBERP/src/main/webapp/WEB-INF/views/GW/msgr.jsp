@@ -185,7 +185,7 @@
 .msgr_logo {
 	width: 210px;
 	height: 200px;
-	background-image: url("../images/msgr_logo_img.png");
+	background-image: url("./images/msgr_logo_img.png");
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 140pt;

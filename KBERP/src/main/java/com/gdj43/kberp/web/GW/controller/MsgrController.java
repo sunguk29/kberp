@@ -12,6 +12,7 @@ public class MsgrController {
 		
 		mav.setViewName("GW/msgr");
 		
+		
 		return mav;
 	}
 	
