@@ -235,24 +235,24 @@ $(document).ready(function() {
 	});
 	
 	$("#addBtn").on("click", function() {
-		if(checkEmpty("#cc_name")) {
+		if(checkEmpty("#ccname")) {
 			alert("고객사를 입력하세요.");
-			$("#cc_name").focus();
-		} else if(checkEmpty("#cc_clsfy")) {
+			$("#ccname").focus();
+		} else if(checkEmpty("#ccclsfy")) {
 			alert("고객사 분류를 선택하세요.");
-			$("#cc_clsfy").focus();
-		} else if(checkEmpty("#cc_grade")) {
+			$("#ccclsfy").focus();
+		} else if(checkEmpty("#ccgrade")) {
 			alert("고객사 등급을 선택하세요.");
-			$("#cc_grade").focus();
-		} else if(checkEmpty("#zip_code_num")) {
+			$("#ccgrade").focus();
+		} else if(checkEmpty("#zipcodenum")) {
 			alert("우편번호를 입력하세요.");
-			$("#zip_code_num").focus();
+			$("#zipcodenum").focus();
 		} else if(checkEmpty("#adrs")) {
 			alert("주소를 입력하세요.");
 			$("#adrs").focus();
-		} else if(checkEmpty("#dtl_adrs")) {
+		} else if(checkEmpty("#dtladrs")) {
 			alert("상세주소를 입력하세요.");
-			$("#dtl_adrs").focus();
+			$("#dtladrs").focus();
 		} else if(checkEmpty("#rvn")) {
 			alert("매출를 입력하세요.");
 			$("#rvn").focus();
@@ -268,6 +268,7 @@ $(document).ready(function() {
 					if(res.fileName.length > 0) {
 						$("#attFile").val(res.fileName[0]);
 					}
+					
 					var params = $("#addForm").serialize();
 					
 					$.ajax({
@@ -292,8 +293,7 @@ $(document).ready(function() {
 				}
 			});
 			
-			addForm.submit();
-			
+			addForm.submit(); // ajaxForm 실행
 		}
 	});
 });
@@ -308,12 +308,6 @@ function checkEmpty(sel) {
 </script>
 </head>
 <body>
-<form action="clntCmpnyList" id="listForm" method="post">
-	<input type="hidden" id="page" name="page" value="${page}" />
-	<input type="hidden" name="top" value="${param.top}" />
-	<input type="hidden" name="menuNum" value="${param.menuNum}" />
-	<input type="hidden" name="menuType" value="${param.menuType}" />
-</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -327,60 +321,61 @@ function checkEmpty(sel) {
 			<div class="page_title_text">고객사 등록</div>
 			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
 			<img alt="등록버튼" src="resources/images/sales/save.png" class="btnImg" id="addBtn" />
+			<!-- 검색영역 선택적 사항 -->
+			
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="bodyWrap">
-				<table>
-					<colgroup>
-						<col width="200" />
-						<col width="auto" />
-					</colgroup>
-					<form action="imageUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
+				<form action="imageUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
+					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
+					<table>
+						<colgroup>
+							<col width="200" />
+							<col width="auto" />
+						</colgroup>
 						<tbody>
 							<tr>
 								<td><input type="button" class="btn" value="고객사 *" readonly="readonly" /></td>
-								<td><input type="text" class="txt" id="cc_name" name="cc_name" /></td>
+								<td><input type="text" class="txt" id="ccname" name="ccname" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="고객사 분류 *" /></td>
-								<td><select class="txt" id="cc_clsfy" name="cc_clsfy">
-										<optgroup>
-											<option>선택하세요</option>
+								<td>
+									<select class="txt" id="ccclsfy" name="ccclsfy">
 											<option value="0">거래고객사</option>
 											<option value="1">파트너사</option>
 											<option value="2">해지고객사</option>
 											<option value="3">정지고객사</option>
 											<option value="4">외국고객사</option>
 											<option value="5">기타</option>
-										</optgroup>
-								</select></td>
+									</select>
+								</td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="등급 *" /></td>
-								<td><select class="txt" id="cc_grade" name="cc_grade">
-										<optgroup>
-											<option>선택하세요</option>
+								<td>
+									<select class="txt" id="ccgrade" name="ccgrade">
 											<option value="0">S</option>
 											<option value="1">A</option>
 											<option value="2">B</option>
 											<option value="3">C</option>
 											<option value="4">D</option>
-										</optgroup>
-								</select></td>
+									</select>
+								</td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="사업자번호" /></td>
-								<td><input type="text" class="txt" id="br_num" name="br_num" /></td>
+								<td><input type="text" class="txt" id="brnum" name="brnum" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="대표" /></td>
-								<td><input type="text" class="txt" id="c_name" name="c_name" /></td>
+								<td><input type="text" class="txt" id="cname" name="cname" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="유선번호" /></td>
-								<td><input type="text" class="txt" id="phone_num" name="phone_num" /></td>
+								<td><input type="text" class="txt" id="phonenum" name="phonenum" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="팩스번호" /></td>
@@ -392,7 +387,7 @@ function checkEmpty(sel) {
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="우편번호" /></td>
-								<td><input type="text" class="txt" id="zip_code_num" name="zip_code_num" /></td>
+								<td><input type="text" class="txt" id="zipcodenum" name="zipcodenum" /></td>
 							</tr>
 							<tr height="40">
 								<td rowspan="2"><input type="button" class="address" value="주소 *" /></td>
@@ -400,7 +395,7 @@ function checkEmpty(sel) {
 								<!-- <img class="btnImg" alt="돋보기" src="resources/images/sales/mg.png" /></td> -->
 							</tr>
 							<tr height="40">
-								<td><input type="text" class="txt" placeholder="상세주소" id="dtl_adrs" name="dtl_adrs"/></td>
+								<td><input type="text" class="txt" placeholder="상세주소" id="dtladrs" name="dtladrs"/></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="매출(년)*" /></td>
@@ -408,31 +403,33 @@ function checkEmpty(sel) {
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="인지경로"></td>
-								<td><select class="txt" id="rp" name="rp">
-										<optgroup>
+								<td>
+									<select class="txt" id="rp" name="rp">
 											<option value="0">자사홈페이지</option>
 											<option value="1">인터넷검색</option>
 											<option value="2">지인소개</option>
 											<option value="3">세미나</option>
 											<option value="4">전화</option>
 											<option value="5">기타</option>
-										</optgroup>
-								</select></td>
+									</select>
+								</td>
 							</tr>
 						</tbody>
 					</table>
-					<!-- 첨부자료 -->
-					<!-- <div class="rvn_txt">
-						첨부자료 (0) <input type="file" name="att" />
+					<!-- 첨부파일 -->
+					<div class="rvn_txt">
+						첨부파일 (0) <input type="file" name="att" />
 						<input type="hidden" id="attFile" name="attFile" />
 						<img class="plus_btn" src="resources/images/sales/plus.png" border='0' />
 					</div>
-					<div class="cntrct_box_in"></div> -->
-					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
+					<div class="cntrct_box_in">
+					<!-- 첨부파일 이름 들어갈 곳 -->
+					</div>
 				</form>
 			</div>
 		</div>
-			<!-- bottom -->
+	</div>
+	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>
 </html>

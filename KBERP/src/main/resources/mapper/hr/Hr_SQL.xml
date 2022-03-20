@@ -13,5 +13,27 @@
 	                            ON A.RANK_NUM = R.RANK_NUM
 	                      LEFT OUTER JOIN APRVL_LINE AP
 	                            ON A.APRVL_NUM = AP.APRVL_NUM
+                        <if test="searchTxt != null and searchTxt != ''">
+							<choose>
+								<when test="searchGbn == 0">
+							 		WHERE E.EMP_NAME LIKE '%' || #{searchTxt} || '%' 
+									OR A.APNTM_DVSN_NUM LIKE '%' || #{searchTxt} || '%'
+									OR D.DEPT_NAME LIKE '%' || #{searchTxt} || '%'
+									OR R.RANK_NAME LIKE '%' || #{searchTxt} || '%'
+								</when>
+								<when test="searchGbn == 1">
+									WHERE A.APNTM_DVSN_NUM LIKE '%' || #{searchTxt} || '%' 
+								</when>
+								<when test="searchGbn == 2">
+									WHERE  E.EMP_NAME LIKE '%' || #{searchTxt} || '%' 
+								</when>
+								<when test="searchGbn == 3">
+									WHERE D.DEPT_NAME LIKE '%' || #{searchTxt} || '%' 
+								</when>
+								<when test="searchGbn == 3">
+									WHERE R.RANK_NAME LIKE '%' || #{searchTxt} || '%' 
+								</when>
+							</choose>
+						</if>
   </select>
 </mapper>
