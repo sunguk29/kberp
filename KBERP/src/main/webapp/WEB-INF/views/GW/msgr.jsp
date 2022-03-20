@@ -123,7 +123,7 @@
 	border : 1px solid #85898F;
 	padding: 8px 20px;
 	font-size : 12pt;
-	background-image: url("../images/profile.png");
+	background-image: url("./images/profile.png");
 	background-position: 250px 7px;
 	background-repeat: no-repeat;
 	background-size: 20pt;
@@ -137,7 +137,7 @@
 	border : 0px solid;
 	padding : 2px;
 	font-size : 14pt;
-	background-image: url("../images/alarm.png");
+	background-image: url("./images/alarm.png");
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
 	background-size: 25pt;
