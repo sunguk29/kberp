@@ -38,6 +38,18 @@
 	font-size: 15px;
 	font-weight: bold;
 }
+.ptm_right_bot {
+	width: 94px;
+	height: 32px;
+	margin-top: 5px;
+	text-align: center;
+}
+.ptm_right_bot2 {
+	width: 94px;
+    height: 32px;
+    margin-top: 5px;
+    text-align: center;
+}
 .ptm_mid {
 	display: inline-block;
 	vertical-align: top;
@@ -54,6 +66,12 @@
 	width: 130px;
 	height: 25px;
 	outline: none;
+}
+.ptm_mid_right0 {
+	display: inline-block;
+	vertical-align: top;
+	width: 50px;
+	height: 70px;
 }
 .ptm_mid_right {
 	display: inline-block;
@@ -72,6 +90,17 @@
 	height: 19px;
 	outline: none;
 }
+.text_size1 {
+	width: 123px;
+	height: 19px;
+	outline: none;
+}
+.text_size2 {
+	width: 300px;
+	height: 19px;
+	margin-left : 10px;
+	outline: none;
+}
 .ptm_right {
 	display: inline-block;
 	vertical-align: top;
@@ -83,12 +112,6 @@
 	height: 32px;
 	text-align: center;
 }
-.ptm_right_bot {
-	width: 94px;
-	height: 32px;
-	margin-top: 5px;
-	text-align: center;
-}
 /* 팝업 내용 */
 .popup_cc_box_left {
    display: inline-block;
@@ -96,12 +119,21 @@
    width: 120px;
    height: 50px;
 }
+/* 담당자 조회 내용  */
 .popup_cc_box_right {
    display: inline-block;
    width: 400px;
    height: 50px;
    font-size: 14px;
    line-height: 50px;
+}
+/* 고객사 조회 내용  */
+.popup_cc_box_right2 {
+   display: inline-block;
+   width: 400px;
+   height: 50px;
+   margin: 0px;
+   font-size: 0px;
 }
 .popup_box_in {
    width: calc(100% - 4px);
@@ -117,16 +149,21 @@
 }
 .company {
    display: inline-block;
-   width: 42px;
+   width: 25px;
    height: 25px;
-   background-image: url("resources/images/sales/usericon.png");
-   background-size: 42px 25px;
+   background-size: 25px 25px;
+   background-repeat: no-repeat;
    margin-top: 13px;
    margin-left: 45px;
 }
 .boldname{
 	margin-left: 30px;
 	font-weight: bold;
+}
+.boldname2 {
+	font-weight: bold;
+	font-size : 12px;
+	padding: 0px;
 }
 .mg_wid {
 	margin-left: 50px;
@@ -143,6 +180,17 @@
 	text-align: right;
 	background-color: #fff;
 	padding: 5px 0px;
+}
+/* 대출한도, 이자율, 판매상태 */
+.adrs_name {
+	font-weight: bold;
+	font-size: 12px;
+	margin: 0px;
+}
+.clntCmpny_dt {
+	font-weight: bold;
+	color: #2E83F2;
+	font-size: 12px;
 }
 /*----- 팝업 CSS 끝 ----- */
 
@@ -432,7 +480,127 @@ $(document).ready(function() {
 		$("#listForm").submit();
 	});	
 	
-	$("#btnImg_in").on("click", function() {
+	$("#ccIcon").on("click", function() {
+		var html = "";
+		
+		html += "<div class=\"popup_title_mid\">";
+		html += "<div class=\"ptm_left\">";
+		html +=	"<div class=\"ptm_left_top\">고객사분류</div>";	
+		html +=	"<div class=\"ptm_left_bot\">고객사명</div>";	
+		html += "</div>";
+		html += "<div class=\"ptm_mid\">";
+		html +=	"<div class=\"ptm_mid_top\">";
+		html +=	"<select class=\"sel_size\">";
+		html +=		"<option>선택안함</option>";
+		html +=		"<option>거래고객사</option>";
+		html +=		"<option>파트너사</option>";
+		html +=		"<option>해지고객사</option>";
+		html +=		"<option>정지고객사</option>";
+		html +=		"<option>외국고객사</option>";
+		html +=		"<option>기타</option>";
+		html +=	"</select>";
+		html +=	"</div>";		
+		html +=	"<div class=\"ptm_mid_bot\">";
+		html +=	"<input type=\"text\" class=\"text_size2\" placeholder=\"검색어를 입력해주세요\" />";
+		html +=	"</div>";	
+		html += "</div>";
+		html += "<div class=\"ptm_mid_right\">";
+		html +=	"<div class=\"ptm_mid_right_top\"></div>";
+		html +=	"<div class=\"ptm_mid_right_bot\"></div>";
+ 		html += "</div>"; 
+		html += "<div class=\"ptm_right\">";
+		html +=	"<div class=\"ptm_right_top\"></div>";
+		html +=	"<div class=\"ptm_right_bot\">";
+		html +=	"<div class=\"cmn_btn\">검색</div>";
+		html +=	"</div>";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class=\"popup_cont pc_back\">";
+		html += "<div class=\"popup_box_in\">";
+		html += "<div class=\"popup_cc_box_left\">";
+		html += "<span><img alt=\"고객사이미지\" class=\"company\" src=\"resources/images/sales/client.png\"></span>";
+		html += "</div>";
+		html += "<div class=\"popup_cc_box_right2\">";
+		html += "<span class=\"boldname2\">고객사명 / 고객사 분류 / 고객 등급</span><br/>";
+		html += "<span class=\"adrs_name\">주소</span><br/>";
+		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class=\"popup_box_in\">";
+		html += "<div class=\"popup_cc_box_left\">";
+		html += "<span><img alt=\"고객사이미지\" class=\"company\" src=\"resources/images/sales/client.png\"></span>";
+		html += "</div>";
+		html += "<div class=\"popup_cc_box_right2\">";
+		html += "<span class=\"boldname2\">고객사명 / 고객사 분류 / 고객 등급</span><br/>";
+		html += "<span class=\"adrs_name\">주소</span><br/>";
+		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class=\"popup_box_in\">";
+		html += "<div class=\"popup_cc_box_left\">";
+		html += "<span><img alt=\"고객사이미지\" class=\"company\" src=\"resources/images/sales/client.png\"></span>";
+		html += "</div>";
+		html += "<div class=\"popup_cc_box_right2\">";
+		html += "<span class=\"boldname2\">고객사명 / 고객사 분류 / 고객 등급</span><br/>";
+		html += "<span class=\"adrs_name\">주소</span><br/>";
+		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class=\"popup_box_in\">";
+		html += "<div class=\"popup_cc_box_left\">";
+		html += "<span><img alt=\"고객사이미지\" class=\"company\" src=\"resources/images/sales/client.png\"></span>";
+		html += "</div>";
+		html += "<div class=\"popup_cc_box_right2\">";
+		html += "<span class=\"boldname2\">고객사명 / 고객사 분류 / 고객 등급</span><br/>";
+		html += "<span class=\"adrs_name\">주소</span><br/>";
+		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class=\"popup_box_in\">";
+		html += "<div class=\"popup_cc_box_left\">";
+		html += "<span><img alt=\"고객사이미지\" class=\"company\" src=\"resources/images/sales/client.png\"></span>";
+		html += "</div>";
+		html += "<div class=\"popup_cc_box_right2\">";
+		html += "<span class=\"boldname2\">고객사명 / 고객사 분류 / 고객 등급</span><br/>";
+		html += "<span class=\"adrs_name\">주소</span><br/>";
+		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class=\"board_bottom2\">";
+		html +=	"<div class=\"pgn_area\">";
+		html +=	"<div class=\"page_btn page_first\">first</div>";
+		html +=	"<div class=\"page_btn page_prev\">prev</div>";
+		html +=	"<div class=\"page_btn_on\">1</div>";
+		html +=	"<div class=\"page_btn\">2</div>";
+		html +=	"<div class=\"page_btn\">3</div>";
+		html +=	"<div class=\"page_btn\">4</div>";
+		html +=	"<div class=\"page_btn\">5</div>";
+		html +=	"<div class=\"page_btn page_next\">next</div>";
+		html +=	"<div class=\"page_btn page_last\">last</div>";
+		html +=	"</div>";
+		html +=	"</div>";
+		html +=	"</div>";	
+
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "고객사 조회",
+			contents : html,
+			width : 600,
+			height : 500,
+			buttons : [{
+				name : "등록",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "취소"
+			}]
+		});		
+	});
+	
+	$("#userIcon").on("click", function() {
 		var html = "";
 		
 	 	html += "<div class=\"popup_title_mid\">"; 
@@ -471,7 +639,7 @@ $(document).ready(function() {
 		html += "<div class=\"popup_cont pc_back\">";
 		html +=	"<div class=\"popup_box_in\">";
 		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span class=\"company\"></span>";
+		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
 		html +=	"</div>";
 		html +=	"<div class=\"popup_cc_box_right\">";
 		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
@@ -480,7 +648,34 @@ $(document).ready(function() {
 		html +=	"</div>";
 		html +=	"<div class=\"popup_box_in\">";
 		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span class=\"company\"></span>";
+		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_cc_box_right\">";
+		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
+		html +=	"<span class=\"mg_wid\">영업1팀</span>";
+		html +=	"</div>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_box_in\">";
+		html +=	"<div class=\"popup_cc_box_left\">";
+		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_cc_box_right\">";
+		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
+		html +=	"<span class=\"mg_wid\">영업1팀</span>";
+		html +=	"</div>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_box_in\">";
+		html +=	"<div class=\"popup_cc_box_left\">";
+		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_cc_box_right\">";
+		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
+		html +=	"<span class=\"mg_wid\">영업1팀</span>";
+		html +=	"</div>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_box_in\">";
+		html +=	"<div class=\"popup_cc_box_left\">";
+		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
 		html +=	"</div>";
 		html +=	"<div class=\"popup_cc_box_right\">";
 		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
@@ -572,7 +767,7 @@ $(document).ready(function() {
 								<td><input type="button" class="btn" value="고객사 *" readonly="readonly"/></td>
 								<td>
 									<input type="text" class="txt" />
-									<img class="btnImg_in" alt="팝업" src="resources/images/sales/popup.png" />
+									<img class="btnImg_in" id="ccIcon" alt="팝업" src="resources/images/sales/popup.png" />
 								</td>
 							</tr>
 							<tr>
@@ -604,7 +799,7 @@ $(document).ready(function() {
 								<td><input type="button" class="btn" value="담당자 *" readonly="readonly"/></td>
 								<td>
 									<input type="text" class="txt" />
-									<img class="btnImg_in" id="btnImg_in" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
+									<img class="btnImg_in" id="userIcon" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
 								</td>
 							</tr>
 							
