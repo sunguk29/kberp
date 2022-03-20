@@ -185,7 +185,7 @@
 .msgr_logo {
 	width: 210px;
 	height: 200px;
-	background-image: url("./images/msgr_logo_img.png");
+	background-image: url("/KBERP/images/msgr_logo_img.png");
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 140pt;
@@ -389,14 +389,14 @@ $(document).ready(function() {
 			dataType : "json",
 			data : params,
 			success : function(res) {
-				console.log(res);		
+				console.log(res);	
 			},
 			error : function(request, status, error) { 
 				console(request.responseText); 
-		};	
+			}
+		});
 	});
-	
-}); // ready 
+}); // ready
 </script>
 </head>
 <body>
