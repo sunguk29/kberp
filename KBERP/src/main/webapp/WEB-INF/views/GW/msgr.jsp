@@ -137,7 +137,7 @@
 	border : 0px solid;
 	padding : 2px;
 	font-size : 14pt;
-	background-image: url("./images/alarm.png");
+	background-image: url("./GW/images/alarm.png");
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
 	background-size: 25pt;
