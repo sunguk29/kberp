@@ -389,16 +389,12 @@ $(document).ready(function() {
 			dataType : "json",
 			data : params,
 			success : function(res) {
-				console.log(res);
-		
+				console.log(res);		
 			},
 			error : function(request, status, error) { 
 				console(request.responseText); 
-		})
-		
+		};	
 	});
-	
-
 	
 }); // ready 
 </script>
