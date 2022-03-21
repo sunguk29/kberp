@@ -1,4 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="blank">
+<mapper namespace="prsnl">
+	<select id="getBasicInfo" parameterType="hashmap" resultType="hashmap">
+		SELECT EMP.EMP_NUM, EMP.EMP_NAME, EMP.EMP_NAME_ENG, EMP.EMP_PCTR_FILE,
+		       R.RANK_NAME, D.DEPT_NAME
+		FROM EMP INNER JOIN APNTM A
+		                 ON EMP.EMP_NUM = A.EMP_NUM
+		         INNER JOIN RANK R
+		                 ON A.RANK_NUM = R.RANK_NUM
+		         INNER JOIN DEPT D
+		                 ON A.DEPT_NUM = D.DEPT_NUM
+		WHERE EMP.EMP_NUM = #{sEmpNum}
+		      AND A.START_DATE <![CDATA[<=]]> SYSDATE
+		      AND A.END_DATE IS NULL AND A.STS_NUM = '1'
+		      AND D.DEL_CHECK = '1'
+	</select>
+
+	<select id="getHumanInfo" parameterType="hashmap" resultType="hashmap">
+		SELECT TO_CHAR(BRTHDT, 'YYYY-MM-DD') AS BRTHDT, GNDR, EMAIL, ZIP_CODE, ADRS, DTL_ADRS, PHONE_NUM, MBL_NUM
+		FROM EMP
+		WHERE EMP_NUM = #{sEmpNum}
+	</select>
+	<select id="getWorkInfo" parameterType="hashmap" resultType="hashmap">
+		SELECT EMP_NUM, HIRE_TYPE, PRBTN_CHECK
+		FROM EMP
+		WHERE EMP_NUM = #{sEmpNum}
+	</select>
+	<select id="getApntmList" parameterType="hashmap" resultType="hashmap">
+		SELECT SQ.APNTM_DVSN_NUM, TO_CHAR(SQ.START_DATE, 'YYYY-MM-DD') AS START_DATE, TO_CHAR(SQ.END_DATE, 'YYYY-MM-DD') AS END_DATE,
+		       CASE WHEN SQ.NEWEST = '1' AND SQ.OLDEST = '1'
+		            THEN '0'
+		            WHEN SQ.NEWEST = '1' AND SQ.OLDEST != '1'
+		            THEN '1'
+		            WHEN SQ.NEWEST != '1' AND SQ.OLDEST = '1'
+		            THEN '-1'
+		       END AS DATE_TYPE
+		FROM (  SELECT E.EMP_NUM, E.HIRE_TYPE, E.PRBTN_CHECK, A.APNTM_DVSN_NUM, A.START_DATE, A.END_DATE,
+		               ROW_NUMBER() OVER(ORDER BY START_DATE DESC) AS NEWEST,
+		               ROW_NUMBER() OVER(ORDER BY START_DATE ASC) AS OLDEST
+		        FROM EMP E INNER JOIN APNTM A
+		                           ON E.EMP_NUM = A.EMP_NUM
+		        WHERE E.EMP_NUM = #{sEmpNum}
+		              AND A.STS_NUM = '1' ) SQ
+		WHERE SQ.NEWEST = '1' OR SQ.OLDEST = '1'
+	</select>
+	<select id="getSlryInfo" parameterType="hashmap" resultType="hashmap">
+		SELECT B.BANK_NAME, SA.ACNT_NUM, SA.DPSTR
+		FROM SLRY_ACNT SA INNER JOIN BANK B
+		                          ON SA.BANK_NUM = B.BANK_NUM
+		WHERE SA.EMP_NUM = #{sEmpNum}
+	</select>
+	
+	<select id="getMenuAthrty" parameterType="hashmap" resultType="Integer">
+		SELECT MA.ATHRTY_TYPE_NUM
+			FROM EMP E INNER JOIN MENU_ATHRTY MA
+			                   ON E.ATHRTY_NUM = MA.ATHRTY_NUM
+			WHERE MA.MENU_NUM = #{menuNum}
+			      AND E.EMP_NUM = #{sEmpNum}
+	</select>
 </mapper>
