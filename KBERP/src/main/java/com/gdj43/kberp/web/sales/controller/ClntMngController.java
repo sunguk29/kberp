@@ -27,13 +27,28 @@ public class ClntMngController {
 	
 	@RequestMapping(value = "/clntCmpnyList")
 	public ModelAndView clntCmpnyList(@RequestParam HashMap<String, String> params, 
-									  ModelAndView mav) {
+									  ModelAndView mav) throws Throwable {
 		
 		if(params.get("page") == null || params.get("page") == "") {
 			params.put("page", "1");
 		}
 		
+		int MaxCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyCntrctCnt");
+		int CntrctCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyCntrctCnt");
+		int PartnerCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyPartnerCnt");
+		int TmnCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyTmnCnt");
+		int SspsCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnySspsCnt");
+		int ForeignCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyForeignCnt");
+		int EtcCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyEtcCnt");
+		
 		mav.addObject("page", params.get("page"));
+		mav.addObject("maxCnt", Integer.toString(MaxCnt));
+		mav.addObject("CntrctCnt", Integer.toString(CntrctCnt));
+		mav.addObject("PartnerCnt", Integer.toString(PartnerCnt));
+		mav.addObject("TmnCnt", Integer.toString(TmnCnt));
+		mav.addObject("SspsCnt", Integer.toString(SspsCnt));
+		mav.addObject("ForeignCnt", Integer.toString(ForeignCnt));
+		mav.addObject("EtcCnt", Integer.toString(EtcCnt));
 		
 		mav.setViewName("sales/clntCmpnyList");
 		
@@ -49,10 +64,10 @@ public class ClntMngController {
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		int cnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyCnt", params);
+		int listCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyListCnt", params);
 		
 		PagingBean pb = 
-				iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
+				iPagingService.getPagingBean(Integer.parseInt(params.get("page")), listCnt, 5, 5);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
@@ -64,46 +79,6 @@ public class ClntMngController {
 		modelMap.put("pb", pb);
 		
 		return mapper.writeValueAsString(modelMap);
-	}
-	
-	@RequestMapping(value = "/clntList")
-	public ModelAndView clntList(@RequestParam HashMap<String, String> params, 
-								 ModelAndView mav) {
-		
-		if(params.get("page") == null || params.get("page") == "") {
-			params.put("page", "1");
-		}
-		
-		mav.addObject("page", params.get("page"));
-		
-		mav.setViewName("sales/clntList");
-		
-		return mav;
-	}
-	@RequestMapping(value = "/clntListAjax", method = RequestMethod.POST, 
-			produces = "text/json;charset=UTF-8")
-	@ResponseBody 
-	public String clntListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
-	
-	ObjectMapper mapper = new ObjectMapper();
-	
-	Map<String, Object> modelMap = new HashMap<String, Object>();
-	
-	int cnt = iCommonService.getIntData("clntCmpnyMng.clntCnt", params);
-	
-	PagingBean pb = 
-			iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
-	
-	params.put("startCount", Integer.toString(pb.getStartCount()));
-	params.put("endCount", Integer.toString(pb.getEndCount()));
-	
-	List<HashMap<String, String>> list = 
-			iCommonService.getDataList("clntCmpnyMng.getClntList", params);
-	
-	modelMap.put("list", list);
-	modelMap.put("pb", pb);
-	
-	return mapper.writeValueAsString(modelMap);
 	}
 	
 	@RequestMapping(value = "/clntCmpnyReg")
@@ -124,7 +99,7 @@ public class ClntMngController {
 	@RequestMapping(value = "/clntCmpnyMngAction/{gbn}", method = RequestMethod.POST,
 					produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String clntCmpnyMngAction(@RequestParam HashMap<String, String> params, 
+	public String clntCmpnyMngActionAjax(@RequestParam HashMap<String, String> params, 
 									 @PathVariable String gbn) throws Throwable {
 		
 		ObjectMapper mapper = new ObjectMapper();

@@ -238,7 +238,7 @@ $(document).ready(function() {
 			title : "알림",
 			contents : "나가면 저장되지않습니다, 나가시겠습니까?",
 			contentsEvent : function() {
-				$("#popup1").draggable();
+				
 			},
 			buttons : [{
 				name : "나가기",
@@ -279,7 +279,7 @@ $(document).ready(function() {
 			$("#rp").focus();
 		} else {
 			makePopup({
-				bg : false,
+				bg : true,
 				bgClose : false,
 				title : "알림",
 				contents : "저장하시겠습니까?",
@@ -287,13 +287,12 @@ $(document).ready(function() {
 					$("#popup1").draggable();
 				},
 				buttons : [{
-					name : "확인",
+					name : "저장",
 					func:function() {
 						var addForm = $("#addForm");
 						
 						addForm.ajaxForm({
 							success : function(res) {
-								
 								if(res.fileName.length > 0) {
 									$("#attFile").val(res.fileName[0]);
 								}
@@ -307,7 +306,7 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
-											location.href = "clntCmpnyList";
+											$("#listForm").submit();
 										} else {
 											alert("등록중 문제가 발생하였습니다.");
 										}
@@ -316,6 +315,7 @@ $(document).ready(function() {
 										console.log(request.responseText);
 									}
 								});
+								
 							},
 							error : function(req) {
 								console.log(req.responseText);
@@ -372,6 +372,10 @@ function checkEmpty(sel) {
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="bodyWrap">
 				<form action="imageUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
+					<input type="hidden" id="page" name="page" value="${page}" />
+					<input type="hidden" name="top" value="${param.top}" />
+					<input type="hidden" name="menuNum" value="${param.menuNum}" />
+					<input type="hidden" name="menuType" value="${param.menuType}" />
 					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
 					<table>
 						<colgroup>
