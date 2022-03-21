@@ -124,6 +124,22 @@
 	margin-left: 26px;
 	margin-top: 26px;
 }
+.sales_cal_big {
+	width: 30px;
+	height: 30px;
+	background-color: #4B94F2;
+	border-radius: 3px;
+	margin-left: 26px;
+	margin-top: 26px;
+}
+.nrml_cal_big {
+	width: 30px;
+	height: 30px;
+	background-color: #66BB6A;
+	border-radius: 3px;
+	margin-left: 26px;
+	margin-top: 26px;
+}
 .so_cal_big {
 	width: 30px;
 	height: 30px;
@@ -414,7 +430,13 @@ $(document).ready(function() {
 		for(var data of list){
 			html +=	"<div class=\"cal_text1\">";
 			html += "<div class=\"text_left\">";
-			html +=	"<div class=\"lead_cal_big\"></div>";
+			if(!data.lNum == ""){
+				html +=	"<div class=\"lead_cal_big\"></div>";			
+			} else if(!data.sNum == ""){				
+				html +=	"<div class=\"sales_cal_big\"></div>";
+			} else {				
+				html +=	"<div class=\"nrml_cal_big\"></div>";
+			}
 			html +=	"</div>";
 			html +=	"<div class=\"text_right\"><br/>" + data.START_DATE_HR + " ~ " + data.END_DATE_HR + "<br/>" + data.CLNT_CMPNY_NAME + "</div>";
 			html += "</div>";
