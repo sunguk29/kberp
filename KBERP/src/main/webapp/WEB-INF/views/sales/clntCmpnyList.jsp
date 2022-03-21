@@ -127,16 +127,15 @@ select {
 	border-collapse: collapse;
 	background-color: #FFF;
 	width: 100%;
-	font-size: 10.5pt;
+	font-size: 9pt;
 	text-align: left;
-	margin: 10px 0px 40px 0px;
 }
 
 .list_table thead th {
-	height: 25px;
-	font-size: 10pt;
 	font-weight: bold;
-	/* border-top: 2px solid gray; */
+}
+.list_table th, .list_table td  {
+	height: 20px;
 }
 
 .list_table thead tr:nth-child(1) {
@@ -144,27 +143,18 @@ select {
 }
 
 .list_table thead tr:nth-child(3) {
-	border-bottom: 1.5px solid gray;
-}
-
-.list_table thead tr {
-	border-bottom: none;
-}
-
-.list_table tbody td {
-	height: 25px;
-	font-size: 10pt;
+	border-bottom: 2px solid gray;
 }
 
 .list_table tbody tr:nth-child(3) {
-	border-bottom: 1.5px solid #d7d7d7;
+	border-bottom: 1px solid gray;
 }
+
 /* 글번호 */
-.list_table thead tr:nth-child(1) th:nth-child(1), .list_table tbody tr:nth-child(1) td:nth-child(1)
-	{
+.list_table thead tr:nth-child(1) th:nth-child(1), .list_table tbody tr:nth-child(1) td:nth-child(1) {
 	text-align: center;
 }
-/* 상품명 */
+/* 고객사명 */
 .list_table tbody tr:nth-child(2) td:nth-child(2) {
 	font-weight: bold;
 	font-size: 10pt;
@@ -172,11 +162,12 @@ select {
 .list_table tbody tr:nth-child(2) td:nth-child(2):hover {
 	color: #4b94f2;
 	cursor: pointer;
+	font-size: 10pt;
 	text-decoration: underline;
 }
 /* 거래 횟수 이미지 */
 .deal{
-	height: 40px;
+	height: 36px;
 }
 .deal_cnt{
 	position:relative;
@@ -204,6 +195,10 @@ select {
 
 .sales_psbl_btn:active {
 	background-color: #2e83f2;
+}
+.cont_table {
+	width: 927px;
+	height: 420px;
 }
 </style>
 <script type="text/javascript">
@@ -274,11 +269,11 @@ function drawList(list) {
  		html += "<tbody>";
 		html += "<tr>";
 		html += "<td rowspan=\"3\">" + data.RNUM + "</td>";
-		html += "<td>" + data.CLNT_CMPNY_NUM + "</td>";
+		html += "<td>CC" + data.CLNT_CMPNY_NUM + "</td>";
 		html += "<td>" + data.GRADE_NAME + "등급</td>";
 		html += "<td rowspan=\"3\">";
 		html += "<img class=\"deal\" alt=\"거래\" src=\"resources/images/sales/hands.png\" />";
-		html += "<span class=\"deal_cnt\">2건</span>";
+		html += "<span class=\"deal_cnt\">" + data.CNT + "건</span>";
 		html += "</td>";
 		html += "</tr>";
 		html += "<tr>";
@@ -352,72 +347,76 @@ function drawPaging(pb) {
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="bodyWrap">
-			<div class="sts">
-				<div class="sts_list">전체 : 377건</div>
-				<div class="sts_list">파트너사 : 123건</div>
-				<div class="sts_list">거래고객사 : 235건</div>
-				<div class="sts_list">해지고객사 : 15건</div>
-				<div class="sts_list">정지고객사 : 2건</div>
-				<div class="sts_list">외국파트너사 : 2건</div>
-				<div class="sts_list">기타 : 2건</div>
-			</div>
-			<div class="tLine"></div>
-			<table class="srch_table">
-				<colgroup>
-					<col width="130" />
-					<col width="130" />
-					<col width="320" />
-					<col width="220" />
-				</colgroup>
-				<tbody>
-					<tr>
-						<td><span class="srch_name">고객사분류</span></td>
-						<td><select>
-								<option>전체</option>
-								<option>파트너사</option>
-								<option>거래고객사</option>
-								<option>해지고객사</option>
-								<option>정지고객사</option>
-								<option>외국파트너사</option>
-								<option>기타</option>
-						</select></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td><span class="srch_name">검색어</span></td>
-						<td><select>
-								<option>선택안함</option>
-								<option>고객사명</option>
-								<option>고객사번호</option>
-						</select></td>
-						<td><input type="text" class="srch_msg"
-							placeholder="검색 조건을 선택한 후 입력해주세요." /></td>
-						<td><span class="cmn_btn">검색</span></td>
-					</tr>
-					<tr>
-						<td><span class="srch_name">정렬</span></td>
-						<td><select>
-								<option selected="selected">선택안함</option>
-								<option>매출</option>
-								<option>고객사명</option>
-						</select></td>
-						<td>
-							<img class="asc_btn cmn_btn" alt="등록버튼" src="resources/images/sales/asc.png" />
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<div class="SearchResult">
-				<h3>고객사 (검색결과: ${CNT}건)</h3>
-			</div>
-			<table class="list_table"></table>
-			<div class="body_bottom">
-				<div class="board_bottom">
-					<div class="pgn_area"></div>
-					<div class="cmn_btn" id="addBtn">등록</div>
+				<form action="#" id="searchForm" method="post">
+					<div class="sts">
+						<div class="sts_list">전체 : ${maxCnt}건</div>
+						<div class="sts_list">파트너사 : ${PartnerCnt}건</div>
+						<div class="sts_list">거래고객사 : ${CntrctCnt}건</div>
+						<div class="sts_list">해지고객사 : ${TmnCnt}건</div>
+						<div class="sts_list">정지고객사 : ${SspsCnt}건</div>
+						<div class="sts_list">외국파트너사 : ${ForeignCnt}건</div>
+						<div class="sts_list">기타 : ${EtcCnt}건</div>
+					</div>
+					<div class="tLine"></div>
+					<table class="srch_table">
+						<colgroup>
+							<col width="130" />
+							<col width="130" />
+							<col width="320" />
+							<col width="220" />
+						</colgroup>
+						<tbody>
+							<tr>
+								<td><span class="srch_name">고객사분류</span></td>
+								<td><select>
+										<option>전체</option>
+										<option>파트너사</option>
+										<option>거래고객사</option>
+										<option>해지고객사</option>
+										<option>정지고객사</option>
+										<option>외국파트너사</option>
+										<option>기타</option>
+								</select></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td><span class="srch_name">검색어</span></td>
+								<td><select>
+										<option>선택안함</option>
+										<option>고객사명</option>
+										<option>고객사번호</option>
+								</select></td>
+								<td><input type="text" class="srch_msg"
+									placeholder="검색 조건을 선택한 후 입력해주세요." /></td>
+								<td><span class="cmn_btn">검색</span></td>
+							</tr>
+							<tr>
+								<td><span class="srch_name">정렬</span></td>
+								<td><select>
+										<option selected="selected">선택안함</option>
+										<option>매출</option>
+										<option>고객사명</option>
+								</select></td>
+								<td>
+									<img class="asc_btn cmn_btn" alt="등록버튼" src="resources/images/sales/asc.png" />
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+				<div class="SearchResult">
+					<h3>고객사 (검색결과: ${CNT}건)</h3>
 				</div>
-			</div>
+				<div class="cont_table">
+					<table class="list_table"></table>
+				</div>
+				<div class="body_bottom">
+					<div class="board_bottom">
+						<div class="pgn_area"></div>
+						<div class="cmn_btn" id="addBtn">등록</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

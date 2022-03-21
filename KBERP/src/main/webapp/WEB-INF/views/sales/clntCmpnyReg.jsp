@@ -233,12 +233,12 @@ $(document).ready(function() {
 	
 	$("#listBtn").on("click", function() {
 		makePopup({
-			bg : false,
+			bg : true,
 			bgClose : false,
 			title : "알림",
 			contents : "나가면 저장되지않습니다, 나가시겠습니까?",
 			contentsEvent : function() {
-				$("#popup1").draggable();
+				
 			},
 			buttons : [{
 				name : "나가기",
@@ -255,31 +255,31 @@ $(document).ready(function() {
 	
 	$("#addBtn").on("click", function() {
 		if(checkEmpty("#ccName")) {
-			makeAlert("알림", "고객사를 입력하세요");
+			makeAlert("필수 항목 알림", "고객사를 입력하세요");
 		} else if(checkEmpty("#ccClsfy")) {
-			makeAlert("알림", "대표를 입력하세요");
+			makeAlert("필수 항목 알림", "대표를 입력하세요");
 			$("#ccClsfy").focus();
 		} else if(checkEmpty("#ccGrade")) {
-			makeAlert("알림", "등급을 선택하세요");
+			makeAlert("필수 항목 알림", "등급을 선택하세요");
 			$("#ccGrade").focus();
 		} else if(checkEmpty("#zipCodeNum")) {
-			makeAlert("알림", "우편번호를 입력하세요");
+			makeAlert("필수 항목 알림", "우편번호를 입력하세요");
 			$("#zipCodeNum").focus();
 		} else if(checkEmpty("#adrs")) {
-			makeAlert("알림", "주소를 입력하세요");
+			makeAlert("필수 항목 알림", "주소를 입력하세요");
 			$("#adrs").focus();
 		} else if(checkEmpty("#dtlAdrs")) {
-			makeAlert("알림", "상세주소를 입력하세요");
+			makeAlert("필수 항목 알림", "상세주소를 입력하세요");
 			$("#dtlAdrs").focus();
 		} else if(checkEmpty("#rvn")) {
-			makeAlert("알림", "매출를 입력하세요");
+			makeAlert("필수 항목 알림", "매출를 입력하세요");
 			$("#rvn").focus();
 		} else if(checkEmpty("#rp")) {
-			makeAlert("알림", "인지경로를 선택하세요");
+			makeAlert("필수 항목 알림", "인지경로를 선택하세요");
 			$("#rp").focus();
 		} else {
 			makePopup({
-				bg : false,
+				bg : true,
 				bgClose : false,
 				title : "알림",
 				contents : "저장하시겠습니까?",
@@ -287,13 +287,12 @@ $(document).ready(function() {
 					$("#popup1").draggable();
 				},
 				buttons : [{
-					name : "확인",
+					name : "저장",
 					func:function() {
 						var addForm = $("#addForm");
 						
 						addForm.ajaxForm({
 							success : function(res) {
-								
 								if(res.fileName.length > 0) {
 									$("#attFile").val(res.fileName[0]);
 								}
@@ -307,7 +306,7 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
-											location.href = "clntCmpnyList";
+											$("#listForm").submit();
 										} else {
 											alert("등록중 문제가 발생하였습니다.");
 										}
@@ -316,6 +315,7 @@ $(document).ready(function() {
 										console.log(request.responseText);
 									}
 								});
+								
 							},
 							error : function(req) {
 								console.log(req.responseText);
@@ -372,6 +372,10 @@ function checkEmpty(sel) {
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="bodyWrap">
 				<form action="imageUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
+					<input type="hidden" id="page" name="page" value="${page}" />
+					<input type="hidden" name="top" value="${param.top}" />
+					<input type="hidden" name="menuNum" value="${param.menuNum}" />
+					<input type="hidden" name="menuType" value="${param.menuType}" />
 					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
 					<table>
 						<colgroup>
