@@ -323,10 +323,11 @@ html, body {
 	min-height: 560px; 
 	padding: 20px;
 	overflow-y: auto;
+	overflow-x: clip; 
 }
 
 .right_area_wrap {
-	white-space: unset !important;
+	white-space: normal !important;
 }
 
 .navi_bar {
