@@ -41,7 +41,32 @@ public class CallCntrController {
 				try {
 					switch(gbn) {
 					case "insert":
-						iccs.callCenter(params);
+						iccs.clntSave(params);
+						break;
+					}
+					modelMap.put("res", "success");
+					
+				} catch(Throwable e) {
+					e.printStackTrace();
+					modelMap.put("res", "failed");
+				}
+				
+				return mapper.writeValueAsString(modelMap);
+			}
+	
+	@RequestMapping(value="/cnslNoteAction/{gbn}", method = RequestMethod.POST,
+			produces = "text/json;charset=UTF-8")
+			@ResponseBody
+			public String cnslNoteActionAjax(@RequestParam HashMap<String, String> params,
+										   	 @PathVariable String gbn) throws Throwable {
+				ObjectMapper mapper = new ObjectMapper();
+		
+				Map<String, Object> modelMap = new HashMap<String, Object>();
+				
+				try {
+					switch(gbn) {
+					case "insert":
+						iccs.noteSave(params);
 						break;
 					}
 					modelMap.put("res", "success");

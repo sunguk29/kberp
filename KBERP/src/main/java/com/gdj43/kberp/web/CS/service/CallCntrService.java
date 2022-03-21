@@ -13,7 +13,12 @@ public class CallCntrService implements ICallCntrService {
 	public ICallCntrDao iccd;
 
 	@Override
-	public void callCenter(HashMap<String, String> params) throws Throwable {
-		iccd.callCenter(params);
+	public void clntSave(HashMap<String, String> params) throws Throwable {
+		iccd.clntSave(params);
+	}
+
+	@Override
+	public void noteSave(HashMap<String, String> params) throws Throwable {
+		iccd.noteSave(params);
 	}
 }

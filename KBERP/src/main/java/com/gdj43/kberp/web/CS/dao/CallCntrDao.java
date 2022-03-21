@@ -12,7 +12,12 @@ public class CallCntrDao implements ICallCntrDao {
 	public SqlSession sqlSession;
 
 	@Override
-	public void callCenter(HashMap<String, String> params) throws Throwable {
-		sqlSession.insert("CC.callCenter", params);
+	public void clntSave(HashMap<String, String> params) throws Throwable {
+		sqlSession.insert("CC.clntSave", params);
+	}
+
+	@Override
+	public void noteSave(HashMap<String, String> params) throws Throwable {
+		sqlSession.insert("CC.noteSave", params);
 	}
 }

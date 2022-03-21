@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="CC">
-<insert id="callCenter" parameterType="hashmap">
+<insert id="clntSave" parameterType="hashmap">
 INSERT INTO INDVDL_CLNT(CLNT_NUM, CLNT_NAME, CLNT_GRADE, PHONE_NUM_1, PHONE_NUM_2, ADRS, DTL_ADRS)
 VALUES (INDVDL_CLNT_SEQ.NEXTVAL, #{clnt_name}, #{clnt_grade}, #{phon_num_1}, #{phon_num_2}, #{adrs}, #{dtl_adrs})
 </insert>
+
+
 </mapper>

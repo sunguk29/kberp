@@ -42,7 +42,7 @@ public class AprvlMngController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/parvlMngAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@RequestMapping(value = "/aprvlMngAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String parvlMngAjax(@RequestParam HashMap<String, String> params) throws Throwable {
 		ObjectMapper mapper = new ObjectMapper();
@@ -65,6 +65,19 @@ public class AprvlMngController {
 		
 		
 		return mapper.writeValueAsString(modelMap);
+	}
+	
+	@RequestMapping(value= "/aprvlMngDtlView")
+	public ModelAndView aprvlMngDtlView(@RequestParam HashMap<String, String> params,
+							ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = ics.getData("aprvlMng.aprvlMngDtlView",params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("mng/aprvlMngDtlView");
+		
+		return mav;
 	}
 	
 	
