@@ -17,7 +17,7 @@ public class BoardController {
 	@RequestMapping(value = "/boardWrite")
 	public ModelAndView boardWrite(ModelAndView mav) {
 		
-		mav.setViewName("testa/boardWrite");
+		mav.setViewName("GW/boardWrite");
 		
 		return mav;
 	}
