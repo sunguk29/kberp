@@ -4,30 +4,149 @@
 
 	<select id="getClntCmpntList" parameterType="hashmap" resultType="hashmap">
 		SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, A.RVN, A.CNT
-		FROM (SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, A.RVN, NVL(B.CNT, 0) AS CNT,
-		             ROW_NUMBER() OVER(ORDER BY A.RNUM DESC) AS RNUM2
-		      FROM (  SELECT ROW_NUMBER() OVER(ORDER BY CC.CLNT_CMPNY_NUM ASC) AS RNUM, CC.CLNT_CMPNY_NUM, CCG.GRADE_NAME, CCC.CLNT_CMPNY_CLSFY_NAME,
-		                     CC.CLNT_CMPNY_NAME, CC.RVN, CC.ADRS || CC.DTL_ADRS AS ADRS
+		FROM ( SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, A.RVN, NVL(B.CNT, 0) AS CNT,
+		              A.CLNT_CMPNY_CLSFY_NUM, ROW_NUMBER() OVER(ORDER BY A.RNUM DESC) AS RNUM2
+		       FROM ( SELECT ROW_NUMBER() OVER(ORDER BY CC.CLNT_CMPNY_NUM ASC) AS RNUM, CC.CLNT_CMPNY_NUM, CCG.GRADE_NAME, CCC.CLNT_CMPNY_CLSFY_NAME,
+		                     CC.CLNT_CMPNY_NAME, CC.RVN, CC.ADRS || CC.DTL_ADRS AS ADRS, CC.CLNT_CMPNY_CLSFY_NUM
 		              FROM CLNT_CMPNY CC INNER JOIN CLNT_CMPNY_GRADE CCG
 		                                         ON CC.GRADE_NUM = CCG.GRADE_NUM
 		                                 INNER JOIN CLNT_CMPNY_CLSFY CCC
-		                                         ON CC.CLNT_CMPNY_CLSFY_NUM = CCC.CLNT_CMPNY_CLSFY_NUM ) A LEFT OUTER JOIN ( SELECT CC.CLNT_CMPNY_NAME, COUNT(*) AS CNT
-		                                                                                                                     FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
-		                                                                                                                                                ON CC.CLNT_NAME = EC.CLNT_NAME
-		                                                                                                                                        INNER JOIN LEAD L
-		                                                                                                                                                ON L.CLNT_NUM = EC.CLNT_NUM 
-		                                                                                                                                        INNER JOIN SALES S
-		                                                                                                                                                ON S.LEAD_NUM = L.LEAD_NUM
-		                                                                                                                                        INNER JOIN CNTRCT C
-		                                                                                                                                                ON C.SALES_NUM = S.SALES_NUM
-		                                                                                                                     GROUP BY CC.CLNT_CMPNY_NAME ) B
-		                                                                                                                ON A.CLNT_CMPNY_NAME = B.CLNT_CMPNY_NAME ) A
+		                                         ON CC.CLNT_CMPNY_CLSFY_NUM = CCC.CLNT_CMPNY_CLSFY_NUM ) A 
+		                                 LEFT OUTER JOIN ( SELECT CC.CLNT_CMPNY_NAME, COUNT(*) AS CNT
+		                                                   FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
+		                                              								  ON CC.CLNT_NAME = EC.CLNT_NAME
+		                                 									  INNER JOIN LEAD L
+		                                         									  ON L.CLNT_NUM = EC.CLNT_NUM 
+		                                 									  INNER JOIN SALES S
+		                                         									  ON S.LEAD_NUM = L.LEAD_NUM
+		                                 									  INNER JOIN CNTRCT C
+		                                         									  ON C.SALES_NUM = S.SALES_NUM
+		                                                   GROUP BY CC.CLNT_CMPNY_NAME ) B
+		                                              ON A.CLNT_CMPNY_NAME = B.CLNT_CMPNY_NAME 
+			   WHERE 1 = 1
+				<if test="searchTxt != null and searchTxt != ''">
+					<choose>
+						<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
+							AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="clntCmpnyClsfyNum == 9 and searchType == 1">
+							AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="clntCmpnyClsfyNum == 0 and searchType == 0">
+							AND A.CLNT_CMPNY_CLSFY_NUM = 0
+							AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="clntCmpnyClsfyNum == 1 and searchType == 0">
+							AND A.CLNT_CMPNY_CLSFY_NUM = 1
+							AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="clntCmpnyClsfyNum == 2 and searchType == 0">
+							AND A.CLNT_CMPNY_CLSFY_NUM = 2
+							AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="clntCmpnyClsfyNum == 3 and searchType == 0">
+							AND A.CLNT_CMPNY_CLSFY_NUM = 3
+							AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="clntCmpnyClsfyNum == 4 and searchType == 0">
+							AND A.CLNT_CMPNY_CLSFY_NUM = 4
+							AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="clntCmpnyClsfyNum == 5 and searchType == 0">
+							AND A.CLNT_CMPNY_CLSFY_NUM = 5
+							AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="clntCmpnyClsfyNum == 0 and searchType == 1">
+							AND A.CLNT_CMPNY_CLSFY_NUM = 0
+							AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="clntCmpnyClsfyNum == 1 and searchType == 1">
+							AND A.CLNT_CMPNY_CLSFY_NUM = 1
+							AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="clntCmpnyClsfyNum == 2 and searchType == 1">
+							AND A.CLNT_CMPNY_CLSFY_NUM = 2
+							AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="clntCmpnyClsfyNum == 3 and searchType == 1">
+							AND A.CLNT_CMPNY_CLSFY_NUM = 3
+							AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="clntCmpnyClsfyNum == 4 and searchType == 1">
+							AND A.CLNT_CMPNY_CLSFY_NUM = 4
+							AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="clntCmpnyClsfyNum == 5 and searchType == 1">
+							AND A.CLNT_CMPNY_CLSFY_NUM = 5
+							AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+						</when>
+					</choose>
+				</if> ) A
 		WHERE A.RNUM2 BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
 	<select id="clntCmpnyListCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
+		WHERE 1 = 1
+		<if test="searchTxt != null and searchTxt != ''">
+			<choose>
+				<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
+					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 9 and searchType == 1">
+					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 0 and searchType == 0">
+					AND CLNT_CMPNY_CLSFY_NUM = 0
+					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 1 and searchType == 0">
+					AND CLNT_CMPNY_CLSFY_NUM = 1
+					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 2 and searchType == 0">
+					AND CLNT_CMPNY_CLSFY_NUM = 2
+					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 3 and searchType == 0">
+					AND CLNT_CMPNY_CLSFY_NUM = 3
+					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 4 and searchType == 0">
+					AND CLNT_CMPNY_CLSFY_NUM = 4
+					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 5 and searchType == 0">
+					AND CLNT_CMPNY_CLSFY_NUM = 5
+					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 0 and searchType == 1">
+					AND CLNT_CMPNY_CLSFY_NUM = 0
+					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 1 and searchType == 1">
+					AND CLNT_CMPNY_CLSFY_NUM = 1
+					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 2 and searchType == 1">
+					AND CLNT_CMPNY_CLSFY_NUM = 2
+					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 3 and searchType == 1">
+					AND CLNT_CMPNY_CLSFY_NUM = 3
+					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 4 and searchType == 1">
+					AND CLNT_CMPNY_CLSFY_NUM = 4
+					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 5 and searchType == 1">
+					AND CLNT_CMPNY_CLSFY_NUM = 5
+					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+			</choose>
+		</if>
 	</select>
 	
 	<insert id="getClntCmpnyAdd" parameterType="hashmap">
@@ -37,37 +156,37 @@
 			    #{zipCodeNum}, #{adrs}, #{dtlAdrs}, #{rvn}, #{sEmpNum})
 	</insert>
 	
-	<select id="clntCmpnyCntrctCnt" resultType="Integer">
+	<select id="clntCmpnyCntrctCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
-		FROM CLNT_CMPNY
+        FROM CLNT_CMPNY
 		WHERE CLNT_CMPNY_CLSFY_NUM = 0
 	</select>
 
-	<select id="clntCmpnyPartnerCnt" resultType="Integer">
+	<select id="clntCmpnyPartnerCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE CLNT_CMPNY_CLSFY_NUM = 1
 	</select>
 	
-	<select id="clntCmpnyTmnCnt" resultType="Integer">
+	<select id="clntCmpnyTmnCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE CLNT_CMPNY_CLSFY_NUM = 2
 	</select>
 	
-	<select id="clntCmpnySspsCnt" resultType="Integer">
+	<select id="clntCmpnySspsCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE CLNT_CMPNY_CLSFY_NUM = 3
 	</select>
 	
-	<select id="clntCmpnyForeignCnt" resultType="Integer">
+	<select id="clntCmpnyForeignCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE CLNT_CMPNY_CLSFY_NUM = 4
 	</select>
 	
-	<select id="clntCmpnyEtcCnt" resultType="Integer">
+	<select id="clntCmpnyEtcCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE CLNT_CMPNY_CLSFY_NUM = 5

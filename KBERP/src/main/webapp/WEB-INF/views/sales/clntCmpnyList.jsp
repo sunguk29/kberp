@@ -200,6 +200,10 @@ select {
 	width: 927px;
 	height: 420px;
 }
+.actionForm {
+	width: 100%;
+	height: 100%;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -213,13 +217,34 @@ $(document).ready(function() {
 	});
 	
 	$("#addBtn").on("click", function() {
-		$("#addForm").submit();
+		$("#oldClntCmpnyClsfyNum").val($("#clntCmpnyClsfyNum").val());
+		$("#oldSearchType").val($("#searchType").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
+		
+		$("#actionForm").attr("action", "clntCmgnyReg");
+		$("#actionForm").submit();
+	});
+	
+	$("#searchTxt").on("keypress", function(event) { // 엔터 처리
+		if(event.keyCode == 13) {
+			$("#searchBtn").click(); 
+			
+			return false; // event를 실행하지 않겠다.
+		}
+	});
+	
+	$("#searchBtn").on("click", function() {
+		$("#oldClntCmpnyClsfyNum").val($("#clntCmpnyClsfyNum").val());
+		$("#oldSearchType").val($("#searchType").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
+		
+		reloadList();
 	});
 	
 });
 
 function reloadList() {
-	var params = $("#addForm").serialize();
+	var params = $("#actionForm").serialize();
 	
 	$.ajax({
 		type : "post",
@@ -323,19 +348,17 @@ function drawPaging(pb) {
 </script>
 </head>
 <body>
-<form action="clntCmpnyReg" id="addForm" method="post">
-	<input type="hidden" id="page" name="page" value="${page}" />
-	<input type="hidden" name="top" value="${param.top}" />
-	<input type="hidden" name="menuNum" value="${param.menuNum}" />
-	<input type="hidden" name="menuType" value="${param.menuType}" />
-</form>
-	<!-- top & left -->
-	<c:import url="/topLeft">
-		<c:param name="top">${param.top}</c:param>
-		<c:param name="menuNum">${param.menuNum}</c:param>
-		<%-- board로 이동하는 경우 B 나머지는 M --%>
-		<c:param name="menuType">${param.menuType}</c:param>
-	</c:import>
+<input type="hidden" id="oldClntCmpnyClsfyNum" value="${param.clntCmpnyClsfyNum}" />
+<input type="hidden" id="oldSearchType" value="${param.searchType}" />
+<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
+<!-- top & left -->
+<c:import url="/topLeft">
+	<c:param name="top">${param.top}</c:param>
+	<c:param name="menuNum">${param.menuNum}</c:param>
+	<%-- board로 이동하는 경우 B 나머지는 M --%>
+	<c:param name="menuType">${param.menuType}</c:param>
+</c:import>
+<form action="#" id="actionForm" method="post">
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
@@ -346,65 +369,66 @@ function drawPaging(pb) {
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
+	<input type="hidden" id="page" name="page" value="${page}" />
+	<input type="hidden" name="top" value="${param.top}" />
+	<input type="hidden" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />
 			<div class="bodyWrap">
-				<form action="#" id="searchForm" method="post">
-					<div class="sts">
-						<div class="sts_list">전체 : ${maxCnt}건</div>
-						<div class="sts_list">파트너사 : ${PartnerCnt}건</div>
-						<div class="sts_list">거래고객사 : ${CntrctCnt}건</div>
-						<div class="sts_list">해지고객사 : ${TmnCnt}건</div>
-						<div class="sts_list">정지고객사 : ${SspsCnt}건</div>
-						<div class="sts_list">외국파트너사 : ${ForeignCnt}건</div>
-						<div class="sts_list">기타 : ${EtcCnt}건</div>
-					</div>
-					<div class="tLine"></div>
-					<table class="srch_table">
-						<colgroup>
-							<col width="130" />
-							<col width="130" />
-							<col width="320" />
-							<col width="220" />
-						</colgroup>
-						<tbody>
-							<tr>
-								<td><span class="srch_name">고객사분류</span></td>
-								<td><select>
-										<option>전체</option>
-										<option>파트너사</option>
-										<option>거래고객사</option>
-										<option>해지고객사</option>
-										<option>정지고객사</option>
-										<option>외국파트너사</option>
-										<option>기타</option>
-								</select></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td><span class="srch_name">검색어</span></td>
-								<td><select>
-										<option>선택안함</option>
-										<option>고객사명</option>
-										<option>고객사번호</option>
-								</select></td>
-								<td><input type="text" class="srch_msg"
-									placeholder="검색 조건을 선택한 후 입력해주세요." /></td>
-								<td><span class="cmn_btn">검색</span></td>
-							</tr>
-							<tr>
-								<td><span class="srch_name">정렬</span></td>
-								<td><select>
-										<option selected="selected">선택안함</option>
-										<option>매출</option>
-										<option>고객사명</option>
-								</select></td>
-								<td>
-									<img class="asc_btn cmn_btn" alt="등록버튼" src="resources/images/sales/asc.png" />
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</form>
+				<div class="sts">
+					<div class="sts_list" id="maxCnt">전체 : ${maxCnt}건</div>
+					<div class="sts_list" id="CntrctCnt">거래고객사 : ${CntrctCnt}건</div>
+					<div class="sts_list" id="PartnerCnt">파트너사 : ${PartnerCnt}건</div>
+					<div class="sts_list" id="TmnCnt">해지고객사 : ${TmnCnt}건</div>
+					<div class="sts_list" id="SspsCnt">정지고객사 : ${SspsCnt}건</div>
+					<div class="sts_list" id="ForeignCnt">외국파트너사 : ${ForeignCnt}건</div>
+					<div class="sts_list" id="EtcCnt">기타 : ${EtcCnt}건</div>
+				</div>
+				<div class="tLine"></div>
+				<table class="srch_table">
+					<colgroup>
+						<col width="130" />
+						<col width="130" />
+						<col width="320" />
+						<col width="220" />
+					</colgroup>
+					<tbody>
+						<tr>
+							<td><span class="srch_name">고객사분류</span></td>
+							<td><select id="clntCmpnyClsfyNum" name="clntCmpnyClsfyNum">
+									<option value="9">전체</option>
+									<option value="0">거래고객사</option>
+									<option value="1">파트너사</option>
+									<option value="2">해지고객사</option>
+									<option value="3">정지고객사</option>
+									<option value="4">외국파트너사</option>
+									<option value="5">기타</option>
+							</select></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><span class="srch_name">검색어</span></td>
+							<td><select id="searchType" name="searchType">
+									<option value="0">고객사명</option>
+									<option value="1">고객사번호</option>
+							</select></td>
+							<td><input type="text" class="srch_msg" placeholder="검색어를 입력해주세요." id="searchTxt" name="searchTxt" /></td>
+							<td><span class="cmn_btn" id="searchBtn">검색</span></td>
+						</tr>
+						<tr>
+							<td><span class="srch_name">정렬</span></td>
+							<td><select id="listSort" name="listSort">
+									<option selected="selected">선택안함</option>
+									<option value="0">매출</option>
+									<option value="1">고객사명</option>
+							</select></td>
+							<td>
+								<img class="asc_btn cmn_btn" alt="등록버튼" src="resources/images/sales/asc.png" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
 				<div class="SearchResult">
 					<h3>고객사 (검색결과: ${CNT}건)</h3>
 				</div>
@@ -417,9 +441,10 @@ function drawPaging(pb) {
 						<div class="cmn_btn" id="addBtn">등록</div>
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
+			</div> <!-- bodyWrap end -->
+		</div> <!-- cont_area end -->
+	</div> <!--cont_wrap end -->
+</form>		
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

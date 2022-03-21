@@ -33,13 +33,13 @@ public class ClntMngController {
 			params.put("page", "1");
 		}
 		
-		int MaxCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyCntrctCnt");
-		int CntrctCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyCntrctCnt");
-		int PartnerCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyPartnerCnt");
-		int TmnCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyTmnCnt");
-		int SspsCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnySspsCnt");
-		int ForeignCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyForeignCnt");
-		int EtcCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyEtcCnt");
+		int MaxCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyListCnt", params);
+		int CntrctCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyCntrctCnt", params);
+		int PartnerCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyPartnerCnt", params);
+		int TmnCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyTmnCnt", params);
+		int SspsCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnySspsCnt", params);
+		int ForeignCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyForeignCnt", params);
+		int EtcCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyEtcCnt", params);
 		
 		mav.addObject("page", params.get("page"));
 		mav.addObject("maxCnt", Integer.toString(MaxCnt));
