@@ -430,9 +430,9 @@ $(document).ready(function() {
 		for(var data of list){
 			html +=	"<div class=\"cal_text1\">";
 			html += "<div class=\"text_left\">";
-			if(!data.lNum == ""){
+			if(!data.LEAD_NUM == ""){
 				html +=	"<div class=\"lead_cal_big\"></div>";			
-			} else if(!data.sNum == ""){				
+			} else if(!data.SALES_NUM == ""){				
 				html +=	"<div class=\"sales_cal_big\"></div>";
 			} else {				
 				html +=	"<div class=\"nrml_cal_big\"></div>";
