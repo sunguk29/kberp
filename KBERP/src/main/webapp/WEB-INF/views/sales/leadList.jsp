@@ -330,7 +330,7 @@ input:focus {
 
 .list_table tbody td {
 	height: 30px;
-	font-size: 11pt;
+	font-size: 10pt;
 }
 
 .list_table tbody tr:nth-child(3) {
@@ -344,7 +344,7 @@ input:focus {
 /* 상품명 */
 .list_table tbody tr:nth-child(2) td:nth-child(2) {
 	font-weight: 700;
-	font-size: 12pt;
+	font-size: 10pt;
 }
 .list_table tbody tr:nth-child(2) td:nth-child(2):hover {
 	color: #4b94f2;
@@ -375,6 +375,34 @@ input:focus {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	
+	// 목록 조회
+	reloadList();
+	
+	$("#searchBtn").on("click", function() {
+		$("#actionForm").submit();
+	});
+	
+	$(".list_table tbody").on("click", "tr", function() {
+		$("#no").val($(this).attr("no"));
+		
+		$("#actionForm").attr("action", "lead");
+		$("#actionForm").submit();
+	});
+	
+	$("#pgn_area").on("click", "div", function() {
+		
+		$("#page").val($(this).attr("page"));
+		
+		reloadList();
+		
+	});
+	
+	$("#writeBtn").on("click", function() {
+		
+		$("#actionForm").attr("action", "leadReg")
+		$("#actionForm").submit();
+	});
 	
 	$(".userIcon").on("click", function() {
 		var html = "";
@@ -491,30 +519,6 @@ $(document).ready(function() {
 			}]
 		});
 	});
-	
-	// 목록 조회
-	reloadList();
-	
-	$(".list_table tbody").on("click", "tr", function() {
-		$("#no").val($(this).attr("no"));
-		
-		$("#actionForm").attr("action", "lead");
-		$("#actionForm").submit();
-	});
-	
-	$("#pgn_area").on("click", "div", function() {
-		
-		$("#page").val($(this).attr("page"));
-		
-		reloadList();
-		
-	});
-	
-	$("#writeBtn").on("click", function() {
-		
-		$("#actionForm").attr("action", "leadReg")
-		$("#actionForm").submit();
-	});
 }); 
 
 function reloadList() {
@@ -538,26 +542,53 @@ function reloadList() {
 function drawList(list) {
 	var html = "";
 	
+	html += "<colgroup>";
+	html += "<col width=\"70\">";
+	html += "<col width=\"100\">";
+	html += "<col width=\"290\">";
+	html += "<col width=\"80\">";
+	html += "</colgroup>";
+	html += "<thead>";
+	html += "<tr>";
+	html += "<th rowspan=\"3\">글번호</th>";
+	html += "<th>리드번호</th>";
+	html += "<th>고객사명 / 고객명</th>";
+	html += "<th></th>";
+	html += "</tr>";
+	html += "<tr>";
+	html += "<th>담당자</th>";
+	html += "<th>리드명</th>";
+	html += "<th>가능 여부</th>";
+	html += "</tr>";
+	html += "<tr>";
+	html += "<th>진행상태</th>";
+	html += "<th>등록일</th>";
+	html += "<th></th>";
+	html += "</tr>";
+	html += "</thead>";
+	
 	for(var data of list) {
+		html += "<tbody>";
 		html += "<tr no=\"" + data.LEAD_NUM + "\">";
 		html += "<td rowspan=\"3\">" + data.LEAD_NUM + "</td>";
-		html += "<td>" + LD + data.LEAD_NUM + "</td>";
-		html += "<td>" + CLNT_CMPNY_NAME / CLNT_NAME + "</td>";
+		html += "<td> LD" + data.LEAD_NUM + "</td>";
+		html += "<td>" + data.CLNT_CMPNY_NAME + " / " + data.CLNT_NAME + "</td>";
 		html += "<td></td>";
 		html += "</tr>";
 		html += "<tr>";
-		html += "<td>" + EMP_NAME + "</td>";
-		html += "<td>" + LEAD_NAME + "</td>";
+		html += "<td>" + data.EMP_NAME + "</td>";
+		html += "<td>" + data.LEAD_NAME + "</td>";
 		html += "<td><span class=\"sales_psbl_btn\"> 50 % </span></td>";
 		html += "</tr>";
 		html += "<tr>";
-		html += "<td>" + PRGRS_STS_NUM + "</td>";
-		html += "<td>" + RGSTRTN_DATE + "</td>";
+		html += "<td>" + data.PSNUM + "</td>";
+		html += "<td>" + data.RGSTRTN_DATE + "</td>";
 		html += "<td></td>";
 		html += "</tr>";
+		html += "</tbody>";
 	}
 	
-	$(".list_table tbody").html(html);
+	$(".list_table").html(html);
 }
 
 function drawPaging(pb) {
@@ -596,6 +627,7 @@ function drawPaging(pb) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />	
+	<input type="hidden" id="searchBtn" value="검색" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -666,9 +698,9 @@ function drawPaging(pb) {
 									<td>
 										<select>
 											<option>선택안함</option>
-											<option>진행중</option>
-											<option>종료(영업기회 전환)</option>
-											<option>종료(영업기회 실패)</option>
+											<option value="1">진행중</option>
+											<option value="2">종료(영업기회 전환)</option>
+											<option value="3">종료(영업기회 실패)</option>
 										</select>
 									</td>
 									<td>
@@ -724,7 +756,7 @@ function drawPaging(pb) {
 										<input type="text" class="srch_msg" placeholder="검색 조건을 선택한 후 입력해주세요." />
 									</td>
 									<td>
-										<span class="cmn_btn">검색</span>
+										<span class="cmn_btn" id="searchBtn">검색</span>
 									</td>
 									<td colspan="3"></td>
 								</tr>
@@ -749,34 +781,7 @@ function drawPaging(pb) {
 						</table>
 						<div class="SearchResult"><h3>리드 (검색결과: 390건)</h3></div>
 						<!-- list_table -->
-						<table class="list_table">
-							<!-- col=4 -->
-							<colgroup>
-								<col width="70">
-								<col width="100">
-								<col width="290">
-								<col width="80">
-							</colgroup>
-							<thead>
-								<tr>
-									<th rowspan="3">글번호</th>
-									<th>리드번호</th>
-									<th>고객사명 / 고객명</th>
-									<th></th>
-								</tr>
-								<tr>
-									<th>담당자</th>
-									<th>리드명</th>
-									<th>가능 여부</th>
-								</tr>
-								<tr>
-									<th>진행상태</th>
-									<th>등록일</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody></tbody>
-						</table>
+						<table class="list_table"></table>
 						<div class="body_bottom">
 							<div class="board_bottom">
 								<div class="pgn_area"></div>

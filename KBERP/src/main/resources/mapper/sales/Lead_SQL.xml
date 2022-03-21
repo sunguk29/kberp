@@ -2,9 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="lead">
 	<select id="getLeadList" resultType="hashmap" parameterType="hashmap">
-		SELECT LL.LEAD_NUM, LL.CLNT_CMPNY_NAME, LL.CLNT_NAME, LL.EMP_NAME, LL.LEAD_NAME, LL.PRGRS_STS_NUM, LL.RGSTRTN_DATE
-		FROM (  SELECT L.LEAD_NUM, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NAME, L.LEAD_NAME, L.PRGRS_STS_NUM,
-		               TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE, ROW_NUMBER() OVER(ORDER BY LEAD_NUM DESC) AS RNUM
+		SELECT LL.LEAD_NUM, LL.CLNT_CMPNY_NAME, LL.CLNT_NAME, LL.EMP_NAME, LL.PSNUM, LL.LEAD_NAME, LL.RGSTRTN_DATE
+		FROM (  SELECT L.LEAD_NUM, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NAME, L.LEAD_NAME,
+		               DECODE(PRGRS_STS_NUM, 1, '진행중', 2, '종료(영업기회 전환)', 3, '종료(영업기회 실패)') AS PSNUM, 
+		               TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE, 
+		               ROW_NUMBER() OVER(ORDER BY LEAD_NUM DESC) AS RNUM
 		        FROM LEAD L INNER JOIN EMP E
 		                            ON L.MNGR_EMP_NUM = E.EMP_NUM
 		                    INNER JOIN ENTRPRS_CLNT EC
