@@ -8,9 +8,16 @@ import org.springframework.web.servlet.ModelAndView;
 public class BoardController {
 
 	@RequestMapping(value = "/board")
-	public ModelAndView clndr(ModelAndView mav) {
+	public ModelAndView board(ModelAndView mav) {
 		
 		mav.setViewName("GW/board");
+		
+		return mav;
+	}
+	@RequestMapping(value = "/boardWrite")
+	public ModelAndView boardWrite(ModelAndView mav) {
+		
+		mav.setViewName("GW/boardWrite");
 		
 		return mav;
 	}

@@ -19,6 +19,10 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	$("#writeBtn").on("click", function() {
+		$("#actionForm").attr("action", "boardWrite");
+		$("#actionForm").submit();
+	});
 	$("#alertBtn").on("click", function() {
 		makeAlert("하이", "내용임");
 	});
@@ -189,7 +193,7 @@ $(document).ready(function() {
 					<div class="page_btn page_next">next</div>
 					<div class="page_btn page_last">last</div>
 				</div>
-				<div class="cmn_btn_ml">글쓰기</div>
+				<div class="cmn_btn_ml" id="writeBtn">글쓰기</div>
 				<div class="cmn_btn_ml" id="alertBtn">알림</div>
 				<div class="cmn_btn_ml" id="btn1Btn">버튼1개</div>
 				<div class="cmn_btn_ml" id="btn2Btn">버튼2개</div>
