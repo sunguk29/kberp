@@ -22,4 +22,9 @@
 		FROM LEAD
 		WHERE 1 = 1
 	</select>
+
+	<insert id="getLeadAdd" parameterType="hashmap">
+		INSERT INTO LEAD(LEAD_NUM, RGSTRTN_EMP_NUM, MNGR_EMP_NUM, CLNT_NUM, RCGNTN_PATH_NUM, LEAD_NAME)
+		VALUES(LEAD_SEQ.NEXTVAL, #{mn}, #{mn}, #{clntName}, #{rp}, #{leadName}) 
+	</insert>
 </mapper>

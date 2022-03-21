@@ -6,7 +6,8 @@ html, body {
 	height: 100%;
 	font-family: 고딕;
 	min-width: 1400px;
-	overflow: hidden;
+	overflow-x: auto;
+	overflow-y: hidden;
 }
 
 .top_area, .left_area, .cmn_btn, .cmn_btn_ml, .cmn_btn_mr, .cmn_btn_mb, .page_btn, .page_btn_on {
@@ -322,6 +323,11 @@ html, body {
 	min-height: 560px; 
 	padding: 20px;
 	overflow-y: auto;
+	overflow-x: clip; 
+}
+
+.right_area_wrap {
+	white-space: normal !important;
 }
 
 .navi_bar {

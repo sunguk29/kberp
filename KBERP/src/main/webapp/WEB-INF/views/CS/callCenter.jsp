@@ -781,7 +781,48 @@ $(document).ready(function() {
 			}); // ajax end
 		} // else end
 	}); // saveBtn end
+	
+	$("#noteSaveBtn").on("click", function() {
+		
+		if(checkEmpty("#clnt_name")) {
+			alert("고객명을 입력하세요.");
+			$("#clnt_name").focus();
+		} else if(checkEmpty("#clnt_grade")) {
+			alert("고객등급을 입력하세요.");
+			$("#clnt_grade").focus();
+		} else if(checkEmpty("#ltl_cnsl")) {
+			alert("최근상담일을 입력하세요.");
+			$("#clnt_grade").focus();
+		} else if(checkEmpty("#phon_num_1")) {
+			alert("전화번호를 입력하세요.");
+			$("#phon_num_1").focus();
+		} else {
+			// 저장
+			var params = $("#noteSaveForm").serialize();
+			
+			$.ajax({
+				type : "post",
+				url : "callCenterAction/insert",
+				dataType : "json",
+				data : params,
+				success : function(res) {
+					if(res.res == "success") {
+						location.href = "callCenter";
+					} else {
+						alert("작성중 문제가 발생하였습니다.");
+					}
+
+				},
+				error : function(request, status, error) {
+					console.log(request.responseText);
+
+				}
+			}); // ajax end
+		} // else end
+	}); // saveBtn end
 });
+
+
 
 function checkEmpty(sel) {
 	if($.trim($(sel).val()) == "") {
@@ -853,6 +894,7 @@ function checkEmpty(sel) {
 		    	<!-- 상담노트 파트 -->
 		    	<div class="top">
 		    		<div class="mid_area">
+		    		<form action="#" id="noteSaveForm" method="post">
 						<div class="cnsl_note_top">
 							<div class="cnsl_note">상담노트</div>
 							<div class="cmn_btn" id="call_btn"><img alt="부서별연락처" src="resources/images/CS/call.png" id="imgs"></div>
@@ -874,13 +916,14 @@ function checkEmpty(sel) {
 						<div class="mid_row3">
 							<div class="cnsl_note_rslt">상담결과</div>
 							<select name="sucess_sel">
-								<option>완료</option>
-								<option>미처리</option>
-								<option>예약</option>
-								<option>이관</option>
+								<option value="0">완료</option>
+								<option value="1">미처리</option>
+								<option value="2">예약</option>
+								<option value="3">이관</option>
 							</select>
-							<div class="note_cmn_btn_mr">노트저장</div>
+							<div class="note_cmn_btn_mr" id="noteSaveBtn">노트저장</div>
 						</div>
+						</form>
 					</div>
 				</div>
 			</div> <!-- top area div 끝 -->

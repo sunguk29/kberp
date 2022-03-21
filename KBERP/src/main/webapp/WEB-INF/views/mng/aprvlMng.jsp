@@ -6,10 +6,25 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP Sample</title>
+<title>카카오뱅크 ERP 승인관리</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
+
+.cmn_btn{
+	border: none;
+}
+
+#searchTxt {
+	height : 21px;
+	margin-right: 5px;
+	margin-top: 2px;
+}
+#searchGbn {
+	height : 27px;
+	margin-right: 5px;
+	margin-top: 2px;
+}
 
  tbody td:nth-child(3):hover {
  	text-decoration: underline;
@@ -52,7 +67,7 @@ $(document).ready(function() {
 		reloadList();
 	});
 
-	$("tbody").on("click", "#click", function() {
+	$("tbody").on("click", "tr", function() {
 		$("#no").val($(this).attr("no"));
 		
 		$("#searchGbn").val($("#oldSearchGbn").val());
@@ -62,7 +77,7 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-	$("#paging_wrap").on("click", "span", function() {
+	$(".pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
 		
 		
@@ -75,7 +90,7 @@ function reloadList() { // 목록 조회용 + 페이징 조회용
 
 	$.ajax({
 		type : "post", 
-		url : "parvlMngAjax", 
+		url : "aprvlMngAjax", 
 		dataType : "json",
 		data : params, 
 		success : function(res) { 
@@ -94,14 +109,19 @@ function drawList(list) {
 	var html = "";
 	
 	for(var data of list) {
-		html += "<tr num=\""+ data.RSVTN_NUM + "\">";
+		html += "<tr no=\""+ data.RSVTN_NUM + "\">";
 		html += "<td>" + data.RSVTN_NUM + "</td>";
 		html += "<td>" + data.FCLTY_NUM + "</td>";
 		html += "<td id=\"click\">" + data.FCLTY_NAME + "</td>";
-		html += "<td>" + data.RSVTN_DATE + "</td>";
 		html += "<td>" + data.EMP_NAME + "</td>";
+		html += "<td>" + data.RSVTN_DATE + "</td>";
 		html += "<td>" + data.TIME_DVSN_NUM + "</td>";
-		html += "</tr>";
+		if(data.STS_NUM==0)
+            html += "<td>대기</td>";              
+        else if(data.STS_NUM==1)
+            html += "<td>승인</td>";     
+        else
+            html += "<td>불가</td>";
 	}
 	$("tbody").html(html);
 }
@@ -109,30 +129,30 @@ function drawList(list) {
 function drawPaging(pb) {
 	var html = "";
 	
-	html += "<span page=\"1\" class=\"page_btn page_first\">first</span>";
-	
+	html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
 	if($("#page").val() == "1") {
-		html += "<span page=\"1\" class=\"page_btn page_prev\">prev</span>";
+		html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
 	} else {
-		html += "<span page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</span>";
+		html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
 	}
+	
 	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
 		if($("#page").val() == i) {
-			html += "<span class=\"page_btn_on\">" + i + "</span>";
+			html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
 		} else {
-			html += "<span class=\"page_btn\">" + i + "</span>";
+			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
 		}
 	}
 	
 	if($("#page").val() == pb.maxPcount) {
-		html += "<span page=\"" + pb.maxPcount + "\" class=\"page_btn page_next\">next</span>";
+		html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_next\">next</div>";
 	} else {
-		html += "<span page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</span>";
+		html += "<div page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</div>";
 	}
-	
-	html += "<span page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</span>";
+	html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
 	
 	$(".pgn_area").html(html);
+
 }
 </script>
 </head>
@@ -144,6 +164,7 @@ function drawPaging(pb) {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
+	<input type="hidden" id="num" name="num"/>
 <input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
 <input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
 	
@@ -161,7 +182,7 @@ function drawPaging(pb) {
 						<option value="1">시설물명</option>
 					</select>
 					<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
-					<input class="cmn_btn_ml" type="button" value="검색" id="searchBtn"/>
+					<input class="cmn_btn" type="button" value="검색" id="searchBtn"/>
 				</form>	
 			</div>
 		</div>
@@ -171,12 +192,12 @@ function drawPaging(pb) {
 			<table class="board_table">
 				<colgroup>
 					<col width="100"/>
+					<col width="100"/>
 					<col width="150"/>
 					<col width="150"/>
 					<col width="150"/>
 					<col width="150"/>
-					<col width="150"/>
-					<col width="50"/>
+					<col width="100"/>
 					
 				</colgroup>
 				<thead>
@@ -187,11 +208,15 @@ function drawPaging(pb) {
 						<th>신청자</th>
 						<th>사용 날짜</th>
 						<th>사용 시간</th>
+						<th>승인처리</th>
 					</tr>
 				</thead>
 				<tbody></tbody>
 			</table>
 			<div>
+			if(data.STS_NUM == 1 ){
+				
+			}
 			<div class="board_bottom">
 				<div class="pgn_area"></div>
 			</div>

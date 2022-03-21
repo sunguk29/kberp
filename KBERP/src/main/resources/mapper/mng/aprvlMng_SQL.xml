@@ -21,7 +21,7 @@
 	 <select id="aprvlMngList" resultType="hashmap" parameterType="hashmap">
 		SELECT *
 		FROM (SELECT FR.RSVTN_NUM, FR.FCLTY_NUM, F.FCLTY_NAME, E.EMP_NAME, 
-				TO_CHAR(RSVTN_DATE, 'YYYY-MM-DD') AS RSVTN_DATE, FR.TIME_DVSN_NUM,
+				TO_CHAR(RSVTN_DATE, 'YYYY-MM-DD') AS RSVTN_DATE, FR.TIME_DVSN_NUM, STS_NUM,
 				 ROW_NUMBER() OVER(ORDER BY FR.RSVTN_NUM DESC) AS RNUM
 		FROM FCLTY_RSVTN FR INNER JOIN FCLTY F
 		                    ON FR.FCLTY_NUM = F.FCLTY_NUM
@@ -40,5 +40,16 @@
 				</if>
 				) A
 				WHERE A.RNUM BETWEEN #{startCount} AND #{endCount} 
+	</select>
+	
+	<select id="aprvlMngDtlView" resultType="hashmap" parameterType="hashmap">
+		SELECT FR.RSVTN_NUM, FR.FCLTY_NUM, F.FCLTY_NAME, E.EMP_NAME, 
+				TO_CHAR(RSVTN_DATE, 'YYYY-MM-DD') AS RSVTN_DATE, FR.TIME_DVSN_NUM,USE_NUM_OF_PL, USE_USE,
+				 ROW_NUMBER() OVER(ORDER BY FR.RSVTN_NUM DESC) AS RNUM
+		FROM FCLTY_RSVTN FR INNER JOIN FCLTY F
+		                    ON FR.FCLTY_NUM = F.FCLTY_NUM
+		                    INNER JOIN EMP E
+		                    ON FR.EMP_NUM = E.EMP_NUM
+		WHERE RSVTN_NUM = #{no}
 	</select>
 </mapper>

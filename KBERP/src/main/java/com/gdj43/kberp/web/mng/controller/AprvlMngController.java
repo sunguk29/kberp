@@ -42,7 +42,7 @@ public class AprvlMngController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/parvlMngAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@RequestMapping(value = "/aprvlMngAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String parvlMngAjax(@RequestParam HashMap<String, String> params) throws Throwable {
 		ObjectMapper mapper = new ObjectMapper();
@@ -53,7 +53,7 @@ public class AprvlMngController {
 		int cnt = ics.getIntData("aprvlMng.getCnt", params);
 		
 		// 페이징 계산
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 1, 5);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
@@ -63,7 +63,21 @@ public class AprvlMngController {
 		modelMap.put("list", list); 
 		modelMap.put("pb", pb); 
 		
+		
 		return mapper.writeValueAsString(modelMap);
+	}
+	
+	@RequestMapping(value= "/aprvlMngDtlView")
+	public ModelAndView aprvlMngDtlView(@RequestParam HashMap<String, String> params,
+							ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = ics.getData("aprvlMng.aprvlMngDtlView",params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("mng/aprvlMngDtlView");
+		
+		return mav;
 	}
 	
 	

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Fclty">
+<select id="rsvtnFcltyList" resultType="hashmap" parameterType="hashmap">
+	SELECT O.RSVTN_NUM, O.FCLTY_NAME, O.RSVTN_DATE, 
+	       O.START_TIME, O.END_TIME,O.USE_NUM_OF_PL
+	FROM        (SELECT R.RSVTN_NUM, F.FCLTY_NAME, TO_CHAR(R.RSVTN_DATE,'YYYY-MM-DD')AS RSVTN_DATE, 
+	                   RT.START_TIME, RT.END_TIME, ROW_NUMBER() OVER(ORDER BY R.RSVTN_NUM) AS RSUM,R.USE_NUM_OF_PL
+	             FROM FCLTY_RSVTN R  INNER JOIN FCLTY F 
+	                                ON R.FCLTY_NUM = F.FCLTY_NUM
+	                                INNER JOIN RSVTN_TIME_DVSN RT
+	                                ON R.TIME_DVSN_NUM = RT.TIME_DVSN_NUM
+	             WHERE 1 = 1 
+	<if test="searchTxt != null and searchTxt != ''">
+			<choose>
+				<when test="searchGbn == 0">
+					AND F.FCLTY_NAME LIKE '%' || #{searchTxt} || '%' 
+				</when>
+			</choose>
+	</if>
+	) O 
+	WHERE O.RSUM BETWEEN #{startCount} AND #{endCount} 
+</select>
+<select id="fcltyListCnt" resultType="Integer" parameterType="hashmap">
+	SELECT COUNT(*) AS CNT
+	FROM FCLTY_RSVTN  R INNER JOIN FCLTY F ON R.FCLTY_NUM = F.FCLTY_NUM 
+	WHERE 1=1 AND FCLTY_NAME LIKE '%' || #{searchTxt} || '%'
+</select>
+
+
+</mapper>

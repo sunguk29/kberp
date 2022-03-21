@@ -70,7 +70,7 @@
 	text-align: center;
 }
 .text_size {
-	width: 230px;
+	width: 200px;
 	height: 19px;
 	outline: none;
 }
@@ -100,7 +100,7 @@
 }
 .popup_cc_box_right {
    display: inline-block;
-   width: 400px;
+   width: 300px;
    height: 50px;
    font-size: 14px;
    line-height: 50px;
@@ -375,35 +375,35 @@ input:focus {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
-	// 목록 조회
+
 	reloadList();
 	
 	$("#searchBtn").on("click", function() {
 		$("#actionForm").submit();
 	});
-	
-	$(".list_table tbody").on("click", "tr", function() {
-		$("#no").val($(this).attr("no"));
-		
-		$("#actionForm").attr("action", "lead");
-		$("#actionForm").submit();
-	});
-	
-	$("#pgn_area").on("click", "div", function() {
-		
+
+/* 페이징 */
+	$(".pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
-		
+
 		reloadList();
-		
 	});
-	
+
+/* 등록  */	
 	$("#writeBtn").on("click", function() {
 		
 		$("#actionForm").attr("action", "leadReg")
 		$("#actionForm").submit();
 	});
 	
+	$(".list_table").on("click", "tr", function() {
+		$("#no").val($(this).attr("no"));
+		
+		$("#actionForm").attr("action", "lead");
+		$("#actionForm").submit();
+	});
+
+/* 담당자 팝업  */
 	$(".userIcon").on("click", function() {
 		var html = "";
 		
@@ -506,7 +506,7 @@ $(document).ready(function() {
 			bgClose : false,
 			title : "담당자 조회",
 			contents : html,
-			width : 600,
+			width : 500,
 			height : 500,
 			buttons : [{
 				name : "등록",
@@ -603,9 +603,9 @@ function drawPaging(pb) {
 	
 	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
 		if($("#page").val() == i) {
-			html += "<div class=\"page_btn_on\">" + i + "</div>";
+			html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
 		} else {
-			html += "<div class=\"page_btn\">" + i + "</div>";
+			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
 		}
 	}
 	
@@ -627,7 +627,6 @@ function drawPaging(pb) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />	
-	<input type="hidden" id="searchBtn" value="검색" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -696,7 +695,7 @@ function drawPaging(pb) {
 										<span class="srch_name">진행 상태</span>
 									</td>
 									<td>
-										<select>
+										<select id="psNum" name="psNum">
 											<option>선택안함</option>
 											<option value="1">진행중</option>
 											<option value="2">종료(영업기회 전환)</option>
@@ -785,7 +784,7 @@ function drawPaging(pb) {
 						<div class="body_bottom">
 							<div class="board_bottom">
 								<div class="pgn_area"></div>
-								<div class="cmn_btn" id="writeBtn"> 등록</div>
+								<div class="cmn_btn" id="writeBtn"> 등록</div>								
 							</div>
 						</div>
 					</div>

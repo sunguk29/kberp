@@ -6,13 +6,15 @@
 $(document).ready(function() {
 	$(".right_area_wrap").slimScroll({
 		width : $(".right_area").width() + "px",
-	    height : $(".right_area").height() + "px"
+	    height : $(".right_area").height() + "px",
+	    axis : 'both'
 	});
 	
 	$(window).resize(function(){
 		$(".right_area_wrap").slimScroll({
 			width : $(".right_area").width() + "px",
-			height : $(".right_area").height() + "px"
+			height : $(".right_area").height() + "px",
+			axis : 'both'
 		});
 	});
 	

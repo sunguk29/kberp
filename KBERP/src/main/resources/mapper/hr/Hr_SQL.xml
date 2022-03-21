@@ -13,8 +13,7 @@
 	                       	 	 ON A.RANK_NUM = R.RANK_NUM
 	                       LEFT OUTER JOIN APRVL_LINE AP
 	                        	 ON A.APRVL_NUM = AP.APRVL_NUM
-	ORDER BY APNTM_NUM DESC                    
-                     <!--  조회 필터링 
+                     <!--  조회 필터링 	-->
                        <if test="searchTxt != null and searchTxt != ''">
 							<choose>
 								<when test="searchGbn == 0">
@@ -37,7 +36,8 @@
 								</when>
 							</choose>
 						</if>
-						-->
+	ORDER BY APNTM_NUM DESC          
+					
  </select>
  
 

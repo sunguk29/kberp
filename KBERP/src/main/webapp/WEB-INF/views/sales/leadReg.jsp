@@ -575,30 +575,48 @@ hr { /* 구분선 */
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	
 	$("#listBtn").on("click", function() {
 		$("#listForm").submit();
 	});	
 	
-/* 	$("#writeBtn").on("click", function() {
+	$("#writeBtn").on("click", function() {
 		if(checkEmpty("#leadName")) {
-			alert("알림" "리드명을 입력하세요.");
+			alert("리드명을 입력하세요.");
 			$("#leadName").focus();
 		} else if(checkEmpty("#clntName")) {
-			alert("알림" "고객명을 입력하세요.");
+			alert("고객명을 입력하세요.");
 			$("#clntName").focus();
 		} else if(checkEmpty("#ccName")) {
-			alert("알림" "고객사명을 입력하세요.");
+			alert("고객사명을 입력하세요.");
 			$("#ccName").focus();
-		} else if(checkEmpty("#rPath")) {
-			alert("알림" "인지경로를 입력하세요.");
-			$("#rPath").focus();
-		} else if(checkEmpty("#meName")) {
-			alert("알림" "담당자를 입력하세요.");
-			$("#meName").focus();
+		} else if(checkEmpty("#rp")) {
+			alert("인지경로를 입력하세요.");
+			$("#rp").focus();
+		} else if(checkEmpty("#mn")) {
+			alert("담당자를 입력하세요.");
+			$("#mn").focus();
 		} else {	
-			
-		}
-	}); */
+			var params = $("#writeForm").serialize();
+		
+			$.ajax({
+				type : "post", 
+				url : "leadAction/insert", 
+				dataType : "json", 
+				data : params, 
+				success : function(res) { 
+					if(res.res == "success") {
+						location.href = "leadList";
+					} else {
+						alert("작성중 문제가 발생하였습니다.");
+					}
+				},
+				error : function(request, status, error) {
+					console.log(request.responseText);
+				}
+			}); 
+		}	
+	}); 
 	
 	$("#clntIcon").on("click", function() {
 		var html = "";
@@ -1035,77 +1053,79 @@ function checkEmpty(sel) {
 			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
 			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="writeBtn"/>
 		</div>
+		
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="body">
 				<div class="bodyWrap">
 				<!-- 시작 -->
-					<table>
-						<colgroup>
-							<col width="200" />
-							<col width="auto" />
-						</colgroup>
-						<tbody>
-							<tr>
-								<td><input type="button" class="btn" id="leadName" value="리드명 *" readonly="readonly"/></td>
-								<td><input type="text" class="txt" /></td>
-							</tr>
-							<tr>
-								<td><input type="button" class="btn" id="clntName" value="고객명 *" readonly="readonly"/></td>
-								<td>
-									<input type="text" class="txt" />
-									<img class="btnImg_in" id="clntIcon" alt="팝업" src="resources/images/sales/popup.png" />
-								</td>
-							</tr>
-							<tr>
-								<td><input type="button" class="btn" id="ccName" value="고객사 *" readonly="readonly"/></td>
-								<td>
-									<input type="text" class="txt" />
-									<img class="btnImg_in" id="ccIcon" alt="팝업" src="resources/images/sales/popup.png" />
-								</td>
-							</tr>
-							<tr>
-								<td><input type="button" class="btn" value="고객사 등급" readonly="readonly"/></td>
-								<td><select class="txt_in" id="ccGrade" name="ccGrade" disabled="disabled">
-										<optgroup>
-											<option>고객사 등록 후 자동 입력</option>
-											<option value="0">S</option>
-											<option value="1">A</option>
-											<option value="2">B</option>
-											<option value="3">C</option>
-											<option value="4">D</option>
-										</optgroup>
-								</select></td>
-							</tr>
-							<tr>
-								<td><input type="button" class="btn" value="인지경로 *" readonly="readonly"/></td>
-								<td><select class="txt_in" id="rPath" name="rPath">
-										<optgroup>
+					<form action="#" id="writeForm" method="post"> 				
+						<table>
+							<colgroup>
+								<col width="200" />
+								<col width="auto" />
+							</colgroup>
+							<tbody>
+								<tr>
+									<td><input type="button" class="btn" value="리드명 *" readonly="readonly"/></td>
+									<td><input type="text" class="txt" id="leadName" name="leadName" /></td>
+								</tr>
+								<tr>
+									<td><input type="button" class="btn" value="고객명 *" readonly="readonly"/></td>
+									<td>
+										<input type="text" class="txt" id="clntName" name="clntName" />
+										<img class="btnImg_in" id="clntIcon" alt="팝업" src="resources/images/sales/popup.png" />
+									</td>
+								</tr>
+								<tr>
+									<td><input type="button" class="btn" value="고객사 *" readonly="readonly"/></td>
+									<td>
+										<input type="text" class="txt" id="ccName" name="ccName" />
+										<img class="btnImg_in" id="ccIcon" alt="팝업" src="resources/images/sales/popup.png" />
+									</td>
+								</tr>
+								<tr>
+									<td><input type="button" class="btn" value="고객사 등급" readonly="readonly"/></td>
+									<td><select class="txt_in" id="ccGrade" name="ccGrade" disabled="disabled">
+											<optgroup>
+												<option>고객사 등록 후 자동 입력</option>
+												<option value="0">S</option>
+												<option value="1">A</option>
+												<option value="2">B</option>
+												<option value="3">C</option>
+												<option value="4">D</option>
+											</optgroup>
+									</select></td>
+								</tr>
+								<tr>
+									<td><input type="button" class="btn" value="인지경로 *" readonly="readonly"/></td>
+									<td>
+										<select class="txt_in" id="rp" name="rp">
 											<option value="0">자사홈페이지</option>
 											<option value="1">인터넷검색</option>
 											<option value="2">지인소개</option>
 											<option value="3">세미나</option>
 											<option value="4">전화</option>
-										</optgroup>
-								</select></td>
-							</tr>
-							<tr>
-								<td><input type="button" class="btn" id="meName" value="담당자 *" readonly="readonly"/></td>
-								<td>
-									<input type="text" class="txt" />
-									<img class="btnImg_in" id="userIcon" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
-								</td>
-							</tr>
-							
-						</tbody>
-					</table>
-					<!-- 첨부자료 -->
-					<div class="rvn_txt"> 첨부자료 (0)
-						<input type=file name='file1' style='display: none;' /> 
-						<img class="plus_btn" src="resources/images/sales/plus.png" border='0' onclick="document.all.file1.click();" > 
-					</div>
-					<div class="cntrct_box_in"></div>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td><input type="button" class="btn" value="담당자 *" readonly="readonly"/></td>
+									<td>
+										<input type="text" class="txt" id="mn" name="mn" />
+										<img class="btnImg_in" id="userIcon" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
+									</td>
+								</tr>					
+							</tbody>
+						</table>
+						<!-- 첨부자료 -->
+						<div class="rvn_txt"> 첨부자료 (0)
+							<input type=file name='file1' style='display: none;' /> 
+							<img class="plus_btn" src="resources/images/sales/plus.png" border='0' onclick="document.all.file1.click();" > 
+						</div>
+						<div class="cntrct_box_in"></div>
+					</form>
 				</div> <!-- bodyWrap end -->
 			</div>	
 		</div>
