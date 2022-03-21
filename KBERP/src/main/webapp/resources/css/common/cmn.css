@@ -325,6 +325,10 @@ html, body {
 	overflow-y: auto;
 }
 
+.right_area_wrap {
+	white-space: unset !important;
+}
+
 .navi_bar {
 	height: 30px;
 	line-height: 30px;
