@@ -16,4 +16,9 @@ public class HrDao implements IHrDao {
 	public List<HashMap<String, String>> getApntmList(HashMap<String, String> params) throws Throwable {
 		return sqlSession.selectList("hr.getApntmList", params);
 	}
+
+	@Override
+	public HashMap<String, String> getApntmCont(HashMap<String, String> params) throws Throwable {
+		return sqlSession.selectOne("hr.getApntmCont", params);
+	}
 }

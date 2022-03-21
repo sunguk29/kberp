@@ -1,7 +1,6 @@
 package com.gdj43.kberp.web.CS.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,32 +29,28 @@ public class CallCntrController {
 		return mav;
 	}
 	
-	@RequestMapping(value="callCenterAjax", method = RequestMethod.POST,
+	@RequestMapping(value="/callCenterAction/{gbn}", method = RequestMethod.POST,
 			produces = "text/json;charset=UTF-8")
-	@ResponseBody
-	public String callCenterAjax(@RequestParam HashMap<String, String> params,
-			  					 @PathVariable String gbn) throws Throwable {
-		ObjectMapper mapper = new ObjectMapper();
+			@ResponseBody
+			public String callCenterActionAjax(@RequestParam HashMap<String, String> params,
+										   	   @PathVariable String gbn) throws Throwable {
+				ObjectMapper mapper = new ObjectMapper();
 		
-		Map<String, Object> modelMap = new HashMap<String, Object>();
-		
-		List<HashMap<String, String>> list = iccs.getCallCenter(params);
-		
-		modelMap.put("list", list);
-		
-		try {
-			switch(gbn) {
-			case "insert":
-				iccs.callCenter(params);
-				break;
+				Map<String, Object> modelMap = new HashMap<String, Object>();
+				
+				try {
+					switch(gbn) {
+					case "insert":
+						iccs.callCenter(params);
+						break;
+					}
+					modelMap.put("res", "success");
+					
+				} catch(Throwable e) {
+					e.printStackTrace();
+					modelMap.put("res", "failed");
+				}
+				
+				return mapper.writeValueAsString(modelMap);
 			}
-			modelMap.put("res", "success");
-			
-		} catch(Throwable e) {
-			e.printStackTrace();
-			modelMap.put("res", "failed");
-		}
-		
-		return mapper.writeValueAsString(modelMap);
-	}
 }

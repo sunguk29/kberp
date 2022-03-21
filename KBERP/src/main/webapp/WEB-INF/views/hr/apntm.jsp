@@ -376,8 +376,6 @@
     height: 24px;
     width: 24px;
     margin-left: 7px;
-    background-image: url(../images/cmn/srch_icon.png);
-    background-size: 100%;
     cursor: pointer;
 }
 
@@ -467,58 +465,45 @@
     border: solid 1px #ffffff;
 }
 
+#apntm_cont {
+	display: inline-block;
+    vertical-align: top;
+    height: 480px;
+    width: 520px;
+}
 
 /* 개인 작업 영역 */
 
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
-	});
+	// 조회 필터 기본 세팅
+	if ("${param.searchGbn}" != "") {
+		$("#searchGbn").val("${param.searchGbn}");
+	} else {
+		$("#oldSearchGbn").val("0");
+	}
 	
+	// 인사발령 메인화면
 	reloadList();
+
 	
+	// 발령 상세보기 
+	$("tbody").on("click", "tr", function() {
+		$("#no").val($(this).attr("no"));
+
+		reloadCont();
+	});
 	
-	$("#addBtn").on("clikc", function() {
-		$("#actionForm").attr("action", "clntCmpnyReg");
-		$("#actionForm").submit();
+	// 발령 조회
+	$("#searchBtn").on("click", function() {
+		$("#oldSearchGbn").val($("#searchGbn").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());		
+
+		reloadList();
 	});
 
+// 발령 리스트 리로드
 function reloadList() {
 	var params = $("#actionForm").serialize();
 	
@@ -536,28 +521,156 @@ function reloadList() {
 	});
 	
 }
+// 발령 상세정보 리로드
+function reloadCont() {
+	var params = $("#actionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "apntmListAjax",
+		data : params,
+		dataType : "json",
+		success : function(res) {
+			drawCont(res.cont);
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	});
+	
+}
+
+// 발령 리스트 생성
 function drawList(list) {
 	var html = "";
 	
-	for(var data of list) {
-		html += "<tr>";
-		html += "<td>" + data.RNUM + "</td>"
-		html += "<td>" + data.APNTM_DVSN_NUM + "</td>"
-		html += "<td>" + data.EMP_NAME + "</td>"
-		html += "<td>" + data.DEPT_NAME + "</td>"
-		html += "<td>" + data.RANK_NAME + "</td>"
-		html += "<td>" + data.START_DATE + "</td>"
-		html += "<td>" + data.APRVL_STS + "</td>"
-		html += "</tr>";
+	for(var data of list) {                                 
+		html += "<tr no=\"" + data.APNTM_NUM + "\">"        ;
+		html += "<td>" + data.APNTM_NUM + "</td>"           ;
+		html += "<td>" + data.APNTM_DVSN_NUM + "</td>"      ;
+		html += "<td>" + data.EMP_NAME + "</td>"            ;
+		html += "<td>" + data.DEPT_NAME + "</td>"           ;
+		html += "<td>" + data.RANK_NAME + "</td>"           ;
+		html += "<td>" + data.START_DATE + "</td>"          ;
+		html += "<td>" + data.APRVL_STS + "</td>"           ;
+		html += "</tr>"                                     ;
 	}
 	$("tbody").html(html);
 }	
+
+//발령 상세정보 생성
+function drawCont(cont){
+	var html = "";
 	
+	html += "<div class=\"apntm_cont_right_area\">                                                     ";
+	html += "	<div class=\"apntm_add_title_area\">                                                   ";
+	html += "		<div class=\"apntm_add_title\">발령정보</div>                                      ";
+	html += "	</div>                                                                                 ";
+	html += "	<div class=\"apnmt_add_area\">                                                         ";
+	html += "		<div class=\"apnmt_add_top_area\">                                                 ";
+	html += "			<div class=\"apnmt_prfl_img\"></div>                                           ";
+	html += "			<div class=\"apnmt_prfl_info_wrap\">                                           ";
+	html += "				<div class=\"apnmt_prfl_info\">                                            ";
+	html += "					<div class=\"prfl_info_emp_num\">                                      ";
+	html += "						<div class=\"prfl_info_text\">사원번호</div>                       ";
+	html += "						<input type=\"text\" class=\"prfl_info_input\" value=\"" + cont.APNTM_NUM + "\" />  ";
+	html += "						<div class=\"prfl_srch_btn\"></div>                                ";
+	html += "					</div>                                                                 ";
+	html += "				</div>                                                                     ";
+	html += "				<div class=\"apnmt_prfl_info\">                                            ";
+	html += "					<div class=\"prfl_info_emp_name\">                                     ";
+	html += "						<div class=\"prfl_info_text\">사원명</div>                         ";
+	html += "						<input type=\"text\" class=\"prfl_info_input\" value=\"" + cont.EMP_NAME + "\" /> ";
+	html += "					</div>                                                                 ";
+	html += "				</div>                                                                     ";
+	html += "				<div class=\"apnmt_prfl_info\">                                            ";
+	html += "					<div class=\"prfl_info_dept\">                                         ";
+	html += "						<div class=\"prfl_info_text\">부서명</div>                         ";
+	html += "						<input type=\"text\" class=\"prfl_info_input\" value=\"" + cont.DEPT_NAME + "\" /> ";
+	html += "					</div>                                                                 ";
+	html += "				</div>                                                                     ";
+	html += "				<div class=\"apnmt_prfl_info\">                                            ";
+	html += "					<div class=\"prfl_info_team\">                                         ";
+	html += "						<div class=\"prfl_info_text\">팀명</div>                           ";
+	html += "						<input type=\"text\" class=\"prfl_info_input\" value=\"" + cont.DEPT_NAME + "\" />";
+	html += "					</div>                                                                 ";
+	html += "				</div>                                                                     ";
+	html += "			</div>                                                                         ";
+	html += "		</div>                                                                             ";
+	html += "		<div class=\"apnmt_add_mid_area\">                                                 ";
+	html += "			<div class=\"apnmt_info_wrap\">                                                ";
+	html += "				<div class=\"apnmt_info\">                                                 ";
+	html += "					<div class=\"apnmt_info_text\">발령구분*</div>                         ";
+	html += "					<select class=\"apnmt_select\">                                        ";
+	html += "						<option selected>선택</option>                                     ";
+	html += "						<option>test</option>                                              ";
+	html += "						<option>test</option>                                              ";
+	html += "						<option>test</option>                                              ";
+	html += "					</select>                                                              ";
+	html += "				</div>                                                                     ";
+	html += "				<div class=\"apnmt_info\">                                                 ";
+	html += "					<div class=\"apnmt_info_text\">발령부서*</div>                         ";
+	html += "					<select class=\"apnmt_select\">                                        ";
+	html += "						<option selected>선택</option>                                     ";
+	html += "						<option>test</option>                                              ";
+	html += "						<option>test</option>                                              ";
+	html += "						<option>test</option>                                              ";
+	html += "					</select>                                                              ";
+	html += "				</div>                                                                     ";
+	html += "			</div>                                                                         ";
+	html += "			<div class=\"apnmt_info_wrap\">                                                ";
+	html += "				<div class=\"apnmt_info\">                                                 ";
+	html += "					<div class=\"apnmt_info_text\">발령팀*</div>                           ";
+	html += "					<select class=\"apnmt_select\">                                        ";
+	html += "						<option selected>선택</option>                                     ";
+	html += "						<option>test</option>                                              ";
+	html += "						<option>test</option>                                              ";
+	html += "						<option>test</option>                                              ";
+	html += "					</select>                                                              ";
+	html += "				</div>                                                                     ";
+	html += "				<div class=\"apnmt_info\">                                                 ";
+	html += "					<div class=\"apnmt_info_text\">발령직급*</div>                         ";
+	html += "					<select class=\"apnmt_select\">                                        ";
+	html += "						<option selected>선택</option>                                     ";
+	html += "						<option>test</option>                                              ";
+	html += "						<option>test</option>                                              ";
+	html += "						<option>test</option>                                              ";
+	html += "					</select>                                                              ";
+	html += "				</div>                                                                     ";
+	html += "			</div>                                                                         ";
+	html += "			<div class=\"apnmt_info_wrap\">                                                ";
+	html += "				<div class=\"apnmt_info\">                                                 ";
+	html += "					<div class=\"apnmt_info_text\">발령시작*</div>                         ";
+	html += "					<div class=\"prd_text_wrap\">                                          ";
+	html += "						<input type=\"date\" class=\"prd_text\" id=\"prd_start\"/>         ";
+	html += "					</div>                                                                 ";
+	html += "				</div>                                                                     ";
+	html += "				<div class=\"apnmt_info\">                                                 ";
+	html += "					<div class=\"apnmt_info_text_end\">발령종료</div>                      ";
+	html += "					<div class=\"prd_text_wrap\">                                          ";
+	html += "						<input type=\"date\" class=\"prd_text\" id=\"prd_end\"/>           ";
+	html += "					</div>                                                                 ";
+	html += "				</div>                                                                     ";
+	html += "			</div>                                                                         ";
+	html += "		</div>                                                                             ";
+	html += "		<div class=\"apnmt_add_bottom_area\">                                              ";
+	html += "			<div class=\"apnmt_add_cont_wrap\">                                            ";
+	html += "				<div class=\"apnmt_add_cont_title\"> - 세부내용 - </div>                   ";
+	html += "				<input type=\"text\" class=\"apnmt_add_cont_input\" />                     ";
+	html += "			</div>                                                                         ";
+	html += "		</div>                                                                             ";
+	html += "	</div>                                                                                 ";
+	html += "</div>                                                                                    ";
+	$("#apntm_cont").html(html);
+	                                                                                                 
+}
 	
 });
 </script>
 </head>
 <body>
+<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}" />
+<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -573,49 +686,54 @@ function drawList(list) {
 		<div class="apntm_add_btn_area">
 			<input type="button" class="apntm_add_btn"  id="apntm_add_btn" value="발령추가"/>
 		</div>
-		<div class="srch_wrap">
-			<div class="srch_top_area">
-				<select class="srch_select">
-					<option selected>전체</option>
-					<option>발령구분</option>
-					<option>사원명</option>
-					<option>발령부서</option>
-					<option>발령직급</option>
-				</select>
-				<div class="srch_input">	
-					<input type="text" />
-				</div>
-				<div class="cmn_btn">검색</div>
-			</div>
-			<div class="srch_bottom_area">
-				<div class="aprvl_radio_wrap">
-					<div class="radio_title">결재상태
-						<form class="radio_form">
-							<input type="radio" name="aprvl" id="aprvl_entr" checked="checked"/><label for="aprvl_entr">전체</label>
-							<input type="radio" name="aprvl" id="aprvl"/><label for="aprvl">승인</label>
-							<input type="radio" name="aprvl" id="aprvl_rjct"/><label for="aprvl_rjct">반려</label>
-							<input type="radio" name="aprvl" id="aprvl_cnsdr"/><label for="aprvl_cnsdr">검토</label>
-						</form>
+<!--------------------- 발령 조회 Form ------------------------->			
+			<form action="#" id="actionForm" method="post">
+				<input type="hidden" id="no" name="no" />
+				<div class="srch_wrap">
+					<div class="srch_top_area"> 
+						<select class="srch_select" id="searchGbn" name="searchGbn">
+							<option selected  value="0">전체</option>
+							<option value="1">발령구분</option>
+							<option value="2">사원명</option>
+							<option value="3">발령부서</option>
+							<option value="4">발령직급</option>
+						</select>
+						<div class="srch_input">	
+							<input type="text"  name="searchTxt" id="searchTxt" value="${param.searchTxt}" />
+						</div>
+						<div class="cmn_btn" id="searchBtn">검색</div>
+					</div>
+					<div class="srch_bottom_area">
+						<div class="aprvl_radio_wrap">
+							<div class="radio_title">결재상태
+								<form class="radio_form">
+									<input type="radio" name="aprvl" id="aprvl_entr" checked="checked"/><label for="aprvl_entr">전체</label>
+									<input type="radio" name="aprvl" id="aprvl"/><label for="aprvl">승인</label>
+									<input type="radio" name="aprvl" id="aprvl_rjct"/><label for="aprvl_rjct">반려</label>
+									<input type="radio" name="aprvl" id="aprvl_cnsdr"/><label for="aprvl_cnsdr">검토</label>
+								</form>
+							</div>
+						</div>
+						<div class="srch_prd_wrap">
+							<div class="prd_radio_title">발령시작일</div>
+							<form class="prd_radio_form">
+								<input type="radio" name="prd" id="prd_entr" checked="checked"/><label for="prd_entr">전체</label>
+								<input type="radio" name="prd" id="prd"/><label for="prd">기간설정</label>
+							</form>
+							<div class="prd_wrap">
+								<div class="prd_text_wrap">
+									<input type="date" class="prd_text" id="prd_start"/>
+								</div>
+								<div class="prd_clsftn">~</div>
+								<div class="prd_text_wrap">
+									<input type="date" class="prd_text" id="prd_end"/>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="srch_prd_wrap">
-					<div class="prd_radio_title">발령시작일</div>
-					<form class="prd_radio_form">
-						<input type="radio" name="prd" id="prd_entr" checked="checked"/><label for="prd_entr">전체</label>
-						<input type="radio" name="prd" id="prd"/><label for="prd">기간설정</label>
-					</form>
-					<div class="prd_wrap">
-						<div class="prd_text_wrap">
-							<input type="date" class="prd_text" id="prd_start"/>
-						</div>
-						<div class="prd_clsftn">~</div>
-						<div class="prd_text_wrap">
-							<input type="date" class="prd_text" id="prd_end"/>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+			</form>
+<!--------------------- 발령 리스트 ------------------------->			
 		<div class="apntm_cont_left_area">
 			<div class="apntm_list_title">발령목록</div>
 			<div class="apntm_list_area">
@@ -644,108 +762,7 @@ function drawList(list) {
 				</table>
 			</div>
 		</div>
-		<div class="apntm_cont_right_area" id="new_apntm">
-			<div class="apntm_add_title_area">
-				<div class="apntm_add_title">신규발령</div>
-				<div class="apntm_add_btn_area_2">
-					<input type="button" class="apntm_add_btn_2" value="등록" />
-				</div>
-			</div>
-			<div class="apnmt_add_area">
-				<div class="apnmt_add_top_area">
-					<div class="apnmt_prfl_img"></div>
-					<div class="apnmt_prfl_info_wrap">
-						<div class="apnmt_prfl_info">
-							<div class="prfl_info_emp_num">
-								<div class="prfl_info_text">사원번호</div>
-								<input type="text" class="prfl_info_input" value="11234" />
-								<div class="prfl_srch_btn"></div>
-							</div>
-						</div>
-						<div class="apnmt_prfl_info">
-							<div class="prfl_info_emp_name">
-								<div class="prfl_info_text">사원명</div>
-								<input type="text" class="prfl_info_input" value="유은지" />
-							</div>
-						</div>
-						<div class="apnmt_prfl_info">
-							<div class="prfl_info_dept">
-								<div class="prfl_info_text">부서명</div>
-								<input type="text" class="prfl_info_input" value="인사부" />
-							</div>
-						</div>
-						<div class="apnmt_prfl_info">
-							<div class="prfl_info_team">
-								<div class="prfl_info_text">팀명</div>
-								<input type="text" class="prfl_info_input" value="인사1팀" />
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="apnmt_add_mid_area">
-					<div class="apnmt_info_wrap">
-						<div class="apnmt_info">
-							<div class="apnmt_info_text">발령구분*</div>
-							<select class="apnmt_select">
-								<option selected>선택</option>
-								<option>test</option>
-								<option>test</option>
-								<option>test</option>
-							</select>
-						</div>
-						<div class="apnmt_info">
-							<div class="apnmt_info_text">발령부서*</div>
-							<select class="apnmt_select">
-								<option selected>선택</option>
-								<option>test</option>
-								<option>test</option>
-								<option>test</option>
-							</select>
-						</div>
-					</div>
-					<div class="apnmt_info_wrap">
-						<div class="apnmt_info">
-							<div class="apnmt_info_text">발령팀*</div>
-							<select class="apnmt_select">
-								<option selected>선택</option>
-								<option>test</option>
-								<option>test</option>
-								<option>test</option>
-							</select>
-						</div>
-						<div class="apnmt_info">
-							<div class="apnmt_info_text">발령직급*</div>
-							<select class="apnmt_select">
-								<option selected>선택</option>
-								<option>test</option>
-								<option>test</option>
-								<option>test</option>
-							</select>
-						</div>
-					</div>
-					<div class="apnmt_info_wrap">
-						<div class="apnmt_info">
-							<div class="apnmt_info_text">발령시작*</div>
-							<div class="prd_text_wrap">
-								<input type="date" class="prd_text" id="prd_start"/>
-							</div>
-						</div>
-						<div class="apnmt_info">
-							<div class="apnmt_info_text_end">발령종료</div>
-							<div class="prd_text_wrap">
-								<input type="date" class="prd_text" id="prd_end"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="apnmt_add_bottom_area">
-					<div class="apnmt_add_cont_wrap">
-						<div class="apnmt_add_cont_title"> - 세부내용 - </div>
-						<input type="text" class="apnmt_add_cont_input" />
-					</div>
-				</div>
-			</div>
-		</div>
+		<div id="apntm_cont"></div>
 	</div>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>

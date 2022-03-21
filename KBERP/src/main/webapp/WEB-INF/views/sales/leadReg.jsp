@@ -24,11 +24,19 @@
 	padding-bottom: 3px;
 	border-bottom: 1px solid #d7d7d7;
 }
+
 .ptm_left {
 	display: inline-block;
 	vertical-align: top;
 	width: 100px;
 	height: 70px;
+}
+.ptm_left2 {
+	display: inline-block;
+	vertical-align: top;
+	width: 100px;
+	height: 50px;
+	margin-top: 20px;
 }
 .ptm_left_top, .ptm_left_bot {
 	width: 100px;
@@ -44,7 +52,7 @@
 	margin-top: 5px;
 	text-align: center;
 }
-.ptm_right_bot2 {
+.ptm_right_bot2, .ptm_right_top2 {
 	width: 94px;
     height: 32px;
     margin-top: 5px;
@@ -55,6 +63,13 @@
 	vertical-align: top;
 	width: 150px;
 	height: 70px;
+}
+.ptm_mid2 {
+	display: inline-block;
+	vertical-align: top;
+	width: 150px;
+	height: 50px;
+	margin-top: 20px;
 }
 .ptm_mid_top, .ptm_mid_bot {
 	width: 150px;
@@ -107,6 +122,13 @@
 	width: 94px;
 	height: 100%;
 }
+.ptm_right2 {
+	display: inline-block;
+	vertical-align: top;
+	width: 94px;
+	height: 50px;
+	margin-top: 20px;
+}
 .ptm_right_top {
 	width: 94px;
 	height: 32px;
@@ -122,7 +144,7 @@
 /* 담당자 조회 내용  */
 .popup_cc_box_right {
    display: inline-block;
-   width: 400px;
+   width: 300px;
    height: 50px;
    font-size: 14px;
    line-height: 50px;
@@ -135,6 +157,76 @@
    margin: 0px;
    font-size: 0px;
 }
+/* 고객 조회 내용 */
+.popup_cc_box_right3 {
+   display: inline-block;
+   width: 400px;
+   height: 50px;
+   font-size: 14px;
+}
+/* 고객 추가 팝업 */
+.btn2 {
+	width : 90px;
+	height: 40px;
+	font-weight: bold;
+	font-size: 14px;
+	text-align: center;
+	line-height: 40px;
+	display: inline-block;
+	vertical-align: top;
+}
+.txt2 {
+	height: 30px;
+	width: 450px;
+	margin: 7px 5px 3px 5px;
+	font-size: 10.5px;
+	color: black;
+	display: inline-block;
+	vertical-align: middle;
+	box-sizing: border-box;
+	outline: none;
+	line-height: 30px;
+	border-bottom: 1px solid #d7d7d7;
+}
+.txt3 {
+	height: 25px;
+	width: 400px;
+	font-size: 12px;
+	display: inline-block;
+	vertical-align: middle;
+	box-sizing: border-box;
+	outline: none;
+	line-height: 30px;
+	margin: 0px;
+	padding: 0px;
+	border : none;
+}
+.btnImg2 {
+	width : 20px;
+	height: 20px;
+	text-align: right;
+	margin-left: 25px;
+	background-size: 20px 20px;
+}
+.btnImg3 {
+	width : 15px;
+	height: 15px;
+	text-align: right;
+	margin-left: 5px;
+	background-size: 15px 15px;
+}
+.imgPos2 {
+	display: inline-block;
+	vertical-align: middle;
+}
+.popup_cont2 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+	font-weight: 600;
+	text-align: center;
+	line-height: 80px;
+}
+/* 고객 추가 팝업 끝  */
 .popup_box_in {
    width: calc(100% - 4px);
    height: 50px;
@@ -164,6 +256,13 @@
 	font-weight: bold;
 	font-size : 12px;
 	padding: 0px;
+}
+.boldname3 {
+	font-weight: bold;
+	font-size : 12px;
+	margin-top: 10px;
+	display: inline-block;
+	vertical-align: top;
 }
 .mg_wid {
 	margin-left: 50px;
@@ -480,6 +579,194 @@ $(document).ready(function() {
 		$("#listForm").submit();
 	});	
 	
+/* 	$("#writeBtn").on("click", function() {
+		if(checkEmpty("#leadName")) {
+			alert("알림" "리드명을 입력하세요.");
+			$("#leadName").focus();
+		} else if(checkEmpty("#clntName")) {
+			alert("알림" "고객명을 입력하세요.");
+			$("#clntName").focus();
+		} else if(checkEmpty("#ccName")) {
+			alert("알림" "고객사명을 입력하세요.");
+			$("#ccName").focus();
+		} else if(checkEmpty("#rPath")) {
+			alert("알림" "인지경로를 입력하세요.");
+			$("#rPath").focus();
+		} else if(checkEmpty("#meName")) {
+			alert("알림" "담당자를 입력하세요.");
+			$("#meName").focus();
+		} else {	
+			
+		}
+	}); */
+	
+	$("#clntIcon").on("click", function() {
+		var html = "";
+		
+		html += "<div class=\"popup_title_mid\">";
+		html += "<div class=\"ptm_left2\">";
+		html += "<div class=\"ptm_left_top\">고객/고객사</div>";			
+		html += "</div>";
+		html += "<div class=\"ptm_mid2\">";
+		html += "<div class=\"ptm_mid_top\">";
+		html += "<input type=\"text\" class=\"text_size2\" placeholder=\"검색어를 입력해주세요\" />";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class=\"ptm_mid_right\"></div>";
+		html += "<div class=\"ptm_right2\">";
+		html += "<div class=\"ptm_right_top2\">";
+		html += "<div class=\"cmn_btn\">검색</div>";
+		html += "</div>";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class=\"popup_cont pc_back\">";
+		html += "<div class=\"popup_box_in\">";
+		html += "<div class=\"popup_cc_box_left\">";
+		html += "<span><img alt=\"고객이미지\" class=\"company\" src=\"resources/images/sales/clnt.png\"></span>";
+		html += "</div>";
+		html += "<div class=\"popup_cc_box_right3\">";
+		html += "<div class=\"boldname3\">고객명 / 고객사명 / 고객사등급</div><br/>";
+		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class=\"popup_box_in\">";
+		html += "<div class=\"popup_cc_box_left\">";
+		html += "<span><img alt=\"고객이미지\" class=\"company\" src=\"resources/images/sales/clnt.png\"></span>";
+		html += "</div>";
+		html += "<div class=\"popup_cc_box_right3\">";
+		html += "<div class=\"boldname3\">고객명 / 고객사명 / 고객사등급</div><br/>";
+		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class=\"popup_box_in\">";
+		html += "<div class=\"popup_cc_box_left\">";
+		html += "<span><img alt=\"고객이미지\" class=\"company\" src=\"resources/images/sales/clnt.png\"></span>";
+		html += "</div>";
+		html += "<div class=\"popup_cc_box_right3\">";
+		html += "<div class=\"boldname3\">고객명 / 고객사명 / 고객사등급</div><br/>";
+		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class=\"popup_box_in\">";
+		html += "<div class=\"popup_cc_box_left\">";
+		html += "<span><img alt=\"고객이미지\" class=\"company\" src=\"resources/images/sales/clnt.png\"></span>";
+		html += "</div>";
+		html += "<div class=\"popup_cc_box_right3\">";
+		html += "<div class=\"boldname3\">고객명 / 고객사명 / 고객사등급</div><br/>";
+		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class=\"popup_box_in\">";
+		html += "<div class=\"popup_cc_box_left\">";
+		html += "<span><img alt=\"고객이미지\" class=\"company\" src=\"resources/images/sales/clnt.png\"></span>";
+		html += "</div>";
+		html += "<div class=\"popup_cc_box_right3\">";
+		html += "<div class=\"boldname3\">고객명 / 고객사명 / 고객사등급</div><br/>";
+		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class=\"board_bottom2\">";
+		html +=	"<div class=\"pgn_area\">";
+		html +=	"<div class=\"page_btn page_first\">first</div>";
+		html +=	"<div class=\"page_btn page_prev\">prev</div>";
+		html +=	"<div class=\"page_btn_on\">1</div>";
+		html +=	"<div class=\"page_btn\">2</div>";
+		html +=	"<div class=\"page_btn\">3</div>";
+		html +=	"<div class=\"page_btn\">4</div>";
+		html +=	"<div class=\"page_btn\">5</div>";
+		html +=	"<div class=\"page_btn page_next\">next</div>";
+		html +=	"<div class=\"page_btn page_last\">last</div>";
+		html +=	"</div>";
+		html +=	"</div>";
+		html +=	"</div>";
+	
+		makePopup({
+			depth : 1,
+			bg : true,
+			bgClose : false,
+			title : "고객 조회",
+			contents : html,
+			width : 600,
+			height : 500,
+			buttons : [{
+				name : "고객 추가",
+				func:function() {
+					var html = "";
+					
+				html += "<div class=\"popup_cont pc_back\">";
+				html += "<div class=\"popup_table\">";
+				html += "<div class=\"btn2\">고객</div>";
+				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";
+				html += "<div class=\"btn2\">고객사 *</div>";
+				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" />";
+				html += "<span class=\"imgPos2\"><img class=\"btnImg2\" alt=\"돋보기\" src=\"resources/images/sales/mg.png\" /></span>";		
+				html += "</div>";
+				html += "<div class=\"btn2\">부서</div>";
+				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";
+				html += "<div class=\"btn2\">직책</div>";
+				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";							
+				html += "<div class=\"btn2\">휴대폰 번호*</div>";
+				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";															
+				html += "<div class=\"btn2\">메일</div>";
+				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";							
+				html += "<div class=\"btn2\">첨부자료</div>";
+				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" />";
+				html += "<div class=\"imgPos2\">";
+				html += "<span>";
+				html += "<img class=\"btnImg3\" alt=\"추가\" src=\"resources/images/sales/plus.png\" />";
+				html += "<img class=\"btnImg3\" alt=\"접기\" src=\"resources/images/sales/uparrow.png\" />";
+				html += "</span>";
+				html += "</div>";
+				html += "</div>";
+				html += "</div>";
+				html += "</div>";
+
+					makePopup({
+						depth : 2,
+						bg : true,
+						bgClose : false,
+						title : "고객 등록",
+						contents : html,
+						width : 600,
+						height : 400,
+						buttons : [{
+							name : "등록",
+							func: function() {
+								
+								var html = "";
+								
+								html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
+								
+								makePopup({
+									depth : 3,
+									bg : true,
+									bgClose : true,
+									title : "저장 완료",
+									contents : html,
+									width : 400,
+									height : 180,
+									buttons : {
+										name : "확인"	
+									}
+								});
+							}
+						}, {
+							name : "취소"
+						}]
+					});									
+				}
+			},	{
+				name : "등록",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "취소"
+			}]
+		});			
+	});
+	
 	$("#ccIcon").on("click", function() {
 		var html = "";
 		
@@ -716,6 +1003,14 @@ $(document).ready(function() {
 		});
 	});	
 });
+
+function checkEmpty(sel) {
+	if($.trim($(sel).val()) == "") {
+		return true;
+	} else {
+		return false;
+	}
+}	
 </script>
 </head>
 <body>
@@ -738,7 +1033,7 @@ $(document).ready(function() {
 			<div class="page_title_text">리드 등록</div>
 			<!-- 검색영역 선택적 사항 -->
 			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
-			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" />
+			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="writeBtn"/>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
@@ -753,18 +1048,18 @@ $(document).ready(function() {
 						</colgroup>
 						<tbody>
 							<tr>
-								<td><input type="button" class="btn" value="리드명 *" readonly="readonly"/></td>
+								<td><input type="button" class="btn" id="leadName" value="리드명 *" readonly="readonly"/></td>
 								<td><input type="text" class="txt" /></td>
 							</tr>
 							<tr>
-								<td><input type="button" class="btn" value="고객명 *" readonly="readonly"/></td>
+								<td><input type="button" class="btn" id="clntName" value="고객명 *" readonly="readonly"/></td>
 								<td>
 									<input type="text" class="txt" />
-									<img class="btnImg_in" alt="팝업" src="resources/images/sales/popup.png" />
+									<img class="btnImg_in" id="clntIcon" alt="팝업" src="resources/images/sales/popup.png" />
 								</td>
 							</tr>
 							<tr>
-								<td><input type="button" class="btn" value="고객사 *" readonly="readonly"/></td>
+								<td><input type="button" class="btn" id="ccName" value="고객사 *" readonly="readonly"/></td>
 								<td>
 									<input type="text" class="txt" />
 									<img class="btnImg_in" id="ccIcon" alt="팝업" src="resources/images/sales/popup.png" />
@@ -772,31 +1067,31 @@ $(document).ready(function() {
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="고객사 등급" readonly="readonly"/></td>
-								<td><select class="txt_in" disabled="disabled">
+								<td><select class="txt_in" id="ccGrade" name="ccGrade" disabled="disabled">
 										<optgroup>
 											<option>고객사 등록 후 자동 입력</option>
-											<option>S</option>
-											<option>A</option>
-											<option>B</option>
-											<option>C</option>
-											<option>D</option>
+											<option value="0">S</option>
+											<option value="1">A</option>
+											<option value="2">B</option>
+											<option value="3">C</option>
+											<option value="4">D</option>
 										</optgroup>
 								</select></td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="인지경로 *" readonly="readonly"/></td>
-								<td><select class="txt_in">
+								<td><select class="txt_in" id="rPath" name="rPath">
 										<optgroup>
-											<option>자사홈페이지</option>
-											<option>인터넷검색</option>
-											<option>지인소개</option>
-											<option>세미나</option>
-											<option>전화</option>
+											<option value="0">자사홈페이지</option>
+											<option value="1">인터넷검색</option>
+											<option value="2">지인소개</option>
+											<option value="3">세미나</option>
+											<option value="4">전화</option>
 										</optgroup>
 								</select></td>
 							</tr>
 							<tr>
-								<td><input type="button" class="btn" value="담당자 *" readonly="readonly"/></td>
+								<td><input type="button" class="btn" id="meName" value="담당자 *" readonly="readonly"/></td>
 								<td>
 									<input type="text" class="txt" />
 									<img class="btnImg_in" id="userIcon" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
