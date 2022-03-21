@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +22,6 @@ import com.gdj43.kberp.web.common.service.ICommonService;
 public class ClntMngController {
 	@Autowired
 	public ICommonService iCommonService;
-	
 	@Autowired
 	public IPagingService iPagingService;
 	
@@ -137,12 +134,7 @@ public class ClntMngController {
 		try {
 			switch(gbn) {
 			case "insert" :
-				int cnt = iCommonService.insertData("clntCmpnyMng.getClntCmpnyAdd", params);
-				if(cnt == 1) {
-					modelMap.put("res", "success");
-				} else {
-					modelMap.put("res", "faild");
-				}
+				iCommonService.insertData("clntCmpnyMng.getClntCmpnyAdd", params);
 				break;
 			case "update" :
 				
@@ -151,9 +143,10 @@ public class ClntMngController {
 				
 				break;
 			}
+			modelMap.put("res", "success");
 		} catch (Throwable e) {
 			e.printStackTrace();
-			modelMap.put("res", "error");
+			modelMap.put("res", "faild");
 		}
 
 		return mapper.writeValueAsString(modelMap);
