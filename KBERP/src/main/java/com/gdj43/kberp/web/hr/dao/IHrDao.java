@@ -7,5 +7,7 @@ public interface IHrDao {
 
 	public List<HashMap<String, String>> getApntmList(HashMap<String, String> params) throws Throwable;
 
+	public HashMap<String, String> getApntmCont(HashMap<String, String> params) throws Throwable;
+
 
 }

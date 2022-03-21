@@ -18,7 +18,7 @@ import com.gdj43.kberp.web.CS.service.IEventService;
 
 
 @Controller
-@RequestMapping("/event")
+//@RequestMapping("/event")	
 public class EventController {
 	@Autowired
 	public IEventService iEventService;

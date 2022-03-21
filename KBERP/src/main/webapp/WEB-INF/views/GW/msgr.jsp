@@ -61,7 +61,7 @@
 	display : inline-block;
 	width : 30px;
 	height : 30px;
-	background-image: url("../images/write.png");
+	background-image: url("/images/write.png");
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
 	background-size: 20pt;
@@ -85,7 +85,7 @@
 	height: 60px;
 	border : 1px solid #85898F;
 	padding: 8px 20px;
-	font-size : 12pt;	
+	font-size : 12pt;
 	background-image: url("../images/profile.png");
 	background-position: 250px 7px;
 	background-repeat: no-repeat;
@@ -123,7 +123,7 @@
 	border : 1px solid #85898F;
 	padding: 8px 20px;
 	font-size : 12pt;
-	background-image: url("../images/profile.png");
+	background-image: url("./images/profile.png");
 	background-position: 250px 7px;
 	background-repeat: no-repeat;
 	background-size: 20pt;
@@ -185,7 +185,7 @@
 .msgr_logo {
 	width: 210px;
 	height: 200px;
-	background-image: url("../images/msgr_logo_img.png");
+	background-image: url(".../images/msgr_logo_img.png");
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 140pt;
@@ -259,7 +259,6 @@ th:nth-child(1), th:nth-child(2) {
 	height: 39.5px;
 	text-align: center;
 	border-right: 1px solid #5555; 
-
 }
 th:nth-child(3) {
 	width: 120px;
@@ -363,9 +362,6 @@ $(document).ready(function() {
 		html +=	"			</table>                                                        ";
 		html +=	"		</div>                                                              ";
 		
-		
-		
-		
 		makePopup({
 			bg : true,
 			bgClose : false,
@@ -383,8 +379,49 @@ $(document).ready(function() {
 				name : "취소"
 			}]
 		});
+	}); // main msgr btn
+	
+	$(".chat_list1").on("click", function() {
+		
+		var html = "";
+		
+		html += "			<div class = \"right_box\">                                                      ";
+		html += "			<div class = \"rcpnt_rank_box\">                                                 ";
+		html += "				<div id = \"rcpnt_rank\">대화상대 성명 / 부서 / 직급  외 2명 </div>          			   ";
+		html += "			</div>		                                                                   ";
+		html += "			                                                                               ";
+		html += "			<div class = \"chat_room\">                                                      ";
+		html += "				<div class = \"chat_dtl\">                                                   ";
+		html += "					<div class = \"chat_rcpnt\">반갑습니다.&nbsp;                          	   ";
+		html += "						<div class= \"chat_time_rcpnt\"><small>오전 11:20</small></div>        ";
+		html += "					</div>                                                                 ";
+		html += "					<div class = \"chat_user\">저도요.&nbsp;                                   ";
+		html += "						<div class= \"chat_time_user\"><small>오후 12:13</small></div>         ";
+		html += "					</div>					                                               ";
+		html += "				</div>                                                                     ";
+		html += "				<div class = \"chat_input\">                                                 ";
+		html += "					<div class = \"chat_img_file\"></div>                                    ";
+		html += "					<div class = \"chat_img_plus\"></div>                                    ";
+		html += "					<input type= \"text\" placeholder = \"메시지 입력..\" class = \"chat_write\" />   ";		
+		html += "				</div>                                                                     ";
+		html += "			                                                                               ";
+		html += "			</div>	                                                                       ";
+		html += "			</div>	                                                                       ";
+		
+		$.ajax({
+			type : "post",
+			url : "chatRoomAjax",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				console.log(res);	
+			},
+			error : function(request, status, error) { 
+				console(request.responseText); 
+			}
+		});
 	});
-});
+}); // ready
 </script>
 </head>
 <body>
@@ -428,6 +465,7 @@ $(document).ready(function() {
 			</div>
 		</div>
 	</div>
+	
 	
 	<div class = "right_box">
 		<div class = "msgr_main">

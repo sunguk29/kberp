@@ -1,5 +1,7 @@
 package com.gdj43.kberp.web.GW.service;
 
-public class IBoardService {
+import java.util.HashMap;
+
+public interface IBoardService {
 
 }

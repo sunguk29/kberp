@@ -24,13 +24,13 @@ public class HrController {
 	@Autowired
 	public IHrService iHrService;
 	
-	   @RequestMapping(value = "/apntm")
-	   public ModelAndView aSellList(@RequestParam HashMap<String,String> params, 
-	                         ModelAndView mav) {
-	      mav.setViewName("hr/apntm");
-	      
-	      return mav;
-	   }
+   @RequestMapping(value = "/apntm")
+   public ModelAndView apntmList(@RequestParam HashMap<String,String> params, 
+                         ModelAndView mav) {
+      mav.setViewName("hr/apntm");
+      
+      return mav;
+   }
 	   
 	@RequestMapping(value = "/apntmListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	   @ResponseBody
@@ -40,8 +40,10 @@ public class HrController {
 			Map<String, Object> modelMap = new HashMap<String, Object>();
 			
 			List<HashMap<String, String>> list = iHrService.getApntmList(params);
+			HashMap<String, String> cont = iHrService.getApntmCont(params);
 			
 			modelMap.put("list", list);
+			modelMap.put("cont", cont);
 			
 			return mapper.writeValueAsString(modelMap); 
 	   }
