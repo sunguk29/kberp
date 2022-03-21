@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +33,8 @@ public class CallCntrController {
 	@RequestMapping(value="callCenterAjax", method = RequestMethod.POST,
 			produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String callCenterAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+	public String callCenterAjax(@RequestParam HashMap<String, String> params,
+			  					 @PathVariable String gbn) throws Throwable {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -40,6 +42,20 @@ public class CallCntrController {
 		List<HashMap<String, String>> list = iccs.getCallCenter(params);
 		
 		modelMap.put("list", list);
+		
+		try {
+			switch(gbn) {
+			case "insert":
+				iccs.callCenter(params);
+				break;
+			}
+			modelMap.put("res", "success");
+			
+		} catch(Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "failed");
+		}
+		
 		return mapper.writeValueAsString(modelMap);
 	}
 }

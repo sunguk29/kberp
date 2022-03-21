@@ -197,10 +197,10 @@
 	background-color: #eeeeee;
 	border: 1px solid #999999;
 	margin-top: 10px;
-	margin-left: 262px;
+	margin-left: 259px;
 }
 
-#info_txt {
+.info_txt {
 	width: 162px;
 }
 
@@ -742,7 +742,67 @@ $(document).ready(function() {
 			}]
 		});
 	});
+	
+	$("#saveBtn").on("click", function() {
+		
+		if(checkEmpty("#clnt_name")) {
+			alert("고객명을 입력하세요.");
+			$("#clnt_name").focus();
+		} else if(checkEmpty("#clnt_grade")) {
+			alert("고객등급을 입력하세요.");
+			$("#clnt_grade").focus();
+		} else if(checkEmpty("#ltl_cnsl")) {
+			alert("최근상담일을 입력하세요.");
+			$("#clnt_grade").focus();
+		} else if(checkEmpty("#phon_num_1")) {
+			alert("전화번호를 입력하세요.");
+			$("#phon_num_1").focus();
+		} else {
+			var saveForm = $("#saveForm");
+			
+			writeForm.ajaxForm({
+				success : function(res) {
+					
+					// 저장
+					var params = $("saveForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "atbAction/insert",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							if(res.res == "success") {
+								location.href = "callCenter";
+							} else {
+								alert("작성중 문제가 발생하였습니다.");
+							}
+
+						},
+						error : function(request, status, error) {
+							console.log(request.responseText);
+
+						}
+					}); // ajax end
+					
+				}, // success end
+				error : function(req) {
+					console.log(req.responseText);
+				}// error end
+			}); //ajaxForm end
+			
+			writeForm.submit(); // ajaxForm 실행
+		} // else end
+	}); // writeBtn end
 });
+
+function checkEmpty(sel) {
+	if($.trim($(sel).val()) == "") {
+		return true;
+	} else {
+		return false;
+	}
+}
 </script>
 </head>
 <body>
@@ -768,6 +828,7 @@ $(document).ready(function() {
 			<!-- 고객정보 파트 -->
 				<div class="top">
 					<div class="clnt_info_cont">
+					<form action="#" id="saveForm" method="post">
 						<div class="clnt_info_Header">
 							<div class="clnt_info">고객정보</div>
 							<div class="srch_text_wrap clnt_srch">
@@ -777,19 +838,19 @@ $(document).ready(function() {
 						</div>
 		    			<div class="clnt_info_cont_row1">	  
 			    			<div class="clnt_name">고객명</div>
-			    				<input type="text" id="info_txt">
+			    				<input type="text" class="info_txt" id="clnt_name">
 			    			<div class="clnt_grade">고객등급</div>
-			    				<input type="text" id="info_txt">
+			    				<input type="number" class="info_txt" id="clnt_grade">
 			    		</div>
 			    		<div class="clnt_info_cont_row2">	  
 			    			<div class="ltl_cnsl_day">최근상담일</div>
-			    				<input type="text" id="info_txt">
+			    				<input type="date" class="info_txt" id="ltl_cnsl">
 			    			<div class="phone_num_1">전화번호 1</div>
-			    				<input type="text" id="info_txt">
+			    				<input type="tel" class="info_txt" id="phon_num_1">
 			    		</div>	
 		    			<div class="clnt_info_cont_row3">	  
 			    			<div class="phone_num_2">전화번호 2</div>
-			    				<input type="text" id="info_txt">
+			    				<input type="tel" class="info_txt" id="phon_num_1">
 			    		</div>
 			    		<div class="clnt_info_cont_row4">	  
 			    			<div class="adrs">주소</div>
@@ -797,7 +858,8 @@ $(document).ready(function() {
 			    				<br/>
 			    				<input class="adrs_input_dtls" type="text">
 			    		</div>	
-		    			<div class="cmn_btn_mr">저장</div>
+		    			<div class="cmn_btn_mr" id="saveBtn">저장</div>
+		    		</form>
 		    		</div>
 		    	</div> <!-- 고객정보 div 끝 -->
 		    	

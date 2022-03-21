@@ -17,4 +17,9 @@ public class CallCntrService implements ICallCntrService {
 	public List<HashMap<String, String>> getCallCenter(HashMap<String, String> params) throws Throwable {
 		return iccd.getCallCenter(params);
 	}
+
+	@Override
+	public void callCenter(HashMap<String, String> params) throws Throwable {
+		iccd.callCenter(params);
+	}
 }
