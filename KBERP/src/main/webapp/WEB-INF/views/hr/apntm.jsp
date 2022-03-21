@@ -477,56 +477,33 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
-	});
+	// 조회 필터 기본 세팅
+	if ("${param.searchGbn}" != "") {
+		$("#searchGbn").val("${param.searchGbn}");
+	} else {
+		$("#oldSearchGbn").val("0");
+	}
 	
-	// 발령리스트
+	// 인사발령 메인화면
 	reloadList();
 
 	
-	// 발령 상세보기
+	// 발령 상세보기 
 	$("tbody").on("click", "tr", function() {
 		$("#no").val($(this).attr("no"));
 
 		reloadCont();
 	});
+	
+	// 발령 조회
+	$("#searchBtn").on("click", function() {
+		$("#oldSearchGbn").val($("#searchGbn").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());		
 
-	// 발령 리스트 리로드
+		reloadList();
+	});
+
+// 발령 리스트 리로드
 function reloadList() {
 	var params = $("#actionForm").serialize();
 	
@@ -544,7 +521,7 @@ function reloadList() {
 	});
 	
 }
-	// 발령 상세정보 리로드
+// 발령 상세정보 리로드
 function reloadCont() {
 	var params = $("#actionForm").serialize();
 	
@@ -562,6 +539,8 @@ function reloadCont() {
 	});
 	
 }
+
+// 발령 리스트 생성
 function drawList(list) {
 	var html = "";
 	
@@ -579,7 +558,7 @@ function drawList(list) {
 	$("tbody").html(html);
 }	
 
-//발령 상세정보
+//발령 상세정보 생성
 function drawCont(cont){
 	var html = "";
 	
@@ -707,7 +686,7 @@ function drawCont(cont){
 		<div class="apntm_add_btn_area">
 			<input type="button" class="apntm_add_btn"  id="apntm_add_btn" value="발령추가"/>
 		</div>
-<!--------------------- 발령 조회 ------------------------->			
+<!--------------------- 발령 조회 Form ------------------------->			
 			<form action="#" id="actionForm" method="post">
 				<input type="hidden" id="no" name="no" />
 				<div class="srch_wrap">
