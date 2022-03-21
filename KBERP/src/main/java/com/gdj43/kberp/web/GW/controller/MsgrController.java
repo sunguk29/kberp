@@ -36,7 +36,7 @@ public class MsgrController {
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 
-	
+		
 	
 		return mapper.writeValueAsString(modelMap);
 	}
