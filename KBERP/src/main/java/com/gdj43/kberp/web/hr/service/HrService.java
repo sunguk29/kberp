@@ -18,4 +18,9 @@ public class HrService implements IHrService {
 	public List<HashMap<String, String>> getApntmList(HashMap<String, String> params) throws Throwable {
 		return iHrDao.getApntmList(params);
 	}
+
+	@Override
+	public HashMap<String, String> getApntmCont(HashMap<String, String> params) throws Throwable {
+		return iHrDao.getApntmCont(params);
+	}
 }
