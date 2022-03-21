@@ -116,7 +116,12 @@ function drawList(list) {
 		html += "<td>" + data.EMP_NAME + "</td>";
 		html += "<td>" + data.RSVTN_DATE + "</td>";
 		html += "<td>" + data.TIME_DVSN_NUM + "</td>";
-		html += "</tr>";
+		if(data.STS_NUM==0)
+            html += "<td>대기</td>";              
+        else if(data.STS_NUM==1)
+            html += "<td>승인</td>";     
+        else
+            html += "<td>불가</td>";
 	}
 	$("tbody").html(html);
 }
@@ -209,6 +214,9 @@ function drawPaging(pb) {
 				<tbody></tbody>
 			</table>
 			<div>
+			if(data.STS_NUM == 1 ){
+				
+			}
 			<div class="board_bottom">
 				<div class="pgn_area"></div>
 			</div>
