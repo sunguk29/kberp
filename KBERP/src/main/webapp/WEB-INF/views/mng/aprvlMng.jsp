@@ -6,10 +6,25 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP Sample</title>
+<title>카카오뱅크 ERP 승인관리</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
+
+.cmn_btn{
+	border: none;
+}
+
+#searchTxt {
+	height : 21px;
+	margin-right: 5px;
+	margin-top: 2px;
+}
+#searchGbn {
+	height : 27px;
+	margin-right: 5px;
+	margin-top: 2px;
+}
 
  tbody td:nth-child(3):hover {
  	text-decoration: underline;
@@ -52,7 +67,7 @@ $(document).ready(function() {
 		reloadList();
 	});
 
-	$("tbody").on("click", "#click", function() {
+	$("tbody").on("click", "tr", function() {
 		$("#no").val($(this).attr("no"));
 		
 		$("#searchGbn").val($("#oldSearchGbn").val());
@@ -75,7 +90,7 @@ function reloadList() { // 목록 조회용 + 페이징 조회용
 
 	$.ajax({
 		type : "post", 
-		url : "parvlMngAjax", 
+		url : "aprvlMngAjax", 
 		dataType : "json",
 		data : params, 
 		success : function(res) { 
@@ -94,7 +109,7 @@ function drawList(list) {
 	var html = "";
 	
 	for(var data of list) {
-		html += "<tr num=\""+ data.RSVTN_NUM + "\">";
+		html += "<tr no=\""+ data.RSVTN_NUM + "\">";
 		html += "<td>" + data.RSVTN_NUM + "</td>";
 		html += "<td>" + data.FCLTY_NUM + "</td>";
 		html += "<td id=\"click\">" + data.FCLTY_NAME + "</td>";
@@ -144,6 +159,7 @@ function drawPaging(pb) {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
+	<input type="hidden" id="num" name="num"/>
 <input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
 <input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
 	
