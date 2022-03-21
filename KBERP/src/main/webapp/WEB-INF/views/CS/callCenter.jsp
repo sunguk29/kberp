@@ -758,42 +758,29 @@ $(document).ready(function() {
 			alert("전화번호를 입력하세요.");
 			$("#phon_num_1").focus();
 		} else {
-			var saveForm = $("#saveForm");
+			// 저장
+			var params = $("#saveForm").serialize();
 			
-			writeForm.ajaxForm({
+			$.ajax({
+				type : "post",
+				url : "callCenterAction/insert",
+				dataType : "json",
+				data : params,
 				success : function(res) {
-					
-					// 저장
-					var params = $("saveForm").serialize();
-					
-					$.ajax({
-						type : "post",
-						url : "atbAction/insert",
-						dataType : "json",
-						data : params,
-						success : function(res) {
-							if(res.res == "success") {
-								location.href = "callCenter";
-							} else {
-								alert("작성중 문제가 발생하였습니다.");
-							}
+					if(res.res == "success") {
+						location.href = "callCenter";
+					} else {
+						alert("작성중 문제가 발생하였습니다.");
+					}
 
-						},
-						error : function(request, status, error) {
-							console.log(request.responseText);
+				},
+				error : function(request, status, error) {
+					console.log(request.responseText);
 
-						}
-					}); // ajax end
-					
-				}, // success end
-				error : function(req) {
-					console.log(req.responseText);
-				}// error end
-			}); //ajaxForm end
-			
-			writeForm.submit(); // ajaxForm 실행
+				}
+			}); // ajax end
 		} // else end
-	}); // writeBtn end
+	}); // saveBtn end
 });
 
 function checkEmpty(sel) {
@@ -838,25 +825,25 @@ function checkEmpty(sel) {
 						</div>
 		    			<div class="clnt_info_cont_row1">	  
 			    			<div class="clnt_name">고객명</div>
-			    				<input type="text" class="info_txt" id="clnt_name">
+			    				<input type="text" class="info_txt" id="clnt_name" name="clnt_name">
 			    			<div class="clnt_grade">고객등급</div>
-			    				<input type="number" class="info_txt" id="clnt_grade">
+			    				<input type="number" class="info_txt" id="clnt_grade" name="clnt_grade">
 			    		</div>
 			    		<div class="clnt_info_cont_row2">	  
 			    			<div class="ltl_cnsl_day">최근상담일</div>
-			    				<input type="date" class="info_txt" id="ltl_cnsl">
+			    				<input type="date" class="info_txt" id="ltl_cnsl" name="ltl_cnsl">
 			    			<div class="phone_num_1">전화번호 1</div>
-			    				<input type="tel" class="info_txt" id="phon_num_1">
+			    				<input type="tel" class="info_txt" id="phon_num_1" name="phon_num_1">
 			    		</div>	
 		    			<div class="clnt_info_cont_row3">	  
 			    			<div class="phone_num_2">전화번호 2</div>
-			    				<input type="tel" class="info_txt" id="phon_num_1">
+			    				<input type="tel" class="info_txt" id="phon_num_2" name="phon_num_2">
 			    		</div>
 			    		<div class="clnt_info_cont_row4">	  
 			    			<div class="adrs">주소</div>
-			    				<input class="adrs_input" type="text">
+			    				<input class="adrs_input" type="text" id="adrs" name="adrs">
 			    				<br/>
-			    				<input class="adrs_input_dtls" type="text">
+			    				<input class="adrs_input_dtls" type="text" id="dtl_adrs" name="dtl_adrs">
 			    		</div>	
 		    			<div class="cmn_btn_mr" id="saveBtn">저장</div>
 		    		</form>
