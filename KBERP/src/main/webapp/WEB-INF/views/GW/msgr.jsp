@@ -381,7 +381,7 @@ $(document).ready(function() {
 		});
 	}); // main msgr btn
 	
-	$("#chat_list1").on("click", function() {
+	$(".chat_list1").on("click", function() {
 		
 		var html = "";
 		
