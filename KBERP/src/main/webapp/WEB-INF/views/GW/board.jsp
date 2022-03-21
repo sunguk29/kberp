@@ -19,6 +19,13 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	$("#writeBtn").on("click", function() {
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		$("#actionForm").attr("action", "boardWrite");
+		$("#actionForm").submit();
+	});
 	$("#alertBtn").on("click", function() {
 		makeAlert("하이", "내용임");
 	});
