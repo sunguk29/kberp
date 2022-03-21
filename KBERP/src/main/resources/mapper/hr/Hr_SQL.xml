@@ -2,18 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hr">
 <select id="getApntmList" resultType="hashmap" parameterType="hashmap">
-	SELECT A.RNUM, E.EMP_NAME, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, A.START_DATE, AP.APRVL_STS
-	FROM ( SELECT APNTM_NUM, APNTM_DVSN_NUM, EMP_NUM, DEPT_NUM, RANK_NUM, TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE , 
-	              APRVL_NUM, ROW_NUMBER() OVER(ORDER BY APNTM_NUM DESC) AS RNUM
-	        FROM APNTM )A INNER JOIN EMP E
-	                            ON A.EMP_NUM = E.EMP_NUM
-	                      INNER JOIN DEPT D
-	                            ON A.DEPT_NUM = D.DEPT_NUM
-	                      INNER JOIN RANK R
-	                            ON A.RANK_NUM = R.RANK_NUM
-	                      LEFT OUTER JOIN APRVL_LINE AP
-	                            ON A.APRVL_NUM = AP.APRVL_NUM
-                        <if test="searchTxt != null and searchTxt != ''">
+	SELECT A.APNTM_NUM, E.EMP_NAME, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, START_DATE, AP.APRVL_STS
+	FROM ( SELECT APNTM_NUM, APNTM_DVSN_NUM, EMP_NUM, DEPT_NUM, RANK_NUM, 
+	              TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE , APRVL_NUM
+	       FROM APNTM )  A INNER JOIN EMP E
+	                        	 ON A.EMP_NUM = E.EMP_NUM
+	                       INNER JOIN DEPT D
+	                       		 ON A.DEPT_NUM = D.DEPT_NUM
+	                       INNER JOIN RANK R
+	                       	 	 ON A.RANK_NUM = R.RANK_NUM
+	                       LEFT OUTER JOIN APRVL_LINE AP
+	                        	 ON A.APRVL_NUM = AP.APRVL_NUM
+	ORDER BY APNTM_NUM DESC                    
+                     <!--  조회 필터링 
+                       <if test="searchTxt != null and searchTxt != ''">
 							<choose>
 								<when test="searchGbn == 0">
 							 		WHERE E.EMP_NAME LIKE '%' || #{searchTxt} || '%' 
@@ -30,10 +32,28 @@
 								<when test="searchGbn == 3">
 									WHERE D.DEPT_NAME LIKE '%' || #{searchTxt} || '%' 
 								</when>
-								<when test="searchGbn == 3">
+								<when test="searchGbn == 4">
 									WHERE R.RANK_NAME LIKE '%' || #{searchTxt} || '%' 
 								</when>
 							</choose>
 						</if>
-  </select>
+						-->
+ </select>
+ 
+
+ <select id="getApntmCont" resultType="hashmap" parameterType="hashmap">
+ 	 SELECT A.APNTM_NUM, E.EMP_NAME, E.EMP_NUM, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, START_DATE, AP.APRVL_STS
+	 FROM ( SELECT APNTM_NUM, APNTM_DVSN_NUM, EMP_NUM, DEPT_NUM, RANK_NUM, 
+                   TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE , APRVL_NUM
+       	    FROM APNTM )A INNER JOIN EMP E
+                                ON A.EMP_NUM = E.EMP_NUM
+                          INNER JOIN DEPT D
+                                ON A.DEPT_NUM = D.DEPT_NUM
+                     	  INNER JOIN RANK R
+                        		ON A.RANK_NUM = R.RANK_NUM
+                     	  LEFT OUTER JOIN APRVL_LINE AP
+                        		ON A.APRVL_NUM = AP.APRVL_NUM
+	 WHERE APNTM_NUM = #{no}
+</select>
+
 </mapper>
