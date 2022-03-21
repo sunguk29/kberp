@@ -91,11 +91,11 @@
 			<!-- 여기부터 쓰면 됨 -->
 			<table class="board_table">
 				<colgroup>
-					<col width="50" />
-					<col width="600" />
-					<col width="100" />
-					<col width="100" />
-					<col width="100" />
+					<col width="100"/>
+					<col width="400"/>
+					<col width="150"/>
+					<col width="150"/>
+					<col width="100"/>
 				</colgroup>
 				<thead>
 					<tr>
@@ -103,79 +103,79 @@
 						<th>제목</th>
 						<th>작성자</th>
 						<th>작성일</th>
-						<th>답변상태</th>
+						<th>조회수</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td>10</td>
-						<td class="board_table_hover board_table_blue board_cont_left">게시판입니다.</td>
-						<td>조**</td>
+						<td class="board_table_hover board_cont_left">게시판입니다.</td>
+						<td>백종훈 대리</td>
 						<td>2021-12-01</td>
-						<td>대기</td>
+						<td>3</td>
 					</tr>
 					<tr>
 						<td>10</td>
 						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>김**</td>
+						<td>백종훈 대리</td>
 						<td>2021-12-01</td>
-						<td>대기</td>
+						<td>3</td>
 					</tr>
 					<tr>
 						<td>10</td>
 						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>이**</td>
+						<td>백종훈 대리</td>
 						<td>2021-12-01</td>
-						<td>대기</td>
+						<td>3</td>
 					</tr>
 					<tr>
 						<td>10</td>
 						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>박**</td>
+						<td>백종훈 대리</td>
 						<td>2021-12-01</td>
-						<td>대기</td>
+						<td>3</td>
 					</tr>
 					<tr>
 						<td>10</td>
 						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>최**</td>
+						<td>백종훈 대리</td>
 						<td>2021-12-01</td>
-						<td>대기</td>
+						<td>3</td>
 					</tr>
 					<tr>
 						<td>10</td>
 						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>정**</td>
+						<td>백종훈 대리</td>
 						<td>2021-12-01</td>
-						<td>대기</td>
+						<td>3</td>
 					</tr>
 					<tr>
 						<td>10</td>
 						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>조**</td>
+						<td>백종훈 대리</td>
 						<td>2021-12-01</td>
-						<td>완료</td>
+						<td>3</td>
 					</tr>
 					<tr>
 						<td>10</td>
 						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>김**</td>
+						<td>백종훈 대리</td>
 						<td>2021-12-01</td>
-						<td>완료</td>
+						<td>3</td>
 					</tr>
 					<tr>
 						<td>10</td>
 						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>이**</td>
+						<td>백종훈 대리</td>
 						<td>2021-12-01</td>
-						<td>완료</td>
+						<td>3</td>
 					</tr>
 					<tr>
 						<td>10</td>
 						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>박**</td>
+						<td>백종훈 대리</td>
 						<td>2021-12-01</td>
-						<td>완료</td>
+						<td>3</td>
 					</tr>
 				</tbody>
 			</table>
@@ -192,6 +192,9 @@
 					<div class="page_btn page_last">last</div>
 				</div>
 				<div class="cmn_btn_ml">글쓰기</div>
+				<div class="cmn_btn_ml" id="alertBtn">알림</div>
+				<div class="cmn_btn_ml" id="btn1Btn">버튼1개</div>
+				<div class="cmn_btn_ml" id="btn2Btn">버튼2개</div>
 			</div>
 		</div>
 	</div>
