@@ -7,4 +7,6 @@ public interface ICallCntrDao {
 
 	public List<HashMap<String, String>> getCallCenter(HashMap<String, String> params) throws Throwable;
 
+	public void callCenter(HashMap<String, String> params) throws Throwable;
+
 }

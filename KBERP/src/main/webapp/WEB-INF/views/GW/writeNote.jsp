@@ -7,7 +7,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Note</title>
-<link rel="icon" href="../images/favicon/favi.gif" />
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
