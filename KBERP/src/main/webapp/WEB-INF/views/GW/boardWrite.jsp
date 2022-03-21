@@ -5,7 +5,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>글 쓰기</title>
+<title>카카오뱅크 ERP - 자유게시판 글쓰기</title>
+<link rel="icon" href="../images/favicon/favi.gif" />
+<link rel="stylesheet" type="text/css" href="../css/cmn.css" />
 <style type="text/css">
 /* 가로 사이즈 조정용 */
 .cont_wrap {
