@@ -71,7 +71,7 @@
 	border: 1px solid #000;
 }
 .content_bot {
-	width: 498px;
+	width: 600px;
 	height: 30px;
 	font-size: 15px;
 	line-height: 30px;
@@ -158,12 +158,17 @@
 	outline: none;
 }
 .cal_text_top {
-	width: 317px;
+	width: 312px;
 	height: 30px;
 	font-size: 15px;
 	font-weight: bold;
 	line-height: 30px;
+	border: none;
 	background-color: #BDBDBD;
+	background-image: url(resources/images/sales/today.png);
+	background-size: 20px 20px;
+	background-repeat: no-repeat;
+	background-position: 0px center;
 }
 .cal_text1 {
 	width: 317px;
@@ -340,7 +345,6 @@
    border: 2px solid #d7d7d7;
    border-radius: 3px;
    background-color: #F2F2F2;
-   margin-left: 15px;
    margin-bottom: 5px;
 }
 .popup_box_in:hover {
@@ -380,43 +384,44 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
+	
+	reloadList();
+	
+	/* 목록 조회용  */
+	function reloadList() {
+		var params = $("#actionForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "salesSchdlAjax",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				drawList(res.list);
+			},
+			error : function(req) {
+				console.log(req.responseTxt);
 			}
 		});
-	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
-	});
+	}
+	
+	/* 목록 그리기용  */
+	function drawList(list) {
+		var html = "";
+
+		html += "<input type=\"text\" class=\"cal_text_top\" readonly=\"readonly\" value=\"      ${tday}\" />";
+		
+		for(var data of list){
+			html +=	"<div class=\"cal_text1\">";
+			html += "<div class=\"text_left\">";
+			html +=	"<div class=\"lead_cal_big\"></div>";
+			html +=	"</div>";
+			html +=	"<div class=\"text_right\"><br/>" + data.START_DATE_HR + " ~ " + data.END_DATE_HR + "<br/>" + data.CLNT_CMPNY_NAME + "</div>";
+			html += "</div>";
+		}
+		
+		$(".calendar_text").html(html);
+	}
 	
 	/* 캘린더 이벤트 관련 시작 */
 	var data = [
@@ -566,6 +571,7 @@ $(document).ready(function() {
 	});
 	
 	/* 검색 밑 등록 버튼 관련 이벤트 끝 */
+	
 });
 </script>
 <!-- calendar Script -->
@@ -632,6 +638,7 @@ $(document).ready(function() {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" name="tday" value="${tday}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -661,8 +668,7 @@ $(document).ready(function() {
 						</select>
 						</span>
 						<span class="userseach">
-								담당자
-								<input type="text" id="usrsrchTxt" readonly="readonly" />
+								담당자 <input type="text" id="usrsrchTxt" readonly="readonly" />
 						</span>
 						<div class="cmn_btn bg">검색</div>
 						</div>
@@ -673,18 +679,7 @@ $(document).ready(function() {
 							<div class="calendar">
 								<div id="fullCalendarArea"></div>
 							</div>
-							<div class="calendar_text">
-								<div class="cal_text_top">
-								<img alt="오늘날짜" src="resources/images/sales/today.png" class="imgsize" />
-								오늘날짜
-								</div>
-								<div class="cal_text1">
-									<div class="text_left">
-										<div class="lead_cal_big"></div>
-									</div>
-									<div class="text_right"><br/>10:00 ~ 11:30 방문/종합광고<br/>미래전자<br/>[진행중-제안]대출 상담 건</div>
-								</div>
-							</div>
+							<div class="calendar_text"></div>
 						</div>
 						<div class="content_bot">
 							<div class="lead_cal"></div>

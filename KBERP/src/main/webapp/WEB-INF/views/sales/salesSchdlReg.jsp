@@ -80,6 +80,26 @@ td:nth-child(3) {
 .txt:hover{
 	cursor : pointer;
 }
+.sales_txt, .lead_txt{
+	height: 33px;
+	width: 100%;
+	padding: 0 5px;
+	font-size: 10.5px;
+	color: black;
+	vertical-align: middle;
+	box-sizing: border-box;
+	outline: none;
+	border-radius: 3px;
+	line-height: 33px;
+	border: none;
+	background-image: url(resources/images/sales/popup.png);
+	background-size: 20px 20px;
+	background-repeat: no-repeat;
+	background-position: 700px center;
+}
+.sales_txt:hover, .lead_txt:hover{
+	cursor : pointer;
+}
 input {
 	font-size: 10.5px;
 }
@@ -249,43 +269,6 @@ $(document).ready(function() {
 	$("#alertBtn").on("click", function() {
 		makeAlert("하이", "내용임");
 	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			contentsEvent : function() {
-				$("#popup1").draggable();
-			},
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
-	});
 	
 	/* 목록 이동 이벤트 */
 	$("#listBtn").on("click", function() {
@@ -296,19 +279,73 @@ $(document).ready(function() {
 	/* 저장 이동 및 알림 이벤트 */
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#ssname")){
-			essentialPop();
+			makeAlert("필수입력", "일정명을 입력하세요");
 			$("#ssname").focus();
 		} else if(checkEmpty("#ssactvtyclsfy")){
-			essentialPop();
+			makeAlert("필수입력", "활동분류를 입력하세요");
 			$("#ssactvtyclsfy").focus();
-		} else if(checkEmpty("#ssactvtyprps")){
-			essentialPop();
-			$("#ssactvtyprps").focus();
 		} else if(checkEmpty("#sdt")){
-			essentialPop();
+			makeAlert("필수입력", "시작일을 입력하세요");
 			$("#sdt").focus();
+		} else if(checkEmpty("#ssactvtycont")){
+			makeAlert("필수입력", "활동내용을 입력하세요");
+			$("#ssactvtycont").focus();
 		} else {
-			saveCheckPop();
+			makePopup({
+				bg : false,
+				bgClose : false,
+				title : "저장",
+				contents : "저장하시겠습니까?",
+				contentsEvent : function() {
+					$("#popup").draggable();
+				},
+				draggable : true,
+				width : 400,
+				height: 180,
+				buttons : [{
+					name : "확인",
+					func:function(){
+						
+						
+						var RegForm = $("#RegForm");
+						
+						RegForm.ajaxForm({
+							success: function(res) {
+								if(res.fileName.length > 0){
+									$("#schdl_att_file").val(res.fileName[0]);
+								}
+								
+								var params = $("#RegForm").serialize();
+								
+								$.ajax({
+									type  : "post",
+									url : "salesSchdlAction/insert",
+									dataType : "json",
+									data : params,
+									success : function(res) {
+										if(res.res == "success"){
+											savePop();								
+										} else {
+											alert("등록중 문제가 발생하였습니다.");
+										}
+									},
+									error : function(request, status, error) {
+										console.log(request.responseTxt);
+									}
+								});
+							},
+							error : function(req) {
+								console.log(req.responseTxt);
+							}
+						});
+						
+						RegForm.sumbmit();
+						}
+						}, {
+							name : "취소"
+						}]
+				});
+						
 		}
 		
 	});
@@ -324,54 +361,6 @@ function checkEmpty(sel) {
 	}
 }
 
-function essentialPop() {
-	var html = "";
-	
-	html += "<div class=\"popup_cont\">필수항목을 입력하세요.</div>";
-	
-	makePopup({
-		bg : true,
-		bgClose : false,
-		title : "필수 항목 입력",
-		draggable : true,
-		contents : html,
-		width : 400,
-		height : 180,
-		buttons : [{
-			name : "확인",
-			func:function(){
-				closePopup();
-			}
-		}]
-	});
-}
-
-function saveCheckPop() {
-	var html = "";
-	
-	html += "<div class=\"popup_cont\">저장하시겠습니까?</div>";
-	
-	makePopup({
-		bg : true,
-		bgClose : false,
-		title : "저장",
-		draggable : true,
-		contents : html,
-		width : 400,
-		height : 180,
-		buttons : [{
-			name : "확인",
-			func:function(){
-				savePop();
-			}
-		}, {
-			name : "취소"	,
-			func:function(){
-				closePopup();
-			}
-		}]
-	});
-}
 
 function savePop() {
 	var html = "";
@@ -379,7 +368,7 @@ function savePop() {
 	html += "<div class=\"popup_cont\">저장되었습니다</div>";
 	
 	makePopup({
-		bg : true,
+		bg : false,
 		bgClose : false,
 		title : "저장",
 		draggable : true,
@@ -388,12 +377,13 @@ function savePop() {
 		height : 180,
 		buttons : [{
 			name : "확인",
-			func:function(){
-				closePopup();
+			func:function() {
+				$("#backForm").submit();
 			}
 		}]
 	});
 }
+
 </script>
 </head>
 <body>
@@ -413,9 +403,9 @@ function savePop() {
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">영업일정 등록</div>
-			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
+			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg"  id="listBtn"/> 
 			<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" id="deleteBtn" />
-			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg"  id="listBtn"/>
+			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
@@ -423,7 +413,7 @@ function savePop() {
 			<div class="body">
 				<div class="bodyWrap">
 				<!-- 시작 -->
-					<form action="#" id="RegForm" method="post">
+					<form action="#" id="RegForm" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
 					<table>
 						<colgroup>
@@ -443,13 +433,13 @@ function savePop() {
 							<tr>
 								<td><input type="button" class="btn" value="영업" readonly="readonly"/></td>
 								<td colspan="5">
-									<img class="btnImg_in" alt="팝업" src="resources/images/sales/popup.png" id="sNum" name="sNum"/>
+									<input type="text" class="sales_txt" id="sNum" name="sNum" />
 								</td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="리드" readonly="readonly"/></td>
 								<td colspan="5">
-									<img class="btnImg_in" alt="팝업" src="resources/images/sales/popup.png" id="lNum" name="lNum"/>
+									<input type="text" class="lead_txt" id="lNum" name="lNum" />
 								</td>
 							</tr>
 							<tr>
@@ -462,26 +452,13 @@ function savePop() {
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="활동분류 *" readonly="readonly"/></td>
-								<td colspan="5"><select class="txt_in" id=ssactvtyclsfy" name="ssactvtyclsfy">
+								<td colspan="5"><select class="txt_in" id="ssactvtyclsfy" name="ssactvtyclsfy">
 										<optgroup>
 											<option>선택하세요</option>
 											<option value="0">전화</option>
 											<option value="1">메일</option>
 											<option value="2">방문</option>
 											<option value="3">기타</option>
-										</optgroup>
-								</select></td>
-							</tr>
-							<tr>
-								<td><input type="button" class="btn" value="활동목적 *" readonly="readonly"/></td>
-								<td colspan="5"><select class="txt_in" id="ssactvtyprps">
-										<optgroup>
-											<option>선택하세요</option>
-											<option value="0">종합광고</option>
-											<option value="1">개별광고</option>
-											<option value="2">클레임</option>
-											<option value="3">교육</option>
-											<option value="4">기타</option>
 										</optgroup>
 								</select></td>
 							</tr>
@@ -494,18 +471,18 @@ function savePop() {
 								<td colspan="2"><input type="datetime-local" class="txt" id="edt" name="edt"/></td>
 							</tr>
 							<tr>
-								<td><input type="button" class="btn" value="활동내용" readonly="readonly"/></td>
+								<td><input type="button" class="btn" value="활동내용 *" readonly="readonly"/></td>
 								<td colspan="5"><textarea class="ta_box" id="ssactvtycont" name="ssactvtycont"></textarea></td>
 							</tr>
 						</tbody>
 					</table>
-					</form>
 					<!-- 첨부자료 -->
 					<div class="rvn_txt"> 첨부자료 (0)
 						<input type=file name='file1' style='display: none;' /> 
 						<img class="plus_btn" id="schdl_att_file" name="schdl_att_file" src="resources/images/sales/plus.png" border='0' onclick="document.all.file1.click();" > 
 					</div>
 					<div class="cntrct_box_in"></div>
+					</form>
 					<!-- 끝 -->
 				</div>
 		
