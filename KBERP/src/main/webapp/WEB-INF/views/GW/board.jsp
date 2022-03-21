@@ -189,7 +189,7 @@ $(document).ready(function() {
 					<div class="page_btn page_next">next</div>
 					<div class="page_btn page_last">last</div>
 				</div>
-				<div class="cmn_btn_ml">글쓰기</div>
+				<div class="cmn_btn_ml" id="writeBtn">글쓰기</div>
 				<div class="cmn_btn_ml" id="alertBtn">알림</div>
 				<div class="cmn_btn_ml" id="btn1Btn">버튼1개</div>
 				<div class="cmn_btn_ml" id="btn2Btn">버튼2개</div>
