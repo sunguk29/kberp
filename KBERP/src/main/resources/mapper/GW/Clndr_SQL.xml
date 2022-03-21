@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="clndr">
+<insert id="clndrAdd" parameterType="hashmap">
+INSERT INTO SCHDL (SCHDL_NUM, SCHDL_TYPE_NUM, SCHDL_CTGRY_NUM,EMP_NUM,
+                   USER_CTGRY_NAME, SCHDL_TITLE, SCHDL_PLACE, SCHDL_CONT,
+                   SCHDL_START_TIME, SCHDL_END_TIME, ALDY_DVSN)
+VALUES (SCHDL_SEQ.NEXTVAL, #{schdl_type}, #{schdl_ctgry}, #{emp_num}, '0', #{schdl_title}, #{schdl_place}, #{schdl_cont},
+        #{schdl_start_time}, #{schdl_end_time}, #{aldy_dvsn})
+</insert>
+</mapper>

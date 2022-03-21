@@ -16,8 +16,6 @@
 }
 /* 개인 작업 영역 */
 
-
-
 .main_box {
 
 }
@@ -185,7 +183,7 @@
 .msgr_logo {
 	width: 210px;
 	height: 200px;
-	background-image: url(".../images/msgr_logo_img.png");
+	background-image: url("resources/images/msgr_logo_img.png");
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 140pt;
@@ -286,7 +284,7 @@ td:nth-child(5) {
 .chart {
 	width: 45px;
 	height: 45px;
-	background-image: url("chart.png");
+	background-image: url("../images/chart.png");
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 38pt;
@@ -297,8 +295,9 @@ td:nth-child(5) {
 
 </style>
 <script type="text/javascript">
-$(document).ready(function() {
 
+$(document).ready(function() {
+	
 	$("#main_msgr_btn").on("click", function() {
 		var html = "";
 		
@@ -383,6 +382,18 @@ $(document).ready(function() {
 	
 	$(".chat_list1").on("click", function() {
 		
+		$.ajax({
+			type : "post",
+			url : "chatRoomAjax",
+			dataType : "json",
+			success : function(res) {
+				console.log(res);	
+			},
+			error : function(request, status, error) { 
+				console(request.responseText);
+			}
+		});
+		
 		var html = "";
 		
 		html += "			<div class = \"right_box\">                                                      ";
@@ -408,19 +419,26 @@ $(document).ready(function() {
 		html += "			</div>	                                                                       ";
 		html += "			</div>	                                                                       ";
 		
+	});
+	
+/* 	function reloadList() { //목록 조회용 + 페이징 조회용
+		var params = $("#actionForm").serialize();
+				
 		$.ajax({
 			type : "post",
-			url : "chatRoomAjax",
+			url : "chatAjax",
 			dataType : "json",
 			data : params,
-			success : function(res) {
-				console.log(res);	
+			success : function(res) { 
+				console.log(res);
+				drawList(res.list);
 			},
 			error : function(request, status, error) { 
 				console(request.responseText); 
 			}
 		});
-	});
+	} */
+	
 }); // ready
 </script>
 </head>
@@ -433,7 +451,6 @@ $(document).ready(function() {
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
 	<!-- 내용영역 -->
-	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">메신저</div>
 		</div>

@@ -21,5 +21,12 @@ public class BoardController {
 		
 		return mav;
 	}
+	@RequestMapping(value = "/boardAdmnstr")
+	public ModelAndView boardAdmnstr(ModelAndView mav) {
+		
+		mav.setViewName("GW/boardAdmnstr");
+		
+		return mav;
+	}
 	
 }

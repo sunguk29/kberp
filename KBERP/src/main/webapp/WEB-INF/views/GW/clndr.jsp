@@ -15,8 +15,8 @@
 	width: 900px;
 }
 /* 개인 작업 영역 */
-/* 팝업 */
 
+/* 팝업 */
 .popup_style{
 	height: 30px;
 	margin-top: 20px;
@@ -36,14 +36,14 @@
 	font-size: 9pt;
 	color: blue;
 }
-#popup_title, #popup_place {
+#schdl_title, #schdl_place {
 	position: absolute;
 	left: calc(50% - 140px);
 	width: 360px;
 	height: 25px;
 	font-size: 9pt;
 }
-#popup_start_time, #popup_end_time{
+#schdl_start_time, #schdl_end_time{
 	position: absolute;
 	left: calc(50% - 140px);
 	width: 160px;
@@ -166,7 +166,7 @@
 .today_schdl{
 	margin-top: 15px;
 }
-.dnr{
+.get_tgthr{
 	background-color: #e9e1f4;
 }
 .bsns{
@@ -267,7 +267,17 @@ $(document).ready(function() {
 		$("#fullCalendarArea").fullCalendar("addEventSource", newEvents);
 		$("#fullCalendarArea").fullCalendar("refetchEvents");
 	});
+	
+	
 });
+function checkEmpty(sel) {
+	if($.trim($(sel).val()) == ""){
+		return true;
+	} else {
+		return false;
+	}
+}
+
 </script>
 
 <!-- calendar Script -->
@@ -328,53 +338,57 @@ $(document).ready(function() {
 	$("#new_schdl").on("click", function () {
 		var html = "";
 		
+		html += "<form action=\"#\" id=\"addForm\" method=\"post\">";
+		html += "<input type=\"hidden\" id=\"emp_num\" name=\"emp_num\" value=\"${sEmpNum}\">";
 		html += "<div class=\"popup_style\">";
 		html += "<span>일정 종류</span><span class=\"star\"> *</span>";
-		html += "<select class=\"slct_type\">";
-		html += "<option>개인</option>";
-		html += "<option>팀</option>";
-		html += "				<option>전사</option>";
+		html += "<select class=\"slct_type\" id=\"schdl_type\" name=\"schdl_type\">";
+		html += "<option value=\"0\">개인</option>";
+		html += "<option value=\"1\">팀</option>";
+		html += "<option value=\"2\">전사</option>";
 		html += "</select>";
-		html += "				</div>";
-		html += "			<div class=\"popup_style\">";
-		html += "				<span>제목</span><span class=\"star\"> *</span>";
-		html += "				<input type=\"text\" id=\"popup_title\">";
-		html += "			</div>";
-		html += "			<div class=\"popup_style\">";
-		html += "				<span>위치</span>";
-		html += "				<input type=\"text\" id=\"popup_place\">";
-		html += "			</div>";
-		html += "			<div class=\"popup_style\">";
-		html += "				<span>시작 시간</span>";
-		html += "				<input type=\"date\" id=\"popup_start_time\"> <input type=\"time\" class=\"popup_time\">";
-		html += "			</div>";		
-		html += "			<div class=\"popup_style\">";
-		html += "				<span>종료 시간</span>";
-		html += "				<input type=\"date\" id=\"popup_end_time\"> <input type=\"time\"class=\"popup_time\">";			
-		html += "			</div>";
-		html += "			<div class=\"popup_dtl_cont\">";
-		html += "				<span>상세내용</span>";
-		html += "				<textarea rows=\"10\" cols=\"57\" class=\"dtl_cont\"></textarea>";			
-		html += "			</div>";
-		html += "			<div class=\"popup_style\">";
-		html += "				<span>범주</span><span class=\"star\"> *</span>";
-		html += "				<select class=\"slct_type\">";
-		html += "					<option>전체</option>";
-		html += "					<option>업무</option>";
-		html += "					<option>휴가</option>";
-		html += "					<option>교육</option>";
-		html += "					<option>회의</option>";
-		html += "					<option>회식</option>";
-		html += "					<option>출장</option>";
-		html += "					<option>개발</option>";
-		html += "					<option>사용자지정</option>";
-		html += "				</select>";
-		html += "				<input type=\"text\" placeholder=\"사용자 지정\"id=\"ctgry_user\">";
-		html += "			</div>";
-		html += "			<div class=\"popup_style\">";
-		html += "				<span>종일 일정</span>";
-		html += "				<input type=\"checkbox\" id=\"allday\">";		
-		html += "	</div>";
+		html += "</div>";
+		html += "<div class=\"popup_style\">";
+		html += "<span>제목</span><span class=\"star\"> *</span>";
+		html += "<input type=\"text\" id=\"schdl_title\" name=\"schdl_title\">";
+		html += "</div>";
+		html += "<div class=\"popup_style\">";
+		html += "<span>위치</span>";
+		html += "<input type=\"text\" id=\"schdl_place\" name=\"schdl_place\">";
+		html += "</div>";
+		html += "<div class=\"popup_style\">";
+		html += "<span>시작 시간</span>";
+		html += "<input type=\"date\" id=\"schdl_start_time\" name=\"schdl_start_time\"> <input type=\"time\" class=\"popup_time\">";
+		html += "</div>";	
+		html += "<div class=\"popup_style\">";
+		html += "<span>종료 시간</span>";
+		html += "<input type=\"date\" id=\"schdl_end_time\" name=\"schdl_end_time\"> <input type=\"time\"class=\"popup_time\">";			
+		html += "</div>";
+		html += "<div class=\"popup_dtl_cont\">";
+		html += "<span>상세내용</span>";
+		html += "<textarea rows=\"10\" cols=\"57\" class=\"dtl_cont\" id=\"schdl_cont\" name=\"schdl_cont\"></textarea>";			
+		html += "</div>";
+		html += "<div class=\"popup_style\">";
+		html += "<span>범주</span><span class=\"star\"> *</span>";
+		html += "<select class=\"slct_type\" id=\"schdl_ctgry\" name=\"schdl_ctgry\">";
+		html += "<option value=\"1\">전체</option>";
+		html += "<option value=\"2\">업무</option>";
+		html += "<option value=\"3\">휴가</option>";
+		html += "<option value=\"4\">교육</option>";
+		html += "<option value=\"5\">회의</option>";
+		html += "<option value=\"6\">회식</option>";
+		html += "<option value=\"7\">출장</option>";
+		html += "<option value=\"8\">개발</option>";
+		html += "<option value=\"0\">사용자지정</option>";
+		html += "</select>";
+		html += "<input type=\"text\" placeholder=\"사용자 지정\"id=\"ctgry_user\" name=\"ctgry_user\">";
+		html += "</div>";
+		html += "<div class=\"popup_style\">";
+		html += "<span>종일 일정</span>";
+		html += "<input type=\"checkbox\" id=\"aldy_dvsn\" name=\"aldy_dvsn\" value=\"1\">";		
+		html += "<input type=\"hidden\" id=\"aldy_dvsn_hidden\" name=\"aldy_dvsn\" value=\"0\">";		
+		html += "</div>";
+		html += "</form>";
 		
 		makePopup({
 			bg : true,
@@ -386,9 +400,37 @@ $(document).ready(function() {
 			buttons : [{
 				name : "저장",
 				func:function() {
-					console.log("One!");
-					closePopup();
+					if(checkEmpty("#schdl_title")){
+						alert("제목을 입력하세요.");
+						$("#schdl_title").focus();
+					}else if(checkEmpty("#schdl_start_time")){
+						alert("시작 시간을 선택하세요.");
+						$("#schdl_start_time").focus();
+					}else if(checkEmpty("#schdl_end_time")){
+						alert("종료 시간을 선택하세요.");
+						$("#schdl_end_time").focus();
+					}else{
+						var params = $("#addForm").serialize();
+						console.log(params);
+						$.ajax({
+							type: "post", 
+							url : "clndrAction/insert",
+							dataType : "json",
+							data : params, 
+							success : function(res) { 
+								if(res.res == "success"){
+									location.href = "clndr";
+								}else{
+									alert("작성중 문제가 발생하였습니다.");
+								}
+							},
+							error : function(request, status, error) { 
+								console.log(request.responseText); 
+							}
+						});
+					}
 				}
+			
 			}, {
 				name : "취소"
 			}]
@@ -397,11 +439,15 @@ $(document).ready(function() {
 		
 	});
 	
+	
+
 });
+
 </script>
 </head>
 <body>
 	<!-- top & left -->
+	
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
 		<c:param name="menuNum">${param.menuNum}</c:param>
@@ -416,7 +462,7 @@ $(document).ready(function() {
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
-			<!-- 여기부터 쓰면 됨 -->
+			<!-- 여기부터 쓰면 됨 -->			
 			<input type="button" value="일정 등록" id="new_schdl">
 	<div id="side_bar">
 		<div class="schdl_type">
@@ -428,14 +474,14 @@ $(document).ready(function() {
 		</div>
 		<div class="schdl_ctgry">
 			<h5 class="side_bar_title">범주</h5>
-			<input type="checkbox" class="ctgry_box" id="business"><label for="business" class="type_label">업무</label><br>
+			<input type="checkbox" class="ctgry_box" id="bsns"><label for="bsns" class="type_label">업무</label><br>
 			<input type="checkbox" class="ctgry_box" id="leave"><label for="leave" class="type_label">휴가</label><br>
-			<input type="checkbox" class="ctgry_box" id="education"><label for="education" class="type_label">교육</label><br>
-			<input type="checkbox" class="ctgry_box" id="meeting"><label for="meeting" class="type_label">회의</label><br>
-			<input type="checkbox" class="ctgry_box" id="dinner"><label for="dinner" class="type_label">회식</label><br>
-			<input type="checkbox" class="ctgry_box" id="business_trip"><label for="business_trip" class="type_label">출장</label><br>
-			<input type="checkbox" class="ctgry_box" id="development"><label for="development" class="type_label">개발</label><br>
-			<input type="checkbox" class="ctgry_box" id="user"><label for="user" class="type_label">사용자 지정</label>
+			<input type="checkbox" class="ctgry_box" id="edctn"><label for="edctn" class="type_label">교육</label><br>
+			<input type="checkbox" class="ctgry_box" id="mtng"><label for="mtng" class="type_label">회의</label><br>
+			<input type="checkbox" class="ctgry_box" id="get_tgthr"><label for="get_tgthr" class="type_label">회식</label><br>
+			<input type="checkbox" class="ctgry_box" id="bsns_trip"><label for="bsns_trip" class="type_label">출장</label><br>
+			<input type="checkbox" class="ctgry_box" id="devel"><label for="devel" class="type_label">개발</label><br>
+			<input type="checkbox" class="ctgry_box" id="user_dsgnt"><label for="user_dsgnt" class="type_label">사용자 지정</label>
 			
 			
 		</div>
@@ -443,8 +489,6 @@ $(document).ready(function() {
 		<div class="today">		
 			<h5 class="side_bar_title">오늘 할 일</h5>
 			<div class="today_schdl">
-				<div class="bsns">오전 11:00 가나다라···	</div>
-				<div class="dnr">오후 5:00 가나다라···	</div>
 			</div>
 		</div>
 		
