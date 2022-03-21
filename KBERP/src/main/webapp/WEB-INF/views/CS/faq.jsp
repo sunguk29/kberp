@@ -196,11 +196,6 @@ $(document).ready(function() {
 		</div>
 	</div>
 	
-	<!-- 글쓰기 -->
-<form action="faqAdd" id="actionForm" method="post">
-	
-</form>
-	
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>
