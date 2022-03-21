@@ -1,4 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="in">
+	<select id="getInqryCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM INQRY I INNER JOIN INQRY_CTGRY ICT
+		                   ON I.CTGRY_NUM = ICT.CTGRY_NUM
+		             INNER JOIN EMP E
+		                     ON I.EMP_NUM = E.EMP_NUM
+		             INNER JOIN INDVDL_CLNT ICL
+		                     ON I.CLNT_NUM = ICL.CLNT_NUM
+		WHERE 1 = 1
+		<if test="searchTxt != null and searchTxt != ''"> <!-- 검색어가 있다면 -->
+			<choose>
+				<when test="searchGbn == 0">
+					AND WRTNG_TITLE LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="searchGbn == 1">
+					AND CLNT_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+			</choose>
+		</if>
+	</select>
+	
+	<select id="getInqryList" resultType="hashmap" parameterType="hashmap">
+		SELECT IQ.INQRY_NUM, IQ.CTGRY_NUM, IQ.WRTNG_TITLE, IQ.CLNT_NUM, IQ.WRTNG_DATE, 
+		       IQ.ATT_FILE, IQ.ANSR
+		FROM ( SELECT I.INQRY_NUM, I.CTGRY_NUM, I.WRTNG_TITLE, I.CLNT_NUM, TO_CHAR(I.WRTNG_DATE, 'YYYY-MM-DD') AS WRTNG_DATE, 
+		       I.ATT_FILE, DECODE(ANSR_TITLE, NULL, '대기', '완료') AS ANSR , ROW_NUMBER() OVER(ORDER BY I.INQRY_NUM DESC) AS RNUM
+				FROM INQRY I INNER JOIN INQRY_CTGRY ICT
+				                   ON I.CTGRY_NUM = ICT.CTGRY_NUM
+				             INNER JOIN INDVDL_CLNT ICL
+				                     ON I.CLNT_NUM = ICL.CLNT_NUM
+				             LEFT OUTER JOIN EMP E
+				                     ON I.EMP_NUM = E.EMP_NUM
+				WHERE 1 = 1 
+				<if test="searchTxt != null and searchTxt != ''"> <!-- 검색어가 있다면 -->
+					<choose>
+						<when test="searchGbn == 0">
+							AND I.WRTNG_TITLE LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="searchGbn == 1">
+							AND CLNT_NUM LIKE '%' || #{searchTxt} || '%'
+						</when>
+					</choose>
+				</if>
+				) IQ
+		WHERE IQ.RNUM BETWEEN #{startCount} AND #{endCount}
+	</select>
 </mapper>

@@ -15,48 +15,116 @@
 	width: 900px;
 }
 /* 개인 작업 영역 */
-
+tbody img {
+	width: 12px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
+	reloadList();
+	
+	if('${param.searchGbn}' != '') {
+		$("#searchGbn").val('${param.searchGbn}');
+	} else {
+		$("#oldSearchGbn").val("0");
+	}
+	
+	$("#searchTxt").on("keypress", function(event) {
+		if(event.keyCode == 13) {
+			$("#searchBtn").click();
+				
+			return false;
+		}
 	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
+	
+	$("#searchBtn").on("click", function() {
+		$("#page").val("1");
+		
+		$("#oldSearchGbn").val($("#searchGbn").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
+		
+		// 목록 조회
+		reloadList();
 	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
+	
+	$("#paging_wrap").on("click", "span", function() {
+		$("#page").val($(this).attr("page"));
+		
+		reloadList();
 	});
+	
+	
 });
+function reloadList() { // 목록 조회용 + 페이징 조회용
+	var params =  $("#actionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "inqryListAjax", 
+		dataType : "json", 
+		data : params, 
+		success : function(res) { 
+			console.log(res);
+			drawList(res.list);
+			drawPaging(res.pb);
+		},
+		error : function(request, status, error) {
+			console.log(request.responseText); 			
+		}
+	});
+}
+
+
+function drawList(list) {
+	var html = "";
+	
+	for(var data of list) {
+		html += "<tr no=\"" + data.INQRY_NUM + "\">";
+		html += "<td>" + data.INQRY_NUM + "</td>";
+		html += "<td>" + data.CTGRY_NUM + "</td>";
+		html += "<td>";
+		html += data.WRTNG_TITLE;
+		if(data.ATT_FILE != null) {
+			html += "<img src=\"resources/images/CS/attFile.png\" />";
+		}
+		html += "</td>";
+		html += "<td>" + data.CLNT_NUM + "</td>";
+		html += "<td>" + data.WRTNG_DATE + "</td>";
+		html += "<td>" + data.TB_HIT + "</td>";
+		html += "</tr>";
+	}
+	$("tbody").html(html);
+}
+
+function drawPaging(pb) {
+	var html = "";
+	
+	html += "<span page=\"1\">처음</span>";
+	
+	if($("#page").val() == "1") {
+		html += "<span page=\"1\">이전</span>";
+	} else {
+		html += "<span page=\"" + ($("#page").val() * 1 - 1) + "\">이전</span>";
+	}
+	
+	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
+		if($("#page").val() == i) {
+			html += "<span page=\"" + i + "\"><b>" + i + "</b></span>";
+		} else {
+			html += "<span page=\"" + i + "\">" + i + "</span>";
+		}
+	}
+	
+	if($("#page").val() == pb.maxPcount) {
+		html += "<span page=\"" + pb.maxPcount + "\">다음</span>";
+	} else {
+		html += "<span page=\"" + ($("#page").val() * 1 + 1) + "\">다음</span>";
+	}
+	
+	html += "<span page=\"" + pb.maxPcount + "\">마지막</span>";
+	
+	$("#paging_wrap").html(html);
+}
 </script>
 </head>
 <body>
@@ -67,21 +135,26 @@ $(document).ready(function() {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
+	<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}" />
+	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
+	<form action="#" id="actionForm" method="post">
+		<input type="hidden" id="no" name="no" />
+		<input type="hidden" id="page" name="page" value="${page}" />
+	</form>
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">1:1 문의</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
-				<select class="srch_sel">
-					<option>제목</option>
-					<option>내용</option>
-					<option>작성자</option>
+				<select class="srch_sel" id="searchGbn" name="searchGbn">
+					<option value="0">제목</option>
+					<option value="1">작성자</option>
 				</select>
 				<div class="srch_text_wrap">
-					<input type="text" />
+					<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
 				</div>
-				<div class="cmn_btn_ml">검색</div>
+				<div class="cmn_btn_ml" id="searchBtn">검색</div>
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -106,88 +179,7 @@ $(document).ready(function() {
 						<th>답변상태</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td>10</td>
-						<td>인터넷뱅킹</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>조**</td>
-						<td>2021-12-01</td>
-						<td>대기</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td>인터넷뱅킹</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>김**</td>
-						<td>2021-12-01</td>
-						<td>대기</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td>인터넷뱅킹</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>이**</td>
-						<td>2021-12-01</td>
-						<td>대기</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td>인터넷뱅킹</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>박**</td>
-						<td>2021-12-01</td>
-						<td>대기</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td>인터넷뱅킹</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>최**</td>
-						<td>2021-12-01</td>
-						<td>대기</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td>인터넷뱅킹</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>정**</td>
-						<td>2021-12-01</td>
-						<td>대기</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td>인터넷뱅킹</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>조**</td>
-						<td>2021-12-01</td>
-						<td>완료</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td>인터넷뱅킹</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>김**</td>
-						<td>2021-12-01</td>
-						<td>완료</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td>인터넷뱅킹</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>이**</td>
-						<td>2021-12-01</td>
-						<td>완료</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td>인터넷뱅킹</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>박**</td>
-						<td>2021-12-01</td>
-						<td>완료</td>
-					</tr>
-				</tbody>
+				<tbody></tbody>
 			</table>
 			<div class="board_bottom">
 				<div class="pgn_area">
