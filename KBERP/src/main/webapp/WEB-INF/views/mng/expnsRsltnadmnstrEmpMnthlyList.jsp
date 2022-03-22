@@ -118,6 +118,84 @@ $(document).ready(function() {
 	});
 });
 
+function reloadList() {
+	var params = $("#actionForm").serialize();
+	
+	$.ajax({
+		type : "post", // 전송 형태
+		url : "expnsRsltnadmnstrEmpMnthlyListAjax", // 통신 주소
+		dataType : "json", // 받을 데이터 형태
+		data : params, // 보낼 데이터. 보낼 것이 없으면 안 씀
+		success : function(res) { // 성공 시 실행 함수. 인자는 받아온 데이터
+			console.log(res);
+			drawList(res.list);
+			drawPaging(res.pb);
+		},
+		error : function(request, status, error) { // 문제 발생 시 실행 함수
+			console.log(request.responseText); // 결과 텍스트
+		}
+	});
+}
+
+function drawList(list) {
+	var html = "";
+	
+	for(var data of list) {
+		html += "<tr>";
+		html += "<td>" + data.DATE_MON + "</td>";
+		html += "<td class=\"board_table_hover\" id=\"empName\" mon=\"" + data.DATE_MON + "\" empNum=\"" + data.EMP_NUM + "\">" + data.EMP_NAME + "</td>";
+		html += "<td>";
+		if(data.IND != null) {
+			html += data.IND;
+		} else {
+			html += "0";
+		}
+		html += " 원</td>";
+		html += "<td>";
+		if(data.CRP != null) {
+			html += data.CRP;
+		} else {
+			html += "0";
+		}
+		html += " 원</td>";
+		html += "<td>" + data.TOTAL + " 원</td>";
+		html += "</tr>";
+	}
+	
+	$("tbody").html(html);
+}
+
+function drawPaging(pb) {
+	var html = "";
+	
+	html += "<div class=\"page_btn page_first\" page=\"1\">first</div>";
+	
+	if($("#page").val() == "1") {
+		html += "<div class=\"page_btn page_prev\" page=1>prev</div>";
+	} else {
+		html += "<div class=\"page_btn page_prev\" page=\"" + ($("#page").val() * 1 - 1) + "\">prev</div>";		
+	}
+	
+	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
+		if($("#page").val() == i) {
+			html += "<div class=\"page_btn_on\" page=\"" + i + "\">" + i + "</div>";
+		} else {
+			html += "<div class=\"page_btn\" page=\"" + i + "\">" + i + "</div>";
+		}
+	}
+	
+	if($("#page").val() == pb.maxPcount) {
+		html += "<div class=\"page_btn page_next\" page=\"" + pb.maxPcount + "\">next</div>";		
+	} else {
+		html += "<div class=\"page_btn page_next\" page=\"" + ($("#page").val() * 1 + 1) + "\">next</div>";				
+	}
+	
+	html += "<div class=\"page_btn page_last\" page=\"" + pb.maxPcount + "\">last</div>";
+	
+	$(".pgn_area").html(html);
+	
+}
+
 </script>
 </head>
 <body>
@@ -140,7 +218,7 @@ $(document).ready(function() {
 		<div class="cont_area">
 				<!-- 여기부터 쓰면 됨 -->
 				<div class="emp_name">
-					<div>사원명 : 홍길동</div>
+					<div>사원명 : ${param. empNum}</div>
 				</div>
 				<div>
 					<table class="board_table">

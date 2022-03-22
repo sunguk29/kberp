@@ -91,5 +91,29 @@ public class AcntncController {
 		
 		return mav;
 	}
-
+	
+	// 지출결의서관리 사원별 월별 목록 ajax
+	@RequestMapping(value = "/expnsRsltnadmnstrEmpMnthlyListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String expnsRsltnadmnstrEmpMnthlyListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		// 총 게시글 수
+		int cnt = iCommonService.getIntData("expnsRsltnadmnstr.getExpnsEmpMnthlyCnt", params);
+		
+		// 페이징 계산
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
+		
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("expnsRsltnadmnstr.getExpnsEmpMnthlyList", params);
+		
+		modelMap.put("list", list); 
+		modelMap.put("pb", pb); 
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 }
