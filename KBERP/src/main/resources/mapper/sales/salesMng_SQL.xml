@@ -11,8 +11,10 @@
 	
 	<!-- 영업관리 리스트 -->
 	<select id="getSalesList" parameterType="hashmap" resultType="hashmap">
-		SELECT SS.PRGRS_STS_NUM, SS.LEAD_NAME, SS.CLNT_CMPNY_NAME, SS.CLNT_NAME, SS.EMP_NAME
-		FROM ( SELECT S.SALES_NUM, S.PRGRS_STS_NUM, L.LEAD_NAME, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NAME,
+		SELECT SS.PRGRS_STS, SS.PRGRS_STS2, SS.LEAD_NAME, SS.CLNT_CMPNY_NAME, SS.CLNT_NAME, SS.EMP_NAME
+		FROM ( SELECT S.SALES_NUM, L.LEAD_NAME, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, S.MNGR_EMP_NUM, E.EMP_NAME, 
+		              DECODE(S.PRGRS_STS_NUM, 4, '종료(성공)', 5, '종료(실패)', '진행중') AS PRGRS_STS,
+		              DECODE(S.PRGRS_STS_NUM, 0, '영업기회', 1, '제안', 2, '견적', 3, '계약') AS PRGRS_STS2,
 		              ROW_NUMBER() OVER(ORDER BY SALES_NUM DESC) AS RNUM
 		       FROM SALES S INNER JOIN EMP E
 		                            ON S.MNGR_EMP_NUM = E.EMP_NUM
@@ -22,8 +24,62 @@
 		                            ON EC.CLNT_NUM = L.CLNT_NUM
 		                    INNER JOIN CLNT_CMPNY CC
 		                            ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
+		                    INNER JOIN CLNT_CMPNY_GRADE CCG
+		                            ON CCG.GRADE_NUM = CC.GRADE_NUM
 		      ) SS
 		WHERE SS.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
+	
+	<!-- 영업기회 기본정보tab -->
+	<select id="getSales1AddLead" parameterType="hashmap" resultType="hashmap">
+		SELECT L.LEAD_NUM, L.LEAD_NAME, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NAME, E.EMP_NUM,
+		       DECODE(CCG.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME
+		FROM LEAD L INNER JOIN EMP E
+		                    ON E.EMP_NUM = L.MNGR_EMP_NUM
+		            INNER JOIN ENTRPRS_CLNT EC
+		                    ON EC.CLNT_NUM = L.CLNT_NUM
+		            INNER JOIN CLNT_CMPNY CC
+		                    ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
+		            INNER JOIN CLNT_CMPNY_GRADE CCG
+		                            ON CCG.GRADE_NUM = CC.GRADE_NUM
+		WHERE L.LEAD_NUM = #{leadNum}
+	</select>
+	
+	<!-- 영업번호 시퀀스 담기 -->
+	<select id="salesSeq" resultType="String">
+		SELECT SALES_SEQ.NEXTVAL
+		FROM DUAL
+	</select>
+	
+	<!-- 영업기회 대출상세정보tab -->
+	<insert id="getSales1AddLoan" parameterType="hashmap">
+		INSERT INTO LOAN_DTL_INFO ( SALES_NUM, LOAN_CAUSE_NUM, EXPCTN_LOAN_SCALE, LOAN_HOPE_TYPE, LOAN_HOPE_TIME )
+		VALUES ( #{ss}, #{loanCause}, #{expctnLoanScale}, #{loanHopeType}, #{loanHopeTime})
+	</insert>
+	
+	<!-- 예정사업 상세정보tab -->
+	<insert id="getSales1AddBsns" parameterType="hashmap">
+		INSERT INTO EXPCTD_BSNS_INFO ( SALES_NUM, EXPCTD_BSNS_NAME, EXPCTD_BSNS_TYPE, RMKS )
+		VALUES ( #{ss}, #{expctdBsnsName}, #{expctdBsnsType}, #{rmks} )
+	</insert>
+	
+	<!-- 영업기회 등록 -->
+	<insert id="getSales1AddSales" parameterType="hashmap">
+		INSERT INTO SALES(SALES_NUM, MNGR_EMP_NUM, LEAD_NUM)
+		VALUES(#{ss}, #{len}, #{llnum})
+	</insert>
+	
+	
+	<!-- 예정사업 첨부파일tab -->
+	<!-- <insert id="getSales1AddBsnsAtt" parameterType="hashmap">
+	
+	</insert> -->
+	
+	
+	
+	<!-- 영업기회 상세보기 -->
+	<!-- <select id="getSales1" resultType="hashmap" parameterType="hashmap">
+	
+	</select> -->
 </mapper>
