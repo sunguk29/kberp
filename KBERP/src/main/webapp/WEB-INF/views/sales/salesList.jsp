@@ -89,7 +89,7 @@
 	height: 40px;
 }
 
-.srch_table tr:nth-child(5) {
+.srch_table tr:nth-child(6) {
 	height: 41.5px;
 	border-top: 1.5px solid #d7d7d7;
 }
@@ -177,7 +177,7 @@ select {
 	display: inline-block;
 	width: 25px;
 	height: 25px;
-	background-image: url("../../images/sales/option.png");
+	background-image: url("resources/images/sales/option.png");
 	background-size: 100%;
 	background-repeat: no-repeat;
 	margin: 10px 5px;
@@ -219,14 +219,14 @@ select {
 	display: inline-block;
 	width: 20px;
 	height: 25px;
-	background-image: url("../../images/sales/client.png");
+	background-image: url("resources/images/sales/client.png");
 	background-size: 100%;
 	background-repeat: no-repeat;
 	margin: 13px 0px 13px 10px;
 }
 
 .client { /* 고객사/고객  */
-	width: 180px;
+	width: 200px;
 	height: 25px;
 	font-size: 10.5pt;
 	font-weight: bold;
@@ -266,7 +266,7 @@ table {
 	padding-left: 70px;
 }
 
-.colNum1, .colNum2, .colNum3, .colNum4, .colNum5, .colNum6 {
+.colNum1, .colNum2, .colNum3, .colNum4 {
 	width: 200px;
 	background-color: #F2CB05;
 	border: none;
@@ -293,23 +293,13 @@ table {
 	background: linear-gradient(100deg, #FFD232, #FFC81E);
 }
 
-.colNum5 {
-	background: linear-gradient(100deg, #FFC81E, #FFC314);
-}
-
-.colNum6 {
-	background: linear-gradient(100deg, #FFC314, #F2B705);
-}
-
-.colNum1:active, .colNum2:active, .colNum3:active, .colNum4:active,
-	.colNum5:active, .colNum6:active {
+.colNum1:active, .colNum2:active, .colNum3:active, .colNum4:active {
 	font-weight: bold;
 	color: #2E83F2;
 	cursor: pointer;
 }
 
-.colNum1:hover, .colNum2:hover, .colNum3:hover, .colNum4:hover, .colNum5:hover,
-	.colNum6:hover {
+.colNum1:hover, .colNum2:hover, .colNum3:hover, .colNum4:hover {
 	font-weight: bold;
 	cursor: pointer;
 }
@@ -351,46 +341,29 @@ table {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
-	});
-	
 	
 	reloadList();
+	
+	// 목록에서 영업명 선택 시 상세보기로 이동(우선 영업기회로...)
+	$(".salesOpportunity").on("click", "salesOpportunityName", function() {
+		
+		$("#actionForm").attr("action", "sales1SalesChncCont"); // 우선 영업기회 상세보기로 이동.
+		$("#actionForm").submit();
+	});
+	
+	// 페이징
+	$(".pgn_area").on("click", "div", function() {
+		$("#page").val($(this).attr("page"));
+		
+		reloadList();
+	});
+	
+	// 리드에서 영업기회로 전환하면 영업기회등록화면(sales1SalesChncReg)으로 이어지게...? or '등록' 버튼 클릭 시 영업기회 등록으로 이동하도록?
+	$("#addBtn").on("click", function() {
+		$("#actionForm").attr("action", "sales1SalesChncReg");
+		$("#actionForm").submit();
+	});
+	
 });
 
 function reloadList() {
@@ -412,37 +385,56 @@ function reloadList() {
 }
 
 
-
 function drawList(list) {
 	var html = "";
 	
 	for(var data of list) {
-		html += "<div class=\"sledding\">" + data.PRGRS_STS_NUM + "</div>";
+		html += "<div class=\"salesOpportunity\">";
+		html += "<div class=\"sledding\">" + data.PRGRS_STS + "</div>";
 		html += "<div class=\"salesOpportunityName\">" + data.LEAD_NAME + "</div>";
 		html += "<div class=\"opt\"></div>";
 		html += "<table cellspacing=\"0\">";
 		html += "<colgroup>";
-		html += "<col width=\"120\" />";
-		html += "<col width=\"25\" />";
-		html += "<col width=\"120\" />";
-		html += "<col width=\"25\" />";
-		html += "<col width=\"120\" />";
-		html += "<col width=\"25\" />";
-		html += "<col width=\"120\" />";
-		html += "<col width=\"25\" />";
-		html += "<col width=\"120\" />";
-		html += "<col width=\"25\" />";			
-		html += "<col width=\"120\" />";						
+		html += "<col width=\"120\">";
+		html += "<col width=\"25\">";
+		html += "<col width=\"120\">";
+		html += "<col width=\"25\">";
+		html += "<col width=\"120\">";
+		html += "<col width=\"25\">";
+		html += "<col width=\"120\">";
+		html += "<col width=\"25\">";
+		html += "<col width=\"120\">";
+		html += "<col width=\"25\">";			
+		html += "<col width=\"120\">";						
 		html += "</colgroup>";
 		html += "<tbody>";
+		
+		/* 현재 단계 굵게 표시 */
+
 		html += "<tr height=\"10\">";
-		html += "<td class=\"colNum2\" rowspan=\"3\">영업기회</td>";
+		if(data.PRGRS_STS2 == "영업기회") {
+			html += "<td class=\"colNum1\" rowspan=\"3\"><b>영업기회</b></td>";
+		} else {
+			html += "<td class=\"colNum1\" rowspan=\"3\">영업기회</td>";
+		}
 		html += "<td class=\"a\"></td>";
-		html += "<td class=\"colNum3\" rowspan=\"3\">제안</td>";
+		if(data.PRGRS_STS2 == "제안") {
+			html += "<td class=\"colNum1\" rowspan=\"3\"><b>제안</b></td>";
+		} else {
+			html += "<td class=\"colNum1\" rowspan=\"3\">제안</td>";
+		}
 		html += "<td class=\"a\"></td>";
-		html += "<td class=\"colNum4\" rowspan=\"3\">견적</td>";
+		if(data.PRGRS_STS2 == "견적") {
+			html += "<td class=\"colNum1\" rowspan=\"3\"><b>견적</b></td>";
+		} else {
+			html += "<td class=\"colNum1\" rowspan=\"3\">견적</td>";
+		}
 		html += "<td class=\"a\"></td>";
-		html += "<td class=\"colNum6\" rowspan=\"3\">계약</td>";
+		if(data.PRGRS_STS2 == "계약") {
+			html += "<td class=\"colNum1\" rowspan=\"3\"><b>계약</b></td>";
+		} else {
+			html += "<td class=\"colNum1\" rowspan=\"3\">계약</td>";
+		}
 		html += "</tr>";
 		html += "<tr height=\"10\">";
 		html += "<td class=\"stick1\"></td>";
@@ -460,9 +452,10 @@ function drawList(list) {
 		html += "<div class=\"client\">" + data.CLNT_CMPNY_NAME + " / " + data.CLNT_NAME + "</div>";
 		html += "<div class=\"fs\">예상매출: 12,000,000원</div>";
 		html += "<div class=\"pic\">" + data.EMP_NAME + "</div>";
-		
+		html += "<br>";
+		html += "</div>";
 	}
-	$(".salesOpportunity").html(html);
+	$(".salesWrap").html(html);
 }
 
 function drawPaging(pb) {
@@ -500,7 +493,7 @@ function drawPaging(pb) {
 <body>
 	<form action="#" id="actionForm" method="post">
 		<input type="hidden" id="page" name="page" value="${page}" />
-		<input type="hidden" name="page" value="${param.top}" />
+		<input type="hidden" name="top" value="${param.top}" />
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
 	</form>
@@ -645,8 +638,7 @@ function drawPaging(pb) {
 								</td>
 								<td>
 									<select>
-										<option selected="selected">상품등급</option>
-										<option>영업명</option>
+										<option selected="selected">영업명</option>
 										<option>고객사명</option>
 										<option>예상매출</option>
 										<option>시작일</option>
@@ -662,11 +654,11 @@ function drawPaging(pb) {
 					<div class="SearchResult">
 						<h3>영업관리 (검색결과: 83건)</h3>
 					</div>
-					<div class="salesOpportunity"></div>
+					<div class="salesWrap"></div>
 					<div class="body_bottom">
 						<div class="board_bottom">
 							<div class="pgn_area"></div>
-							<div class="cmn_btn">등록</div>
+							<div class="cmn_btn" id="addBtn">등록</div>
 						</div>
 					</div>
 				</div>
@@ -675,8 +667,6 @@ function drawPaging(pb) {
 		<!-- cont_area end -->
 	</div>
 	<!-- cont_wrap end -->
-	</div>
-	<!-- right_area end  -->
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

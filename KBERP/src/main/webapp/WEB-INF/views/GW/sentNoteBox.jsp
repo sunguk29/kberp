@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Note</title>
+<title>sentNoteBox</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -15,31 +15,120 @@
 	width: 900px;
 }
 /* 개인 작업 영역 */
+.note {
+	display: inline-block;
+	vertical-align : top;
+	width: 900px;
+	height: 500px;
+	border: 1px solid #000;
+}
 
+.title {
+	display: inline-block;
+	vertical-align: top;
+	width: 900px;
+	height: 50px;
+	text-indent: 35px;
+	line-height: 50px;
+	background-image: url('../images/note.png');
+	background-size: 18px 18px;
+	background-repeat: no-repeat;
+	background-position: 10px 16px;
+	font-size: 17px;
+	font-weight: bold;
+}
+.title_bar {
+	display: inline-block;
+	vertical-align: top;
+	width: 900px;
+	height: 3px;
+	background-color: #4B94F2;
+}
+
+.guide {
+	display: table-cell;
+	vertical-align: middle;
+	width: 900px;
+	height: 50px;
+	background-color: #F2CB05;
+	font-size: 12px;
+	text-align: center;
+	/*padding-left: 10px;*/
+}
+
+table {
+	border-collapse: collapse;
+	
+}
+
+tr {
+	border-top: 1px solid #444;
+	border-bottom: 1px solid #444;
+	height: 45px;
+	
+}
+
+thead tr {
+	background-color: #cecece;
+	font-size: 15px;
+}
+
+tbody tr {
+	font-size: 13px;
+}
+
+td:nth-child(1), th:nth-child(1) {
+	width: 50px;
+	text-align: center;
+}
+
+td:nth-child(2), th:nth-child(2) {
+	width: 50px;
+	text-align: center;
+}
+
+td:nth-child(3), th:nth-child(3) {
+	width: 50px;
+	text-align: center;
+}
+
+td:nth-child(4), th:nth-child(4) {
+	width: 150px;
+	text-align: center;
+}
+
+th:nth-child(5) {
+	width: 450px;
+	text-align: center;
+}
+
+td:nth-child(5) {
+	width: 450px;
+	text-align: left;
+	color: blue;
+}
+
+td:nth-child(6), th:nth-child(6) {
+	width: 150px;
+	text-align: center;
+}
+
+td:nth-child(5):hover {
+	text-decoration: underline;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.move_btn {
+	margin-top: 20px;
+	margin-left: 380px;
+	font-size: 10px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	$("#btn2Btn").on("click", function() {
+	
+	$("#dltBtn").on("click", function() {
 		makePopup({
 			bg : false,
 			bgClose : false,
@@ -70,7 +159,7 @@ $(document).ready(function() {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">프로젝트 관리</div>
+			<div class="page_title_text">보낸쪽지함</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
 				<select class="srch_sel">
@@ -87,96 +176,77 @@ $(document).ready(function() {
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
-			<table class="board_table">
-				<colgroup>
-					<col width="100"/>
-					<col width="400"/>
-					<col width="150"/>
-					<col width="150"/>
-					<col width="100"/>
-				</colgroup>
-				<thead>
-					<tr>
-						<th>No</th>
-						<th>제목</th>
-						<th>작성자</th>
-						<th>작성일</th>
-						<th>조회수</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-				</tbody>
-			</table>
+			<div class="note">
+				<div class="title">보낸쪽지함
+					<div class="title_bar"></div>
+				</div>
+				<div class="guide">※ 받은 쪽지와 보낸 쪽지 모두 30일 이후에 자동 삭제됩니다.<br/>
+								  (단, 30일이 지난 쪽지라도 사용자가 열어보지 않으면 삭제되지 않습니다.)
+				</div>
+				<table class="board_table">
+					<thead>
+						<tr>
+							<th>선택</th>
+							<th>No.</th>
+							<th>파일</th>
+							<th>받은사람</th>
+							<th>내용</th>
+							<th>보낸시간</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input type="checkbox"></td>
+							<td>6</td>
+							<td></td>
+							<td>최현우[chw]</td>
+							<td>수신참조 된 결제 내역이 있습니다.<img src="../images/new.png" height="13" width="13"/></td>
+							<td>2022-01-30 18:00</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox"></td>
+							<td>5</td>
+							<td></td>
+							<td>최현우[chw]</td>
+							<td>올해 사내행사 총 결재금액 및 지출 내용입니다.<img src="../images/new.png" height="13" width="13"/></td>
+							<td>2022-01-30 18:00</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox"></td>
+							<td>4</td>
+							<td></td>
+							<td>최현우[chw]</td>
+							<td>수신참조 된 결제 내역이 있습니다.<img src="../images/new.png" height="13" width="13"/></td>
+							<td>2022-01-30 18:00</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox"></td>
+							<td>3</td>
+							<td></td>
+							<td>최현우[chw]</td>
+							<td>전자결재 문서가 종결(전결) 되었습니다.<img src="../images/new.png" height="13" width="13"/></td>
+							<td>2022-01-30 18:00</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox"></td>
+							<td>2</td>
+							<td></td>
+							<td>최현우[chw]</td>
+							<td>새로운 전자결재 문서가 상신되었습니다.<img src="../images/new.png" height="13" width="13"/></td>
+							<td>2022-01-30 18:00</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox"></td>
+							<td>1</td>
+							<td></td>
+							<td>최현우[chw]</td>
+							<td>수신참조 된 결제 내역이 있습니다.<img src="../images/new.png" height="13" width="13"/></td>
+							<td>2022-01-30 18:00</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
 			<div class="board_bottom">
 				<div class="pgn_area">
 					<div class="page_btn page_first">first</div>
@@ -189,10 +259,7 @@ $(document).ready(function() {
 					<div class="page_btn page_next">next</div>
 					<div class="page_btn page_last">last</div>
 				</div>
-				<div class="cmn_btn_ml">글쓰기</div>
-				<div class="cmn_btn_ml" id="alertBtn">알림</div>
-				<div class="cmn_btn_ml" id="btn1Btn">버튼1개</div>
-				<div class="cmn_btn_ml" id="btn2Btn">버튼2개</div>
+				<div class="cmn_btn_ml" id="dltBtn">삭제</div>
 			</div>
 		</div>
 	</div>

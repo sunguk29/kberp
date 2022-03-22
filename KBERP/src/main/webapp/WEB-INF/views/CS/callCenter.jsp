@@ -635,6 +635,9 @@ $(document).ready(function() {
 	});
 
 	$("#searchBtn").on("click", function() {
+		
+		$("#oldsearchTxt").val($("#searchTxt").val());
+		
 		var html = "";
 		
 		html += "<div class=\"srch_slct\">";
@@ -856,6 +859,7 @@ function checkEmpty(sel) {
 			<!-- 고객정보 파트 -->
 				<div class="top">
 					<div class="clnt_info_cont">
+						<input type="hidden" id="oldsearchTxt" value="${param.searchTxt}"/>
 					<form action="#" id="saveForm" method="post">
 						<div class="clnt_info_Header">
 							<div class="clnt_info">고객정보</div>
