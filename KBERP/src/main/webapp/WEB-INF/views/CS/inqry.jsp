@@ -26,9 +26,23 @@
 
 .cont_area {
 	display: inline-block;
-	margin-left: 100px;
-	margin-top: 10px;
+	margin-left: 80px;
+	margin-top: 30px;
 }
+
+.cnsl_page {
+	display: inline-block;
+	width: 85px;
+	height: 40px;
+	line-height: 40px;
+	color: #2E83F2;
+	text-shadow: 0px 0 1px #7b7b7b;
+	font-size: 14pt;
+	font-weight: bold;
+	text-align: center;
+	border-bottom: 2px solid #2E83F2;
+}
+
 .cnsl_top .ctgr, .cnsl_top .wrtng_title, .cnsl_top .wrtng_wrtr {
 	display: inline-block;
 	margin-right: 20px;
@@ -103,20 +117,9 @@ $(document).ready(function() {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">1:1 문의</div>
-			<!-- 검색영역 선택적 사항 -->
-			<div class="page_srch_area">
-				<select class="srch_sel">
-					<option>제목</option>
-					<option>내용</option>
-					<option>작성자</option>
-				</select>
-				<div class="srch_text_wrap">
-					<input type="text" />
-				</div>
-				<div class="cmn_btn_ml">검색</div>
-			</div>
+			<span class="page_title_text">1:1 문의</span>
 		</div>
+		<div class="cnsl_page">상담글</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
@@ -144,7 +147,7 @@ $(document).ready(function() {
 			</div> <!-- cnsl_top의 끝 -->
 			
 				<div class="cnsl_middle">
-					<textarea class="wrtng_cont" rows="20" cols="116" placeholder="내용을 입력하세요." readonly="readonly"></textarea>
+					<textarea class="wrtng_cont" rows="22" cols="116" placeholder="내용을 입력하세요." readonly="readonly"></textarea>
 				</div>
 				<div class="cnsl_bottom">
 					<div class="file_atch">
