@@ -212,14 +212,18 @@ $(document).ready(function() {
 	
 	$(".pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
+		
+		$("#clntCmpnyClsfyNum").val($("#oldClntCmpnyClsfyNum").val());
+		$("#searchType").val($("#oldSearchType").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
 
 		reloadList();
 	});
 	
 	$("#addBtn").on("click", function() {
-		$("#oldClntCmpnyClsfyNum").val($("#clntCmpnyClsfyNum").val());
-		$("#oldSearchType").val($("#searchType").val());
-		$("#oldSearchTxt").val($("#searchTxt").val());
+		$("#clntCmpnyClsfyNum").val($("#oldClntCmpnyClsfyNum").val());
+		$("#searchType").val($("#oldSearchType").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
 		
 		$("#actionForm").attr("action", "clntCmpnyReg");
 		$("#actionForm").submit();
@@ -234,6 +238,8 @@ $(document).ready(function() {
 	});
 	
 	$("#searchBtn").on("click", function() {
+		$("#page").val("1");
+		
 		$("#oldClntCmpnyClsfyNum").val($("#clntCmpnyClsfyNum").val());
 		$("#oldSearchType").val($("#searchType").val());
 		$("#oldSearchTxt").val($("#searchTxt").val());
