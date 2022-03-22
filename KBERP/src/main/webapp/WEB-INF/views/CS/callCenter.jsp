@@ -901,6 +901,8 @@ function checkEmpty(sel) {
 							<div class="cmn_btn" id="guide_btn"><img alt="대응가이드" src="resources/images/CS/call_guide.png" id="imgs"></div>
 						</div>
 						<div class="mid_row1">
+							<input type="hidden" id="emp_num" name="emp_num" value="${sEmpNum}"/>
+							<input type="hidden" id="clnt_num" name="clnt_num" value="${data.CLNT_NUM}"/>
 							<div class="cnsl_type">상담유형</div>
 							<select id="big_sel" name="big_sel">
 								<option>대분류</option>
