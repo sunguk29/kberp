@@ -356,6 +356,9 @@ textarea {
 .hr_bot {
 	margin-bottom: 20px;
 }
+.mng_txt{
+	width: 680px; 
+}
 /* 끝 */
 </style>
 </head>
@@ -419,14 +422,13 @@ textarea {
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="영업시작일*" /></td>
-									<td colspan="3"><input type="text" class="txt" readonly="readonly" value="${data.START_DATE}" /></td>
+									<td colspan="3"><input type="date" class="txt" readonly="readonly" value="${data.START_DATE}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="담당자 *" readonly="readonly"/></td>
 								<td colspan="3" value="${data.EMP_NUM}">
-									<div class="imgPos">
-										<img class="btnImg_in" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
-									</div>
+									<input type="text" class="txt mng_txt" readonly="readonly" value="${data.EMP_NAME}" />
+									<img class="btnImg_in" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
 								</td>
 							</tr>
 						</tbody>

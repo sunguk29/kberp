@@ -107,7 +107,8 @@ public class ClntMngController {
 		try {
 			switch(gbn) {
 			case "insert" :
-				iCommonService.insertData("clntCmpnyMng.getClntCmpnyAdd", params);
+				iCommonService.insertData("clntCmpnyMng.getClntCmpnyAdd", params); // 글저장
+				iCommonService.insertData("clntCmpnyMng.getClntCmpnyAttFile", params); // 첨부파일
 				break;
 			case "update" :
 				
