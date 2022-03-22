@@ -106,6 +106,7 @@ $(document).ready(function() {
 	
 	$("tbody").on("click", "#empName", function() {
 		$("#empNum").val($(this).attr("empNum"));
+		$("#empName").val($(this).attr("empName"));
 		$("#mon").val($(this).attr("mon"));
 		
 		$("#searchTxt").val($("#oldSearchTxt").val());
@@ -143,7 +144,7 @@ function drawList(list) {
 	for(var data of list) {
 		html += "<tr>";
 		html += "<td>" + data.DATE_MON + "</td>";
-		html += "<td class=\"board_table_hover\" id=\"empName\" mon=\"" + data.DATE_MON + "\" empNum=\"" + data.EMP_NUM + "\">" + data.EMP_NAME + "</td>";
+		html += "<td class=\"board_table_hover\" id=\"empName\" mon=\"" + data.DATE_MON + "\" empNum=\"" + data.EMP_NUM + "\" empName=\"" + data.EMP_NAME + "\">" + data.EMP_NAME + "</td>";
 		html += "<td>";
 		if(data.IND != null) {
 			html += data.IND;
@@ -201,6 +202,7 @@ function drawPaging(pb) {
 <body>
 	<form action="#" id="actionForm" method="post">
 		<input type="hidden" id="empNum" name="empNum">
+		<input type="hidden" id="empName" name="empName">
 		<input type="hidden" id="mon" name="mon">
 		<input type="hidden" id="page" name="page" value="${page}" />
 		<input type="hidden" id="searchMonth" name="searchMonth" value="${searchMonth}">

@@ -79,12 +79,16 @@ public class AcntncController {
 	
 	// 지출결의서관리 사원별 월별 목록
 	@RequestMapping(value = "/expnsRsltnadmnstrEmpMnthlyList")
-	public ModelAndView expnsRsltnadmnstrEmpMnthlyList(@RequestParam HashMap<String, String> params, ModelAndView mav) {
+	public ModelAndView expnsRsltnadmnstrEmpMnthlyList(@RequestParam HashMap<String, String> params, 
+													   ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("expnsRsltnadmnstr.getExpnsEmpMnthlyData", params);
 		
 		if(params.get("page") == null || params.get("page") == "") {
 			params.put("page", "1");
 		}
 		
+		mav.addObject("data", data);
 		mav.addObject("page", params.get("page"));
 		
 		mav.setViewName("mng/expnsRsltnadmnstrEmpMnthlyList");
