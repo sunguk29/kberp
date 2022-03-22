@@ -34,5 +34,13 @@
 			 ) S
 		WHERE S.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
+	
+	<select id="getExpnsEmpMnthlyCnt">
+		
+	</select>
+	
+	<select id="getExpnsEmpMnthlyList" resultType="hashmap" parameterType="hashmap">
+		
+	</select>
 
 </mapper>
