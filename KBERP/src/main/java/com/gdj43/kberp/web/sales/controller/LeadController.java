@@ -71,6 +71,31 @@ public class LeadController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
+	@RequestMapping(value = "/meListAjax", method = RequestMethod.POST, 
+					produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String meListAjax(@RequestParam HashMap<String, String> params, 
+							   HttpSession session) throws Throwable {
+
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();		
+		
+		// 총 게시글 수
+		int cnt = iCommonService.getIntData("lead.getMeCnt", params);
+		
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
+		
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		List<HashMap<String, String>> meList = iCommonService.getDataList("lead.getMeList", params);
+		
+		modelMap.put("list", meList);
+		modelMap.put("pb", pb);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 	@RequestMapping(value = "/leadReg")
 	public ModelAndView leadReg(ModelAndView mav) {
 		
@@ -108,5 +133,14 @@ public class LeadController {
 		}
 		
 		return mapper.writeValueAsString(modelMap); 
+	}
+	
+	
+	@RequestMapping(value = "/leadCont")
+	public ModelAndView leadCont(ModelAndView mav) throws Throwable {
+		
+		mav.setViewName("sales/leadCont");
+		
+		return mav;
 	}
 }

@@ -33,23 +33,7 @@ public class ClntMngController {
 			params.put("page", "1");
 		}
 		
-		int MaxCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyListCnt", params);
-		int CntrctCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyCntrctCnt", params);
-		int PartnerCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyPartnerCnt", params);
-		int TmnCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyTmnCnt", params);
-		int SspsCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnySspsCnt", params);
-		int ForeignCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyForeignCnt", params);
-		int EtcCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyEtcCnt", params);
-		
 		mav.addObject("page", params.get("page"));
-		mav.addObject("maxCnt", Integer.toString(MaxCnt));
-		mav.addObject("CntrctCnt", Integer.toString(CntrctCnt));
-		mav.addObject("PartnerCnt", Integer.toString(PartnerCnt));
-		mav.addObject("TmnCnt", Integer.toString(TmnCnt));
-		mav.addObject("SspsCnt", Integer.toString(SspsCnt));
-		mav.addObject("ForeignCnt", Integer.toString(ForeignCnt));
-		mav.addObject("EtcCnt", Integer.toString(EtcCnt));
-		
 		mav.setViewName("sales/clntCmpnyList");
 		
 		return mav;
@@ -66,14 +50,28 @@ public class ClntMngController {
 		
 		int listCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyListCnt", params);
 		
-		PagingBean pb = 
-				iPagingService.getPagingBean(Integer.parseInt(params.get("page")), listCnt, 5, 5);
+		int MaxCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyListCnt", params);
+		int CntrctCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyCntrctCnt", params);
+		int PartnerCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyPartnerCnt", params);
+		int TmnCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyTmnCnt", params);
+		int SspsCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnySspsCnt", params);
+		int ForeignCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyForeignCnt", params);
+		int EtcCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyEtcCnt", params);
+		
+		modelMap.put("MaxCnt", MaxCnt);
+		modelMap.put("CntrctCnt", CntrctCnt);
+		modelMap.put("PartnerCnt", PartnerCnt);
+		modelMap.put("TmnCnt", TmnCnt);
+		modelMap.put("SspsCnt", SspsCnt);
+		modelMap.put("ForeignCnt", ForeignCnt);
+		modelMap.put("EtcCnt", EtcCnt);
+		
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), listCnt, 5, 5);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
-		List<HashMap<String, String>> list = 
-				iCommonService.getDataList("clntCmpnyMng.getClntCmpntList", params);
+		List<HashMap<String, String>> list = iCommonService.getDataList("clntCmpnyMng.getClntCmpntList", params);
 		
 		modelMap.put("list", list);
 		modelMap.put("pb", pb);

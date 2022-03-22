@@ -706,6 +706,9 @@ $(document).ready(function() {
 			contents : html,
 			width : 600,
 			height : 500,
+			contentsEvent : function() {
+				
+			},
 			buttons : [{
 				name : "고객 추가",
 				func:function() {
