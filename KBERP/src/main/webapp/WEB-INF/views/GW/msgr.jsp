@@ -71,7 +71,7 @@
 .chat_box {
 	display : inline-block;
 	width : 350px;
-	height : 466px;
+	height : 610px;
 	border : 1px solid;
 	overflow: hidden auto;
 	background-color: #f4f4f4;
@@ -174,9 +174,9 @@
 .msgr_main {
 	vertical-align : top;
 	display : inline-block;
-	width: 520px;
-	height: 500px;
-	padding: 24px;
+	width: 570px;
+	height: 692px;
+	padding: 0px;
 	border : 1px solid;
 }
 
@@ -293,12 +293,140 @@ td:nth-child(5) {
 	cursor: pointer;
 }
 
+.rcpnt_rank_box {
+	vertical-align : top;
+	display : inline-block;
+	width : 530px;
+	height : 54px;
+	border : 1px solid;
+	padding: 8px 20px 8px 20px;
+	margin-bottom: 10px;
+	background-color: #f2cb05;
+}
+
+#rcpnt_rank {
+	width : 300px;
+	display : inline-block;
+	vertical-align: top;
+	display : inline-block;
+ 	border : 0px solid;
+	font-size : 13pt;
+	margin-top: 17px;
+	margin-left : 120px;
+	text-align: left;
+	background-color: #f2cb05;
+	font-weight: bold; 
+}
+
+.chat_room {
+	vertical-align : top;
+	display : inline-block;
+	width : 550px;
+	height : 590px;
+	border : 1px solid;
+	padding: 10px;
+}
+
+.chat_dtl {
+	width : 550px;
+	height : 540px;
+	border-radius: 8px;
+	
+}
+
+
+.chat_input {
+	display : inline-block;
+	width : 540px;
+	height : 40px;
+	position: relative;
+}
+
+.chat_write {
+	display: inline-block;
+	width : 540px;
+	height : 40px;
+	font-size: 13pt;
+	border-radius: 8px;
+	text-indent: 10pt;
+	position : relative;
+}
+
+.chat_img_file {
+ 	width : 35px;
+	height : 35px;
+ 	background-image: url("../images/file.png");
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+	background-size: 24pt;
+	position: absolute;
+	z-index: 100;
+	cursor: pointer;
+	margin-left: 505px;
+	margin-top: 6px;
+}
+
+.chat_img_plus {
+ 	width : 35px;
+	height : 35px;
+ 	background-image: url("../images/plus.png");
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+	background-size: 24pt;
+	position: absolute;
+	z-index: 100;
+	cursor: pointer;
+	margin-left: 465px;
+	margin-top: 6px;
+}
+
+.chat_rcpnt {
+	display: block;
+	height: 40px;
+	width: 120px;
+	border : 1px solid;
+	font-size: 14pt;
+	text-indent: 5pt;
+	border-radius: 8px;
+	position: relative;
+	top: 425px;
+	background-color: white;
+}
+.chat_user {
+	display: block;
+	height: 40px;
+	width: 80px;
+	border : 1px solid;
+	font-size: 14pt;
+	text-align : center;
+	border-radius: 8px;
+	position: relative;
+	top: 440px;
+	left : 465px;
+	background-color: white;
+}
+
+.chat_time_rcpnt {
+	display: inline-block;
+	position: relative;
+	left: 120px;
+	bottom : 5px;
+}
+
+.chat_time_user {
+	width : 150;
+	display: inline-block;
+	position: relative;
+	right: 90px;
+	bottom : 10px;
+}
 </style>
 <script type="text/javascript">
 
 $(document).ready(function() {
 	
 	$("#main_msgr_btn").on("click", function() {
+				
 		var html = "";
 		
 		html +=	"		<div class = \"srch_mid\">                                          ";
@@ -382,18 +510,6 @@ $(document).ready(function() {
 	
 	$(".chat_list1").on("click", function() {
 		
-		$.ajax({
-			type : "post",
-			url : "chatRoomAjax",
-			dataType : "json",
-			success : function(res) {
-				console.log(res);	
-			},
-			error : function(request, status, error) { 
-				console(request.responseText);
-			}
-		});
-		
 		var html = "";
 		
 		html += "			<div class = \"right_box\">                                                      ";
@@ -419,14 +535,30 @@ $(document).ready(function() {
 		html += "			</div>	                                                                       ";
 		html += "			</div>	                                                                       ";
 		
+		
+		$(".right_box").html(html);
+		$(".msgr_main").remove();
+		
+		$.ajax({
+			type : "post",
+			url : "chatRoomAjax",
+			dataType : "json",
+			success : function(res) {
+				console.log(res);
+				
+			},
+			error : function(request, status, error) { 
+				console(request.responseText);
+			}
+		});
 	});
 	
-/* 	function reloadList() { //목록 조회용 + 페이징 조회용
+/*  	function reloadList() { //목록 조회용 + 페이징 조회용
 		var params = $("#actionForm").serialize();
 				
 		$.ajax({
 			type : "post",
-			url : "chatAjax",
+			url : "chatRoomAjax",
 			dataType : "json",
 			data : params,
 			success : function(res) { 
@@ -437,12 +569,18 @@ $(document).ready(function() {
 				console(request.responseText); 
 			}
 		});
-	} */
+	}  */
 	
 }); // ready
 </script>
 </head>
 <body>
+<!-- <form action = "#" id = "actionForm" method = "post">
+	<input type = hidden id = "chatList"/>
+	<input type = "checkbox" id = "autoScroll" checked = "checked" />자동스크롤
+</form> -->
+
+
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -488,7 +626,7 @@ $(document).ready(function() {
 		<div class = "msgr_main">
 		<div class = "msgr_logo">
 			<input type="button" value = "메시지 보내기" id = "main_msgr_btn" />	
-			</div>
+		</div>
 		</div>
 	</div>
 </div>
