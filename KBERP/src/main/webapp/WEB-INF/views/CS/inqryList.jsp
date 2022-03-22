@@ -19,6 +19,18 @@ tbody img {
 	width: 12px;
 }
 
+td:nth-child(3) {
+	text-align: left;
+	color: #222222;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+td:nth-child(3):hover {
+	color: #4B94F2;
+	text-decoration: underline;
+}
+
 
 </style>
 <script type="text/javascript">
@@ -178,7 +190,7 @@ function drawPaging(pb) {
 			<!-- 여기부터 쓰면 됨 -->
 			<table class="board_table">
 				<colgroup>
-					<col width="50"/>
+					<col width="50" class=""/>
 					<col width="150"/>
 					<col width="450"/>
 					<col width="100"/>
