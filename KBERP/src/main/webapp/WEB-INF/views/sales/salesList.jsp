@@ -344,8 +344,9 @@ $(document).ready(function() {
 	
 	reloadList();
 	
-	// 목록에서 영업명 선택 시 상세보기로 이동(우선 영업기회로...)
-	$(".salesOpportunity").on("click", "salesOpportunityName", function() {
+	// 목록에서 영업명 선택 시 상세보기로 이동
+	$(".salesWrap").on("click", ".salesOpportunityName", function() {
+		$("#salesNum").val($(this).attr("salesNum")); // 영업번호 가져오기
 		
 		$("#actionForm").attr("action", "sales1SalesChncCont"); // 우선 영업기회 상세보기로 이동.
 		$("#actionForm").submit();
@@ -358,7 +359,7 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
-	// 리드에서 영업기회로 전환하면 영업기회등록화면(sales1SalesChncReg)으로 이어지게...? or '등록' 버튼 클릭 시 영업기회 등록으로 이동하도록?
+	// *추후변경:리드에서 영업기회로 전환하면 영업기회등록화면(sales1SalesChncReg)으로 이어지게...
 	$("#addBtn").on("click", function() {
 		$("#actionForm").attr("action", "sales1SalesChncReg");
 		$("#actionForm").submit();
@@ -391,7 +392,7 @@ function drawList(list) {
 	for(var data of list) {
 		html += "<div class=\"salesOpportunity\">";
 		html += "<div class=\"sledding\">" + data.PRGRS_STS + "</div>";
-		html += "<div class=\"salesOpportunityName\">" + data.LEAD_NAME + "</div>";
+		html += "<div class=\"salesOpportunityName\" salesNum = \"" + data.SALES_NUM + "\">" + data.LEAD_NAME + "</div>";
 		html += "<div class=\"opt\"></div>";
 		html += "<table cellspacing=\"0\">";
 		html += "<colgroup>";
@@ -496,6 +497,7 @@ function drawPaging(pb) {
 		<input type="hidden" name="top" value="${param.top}" />
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
+		<input type="hidden" id="salesNum" name="salesNum" />
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">

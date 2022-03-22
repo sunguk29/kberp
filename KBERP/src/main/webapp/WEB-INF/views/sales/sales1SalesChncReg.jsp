@@ -488,7 +488,7 @@ $(document).ready(function() {
 						closePopup();
 					}
 				}, {
-					name : "둘닫기"
+					name : "닫기"
 				}]
 			});
 			
