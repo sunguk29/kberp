@@ -396,109 +396,59 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
+/* 상세보기 */
 	$(".list_table").on("click", "tr", function() {
 		$("#no").val($(this).attr("no"));
 		
-		$("#actionForm").attr("action", "lead");
+		$("#actionForm").attr("action", "leadCont");
 		$("#actionForm").submit();
 	});
 
 /* 담당자 팝업  */
 	$(".userIcon").on("click", function() {
-		var html = "";
+ 		var html = "";
 		
 	 	html += "<div class=\"popup_title_mid\">"; 
-		html += "<div class=\"ptm_left\">";
-		html += "<div class=\"ptm_left_top\">팀분류</div>";
-		html +=	"<div class=\"ptm_left_bot\">사원분류</div>";		
-		html += "</div>";
-		html += "<div class=\"ptm_mid\">";
-		html +=	"<div class=\"ptm_mid_top\">";
-		html +=	"<select class=\"sel_size\">"
-		html +=		"<option>영업1팀</option>";
-		html +=		"<option>영업2팀</option>";
-		html +=		"<option>영업3팀</option>";
-		html +=	"</select>";
-		html +=	"</div>";		
-		html +=	"<div class=\"ptm_mid_bot\">";
-		html +=	"<select class=\"sel_size\">";
-		html +=		"<option>사원번호</option>";
-		html +=		"<option>사원명</option>";
-		html +=	"</select>";
-		html +=	"</div>";	
-		html += "</div>";
-		html += "<div class=\"ptm_mid_right\">";
-		html +=	"<div class=\"ptm_mid_right_top\"></div>";
-		html +=	"<div class=\"ptm_mid_right_bot\">";
-		html +=	"<input type=\"text\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" />";
-		html +=	"</div>";
-		html += "</div>";
-		html += "<div class=\"ptm_right\">";
-		html +=	"<div class=\"ptm_right_top\"></div>";
-		html +=	"<div class=\"ptm_right_bot\">";
-		html +=	"<div class=\"cmn_btn\">검색</div>";
-		html +=	"</div>";
-		html +=	"</div>";
+	 	html += 	"<form id=\"popupForm\">";
+	 	html += 		"<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
+		html += 		"<div class=\"ptm_left\">";
+		html += 			"<div class=\"ptm_left_top\">팀분류</div>";
+		html +=				"<div class=\"ptm_left_bot\">사원분류</div>";		
+		html += 		"</div>";
+		html += 		"<div class=\"ptm_mid\">";
+		html +=				"<div class=\"ptm_mid_top\">";
+		html +=					"<select class=\"sel_size\" id=\"deptS\" name=\"deptS\">"
+		html +=						"<option value=\"6\">영업부</option>";
+		html +=						"<option value=\"7\">영업1팀</option>";
+		html +=						"<option value=\"8\">영업2팀</option>";
+		html +=					"</select>";
+		html +=				"</div>";		
+		html +=				"<div class=\"ptm_mid_bot\">";
+		html +=					"<select class=\"sel_size\" id=\"empS\" name=\"empS\">";
+		html +=						"<option value=\"0\">사원번호</option>";
+		html +=						"<option value=\"1\">사원명</option>";
+		html +=					"</select>";
+		html +=				"</div>";	
+		html += 		"</div>";
+		html += 		"<div class=\"ptm_mid_right\">";
+		html +=				"<div class=\"ptm_mid_right_top\"></div>";
+		html +=				"<div class=\"ptm_mid_right_bot\">";
+		html +=					"<input type=\"text\" id=\"searchT\" name=\"searchT\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" />";
+		html +=				"</div>";
+		html += 		"</div>";
+		html += 		"<div class=\"ptm_right\">";
+		html +=				"<div class=\"ptm_right_top\"></div>";
+		html +=				"<div class=\"ptm_right_bot\">";
+		html +=					"<div class=\"cmn_btn\" id=\"meBtn\">검색</div>";
+		html +=				"</div>";
+		html +=			"</div>";
+		html += 	"</form>";
 		html += "</div>";
 		html += "<div class=\"popup_cont pc_back\">";
-		html +=	"<div class=\"popup_box_in\">";
-		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_cc_box_right\">";
-		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
-		html +=	"<span class=\"mg_wid\">영업1팀</span>";
-		html +=	"</div>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_box_in\">";
-		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_cc_box_right\">";
-		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
-		html +=	"<span class=\"mg_wid\">영업1팀</span>";
-		html +=	"</div>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_box_in\">";
-		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_cc_box_right\">";
-		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
-		html +=	"<span class=\"mg_wid\">영업1팀</span>";
-		html +=	"</div>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_box_in\">";
-		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_cc_box_right\">";
-		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
-		html +=	"<span class=\"mg_wid\">영업1팀</span>";
-		html +=	"</div>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_box_in\">";
-		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_cc_box_right\">";
-		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
-		html +=	"<span class=\"mg_wid\">영업1팀</span>";
-		html +=	"</div>";
-		html +=	"</div>";
-		html += "<div class=\"board_bottom2\">";
-		html +=	"<div class=\"pgn_area\">";
-		html +=	"<div class=\"page_btn page_first\">first</div>";
-		html +=	"<div class=\"page_btn page_prev\">prev</div>";
-		html +=	"<div class=\"page_btn_on\">1</div>";
-		html +=	"<div class=\"page_btn\">2</div>";
-		html +=	"<div class=\"page_btn\">3</div>";
-		html +=	"<div class=\"page_btn\">4</div>";
-		html +=	"<div class=\"page_btn\">5</div>";
-		html +=	"<div class=\"page_btn page_next\">next</div>";
-		html +=	"<div class=\"page_btn page_last\">last</div>";
-		html +=	"</div>";
-		html +=	"</div>";
+		html +=		"<div class=\"popup_box\"></div>";
+		html += 	"<div class=\"board_bottom2\">";
+		html +=			"<div class=\"pgn_area\" id=\"mepb\"></div>";
+		html +=		"</div>"; 
 		html +=	"</div>";
 		
 		makePopup({
@@ -506,7 +456,32 @@ $(document).ready(function() {
 			bgClose : false,
 			title : "담당자 조회",
 			contents : html,
-			width : 500,
+			contentsEvent : function() {
+				meList();
+				//페이징 
+				$("#mepb").on("click", "div", function() {
+					$("#Page").val($(this).attr("page"));
+					
+					meList();
+				});
+				// 검색버튼
+				$("#meBtn").on("click", function () {
+					$("#page").val("1");
+					
+					meList();
+					
+				});
+				
+				$("#searchT").on("keypress", function(event) {
+					if(event.keyCode == 13 ) {
+						$("#page").val("1");
+						
+						meList();
+						return false;
+					}
+				});
+			},
+			width : 600,
 			height : 500,
 			buttons : [{
 				name : "등록",
@@ -521,6 +496,44 @@ $(document).ready(function() {
 	});
 }); 
 
+/* 담당자 조회 팝업  */
+function meList() {
+	var params = $("#popupForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "meListAjax",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			drawList2(res.list);
+			drawPaging(res.pb, "#mepb");
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	});	
+}
+function drawList2(list) {
+	var html = "";
+		
+	for(var data of list) {
+		
+		html +=	"<div class=\"popup_box_in\">";
+		html +=	"<div class=\"popup_cc_box_left\">";
+		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_cc_box_right\">";
+		html +=	 data.EMP_NUM + "<span class=\"boldname\">" + data.EMP_NAME + " / " + data.RANK_NAME + "</span>";
+		html +=	"<span class=\"mg_wid\">" + data.DEPT_NAME + "</span>";
+		html +=	"</div>";
+		html +=	"</div>";	
+	}
+	
+	$(".popup_box").html(html);
+	
+}
+/* 리드 리스트 */
 function reloadList() {
 	var params = $("#actionForm").serialize();
 	
@@ -531,7 +544,7 @@ function reloadList() {
 		data : params,
 		success : function(res) {
 			drawList(res.list);
-			drawPaging(res.pb);
+			drawPaging(res.pb, ".pgn_area");
 		},
 		error : function(req) {
 			console.log(req.responseText);
@@ -591,7 +604,7 @@ function drawList(list) {
 	$(".list_table").html(html);
 }
 
-function drawPaging(pb) {
+function drawPaging(pb, sel) {
 	var html = "";
 	
 	html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
@@ -616,7 +629,7 @@ function drawPaging(pb) {
 	}
 	html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
 	
-	$(".pgn_area").html(html);
+	$(sel).html(html);
 }
 </script>
 </head>

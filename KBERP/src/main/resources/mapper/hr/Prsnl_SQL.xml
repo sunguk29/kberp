@@ -51,6 +51,28 @@
 		WHERE SA.EMP_NUM = #{sEmpNum}
 	</select>
 	
+	<select id="getEdctnLevel" parameterType="hashmap" resultType="hashmap">
+		SELECT EDCTN_LEVEL_NUM, SCHL_NAME, TO_CHAR(ADMSN_DATE, 'YYYY-MM-DD') AS ADMSN_DATE,
+		       TO_CHAR(GRDTN_DATE, 'YYYY-MM-DD') AS GRDTN_DATE, GRADE, SCHL_REGSTR_DVSN
+		FROM EDCTN_LEVEL
+		WHERE EMP_NUM = #{sEmpNum}
+		ORDER BY ADMSN_DATE DESC <!-- 일단 입학일 순 정렬 :: 정렬 조건도 추가하기? -->
+	</select>
+	<select id="getCr" parameterType="hashmap" resultType="hashmap">
+		SELECT CMPNY_NAME, TO_CHAR(JOIN_DATE, 'YYYY-MM-DD') AS JOIN_DATE, TO_CHAR(RSGNT_DATE, 'YYYY-MM-DD') AS RSGNT_DATE,
+		       DEPT, PSTN, JOB
+		FROM CR
+		WHERE EMP_NUM = #{sEmpNum}
+		ORDER BY JOIN_DATE DESC <!-- 얘도 일단 입사일 순 정렬 -->
+	</select>
+	<select id="getQlfctn" parameterType="hashmap" resultType="hashmap">
+		SELECT LCNS_NAME, TO_CHAR(ACQRMNT_DATE, 'YYYY-MM-DD') AS ACQRMNT_DATE,
+ 		       ISSUE_ORGNZT, ACQRMNT_SCORE, TO_CHAR(EXPRTN_DATE, 'YYYY-MM-DD') AS EXPRTN_DATE
+		FROM LCNS
+		WHERE EMP_NUM = #{sEmpNum}
+		ORDER BY ACQRMNT_DATE DESC <!-- 취득일 순 정렬 -->
+	</select>
+	
 	<select id="getMenuAthrty" parameterType="hashmap" resultType="Integer">
 		SELECT MA.ATHRTY_TYPE_NUM
 			FROM EMP E INNER JOIN MENU_ATHRTY MA

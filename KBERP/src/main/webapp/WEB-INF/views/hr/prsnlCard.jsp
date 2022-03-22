@@ -57,7 +57,7 @@
 #table_area {
 	width: 862px;
 	height: 278px;
-	overflow-y: auto;
+	/* overflow-y: auto; */
 }
 
 #basic_info_area {
@@ -735,7 +735,6 @@ function tabContChange(tId, data, dataList) {
 					rsdnt_rgstn_flag = false;
 				} else {
 					rsdnt_rgstn_flag = true;
-					
 				}
 			}
 		}
@@ -871,80 +870,36 @@ function tabContChange(tId, data, dataList) {
 		html += "	</thead>                                                 ";
 		html += "	<tbody>                                                  ";
 		
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">서울대학교</div></td> ";
-		html += "			<td><div class=\"td_cont\">2013/03/02</div></td> ";
-		html += "			<td><div class=\"td_cont\">2020/02/14</div></td> ";
-		html += "			<td><div class=\"td_cont\">4.5 / 4.5</div></td>  ";
-		html += "		</tr>                                                ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">서울고등학교</div></td>";
-		html += "			<td><div class=\"td_cont\">2010/03/02</div></td> ";
-		html += "			<td><div class=\"td_cont\">2013/02/15</div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		</tr>                                                ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">서울중학교</div></td> ";
-		html += "			<td><div class=\"td_cont\">2007/03/02</div></td> ";
-		html += "			<td><div class=\"td_cont\">2010/02/13</div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		</tr>                                                ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"false\" />        ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"false\" />        ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"false\" />        ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"false\" />        ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"false\" />        ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"false\" />        ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"false\" />        ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td> ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		</tr>                                                ";
+		for (var dl of dataList) {
+			html += "		<tr class=\"table_item\">                            ";
+			html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
+			html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
+			html += "			<td><div class=\"td_cont\">" + dl.SCHL_NAME + "</div></td> ";
+			html += "			<td><div class=\"td_cont\">" + dl.ADMSN_DATE + "</div></td> ";
+			html += "			<td><div class=\"td_cont\">";
+			if (dl.GRDTN_DATE != null) {
+				html += dl.GRDTN_DATE;
+			}
+			html += "</div></td> ";
+			html += "			<td><div class=\"td_cont\">";
+			if (dl.GRADE != null) {
+				html += dl.GRADE + " / 4.5";
+			}
+			html += "</div></td>  ";
+			html += "		</tr>                                                ";
+		}
+		if (dataList.length < 10) {
+			for (var i = dataList.length; i < 10; i++) {
+				html += "		<tr class=\"table_item\">                            ";
+				html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
+				html += "			<input type=\"hidden\" class=\"val_existed\" value=\"false\" />        ";
+				html += "			<td><div class=\"td_cont\"></div></td> ";
+				html += "			<td><div class=\"td_cont\"></div></td> ";
+				html += "			<td><div class=\"td_cont\"></div></td> ";
+				html += "			<td><div class=\"td_cont\"></div></td>           ";
+				html += "		</tr>                                                ";
+			}
+		}
 		
 		html += "	</tbody>                                                 ";
 		html += "</table>                                                    ";
@@ -974,89 +929,42 @@ function tabContChange(tId, data, dataList) {
 		html += "	</thead>                                                                 ";
 		html += "	<tbody>                                                                  ";
 		
-		html += "		<tr class=\"table_item\">                                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">삼성전자</div></td>                   ";
-		html += "			<td><div class=\"td_cont\">2011/01/01 - 2021/12/31</div></td>    ";
-		html += "			<td><div class=\"td_cont\">개발팀</div></td>                     ";
-		html += "			<td><div class=\"td_cont\">과장</div></td>                       ";
-		html += "			<td><div class=\"td_cont\">S/W개발</div></td>                    ";
-		html += "		</tr>                                                                ";
-		html += "		<tr class=\"table_item\">                                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">구글코리아</div></td>                 ";
-		html += "			<td><div class=\"td_cont\">2005/01/01 - 2010/12/31</div></td>    ";
-		html += "			<td><div class=\"td_cont\">개발팀</div></td>                     ";
-		html += "			<td><div class=\"td_cont\">대리</div></td>                       ";
-		html += "			<td><div class=\"td_cont\">S/W개발</div></td>                    ";
-		html += "		</tr>                                                                ";
-		html += "		<tr class=\"table_item\">                                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">네이버</div></td>                     ";
-		html += "			<td><div class=\"td_cont\">2001/01/01 - 2004/12/31</div></td>    ";
-		html += "			<td><div class=\"td_cont\">개발팀</div></td>                     ";
-		html += "			<td><div class=\"td_cont\">사원</div></td>                       ";
-		html += "			<td><div class=\"td_cont\">S/W개발</div></td>                    ";
-		html += "		<tr class=\"table_item\">                                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"false\" />        ";
-		html += "			<td><div class=\"td_cont\"></div></td>                     ";
-		html += "			<td><div class=\"td_cont\"></div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>                     ";
-		html += "			<td><div class=\"td_cont\"></div></td>                       ";
-		html += "			<td><div class=\"td_cont\"></div></td>                    ";
-		html += "		<tr class=\"table_item\">                                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"false\" />        ";
-		html += "			<td><div class=\"td_cont\"></div></td>                     ";
-		html += "			<td><div class=\"td_cont\"></div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>                     ";
-		html += "			<td><div class=\"td_cont\"></div></td>                       ";
-		html += "			<td><div class=\"td_cont\"></div></td>                    ";
-		html += "		<tr class=\"table_item\">                                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"false\" />        ";
-		html += "			<td><div class=\"td_cont\"></div></td>                     ";
-		html += "			<td><div class=\"td_cont\"></div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>                     ";
-		html += "			<td><div class=\"td_cont\"></div></td>                       ";
-		html += "			<td><div class=\"td_cont\"></div></td>                    ";
-		html += "		<tr class=\"table_item\">                                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"false\" />        ";
-		html += "			<td><div class=\"td_cont\"></div></td>                     ";
-		html += "			<td><div class=\"td_cont\"></div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>                     ";
-		html += "			<td><div class=\"td_cont\"></div></td>                       ";
-		html += "			<td><div class=\"td_cont\"></div></td>                    ";
-		html += "		<tr class=\"table_item\">                                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"false\" />        ";
-		html += "			<td><div class=\"td_cont\"></div></td>                     ";
-		html += "			<td><div class=\"td_cont\"></div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>                     ";
-		html += "			<td><div class=\"td_cont\"></div></td>                       ";
-		html += "			<td><div class=\"td_cont\"></div></td>                    ";
-		html += "		<tr class=\"table_item\">                                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"false\" />        ";
-		html += "			<td><div class=\"td_cont\"></div></td>                     ";
-		html += "			<td><div class=\"td_cont\"></div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>                     ";
-		html += "			<td><div class=\"td_cont\"></div></td>                       ";
-		html += "			<td><div class=\"td_cont\"></div></td>                    ";
-		html += "		<tr class=\"table_item\">                                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"false\" />        ";
-		html += "			<td><div class=\"td_cont\"></div></td>                     ";
-		html += "			<td><div class=\"td_cont\"></div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>                     ";
-		html += "			<td><div class=\"td_cont\"></div></td>                       ";
-		html += "			<td><div class=\"td_cont\"></div></td>                    ";
-		html += "		</tr>                                                                ";
+		for (var dl of dataList) {
+			html += "		<tr class=\"table_item\">                                            ";
+			html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
+			html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
+			html += "			<td><div class=\"td_cont\">" + dl.CMPNY_NAME + "</div></td>                   ";
+			html += "			<td><div class=\"td_cont\">" + dl.JOIN_DATE + " - " + dl.RSGNT_DATE + "</div></td>    ";
+			html += "			<td><div class=\"td_cont\">";
+			if (dl.DEPT != null) {
+				html += dl.DEPT;
+			}
+			html += "</div></td>                     ";
+			html += "			<td><div class=\"td_cont\">";
+			if (dl.PSTN != null) {
+				html += dl.PSTN;
+			}
+			html += "</div></td>                       ";
+			html += "			<td><div class=\"td_cont\">";
+			if (dl.JOB != null) {
+				html += dl.JOB;
+			}
+			html += "</div></td>                    ";
+			html += "		</tr>                                                                ";
+		}
+		if (dataList.length < 10) {
+			for (var i = dataList.length; i < 10; i++) {
+				html += "		<tr class=\"table_item\">                                            ";
+				html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
+				html += "			<input type=\"hidden\" class=\"val_existed\" value=\"false\" />        ";
+				html += "			<td><div class=\"td_cont\"></div></td>                     ";
+				html += "			<td><div class=\"td_cont\"></div></td>    ";
+				html += "			<td><div class=\"td_cont\"></div></td>                     ";
+				html += "			<td><div class=\"td_cont\"></div></td>                       ";
+				html += "			<td><div class=\"td_cont\"></div></td>                    ";
+				html += "		</tr>                                                                ";
+			}
+		}
 		
 		html += "	</tbody>                                                                 ";
 		html += "</table>                                                                    ";
@@ -1087,123 +995,39 @@ function tabContChange(tId, data, dataList) {
 		html += "	</thead>                                                 ";
 		html += "	<tbody>                                                  ";
 		
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">TOEIC</div></td>      ";
-		html += "			<td><div class=\"td_cont\">2021/11/01</div></td> ";
-		html += "			<td><div class=\"td_cont\">~~~</div></td>        ";
-		html += "			<td><div class=\"td_cont\">990</div></td>        ";
-		html += "			<td><div class=\"td_cont\">2023/10/31</div></td> ";
-		html += "		</tr>                                                ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">정보처리기사</div></td>";
-		html += "			<td><div class=\"td_cont\">2011/06/21</div></td> ";
-		html += "			<td><div class=\"td_cont\">한국~~~</div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		</tr>                                                ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">정보처리기사</div></td>";
-		html += "			<td><div class=\"td_cont\">2011/06/21</div></td> ";
-		html += "			<td><div class=\"td_cont\">한국~~~</div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		</tr>                                                ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">정보처리기사</div></td>";
-		html += "			<td><div class=\"td_cont\">2011/06/21</div></td> ";
-		html += "			<td><div class=\"td_cont\">한국~~~</div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		</tr>                                                ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">정보처리기사</div></td>";
-		html += "			<td><div class=\"td_cont\">2011/06/21</div></td> ";
-		html += "			<td><div class=\"td_cont\">한국~~~</div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		</tr>                                                ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">정보처리기사</div></td>";
-		html += "			<td><div class=\"td_cont\">2011/06/21</div></td> ";
-		html += "			<td><div class=\"td_cont\">한국~~~</div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		</tr>                                                ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">정보처리기사</div></td>";
-		html += "			<td><div class=\"td_cont\">2011/06/21</div></td> ";
-		html += "			<td><div class=\"td_cont\">한국~~~</div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		</tr>                                                ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">정보처리기사</div></td>";
-		html += "			<td><div class=\"td_cont\">2011/06/21</div></td> ";
-		html += "			<td><div class=\"td_cont\">한국~~~</div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		</tr>                                                ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">정보처리기사</div></td>";
-		html += "			<td><div class=\"td_cont\">2011/06/21</div></td> ";
-		html += "			<td><div class=\"td_cont\">한국~~~</div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		</tr>                                                ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">정보처리기사</div></td>";
-		html += "			<td><div class=\"td_cont\">2011/06/21</div></td> ";
-		html += "			<td><div class=\"td_cont\">한국~~~</div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		</tr>                                                ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">정보처리기사</div></td>";
-		html += "			<td><div class=\"td_cont\">2011/06/21</div></td> ";
-		html += "			<td><div class=\"td_cont\">한국~~~</div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		</tr>                                                ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">정보처리기사</div></td>";
-		html += "			<td><div class=\"td_cont\">2011/06/21</div></td> ";
-		html += "			<td><div class=\"td_cont\">한국~~~</div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		</tr>                                                ";
-		html += "		<tr class=\"table_item\">                            ";
-		html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "			<td><div class=\"td_cont\">정보처리기사</div></td>";
-		html += "			<td><div class=\"td_cont\">2011/06/21</div></td> ";
-		html += "			<td><div class=\"td_cont\">한국~~~</div></td>    ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "			<td><div class=\"td_cont\"></div></td>           ";
-		html += "		</tr>                                                ";
+		for (var dl of dataList) {
+			html += "		<tr class=\"table_item\">                            ";
+			html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
+			html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
+			html += "			<td><div class=\"td_cont\">" + dl.LCNS_NAME + "</div></td>      ";
+			html += "			<td><div class=\"td_cont\">" + dl.ACQRMNT_DATE + "</div></td> ";
+			html += "			<td><div class=\"td_cont\">" + dl.ISSUE_ORGNZT + "</div></td>        ";
+			html += "			<td><div class=\"td_cont\">";
+			if (dl.ACQRMNT_SCORE != null) {
+				html += dl.ACQRMNT_SCORE;
+			}
+			html += "</div></td>        ";
+			html += "			<td><div class=\"td_cont\">";
+			if (dl.EXPRTN_DATE != null) {
+				html += dl.EXPRTN_DATE;
+			}
+			html += "</div></td> ";
+			html += "		</tr>                                                ";
+		}
+		
+		if (dataList.length < 10) {
+			for (var i = dataList.length; i < 10; i++) {
+				html += "		<tr class=\"table_item\">                            ";
+				html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
+				html += "			<input type=\"hidden\" class=\"val_existed\" value=\"false\" />        ";
+				html += "			<td><div class=\"td_cont\"></div></td>";
+				html += "			<td><div class=\"td_cont\"></div></td> ";
+				html += "			<td><div class=\"td_cont\"></div></td>    ";
+				html += "			<td><div class=\"td_cont\"></div></td>           ";
+				html += "			<td><div class=\"td_cont\"></div></td>           ";
+				html += "		</tr>                                                ";
+			}
+		}
 		
 		html += "	</tbody>                                                 ";
 		html += "</table>                                                    ";
@@ -1626,6 +1450,8 @@ $(document).ready(function() {
 			$(".popup_bg, .popup").remove();
 		});
 	});
+	
+	$("#table_area").slimScroll({height: "280px"});
 	
 	$("#table_area").on("mouseenter", ".table_item", function() {
 		var state = $(this).find(".item_selected").val();
