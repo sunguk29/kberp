@@ -59,7 +59,7 @@
 	display : inline-block;
 	width : 30px;
 	height : 30px;
-	background-image: url("/images/write.png");
+	background-image: url("resources/images/GW/write.png");
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
 	background-size: 20pt;
@@ -84,7 +84,7 @@
 	border : 1px solid #85898F;
 	padding: 8px 20px;
 	font-size : 12pt;
-	background-image: url("../images/profile.png");
+	background-image: url("resources/images/GW/profile.png");
 	background-position: 250px 7px;
 	background-repeat: no-repeat;
 	background-size: 20pt;
@@ -107,7 +107,7 @@
 	display : inline-block;
 	width: 40px;
 	height: 40px;
-	background-image: url("../images/alarm.png");
+	background-image: url("resources/images/GW/alarm.png");
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
 	background-size: 25pt;
@@ -121,7 +121,7 @@
 	border : 1px solid #85898F;
 	padding: 8px 20px;
 	font-size : 12pt;
-	background-image: url("./images/profile.png");
+	background-image: url("resources/images/GW/profile.png");
 	background-position: 250px 7px;
 	background-repeat: no-repeat;
 	background-size: 20pt;
@@ -135,7 +135,7 @@
 	border : 0px solid;
 	padding : 2px;
 	font-size : 14pt;
-	background-image: url("../images/alarm.png");
+	background-image: url("resources/images/GW/alarm.png");
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
 	background-size: 25pt;
@@ -183,12 +183,12 @@
 .msgr_logo {
 	width: 210px;
 	height: 200px;
-	background-image: url("resources/images/msgr_logo_img.png");
+	background-image: url("resources/images/GW/msgr_logo_img.png");
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 140pt;
-	margin-top: 100px;
-	margin-left: 150px;
+	margin-top: 200px;
+	margin-left: 180px;
 }
 
 #main_msgr_btn {
@@ -284,7 +284,7 @@ td:nth-child(5) {
 .chart {
 	width: 45px;
 	height: 45px;
-	background-image: url("../images/chart.png");
+	background-image: url("resources/images/GW/chart.png");
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 38pt;
@@ -355,7 +355,7 @@ td:nth-child(5) {
 .chat_img_file {
  	width : 35px;
 	height : 35px;
- 	background-image: url("../images/file.png");
+ 	background-image: url("resources/images/GW/file.png");
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
 	background-size: 24pt;
@@ -369,7 +369,7 @@ td:nth-child(5) {
 .chat_img_plus {
  	width : 35px;
 	height : 35px;
- 	background-image: url("../images/plus.png");
+ 	background-image: url("resources/images/GW/plus.png");
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
 	background-size: 24pt;
@@ -424,8 +424,9 @@ td:nth-child(5) {
 <script type="text/javascript">
 
 $(document).ready(function() {
+
 	
-	$("#main_msgr_btn").on("click", function() {
+	$("#main_msgr_btn, .srch_img").on("click", function() {
 				
 		var html = "";
 		
@@ -508,13 +509,15 @@ $(document).ready(function() {
 		});
 	}); // main msgr btn
 	
+	$("")
+	
 	$(".chat_list1").on("click", function() {
 		
 		var html = "";
 		
 		html += "			<div class = \"right_box\">                                                      ";
 		html += "			<div class = \"rcpnt_rank_box\">                                                 ";
-		html += "				<div id = \"rcpnt_rank\">대화상대 성명 / 부서 / 직급  외 2명 </div>          			   ";
+		html += "				<div id = \"rcpnt_rank\">대화상대 성명 / 부서 / 직급  외 2명</div>          			   ";
 		html += "			</div>		                                                                   ";
 		html += "			                                                                               ";
 		html += "			<div class = \"chat_room\">                                                      ";
@@ -526,51 +529,47 @@ $(document).ready(function() {
 		html += "						<div class= \"chat_time_user\"><small>오후 12:13</small></div>         ";
 		html += "					</div>					                                               ";
 		html += "				</div>                                                                     ";
-		html += "				<div class = \"chat_input\">                                                 ";
+		html += "				<div class = \"chat_input\">                                             ";
 		html += "					<div class = \"chat_img_file\"></div>                                    ";
 		html += "					<div class = \"chat_img_plus\"></div>                                    ";
 		html += "					<input type= \"text\" placeholder = \"메시지 입력..\" class = \"chat_write\" />   ";		
 		html += "				</div>                                                                     ";
-		html += "			                                                                               ";
 		html += "			</div>	                                                                       ";
 		html += "			</div>	                                                                       ";
 		
-		
-		$(".right_box").html(html);
 		$(".msgr_main").remove();
+		$(".right_box").html(html);
 		
-		$.ajax({
+	});
+	
+	$(".chat_write").on("keypress", function(event) {
+		if(event.keyCode == 13) {
+			
+			return true;
+		}
+	});
+	
+function insert() {
+	$(".chat_dtl").val($(".chat_write").val());
+	
+	var params = $("#insertForm").serialize();
+	
+ 		$.ajax({
 			type : "post",
-			url : "chatRoomAjax",
+			url : "insertContAjax",
 			dataType : "json",
+			data : params,
 			success : function(res) {
 				console.log(res);
-				
+				$(".chat_dtl").val("");
+				$(".chat_write").val("");
 			},
 			error : function(request, status, error) { 
 				console(request.responseText);
 			}
-		});
-	});
-	
-/*  	function reloadList() { //목록 조회용 + 페이징 조회용
-		var params = $("#actionForm").serialize();
-				
-		$.ajax({
-			type : "post",
-			url : "chatRoomAjax",
-			dataType : "json",
-			data : params,
-			success : function(res) { 
-				console.log(res);
-				drawList(res.list);
-			},
-			error : function(request, status, error) { 
-				console(request.responseText); 
-			}
-		});
-	}  */
-	
+		}); 
+	}
+
 }); // ready
 </script>
 </head>
@@ -589,9 +588,9 @@ $(document).ready(function() {
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
 	<!-- 내용영역 -->
-		<div class="page_title_bar">
+<!-- 		<div class="page_title_bar">
 			<div class="page_title_text">메신저</div>
-		</div>
+		</div> -->
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
