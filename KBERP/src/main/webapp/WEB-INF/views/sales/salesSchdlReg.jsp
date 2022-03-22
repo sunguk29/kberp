@@ -478,7 +478,7 @@ function savePop() {
 					<!-- 첨부자료 -->
 					<div class="rvn_txt">
 						첨부파일 (0) <input type="file" name="att" />
-						<input type=fileid="schdl_att_file" name="schdl_att_file"' /> 
+						<input type="file" id="schdl_att_file" name="schdl_att_file"' /> 
 						<img class="plus_btn"  src="resources/images/sales/plus.png" border='0' /> 
 					</div>
 					<div class="cntrct_box_in"></div>

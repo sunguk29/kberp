@@ -221,7 +221,7 @@ $(document).ready(function() {
 		$("#oldSearchType").val($("#searchType").val());
 		$("#oldSearchTxt").val($("#searchTxt").val());
 		
-		$("#actionForm").attr("action", "clntCmgnyReg");
+		$("#actionForm").attr("action", "clntCmpnyReg");
 		$("#actionForm").submit();
 	});
 	
