@@ -18,6 +18,8 @@
 tbody img {
 	width: 12px;
 }
+
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -47,10 +49,24 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
+	$("tbody").on("click", "tr", function() {
+		$("#no").val($(this).attr("no"));
+		
+		$("#actionForm").attr("action", "inqry");
+		$("#actionForm").submit();
+		
+	});
+	
 	$("#paging_wrap").on("click", "span", function() {
 		$("#page").val($(this).attr("page"));
 		
 		reloadList();
+	});
+	
+	$("#writeBtn").on("click", function () {
+		
+		$("#actionForm").attr("action", "inqryAdd");
+		$("#actionForm").submit();
 	});
 	
 	

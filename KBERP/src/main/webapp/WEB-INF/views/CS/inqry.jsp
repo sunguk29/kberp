@@ -15,47 +15,80 @@
 	width: 900px;
 }
 /* 개인 작업 영역 */
+.cmn_btn_ml {
+	/* 마우스 드래그 금지 */
+	-ms-user-select: none;
+	-moz-user-select: -moz-none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	user-select:none;
+}
 
+.cont_area {
+	display: inline-block;
+	margin-left: 100px;
+	margin-top: 10px;
+}
+.cnsl_top .ctgr, .cnsl_top .wrtng_title, .cnsl_top .wrtng_wrtr {
+	display: inline-block;
+	margin-right: 20px;
+	height: 50px;
+}
+
+.cnsl_top .ctgr select {
+	width: 150px;
+	height: 30px;
+}
+
+.cnsl_top .wrtng_title {
+	width: 200px;
+	height: 40px;
+	margin-right: 200px;
+}
+
+.cnsl_top .wrtng_title input {
+	width: 420px;
+	height: 25px;
+	
+}
+
+.wrtng_wrtr {
+	margin-left: 50px;
+}
+
+.cnsl_top .wrtng_wrtr input {
+	width: 115px;
+	height: 25px;
+	
+}
+
+.wrtng_cont {
+	resize: none;
+	font-family: 고딕;
+}
+
+.cnsl_bottom {
+	margin-top: 30px;
+}
+
+.cnsl_bottom input[type="text"] {
+	width: 400px;
+	height: 20px;
+}
+
+.dwnld {
+	height: 26px;
+	vertical-align: bottom;
+	margin-right: 123px;
+}
+
+.cmn_btn_ml {
+	vertical-align: bottom;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
-	});
+	
 });
 </script>
 </head>
