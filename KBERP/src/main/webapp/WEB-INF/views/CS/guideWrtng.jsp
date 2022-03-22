@@ -15,13 +15,51 @@
 	width: 900px;
 }
 /* 개인 작업 영역 */
-
+tr{
+	text-align: center;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#writeBtn").on("click", function(){
 		$("#actionForm").submit(); 	
 	});	
+	
+	 reloadList();
+	
+	function reloadList(){	//목록 조회용 + 페이징 조회용
+		
+		$.ajax({
+			type: "post", // 전송형태
+			url : "guideWrtngAjax" , //통신 주소
+			dataType : "json", //받을 데이터 형태
+			 //보낼 데이터. 보낼 것이 없으면 안씀
+			success : function(res){ // 성공 시 실행 함수. 인자는 받아온 데이터
+			//받아온 데이터중의 list를 그리겠다.
+				drawList(res.list);
+			},
+			error: function(request, status, error){ // 문제 발생 시 실행 함수
+				console.log(request.responseText); //결과텍스트. 스프링 실행 결과
+			}
+		});
+	}
+
+	// 컨트롤러에서 list를 받아서 그린다
+	function drawList(list){
+		var html ="";
+		
+		// of: list 하나씩 꺼내오는 for문
+		for(var data of list){
+			html+="<tr no=\"" + data.BOARD_NUM+ "\">";
+			html+="<td>" + data.BOARD_NUM +"</td>";
+			html+="<td class=\"board_table_hover board_cont_left\">" + data.CMBN_TITLE +"</td>";
+			html+="<td>" + data.EMP_NAME +"</td>";
+			html+="<td>" + data.WRITE_DATE +"</td>";
+			html+="<td>" + data.CMBN_HITS +"</td>";
+			html+="</tr>";
+		}
+		$("tbody").html(html);
+	}
 });
 </script>
 </head>
@@ -70,78 +108,7 @@ $(document).ready(function() {
 						<th>조회수</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-				<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td class="board_table_hover board_cont_left"></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-				</tbody>
+				<tbody></tbody>
 			</table>
 			<div class="board_bottom">
 				<div class="pgn_area">

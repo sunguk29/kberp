@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cm">
+<select id="getGuide" parameterType="hashmap" resultType="hashmap">
+SELECT C.BOARD_NUM, C.CMBN_TITLE, E.EMP_NAME, TO_CHAR(C.WRITE_DATE,'YYYY-MM-DD') AS WRITE_DATE, C.CMBN_HITS
+FROM CMBN_INFO C INNER JOIN EMP E
+                            ON C.EMP_NUM = E.EMP_NUM
+</select>
 </mapper>
