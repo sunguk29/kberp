@@ -95,7 +95,7 @@ td:nth-child(3) {
 	background-image: url(resources/images/sales/popup.png);
 	background-size: 20px 20px;
 	background-repeat: no-repeat;
-	background-position: 700px center;
+	background-position: right;
 }
 .sales_txt:hover, .lead_txt:hover{
 	cursor : pointer;
@@ -412,7 +412,7 @@ function savePop() {
 			<div class="body">
 				<div class="bodyWrap">
 				<!-- 시작 -->
-					<form action="#" id="RegForm" method="post" enctype="multipart/form-data">
+					<form action="imageUploadAjax" id="RegForm" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
 					<table>
 						<colgroup>

@@ -53,8 +53,10 @@ public class SchdlController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		List<HashMap<String, String>> list = iCommonService.getDataList("salesSchdl.getSalesSchdlList", params);
+		List<HashMap<String, String>> mgrList = iCommonService.getDataList("salesSchdl.getMgrList", params);
 		
 		modelMap.put("list", list);
+		modelMap.put("mgrList", mgrList);
 		
 		
 		return mapper.writeValueAsString(modelMap);

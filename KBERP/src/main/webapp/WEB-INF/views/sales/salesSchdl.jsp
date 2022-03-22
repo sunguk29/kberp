@@ -81,8 +81,18 @@
 	display: inline-block;
 	vertical-align: top;
 	width: 317px;
-	height: 279px;
+	height: 320px;
 	margin-left: 7px;
+	overflow-y : auto;
+	overflow-x : hidden;
+}
+.calendar_cont_text {
+	display: inline-block;
+	vertical-align: top;
+	width: 317px;
+	height: 270px;
+	margin-left: 7px;
+	/* overflow-y : auto; */
 }
 .lead_cal {
 	display: inline-block;
@@ -174,12 +184,14 @@
 	outline: none;
 }
 .cal_text_top {
-	width: 312px;
+	width: 317px;
 	height: 30px;
 	font-size: 15px;
 	font-weight: bold;
 	line-height: 30px;
 	border: none;
+	padding : 0px 0px;
+	margin-left : 7px;
 	background-color: #BDBDBD;
 	background-image: url(resources/images/sales/today.png);
 	background-size: 20px 20px;
@@ -189,6 +201,7 @@
 .cal_text1 {
 	width: 317px;
 	height: 82px;
+	line-height : 22px;
 	border-bottom: 1px dotted #616161;
 	background-color: #EEEEEE;
 }
@@ -229,7 +242,7 @@
 .text_right {
 	display: inline-block;
 	vertical-align: top;
-	width: 235px;
+	width: 227px;
 	height: 82px;
 	white-space: pre;
 	font-size: 12px;
@@ -397,6 +410,14 @@
 	padding-bottom: 5px;
 }
 /* 팝업 속성  */
+
+/* 캘린더 오늘 목록 Ajax */
+.cal_cont {
+	display : inline-block;
+	vertical-align: top;
+	width : 317px;
+	height : 370px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -424,8 +445,6 @@ $(document).ready(function() {
 	/* 목록 그리기용  */
 	function drawList(list) {
 		var html = "";
-
-		html += "<input type=\"text\" class=\"cal_text_top\" readonly=\"readonly\" value=\"      ${tday}\" />";
 		
 		for(var data of list){
 			html +=	"<div class=\"cal_text1\">";
@@ -438,11 +457,22 @@ $(document).ready(function() {
 				html +=	"<div class=\"nrml_cal_big\"></div>";
 			}
 			html +=	"</div>";
-			html +=	"<div class=\"text_right\"><br/>" + data.START_DATE_HR + " ~ " + data.END_DATE_HR + "<br/>" + data.CLNT_CMPNY_NAME + "</div>";
+			if(!data.LEAD_CC_NAME == ""){				
+				html +=	"<div class=\"text_right\"><br/>" + data.START_DATE_HR + " ~ " + data.END_DATE_HR + "<br/>" + data.LEAD_CC_NAME + "</div>";
+			} else if(!data.SALES_CC_NAME == ""){
+				html +=	"<div class=\"text_right\"><br/>" + data.START_DATE_HR + " ~ " + data.END_DATE_HR + "<br/>" + data.SALES_CC_NAME + "</div>";
+			} else {
+				html +=	"<div class=\"text_right\"><br/>" + data.START_DATE_HR + " ~ " + data.END_DATE_HR + "<br/></div>";
+			}
+			html += "</div>";
 			html += "</div>";
 		}
 		
 		$(".calendar_text").html(html);
+	}
+	
+	function drawmgrList() {
+		var html = "";
 	}
 	
 	/* 캘린더 이벤트 관련 시작 */
@@ -701,7 +731,11 @@ $(document).ready(function() {
 							<div class="calendar">
 								<div id="fullCalendarArea"></div>
 							</div>
+							<div class="cal_cont"> 
+							<input type="text" class="cal_text_top" readonly="readonly" value="      ${tday}" />
 							<div class="calendar_text"></div>
+							</div>
+							</div>
 						</div>
 						<div class="content_bot">
 							<div class="lead_cal"></div>

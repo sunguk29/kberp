@@ -6,24 +6,44 @@
 		VALUES (SALES_SCHDL_SEQ.NEXTVAL, #{sEmpNum}, #{sNum}, #{lNum}, #{ssactvtyclsfy}, #{sdt}, #{edt}, #{ssactvtycont})
 	</insert>
 	<select id="getSalesSchdlList" parameterType="hashmap" resultType="hashmap">
-		SELECT A.START_DATE_HR, DECODE(A.END_DATE_HR, NULL, '미정', A.END_DATE_HR) AS END_DATE_HR, A.ACTVTY_CLSFY_NUM, A.CLNT_CMPNY_NAME, A.LEAD_NUM, A.SALES_NUM
-		FROM ( SELECT SUBSTR(SS.START_DATE_HR, 12, 16) AS START_DATE_HR, SUBSTR(SS.END_DATE_HR, 12, 16) AS END_DATE_HR,
-					  CASE WHEN SS.ACTVTY_CLSFY_NUM = 0 THEN '전화'
-					  	   WHEN SS.ACTVTY_CLSFY_NUM = 1 THEN '메일'
-					  	   WHEN SS.ACTVTY_CLSFY_NUM = 2 THEN '방문'
-					       ELSE '기타'
-					  END AS ACTVTY_CLSFY_NUM,CC.CLNT_CMPNY_NAME,
-                      L.LEAD_NUM, S.SALES_NUM,
-					  ROW_NUMBER() OVER(ORDER BY SS.START_DATE_HR DESC) AS RNUM
-			   FROM SALES_SCHDL SS LEFT JOIN LEAD L
-										  ON SS.LEAD_NUM = L.LEAD_NUM
-								   LEFT JOIN SALES S
-										  ON SS.SALES_NUM = S.SALES_NUM
-								   LEFT JOIN ENTRPRS_CLNT CL
-										  ON L.CLNT_NUM = CL.CLNT_NUM
-								   LEFT JOIN CLNT_CMPNY CC
-										  ON CL.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
-			  WHERE SUBSTR(SS.START_DATE_HR, 1, 10) = #{tday} ) A
-	    ORDER BY A.RNUM DESC
+		SELECT A.START_DATE_HR, A.END_DATE_HR, A.ACTVTY_CLSFY_NUM, L.LEAD_NAME AS SALES_NAME, A.LEAD_NAME, A.LEAD_NUM, A.SALES_NUM, A.CLNT_CMPNY_NAME AS LEAD_CC_NAME, CC.CLNT_CMPNY_NAME AS SALES_CC_NAME
+		FROM( SELECT A.START_DATE_HR, DECODE(A.END_DATE_HR, NULL, '미정', A.END_DATE_HR) AS END_DATE_HR, A.ACTVTY_CLSFY_NUM, A.CLNT_CMPNY_NAME, A.LEAD_NAME, A.LEAD_NUM, A.SALES_NUM
+      		  FROM ( SELECT SUBSTR(SS.START_DATE_HR, 12, 16) AS START_DATE_HR, SUBSTR(SS.END_DATE_HR, 12, 16) AS END_DATE_HR,
+					  		CASE WHEN SS.ACTVTY_CLSFY_NUM = 0 THEN '전화'
+					  	   		 WHEN SS.ACTVTY_CLSFY_NUM = 1 THEN '메일'
+					  	   		 WHEN SS.ACTVTY_CLSFY_NUM = 2 THEN '방문'
+					       		 ELSE '기타'
+					  		END AS ACTVTY_CLSFY_NUM,CC.CLNT_CMPNY_NAME,L.LEAD_NAME, L.LEAD_NUM, S.SALES_NUM,
+					  		ROW_NUMBER() OVER(ORDER BY SS.START_DATE_HR DESC) AS RNUM
+			   		 FROM SALES_SCHDL SS LEFT OUTER JOIN LEAD L
+						   		   			    	  ON SS.LEAD_NUM = L.LEAD_NUM
+								   		 LEFT OUTER JOIN SALES S
+										  			  ON SS.SALES_NUM = S.SALES_NUM
+								   		 LEFT OUTER JOIN ENTRPRS_CLNT CL
+										  			  ON L.CLNT_NUM = CL.CLNT_NUM
+								   		 LEFT OUTER JOIN CLNT_CMPNY CC
+										  			  ON CL.CLNT_NAME = CC.CLNT_NAME
+			  		 WHERE SUBSTR(SS.START_DATE_HR, 1, 10) = #{tday} ) A
+	     ORDER BY A.RNUM DESC) A LEFT OUTER JOIN SALES S 
+	    			 						  ON A.SALES_NUM = S.SALES_NUM
+                                 LEFT OUTER JOIN LEAD L 
+                            			 	  ON S.LEAD_NUM = L.LEAD_NUM
+                                 LEFT OUTER JOIN ENTRPRS_CLNT CL
+                                			  ON CL.CLNT_NUM = L.CLNT_NUM
+                                 LEFT OUTER JOIN CLNT_CMPNY CC
+                                			  ON CC.CLNT_NAME = CL.CLNT_NAME
+	</select>
+	<select id="getMgrList" parameterType="hashmap" resultType="hashmap">
+		SELECT A.EMP_NAME, A.EMP_NUM, A.RANK_NAME, A.DEPT_NAME
+		FROM ( SELECT E.EMP_NAME, E.EMP_NUM, RNK.RANK_NAME, D.DEPT_NAME,
+              		  ROW_NUMBER() OVER(ORDER BY RNK.RANK_NUM DESC) AS RNUM
+       		   FROM EMP E INNER JOIN APNTM AP
+               		              ON E.EMP_NUM = AP.EMP_NUM
+                  		  INNER JOIN RANK RNK
+                          		  ON AP.RANK_NUM = RNK.RANK_NUM
+                  		  INNER JOIN DEPT D
+                          		  ON AP.DEPT_NUM = D.DEPT_NUM
+       		   WHERE D.DEPT_NUM BETWEEN 6 AND 8 ) A
+ORDER BY A.RNUM DESC, A.EMP_NUM DESC   
 	</select>
 </mapper>
