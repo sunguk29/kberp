@@ -310,7 +310,7 @@ $(document).ready(function() {
 						
 						RegForm.ajaxForm({
 							success: function(res) {
-								if(res.fileName.length > 0){
+								if(res.fileName.length > 0) {
 									$("#schdl_att_file").val(res.fileName[0]);
 								}
 								

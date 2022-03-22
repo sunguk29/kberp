@@ -15,47 +15,94 @@
 	width: 900px;
 }
 /* 개인 작업 영역 */
+.cmn_btn_ml {
+	/* 마우스 드래그 금지 */
+	-ms-user-select: none;
+	-moz-user-select: -moz-none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	user-select:none;
+}
 
+.cont_area {
+	display: inline-block;
+	margin-left: 80px;
+	margin-top: 30px;
+}
+
+.cnsl_page {
+	display: inline-block;
+	width: 85px;
+	height: 40px;
+	line-height: 40px;
+	color: #2E83F2;
+	text-shadow: 0px 0 1px #7b7b7b;
+	font-size: 14pt;
+	font-weight: bold;
+	text-align: center;
+	border-bottom: 2px solid #2E83F2;
+}
+
+.cnsl_top .ctgr, .cnsl_top .wrtng_title, .cnsl_top .wrtng_wrtr {
+	display: inline-block;
+	margin-right: 20px;
+	height: 50px;
+}
+
+.cnsl_top .ctgr select {
+	width: 150px;
+	height: 30px;
+}
+
+.cnsl_top .wrtng_title {
+	width: 200px;
+	height: 40px;
+	margin-right: 200px;
+}
+
+.cnsl_top .wrtng_title input {
+	width: 420px;
+	height: 25px;
+	
+}
+
+.wrtng_wrtr {
+	margin-left: 50px;
+}
+
+.cnsl_top .wrtng_wrtr input {
+	width: 115px;
+	height: 25px;
+	
+}
+
+.wrtng_cont {
+	resize: none;
+	font-family: 고딕;
+}
+
+.cnsl_bottom {
+	margin-top: 30px;
+}
+
+.cnsl_bottom input[type="text"] {
+	width: 400px;
+	height: 20px;
+}
+
+.dwnld {
+	height: 26px;
+	vertical-align: bottom;
+	margin-right: 123px;
+}
+
+.cmn_btn_ml {
+	vertical-align: bottom;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
-	});
+	
 });
 </script>
 </head>
@@ -67,29 +114,24 @@ $(document).ready(function() {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
+	<form action="#" id="actionForm" method="post">
+		<input type="hidden" name="no" value="${param.no}" />
+		<input type="hidden" name="page" value="${param.page}" />
+		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+	</form>
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">1:1 문의</div>
-			<!-- 검색영역 선택적 사항 -->
-			<div class="page_srch_area">
-				<select class="srch_sel">
-					<option>제목</option>
-					<option>내용</option>
-					<option>작성자</option>
-				</select>
-				<div class="srch_text_wrap">
-					<input type="text" />
-				</div>
-				<div class="cmn_btn_ml">검색</div>
-			</div>
+			<span class="page_title_text">1:1 문의</span>
 		</div>
+		<div class="cnsl_page">상담글</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="cnsl_top">
 				<div class="ctgr">
-					<select disabled="disabled">
+					<select disabled="disabled" value="${data.CTGRY_NUM}">
 						<option>인터넷뱅킹</option>
 						<option>스마트폰뱅킹</option>
 						<option>CD/ATM</option>
@@ -103,15 +145,15 @@ $(document).ready(function() {
 					</select>
 				</div>
 				<div class="wrtng_title">
-					<input type="text" placeholder="제목" readonly="readonly">
+					<input type="text" placeholder="제목" readonly="readonly" value="${data.WRTNG_TITLE}">
 				</div>
 				<div class="wrtng_wrtr">
-					<input type="text" placeholder="작성자" readonly="readonly">
+					<input type="text" placeholder="작성자" readonly="readonly" value="${data.CLNT_NAME}">
 				</div>
 			</div> <!-- cnsl_top의 끝 -->
 			
 				<div class="cnsl_middle">
-					<textarea class="wrtng_cont" rows="20" cols="116" placeholder="내용을 입력하세요." readonly="readonly"></textarea>
+					<textarea class="wrtng_cont" rows="22" cols="116" placeholder="내용을 입력하세요." readonly="readonly">${data.WRTNG_CONT}</textarea>
 				</div>
 				<div class="cnsl_bottom">
 					<div class="file_atch">

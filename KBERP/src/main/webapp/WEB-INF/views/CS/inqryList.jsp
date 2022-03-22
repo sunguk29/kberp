@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP Sample</title>
+<title>카카오뱅크 ERP 1:1 문의</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -18,6 +18,20 @@
 tbody img {
 	width: 12px;
 }
+
+td:nth-child(3) {
+	text-align: left;
+	color: #222222;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+td:nth-child(3):hover {
+	color: #4B94F2;
+	text-decoration: underline;
+}
+
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -47,10 +61,27 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
+	$("tbody").on("click", "tr", function() {
+		$("#no").val($(this).attr("no"));
+		
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		$("#actionForm").attr("action", "inqry");
+		$("#actionForm").submit();
+		
+	});
+	
 	$("#paging_wrap").on("click", "span", function() {
 		$("#page").val($(this).attr("page"));
 		
 		reloadList();
+	});
+	
+	$("#writeBtn").on("click", function () {
+		
+		$("#actionForm").attr("action", "inqryAdd");
+		$("#actionForm").submit();
 	});
 	
 	
@@ -81,16 +112,16 @@ function drawList(list) {
 	for(var data of list) {
 		html += "<tr no=\"" + data.INQRY_NUM + "\">";
 		html += "<td>" + data.INQRY_NUM + "</td>";
-		html += "<td>" + data.CTGRY_NUM + "</td>";
+		html += "<td>" + data.CTGRY_NAME + "</td>";
 		html += "<td>";
 		html += data.WRTNG_TITLE;
 		if(data.ATT_FILE != null) {
 			html += "<img src=\"resources/images/CS/attFile.png\" />";
 		}
 		html += "</td>";
-		html += "<td>" + data.CLNT_NUM + "</td>";
+		html += "<td>" + data.CLNT_NAME + "</td>";
 		html += "<td>" + data.WRTNG_DATE + "</td>";
-		html += "<td>" + data.TB_HIT + "</td>";
+		html += "<td>" + data.ANSR + "</td>";
 		html += "</tr>";
 	}
 	$("tbody").html(html);
@@ -162,7 +193,7 @@ function drawPaging(pb) {
 			<!-- 여기부터 쓰면 됨 -->
 			<table class="board_table">
 				<colgroup>
-					<col width="50"/>
+					<col width="50" class=""/>
 					<col width="150"/>
 					<col width="450"/>
 					<col width="100"/>

@@ -75,7 +75,46 @@ $(document).ready(function() {
 	reloadList();
 	
 	
+	$("#srchText").on("keypress", function(event) {
+		if(event.keyCode == 13) {
+			
+			$("#searchBtn").click();
+			
+			return false;
+		}
+	});
 	
+	
+	$("#searchBtn").on("click", function() {
+		$("#page").val("1");
+		
+		$("#searchTxt").val($("#srchText").val());
+		$("#searchMonth").val($("#srchMonth").val());
+		$("#oldSearchMonth").val($("#searchMonth").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
+		
+		// 목록 조회
+		reloadList();
+	});
+	
+	$(".pgn_area").on("click", "div", function() {
+		$("#page").val($(this).attr("page"));
+		
+		// 목록 조회
+		reloadList();
+	});
+	
+	$("tbody").on("click", "#empName", function() {
+		$("#empNum").val($(this).attr("empNum"));
+		$("#mon").val($(this).attr("mon"));
+		
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		$("#searchMonth").val($("#oldSearchMonth").val());
+		
+		$("#actionForm").attr("action", "expnsRsltnadmnstrEmpMnthlyList");
+		$("#actionForm").submit();
+		
+	});
 	
 });
 
@@ -88,6 +127,7 @@ function reloadList() { // 목록 조회용 + 페이징 조회용
 		dataType : "json", // 받을 데이터 형태
 		data : params, // 보낼 데이터. 보낼 것이 없으면 안 씀
 		success : function(res) { // 성공 시 실행 함수. 인자는 받아온 데이터
+			console.log(res);
 			drawList(res.list);
 			drawPaging(res.pb);
 		},
@@ -101,14 +141,27 @@ function drawList(list) {
 	var html = "";
 	
 	for(var data of list) {
-		html += "<tr no=\"" + data.DATE_HR + "\">";
-		html += "<td>" + data.DATE_HR + "\"</td>";
-		html += "<td class=\"board_table_hover\">" + data.EMP_NUM + "</td>";
-		html += "<td>" + 150,000원 + "</td>";
-		html += "<td>" + 150,000원 + "</td>";
-		html += "<td>" + 300,000원 + "</td>";
+		html += "<tr>";
+		html += "<td>" + data.DATE_MON + "</td>";
+		html += "<td class=\"board_table_hover\" id=\"empName\" mon=\"" + data.DATE_MON + "\" empNum=\"" + data.EMP_NUM + "\">" + data.EMP_NAME + "</td>";
+		html += "<td>";
+		if(data.IND != null) {
+			html += data.IND;
+		} else {
+			html += "0";
+		}
+		html += " 원</td>";
+		html += "<td>";
+		if(data.CRP != null) {
+			html += data.CRP;
+		} else {
+			html += "0";
+		}
+		html += " 원</td>";
+		html += "<td>" + data.TOTAL + " 원</td>";
 		html += "</tr>";
 	}
+	
 	$("tbody").html(html);
 }
 
@@ -116,11 +169,13 @@ function drawPaging(pb) {
 	var html = "";
 	
 	html += "<div class=\"page_btn page_first\" page=\"1\">first</div>";
+	
 	if($("#page").val() == "1") {
 		html += "<div class=\"page_btn page_prev\" page=1>prev</div>";
 	} else {
-		html += "<div class=\"page_btn page_prev\" page=\"" + ($"#page").val() * 1 - 1 + "\">prev</div>";		
+		html += "<div class=\"page_btn page_prev\" page=\"" + ($("#page").val() * 1 - 1) + "\">prev</div>";		
 	}
+	
 	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
 		if($("#page").val() == i) {
 			html += "<div class=\"page_btn_on\" page=\"" + i + "\">" + i + "</div>";
@@ -128,14 +183,16 @@ function drawPaging(pb) {
 			html += "<div class=\"page_btn\" page=\"" + i + "\">" + i + "</div>";
 		}
 	}
+	
 	if($("#page").val() == pb.maxPcount) {
 		html += "<div class=\"page_btn page_next\" page=\"" + pb.maxPcount + "\">next</div>";		
 	} else {
 		html += "<div class=\"page_btn page_next\" page=\"" + ($("#page").val() * 1 + 1) + "\">next</div>";				
 	}
-	html += "<div class=\"page_btn page_last\">last</div>";
 	
-	$("#pgn_area").html(html);
+	html += "<div class=\"page_btn page_last\" page=\"" + pb.maxPcount + "\">last</div>";
+	
+	$(".pgn_area").html(html);
 	
 }
 
@@ -143,10 +200,15 @@ function drawPaging(pb) {
 </head>
 <body>
 	<form action="#" id="actionForm" method="post">
-		<input type="hidden" id="no" name="no" />
+		<input type="hidden" id="empNum" name="empNum">
+		<input type="hidden" id="mon" name="mon">
 		<input type="hidden" id="page" name="page" value="${page}" />
+		<input type="hidden" id="searchMonth" name="searchMonth" value="${searchMonth}">
+		<input type="hidden" id="searchTxt" name="searchTxt" value="${searchTxt}"> 
 	</form>
-
+	
+	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}">
+	<input type="hidden" id="oldSearchMonth" value="${param.searchMonth}">
 
 
 
@@ -164,12 +226,12 @@ function drawPaging(pb) {
 			<div class="page_title_bar">
 				<div class="page_title_text">지출결의서관리 목록</div>
 				<div class="page_srch_area">
-					<input type="month" class="srch_month">
+					<input type="month" class="srch_month" id="srchMonth">
 					
 					<div class="srch_text_wrap">
-						<input type="text" placeholder="사원명" />
+						<input type="text" placeholder="사원명" id="srchText"/>
 					</div>
-					<div class="cmn_btn_ml">검색</div>
+					<div class="cmn_btn_ml" id="searchBtn">검색</div>
 				</div>
 			</div>
 			<!-- 해당 내용에 작업을 진행하시오. -->
@@ -198,7 +260,6 @@ function drawPaging(pb) {
 					</table>
 					<div class="board_bottom">
 						<div class="pgn_area">
-						
 						</div>
 					</div>
 				</div>
