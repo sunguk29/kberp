@@ -90,7 +90,7 @@ function drawList(list) {
 		html += "</td>";
 		html += "<td>" + data.CLNT_NUM + "</td>";
 		html += "<td>" + data.WRTNG_DATE + "</td>";
-		html += "<td>" + data.TB_HIT + "</td>";
+		html += "<td>" + data.ANSR + "</td>";
 		html += "</tr>";
 	}
 	$("tbody").html(html);
