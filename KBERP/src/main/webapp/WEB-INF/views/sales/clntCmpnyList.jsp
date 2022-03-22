@@ -52,19 +52,19 @@
 	background-color: #f2f2f2;
 	border-radius: 5px;
 }
-.sts_list:hover {
+/* .sts_list:hover {
    font-weight: bold;
    cursor: pointer;
    background-color: #F2B705;
-}
-.sts_list:active {
+} */
+/* .sts_list:active {
    width: 110px;
    margin: 0 5px;
    padding: 8px 5px;
    background-color: #F2CB05;
    cursor: pointer;
    font-weight: bold;
-}
+} */
 .tLine{
 	background-color: #4B94F2;
 	width: 927px;
@@ -254,11 +254,27 @@ function reloadList() {
 		success : function(res) {
 			drawList(res.list);
 			drawPaging(res.pb);
+			drawCnt(res.MaxCnt, res.CntrctCnt, res.PartnerCnt, res.TmnCnt, res.SspsCnt, res.ForeignCnt, res.EtcCnt);
 		},
 		error : function(req) {
 			console.log(req.responseText);
 		}
 	});
+	
+}
+
+function drawCnt(MaxCnt, CntrctCnt, PartnerCnt, TmnCnt, SspsCnt, ForeignCnt, EtcCnt) {
+	var html = "";
+	
+	html += "<div class=\"sts_list\" id=\"maxCnt\">전체 : " + MaxCnt + "건</div>";
+	html += "<div class=\"sts_list\" id=\"CntrctCn\">거래고객사 : " + CntrctCnt + "건</div>";
+	html += "<div class=\"sts_list\" id=\"PartnerCnt\">파트너사 : " + PartnerCnt + "건</div>";
+	html += "<div class=\"sts_list\" id=\"TmnCnt\">해지고객사 : " + TmnCnt + "건</div>";
+	html += "<div class=\"sts_list\" id=\"SspsCnt\">정지고객사 : " + SspsCnt + "</div>";
+	html += "<div class=\"sts_list\" id=\"ForeignCnt\">외국파트너사 : " + ForeignCnt + "건</div>";
+	html += "<div class=\"sts_list\" id=\"EtcCnt\">기타 : " + EtcCnt + "건</div>";
+	
+	$(".sts").html(html);
 	
 }
 
@@ -374,15 +390,7 @@ function drawPaging(pb) {
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 			<div class="bodyWrap">
-				<div class="sts">
-					<div class="sts_list" id="maxCnt">전체 : ${maxCnt}건</div>
-					<div class="sts_list" id="CntrctCnt">거래고객사 : ${CntrctCnt}건</div>
-					<div class="sts_list" id="PartnerCnt">파트너사 : ${PartnerCnt}건</div>
-					<div class="sts_list" id="TmnCnt">해지고객사 : ${TmnCnt}건</div>
-					<div class="sts_list" id="SspsCnt">정지고객사 : ${SspsCnt}건</div>
-					<div class="sts_list" id="ForeignCnt">외국파트너사 : ${ForeignCnt}건</div>
-					<div class="sts_list" id="EtcCnt">기타 : ${EtcCnt}건</div>
-				</div>
+				<div class="sts"></div>
 				<div class="tLine"></div>
 				<table class="srch_table">
 					<colgroup>
