@@ -221,14 +221,14 @@
     height: 450px;
     width: 520px;
     border: solid 1px #d7d7d7;
-    overflow-y: scroll; 
+/* overflow-y: scroll; */
 }  
 
 .apntm_list_title {
     display: inline-block;
     vertical-align: top;
-      color: #7b7b7b;
-   font-size: 11pt;
+    color: #7b7b7b;
+    font-size: 11pt;
     height: 30px;
     width: 522px;
     font-weight: 600;
@@ -248,7 +248,7 @@
    height: 40px;
    font-size: 10pt;
    position: sticky;
-   top: 0;
+   top: 0; 
 }
 
 .apntm_list tbody tr {
@@ -488,6 +488,9 @@ $(document).ready(function() {
    } else {
       $("#oldSearchGbn").val("0");
    }
+   
+   //슬림스크롤
+   $(".apntm_list_area").slimScroll({height: "480px"});
    
    // 인사발령 메인화면
    reloadList();
@@ -880,7 +883,7 @@ function drawNewApntm(){
                      <th>결재현황</th>
                   </tr>
                </thead>
-               <tbody></tbody>
+               <tbody id="apntm_tbody"></tbody>
             </table>
          </div>
       </div>
