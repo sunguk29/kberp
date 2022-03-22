@@ -359,7 +359,7 @@
 	margin-top: 5px; 
 }
 
-[name="sucess_sel"] {
+[name="cnsl_rslt"] {
 	margin-left: 5px;
 	width: 70px;
 	height: 20px;
@@ -784,25 +784,25 @@ $(document).ready(function() {
 	
 	$("#noteSaveBtn").on("click", function() {
 		
-		if(checkEmpty("#clnt_name")) {
-			alert("고객명을 입력하세요.");
-			$("#clnt_name").focus();
-		} else if(checkEmpty("#clnt_grade")) {
-			alert("고객등급을 입력하세요.");
-			$("#clnt_grade").focus();
-		} else if(checkEmpty("#ltl_cnsl")) {
-			alert("최근상담일을 입력하세요.");
-			$("#clnt_grade").focus();
-		} else if(checkEmpty("#phon_num_1")) {
-			alert("전화번호를 입력하세요.");
-			$("#phon_num_1").focus();
+		if(checkEmpty("#big_sel")) {
+			alert("대분류를 입력하세요.");
+			$("#big_sel").focus();
+		} else if(checkEmpty("#small_sel")) {
+			alert("소분류를 입력하세요.");
+			$("#small_sel").focus();
+		} else if(checkEmpty("#cont")) {
+			alert("상담내용을 입력하세요.");
+			$("#cont").focus();
+		} else if(checkEmpty("#cnsl_rslt")) {
+			alert("상담결과를 입력하세요.");
+			$("#cnsl_rslt").focus();
 		} else {
 			// 저장
 			var params = $("#noteSaveForm").serialize();
 			
 			$.ajax({
 				type : "post",
-				url : "callCenterAction/insert",
+				url : "cnslNoteAction/insert",
 				dataType : "json",
 				data : params,
 				success : function(res) {
@@ -901,21 +901,23 @@ function checkEmpty(sel) {
 							<div class="cmn_btn" id="guide_btn"><img alt="대응가이드" src="resources/images/CS/call_guide.png" id="imgs"></div>
 						</div>
 						<div class="mid_row1">
+							<input type="hidden" id="emp_num" name="emp_num" value="${sEmpNum}"/>
+							<input type="hidden" id="clnt_num" name="clnt_num" value="${data.CLNT_NUM}"/>
 							<div class="cnsl_type">상담유형</div>
-							<select name="big_sel">
+							<select id="big_sel" name="big_sel">
 								<option>대분류</option>
 							</select>
-							<select name="small_sel">
+							<select id="small_sel" name="small_sel">
 								<option>소분류</option>
 							</select>
 						</div>
 						<div class="mid_row2">
 							<div class="cnsl_note_cont">상담내용</div>
-							<textarea class="cont_memo" rows="10" cols="42"></textarea>
+							<textarea class="cont_memo" id="cont" name="cont" rows="10" cols="42"></textarea>
 						</div>
 						<div class="mid_row3">
 							<div class="cnsl_note_rslt">상담결과</div>
-							<select name="sucess_sel">
+							<select id="cnsl_rslt" name=cnsl_rslt>
 								<option value="0">완료</option>
 								<option value="1">미처리</option>
 								<option value="2">예약</option>
