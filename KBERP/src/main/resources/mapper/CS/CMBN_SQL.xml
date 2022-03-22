@@ -5,5 +5,6 @@
 SELECT C.BOARD_NUM, C.CMBN_TITLE, E.EMP_NAME, TO_CHAR(C.WRITE_DATE,'YYYY-MM-DD') AS WRITE_DATE, C.CMBN_HITS
 FROM CMBN_INFO C INNER JOIN EMP E
                             ON C.EMP_NUM = E.EMP_NUM
+                            ORDER BY C.BOARD_NUM DESC
 </select>
 </mapper>
