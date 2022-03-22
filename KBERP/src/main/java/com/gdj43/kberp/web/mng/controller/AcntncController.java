@@ -39,7 +39,7 @@ public class AcntncController {
 	
 	// 지출결의서관리 목록
 	@RequestMapping(value = "/expnsRsltnadmnstr")
-	public ModelAndView expnsRsltnadmnstr(@RequestParam HashMap<String, String >params, ModelAndView mav) {
+	public ModelAndView expnsRsltnadmnstr(@RequestParam HashMap<String, String > params, ModelAndView mav) {
 		
 		if(params.get("page") == null || params.get("page") == "") {
 			params.put("page", "1");
@@ -75,6 +75,21 @@ public class AcntncController {
 		modelMap.put("pb", pb); 
 		
 		return mapper.writeValueAsString(modelMap);
+	}
+	
+	// 지출결의서관리 사원별 월별 목록
+	@RequestMapping(value = "/expnsRsltnadmnstrEmpMnthlyList")
+	public ModelAndView expnsRsltnadmnstrEmpMnthlyList(@RequestParam HashMap<String, String> params, ModelAndView mav) {
+		
+		if(params.get("page") == null || params.get("page") == "") {
+			params.put("page", "1");
+		}
+		
+		mav.addObject("page", params.get("page"));
+		
+		mav.setViewName("mng/expnsRsltnadmnstrEmpMnthlyList");
+		
+		return mav;
 	}
 
 }

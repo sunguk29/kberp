@@ -8,29 +8,31 @@
 		                                ON EXPNS_RSLTN.EMP_NUM = EMP.EMP_NUM
 		        WHERE 1 = 1
 		        <if test="searchTxt != null and searchTxt != ''">
-					<if test="month != null and month != ''">
-						AND EMP_NAME = #{searchTxt}
-						AND TO_CHAR(DATE_HR, 'YYYY-MM') = #{month}			
-					</if>
-					AND EMP_NAME = #{searchTxt}
+					AND EMP_NAME LIKE '%' || #{searchTxt} || '%'
+				</if>
+				<if test="searchMonth != null and searchMonth != ''">
+					AND TO_CHAR(DATE_HR, 'YYYY-MM') = #{searchMonth}	
 				</if>
 		        GROUP BY TO_CHAR(DATE_HR, 'YYYY-MM'), EMP_NAME )
 	</select>
 	
 	<select id="getExpnsList" resultType="hashmap" parameterType="hashmap">
-		SELECT TO_CHAR(DATE_HR, 'YYYY-MM') AS DATE_MON, EMP_NAME, SUM(DECODE(ER.EXPNS_TYPE, '법인', AMNT)) AS CRP, 
-     		   SUM(DECODE(EXPNS_TYPE, '개인', AMNT)) AS IND, SUM(AMNT) AS TOTAL
-		FROM EXPNS_RSLTN ER INNER JOIN EMP E
-                    		        ON ER.EMP_NUM = E.EMP_NUM
-		WHERE 1 = 1
-		<if test="searchTxt != null and searchTxt != ''">
-			AND EMP_NAME = #{searchTxt}
-		</if>
-		<if test="month != null and month != ''">
-			AND TO_CHAR(DATE_HR, 'YYYY-MM') = #{month}	
-		</if>
-		GROUP BY TO_CHAR(DATE_HR, 'YYYY-MM'), EMP_NAME
-		ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC		
+		SELECT S.DATE_MON, S.EMP_NAME, S.EMP_NUM, S.CRP, S.IND, S.TOTAL
+		FROM (  SELECT TO_CHAR(DATE_HR, 'YYYY-MM') AS DATE_MON, EMP_NAME, E.EMP_NUM, SUM(DECODE(ER.EXPNS_TYPE, '법인', AMNT)) AS CRP, 
+		     		   SUM(DECODE(EXPNS_TYPE, '개인', AMNT)) AS IND, SUM(AMNT) AS TOTAL, 
+		     		   ROW_NUMBER() OVER(ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
+				FROM EXPNS_RSLTN ER INNER JOIN EMP E
+		                    		        ON ER.EMP_NUM = E.EMP_NUM
+				WHERE 1 = 1
+				<if test="searchTxt != null and searchTxt != ''">
+					AND EMP_NAME LIKE '%' || #{searchTxt} || '%'
+				</if>
+				<if test="searchMonth != null and searchMonth != ''">
+					AND TO_CHAR(DATE_HR, 'YYYY-MM') = #{searchMonth}	
+				</if>
+				GROUP BY TO_CHAR(DATE_HR, 'YYYY-MM'), EMP_NAME, E.EMP_NUM
+			 ) S
+		WHERE S.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 
 </mapper>

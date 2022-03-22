@@ -89,16 +89,32 @@ $(document).ready(function() {
 		$("#page").val("1");
 		
 		$("#searchTxt").val($("#srchText").val());
-		$("#month").val($("#srchMonth").val());
-		$("#oldMonth").val($("#month").val());
+		$("#searchMonth").val($("#srchMonth").val());
+		$("#oldSearchMonth").val($("#searchMonth").val());
 		$("#oldSearchTxt").val($("#searchTxt").val());
 		
 		// 목록 조회
 		reloadList();
-		console.log("클릭");
 	});
 	
+	$(".pgn_area").on("click", "div", function() {
+		$("#page").val($(this).attr("page"));
+		
+		// 목록 조회
+		reloadList();
+	});
 	
+	$("tbody").on("click", "#empName", function() {
+		$("#empNum").val($(this).attr("empNum"));
+		$("#mon").val($(this).attr("mon"));
+		
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		$("#searchMonth").val($("#oldSearchMonth").val());
+		
+		$("#actionForm").attr("action", "expnsRsltnadmnstrEmpMnthlyList");
+		$("#actionForm").submit();
+		
+	});
 	
 });
 
@@ -127,7 +143,7 @@ function drawList(list) {
 	for(var data of list) {
 		html += "<tr>";
 		html += "<td>" + data.DATE_MON + "</td>";
-		html += "<td class=\"board_table_hover\">" + data.EMP_NAME + "</td>";
+		html += "<td class=\"board_table_hover\" id=\"empName\" mon=\"" + data.DATE_MON + "\" empNum=\"" + data.EMP_NUM + "\">" + data.EMP_NAME + "</td>";
 		html += "<td>";
 		if(data.IND != null) {
 			html += data.IND;
@@ -174,7 +190,7 @@ function drawPaging(pb) {
 		html += "<div class=\"page_btn page_next\" page=\"" + ($("#page").val() * 1 + 1) + "\">next</div>";				
 	}
 	
-	html += "<div class=\"page_btn page_last\">last</div>";
+	html += "<div class=\"page_btn page_last\" page=\"" + pb.maxPcount + "\">last</div>";
 	
 	$(".pgn_area").html(html);
 	
@@ -184,13 +200,15 @@ function drawPaging(pb) {
 </head>
 <body>
 	<form action="#" id="actionForm" method="post">
+		<input type="hidden" id="empNum" name="empNum">
+		<input type="hidden" id="mon" name="mon">
 		<input type="hidden" id="page" name="page" value="${page}" />
-		<input type="hidden" id="month" name="month" value="${month}">
+		<input type="hidden" id="searchMonth" name="searchMonth" value="${searchMonth}">
 		<input type="hidden" id="searchTxt" name="searchTxt" value="${searchTxt}"> 
 	</form>
 	
 	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}">
-	<input type="hidden" id="oldMonth" value="${param.month}">
+	<input type="hidden" id="oldSearchMonth" value="${param.searchMonth}">
 
 
 
