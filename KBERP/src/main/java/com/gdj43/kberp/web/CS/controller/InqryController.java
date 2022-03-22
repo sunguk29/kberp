@@ -69,7 +69,12 @@ public class InqryController {
 	
 	// 상세보기
 	@RequestMapping(value = "/inqry")
-	public ModelAndView inqry(ModelAndView mav) {
+	public ModelAndView inqry(@RequestParam HashMap<String, String> params,
+							  ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("in.getInqry", params);
+		
+		mav.addObject("data", data);
 		
 		mav.setViewName("CS/inqry");
 		

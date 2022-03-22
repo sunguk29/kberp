@@ -114,6 +114,12 @@ $(document).ready(function() {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
+	<form action="#" id="actionForm" method="post">
+		<input type="hidden" name="no" value="${param.no}" />
+		<input type="hidden" name="page" value="${param.page}" />
+		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+	</form>
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
@@ -125,7 +131,7 @@ $(document).ready(function() {
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="cnsl_top">
 				<div class="ctgr">
-					<select disabled="disabled">
+					<select disabled="disabled" value="${data.CTGRY_NUM}">
 						<option>인터넷뱅킹</option>
 						<option>스마트폰뱅킹</option>
 						<option>CD/ATM</option>
@@ -139,15 +145,15 @@ $(document).ready(function() {
 					</select>
 				</div>
 				<div class="wrtng_title">
-					<input type="text" placeholder="제목" readonly="readonly">
+					<input type="text" placeholder="제목" readonly="readonly" value="${data.WRTNG_TITLE}">
 				</div>
 				<div class="wrtng_wrtr">
-					<input type="text" placeholder="작성자" readonly="readonly">
+					<input type="text" placeholder="작성자" readonly="readonly" value="${data.CLNT_NAME}">
 				</div>
 			</div> <!-- cnsl_top의 끝 -->
 			
 				<div class="cnsl_middle">
-					<textarea class="wrtng_cont" rows="22" cols="116" placeholder="내용을 입력하세요." readonly="readonly"></textarea>
+					<textarea class="wrtng_cont" rows="22" cols="116" placeholder="내용을 입력하세요." readonly="readonly">${data.WRTNG_CONT}</textarea>
 				</div>
 				<div class="cnsl_bottom">
 					<div class="file_atch">
