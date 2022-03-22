@@ -131,15 +131,15 @@ public class PrsnlController {
 			case "slry_info_btn" :
 				tabData = iCommonService.getData("prsnl.getSlryInfo", params);
 				break;
-				/*case "edctn_level_btn" :
-				tabData = iCommonService.getData("prsnl.getEdctnLevel", params);
+			case "edctn_level_btn" :
+				tabDataList = iCommonService.getDataList("prsnl.getEdctnLevel", params);
 				break;
 			case "cr_btn" :
-				tabData = iCommonService.getData("prsnl.getCr", params);
+				tabDataList = iCommonService.getDataList("prsnl.getCr", params);
 				break;
 			case "qlfctn_btn" :
-				tabData = iCommonService.getData("prsnl.getQlfctn", params);
-				break;*/
+				tabDataList = iCommonService.getDataList("prsnl.getQlfctn", params);
+				break;
 			}
 			
 			/*
