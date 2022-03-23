@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gdj43.kberp.common.bean.PagingBean;
+import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 import com.gdj43.kberp.web.sales.service.ISchdlService;
 
@@ -28,6 +30,9 @@ public class SchdlController {
 	
 	@Autowired
 	public ISchdlService iscService;
+	
+	@Autowired
+	public IPagingService iPagingService;
 	
 	@RequestMapping(value = "/salesSchdl")
 	public ModelAndView schdl(ModelAndView mav) {
@@ -53,13 +58,36 @@ public class SchdlController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		List<HashMap<String, String>> list = iCommonService.getDataList("salesSchdl.getSalesSchdlList", params);
-		List<HashMap<String, String>> mgrList = iCommonService.getDataList("salesSchdl.getMgrList", params);
 		
 		modelMap.put("list", list);
-		modelMap.put("mgrList", mgrList);
 		
 		
 		return mapper.writeValueAsString(modelMap);
+	}
+	
+	@RequestMapping(value = "/mgrListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String mgrListAjax(@RequestParam HashMap<String, String> params, 
+						   HttpSession session) throws Throwable {
+	
+	ObjectMapper mapper = new ObjectMapper();
+	
+	Map<String, Object> modelMap = new HashMap<String, Object>();		
+	
+	// 총 게시글 수
+	int cnt = iCommonService.getIntData("salesSchdl.getMgrCnt", params);
+	
+	PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
+	
+	params.put("startCount", Integer.toString(pb.getStartCount()));
+	params.put("endCount", Integer.toString(pb.getEndCount()));
+	
+	List<HashMap<String, String>> mgrList = iCommonService.getDataList("salesSchdl.getMgrList", params);
+	
+	modelMap.put("mgrList", mgrList);
+	modelMap.put("pb", pb);
+	
+	return mapper.writeValueAsString(modelMap);
 	}
 	
 	@RequestMapping(value = "/salesSchdlReg")
