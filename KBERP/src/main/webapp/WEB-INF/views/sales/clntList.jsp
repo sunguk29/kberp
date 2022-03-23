@@ -1,12 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP - 고객사</title>
+<title>카카오뱅크 ERP - 고객</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -14,7 +13,6 @@
 .cont_wrap {
 	width: 1013px;
 }
-
 /* 개인 작업 영역 */
 .body {
 	display: block;
@@ -32,39 +30,6 @@
 	margin: 20px auto;
 }
 
-/* sts */
-.sts {
-	display: inline-block;
-	width: 100%;
-	height: 30px;
-	text-align: center;
-	margin-top: 10px;
-}
-
-.sts_list {
-	display: inline-block;
-	vertical-align: middle;
-	width: 110px;
-	margin: 0 5px;
-	padding: 8px 5px;
-	font-size: 9pt;
-	text-align: center;
-	background-color: #f2f2f2;
-	border-radius: 5px;
-}
-/* .sts_list:hover {
-   font-weight: bold;
-   cursor: pointer;
-   background-color: #F2B705;
-} */
-/* .sts_list:active {
-   width: 110px;
-   margin: 0 5px;
-   padding: 8px 5px;
-   background-color: #F2CB05;
-   cursor: pointer;
-   font-weight: bold;
-} */
 .tLine{
 	background-color: #4B94F2;
 	width: 927px;
@@ -85,7 +50,7 @@
 	height: 50px;
 }
 
-.srch_table tr:nth-child(3) {
+.srch_table tr:nth-child(2) {
 	height: 45px;
 	border-top: 0.5px solid #d7d7d7;
 }
@@ -142,11 +107,11 @@ select {
 	border-top: 2px solid gray;
 }
 
-.list_table thead tr:nth-child(3) {
+.list_table thead tr:nth-child(2) {
 	border-bottom: 2px solid gray;
 }
 
-.list_table tbody tr:nth-child(3) {
+.list_table tbody tr:nth-child(2), .list_table tbody td:nth-child(1)  {
 	border-bottom: 1px solid gray;
 }
 
@@ -167,7 +132,7 @@ select {
 }
 /* 거래 횟수 이미지 */
 .deal{
-	height: 36px;
+	height: 40px;
 }
 .deal_cnt{
 	position:relative;
@@ -198,11 +163,7 @@ select {
 }
 .cont_table {
 	width: 927px;
-	height: 420px;
-}
-.actionForm {
-	width: 100%;
-	height: 100%;
+	height: 288px;
 }
 </style>
 <script type="text/javascript">
@@ -217,7 +178,7 @@ $(document).ready(function() {
 	});
 	
 	$("#addBtn").on("click", function() {
-		$("#actionForm").attr("action", "clntCmpnyReg");
+		$("#actionForm").attr("action", "clntReg");
 		$("#actionForm").submit();
 	});
 	
@@ -242,14 +203,12 @@ function reloadList() {
 	
 	$.ajax({
 		type : "post",
-		url : "clntCmpnyListAjax",
+		url : "clntListAjax",
 		data : params,
 		dataType : "json",
 		success : function(res) {
-			drawSearchCnt(res.MaxCnt);
 			drawList(res.list);
 			drawPaging(res.pb);
-			drawCnt(res.MaxCnt, res.CntrctCnt, res.PartnerCnt, res.TmnCnt, res.SspsCnt, res.ForeignCnt, res.EtcCnt);
 		},
 		error : function(req) {
 			console.log(req.responseText);
@@ -258,56 +217,26 @@ function reloadList() {
 	
 }
 
-function drawCnt(MaxCnt, CntrctCnt, PartnerCnt, TmnCnt, SspsCnt, ForeignCnt, EtcCnt) {
-	var html = "";
-	
-	html += "<div class=\"sts_list\" id=\"maxCnt\">전체 : " + MaxCnt + "건</div>";
-	html += "<div class=\"sts_list\" id=\"CntrctCn\">거래고객사 : " + CntrctCnt + "건</div>";
-	html += "<div class=\"sts_list\" id=\"PartnerCnt\">파트너사 : " + PartnerCnt + "건</div>";
-	html += "<div class=\"sts_list\" id=\"TmnCnt\">해지고객사 : " + TmnCnt + "건</div>";
-	html += "<div class=\"sts_list\" id=\"SspsCnt\">정지고객사 : " + SspsCnt + "</div>";
-	html += "<div class=\"sts_list\" id=\"ForeignCnt\">외국파트너사 : " + ForeignCnt + "건</div>";
-	html += "<div class=\"sts_list\" id=\"EtcCnt\">기타 : " + EtcCnt + "건</div>";
-	
-	$(".sts").html(html);
-	
-}
-
-function drawSearchCnt(MaxCnt) {
-	var html = "";
-	html += "<h3>"; 
-	html += "고객사 (검색결과: " + MaxCnt + "건)";
-	html += "</h3>";
-	
-	$(".SearchResult").html(html);
-	
-}
-
 function drawList(list) {
 	var html = "";
-	
+		
 	html += "<colgroup>";
-	html += "<col width=\"80\">";		
+	html += "<col width=\"70\">";		
 	html += "<col width=\"90\">";		
-	html += "<col width=\"290\">";		
-	html += "<col width=\"80\">";		
+	html += "<col width=\"150\">";		
+	html += "<col width=\"150\">";		
 	html += "</colgroup>";	
 	html += "<thead>";	
 	html += "<tr>";		
-	html += "<th rowspan=\"3\">글번호</th>";			
-	html += "<th>고객사번호</th>";			
-	html += "<th>고객사 등급</th>";			
-	html += "<th></th>";			
+	html += "<th rowspan=\"2\">글번호</th>";			
+	html += "<th>고객번호</th>";			
+	html += "<th>부서 / 직책</th>";			
+	html += "<th>이메일</th>";			
 	html += "</tr>";		
 	html += "<tr>";		
-	html += "<th>고객사 분류</th>";			
 	html += "<th>고객사명</th>";			
-	html += "<th>거래횟수</th>";			
-	html += "</tr>";		
-	html += "<tr>";		
-	html += "<th>매출</th>";			
-	html += "<th>주소</th>";			
-	html += "<th></th>";			
+	html += "<th>고객명</th>";			
+	html += "<th>전화번호</th>";			
 	html += "</tr>";		
 	html += "</thead>";
 	
@@ -315,36 +244,28 @@ function drawList(list) {
  		html += "<tbody>";
 		html += "<tr>";
 		html += "<td rowspan=\"3\">" + data.RNUM + "</td>";
-		html += "<td>CC" + data.CLNT_CMPNY_NUM + "</td>";
-		html += "<td>" + data.GRADE_NAME + "등급</td>";
-		html += "<td rowspan=\"3\">";
-		html += "<img class=\"deal\" alt=\"거래\" src=\"resources/images/sales/hands.png\" />";
-		html += "<span class=\"deal_cnt\">" + data.CNT + "건</span>";
-		html += "</td>";
+		html += "<td>CL" + data.CLNT_NUM + "</td>";
+		html += "<td>" + data.DEPT + " / " + data.DUTY + "</td>";
+		html += "<td>" + data.EMAIL + "</td>";
 		html += "</tr>";
 		html += "<tr>";
-		html += "<td>" + data.CLNT_CMPNY_CLSFY_NAME + "</td>";
-		html += "<td ccn=\"" + data.CLNT_CMPNY_NUM + "\">" + data.CLNT_CMPNY_NAME + "</td>";
-		html += "</tr>";
-		html += "<tr>";
-		html += "<td>" + data.RVN + "</td>";
-		html += "<td>" + data.ADRS + "</td>";
+		html += "<td>" + data.CLNT_CMPNY_NAME + "</td>";
+		html += "<td cn=\"" + data.CLNT_NUM + "\">" + data.CLNT_NAME + "</td>";
+		html += "<td>" + data.MBL + "</td>";
 		html += "</tr>";
 		html += "</tbody>";
 	}
- 	
+	
 	$(".list_table").html(html);
 	
 	$(".list_table tbody").on("click", "tr:nth-child(2) td:nth-child(2)", function() {
-		$("#ccn").val($(this).attr("ccn"));
+		$("#cn").val($(this).attr("ccn"));
 
-		$("#actionForm").attr("action", "clntCmpnyCont");
+		$("#actionForm").attr("action", "clntCont");
 		$("#actionForm").submit();
 	});
-	
+
 }
-
-
 
 function drawPaging(pb) {
 	var html = "";
@@ -389,67 +310,73 @@ function drawPaging(pb) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">고객사 목록</div>
+			<div class="page_title_text">고객 목록</div>
 			<!-- 검색영역 선택적 사항 -->
 			
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
-	<input type="hidden" id="ccn" name="ccn" />
 	<input type="hidden" id="page" name="page" value="${page}" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 			<div class="bodyWrap">
-				<div class="sts"></div>
 				<div class="tLine"></div>
 				<table class="srch_table">
 					<colgroup>
-						<col width="130" />
-						<col width="130" />
-						<col width="320" />
-						<col width="220" />
+						<col width="90" />
+						<col width="60" />
+						<col width="40" />
+						<col width="60" />
+						<col width="60" />
+						<col width="60" />
+						<col width="60" />
+						<col width="60" />
+						<col width="0" />
+						<col width="55" />
 					</colgroup>
 					<tbody>
+						<!-- col=10 -->
+						
 						<tr>
-							<td><span class="srch_name">고객사분류</span></td>
-							<td><select id="clntCmpnyClsfyNum" name="clntCmpnyClsfyNum">
-									<option value="9">전체</option>
-									<option value="0">거래고객사</option>
-									<option value="1">파트너사</option>
-									<option value="2">해지고객사</option>
-									<option value="3">정지고객사</option>
-									<option value="4">외국파트너사</option>
-									<option value="5">기타</option>
-							</select></td>
-							<td></td>
-							<td></td>
+							<td>
+								<span class="srch_name">검색어</span>
+							</td>
+							<td>
+								<select>
+									<option>선택안함</option>
+									<option>고객명</option>
+									<option>고객사명</option>
+									<option>고객번호</option>
+								</select>
+							</td>
+							<td colspan="3">
+								<input type="text" class="srch_msg" placeholder="검색 조건을 선택한 후 입력해주세요." />
+							</td>
+							<td colspan="5">
+								<span class="cmn_btn">검색</span>
+							</td>
 						</tr>
 						<tr>
-							<td><span class="srch_name">검색어</span></td>
-							<td><select id="searchType" name="searchType">
-									<option value="0">고객사명</option>
-									<option value="1">고객사번호</option>
-							</select></td>
-							<td><input type="text" class="srch_msg" placeholder="검색어를 입력해주세요." id="searchTxt" name="searchTxt" /></td>
-							<td><span class="cmn_btn" id="searchBtn">검색</span></td>
-						</tr>
-						<tr>
-							<td><span class="srch_name">정렬</span></td>
-							<td><select id="listSort" name="listSort">
+							<td>
+								<span class="srch_name">정렬</span>
+							</td>
+							<td>
+								<select>
 									<option selected="selected">선택안함</option>
-									<option value="0">매출</option>
-									<option value="1">고객사명</option>
-							</select></td>
+									<option>고객명</option>
+									<option>고객사명</option>
+								</select>
+							</td>
 							<td>
 								<img class="asc_btn cmn_btn" alt="정렬버튼" src="resources/images/sales/asc.png" />
 							</td>
+							<td colspan="7"></td>
 						</tr>
 					</tbody>
 				</table>
-
-				<div class="SearchResult"></div>
+				<div class="SearchResult"><h3>고객 (검색결과: 83건)</h3></div>
 				<div class="cont_table">
 					<table class="list_table"></table>
 				</div>

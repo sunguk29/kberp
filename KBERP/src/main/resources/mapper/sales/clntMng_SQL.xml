@@ -3,26 +3,30 @@
 <mapper namespace="clntCmpnyMng">
 
 	<select id="getClntCmpntList" parameterType="hashmap" resultType="hashmap">
-		SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, A.RVN, A.CNT
-		FROM ( SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, A.RVN, NVL(B.CNT, 0) AS CNT,
-		              A.CLNT_CMPNY_CLSFY_NUM, ROW_NUMBER() OVER(ORDER BY A.RNUM DESC) AS RNUM2
-		       FROM ( SELECT ROW_NUMBER() OVER(ORDER BY CC.CLNT_CMPNY_NUM ASC) AS RNUM, CC.CLNT_CMPNY_NUM, CCG.GRADE_NAME, CCC.CLNT_CMPNY_CLSFY_NAME,
-		                     CC.CLNT_CMPNY_NAME, CC.RVN, CC.ADRS || CC.DTL_ADRS AS ADRS, CC.CLNT_CMPNY_CLSFY_NUM
-		              FROM CLNT_CMPNY CC INNER JOIN CLNT_CMPNY_GRADE CCG
-		                                         ON CC.GRADE_NUM = CCG.GRADE_NUM
-		                                 INNER JOIN CLNT_CMPNY_CLSFY CCC
-		                                         ON CC.CLNT_CMPNY_CLSFY_NUM = CCC.CLNT_CMPNY_CLSFY_NUM ) A 
-		                                 LEFT OUTER JOIN ( SELECT CC.CLNT_CMPNY_NAME, COUNT(*) AS CNT
-		                                                   FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
-		                                              								  ON CC.CLNT_NAME = EC.CLNT_NAME
-		                                 									  INNER JOIN LEAD L
-		                                         									  ON L.CLNT_NUM = EC.CLNT_NUM 
-		                                 									  INNER JOIN SALES S
-		                                         									  ON S.LEAD_NUM = L.LEAD_NUM
-		                                 									  INNER JOIN CNTRCT C
-		                                         									  ON C.SALES_NUM = S.SALES_NUM
-		                                                   GROUP BY CC.CLNT_CMPNY_NAME ) B
-		                                              ON A.CLNT_CMPNY_NAME = B.CLNT_CMPNY_NAME 
+		SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, TRIM(TO_CHAR(RVN, 'L999,999,999,999,999')) AS RVN, A.CNT
+		FROM (  SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, A.RVN, A.CNT,
+		               ROW_NUMBER() OVER(ORDER BY A.RNUM DESC) AS RNUM2 
+		        FROM (  SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, A.RVN, A.CNT,
+		                       A.CLNT_CMPNY_CLSFY_NUM
+		                FROM ( SELECT A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, A.RVN, NVL(B.CNT, 0) AS CNT,
+		                              A.CLNT_CMPNY_CLSFY_NUM, ROW_NUMBER() OVER(ORDER BY A.RNUM DESC) AS RNUM
+		                       FROM ( SELECT ROW_NUMBER() OVER(ORDER BY CC.CLNT_CMPNY_NUM DESC) AS RNUM, CC.CLNT_CMPNY_NUM, CCG.GRADE_NAME, CCC.CLNT_CMPNY_CLSFY_NAME,
+		                                     CC.CLNT_CMPNY_NAME, CC.RVN, CC.ADRS || CC.DTL_ADRS AS ADRS, CC.CLNT_CMPNY_CLSFY_NUM
+		                              FROM CLNT_CMPNY CC INNER JOIN CLNT_CMPNY_GRADE CCG
+		                                                         ON CC.GRADE_NUM = CCG.GRADE_NUM
+		                                                 INNER JOIN CLNT_CMPNY_CLSFY CCC
+		                                                         ON CC.CLNT_CMPNY_CLSFY_NUM = CCC.CLNT_CMPNY_CLSFY_NUM ) A 
+		                                                 LEFT OUTER JOIN ( SELECT CC.CLNT_CMPNY_NAME, COUNT(*) AS CNT
+		                                                                   FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
+		                                                                                              ON CC.CLNT_NAME = EC.CLNT_NAME
+		                                                                                      INNER JOIN LEAD L
+		                                                                                              ON L.CLNT_NUM = EC.CLNT_NUM 
+		                                                                                      INNER JOIN SALES S
+		                                                                                              ON S.LEAD_NUM = L.LEAD_NUM
+		                                                                                      INNER JOIN CNTRCT C
+		                                                                                              ON C.SALES_NUM = S.SALES_NUM
+		                                                                   GROUP BY CC.CLNT_CMPNY_NAME ) B
+		                                                              ON A.CLNT_CMPNY_NAME = B.CLNT_CMPNY_NAME ) A ) A
 			   WHERE 1 = 1
 				<if test="searchTxt != null and searchTxt != ''">
 					<choose>
@@ -81,7 +85,7 @@
 							AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
 						</when>
 					</choose>
-				</if>) A
+				</if> ) A
 		WHERE A.RNUM2 BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
@@ -550,5 +554,41 @@
 		INSERT INTO CLNT_CMPNY_ATT_FILE (ATT_FILE_NUM, CLNT_CMPNY_NUM, ATT_FILE_NAME)
 		VALUES (CLNT_CMPNY_ATT_FILE_SEQ.NEXTVAL, CLNT_CMPNY_SEQ.CURRVAL, #{attFile})
 	</insert>
+	
+	<select id="getClntList" parameterType="hashmap" resultType="hashmap">
+		SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM
+		FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM,
+		               ROW_NUMBER() OVER(ORDER BY EC.RNUM DESC) AS RNUM2 
+		        FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM
+		                FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME,
+		                               EC.MBL, ROW_NUMBER() OVER(ORDER BY EC.RNUM DESC) AS RNUM
+		                        FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME,
+		                                       EC.MBL, ROW_NUMBER() OVER(ORDER BY EC.CLNT_NUM DESC) AS RNUM
+		                                FROM ENTRPRS_CLNT EC INNER JOIN CLNT_CMPNY CC
+		                                                             ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM ) EC ) EC ) EC ) EC
+		WHERE EC.RNUM2 BETWEEN #{startCount} AND #{endCount}
+	</select>
+	
+	<select id="clntListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM ENTRPRS_CLNT
+	</select>
+	
+	<select id="clntCmpnyCont" parameterType="hashmap" resultType="hashmap">
+		SELECT CLNT_CMPNY_NAME, CLNT_CMPNY_CLSFY_NUM, GRADE_NUM, BSNSMN_RGSTRTN_NUM, CLNT_NAME,
+		       PHONE_NUM, FAX, HMPG, ZIP_CODE_NUM, ADRS, DTL_ADRS, TRIM(TO_CHAR(RVN, 'L999,999,999,999,999')) AS RVN, RCGNTN_PATH_NUM
+		FROM CLNT_CMPNY
+		WHERE CLNT_CMPNY_NUM = #{ccn}
+	</select>
 
+	<delete id="ccDelete" parameterType="hashmap">
+		DELETE FROM CLNT_CMPNY
+		WHERE CLNT_CMPNY_NUM = #{ccn}
+	</delete>
+	
+	<delete id="ccAttDelete" parameterType="hashmap">
+		DELETE FROM CLNT_CMPNY_ATT_FILE
+		WHERE CLNT_CMPNY_NUM = #{ccn}
+	</delete>
+	
 </mapper>

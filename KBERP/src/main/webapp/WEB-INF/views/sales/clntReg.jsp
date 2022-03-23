@@ -1,13 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP - 고객사</title>
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<title>카카오뱅크 ERP - 고객</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -32,7 +30,11 @@
 }
 
 /* 개인 작업 영역 */
-table{	
+.txt:hover {
+	cursor: pointer;
+}
+table{
+	
 	border: 1px;
 	width: 927px;
 	margin: 40px auto;
@@ -40,20 +42,15 @@ table{
 td:nth-child(2), td:nth-child(4){
 	border-bottom: 1px solid #d7d7d7;
 }
-tr:nth-child(11) > td:nth-child(1){
-	border-bottom: 1px solid #d7d7d7;
-}
-/* tr:nth-child(9) > td:nth-child(2){
-	background-color: #F2F2F2;
-} */
+
 td:nth-child(1), td:nth-child(3){
 	text-align: center;
 }
-.btn{
+.btn{ /* 내용 제목 영역 */
 	width : 90px;
 	height: 40px;
 }
-.btn, .address{
+.btn {
 	background-color: #fff;
 	border-radius: 3px;
 	font-weight: bold;
@@ -62,11 +59,11 @@ td:nth-child(1), td:nth-child(3){
 	border: none;
 	text-align: center;
 }
-.btnImg:hover, .plus_btn:hover {
+.btnImg:hover{
 	cursor: pointer;
 }
 .txt{
-	height: 30px;
+	height: 33px;
 	width: 100%;
 	padding: 0 5px;
 	font-size: 10.5px;
@@ -80,88 +77,17 @@ td:nth-child(1), td:nth-child(3){
 }
 
 .btnImg{
-	width : 30px;
+	width: 30px;
 	float: right;
 	margin-left: 10px;
 }
 
+/* 목록, 수정, 삭제 영역 */
 .imgPos{
 	text-align: right;
 }
-.title_name {
-	font-size: 15px;
-	font-weight: bold;
-	border-bottom: 3px solid #2E83F2;
-	padding-bottom: 10px;
-	margin-top: 100px;
-	margin-bottom: 30px;
-}
-.drop_btn {
-	display:inline-block;
-	vertical-align: middle;
-	width: 18px;
-	height: 18px;
-	background-image: url("resources/images/sales/downarrow.png");
-	background-size: 18px 18px;
-	float: right;
-	margin-top: 7.5px;
-}
-.up_btn {
-	display:inline-block;
-	vertical-align: middle;
-	width: 18px;
-	height: 18px;
-	background-image: url("resources/images/sales/up_arrow.png");
-	background-size: 18px 18px;
-	float: right;
-	margin-top: 7.5px;
-}
-.drop_btn:hover, .up_btn:hover {
+.plus_btn:hover {
 	cursor: pointer;
-}
-.cc_box_in {
-	display: inline-block;
-	vertical-align: top;
-	width: 480px;
-	height: 65px;
-	padding-top: 5px;
-	padding-left: 20px;
-	white-space: pre;
-	font-size: 13px;
-	line-height: 20px;
-}
-.cc_box_in:hover {
-	cursor: pointer;
-	color: #2E83F2;
-}
-.cc_box_right {
-	display: inline-block;
-	vertical-align: top;
-	width: 305px;
-	height: 70px;
-	padding-right: 20px;
-}
-.right_box {
-	width: 136px;
-	height: 70px;
-	font-size: 14px;
-	padding-left: 162px;
-	line-height: 70px;
-	text-align: center;
-}
-.boldname{
-	font-weight: bold;
-}
-/* 팝업 버튼 */
-.btn_pos {
-	text-align: center;
-}
-.btn_wd {
-	width: 60px;
-}
-.cont_pos {
-	line-height: 100px;
-	text-align: center;
 }
 /* 첨부자료 */
 .cntrct_box_in {
@@ -171,7 +97,6 @@ td:nth-child(1), td:nth-child(3){
 	border-radius: 7px;
 	margin-bottom: 18px;
 	margin-left: 40px;
-	font-size: 10pt;
 }
 .rvn_txt {
 	height: 33px;
@@ -201,26 +126,17 @@ td:nth-child(1), td:nth-child(3){
 	margin-right: 5px;
 	margin-top: 5.5px;
 }
-.plus_btn_bot {
-	display:inline-block;
-	vertical-align: middle;
-	width: 18px;
-	height: 18px;
-	background-image: url("resources/images/sales/plus.png");
-	background-size: 18px 18px;
-	float: right;
-	margin-right: 7px;
-	margin-top: 7.5px;
-}
-.plus_btn_bot:hover {
-	cursor: pointer;
-}
-.search_text {
-	width: 679px;
-	background-color: #f2f2f2;
-}
 #att {
 	display: none;
+}
+.btnImg_in {
+    display: inline-block;
+    vertical-align: middle;
+    width: 25px;
+    height: 25px;
+    float: right;
+    cursor: pointer;
+    margin-right: 5px;
 }
 </style>
 <script type="text/javascript">
@@ -372,7 +288,7 @@ function findAddr(){
 </script>
 </head>
 <body>
-<form action="clntCmpnyList" id="listForm" method="post">
+<form action="clntList" id="listForm" method="post">
 	<input type="hidden" id="page" name="page" value="${page}" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
@@ -401,107 +317,50 @@ function findAddr(){
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="bodyWrap">
-				<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
-					<input type="hidden" id="page" name="page" value="${page}" />
-					<input type="hidden" name="top" value="${param.top}" />
-					<input type="hidden" name="menuNum" value="${param.menuNum}" />
-					<input type="hidden" name="menuType" value="${param.menuType}" />
-					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
-					<table>
-						<colgroup>
-							<col width="200" />
-							<col width="auto" />
-						</colgroup>
-						<tbody>
-							<tr>
-								<td><input type="button" class="btn" value="고객사 *" readonly="readonly" /></td>
-								<td><input type="text" class="txt" id="ccName" name="ccName" /></td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="고객사 분류 *" /></td>
-								<td>
-									<select class="txt" id="ccClsfy" name="ccClsfy">
-											<option value="0">거래고객사</option>
-											<option value="1">파트너사</option>
-											<option value="2">해지고객사</option>
-											<option value="3">정지고객사</option>
-											<option value="4">외국고객사</option>
-											<option value="5">기타</option>
-									</select>
-								</td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="등급 *" /></td>
-								<td>
-									<select class="txt" id="ccGrade" name="ccGrade">
-											<option value="0">S</option>
-											<option value="1">A</option>
-											<option value="2">B</option>
-											<option value="3">C</option>
-											<option value="4">D</option>
-									</select>
-								</td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="사업자번호" /></td>
-								<td><input type="text" class="txt" id="brNum" name="brNum" /></td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="대표" /></td>
-								<td><input type="text" class="txt" id="cName" name="cName" /></td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="유선번호" /></td>
-								<td><input type="text" class="txt" id="phoneNum" name="phoneNum" /></td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="팩스번호" /></td>
-								<td><input type="text" class="txt" id="fax" name="fax" /></td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="웹사이트" /></td>
-								<td><input type="text" class="txt" id="hmpg" name="hmpg" /></td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="우편번호" /></td>
-								<td><input type="text" class="txt" id="zipCodeNum" name="zipCodeNum" /></td>
-							</tr>
-							<tr height="40">
-								<td rowspan="2"><input type="button" class="address" value="주소 *" /></td>
-								<td><input type="text" class="txt search_text" id="adrs" name="adrs" readonly="readonly" />
-									<img class="btnImg" id="search_icon" alt="돋보기" src="resources/images/sales/mg.png" /></td>
-							</tr>
-							<tr height="40">
-								<td><input type="text" class="txt" placeholder="상세주소" id="dtlAdrs" name="dtlAdrs"/></td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="매출(년)*" /></td>
-								<td><input type="text" class="txt" id="rvn" name="rvn" /></td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="인지경로"></td>
-								<td>
-									<select class="txt" id="rp" name="rp">
-											<option value="0">자사홈페이지</option>
-											<option value="1">인터넷검색</option>
-											<option value="2">지인소개</option>
-											<option value="3">세미나</option>
-											<option value="4">전화</option>
-											<option value="5">기타</option>
-									</select>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<!-- 첨부파일 -->
-					<div class="rvn_txt"> 첨부파일
-						<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" border='0' />
-					</div>
-					<div class="cntrct_box_in">
-					</div>
-					<input type="file" id="att" name="att" />
-					<input type="hidden" id="attFile" name="attFile" />
-				</form>
+				<table>
+					<colgroup>
+						<col width="200" />
+						<col width="auto" />
+					</colgroup>
+					<tbody>
+						<tr>
+							<td><input type="button" class="btn" value="고객 *" readonly="readonly"/></td>
+							<td><input type="text" class="txt" /></td>
+						</tr>
+						<tr height="40">
+							<td><input type="button" class="btn" value="고객사 *" /></td>
+							<td>
+								<div class="imgPos">
+									<img class="btnImg_in" alt="팝업" src="resources/images/sales/popup.png">
+								</div>
+							</td>
+						</tr>
+						<tr height="40">
+							<td><input type="button" class="btn" value="부서" /></td>
+							<td><input type="text" class="txt" /></td>
+						</tr>
+						<tr height="40">
+							<td><input type="button" class="btn" value="직책" /></td>
+							<td><input type="text" class="txt" /></td>								
+						</tr>
+						<tr height="40">
+							<td><input type="button" class="btn" value="휴대폰 번호*" /></td>
+							<td><input type="text" class="txt" /></td>																
+						</tr>
+						<tr height="40">
+							<td><input type="button" class="btn" value="메일" /></td>
+							<td><input type="text" class="txt" /></td>
+						</tr>
+					</tbody>
+				</table>
+				<!-- 첨부자료 -->
+				<div class="rvn_txt"> 첨부파일
+					<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" border='0' />
+				</div>
+				<div class="cntrct_box_in">
+				</div>
+				<input type="file" id="att" name="att" />
+				<input type="hidden" id="attFile" name="attFile" />
 			</div>
 		</div>
 	</div>
