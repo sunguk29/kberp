@@ -81,14 +81,6 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
-	$("#writeBtn").on("click", function () {
-		$("#searchGbn").val($("#oldSearchGbn").val());
-		$("#searchTxt").val($("#oldSearchTxt").val());
-		
-		$("#actionForm").attr("action", "inqryAdd");
-		$("#actionForm").submit();
-	});
-	
 	
 });
 function reloadList() { // 목록 조회용 + 페이징 조회용
@@ -218,9 +210,7 @@ function drawPaging(pb) {
 				<tbody></tbody>
 			</table>
 			<div class="board_bottom">
-				<div class="pgn_area" id="pgn_area">
-				</div>
-				<div class="cmn_btn_ml">글쓰기</div>
+				<div class="pgn_area" id="pgn_area"></div>
 			</div>
 		</div>
 	</div>

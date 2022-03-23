@@ -58,4 +58,9 @@
 		                     ON I.CLNT_NUM = ICL.CLNT_NUM
 		WHERE I.INQRY_NUM = #{no}
 	</select>
+	
+	
+	<select id="ansrAdd" parameterType="hashmap">
+		
+	</select>
 </mapper>

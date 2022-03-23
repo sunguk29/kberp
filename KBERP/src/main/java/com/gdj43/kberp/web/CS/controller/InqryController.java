@@ -81,5 +81,17 @@ public class InqryController {
 		return mav;
 	}
 	
-	
+	// 글등록
+	@RequestMapping(value = "/ansrAdd")
+	public ModelAndView ansrAdd(@RequestParam HashMap<String, String> params,
+			  					ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("in.getInqry", params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("CS/ansrAdd");
+		
+		return mav;
+	}
 }

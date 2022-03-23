@@ -78,7 +78,7 @@
 
 .wrtng_cont {
 	resize: none;
-	font-family: 고딕;
+	font-family: 맑은고딕;
 }
 
 .cnsl_bottom {
@@ -102,7 +102,10 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
+	$("#ansr_rvs").on("click", function () {
+		$("#actionForm").attr("action", "ansrAdd");
+		$("#actionForm").submit();
+	});
 });
 </script>
 </head>
@@ -145,21 +148,21 @@ $(document).ready(function() {
 					</select>
 				</div>
 				<div class="wrtng_title">
-					<input type="text" placeholder="제목" readonly="readonly" value="${data.WRTNG_TITLE}">
+					<input type="text" readonly="readonly" value="${data.WRTNG_TITLE}">
 				</div>
 				<div class="wrtng_wrtr">
-					<input type="text" placeholder="작성자" readonly="readonly" value="${data.CLNT_NAME}">
+					<input type="text" readonly="readonly" value="${data.CLNT_NAME}">
 				</div>
 			</div> <!-- cnsl_top의 끝 -->
 			
 				<div class="cnsl_middle">
-					<textarea class="wrtng_cont" rows="22" cols="116" placeholder="내용을 입력하세요." readonly="readonly">${data.WRTNG_CONT}</textarea>
+					<textarea class="wrtng_cont" rows="22" cols="116" readonly="readonly">${data.WRTNG_CONT}</textarea>
 				</div>
 				<div class="cnsl_bottom">
 					<div class="file_atch">
 						<input type="text" readonly="readonly" placeholder="첨부된 파일 & 이미지 : ">
 						<input class="dwnld" type="button" value="다운로드">
-					<div class="cmn_btn_ml">답변등록</div>
+					<div class="cmn_btn_ml" id="ansr_rvs">답변등록</div>
 					<div class="cmn_btn_ml">삭제</div>
 				</div>
 		</div>
