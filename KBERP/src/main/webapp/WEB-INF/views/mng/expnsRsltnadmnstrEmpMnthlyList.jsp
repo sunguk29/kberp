@@ -125,6 +125,7 @@ function reloadList() {
 			console.log(res);
 			drawList(res.list);
 			drawPaging(res.pb);
+			drawSum(res.data);
 		},
 		error : function(request, status, error) { // 문제 발생 시 실행 함수
 			console.log(request.responseText); // 결과 텍스트
@@ -177,6 +178,38 @@ function drawPaging(pb) {
 	html += "<div class=\"page_btn page_last\" page=\"" + pb.maxPcount + "\">last</div>";
 	
 	$("#pgn_area").html(html);
+	
+}
+
+function drawSum(data) {
+	var html = "";
+	
+	html += "<tr>";
+	html += "<td>개인 지출 합계</td>";
+	if((data != undefined && data != null) ? data.IND : undefined) {
+		html += "<td>" + data.IND + "원</td>";
+	} else {
+		html += "<td>0원</td>";
+	}
+	html += "</tr>";
+	html += "<tr>";
+	html += "<td>법인 지출 합계</td>";
+	if((data != undefined && data != null) ? data.CRP : undefined) {
+		html += "<td>" + data.CRP + "원</td>";
+	} else {
+		html += "<td>0원</td>";
+	}
+	html += "</tr>";
+	html += "<tr>";
+	html += "<td>총 합계</td>";
+	if((data != undefined && data != null) ? data.TOTAL : undefined) {
+		html += "<td>" + data.TOTAL + "원</td>";
+	} else {
+		html += "<td>0원</td>";
+	}
+	html += "</tr>";
+	
+	$("#totalTbody").html(html);
 	
 }
 
@@ -253,25 +286,7 @@ function drawPaging(pb) {
 							<col width="200">
 							<col width="700">
 						</colgroup>
-						<tbody>
-							<tr>
-								<td>개인 지출 합계</td>
-								<td>${data.IND}
-									<c:if test="${data.IND eq null}">0</c:if>
-									원
-								</td>
-							</tr>
-							<tr>
-								<td>법인 지출 합계</td>
-								<td>${data.CRP}
-									<c:if test="${data.CRP eq null}">0</c:if> 
-									원
-								</td>
-							</tr>
-							<tr>
-								<td>총 합계</td>
-								<td>${data.TOTAL} 원</td>
-							</tr>
+						<tbody id="totalTbody">
 						</tbody>
 					</table>
 					<div class="btn_wrap">

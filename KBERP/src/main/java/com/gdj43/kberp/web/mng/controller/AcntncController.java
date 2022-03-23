@@ -37,6 +37,9 @@ public class AcntncController {
 		return mav;
 	}
 	
+	// 전표관리
+	
+	
 	// 지출결의서관리 목록
 	@RequestMapping(value = "/expnsRsltnadmnstr")
 	public ModelAndView expnsRsltnadmnstr(@RequestParam HashMap<String, String> params, ModelAndView mav) {
@@ -82,13 +85,13 @@ public class AcntncController {
 	public ModelAndView expnsRsltnadmnstrEmpMnthlyList(@RequestParam HashMap<String, String> params, 
 													   ModelAndView mav) throws Throwable {
 		
-		HashMap<String, String> data = iCommonService.getData("expnsRsltnadmnstr.getExpnsEmpMnthlyData", params);
+		// HashMap<String, String> data = iCommonService.getData("expnsRsltnadmnstr.getExpnsEmpMnthlyData", params);
 		
 		if(params.get("page2") == null || params.get("page2") == "") {
 			params.put("page2", "1");
 		}
 		
-		mav.addObject("data", data);
+		// mav.addObject("data", data);
 		mav.addObject("page2", params.get("page2"));
 		
 		mav.setViewName("mng/expnsRsltnadmnstrEmpMnthlyList");
@@ -115,6 +118,9 @@ public class AcntncController {
 		
 		List<HashMap<String, String>> list = iCommonService.getDataList("expnsRsltnadmnstr.getExpnsEmpMnthlyList", params);
 		
+		HashMap<String, String> data = iCommonService.getData("expnsRsltnadmnstr.getExpnsEmpMnthlyData", params);
+		
+		modelMap.put("data", data);
 		modelMap.put("list", list); 
 		modelMap.put("pb", pb); 
 		
