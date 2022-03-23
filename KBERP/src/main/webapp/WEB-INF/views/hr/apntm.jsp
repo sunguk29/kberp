@@ -267,7 +267,7 @@
 }
 
 /* ================ 오른쪽 ========== */
-.apntm_cont_right_area{
+.apntm_cont_right_area {
     display: inline-block;
     vertical-align: top;
     height: 480px;
@@ -320,6 +320,16 @@
 
 .apntm_add_btn_2:active {
     background-color: #EEEEEE;
+}
+
+.apnmt_add {
+   display: inline-block;
+    vertical-align: top;
+    height: 440px;
+    width: 520px;
+    border: solid 1px #b7b7b7;
+    padding: 5px;
+    border-radius: 5px;
 }
 
 .apnmt_add_area{
@@ -375,6 +385,7 @@
    width: 98px;
     height: 17px;
     margin-left: 20px;
+    padding-left: 5px;
 }
 
 .prfl_srch_btn {
@@ -440,6 +451,15 @@
     height: 23px;
     border: solid 1px #b7b7b7;
     border-radius: 3px;
+}
+.apnmt_info_input {
+   display: inline-block;
+   vertical-align: top;
+    width: 110px;
+    height: 19px;
+    border: solid 1px #b7b7b7;
+    border-radius: 3px;
+    padding-left: 5px;
 }
 
 .apnmt_add_bottom_area {
@@ -621,26 +641,26 @@ function drawCont(cont){
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_emp_num\">                                      ";
    html += "                  <div class=\"prfl_info_text\">사원번호</div>                       ";
-   html += "                  <input type=\"text\" class=\"prfl_info_input\" value=\"" + cont.APNTM_NUM + "\" />  ";
+   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + cont.APNTM_NUM + "\" />  ";
    html += "                  <div class=\"prfl_srch_btn\"></div>                                ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_emp_name\">                                     ";
    html += "                  <div class=\"prfl_info_text\">사원명</div>                         ";
-   html += "                  <input type=\"text\" class=\"prfl_info_input\" value=\"" + cont.EMP_NAME + "\" /> ";
+   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + cont.EMP_NAME + "\" /> ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_dept\">                                         ";
    html += "                  <div class=\"prfl_info_text\">부서명</div>                         ";
-   html += "                  <input type=\"text\" class=\"prfl_info_input\" value=\"" + cont.DEPT_NAME + "\" /> ";
+   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + cont.DEPT_NAME + "\" /> ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_team\">                                         ";
    html += "                  <div class=\"prfl_info_text\">팀명</div>                           ";
-   html += "                  <input type=\"text\" class=\"prfl_info_input\" value=\"" + cont.DEPT_NAME + "\" />";
+   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + cont.DEPT_NAME + "\" />";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";
@@ -649,62 +669,55 @@ function drawCont(cont){
    html += "         <div class=\"apnmt_info_wrap\">                                                ";
    html += "            <div class=\"apnmt_info\">                                                 ";
    html += "               <div class=\"apnmt_info_text\">발령구분*</div>                         ";
-   html += "               <select class=\"apnmt_select\">                                        ";
-   html += "                  <option selected>선택</option>                                     ";
-   html += "                  <option>test</option>                                              ";
-   html += "                  <option>test</option>                                              ";
-   html += "                  <option>test</option>                                              ";
-   html += "               </select>                                                              ";
+   if(cont.APNTM_DVSN_NUM == 0) {
+   html += "               <input type=\"text\" class=\"apnmt_info_input\" disabled value=\"입사\" />                                        ";
+   } else if(cont.APNTM_DVSN_NUM == 1) {
+   html += "               <input type=\"text\" class=\"apnmt_info_input\" disabled value=\"퇴사\" />                                        ";
+   } else if(cont.APNTM_DVSN_NUM == 2) {
+   html += "               <input type=\"text\" class=\"apnmt_info_input\" disabled value=\"승진\" />                                        ";
+   } else {
+   html += "               <input type=\"text\" class=\"apnmt_info_input\" disabled value=\"이동\" />                                        ";
+   }
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_info\">                                                 ";
    html += "               <div class=\"apnmt_info_text\">발령부서*</div>                         ";
-   html += "               <select class=\"apnmt_select\">                                        ";
-   html += "                  <option selected>선택</option>                                     ";
-   html += "                  <option>test</option>                                              ";
-   html += "                  <option>test</option>                                              ";
-   html += "                  <option>test</option>                                              ";
+   html += "               <input type=\"text\" class=\"apnmt_info_input\" disabled value=\"" + cont.DEPT_NAME + "\" />                                        ";
    html += "               </select>                                                              ";
    html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";
    html += "         <div class=\"apnmt_info_wrap\">                                                ";
    html += "            <div class=\"apnmt_info\">                                                 ";
    html += "               <div class=\"apnmt_info_text\">발령팀*</div>                           ";
-   html += "               <select class=\"apnmt_select\">                                        ";
-   html += "                  <option selected>선택</option>                                     ";
-   html += "                  <option>test</option>                                              ";
-   html += "                  <option>test</option>                                              ";
-   html += "                  <option>test</option>                                              ";
-   html += "               </select>                                                              ";
+   html += "               <input type=\"text\" class=\"apnmt_info_input\" disabled value=\"" + cont.DEPT_NAME + "\" />                                        ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_info\">                                                 ";
    html += "               <div class=\"apnmt_info_text\">발령직급*</div>                         ";
-   html += "               <select class=\"apnmt_select\">                                        ";
-   html += "                  <option selected>선택</option>                                     ";
-   html += "                  <option>test</option>                                              ";
-   html += "                  <option>test</option>                                              ";
-   html += "                  <option>test</option>                                              ";
-   html += "               </select>                                                              ";
+   html += "               <input type=\"text\" class=\"apnmt_info_input\" disabled value=\"" + cont.RANK_NAME + "\" />                                        ";
    html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";
    html += "         <div class=\"apnmt_info_wrap\">                                                ";
    html += "            <div class=\"apnmt_info\">                                                 ";
    html += "               <div class=\"apnmt_info_text\">발령시작*</div>                         ";
-   html += "               <div class=\"prd_text_wrap\">                                          ";
-   html += "                  <input type=\"date\" class=\"prd_text\" id=\"prd_start\"/>         ";
-   html += "               </div>                                                                 ";
+   html += "               <input type=\"text\" class=\"apnmt_info_input\" disabled value=\"" + cont.START_DATE + "\" />                                        ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_info\">                                                 ";
    html += "               <div class=\"apnmt_info_text_end\">발령종료</div>                      ";
-   html += "               <div class=\"prd_text_wrap\">                                          ";
-   html += "                  <input type=\"date\" class=\"prd_text\" id=\"prd_end\"/>           ";
-   html += "               </div>                                                                 ";
+   if(cont.END_DATE == null) {
+	   html += "               <input type=\"text\" class=\"apnmt_info_input\" disabled value=\" - \" />                                        ";
+   } else {
+ 	   html += "               <input type=\"text\" class=\"apnmt_info_input\" disabled value=\"" + cont.END_DATE + "\" />                                        ";
+   }						
    html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";
    html += "      </div>                                                                             ";
    html += "      <div class=\"apnmt_add_bottom_area\">                                              ";
    html += "         <div class=\"apnmt_add_cont_wrap\">                                            ";
    html += "            <div class=\"apnmt_add_cont_title\"> - 세부내용 - </div>                   ";
-   html += "            <input type=\"text\" class=\"apnmt_add_cont_input\" />                     ";
+   if(cont.DTL_CONT == null) {
+   html += "            <input type=\"text\" class=\"apnmt_add_cont_input\" disabled value=\"\" />                     ";
+   } else {
+   html += "            <input type=\"text\" class=\"apnmt_add_cont_input\" disabled value=\"" + cont.DTL_CONT + "\" />                     ";
+   }
    html += "         </div>                                                                         ";
    html += "      </div>                                                                             ";
    html += "   </div>                                                                                 ";
@@ -717,7 +730,7 @@ function drawCont(cont){
 function drawNewApntm(){
    var html = "";
    
-   html += "<div class=\"apntm_cont_right_area\">                                                     ";
+   html += "<div class=\"apntm_add\">                                                     ";
    html += "   <div class=\"apntm_add_title_area\">                                                   ";
    html += "      <div class=\"apntm_add_title\">신규발령</div>                                      ";
    html += "      <input type=\"button\" class=\"apntm_add_btn_2\" value=\"등록\" />                                      ";
@@ -855,7 +868,6 @@ function drawNewApntm(){
                <div class="srch_top_area"> 
                   <select class="srch_select" id="searchGbn" name="searchGbn">
                      <option selected  value="0">전체</option>
-                     <option value="1">발령구분</option>
                      <option value="2">사원명</option>
                      <option value="3">발령부서</option>
                      <option value="4">발령직급</option>
