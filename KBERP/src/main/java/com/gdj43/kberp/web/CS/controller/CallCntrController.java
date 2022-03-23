@@ -14,11 +14,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.web.CS.service.ICallCntrService;
+import com.gdj43.kberp.web.common.service.ICommonService;
 
 @Controller
 public class CallCntrController {
 	@Autowired
 	public ICallCntrService iccs;
+	
+	@Autowired
+	public ICommonService iCommonService;
 	
 	@RequestMapping(value="callCenter")
 	public ModelAndView callCenter(@RequestParam HashMap<String, String> params,
@@ -54,28 +58,5 @@ public class CallCntrController {
 				return mapper.writeValueAsString(modelMap);
 			}
 	
-	@RequestMapping(value="/cnslNoteAction/{gbn}", method = RequestMethod.POST,
-			produces = "text/json;charset=UTF-8")
-			@ResponseBody
-			public String cnslNoteActionAjax(@RequestParam HashMap<String, String> params,
-										   	 @PathVariable String gbn) throws Throwable {
-				ObjectMapper mapper = new ObjectMapper();
-		
-				Map<String, Object> modelMap = new HashMap<String, Object>();
-				
-				try {
-					switch(gbn) {
-					case "insert":
-						iccs.noteSave(params);
-						break;
-					}
-					modelMap.put("res", "success");
-					
-				} catch(Throwable e) {
-					e.printStackTrace();
-					modelMap.put("res", "failed");
-				}
-				
-				return mapper.writeValueAsString(modelMap);
-			}
+	
 }
