@@ -51,10 +51,24 @@
 	</select>
 	
 	<select id="getExpnsEmpMnthlyList" resultType="hashmap" parameterType="hashmap">
-		SELECT TO_CHAR(DATE_HR, 'YYYY-MM-DD') AS EXPNS_DATE, CHIT_NUM, EXPNS_TYPE, AMNT, EXPNS, ACNT_NUM
-		FROM EXPNS_RSLTN
-		WHERE TO_CHAR(DATE_HR, 'YYYY-MM') = #{mon}
-		AND EMP_NUM = #{empNum}
+		SELECT TO_CHAR(ER.DATE_HR, 'YYYY-MM-DD') AS EXPNS_DATE, ER.CHIT_NUM, ER.EXPNS_TYPE, ER.AMNT, ER.EXPNS, AC.ACNT_NAME
+		FROM EXPNS_RSLTN ER INNER JOIN ACNT_CODE AC
+		                            ON ER.ACNT_NUM = AC.SUB_CTGR_ACNT_CODE
+		                           AND AC.MAIN_CTGR_ACNT_CODE = 0
+		                           AND DEL = 0
+		WHERE ER.EMP_NUM = #{empNum}
+		AND TO_CHAR(ER.DATE_HR, 'YYYY-MM') = #{mon}
+	</select>
+	
+	<select id="expnsRsltnadmnstrDtl" resultType="hashmap" parameterType="hashmap">
+		SELECT E.EMP_NAME, TO_CHAR(ER.RGSTRTN_DATE_HR, 'YYYY-MM-DD') AS RGS_DATE, ER.CHIT_NUM, AC.ACNT_NAME, ER.EXPNS, ER.AMNT,
+		       TO_CHAR(ER.DATE_HR, 'YYYY-MM-DD') AS DATE_D, ER.EXPNS_TYPE, ER.RMRKS, ER.ATT_FILE
+		FROM EXPNS_RSLTN ER INNER JOIN EMP E
+		                            ON ER.EMP_NUM = E.EMP_NUM
+		                    INNER JOIN ACNT_CODE AC
+		                            ON ER.ACNT_NUM = AC.SUB_CTGR_ACNT_CODE
+		                           AND AC.MAIN_CTGR_ACNT_CODE = 0
+		WHERE CHIT_NUM = #{sendChitNum}
 	</select>
 
 </mapper>

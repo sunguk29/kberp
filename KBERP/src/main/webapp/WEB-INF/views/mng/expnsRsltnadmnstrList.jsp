@@ -33,43 +33,6 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
-	});
 	
 	// 목록 조회
 	reloadList();
@@ -90,14 +53,12 @@ $(document).ready(function() {
 		
 		$("#searchTxt").val($("#srchText").val());
 		$("#searchMonth").val($("#srchMonth").val());
-		$("#oldSearchMonth").val($("#searchMonth").val());
-		$("#oldSearchTxt").val($("#searchTxt").val());
 		
 		// 목록 조회
 		reloadList();
 	});
 	
-	$(".pgn_area").on("click", "div", function() {
+	$("#pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
 		
 		// 목록 조회
@@ -109,12 +70,14 @@ $(document).ready(function() {
 		$("#empName").val($(this).attr("empName"));
 		$("#mon").val($(this).attr("mon"));
 		
-		$("#searchTxt").val($("#oldSearchTxt").val());
-		$("#searchMonth").val($("#oldSearchMonth").val());
-		
 		$("#actionForm").attr("action", "expnsRsltnadmnstrEmpMnthlyList");
 		$("#actionForm").submit();
 		
+	});
+	
+	$("#srchMonth").on("change", function() {
+		$("#searchMonth").val($("#srchMonth").val());
+		reloadList();
 	});
 	
 });
@@ -193,7 +156,7 @@ function drawPaging(pb) {
 	
 	html += "<div class=\"page_btn page_last\" page=\"" + pb.maxPcount + "\">last</div>";
 	
-	$(".pgn_area").html(html);
+	$("#pgn_area").html(html);
 	
 }
 
@@ -205,15 +168,13 @@ function drawPaging(pb) {
 		<input type="hidden" id="empName" name="empName">
 		<input type="hidden" id="mon" name="mon">
 		<input type="hidden" id="page" name="page" value="${page}" />
-		<input type="hidden" id="searchMonth" name="searchMonth" value="${searchMonth}">
-		<input type="hidden" id="searchTxt" name="searchTxt" value="${searchTxt}"> 
+		<input type="hidden" id="searchMonth" name="searchMonth" value="${param.searchMonth}">
+		<input type="hidden" id="searchTxt" name="searchTxt" value="${param.searchTxt}">
+		<input type="hidden" name="top" value="${param.top}">
+		<input type="hidden" name="menuNum" value="${param.menuNum}">
+		<input type="hidden" name="menuType" value="${param.menuType}">
 	</form>
 	
-	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}">
-	<input type="hidden" id="oldSearchMonth" value="${param.searchMonth}">
-
-
-
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -228,10 +189,10 @@ function drawPaging(pb) {
 			<div class="page_title_bar">
 				<div class="page_title_text">지출결의서관리 목록</div>
 				<div class="page_srch_area">
-					<input type="month" class="srch_month" id="srchMonth">
+					<input type="month" class="srch_month" id="srchMonth" value="${param.searchMonth}">
 					
 					<div class="srch_text_wrap">
-						<input type="text" placeholder="사원명" id="srchText"/>
+						<input type="text" placeholder="사원명" id="srchText"/ value="${param.searchTxt}">
 					</div>
 					<div class="cmn_btn_ml" id="searchBtn">검색</div>
 				</div>
@@ -261,7 +222,7 @@ function drawPaging(pb) {
 						</tbody>
 					</table>
 					<div class="board_bottom">
-						<div class="pgn_area">
+						<div class="pgn_area" id="pgn_area">
 						</div>
 					</div>
 				</div>

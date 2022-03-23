@@ -79,45 +79,36 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
-	});
 	
 	reloadList();
+	
+	$("#pgn_area").on("click", "div", function() {
+		$("#page2").val($(this).attr("page"));
+		
+		// 목록 조회
+		reloadList();
+	});
+	
+	$("#listTbody").on("click", "#chitNum", function() {
+		$("#sendChitNum").val($("#chitNum").attr("chitNum"));
+		
+		$("#actionForm").attr("action", "expnsRsltnadmnstrEmpMnthly");
+		$("#actionForm").submit();
+	});
+	
+	$("#previousBtn").on("click", function() {
+		$("#actionForm").attr("action", "expnsRsltnadmnstr");
+		$("#actionForm").submit();
+	});
+	
+	$("#mnthly_slct").on("change", function() {
+		$("#mon").val($("#mnthly_slct").val());
+		$("#searchMonth").val(null);
+		$("#searchTxt").val(null);
+		
+		// 목록 조회
+		reloadList();
+	});
 	
 	
 });
@@ -147,11 +138,11 @@ function drawList(list) {
 	for(var data of list) {
 		html += "<tr>";
 		html += "<td>" + data.EXPNS_DATE + "</td>";
-		html += "<td class=\"board_table_hover\">" + data.CHIT_NUM + "</td>";
+		html += "<td class=\"board_table_hover\" id=\"chitNum\" chitNum=\"" + data.CHIT_NUM + "\">" + data.CHIT_NUM + "</td>";
 		html += "<td>" + data.EXPNS_TYPE + "</td>";
 		html += "<td>" + data.AMNT + "</td>";
 		html += "<td>" + data.EXPNS + "</td>";
-		html += "<td>" + data.ACNT_NUM + "</td>";
+		html += "<td>" + data.ACNT_NAME + "</td>";
 		html += "</tr>"
 	}
 	
@@ -185,7 +176,7 @@ function drawPaging(pb) {
 	
 	html += "<div class=\"page_btn page_last\" page=\"" + pb.maxPcount + "\">last</div>";
 	
-	$(".pgn_area").html(html);
+	$("#pgn_area").html(html);
 	
 }
 
@@ -195,10 +186,16 @@ function drawPaging(pb) {
 
 	<form action="#" id="actionForm" method="post">
 		<input type="hidden" id="empNum" name="empNum" value="${param.empNum}">
+		<input type="hidden" id="empName" name="empName" value="${param.empName}">
+		<input type="hidden" id="sendChitNum" name="sendChitNum">
 		<input type="hidden" id="mon" name="mon" value="${param.mon}">
 		<input type="hidden" id="page" name="page" value="${param.page}" />
-		<input type="hidden" id="searchMonth" name="searchMonth" value="${searchMonth}">
-		<input type="hidden" id="searchTxt" name="searchTxt" value="${searchTxt}"> 
+		<input type="hidden" id="page2" name="page2" value="${page2}" />
+		<input type="hidden" id="searchMonth" name="searchMonth" value="${param.searchMonth}">
+		<input type="hidden" id="searchTxt" name="searchTxt" value="${param.searchTxt}"> 
+		<input type="hidden" name="top" value="${param.top}">
+		<input type="hidden" name="menuNum" value="${param.menuNum}">
+		<input type="hidden" name="menuType" value="${param.menuType}">
 	</form>
 
 	<!-- top & left -->
@@ -213,7 +210,7 @@ function drawPaging(pb) {
 		<div class="page_title_bar">
 			<div class="page_title_text">지출결의서관리 사원별 월별 목록</div>
 			<div class="mnthly_slct_wrap">
-				<input type="month" class="mnthly_slct" value="${param.mon}" />
+				<input type="month" class="mnthly_slct" id="mnthly_slct" value="${param.mon}" />
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -247,7 +244,7 @@ function drawPaging(pb) {
 					</table>
 					
 					<div class="board_bottom">
-						<div class="pgn_area">
+						<div class="pgn_area" id="pgn_area">
 						</div>
 					</div>
 					
@@ -278,7 +275,7 @@ function drawPaging(pb) {
 						</tbody>
 					</table>
 					<div class="btn_wrap">
-					<div class="cmn_btn">목록</div>
+					<div class="cmn_btn" id="previousBtn">전체 목록</div>
 					</div>
 				</div>
 			</div>

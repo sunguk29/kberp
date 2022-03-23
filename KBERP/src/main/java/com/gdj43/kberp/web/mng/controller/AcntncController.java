@@ -39,7 +39,7 @@ public class AcntncController {
 	
 	// 지출결의서관리 목록
 	@RequestMapping(value = "/expnsRsltnadmnstr")
-	public ModelAndView expnsRsltnadmnstr(@RequestParam HashMap<String, String > params, ModelAndView mav) {
+	public ModelAndView expnsRsltnadmnstr(@RequestParam HashMap<String, String> params, ModelAndView mav) {
 		
 		if(params.get("page") == null || params.get("page") == "") {
 			params.put("page", "1");
@@ -84,12 +84,12 @@ public class AcntncController {
 		
 		HashMap<String, String> data = iCommonService.getData("expnsRsltnadmnstr.getExpnsEmpMnthlyData", params);
 		
-		if(params.get("page") == null || params.get("page") == "") {
-			params.put("page", "1");
+		if(params.get("page2") == null || params.get("page2") == "") {
+			params.put("page2", "1");
 		}
 		
 		mav.addObject("data", data);
-		mav.addObject("page", params.get("page"));
+		mav.addObject("page2", params.get("page2"));
 		
 		mav.setViewName("mng/expnsRsltnadmnstrEmpMnthlyList");
 		
@@ -108,7 +108,7 @@ public class AcntncController {
 		int cnt = iCommonService.getIntData("expnsRsltnadmnstr.getExpnsEmpMnthlyCnt", params);
 		
 		// 페이징 계산
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page2")), cnt, 10, 5);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
@@ -120,4 +120,17 @@ public class AcntncController {
 		
 		return mapper.writeValueAsString(modelMap);
 	}
+	
+	// 지출결의서관리 사원별 월별 상세보기
+	@RequestMapping(value = "/expnsRsltnadmnstrEmpMnthly")
+	public ModelAndView expnsRsltnadmnstrDtl(@RequestParam HashMap<String, String > params, ModelAndView mav) throws Throwable {
+	
+	HashMap<String, String> data = iCommonService.getData("expnsRsltnadmnstr.expnsRsltnadmnstrDtl", params);
+		
+	mav.addObject("data", data);
+	
+	mav.setViewName("mng/expnsRsltnadmnstrEmpMnthly");
+	
+	return mav;
+}
 }
