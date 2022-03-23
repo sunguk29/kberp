@@ -288,8 +288,8 @@ function drawList(list) {
 	
 	html += "<colgroup>";
 	html += "<col width=\"80\">";		
-	html += "<col width=\"90\">";		
-	html += "<col width=\"290\">";		
+	html += "<col width=\"130\">";		
+	html += "<col width=\"250\">";		
 	html += "<col width=\"80\">";		
 	html += "</colgroup>";	
 	html += "<thead>";	
