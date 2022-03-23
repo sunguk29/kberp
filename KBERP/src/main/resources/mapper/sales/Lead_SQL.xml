@@ -17,8 +17,8 @@
 		WHERE LL.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
-	<select id="getMeList" resultType="hashmap" parameterType="hashmap">
-		SELECT ME.EMP_NUM, ME.EMP_NAME, ME.RANK_NAME, ME.DEPT_NAME
+	<select id="getMngrList" resultType="hashmap" parameterType="hashmap">
+		SELECT MNGR.EMP_NUM, MNGR.EMP_NAME, MNGR.RANK_NAME, MNGR.DEPT_NAME
 		FROM ( SELECT E.EMP_NUM, E.EMP_NAME, R.RANK_NAME, D.DEPT_NUM, D.DEPT_NAME, ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM
 		        FROM EMP E INNER JOIN APNTM A
 		                           ON E.EMP_NUM = A.EMP_NUM
@@ -27,26 +27,25 @@
 		                   INNER JOIN RANK R
 		                           ON A.RANK_NUM = R.RANK_NUM
 		        WHERE D.DEPT_NAME LIKE '영%'
-		    ) ME
-		WHERE ME.RNUM BETWEEN #{startCount} AND #{endCount}
-		<choose>
-			<when test="deptS != 6">
-       			AND ME.DEPT_NUM = #{deptS}
-			</when>
-		</choose>
-		<if test="searchT != null and searchT != ''">
-        	<choose>
-       			<when test="empS == 0">
-            	   AND ME.EMP_NUM LIKE '%' || #{searchT} || '%'
-            	</when>
-       			<when test="empS == 1">
-            	   AND ME.EMP_NAME LIKE '%' || #{searchT} || '%'
-            	</when>
-        	</choose>
-      	</if>
+				<choose>
+					<when test="deptS != 6">
+		       			AND D.DEPT_NUM = #{deptS}
+					</when>
+				</choose>
+				<if test="searchTxt != null and searchTxt != ''">
+		        	<choose>
+		       			<when test="empS == 0">
+		            	   AND E.EMP_NUM LIKE '%' || #{searchTxt} || '%'
+		            	</when>
+		       			<when test="empS == 1">
+		            	   AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
+		            	</when>
+		        	</choose>
+		      	</if> ) MNGR
+		WHERE MNGR.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
-	<select id="getMeCnt" resultType="Integer" parameterType="hashmap">
+	<select id="getMngrCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
 		FROM EMP E INNER JOIN APNTM A
 		                           ON E.EMP_NUM = A.EMP_NUM
@@ -60,16 +59,47 @@
        			AND D.DEPT_NUM = #{deptS}
 			</when>
 		</choose>
-		<if test="searchT != null and searchT != ''">
+		<if test="searchTxt != null and searchTxt != ''">
         	<choose>
        			<when test="empS == 0">
-            	   AND E.EMP_NUM LIKE '%' || #{searchT} || '%'
+            	   AND E.EMP_NUM LIKE '%' || #{searchTxt} || '%'
             	</when>
        			<when test="empS == 1">
-            	   AND E.EMP_NAME LIKE '%' || #{searchT} || '%'
+            	   AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
             	</when>
         	</choose>
       	</if>
+	</select>
+	
+	<select id="getCcList" resultType="hashmap" parameterType="hashmap">
+		SELECT CC.CLNT_CMPNY_NAME, CC.CLNT_CMPNY_CLSFY_NAME, CC.GRADE_NAME, CC.ADRS, CC.DTL_ADRS, CC.RD
+		FROM (  SELECT CC.CLNT_CMPNY_NAME, CC.CLNT_CMPNY_CLSFY_NUM, CCC.CLNT_CMPNY_CLSFY_NAME, CCG.GRADE_NAME, CC.ADRS, CC.DTL_ADRS, CC.RGSTRTN_DATE,
+		               ROW_NUMBER() OVER(ORDER BY CC.CLNT_CMPNY_NUM DESC) RNUM, TO_CHAR(CC.RGSTRTN_DATE, 'YYYY-MM-DD') RD
+		        FROM CLNT_CMPNY CC INNER JOIN CLNT_CMPNY_CLSFY CCC
+		                                   ON CC.CLNT_CMPNY_CLSFY_NUM = CCC.CLNT_CMPNY_CLSFY_NUM
+		                           INNER JOIN CLNT_CMPNY_GRADE CCG
+		                                   ON CC.GRADE_NUM = CCG.GRADE_NUM
+		         WHERE 1 = 1                          
+				<choose>
+					<when test="cccnType != 6">
+						AND CC.CLNT_CMPNY_CLSFY_NUM = #{cccnType}
+					</when>
+				</choose> ) CC
+		WHERE CC.RNUM BETWEEN #{startCount} AND #{endCount}
+	</select>
+	
+	<select id="getCcCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM CLNT_CMPNY CC INNER JOIN CLNT_CMPNY_CLSFY CCC
+		                           ON CC.CLNT_CMPNY_CLSFY_NUM = CCC.CLNT_CMPNY_CLSFY_NUM
+		                   INNER JOIN CLNT_CMPNY_GRADE CCG
+		                           ON CC.GRADE_NUM = CCG.GRADE_NUM
+		WHERE 1 = 1
+		<choose>
+			<when test="cccnType != 6">
+				AND CC.CLNT_CMPNY_CLSFY_NUM = #{cccnType}
+			</when>
+		</choose>         
 	</select>
 	
 	<select id="getLeadCnt" resultType="Integer" parameterType="hashmap">
