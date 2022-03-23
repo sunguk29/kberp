@@ -472,9 +472,9 @@ function drawPaging(pb) {
 	<!-- 현재페이지 굵게 표시 : _on -->
 	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
 		if($("#page").val() == i) {
-			html += "<div class=\"page_btn_on\">" + i + "</div>";
+			html += "<div page=\"" + i +"\" class=\"page_btn_on\">" + i + "</div>";
 		} else {
-			html += "<div class=\"page_btn\">" + i + "</div>";
+			html += "<div page=\"" + i +"\" class=\"page_btn\">" + i + "</div>";
 		}
 	}
 	
