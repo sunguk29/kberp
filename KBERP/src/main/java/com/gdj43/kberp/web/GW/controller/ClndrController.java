@@ -1,6 +1,7 @@
 package com.gdj43.kberp.web.GW.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gdj43.kberp.util.Utils;
 import com.gdj43.kberp.web.GW.service.IClndrService;
 
 @Controller
@@ -30,6 +32,21 @@ public class ClndrController {
 		
 		return mav;
 	}
+	
+	@RequestMapping(value = "/clndrAjax", method = RequestMethod.POST,
+			produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String clndrAjax(@RequestParam HashMap<String , String> params) throws Throwable{
+	ObjectMapper mapper = new ObjectMapper();
+	
+	Map<String, Object> modelMap = new HashMap<String, Object>();
+	
+	List<HashMap<String, String>> list = iClndrService.getSchdl(params);
+	list = Utils.toLowerListMapKey(list); //키를 소문자로
+	modelMap.put("list", list);
+	return mapper.writeValueAsString(modelMap);
+	}
+	
 	
 	@RequestMapping(value = "/clndrAction/{gbn}", method = RequestMethod.POST,
 			produces = "text/json;charset=UTF-8")

@@ -75,10 +75,15 @@ $(document).ready(function() {
 	$("#paging_wrap").on("click", "span", function() {
 		$("#page").val($(this).attr("page"));
 		
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
 		reloadList();
 	});
 	
 	$("#writeBtn").on("click", function () {
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
 		
 		$("#actionForm").attr("action", "inqryAdd");
 		$("#actionForm").submit();
@@ -130,31 +135,31 @@ function drawList(list) {
 function drawPaging(pb) {
 	var html = "";
 	
-	html += "<span page=\"1\">처음</span>";
+	html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
 	
 	if($("#page").val() == "1") {
-		html += "<span page=\"1\">이전</span>";
+		html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
 	} else {
-		html += "<span page=\"" + ($("#page").val() * 1 - 1) + "\">이전</span>";
+		html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
 	}
 	
 	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
 		if($("#page").val() == i) {
-			html += "<span page=\"" + i + "\"><b>" + i + "</b></span>";
+			html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
 		} else {
-			html += "<span page=\"" + i + "\">" + i + "</span>";
+			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
 		}
 	}
 	
 	if($("#page").val() == pb.maxPcount) {
-		html += "<span page=\"" + pb.maxPcount + "\">다음</span>";
+		html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_next\">next</div>";
 	} else {
-		html += "<span page=\"" + ($("#page").val() * 1 + 1) + "\">다음</span>";
+		html += "<div page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</div>";
 	}
 	
-	html += "<span page=\"" + pb.maxPcount + "\">마지막</span>";
+	html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
 	
-	$("#paging_wrap").html(html);
+	$("#pgn_area").html(html);
 }
 </script>
 </head>
@@ -213,16 +218,7 @@ function drawPaging(pb) {
 				<tbody></tbody>
 			</table>
 			<div class="board_bottom">
-				<div class="pgn_area">
-					<div class="page_btn page_first">first</div>
-					<div class="page_btn page_prev">prev</div>
-					<div class="page_btn_on">1</div>
-					<div class="page_btn">2</div>
-					<div class="page_btn">3</div>
-					<div class="page_btn">4</div>
-					<div class="page_btn">5</div>
-					<div class="page_btn page_next">next</div>
-					<div class="page_btn page_last">last</div>
+				<div class="pgn_area" id="pgn_area">
 				</div>
 				<div class="cmn_btn_ml">글쓰기</div>
 			</div>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="md">
+<select id="getTotalCnt" resultType="Integer" parameterType="hashmap">
+	SELECT COUNT(*) AS CNT
+	FROM MD
+	WHERE DEL_CHECK IS NULL
+	<!-- 상품등급 -->
+	<if test="md_grade != '-1'"> 			 
+		AND MD_GRADE_NUM = #{md_grade} 	<!-- 0 : S 1 : A 2 : B 3 : C 4 : D 5 : E -->
+	</if>
+	<!-- 판매상태 -->
+ 	<if test="sales_stsA != '-1'" >
+		AND ( 1 = 1 
+		<choose>
+			<when test= "sales_sts0 != null and sales_sts0 !=''"> 판매상태 0:판매중
+				OR SALES_STS_NUM = '0'
+			</when>
+			<when test= "sales_sts1 != null and sales_sts1 !=''"> 판매상태 1:판매중단
+				OR SALES_STS_NUM = '1'
+			</when>
+			<when test= "sales_sts2 != null and sales_sts2 !=''"> 판매상태 2:출시예정
+				OR SALES_STS_NUM = '2'
+			</when>
+		</choose> 
+		  )
+	</if> 
+	<!-- 판매 시작일 -->
+	<if test="sales_start_date != null and sales_start_date !=''"> 
+		AND SALES_START_DATE <![CDATA[ >= ]]> #{sales_start_date}
+	</if>
+	<!-- 판매 종료일 -->
+	<if test="sales_end_date != null and sales_end_date !=''"> 
+		AND SALES_END_DATE  <![CDATA[ <= ]]>  #{sales_end_date}
+	</if>
+	<!-- 검색어 구분 -->
+	<if test="srch_txt != '-1' "> <!-- 검색어가 있을 때에만 -->
+		<choose>
+			<when test="srch_gbn == 0 "> <!-- 검색 구분이 상품명 일때 -->
+				AND MD_NAME LIKE '%' || #{srch_txt} || '%'
+			</when>
+			<when test="srch_gbn == 1"> <!-- 검색 구분이 상품번호 일때 -->
+				AND MD_NUM LIKE '%' || #{srch_txt} || '%'
+			</when>
+		</choose>
+	</if>
+</select>
+
+<!-- 판매중 글 수 -->
+<select id="getOnSaleCnt" resultType="Integer" parameterType="hashmap">
+	SELECT COUNT(*) AS CNT
+	FROM MD
+	WHERE DEL_CHECK IS NULL
+	AND SALES_STS_NUM = '0'
+</select>
+<!-- 출시예정 글 수 -->
+<select id="getRlsExpctdCnt" resultType="Integer" parameterType="hashmap">
+	SELECT COUNT(*) AS CNT
+	FROM MD
+	WHERE DEL_CHECK IS NULL
+	AND SALES_STS_NUM = '2'
+</select>
+<!-- 판매중단 글 수 -->
+<select id="getOffSaleCnt" resultType="Integer" parameterType="hashmap">
+	SELECT COUNT(*) AS CNT
+	FROM MD
+	WHERE DEL_CHECK IS NULL
+	AND SALES_STS_NUM = '1'
+</select>
+
+<select id="getDataList" resultType="hashmap" parameterType="hashmap">
+	SELECT 	 MD_NUM
+			,MD_GRADE_NUM
+			,INTRST_RATE
+			,MD_NAME
+			,LIMIT_AMNT
+			,TO_CHAR(SALES_START_DATE, 'YYYY-MM-DD')AS SALES_START_DATE
+			,TO_CHAR(SALES_END_DATE,'YYYY-MM-DD')AS SALES_END_DATE
+			,SALES_STS_NUM
+	FROM MD
+	WHERE DEL_CHECK IS NULL
+	<!-- 상품등급 -->
+	<if test="md_grade != '-1'"> 			
+		AND MD_GRADE_NUM = #{md_grade} 	<!-- 0 : S 1 : A 2 : B 3 : C 4 : D 5 : E -->
+	</if>
+	<!-- 판매상태 -->
+	<if test="sales_stsA != '-1'" >
+		AND ( 1 = 1 
+		<choose>
+			<when test= "sales_sts0 != null and sales_sts0 !=''"> <!-- 판매상태 0:판매중 -->
+				OR SALES_STS_NUM = '0'
+			</when>
+			<when test= "sales_sts1 != null and sales_sts1 !=''"> <!-- 판매상태 1:판매중단 -->
+				OR SALES_STS_NUM = '1'
+			</when>
+			<when test= "sales_sts2 != null and sales_sts2 !=''"> <!-- 판매상태 2:출시예정 -->
+				OR SALES_STS_NUM = '2'
+			</when>
+		</choose> 
+		  )
+	</if>
+	<!-- 판매 시작일 -->
+	<if test="sales_start_date != null and sales_start_date !=''"> 
+		AND SALES_START_DATE <![CDATA[ >= ]]> #{sales_start_date}
+	</if>
+	<!-- 판매 종료일 -->
+	<if test="sales_end_date != null and sales_end_date !=''"> 
+		AND SALES_END_DATE  <![CDATA[ <= ]]>  #{sales_end_date}
+	</if>
+	<!-- 검색어 구분 -->
+	<if test="srch_txt != '-1' "> <!-- 검색어가 있을 때에만 -->
+		<choose>
+			<when test="srch_gbn == 0 "> <!-- 검색 구분이 상품명 일때 -->
+				AND MD_NAME LIKE '%' || #{srch_txt} || '%'
+			</when>
+			<when test="srch_gbn == 1"> <!-- 검색 구분이 상품번호 일때 -->
+				AND MD_NUM LIKE '%' || #{srch_txt} || '%'
+			</when>
+		</choose>
+	</if>
+	
+	<if test="sort_gbn != null and sort_gbn !=''">
+		<choose>
+			<when test="sort_gbn == 0 "> <!--등록일 기준 -->
+				ORDER BY RGSTRTN_DATE DESC
+			</when>
+			<when test="sort_gbn == 1"> <!-- 상품이름 기준 -->
+				ORDER BY MD_NAME DESC
+			</when>
+			<when test="sort_gbn == 2"> <!-- 상품등급 기준 -->
+				ORDER BY MD_GRADE_NUM
+			</when>
+		</choose>
+	</if>
+	
+	
+</select>
+</mapper>

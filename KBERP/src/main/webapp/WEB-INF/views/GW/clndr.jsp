@@ -43,7 +43,7 @@
 	height: 25px;
 	font-size: 9pt;
 }
-#schdl_start_time, #schdl_end_time{
+#schdl_start_date, #schdl_end_date{
 	position: absolute;
 	left: calc(50% - 140px);
 	width: 160px;
@@ -52,7 +52,7 @@
 	font-size: 9pt;
 }
 
-.popup_time{
+#schdl_start_time, #schdl_end_time{
 	position: absolute;
 	left: calc(50% + 45px);
 	width: 177px;
@@ -78,7 +78,7 @@
 	width: 360px;
 	height: 150px;
 }
-#ctgry_user{
+#user_ctgry{
 	display:none;
 	position: absolute;
 	left: calc(50% - 20px);
@@ -191,6 +191,7 @@
 <script type="text/javascript" src="resources/script/fullcalendar/locale-all.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+	reloadList();
 	var data = [
         {
             title: 'All Day Event',
@@ -218,7 +219,7 @@ $(document).ready(function() {
               start: '2022-03-17',
               color : '#BFA0ED',
 			  textColor : 'black',
-            },
+            }
         ];
 	
 	$("#fullCalendarArea").fullCalendar({
@@ -270,6 +271,32 @@ $(document).ready(function() {
 	
 	
 });
+function reloadList() {
+	var params = $("#actionForm").serialize();
+	$.ajax({
+		type: "post", 
+		url : "clndrAjax", 
+		dataType : "json",
+		data : params, 
+		success : function(schdl) { 
+			console.log(schdl);
+			var oldEvents = $("#fullCalendarArea").fullCalendar("getEventSources");
+			//기존 이벤트 제거
+			$("#fullCalendarArea").fullCalendar("removeEventSources", oldEvents);
+			$("#fullCalendarArea").fullCalendar("refetchEvents");
+			//신규이벤트 추가
+			$("#fullCalendarArea").fullCalendar("addEventSource", schdl.list);
+			$("#fullCalendarArea").fullCalendar("refetchEvents");
+		},
+		error : function(request, status, error) { 
+			console.log(request.responseText); 
+		}
+	});
+	 
+}
+function drawList(list) {
+	
+}
 function checkEmpty(sel) {
 	if($.trim($(sel).val()) == ""){
 		return true;
@@ -277,7 +304,6 @@ function checkEmpty(sel) {
 		return false;
 	}
 }
-
 </script>
 
 <!-- calendar Script -->
@@ -335,6 +361,7 @@ $(document).ready(function() {
 			}
 		}
 	});
+	
 	$("#new_schdl").on("click", function () {
 		var html = "";
 		
@@ -358,11 +385,13 @@ $(document).ready(function() {
 		html += "</div>";
 		html += "<div class=\"popup_style\">";
 		html += "<span>시작 시간</span>";
-		html += "<input type=\"date\" id=\"schdl_start_time\" name=\"schdl_start_time\"> <input type=\"time\" class=\"popup_time\">";
+		html += "<input type=\"date\" id=\"schdl_start_date\" name=\"schdl_start_date\">";
+		html += "<input type=\"time\" id=\"schdl_start_time\" name=\"schdl_start_time\">";
 		html += "</div>";	
 		html += "<div class=\"popup_style\">";
 		html += "<span>종료 시간</span>";
-		html += "<input type=\"date\" id=\"schdl_end_time\" name=\"schdl_end_time\"> <input type=\"time\"class=\"popup_time\">";			
+		html += "<input type=\"date\" id=\"schdl_end_date\" name=\"schdl_end_date\">";			
+		html += "<input type=\"time\" id=\"schdl_end_time\" name=\"schdl_end_time\">";
 		html += "</div>";
 		html += "<div class=\"popup_dtl_cont\">";
 		html += "<span>상세내용</span>";
@@ -381,7 +410,7 @@ $(document).ready(function() {
 		html += "<option value=\"8\">개발</option>";
 		html += "<option value=\"0\">사용자지정</option>";
 		html += "</select>";
-		html += "<input type=\"text\" placeholder=\"사용자 지정\"id=\"ctgry_user\" name=\"ctgry_user\">";
+		html += "<input type=\"text\" placeholder=\"사용자 지정\"id=\"user_ctgry\" name=\"user_ctgry\">";
 		html += "</div>";
 		html += "<div class=\"popup_style\">";
 		html += "<span>종일 일정</span>";
@@ -403,12 +432,12 @@ $(document).ready(function() {
 					if(checkEmpty("#schdl_title")){
 						alert("제목을 입력하세요.");
 						$("#schdl_title").focus();
-					}else if(checkEmpty("#schdl_start_time")){
+					}else if(checkEmpty("#schdl_start_date")){
 						alert("시작 시간을 선택하세요.");
-						$("#schdl_start_time").focus();
-					}else if(checkEmpty("#schdl_end_time")){
+						$("#schdl_start_date").focus();
+					}else if(checkEmpty("#schdl_end_date")){
 						alert("종료 시간을 선택하세요.");
-						$("#schdl_end_time").focus();
+						$("#schdl_end_date").focus();
 					}else{
 						var params = $("#addForm").serialize();
 						console.log(params);
@@ -438,8 +467,6 @@ $(document).ready(function() {
 		
 		
 	});
-	
-	
 
 });
 
@@ -463,6 +490,7 @@ $(document).ready(function() {
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->			
+			 
 			<input type="button" value="일정 등록" id="new_schdl">
 	<div id="side_bar">
 		<div class="schdl_type">

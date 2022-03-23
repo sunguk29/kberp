@@ -1,6 +1,7 @@
 package com.gdj43.kberp.web.GW.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ public class ClndrDao implements IClndrDao{
 
 	@Override
 	public void clndrAdd(HashMap<String, String> params) throws Throwable {
+		System.out.println(params);
 		sqlSession.insert("clndr.clndrAdd", params);
 	}
 
@@ -25,5 +27,11 @@ public class ClndrDao implements IClndrDao{
 	public void clndrDelete(HashMap<String, String> params) throws Throwable {
 		sqlSession.update("clndr.clndrDelete", params);
 	}
+
+	@Override
+	public List<HashMap<String, String>> getSchdl(HashMap<String, String> params) throws Throwable {
+		return sqlSession.selectList("clndr.getSchdl", params);
+	}
+
 
 }
