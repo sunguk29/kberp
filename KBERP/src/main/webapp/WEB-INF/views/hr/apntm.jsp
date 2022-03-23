@@ -191,8 +191,8 @@
     border-radius: 3px;
    display: inline-block;
     vertical-align: top;
-    height: 18px;
-    width: 115px;
+    height: 21px;
+    width: 121px;
     font-size: 9pt;
     text-align: center;
 }
@@ -389,11 +389,13 @@
 }
 
 .prfl_srch_btn {
-   display: inline-block;
+	display: inline-block;
     vertical-align: top;
     height: 24px;
     width: 24px;
     margin-left: 7px;
+    background-image: url("resources/images/hr/srch_icon.png");
+    background-size: 100%;
     cursor: pointer;
 }
 
@@ -488,7 +490,7 @@
 
 .apnmt_add_cont_input {
     height: 55px;
-    width: 490px;
+    width: 450px;
     border: solid 1px #ffffff;
 }
 
@@ -730,7 +732,7 @@ function drawCont(cont){
 function drawNewApntm(){
    var html = "";
    
-   html += "<div class=\"apntm_add\">                                                     ";
+   html += "<div class=\"apntm_cont_right_area\">                                                     ";
    html += "   <div class=\"apntm_add_title_area\">                                                   ";
    html += "      <div class=\"apntm_add_title\">신규발령</div>                                      ";
    html += "      <input type=\"button\" class=\"apntm_add_btn_2\" value=\"등록\" />                                      ";
@@ -804,9 +806,17 @@ function drawNewApntm(){
    html += "               <div class=\"apnmt_info_text\">발령직급*</div>                         ";
    html += "               <select class=\"apnmt_select\">                                        ";
    html += "                  <option selected>선택</option>                                     ";
-   html += "                  <option>test</option>                                              ";
-   html += "                  <option>test</option>                                              ";
-   html += "                  <option>test</option>                                              ";
+   html += "                  <option>사원</option>                                              ";
+   html += "                  <option>주임</option>                                              ";
+   html += "                  <option>대리</option>                                              ";
+   html += "                  <option>과장</option>                                              ";
+   html += "                  <option>차장</option>                                              ";
+   html += "                  <option>부장</option>                                              ";
+   html += "                  <option>이사</option>                                              ";
+   html += "                  <option>상무</option>                                              ";
+   html += "                  <option>전무</option>                                              ";
+   html += "                  <option>부사장</option>                                              ";
+   html += "                  <option>CEO</option>                                              ";
    html += "               </select>                                                              ";
    html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";
