@@ -581,7 +581,15 @@ function drawList(list) {
    for(var data of list) {                                 
       html += "<tr no=\"" + data.APNTM_NUM + "\">"        ;
       html += "<td>" + data.APNTM_NUM + "</td>"           ;
-      html += "<td>" + data.APNTM_DVSN_NUM + "</td>"      ;
+      if(data.APNTM_DVSN_NUM == 0) {
+     	 html += "<td>입사</td>"      ;
+      } else if(data.APNTM_DVSN_NUM == 1) {
+       		 html += "<td>퇴사</td>"      ;
+      } else if(data.APNTM_DVSN_NUM == 2) {
+       		 html += "<td>승진</td>"      ;
+      } else {
+       		 html += "<td>이동</td>"      ;
+      }
       html += "<td>" + data.EMP_NAME + "</td>"            ;
       html += "<td>" + data.DEPT_NAME + "</td>"           ;
       html += "<td>" + data.RANK_NAME + "</td>"           ;
@@ -898,7 +906,7 @@ function drawNewApntm(){
                   <col width="150"/>
                   <col width="100"/>
                   <col width="150"/>
-                  <col width="150"/>
+                  <col width="200"/>
                </colgroup>
                <thead>
                   <tr>
