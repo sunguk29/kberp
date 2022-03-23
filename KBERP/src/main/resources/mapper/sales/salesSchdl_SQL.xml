@@ -86,4 +86,10 @@
         	</choose>
       	</if>
 	</select>
+	<select id="getSalesDaySchdlList" parameterType="hashmap" resultType="hashmap">
+		SELECT START_DATE_HR AS "start", SALES_NUM, LEAD_NUM
+		FROM SALES_SCHDL
+		WHERE SUBSTR(START_DATE_HR, 1, 7) = #{month}
+		AND DEL_CHECK IS NULL 
+	</select>
 </mapper>

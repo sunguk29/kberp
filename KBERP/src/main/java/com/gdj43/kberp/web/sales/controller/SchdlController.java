@@ -35,7 +35,7 @@ public class SchdlController {
 	public IPagingService iPagingService;
 	
 	@RequestMapping(value = "/salesSchdl")
-	public ModelAndView schdl(ModelAndView mav) {
+	public ModelAndView salesSchdl(ModelAndView mav) throws Throwable {
 		
 		Date tday = new Date();
 		
@@ -50,20 +50,49 @@ public class SchdlController {
 	
 	@RequestMapping(value = "/salesSchdlAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String salesSchdlAjax(@RequestParam HashMap<String, String> params,
-									ModelAndView mav) throws Throwable{
+	public String salesSchdlAjax(@RequestParam HashMap<String, String> params) throws Throwable{
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
+		Date month = new Date();
+		
+		SimpleDateFormat sdm = new SimpleDateFormat("YYYY-MM");
+		
+		params.put("month", sdm.format(month));
+		
 		List<HashMap<String, String>> list = iCommonService.getDataList("salesSchdl.getSalesSchdlList", params);
+		List<HashMap<String, String>> slist = iCommonService.getDataList("salesSchdl.getSalesDaySchdlList", params);
 		
 		modelMap.put("list", list);
-		
+		modelMap.put("slist", slist);
 		
 		return mapper.writeValueAsString(modelMap);
 	}
+	
+	
+//	@RequestMapping(value = "/salesDaySchdlAjax", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
+//	@ResponseBody public String salesDaySchdlAjax(@RequestParam HashMap<String,String> params) throws Throwable{
+//		ObjectMapper mapper = new ObjectMapper();
+// 
+//		Map<String, Object> modelMap = new HashMap<String, Object>();
+//		
+//		Date month = new Date();
+//		
+//		SimpleDateFormat sdm = new SimpleDateFormat("YYYY-MM");
+//		
+//		params.put("month", sdm.format(month));
+//		
+//		
+//		List<HashMap<String, String>> slist = iCommonService.getDataList("salesSchdl.getSalesDaySchdlList", params);
+//		 
+//		modelMap.put("slist", slist);
+//		 
+//		 
+//		return mapper.writeValueAsString(modelMap);
+//	 }
+
 	
 	@RequestMapping(value = "/mgrListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody

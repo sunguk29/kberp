@@ -76,6 +76,7 @@
 	font-size: 15px;
 	line-height: 30px;
 	text-align: center;
+	margin-left: 45px;
 }
 .calendar_text {
 	display: inline-block;
@@ -434,7 +435,8 @@ $(document).ready(function() {
 			dataType : "json",
 			data : params,
 			success : function(res) {
-				drawList(res.list);
+				/* drawList(res.list); */
+				darwDayCalc(res.slist);
 			},
 			error : function(req) {
 				console.log(req.responseText);
@@ -445,6 +447,7 @@ $(document).ready(function() {
 	/* 목록 그리기용  */
 	function drawList(list) {
 		var html = "";
+		
 		
 		for(var data of list){
 			html +=	"<div class=\"cal_text1\">";
@@ -469,7 +472,7 @@ $(document).ready(function() {
 		}
 		
 		$(".calendar_text").html(html);
-	}
+	} 
 	/* 담당자 팝업 그리기 */
 	/* 담당자 팝업  */
 	$(".userIcon").on("click", function() {
@@ -547,6 +550,7 @@ $(document).ready(function() {
 						return false;
 					}
 				});
+				
 			},
 			width : 600,
 			height : 500,
@@ -581,12 +585,11 @@ $(document).ready(function() {
 		
 	}
 	
-	function drawList2(mgrList) {
+  	function drawList2(mgrList) {
 		var html = "";
 			
 		for(var data of mgrList) {
-			
-			html +=	"<div class=\"popup_box_in\">";
+			html +=	"<div class=\"popup_box_in\" no=\"" + data.EMP_NUM + "\">";
 			html +=	"<div class=\"popup_cc_box_left\">";
 			html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
 			html +=	"</div>";
@@ -597,15 +600,26 @@ $(document).ready(function() {
 			html +=	"</div>";
 		}
 		
-		$(".popup_box").on("click", function() {
-			var ename = data.EMP_NAME;
-			console.log(ename);
-		});
-		
 		$(".popup_box").html(html);
 		
-	}
+		 $(".popup_box_in").on("click", function() {
+				var mgrNum = $(".popup_box_in").val("no");
+				console.log(mgrNum);
+				if(mgrNum != ""){ 
+					
+					var mgrName = data.EMP_NAME;
+					
+					document.getElementById("usrsrchTxt").value = mgrName;
+					
+					console.log(mgrName);
+				} 
+				
+			 	
+		 }); 
+	} 
 	
+  	
+	 
 	
 	function drawPaging(pb, sel) {
 		var html = "";
@@ -660,11 +674,30 @@ $(document).ready(function() {
           }
         ];
 	
+	function darwDayCalc(slist) {
+		var params = $("#actionForm").serialize();
+		$.ajax({
+			type : "post",
+			url : "salesSchdlAjax",
+			dataType : "json",
+			data : params,
+			success : function(res){					
+					$("#fullCalendarArea").fullCalendar("addEventSource", res.slist);
+					$("#fullCalendarArea").fullCalendar("refetchEvents");
+			},
+			error : function(req) {
+				console.log(req.responseText);
+			}
+		});
+	}
+	
+	
+	
 	$("#fullCalendarArea").fullCalendar({
 		header: {
 			left: '',
 	        center: 'prev, title, next',
-	        right : ''
+	        right: ''
 	      },
 	      locale: "ko",
 	      editable: false,
@@ -674,7 +707,26 @@ $(document).ready(function() {
 	    	  alert(event.start);
 	      },
 	      dayClick: function(date, js, view) { // 일자 클릭
-	    	  alert('Clicked on: ' + date.format());
+	    	  
+	    	 var params = $("#actionForm").serialize();
+			 var tdv = date.format();
+			 document.getElementById("ctt").value = "      " + tdv;
+			
+	  		$.ajax({
+	  			type : "post",
+	  			url : "salesSchdlAjax",
+	  			dataType : "json",
+	  			data : params,
+	  			success : function(res) {
+	  				drawList(res.list);
+	  			},
+	  			error : function(req) {
+	  				console.log(req.responseText);
+	  			}
+	  		});
+	    	  
+	    	  
+	    	   //alert('Clicked on: ' + date.format());
 
 	    	  //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
 
@@ -685,97 +737,6 @@ $(document).ready(function() {
 	
 	/* 캘린더 이벤트 관련 끝 */
 	
-	/* 검색 밑 등록 버튼 관련 이벤트 시작  */
-	/* $("#usrsrchTxt").on("click", function() {
-		var html = "";
-		
-	 	html += "<div class=\"popup_title_mid\">"; 
-		html += "<div class=\"ptm_left\">";
-		html += "<div class=\"ptm_left_top\">팀분류</div>";
-		html +=	"<div class=\"ptm_left_bot\">사원분류</div>";		
-		html += "</div>";
-		html += "<div class=\"ptm_mid\">";
-		html +=	"<div class=\"ptm_mid_top\">";
-		html +=	"<select class=\"sel_size\">"
-		html +=		"<option>영업1팀</option>";
-		html +=		"<option>영업2팀</option>";
-		html +=		"<option>영업3팀</option>";
-		html +=	"</select>";
-		html +=	"</div>";		
-		html +=	"<div class=\"ptm_mid_bot\">";
-		html +=	"<select class=\"sel_size\">";
-		html +=		"<option>사원번호</option>";
-		html +=		"<option>사원명</option>";
-		html +=	"</select>";
-		html +=	"</div>";	
-		html += "</div>";
-		html += "<div class=\"ptm_mid_right\">";
-		html +=	"<div class=\"ptm_mid_right_top\"></div>";
-		html +=	"<div class=\"ptm_mid_right_bot\">";
-		html +=	"<input type=\"text\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" />";
-		html +=	"</div>";
-		html += "</div>";
-		html += "<div class=\"ptm_right\">";
-		html +=	"<div class=\"ptm_right_top\"></div>";
-		html +=	"<div class=\"ptm_right_bot\">";
-		html +=	"<div class=\"cmn_btn\">검색</div>";
-		html +=	"</div>";
-		html +=	"</div>";
-		html += "</div>";
-		html += "<div class=\"popup_cont pc_back\">";
-		html +=	"<div class=\"popup_box_in\">";
-		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span class=\"company\"></span>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_cc_box_right\">";
-		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
-		html +=	"<span class=\"mg_wid\">영업1팀</span>";
-		html +=	"</div>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_box_in\">";
-		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span class=\"company\"></span>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_cc_box_right\">";
-		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
-		html +=	"<span class=\"mg_wid\">영업1팀</span>";
-		html +=	"</div>";
-		html +=	"</div>";
-		html += "<div class=\"board_bottom2\">";
-		html +=	"<div class=\"pgn_area\">";
-		html +=	"<div class=\"page_btn page_first\">first</div>";
-		html +=	"<div class=\"page_btn page_prev\">prev</div>";
-		html +=	"<div class=\"page_btn_on\">1</div>";
-		html +=	"<div class=\"page_btn\">2</div>";
-		html +=	"<div class=\"page_btn\">3</div>";
-		html +=	"<div class=\"page_btn\">4</div>";
-		html +=	"<div class=\"page_btn\">5</div>";
-		html +=	"<div class=\"page_btn page_next\">next</div>";
-		html +=	"<div class=\"page_btn page_last\">last</div>";
-		html +=	"</div>";
-		html +=	"</div>";
-		html +=	"</div>";
-		
-		makePopup({
-			bg : true,
-			bgClose : false,
-			title : "담당자 조회",
-			draggable : true,
-			contents : html,
-			width : 600,
-			height : 500,
-			buttons : [{
-				name : "등록",
-				func:function() {
-					console.log("등록하시겠습니까?");
-					closePopup();
-				}
-			},{
-					name : "취소"	
-			}]
-		});
-		
-	}); */
 	
 	$("#regBtn").on("click", function() {
 		$("#actionForm").attr("action", "salesSchdlReg");
@@ -846,11 +807,13 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
+<input type="hidden" id="no" name="no" />
 <form action="#" id="actionForm" method="post">
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="tday" value="${tday}" />
+	<input type="hidden" name="ctt"  value="${ctt}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -880,7 +843,7 @@ $(document).ready(function() {
 						</select>
 						</span>
 						<span class="userseach">
-								담당자 <input type="text" id="usrsrchTxt" class="userIcon" readonly="readonly" />
+								담당자 <input type="text" id="usrsrchTxt" class="userIcon" readonly="readonly"  />
 						</span>
 						<div class="cmn_btn bg">검색</div>
 						</div>
@@ -891,8 +854,8 @@ $(document).ready(function() {
 							<div class="calendar">
 								<div id="fullCalendarArea"></div>
 							</div>
-							<div class="cal_cont"> 
-							<input type="text" class="cal_text_top" readonly="readonly" value="      ${tday}" />
+							<div class="cal_cont">
+							<input type="text" class="cal_text_top" id="ctt" readonly="readonly"/>
 							<div class="calendar_text"></div>
 							</div>
 							</div>
@@ -909,7 +872,6 @@ $(document).ready(function() {
 				</div>
 			</div>
 		</div>
-	</div>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>
