@@ -70,11 +70,11 @@ public class LeadController {
 		
 		return mapper.writeValueAsString(modelMap);
 	}
-	
-	@RequestMapping(value = "/meListAjax", method = RequestMethod.POST, 
+// 담당자 조회 팝업	
+	@RequestMapping(value = "/mngrListAjax", method = RequestMethod.POST, 
 					produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String meListAjax(@RequestParam HashMap<String, String> params, 
+	public String mngrListAjax(@RequestParam HashMap<String, String> params, 
 							   HttpSession session) throws Throwable {
 
 		ObjectMapper mapper = new ObjectMapper();
@@ -82,20 +82,47 @@ public class LeadController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();		
 		
 		// 총 게시글 수
-		int cnt = iCommonService.getIntData("lead.getMeCnt", params);
+		int cnt = iCommonService.getIntData("lead.getMngrCnt", params);
 		
 		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
-		List<HashMap<String, String>> meList = iCommonService.getDataList("lead.getMeList", params);
+		List<HashMap<String, String>> mngrList = iCommonService.getDataList("lead.getMngrList", params);
 		
-		modelMap.put("list", meList);
+		modelMap.put("list", mngrList);
 		modelMap.put("pb", pb);
 		
 		return mapper.writeValueAsString(modelMap);
 	}
+// 고객사 조회 팝업
+	@RequestMapping(value = "/ccListAjax", method = RequestMethod.POST, 
+				produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String ccListAjax(@RequestParam HashMap<String, String> params, 
+						   HttpSession session) throws Throwable {
+	
+	ObjectMapper mapper = new ObjectMapper();
+	
+	Map<String, Object> modelMap = new HashMap<String, Object>();		
+	
+	// 총 게시글 수
+	int cnt = iCommonService.getIntData("lead.getCcCnt", params);
+	
+	PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
+	
+	params.put("startCount", Integer.toString(pb.getStartCount()));
+	params.put("endCount", Integer.toString(pb.getEndCount()));
+	
+	List<HashMap<String, String>> ccList = iCommonService.getDataList("lead.getCcList", params);
+	
+	modelMap.put("list", ccList);
+	modelMap.put("pb", pb);
+	
+	return mapper.writeValueAsString(modelMap);
+	}	
+	
 	@RequestMapping(value = "/leadReg")
 	public ModelAndView leadReg(ModelAndView mav) {
 		

@@ -433,21 +433,21 @@ $(document).ready(function() {
 		html += 		"<div class=\"ptm_mid_right\">";
 		html +=				"<div class=\"ptm_mid_right_top\"></div>";
 		html +=				"<div class=\"ptm_mid_right_bot\">";
-		html +=					"<input type=\"text\" id=\"searchT\" name=\"searchT\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" />";
+		html +=					"<input type=\"text\" id=\"searchTxt\" name=\"searchTxt\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" />";
 		html +=				"</div>";
 		html += 		"</div>";
 		html += 		"<div class=\"ptm_right\">";
 		html +=				"<div class=\"ptm_right_top\"></div>";
 		html +=				"<div class=\"ptm_right_bot\">";
-		html +=					"<div class=\"cmn_btn\" id=\"meBtn\">검색</div>";
+		html +=					"<div class=\"cmn_btn\" id=\"mngrBtn\">검색</div>";
 		html +=				"</div>";
 		html +=			"</div>";
 		html += 	"</form>";
 		html += "</div>";
 		html += "<div class=\"popup_cont pc_back\">";
-		html +=		"<div class=\"popup_box\"></div>";
+		html +=		"<div class=\"popup_box\" id=\"mngrBox\"></div>";
 		html += 	"<div class=\"board_bottom2\">";
-		html +=			"<div class=\"pgn_area\" id=\"mepb\"></div>";
+		html +=			"<div class=\"pgn_area\" id=\"mngrpb\"></div>";
 		html +=		"</div>"; 
 		html +=	"</div>";
 		
@@ -457,26 +457,26 @@ $(document).ready(function() {
 			title : "담당자 조회",
 			contents : html,
 			contentsEvent : function() {
-				meList();
+				mngrList();
 				//페이징 
-				$("#mepb").on("click", "div", function() {
-					$("#Page").val($(this).attr("page"));
+				$("#mngrpb").on("click", "div", function() {
+					$("#page").val($(this).attr("page"));
 					
-					meList();
+					mngrList();
 				});
 				// 검색버튼
-				$("#meBtn").on("click", function () {
+				$("#mngrBtn").on("click", function () {
 					$("#page").val("1");
 					
-					meList();
+					mngrList();
 					
 				});
 				
-				$("#searchT").on("keypress", function(event) {
+				$("#searchTxt").on("keypress", function(event) {
 					if(event.keyCode == 13 ) {
 						$("#page").val("1");
 						
-						meList();
+						mngrList();
 						return false;
 					}
 				});
@@ -497,24 +497,24 @@ $(document).ready(function() {
 }); 
 
 /* 담당자 조회 팝업  */
-function meList() {
+function mngrList() {
 	var params = $("#popupForm").serialize();
 	
 	$.ajax({
 		type : "post",
-		url : "meListAjax",
+		url : "mngrListAjax",
 		dataType : "json",
 		data : params,
 		success : function(res) {
-			drawList2(res.list);
-			drawPaging(res.pb, "#mepb");
+			mngrDrawList(res.list);
+			drawPaging(res.pb, "#mngrpb");
 		},
 		error : function(req) {
 			console.log(req.responseText);
 		}
 	});	
 }
-function drawList2(list) {
+function mngrDrawList(list) {
 	var html = "";
 		
 	for(var data of list) {
@@ -530,7 +530,7 @@ function drawList2(list) {
 		html +=	"</div>";	
 	}
 	
-	$(".popup_box").html(html);
+	$("#mngrBox").html(html);
 	
 }
 /* 리드 리스트 */

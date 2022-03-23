@@ -282,12 +282,12 @@
 }
 /* 대출한도, 이자율, 판매상태 */
 .adrs_name {
-	font-weight: bold;
+	/* font-weight: bold; */
 	font-size: 12px;
 	margin: 0px;
 }
 .clntCmpny_dt {
-	font-weight: bold;
+	/* font-weight: bold; */
 	color: #2E83F2;
 	font-size: 12px;
 }
@@ -618,282 +618,82 @@ $(document).ready(function() {
 		}	
 	}); 
 	
-	$("#clntIcon").on("click", function() {
-		var html = "";
-		
-		html += "<div class=\"popup_title_mid\">";
-		html += "<div class=\"ptm_left2\">";
-		html += "<div class=\"ptm_left_top\">고객/고객사</div>";			
-		html += "</div>";
-		html += "<div class=\"ptm_mid2\">";
-		html += "<div class=\"ptm_mid_top\">";
-		html += "<input type=\"text\" class=\"text_size2\" placeholder=\"검색어를 입력해주세요\" />";
-		html += "</div>";
-		html += "</div>";
-		html += "<div class=\"ptm_mid_right\"></div>";
-		html += "<div class=\"ptm_right2\">";
-		html += "<div class=\"ptm_right_top2\">";
-		html += "<div class=\"cmn_btn\">검색</div>";
-		html += "</div>";
-		html += "</div>";
-		html += "</div>";
-		html += "<div class=\"popup_cont pc_back\">";
-		html += "<div class=\"popup_box_in\">";
-		html += "<div class=\"popup_cc_box_left\">";
-		html += "<span><img alt=\"고객이미지\" class=\"company\" src=\"resources/images/sales/clnt.png\"></span>";
-		html += "</div>";
-		html += "<div class=\"popup_cc_box_right3\">";
-		html += "<div class=\"boldname3\">고객명 / 고객사명 / 고객사등급</div><br/>";
-		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
-		html += "</div>";
-		html += "</div>";
-		html += "<div class=\"popup_box_in\">";
-		html += "<div class=\"popup_cc_box_left\">";
-		html += "<span><img alt=\"고객이미지\" class=\"company\" src=\"resources/images/sales/clnt.png\"></span>";
-		html += "</div>";
-		html += "<div class=\"popup_cc_box_right3\">";
-		html += "<div class=\"boldname3\">고객명 / 고객사명 / 고객사등급</div><br/>";
-		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
-		html += "</div>";
-		html += "</div>";
-		html += "<div class=\"popup_box_in\">";
-		html += "<div class=\"popup_cc_box_left\">";
-		html += "<span><img alt=\"고객이미지\" class=\"company\" src=\"resources/images/sales/clnt.png\"></span>";
-		html += "</div>";
-		html += "<div class=\"popup_cc_box_right3\">";
-		html += "<div class=\"boldname3\">고객명 / 고객사명 / 고객사등급</div><br/>";
-		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
-		html += "</div>";
-		html += "</div>";
-		html += "<div class=\"popup_box_in\">";
-		html += "<div class=\"popup_cc_box_left\">";
-		html += "<span><img alt=\"고객이미지\" class=\"company\" src=\"resources/images/sales/clnt.png\"></span>";
-		html += "</div>";
-		html += "<div class=\"popup_cc_box_right3\">";
-		html += "<div class=\"boldname3\">고객명 / 고객사명 / 고객사등급</div><br/>";
-		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
-		html += "</div>";
-		html += "</div>";
-		html += "<div class=\"popup_box_in\">";
-		html += "<div class=\"popup_cc_box_left\">";
-		html += "<span><img alt=\"고객이미지\" class=\"company\" src=\"resources/images/sales/clnt.png\"></span>";
-		html += "</div>";
-		html += "<div class=\"popup_cc_box_right3\">";
-		html += "<div class=\"boldname3\">고객명 / 고객사명 / 고객사등급</div><br/>";
-		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
-		html += "</div>";
-		html += "</div>";
-		html += "<div class=\"board_bottom2\">";
-		html +=	"<div class=\"pgn_area\">";
-		html +=	"<div class=\"page_btn page_first\">first</div>";
-		html +=	"<div class=\"page_btn page_prev\">prev</div>";
-		html +=	"<div class=\"page_btn_on\">1</div>";
-		html +=	"<div class=\"page_btn\">2</div>";
-		html +=	"<div class=\"page_btn\">3</div>";
-		html +=	"<div class=\"page_btn\">4</div>";
-		html +=	"<div class=\"page_btn\">5</div>";
-		html +=	"<div class=\"page_btn page_next\">next</div>";
-		html +=	"<div class=\"page_btn page_last\">last</div>";
-		html +=	"</div>";
-		html +=	"</div>";
-		html +=	"</div>";
-	
-		makePopup({
-			depth : 1,
-			bg : true,
-			bgClose : false,
-			title : "고객 조회",
-			contents : html,
-			width : 600,
-			height : 500,
-			contentsEvent : function() {
-				
-			},
-			buttons : [{
-				name : "고객 추가",
-				func:function() {
-					var html = "";
-					
-				html += "<div class=\"popup_cont pc_back\">";
-				html += "<div class=\"popup_table\">";
-				html += "<div class=\"btn2\">고객</div>";
-				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";
-				html += "<div class=\"btn2\">고객사 *</div>";
-				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" />";
-				html += "<span class=\"imgPos2\"><img class=\"btnImg2\" alt=\"돋보기\" src=\"resources/images/sales/mg.png\" /></span>";		
-				html += "</div>";
-				html += "<div class=\"btn2\">부서</div>";
-				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";
-				html += "<div class=\"btn2\">직책</div>";
-				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";							
-				html += "<div class=\"btn2\">휴대폰 번호*</div>";
-				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";															
-				html += "<div class=\"btn2\">메일</div>";
-				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";							
-				html += "<div class=\"btn2\">첨부자료</div>";
-				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" />";
-				html += "<div class=\"imgPos2\">";
-				html += "<span>";
-				html += "<img class=\"btnImg3\" alt=\"추가\" src=\"resources/images/sales/plus.png\" />";
-				html += "<img class=\"btnImg3\" alt=\"접기\" src=\"resources/images/sales/uparrow.png\" />";
-				html += "</span>";
-				html += "</div>";
-				html += "</div>";
-				html += "</div>";
-				html += "</div>";
-
-					makePopup({
-						depth : 2,
-						bg : true,
-						bgClose : false,
-						title : "고객 등록",
-						contents : html,
-						width : 600,
-						height : 400,
-						buttons : [{
-							name : "등록",
-							func: function() {
-								
-								var html = "";
-								
-								html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
-								
-								makePopup({
-									depth : 3,
-									bg : true,
-									bgClose : true,
-									title : "저장 완료",
-									contents : html,
-									width : 400,
-									height : 180,
-									buttons : {
-										name : "확인"	
-									}
-								});
-							}
-						}, {
-							name : "취소"
-						}]
-					});									
-				}
-			},	{
-				name : "등록",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "취소"
-			}]
-		});			
-	});
-	
 	$("#ccIcon").on("click", function() {
 		var html = "";
 		
 		html += "<div class=\"popup_title_mid\">";
-		html += "<div class=\"ptm_left\">";
-		html +=	"<div class=\"ptm_left_top\">고객사분류</div>";	
-		html +=	"<div class=\"ptm_left_bot\">고객사명</div>";	
-		html += "</div>";
-		html += "<div class=\"ptm_mid\">";
-		html +=	"<div class=\"ptm_mid_top\">";
-		html +=	"<select class=\"sel_size\">";
-		html +=		"<option>선택안함</option>";
-		html +=		"<option>거래고객사</option>";
-		html +=		"<option>파트너사</option>";
-		html +=		"<option>해지고객사</option>";
-		html +=		"<option>정지고객사</option>";
-		html +=		"<option>외국고객사</option>";
-		html +=		"<option>기타</option>";
-		html +=	"</select>";
-		html +=	"</div>";		
-		html +=	"<div class=\"ptm_mid_bot\">";
-		html +=	"<input type=\"text\" class=\"text_size2\" placeholder=\"검색어를 입력해주세요\" />";
-		html +=	"</div>";	
-		html += "</div>";
-		html += "<div class=\"ptm_mid_right\">";
-		html +=	"<div class=\"ptm_mid_right_top\"></div>";
-		html +=	"<div class=\"ptm_mid_right_bot\"></div>";
+		html += 	"<form id=\"ccPopupForm\">";
+	 	html += 		"<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
+		html += 		"<div class=\"ptm_left\">";
+		html +=				"<div class=\"ptm_left_top\">고객사분류</div>";	
+		html +=				"<div class=\"ptm_left_bot\">고객사명</div>";	
+		html += 		"</div>";
+		html +=			"<div class=\"ptm_mid\">";
+		html +=				"<div class=\"ptm_mid_top\">";
+		html +=					"<select class=\"sel_size\" id=\"cccnType\" name=\"cccnType\">";
+		html +=						"<option value=\"6\">선택안함</option>";
+		html +=						"<option value=\"0\">거래고객사</option>";
+		html +=						"<option value=\"1\">파트너사</option>";
+		html +=						"<option value=\"2\">해지고객사</option>";
+		html +=						"<option value=\"3\">정지고객사</option>";
+		html +=						"<option value=\"4\">외국고객사</option>";
+		html +=						"<option value=\"5\">기타</option>";
+		html +=					"</select>";
+		html +=				"</div>";		
+		html +=				"<div class=\"ptm_mid_bot\">";
+		html +=					"<input type=\"text\" class=\"text_size2\" id=\"searchTxt\" name=\"searchTxt\" placeholder=\"검색어를 입력해주세요\" />";
+		html +=				"</div>";	
+		html += 		"</div>";
+		html += 		"<div class=\"ptm_mid_right\">";
+		html +=				"<div class=\"ptm_mid_right_top\"></div>";
+		html +=				"<div class=\"ptm_mid_right_bot\"></div>";
+ 		html += 		"</div>"; 
+		html += 		"<div class=\"ptm_right\">";
+		html +=				"<div class=\"ptm_right_top\"></div>";
+		html +=				"<div class=\"ptm_right_bot\">";
+		html +=					"<div class=\"cmn_btn\" id=\"ccBtn\">검색</div>";
+		html +=				"</div>";
+		html += 		"</div>";
+		html += 	"</form>";
  		html += "</div>"; 
-		html += "<div class=\"ptm_right\">";
-		html +=	"<div class=\"ptm_right_top\"></div>";
-		html +=	"<div class=\"ptm_right_bot\">";
-		html +=	"<div class=\"cmn_btn\">검색</div>";
-		html +=	"</div>";
-		html += "</div>";
-		html += "</div>";
 		html += "<div class=\"popup_cont pc_back\">";
-		html += "<div class=\"popup_box_in\">";
-		html += "<div class=\"popup_cc_box_left\">";
-		html += "<span><img alt=\"고객사이미지\" class=\"company\" src=\"resources/images/sales/client.png\"></span>";
-		html += "</div>";
-		html += "<div class=\"popup_cc_box_right2\">";
-		html += "<span class=\"boldname2\">고객사명 / 고객사 분류 / 고객 등급</span><br/>";
-		html += "<span class=\"adrs_name\">주소</span><br/>";
-		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
-		html += "</div>";
-		html += "</div>";
-		html += "<div class=\"popup_box_in\">";
-		html += "<div class=\"popup_cc_box_left\">";
-		html += "<span><img alt=\"고객사이미지\" class=\"company\" src=\"resources/images/sales/client.png\"></span>";
-		html += "</div>";
-		html += "<div class=\"popup_cc_box_right2\">";
-		html += "<span class=\"boldname2\">고객사명 / 고객사 분류 / 고객 등급</span><br/>";
-		html += "<span class=\"adrs_name\">주소</span><br/>";
-		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
-		html += "</div>";
-		html += "</div>";
-		html += "<div class=\"popup_box_in\">";
-		html += "<div class=\"popup_cc_box_left\">";
-		html += "<span><img alt=\"고객사이미지\" class=\"company\" src=\"resources/images/sales/client.png\"></span>";
-		html += "</div>";
-		html += "<div class=\"popup_cc_box_right2\">";
-		html += "<span class=\"boldname2\">고객사명 / 고객사 분류 / 고객 등급</span><br/>";
-		html += "<span class=\"adrs_name\">주소</span><br/>";
-		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
-		html += "</div>";
-		html += "</div>";
-		html += "<div class=\"popup_box_in\">";
-		html += "<div class=\"popup_cc_box_left\">";
-		html += "<span><img alt=\"고객사이미지\" class=\"company\" src=\"resources/images/sales/client.png\"></span>";
-		html += "</div>";
-		html += "<div class=\"popup_cc_box_right2\">";
-		html += "<span class=\"boldname2\">고객사명 / 고객사 분류 / 고객 등급</span><br/>";
-		html += "<span class=\"adrs_name\">주소</span><br/>";
-		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
-		html += "</div>";
-		html += "</div>";
-		html += "<div class=\"popup_box_in\">";
-		html += "<div class=\"popup_cc_box_left\">";
-		html += "<span><img alt=\"고객사이미지\" class=\"company\" src=\"resources/images/sales/client.png\"></span>";
-		html += "</div>";
-		html += "<div class=\"popup_cc_box_right2\">";
-		html += "<span class=\"boldname2\">고객사명 / 고객사 분류 / 고객 등급</span><br/>";
-		html += "<span class=\"adrs_name\">주소</span><br/>";
-		html += "<span class=\"clntCmpny_dt\">등록일(2022-02-08)</span>";
-		html += "</div>";
-		html += "</div>";
-		html += "<div class=\"board_bottom2\">";
-		html +=	"<div class=\"pgn_area\">";
-		html +=	"<div class=\"page_btn page_first\">first</div>";
-		html +=	"<div class=\"page_btn page_prev\">prev</div>";
-		html +=	"<div class=\"page_btn_on\">1</div>";
-		html +=	"<div class=\"page_btn\">2</div>";
-		html +=	"<div class=\"page_btn\">3</div>";
-		html +=	"<div class=\"page_btn\">4</div>";
-		html +=	"<div class=\"page_btn\">5</div>";
-		html +=	"<div class=\"page_btn page_next\">next</div>";
-		html +=	"<div class=\"page_btn page_last\">last</div>";
+		html +=		"<div class=\"popup_box\" id=\"ccBox\"></div>";
+		html += 	"<div class=\"board_bottom2\">";
+		html +=			"<div class=\"pgn_area\" id=\"ccpb\"></div>";
+		html +=		"</div>"; 
 		html +=	"</div>";
-		html +=	"</div>";
-		html +=	"</div>";	
 
 		makePopup({
 			bg : true,
 			bgClose : false,
 			title : "고객사 조회",
 			contents : html,
+			contentsEvent : function() {
+				ccList();
+				//페이징 
+				$("#ccpb").on("click", "div", function() {
+					$("#page").val($(this).attr("page"));
+					
+					ccList();
+				});
+				
+				// 검색버튼
+				$("#ccBtn").on("click", function () {
+					$("#page").val("1");
+					
+					ccList();
+					
+				});
+				
+				$("#searchTxt").on("keypress", function(event) {
+					if(event.keyCode == 13 ) {
+						$("#page").val("1");
+						
+						ccList();
+						return false;
+					}
+				});	
+			},
 			width : 600,
 			height : 500,
 			buttons : [{
@@ -909,100 +709,49 @@ $(document).ready(function() {
 	});
 	
 	$("#userIcon").on("click", function() {
-		var html = "";
+ 		var html = "";
 		
 	 	html += "<div class=\"popup_title_mid\">"; 
-		html += "<div class=\"ptm_left\">";
-		html += "<div class=\"ptm_left_top\">팀분류</div>";
-		html +=	"<div class=\"ptm_left_bot\">사원분류</div>";		
-		html += "</div>";
-		html += "<div class=\"ptm_mid\">";
-		html +=	"<div class=\"ptm_mid_top\">";
-		html +=	"<select class=\"sel_size\">"
-		html +=		"<option>영업1팀</option>";
-		html +=		"<option>영업2팀</option>";
-		html +=		"<option>영업3팀</option>";
-		html +=	"</select>";
-		html +=	"</div>";		
-		html +=	"<div class=\"ptm_mid_bot\">";
-		html +=	"<select class=\"sel_size\">";
-		html +=		"<option>사원번호</option>";
-		html +=		"<option>사원명</option>";
-		html +=	"</select>";
-		html +=	"</div>";	
-		html += "</div>";
-		html += "<div class=\"ptm_mid_right\">";
-		html +=	"<div class=\"ptm_mid_right_top\"></div>";
-		html +=	"<div class=\"ptm_mid_right_bot\">";
-		html +=	"<input type=\"text\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" />";
-		html +=	"</div>";
-		html += "</div>";
-		html += "<div class=\"ptm_right\">";
-		html +=	"<div class=\"ptm_right_top\"></div>";
-		html +=	"<div class=\"ptm_right_bot\">";
-		html +=	"<div class=\"cmn_btn\">검색</div>";
-		html +=	"</div>";
-		html +=	"</div>";
+	 	html += 	"<form id=\"popupForm\">";
+	 	html += 		"<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
+		html += 		"<div class=\"ptm_left\">";
+		html += 			"<div class=\"ptm_left_top\">팀분류</div>";
+		html +=				"<div class=\"ptm_left_bot\">사원분류</div>";		
+		html += 		"</div>";
+		html += 		"<div class=\"ptm_mid\">";
+		html +=				"<div class=\"ptm_mid_top\">";
+		html +=					"<select class=\"sel_size\" id=\"deptS\" name=\"deptS\">"
+		html +=						"<option value=\"6\">영업부</option>";
+		html +=						"<option value=\"7\">영업1팀</option>";
+		html +=						"<option value=\"8\">영업2팀</option>";
+		html +=					"</select>";
+		html +=				"</div>";		
+		html +=				"<div class=\"ptm_mid_bot\">";
+		html +=					"<select class=\"sel_size\" id=\"empS\" name=\"empS\">";
+		html +=						"<option value=\"0\">사원번호</option>";
+		html +=						"<option value=\"1\">사원명</option>";
+		html +=					"</select>";
+		html +=				"</div>";	
+		html += 		"</div>";
+		html += 		"<div class=\"ptm_mid_right\">";
+		html +=				"<div class=\"ptm_mid_right_top\"></div>";
+		html +=				"<div class=\"ptm_mid_right_bot\">";
+		html +=					"<input type=\"text\" id=\"searchTxt\" name=\"searchTxt\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" />";
+		html +=				"</div>";
+		html += 		"</div>";
+		html += 		"<div class=\"ptm_right\">";
+		html +=				"<div class=\"ptm_right_top\"></div>";
+		html +=				"<div class=\"ptm_right_bot\">";
+		html +=					"<div class=\"cmn_btn\" id=\"mngrBtn\">검색</div>";
+		html +=				"</div>";
+		html +=			"</div>";
+		html += 	"</form>";
 		html += "</div>";
 		html += "<div class=\"popup_cont pc_back\">";
-		html +=	"<div class=\"popup_box_in\">";
-		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_cc_box_right\">";
-		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
-		html +=	"<span class=\"mg_wid\">영업1팀</span>";
-		html +=	"</div>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_box_in\">";
-		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_cc_box_right\">";
-		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
-		html +=	"<span class=\"mg_wid\">영업1팀</span>";
-		html +=	"</div>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_box_in\">";
-		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_cc_box_right\">";
-		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
-		html +=	"<span class=\"mg_wid\">영업1팀</span>";
-		html +=	"</div>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_box_in\">";
-		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_cc_box_right\">";
-		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
-		html +=	"<span class=\"mg_wid\">영업1팀</span>";
-		html +=	"</div>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_box_in\">";
-		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_cc_box_right\">";
-		html +=	"17824<span class=\"boldname\">김길동 / 대리</span>";
-		html +=	"<span class=\"mg_wid\">영업1팀</span>";
-		html +=	"</div>";
-		html +=	"</div>";
-		html += "<div class=\"board_bottom2\">";
-		html +=	"<div class=\"pgn_area\">";
-		html +=	"<div class=\"page_btn page_first\">first</div>";
-		html +=	"<div class=\"page_btn page_prev\">prev</div>";
-		html +=	"<div class=\"page_btn_on\">1</div>";
-		html +=	"<div class=\"page_btn\">2</div>";
-		html +=	"<div class=\"page_btn\">3</div>";
-		html +=	"<div class=\"page_btn\">4</div>";
-		html +=	"<div class=\"page_btn\">5</div>";
-		html +=	"<div class=\"page_btn page_next\">next</div>";
-		html +=	"<div class=\"page_btn page_last\">last</div>";
-		html +=	"</div>";
-		html +=	"</div>";
+		html +=		"<div class=\"popup_box\" id=\"mngrBox\"></div>";
+		html += 	"<div class=\"board_bottom2\">";
+		html +=			"<div class=\"pgn_area\" id=\"mngrpb\"></div>";
+		html +=		"</div>"; 
 		html +=	"</div>";
 		
 		makePopup({
@@ -1010,6 +759,31 @@ $(document).ready(function() {
 			bgClose : false,
 			title : "담당자 조회",
 			contents : html,
+			contentsEvent : function() {
+				mngrList();
+				//페이징 
+				$("#mngrpb").on("click", "div", function() {
+					$("#page").val($(this).attr("page"));
+					
+					mngrList();
+				});
+				// 검색버튼
+				$("#mngrBtn").on("click", function () {
+					$("#page").val("1");
+					
+					mngrList();
+					
+				});
+				
+				$("#searchTxt").on("keypress", function(event) {
+					if(event.keyCode == 13 ) {
+						$("#page").val("1");
+						
+						mngrList();
+						return false;
+					}
+				});
+			},
 			width : 600,
 			height : 500,
 			buttons : [{
@@ -1024,7 +798,108 @@ $(document).ready(function() {
 		});
 	});	
 });
+/* 고객사 조회 팝업 */
+function ccList() {
+	var params = $("#ccPopupForm").serialize();
 
+	$.ajax({
+		type : "post",
+		url : "ccListAjax",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			ccDrawList(res.list);
+			drawPaging(res.pb, "#ccpb");
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	});			
+}
+function ccDrawList(list) {
+	var html = "";
+	
+	for(var data of list) {
+		
+	html += "<div class=\"popup_box_in\">";
+	html +=	"<div class=\"popup_cc_box_left\">";
+	html += "<span><img alt=\"고객사이미지\" class=\"company\" src=\"resources/images/sales/client.png\"></span>";
+	html +=	"</div>";
+	html +=	"<div class=\"popup_cc_box_right2\">";
+	html +=	"<span class=\"boldname2\">" + data.CLNT_CMPNY_NAME + " / " + data.CLNT_CMPNY_CLSFY_NAME + " / " + data.GRADE_NAME + "등급</span><br/>";
+	html +=	"<span class=\"adrs_name\">" + data.ADRS + " " + data.DTL_ADRS + "</span><br/>";
+	html += "<span class=\"clntCmpny_dt\">등록일 " + data.RD + "</span>";
+	html += "</div>";
+	html += "</div>";
+	}
+	
+	$("#ccBox").html(html);
+}
+/* 담당자 조회 팝업  */
+function mngrList() {
+	var params = $("#popupForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "mngrListAjax",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			mngrDrawList(res.list);
+			drawPaging(res.pb, "#mngrpb");
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	});	
+}
+function mngrDrawList(list) {
+	var html = "";
+		
+	for(var data of list) {
+		
+		html +=	"<div class=\"popup_box_in\">";
+		html +=	"<div class=\"popup_cc_box_left\">";
+		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_cc_box_right\">";
+		html +=	 data.EMP_NUM + "<span class=\"boldname\">" + data.EMP_NAME + " / " + data.RANK_NAME + "</span>";
+		html +=	"<span class=\"mg_wid\">" + data.DEPT_NAME + "</span>";
+		html +=	"</div>";
+		html +=	"</div>";	
+	}
+	
+	$("#mngrBox").html(html);
+	
+}
+
+function drawPaging(pb, sel) {
+	var html = "";
+	
+	html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
+	if($("#page").val() == "1") {
+		html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
+	} else {
+		html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
+	}
+	
+	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
+		if($("#page").val() == i) {
+			html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
+		} else {
+			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
+		}
+	}
+	
+	if($("#page").val() == pb.maxPcount) {
+		html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_next\">next</div>";
+	} else {
+		html += "<div page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</div>";
+	}
+	html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
+	
+	$(sel).html(html);
+}
 function checkEmpty(sel) {
 	if($.trim($(sel).val()) == "") {
 		return true;
