@@ -16,12 +16,13 @@
 					AND I.WRTNG_TITLE LIKE '%' || #{searchTxt} || '%'
 				</when>
 				<when test="searchGbn == 1">
-					AND ICL.CLNT_NUM LIKE '%' || #{searchTxt} || '%'
+					AND ICL.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
 				</when>
 			</choose>
 		</if>
 	</select>
 	
+	<!-- 목록 -->
 	<select id="getInqryList" resultType="hashmap" parameterType="hashmap">
 		SELECT IQ.INQRY_NUM, IQ.CTGRY_NAME, IQ.WRTNG_TITLE, IQ.CLNT_NAME, IQ.WRTNG_DATE, 
 		       IQ.ATT_FILE, IQ.ANSR
@@ -48,6 +49,7 @@
 		WHERE IQ.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
+	<!-- 상세보기 -->
 	<select id="getInqry" resultType="hashmap" parameterType="hashmap">
 		SELECT I.INQRY_NUM, ICT.CTGRY_NAME, I.WRTNG_TITLE, I.WRTNG_CONT, ICL.CLNT_NAME, I.ATT_FILE
 		FROM INQRY I INNER JOIN INQRY_CTGRY ICT
