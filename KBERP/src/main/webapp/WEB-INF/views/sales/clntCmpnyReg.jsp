@@ -185,6 +185,7 @@ td:nth-child(1), td:nth-child(3){
 	border-radius: 7px;
 	margin-bottom: 18px;
 	margin-left: 40px;
+	font-size: 10pt;
 }
 .rvn_txt {
 	height: 33px;
@@ -239,6 +240,8 @@ td:nth-child(1), td:nth-child(3){
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	var fileName =  $("#att").val();
+	console.log(fileName);
 	$("#listBtn").on("click", function() {
 		makePopup({
 			bg : true,
@@ -411,7 +414,7 @@ function findAddr(){
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="bodyWrap">
-				<form action="imageUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
+				<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
 					<input type="hidden" id="page" name="page" value="${page}" />
 					<input type="hidden" name="top" value="${param.top}" />
 					<input type="hidden" name="menuNum" value="${param.menuNum}" />
@@ -505,14 +508,14 @@ function findAddr(){
 					</table>
 					<!-- 첨부파일 -->
 					<div class="rvn_txt">
-						첨부파일 (0)
+						첨부파일
 						<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" border='0' />
 					</div>
 					<div class="cntrct_box_in">
-					<!-- 첨부파일 이름 들어갈 곳 -->
+						${fileName}
 					</div>
-					<input type="file" name="att" id="att" />
-					<input type="hidden" id="affFile" name="attFile" />
+					<input type="file" id="att" name="att" />
+					<input type="hidden" id="attFile" name="attFile" />
 				</form>
 			</div>
 		</div>

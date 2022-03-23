@@ -34,5 +34,27 @@
 			 ) S
 		WHERE S.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
+	
+	<select id="getExpnsEmpMnthlyData" resultType="hashmap" parameterType="hashmap">
+		SELECT SUM(DECODE(EXPNS_TYPE, '법인', AMNT)) AS CRP, SUM(DECODE(EXPNS_TYPE, '개인', AMNT)) AS IND, SUM(AMNT) AS TOTAL
+		FROM EXPNS_RSLTN ER INNER JOIN EMP E
+		                            ON ER.EMP_NUM = E.EMP_NUM
+		WHERE TO_CHAR(DATE_HR, 'YYYY-MM') = #{mon}
+		AND E.EMP_NUM = #{empNum}
+	</select>
+	
+	<select id="getExpnsEmpMnthlyCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM EXPNS_RSLTN
+		WHERE TO_CHAR(DATE_HR, 'YYYY-MM') = #{mon}
+		AND EMP_NUM = #{empNum}
+	</select>
+	
+	<select id="getExpnsEmpMnthlyList" resultType="hashmap" parameterType="hashmap">
+		SELECT TO_CHAR(DATE_HR, 'YYYY-MM-DD') AS EXPNS_DATE, CHIT_NUM, EXPNS_TYPE, AMNT, EXPNS, ACNT_NUM
+		FROM EXPNS_RSLTN
+		WHERE TO_CHAR(DATE_HR, 'YYYY-MM') = #{mon}
+		AND EMP_NUM = #{empNum}
+	</select>
 
 </mapper>

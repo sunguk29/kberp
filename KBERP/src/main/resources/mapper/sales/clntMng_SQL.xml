@@ -545,5 +545,10 @@
 		</if>
 		AND CLNT_CMPNY_CLSFY_NUM = 5
 	</select>
+	
+	<insert id="getClntCmpnyAttFile" parameterType="hashmap">
+		INSERT INTO CLNT_CMPNY_ATT_FILE (ATT_FILE_NUM, CLNT_CMPNY_NUM, ATT_FILE_NAME)
+		VALUES (CLNT_CMPNY_ATT_FILE_SEQ.NEXTVAL, CLNT_CMPNY_SEQ.CURRVAL, #{attFile})
+	</insert>
 
 </mapper>
