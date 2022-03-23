@@ -1,6 +1,7 @@
 package com.gdj43.kberp.web.GW.service;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,12 @@ public class ClndrService implements IClndrService{
 	public void clndrDelete(HashMap<String, String> params) throws Throwable {
 		iClndrDao.clndrDelete(params);
 	}
+
+	@Override
+	public List<HashMap<String, String>> getSchdl(HashMap<String, String> params) throws Throwable {
+		return iClndrDao.getSchdl(params);
+	}
+
 
 
 }

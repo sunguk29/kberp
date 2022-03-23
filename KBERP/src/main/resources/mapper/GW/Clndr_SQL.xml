@@ -5,7 +5,14 @@
 INSERT INTO SCHDL (SCHDL_NUM, SCHDL_TYPE_NUM, SCHDL_CTGRY_NUM,EMP_NUM,
                    USER_CTGRY_NAME, SCHDL_TITLE, SCHDL_PLACE, SCHDL_CONT,
                    SCHDL_START_TIME, SCHDL_END_TIME, ALDY_DVSN)
-VALUES (SCHDL_SEQ.NEXTVAL, #{schdl_type}, #{schdl_ctgry}, #{emp_num}, '0', #{schdl_title}, #{schdl_place}, #{schdl_cont},
-        #{schdl_start_time}, #{schdl_end_time}, #{aldy_dvsn})
+VALUES (SCHDL_SEQ.NEXTVAL, #{schdl_type}, #{schdl_ctgry}, #{emp_num}, #{user_ctgry}, #{schdl_title}, #{schdl_place}, #{schdl_cont},
+         TO_DATE(#{schdl_start_date}||' '||#{schdl_start_time}, 'YYYY-MM-DD HH24:MI'),  TO_DATE(#{schdl_end_date}||' '||#{schdl_end_time}, 'YYYY-MM-DD HH24:MI'), #{aldy_dvsn})
 </insert>
+<select id="getSchdl" parameterType="hashmap" resultType="hashmap">
+SELECT SCHDL_NUM AS ID, SCHDL_TITLE AS TITLE,  TO_CHAR(SCHDL_START_TIME,'YYYY-MM-DD')||'T'||TO_CHAR(SCHDL_START_TIME,'HH24:MI:SS') AS "START",
+TO_CHAR(SCHDL_END_TIME,'YYYY-MM-DD')||'T'||TO_CHAR(SCHDL_END_TIME,'HH24:MI:SS') AS "END"
+FROM SCHDL
+WHERE '202203' BETWEEN TO_CHAR(SCHDL_START_TIME,'YYYYMM') AND TO_CHAR(SCHDL_END_TIME, 'YYYYMM')
+ORDER BY "START" ASC
+</select>
 </mapper>
