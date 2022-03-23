@@ -186,15 +186,15 @@
     text-align: center;
 }
 
-.prd_btn {
-    display: inline-block;
+.apntm_date_input {
+   border: solid 1px #b7b7b7;
+    border-radius: 3px;
+   display: inline-block;
     vertical-align: top;
-    height: 24px;
-    width: 24px;
-    margin-left: 7px;
-    background-image: url("../images/cmn/calendar_icon.png");
-    background-size: 100%;
-    cursor: pointer;
+    height: 18px;
+    width: 115px;
+    font-size: 9pt;
+    text-align: center;
 }
 
 .prd_clsftn {
@@ -213,6 +213,8 @@
     vertical-align: top;
     height: 480px;
     width: 520px;
+    border-bottom: solid 1px #b7b7b7;
+}
    
 }  
 .apntm_list_area {
@@ -490,7 +492,7 @@ $(document).ready(function() {
    }
    
    //슬림스크롤
-   $(".apntm_list_area").slimScroll({height: "480px"});
+   $(".apntm_list_area").slimScroll({height: "450px"});
    
    // 인사발령 메인화면
    reloadList();
@@ -503,18 +505,32 @@ $(document).ready(function() {
       reloadCont();
    });
    
+   // 기간조회 비활성화
+   $(".prd_value").on("click",  function() {
+     var valueCheck = $(".prd_value:checked").val();
+     
+     if(valueCheck == "1") {
+    	 $(".prd_text").attr("readonly", false);
+    	 $("#prd_start").focus();
+     } else {
+    	 $(".prd_text").val("");
+    	 $(".prd_text").attr("readonly", true);
+     }
+   });
+   
    // 발령 조회
    $("#searchBtn").on("click", function() {
+      $("#oldSearchAprvl").val($("#searchAprvl").val());
       $("#oldSearchGbn").val($("#searchGbn").val());
       $("#oldSearchTxt").val($("#searchTxt").val());      
+      $("#oldstartPrd").val($("#startPrd").val());      
+      $("#oldendPrd").val($("#endPrd").val());      
 
       reloadList();
    });
    
    // 발령 추가
    $("#apntm_add_btn").on("click", function() {
-      $("#oldSearchGbn").val($("#searchGbn").val());
-      $("#oldSearchTxt").val($("#searchTxt").val());      
 
       drawNewApntm();
    });
@@ -570,7 +586,13 @@ function drawList(list) {
       html += "<td>" + data.DEPT_NAME + "</td>"           ;
       html += "<td>" + data.RANK_NAME + "</td>"           ;
       html += "<td>" + data.START_DATE + "</td>"          ;
-      html += "<td>" + data.APRVL_STS + "</td>"           ;
+      if(data.APRVL_STS == "결재진행중") {
+     	 html += "<td>" + data.APRVL_STS + "</td>"           ;
+      } else if(data.APRVL_STS == "결재완료") {
+     	 html += "<td style=\"color:#4B94F2;\">" + data.APRVL_STS + "</td>"           ;
+      } else {
+    	  html += "<td style=\"color:#ff6f60;\">" + data.APRVL_STS + "</td>"           ;
+      }
       html += "</tr>"                                     ;
    }
    $("tbody").html(html);
@@ -729,18 +751,18 @@ function drawNewApntm(){
    html += "               <div class=\"apnmt_info_text\">발령구분*</div>                         ";
    html += "               <select class=\"apnmt_select\">                                        ";
    html += "                  <option selected>선택</option>                                     ";
-   html += "                  <option>test</option>                                              ";
-   html += "                  <option>test</option>                                              ";
-   html += "                  <option>test</option>                                              ";
+   html += "                  <option>입사</option>                                              ";
+   html += "                  <option>퇴사</option>                                              ";
+   html += "                  <option>승진</option>                                              ";
+   html += "                  <option>이동</option>                                              ";
    html += "               </select>                                                              ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_info\">                                                 ";
    html += "               <div class=\"apnmt_info_text\">발령부서*</div>                         ";
    html += "               <select class=\"apnmt_select\">                                        ";
    html += "                  <option selected>선택</option>                                     ";
-   html += "                  <option>test</option>                                              ";
-   html += "                  <option>test</option>                                              ";
-   html += "                  <option>test</option>                                              ";
+   html += "                  <option>영업부</option>                                              ";
+   html += "                  <option>선택안함</option>                                              ";
    html += "               </select>                                                              ";
    html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";
@@ -749,9 +771,12 @@ function drawNewApntm(){
    html += "               <div class=\"apnmt_info_text\">발령팀*</div>                           ";
    html += "               <select class=\"apnmt_select\">                                        ";
    html += "                  <option selected>선택</option>                                     ";
-   html += "                  <option>test</option>                                              ";
-   html += "                  <option>test</option>                                              ";
-   html += "                  <option>test</option>                                              ";
+   html += "                  <option>인사팀</option>                                              ";
+   html += "                  <option>경영팀</option>                                              ";
+   html += "                  <option>영업1팀</option>                                              ";
+   html += "                  <option>영업2팀</option>                                              ";
+   html += "                  <option>고객지원팀</option>                                              ";
+   html += "                  <option>ELS팀</option>                                              ";
    html += "               </select>                                                              ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_info\">                                                 ";
@@ -768,13 +793,13 @@ function drawNewApntm(){
    html += "            <div class=\"apnmt_info\">                                                 ";
    html += "               <div class=\"apnmt_info_text\">발령시작*</div>                         ";
    html += "               <div class=\"prd_text_wrap\">                                          ";
-   html += "                  <input type=\"date\" class=\"prd_text\" id=\"prd_start\"/>         ";
+   html += "                  <input type=\"date\" class=\"apntm_date_input\" id=\"prd_start\"/>         ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_info\">                                                 ";
    html += "               <div class=\"apnmt_info_text_end\">발령종료</div>                      ";
    html += "               <div class=\"prd_text_wrap\">                                          ";
-   html += "                  <input type=\"date\" class=\"prd_text\" id=\"prd_end\"/>           ";
+   html += "                  <input type=\"date\" class=\"apntm_date_input\" id=\"prd_end\"/>           ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";
@@ -797,6 +822,9 @@ function drawNewApntm(){
 <body>
 <input type="hidden" id="oldSearchGbn" value="${param.searchGbn}" />
 <input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
+<input type="hidden" id="oldSearchAprvl" value="${param.searchAprvl}" />
+<input type="hidden" id="oldSearchAprvl" value="${param.startPrd}" />
+<input type="hidden" id="oldSearchAprvl" value="${param.endPrd}" />
    <!-- top & left -->
    <c:import url="/topLeft">
       <c:param name="top">${param.top}</c:param>
@@ -812,7 +840,7 @@ function drawNewApntm(){
       <div class="apntm_add_btn_area">
          <input type="button" class="apntm_add_btn" id="apntm_add_btn" value="발령추가"/>
       </div>
-<!--------------------- 발령 조회 Form ------------------------->         
+<!--------------------- 발령 조회 Form ------------------------->   
          <form action="#" id="actionForm" method="post">
             <input type="hidden" id="no" name="no" />
             <div class="srch_wrap">
@@ -832,26 +860,26 @@ function drawNewApntm(){
                <div class="srch_bottom_area">
                   <div class="aprvl_radio_wrap">
                      <div class="aprvl_radio_title">결재상태</div>
-                        <div class="aprvl_radio_area">
-                           <input type="radio" name="aprvl" id="aprvl_entr" checked="checked"/><label for="aprvl_entr">전체</label>
-                           <input type="radio" name="aprvl" id="aprvl"/><label for="aprvl">승인</label>
-                           <input type="radio" name="aprvl" id="aprvl_rjct"/><label for="aprvl_rjct">반려</label>
-                           <input type="radio" name="aprvl" id="aprvl_cnsdr"/><label for="aprvl_cnsdr">검토</label>
+                        <div class="aprvl_radio_area" id="searchAprvl" name="searchAprvl">
+                           <input type="radio" name="aprvl" id="aprvl_entr" value="0" checked="checked"/><label for="aprvl_entr">전체</label>
+                           <input type="radio" name="aprvl" id="aprvl" value="1" /><label for="aprvl">완료</label>
+                           <input type="radio" name="aprvl" id="aprvl_rjct" value="2" /><label for="aprvl_rjct">반려</label>
+                           <input type="radio" name="aprvl" id="aprvl_cnsdr" value="3" /><label for="aprvl_cnsdr">진행중</label>
                         </div>
                   </div>
                   <div class="srch_prd_wrap">
                      <div class="prd_radio_title">발령시작일</div>
                      <div class="prd_radio_area">
-                        <input type="radio" name="prd" id="prd_entr" checked="checked"/><label for="prd_entr">전체</label>
-                        <input type="radio" name="prd" id="prd"/><label for="prd">기간설정</label>
+                        <input type="radio" name="prd" class="prd_value" id="prd_entr" value="0" checked="checked"/><label for="prd_entr">전체</label>
+                        <input type="radio" name="prd" class="prd_value" id="prd"  value="1"/><label for="prd">기간설정</label>
                      </div>
                      <div class="prd_wrap">
                         <div class="prd_text_wrap">
-                           <input type="date" class="prd_text" id="prd_start"/>
+                           <input type="date" class="prd_text" id="prd_start" name="startPrd" readonly="readonly" "${param.startPrd}"/>
                         </div>
                         <div class="prd_clsftn">~</div>
                         <div class="prd_text_wrap">
-                           <input type="date" class="prd_text" id="prd_end"/>
+                           <input type="date" class="prd_text" id="prd_end" name="endPrd" readonly="readonly" value="${param.endPrd}"/>
                         </div>
                      </div>
                   </div>
@@ -867,10 +895,10 @@ function drawNewApntm(){
                   <col width="80"/>
                   <col width="100"/>
                   <col width="100"/>
-                  <col width="100"/>
-                  <col width="100"/>
                   <col width="150"/>
                   <col width="100"/>
+                  <col width="150"/>
+                  <col width="150"/>
                </colgroup>
                <thead>
                   <tr>
