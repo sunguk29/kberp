@@ -222,5 +222,27 @@ public class ClntMngController {
 		
 		return mapper.writeValueAsString(modelMap);
 	}
+	@RequestMapping(value = "/mngListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String mngListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		int listCnt = iCommonService.getIntData("clntCmpnyMng.popupMngListCnt", params);
+		
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), listCnt, 4, 5);
+		
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("clntCmpnyMng.popupMngList", params);
+		
+		modelMap.put("mngList", list);
+		modelMap.put("mngPb", pb);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 
 }

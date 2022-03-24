@@ -601,6 +601,17 @@
 		FROM CLNT_CMPNY
 	</select>
 	
+	<select id="popupMngListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM EMP E INNER JOIN APNTM A
+		                           ON E.EMP_NUM = A.EMP_NUM
+		                   INNER JOIN DEPT D
+		                           ON A.DEPT_NUM = D.DEPT_NUM
+		                   INNER JOIN RANK R
+		                           ON A.RANK_NUM = R.RANK_NUM
+		WHERE D.DEPT_NAME LIKE '영%'
+	</select>
+	
 	<select id="popupCcList" parameterType="hashmap" resultType="hashmap">
 		SELECT CC.CLNT_CMPNY_NAME, CC.CLNT_CMPNY_CLSFY_NUM, CC.GRADE_NUM, CC.ADRS, TO_CHAR(CC.RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE,
 			   CC.CLNT_CMPNY_NUM
@@ -608,6 +619,20 @@
 		               ROW_NUMBER() OVER(ORDER BY CLNT_CMPNY_NUM DESC) AS RNUM    
 		        FROM CLNT_CMPNY ) CC
 		WHERE CC.RNUM BETWEEN #{startCount} AND #{endCount}
+	</select>
+	
+	<select id="popupMngList" parameterType="hashmap" resultType="hashmap">
+		SELECT ME.EMP_NUM, ME.EMP_NAME, ME.RANK_NAME, ME.DEPT_NAME
+		FROM ( SELECT E.EMP_NUM, E.EMP_NAME, R.RANK_NAME, D.DEPT_NUM, D.DEPT_NAME, ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM
+		        FROM EMP E INNER JOIN APNTM A
+		                           ON E.EMP_NUM = A.EMP_NUM
+		                   INNER JOIN DEPT D
+		                           ON A.DEPT_NUM = D.DEPT_NUM
+		                   INNER JOIN RANK R
+		                           ON A.RANK_NUM = R.RANK_NUM
+		        WHERE D.DEPT_NAME LIKE '영%'
+		    ) ME
+		WHERE ME.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
 </mapper>
