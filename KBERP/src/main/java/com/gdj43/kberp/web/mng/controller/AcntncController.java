@@ -39,6 +39,15 @@ public class AcntncController {
 		return mav;
 	}
 	
+	// 내부비용관리
+	@RequestMapping(value ="/intrnlCostMng")
+	public ModelAndView intrnlCostMng(ModelAndView mav) {
+		
+		mav.setViewName("mng/intrnlCostMngList");
+		
+		return mav;
+	}
+	
 	// 전표관리
 	@RequestMapping(value = "/chitMng")
 	public ModelAndView chitMng(@RequestParam HashMap<String, String> params, ModelAndView mav) {
