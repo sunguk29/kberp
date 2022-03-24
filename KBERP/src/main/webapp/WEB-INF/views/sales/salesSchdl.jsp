@@ -419,6 +419,10 @@
 	width : 317px;
 	height : 370px;
 }
+
+#ctt{
+	display : none;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -435,7 +439,6 @@ $(document).ready(function() {
 			dataType : "json",
 			data : params,
 			success : function(res) {
-				/* drawList(res.list); */
 				darwDayCalc(res.slist);
 			},
 			error : function(req) {
@@ -704,17 +707,20 @@ $(document).ready(function() {
 	      height: 400,
 	      events: data,
 	      eventClick: function(event) { // 이벤트 클릭
-	    	  alert(event.start);
+	    	  /* alert(event.start); */
 	      },
 	      dayClick: function(date, js, view) { // 일자 클릭
-	    	  
-	    	 var params = $("#actionForm").serialize();
-			 var tdv = date.format();
-			 document.getElementById("ctt").value = "      " + tdv;
+	    	   
+			var tdv = date.format();
+			document.getElementById("ctt").value = "      " + tdv;
+		
+			$("#ctt").show();
+			
+			var params = $("#actionForm").serialize();
 			
 	  		$.ajax({
 	  			type : "post",
-	  			url : "salesSchdlAjax",
+	  			url : "salesDaySchdlAjax",
 	  			dataType : "json",
 	  			data : params,
 	  			success : function(res) {
@@ -733,6 +739,8 @@ $(document).ready(function() {
 	    	  //alert('Current view: ' + view.name);
 	      }
 	});
+	
+	
 	
 	
 	/* 캘린더 이벤트 관련 끝 */
@@ -808,13 +816,7 @@ $(document).ready(function() {
 </head>
 <body>
 <input type="hidden" id="no" name="no" />
-<form action="#" id="actionForm" method="post">
-	<input type="hidden" name="top" value="${param.top}" />
-	<input type="hidden" name="menuNum" value="${param.menuNum}" />
-	<input type="hidden" name="menuType" value="${param.menuType}" />
-	<input type="hidden" name="tday" value="${tday}" />
-	<input type="hidden" name="ctt"  value="${ctt}" />
-</form>
+
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -822,6 +824,11 @@ $(document).ready(function() {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
+	<form action="#" id="actionForm" method="post">
+	<input type="hidden" name="top" value="${param.top}" />
+	<input type="hidden" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />
+	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
@@ -855,7 +862,7 @@ $(document).ready(function() {
 								<div id="fullCalendarArea"></div>
 							</div>
 							<div class="cal_cont">
-							<input type="text" class="cal_text_top" id="ctt" readonly="readonly"/>
+							<input type="text" class="cal_text_top" id="ctt" name="ctt" readonly="readonly"/>
 							<div class="calendar_text"></div>
 							</div>
 							</div>
@@ -872,6 +879,7 @@ $(document).ready(function() {
 				</div>
 			</div>
 		</div>
+</form>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

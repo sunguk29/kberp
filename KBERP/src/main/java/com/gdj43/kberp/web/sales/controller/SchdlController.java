@@ -37,12 +37,6 @@ public class SchdlController {
 	@RequestMapping(value = "/salesSchdl")
 	public ModelAndView salesSchdl(ModelAndView mav) throws Throwable {
 		
-		Date tday = new Date();
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
-		
-		mav.addObject("tday", sdf.format(tday));
-		
 		mav.setViewName("sales/salesSchdl");
 		
 		return mav;
@@ -62,36 +56,26 @@ public class SchdlController {
 		
 		params.put("month", sdm.format(month));
 		
-		List<HashMap<String, String>> list = iCommonService.getDataList("salesSchdl.getSalesSchdlList", params);
 		List<HashMap<String, String>> slist = iCommonService.getDataList("salesSchdl.getSalesDaySchdlList", params);
 		
-		modelMap.put("list", list);
 		modelMap.put("slist", slist);
 		
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	
-//	@RequestMapping(value = "/salesDaySchdlAjax", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
-//	@ResponseBody public String salesDaySchdlAjax(@RequestParam HashMap<String,String> params) throws Throwable{
-//		ObjectMapper mapper = new ObjectMapper();
-// 
-//		Map<String, Object> modelMap = new HashMap<String, Object>();
-//		
-//		Date month = new Date();
-//		
-//		SimpleDateFormat sdm = new SimpleDateFormat("YYYY-MM");
-//		
-//		params.put("month", sdm.format(month));
-//		
-//		
-//		List<HashMap<String, String>> slist = iCommonService.getDataList("salesSchdl.getSalesDaySchdlList", params);
-//		 
-//		modelMap.put("slist", slist);
-//		 
-//		 
-//		return mapper.writeValueAsString(modelMap);
-//	 }
+	@RequestMapping(value = "/salesDaySchdlAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String salesDaySchdlAjax(@RequestParam HashMap<String, String> params) throws Throwable{
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("salesSchdl.getSalesSchdlList", params);
+		
+		modelMap.put("list", list);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 
 	
 	@RequestMapping(value = "/mgrListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
@@ -103,7 +87,6 @@ public class SchdlController {
 	
 	Map<String, Object> modelMap = new HashMap<String, Object>();		
 	
-	// 총 게시글 수
 	int cnt = iCommonService.getIntData("salesSchdl.getMgrCnt", params);
 	
 	PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);

@@ -76,4 +76,18 @@ public class ClndrController {
 	
 	return mapper.writeValueAsString(modelMap);
 	}
+	
+	@RequestMapping(value = "/dtlSchdl", method = RequestMethod.POST,
+			produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String dtlClndrAjax(@RequestParam HashMap<String , String> params) throws Throwable{
+	ObjectMapper mapper = new ObjectMapper();
+	
+	Map<String, Object> modelMap = new HashMap<String, Object>();
+	
+	List<HashMap<String, String>> dtl = iClndrService.dtlSchdl(params);
+	dtl = Utils.toLowerListMapKey(dtl);  
+	modelMap.put("dtl", dtl);
+	return mapper.writeValueAsString(modelMap);
+	}
 }

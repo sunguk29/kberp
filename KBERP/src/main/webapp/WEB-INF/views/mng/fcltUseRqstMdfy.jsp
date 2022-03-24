@@ -30,7 +30,7 @@
 	margin-top: 10px;
 }
 #cncl_rqst{
-	margin-left: 590px;
+	margin-left: 502px;
 }
 #use_prps:focus{
 	outline: none;
@@ -80,44 +80,9 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	$("#mdfyBtn").on("click",function(){
-		$("#actionForm").attr("action","fcltUseRqstUpdate");
+		$("#actionForm").attr("action","fcltUseRqstMdfy");
 		$("#actionForm").submit();
 	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : true,
-			bgClose : true,
-			title : "예약취소",
-			contents : "예약을 취소하시겠습니까?",
-			buttons : [{
-				name : "예약취소",
-				func:function() {
-					var params = $("#actionForm").serialize();
-					
-					$.ajax({
-						type : "post",
-						url : "fcltAction/delete",
-						dataType : "json",
-						data : params,
-						success : function(res){ 
-							if(res.res == "success"){
-								$("#actionForm").attr("action","fcltUseRqst");
-								$("#actionForm").submit();
-							}else{
-								alert("취소 중 문제가 발생했습니다.");
-							}
-						},
-						error : function(request, status, error){
-							console.log(request.responseText);
-						}
-					});	
-				}
-			}, {
-				name : "닫기"
-			}]
-		});
-	});
-	
 });
 </script>
 </head>
@@ -135,9 +100,6 @@ $(document).ready(function() {
 			<div class="page_title_text">시설물 예약 상세보기</div>
 			<!-- 검색영역 선택적 사항 -->
 <form action="#" id="actionForm" method="post">
-	<input type="hidden" id="top" name="top" value="${param.top}" />
-	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
-	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="no" value="${param.no}" />
 	<input type="hidden" name="page" value="${param.page}" />
 	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
@@ -162,8 +124,6 @@ $(document).ready(function() {
 					<div class="fclt_use_rsrv">${data.START_TIME} ~ ${data.END_TIME}</div>
 					<div class="fclt_use_rsrv_txt">사용 인원 :</div>
 					<div class="fclt_use_rsrv">${data.USE_NUM_OF_PL}</div>
-					<div class="fclt_use_rsrv_txt">예약 현황 :</div>
-					<div class="fclt_use_rsrv">${data.STS_NUM}</div>
 				</div>
 			</div>		
 				<div id="cont_bottom">
@@ -174,7 +134,8 @@ $(document).ready(function() {
 				</div>
 				<div id="cncl_rqst">
 					<div class = "cmn_btn_ml" id="listBtn">목록으로</div>
-					<div class="cmn_btn_ml" id="btn2Btn">예약취소</div>
+					<div class = "cmn_btn_ml" id="mdfyBtn">예약수정</div>
+					<div class = "cmn_btn_ml" id="rqstcnclBtn">예약취소</div>
 				</div>
 			</div>
 			

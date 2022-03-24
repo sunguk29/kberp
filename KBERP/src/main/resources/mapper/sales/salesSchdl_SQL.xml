@@ -23,7 +23,7 @@
 										  			  ON L.CLNT_NUM = CL.CLNT_NUM
 								   		 LEFT OUTER JOIN CLNT_CMPNY CC
 										  			  ON CL.CLNT_NAME = CC.CLNT_NAME
-			  		 WHERE SUBSTR(SS.START_DATE_HR, 1, 10) = #{tday} ) A
+			  		 WHERE SUBSTR(SS.START_DATE_HR, 1, 10) = TRIM(#{ctt}) ) A
 	     ORDER BY A.RNUM DESC) A LEFT OUTER JOIN SALES S 
 	    			 						  ON A.SALES_NUM = S.SALES_NUM
                                  LEFT OUTER JOIN LEAD L 
