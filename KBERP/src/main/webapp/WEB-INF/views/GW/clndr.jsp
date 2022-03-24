@@ -364,6 +364,7 @@ $(document).ready(function() {
 	    	 //alert('Current view: ' + view.name);
 	      }
 	});
+	/* 상세일정 */
 	function drawList(dtl) {
 		
 		for(var data of dtl){
@@ -446,7 +447,11 @@ $(document).ready(function() {
   						closePopup();
   					}
   				}, {
-  					name : "삭제"
+  					name : "삭제",
+  					func:function(){
+  						schdlDelete(data);
+  					}
+  					
   				},{
   					name : "닫기"
   				}]
@@ -479,6 +484,29 @@ $(document).ready(function() {
 	
 	
 });
+/* 일정삭제 */
+function schdlDelete(data){
+	var params = $("#dtlForm").serialize();
+ 	 
+		$.ajax({
+			type: "post", 
+			url : "clndrAction/delete",
+			dataType : "json",
+			data : {id : data.id}, 
+			success : function(res) { 
+				if(res.res == "success"){
+					location.href = "clndr";
+				}else{
+					alert("삭제중 문제가 발생하였습니다.");
+				}
+				 
+			},
+			error : function(request, status, error) { 
+				console.log(request.responseText); 
+			}
+		});
+}
+/* 일정 불러오기 */
 function reloadList() {
 	var params = $("#actionForm").serialize();
 	$.ajax({
