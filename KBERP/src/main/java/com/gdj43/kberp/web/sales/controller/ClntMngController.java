@@ -152,8 +152,8 @@ public class ClntMngController {
 		try {
 			switch(gbn) {
 			case "insert" :
-				iCommonService.insertData("clntCmpnyMng.getClntCmpnyAttFile", params); // 첨부파일저장
-				iCommonService.insertData("clntCmpnyMng.getClntCmpnyAdd", params); // 글저장
+				iCommonService.insertData("clntCmpnyMng.ClntCmpnyAdd", params); // 글저장
+				iCommonService.insertData("clntCmpnyMng.ClntCmpnyAttFile", params); // 첨부파일저장
 				break;
 			case "update" :
 				
@@ -172,6 +172,55 @@ public class ClntMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
+	@RequestMapping(value = "/clntMngAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String clntMngAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			switch(gbn) {
+			case "insert" :
+				iCommonService.getData("clntCmpnyMng.clntAdd", params);
+				break;
+			case "update" :
+				break;
+			case "delete" :
+				break;
+			}
+			modelMap.put("res", "success");
+		} catch (Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "faild");
+		}
+		
+		return mapper.writeValueAsString(modelMap);
+		
+	}
 	
+	@RequestMapping(value = "/popupCcListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String popupCcListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		int listCnt = iCommonService.getIntData("clntCmpnyMng.popupCcListCnt", params);
+		
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), listCnt, 4, 5);
+		
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("clntCmpnyMng.popupCcList", params);
+		
+		modelMap.put("list", list);
+		modelMap.put("pb", pb);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 
 }
