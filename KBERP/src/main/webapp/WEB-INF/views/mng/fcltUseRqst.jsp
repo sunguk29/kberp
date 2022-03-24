@@ -62,6 +62,13 @@ $(document).ready(function() {
 		
 		reloadList();
 	});
+	$("#rsvtn_btn").on("click",function(){
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		$("#actionForm").attr("action","fcltUseRqstWrite");
+		$("#actionForm").submit();		
+	});
 	
 });
 
@@ -92,7 +99,7 @@ function drawList(list){
 		html += "<td>" + data.FCLTY_NAME + "</td>";
 		html += "<td>" + data.RSVTN_DATE + "</td>";
 		html += "<td>" + data.START_TIME + " ~ " + data.END_TIME + "</td>";
-		html += "<td>" + data.USE_NUM_OF_PL + "</td>";
+		html += "<td>" + data.STS_NUM + "</td>";
 	}
 	$("tbody").html(html);
 	
@@ -143,6 +150,10 @@ function drawPaging(pb) {
 			<div class="page_srch_area">
 			
 <form action="#" id="actionForm" method="post">
+	<input type="hidden" id="gbn" name="gbn"/>
+	<input type="hidden" id="top" name="top" value="${param.top}" />
+	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 	<input type="hidden" id="page" name="page" value="${page}" />
 	<input type="hidden" id="no" name="no" value="${no}" />
 	<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
@@ -174,7 +185,7 @@ function drawPaging(pb) {
 						<th>시설물명</th>
 						<th>예약날짜</th>
 						<th>예약시간</th>
-						<th>예약인원</th>
+						<th>예약현황</th>
 					</tr>
 				</thead>
 				<tbody>	
