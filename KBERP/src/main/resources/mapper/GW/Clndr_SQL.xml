@@ -38,6 +38,6 @@ UPDATE SCHDL SET SCHDL_TYPE_NUM = #{schdl_type},
                  SCHDL_START_TIME = TO_DATE(#{schdl_start_date}||' '||#{schdl_start_time}, 'YYYY-MM-DD HH24:MI:SS'),
                  SCHDL_END_TIME = TO_DATE(#{schdl_end_date}||' '||#{schdl_end_time}, 'YYYY-MM-DD HH24:MI:SS'),
                  ALDY_DVSN = #{aldy_dvsn}
-WHERE SCHDL_NUM = #{id}
+WHERE SCHDL_NUM = #{emp_num}
 </update>
 </mapper>
