@@ -153,7 +153,7 @@
 		</if>
 	</select>
 	
-	<insert id="getClntCmpnyAdd" parameterType="hashmap">
+	<insert id="ClntCmpnyAdd" parameterType="hashmap">
 		INSERT INTO CLNT_CMPNY (CLNT_CMPNY_NUM, CLNT_CMPNY_CLSFY_NUM, GRADE_NUM, RCGNTN_PATH_NUM, CLNT_CMPNY_NAME, BSNSMN_RGSTRTN_NUM,
 							    CLNT_NAME, PHONE_NUM, FAX, HMPG, ZIP_CODE_NUM, ADRS, DTL_ADRS, RVN, EMP_NUM)
 		VALUES (CLNT_CMPNY_SEQ.NEXTVAL, #{ccClsfy}, #{ccGrade}, #{rp}, #{ccName}, #{brNum}, #{cName}, #{phoneNum}, #{fax}, #{hmpg},
@@ -550,7 +550,7 @@
 		AND CLNT_CMPNY_CLSFY_NUM = 5
 	</select>
 	
-	<insert id="getClntCmpnyAttFile" parameterType="hashmap">
+	<insert id="ClntCmpnyAttFile" parameterType="hashmap">
 		INSERT INTO CLNT_CMPNY_ATT_FILE (ATT_FILE_NUM, CLNT_CMPNY_NUM, ATT_FILE_NAME)
 		VALUES (CLNT_CMPNY_ATT_FILE_SEQ.NEXTVAL, CLNT_CMPNY_SEQ.CURRVAL, #{attFile})
 	</insert>
@@ -590,5 +590,24 @@
 		DELETE FROM CLNT_CMPNY_ATT_FILE
 		WHERE CLNT_CMPNY_NUM = #{ccn}
 	</delete>
+	
+	<select id="clntAdd" parameterType="hashmap" resultType="hashmap">
+		INSERT INTO ENTRPRS_CLNT (CLNT_NUM, CLNT_NAME, CLNT_CMPNY_NUM, MNGR_EMP_NUM, RHSTRTN_EMP_NUM, DEPT, DUTY, MBL)
+		VALUES (ENTRPRS_CLNT_SEQ.NEXTVAL)
+	</select>
+	
+	<select id="popupCcListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM CLNT_CMPNY
+	</select>
+	
+	<select id="popupCcList" parameterType="hashmap" resultType="hashmap">
+		SELECT CC.CLNT_CMPNY_NAME, CC.CLNT_CMPNY_CLSFY_NUM, CC.GRADE_NUM, CC.ADRS, TO_CHAR(CC.RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE,
+			   CC.CLNT_CMPNY_NUM
+		FROM (  SELECT CLNT_CMPNY_NAME, CLNT_CMPNY_CLSFY_NUM, GRADE_NUM, ADRS, RGSTRTN_DATE, CLNT_CMPNY_NUM,
+		               ROW_NUMBER() OVER(ORDER BY CLNT_CMPNY_NUM DESC) AS RNUM    
+		        FROM CLNT_CMPNY ) CC
+		WHERE CC.RNUM BETWEEN #{startCount} AND #{endCount}
+	</select>
 	
 </mapper>
