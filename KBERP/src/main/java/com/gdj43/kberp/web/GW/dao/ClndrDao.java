@@ -33,5 +33,10 @@ public class ClndrDao implements IClndrDao{
 		return sqlSession.selectList("clndr.getSchdl", params);
 	}
 
+	@Override
+	public List<HashMap<String, String>> dtlSchdl(HashMap<String, String> params) throws Throwable {
+		return sqlSession.selectList("clndr.dtlSchdl", params);
+	}
+
 
 }

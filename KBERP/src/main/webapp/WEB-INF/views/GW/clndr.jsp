@@ -79,7 +79,6 @@
 	height: 150px;
 }
 #user_ctgry{
-	display:none;
 	position: absolute;
 	left: calc(50% - 20px);
 	font-size: 9pt;
@@ -179,6 +178,109 @@
 	
 	cursor: pointer;
 }
+/* 상세일정 */
+.dtl_schdl_title{
+	font-size: 9pt;
+	font-weight: 500;
+}
+.dtl_schdl_title h2{
+	font-size: 17pt;
+	font-weight: 500;
+	position: absolute;
+	top: calc(50% - 250px);
+	left: calc(50% - 220px);
+	display:inline-block;
+	padding: 5px 40px 5px 40px;
+	border: 1px solid #000;
+}
+.dtl_schdl_cont{
+	position: absolute;
+	top: calc(50% - 150px);
+	left: calc(50% - 240px);
+	width: 500px;
+	height: 500px;
+	font-size: 9pt;
+}
+.dtl_schdl_style{
+	height: 30px;
+	margin-top: 20px;
+	margin-bottom: 15px;
+	margin-left: 30px;
+	font-size: 9pt;
+}
+
+.dtl_schdl_type{
+	width: 100px;
+	height: 25px;
+	position: relative;
+	left: calc(50% - 208px);
+	font-size: 9pt;
+}
+
+#dtl_schdl_title, #dtl_schdl_place, #dtl_schdl_time {
+	position: absolute;
+	left: calc(50% - 140px);
+	width: 360px;
+	height: 25px;
+	font-size: 9pt;
+}
+#dtl_schdl_start_time, #dtl_schdl_end_time{
+	position: absolute;
+	left: calc(50% - 140px);
+	width: 160px;
+	height: 25px;
+	text-align: center;
+	font-size: 9pt;
+}
+
+.dtl_schdl_time{
+	position: absolute;
+	left: calc(50% + 45px);
+	width: 177px;
+	height: 27px;
+	font-size: 9pt;
+	text-align: center;
+}
+.dtl_schdl_dtl_cont{
+	vertical-align:top;
+	width: 475px;
+	height: 160px;
+	font-size: 9pt;
+	margin-top: 20px;
+	margin-bottom: 15px;
+	margin-left: 30px;
+}
+.dtl_cont{
+	display: inline-block;
+	vertical-align: top;
+	position: absolute;
+	left: calc(50% - 140px);
+	font-size: 9pt;
+	resize: none;
+	width: 360px;
+	height: 150px;
+}
+
+.dtl_schdl_btn {
+	text-align: right;	
+	font-size: 9pt;
+}
+.dtl_schdl_btn input{
+	margin-left:5px;
+	font-size: 9pt;
+	width: 70px;
+	height: 30px;
+}
+
+
+#dtl_ctgry{
+	position: relative;
+	left: 320px;
+	top: 0px;
+}
+#dtl_schdl_ctgry{
+	margin-left: 20px;
+}
 </style>
 <!-- Fullcalendar css -->
 <link rel="stylesheet" type="text/css" href="resources/script/fullcalendar/fullcalendar.css" />
@@ -233,7 +335,26 @@ $(document).ready(function() {
 	      height: 600,
 	      events: data,
 	      eventClick: function(event) { // 이벤트 클릭
-	    	  alert(event.start);
+	    	  // 아이디로 ajax조회 event.id를 네 sql에서 조건을 달아서요? 근데 이거 클릭하면 클릭한것만 가져오던데 맞아요 아아 네 파이팅..넵
+	    	  // alert(event.title);
+	    	  var params = $("#dtlForm").serialize();
+	    	 
+	    	  $.ajax({
+					type: "post", 
+					url : "dtlSchdl",
+					dataType : "json",
+					data : {id : event.id}, 
+					success : function(res) { 
+						 console.log(res);
+						 drawList(res.dtl);
+						 
+					},
+					error : function(request, status, error) { 
+						console.log(request.responseText); 
+					}
+				});
+	    	  
+	    	  
 	      },
 	      dayClick: function(date, js, view) { // 일자 클릭
 	    	  alert('Clicked on: ' + date.format());
@@ -243,7 +364,94 @@ $(document).ready(function() {
 	    	 //alert('Current view: ' + view.name);
 	      }
 	});
-	
+	function drawList(dtl) {
+		
+		for(var data of dtl){
+			console.log(data)
+			switch(data.schdl_type_num){
+				case "0":
+					data.schdl_type_num = "개인"					
+					break;
+				case "1":
+					data.schdl_type_num = "팀"					
+					break;
+				case "2":
+					data.schdl_type_num = "전사"					
+					break;
+			}
+			switch(data.schdl_ctgry_num){
+			case "0":
+				data.schdl_ctgry_num = data.user_ctgry_name				
+				break;
+			case "1":
+				data.schdl_ctgry_num = "업무"					
+				break;
+			case "2":
+				data.schdl_ctgry_num = "휴가"					
+				break;
+			case "3":
+				data.schdl_ctgry_num = "교육"					
+				break;
+			case "4":
+				data.schdl_ctgry_num = "회의"					
+				break;
+			case "5":
+				data.schdl_ctgry_num = "회식"					
+				break;
+			case "6":
+				data.schdl_ctgry_num = "출장"					
+				break;
+			case "7":
+				data.schdl_ctgry_num = "개발"					
+				break;
+		}
+		}
+		var html ="";
+	    
+  	  html += "<form action=\"#\" id=\"dtlForm\" method=\"post\">";
+  	  html += "<div class=\"dtl_schdl_style\" id=\"dtl_type\">";
+  	  html += "<span>일정 종류</span>";
+  	  html += "<input type=\"text\" value=\"" + data.schdl_type_num + "\" class=\"dtl_schdl_type\" disabled=\"disabled\">";
+  	  html += "<input type=\"text\" value=\"" + data.schdl_ctgry_num + "\" class=\"dtl_schdl_type\" disabled=\"disabled\" id=\"dtl_schdl_ctgry\">";
+  	  html += "</div>";
+  	  html += "<div class=\"dtl_schdl_style\">";
+  	  html += "<span>제목</span>";
+  	  html += "<input type=\"text\" value=\"" + data.title + "\" id=\"dtl_schdl_title\" disabled=\"disabled\">";
+  	  html += "</div>";
+  	  html += "<div class=\"dtl_schdl_style\">";
+  	  html += "<span>위치</span>";
+  	  html += "<input type=\"text\" value=\"" + data.schdl_place + "\" id=\"dtl_schdl_place\" disabled=\"disabled\">";
+  	  html += "</div>";
+  	  html += "<div class=\"dtl_schdl_style\">";
+  	  html += "<span>기간</span>";
+  	  html += "<input type=\"text\" value=\"" + data.start + " ~ " + data.end + "\" id=\"dtl_schdl_time\" disabled=\"disabled\">";
+  	  html += "</div>";
+  	  html += "<div class=\"dtl_schdl_dtl_cont\">";
+  	  html += "<span>상세내용</span>";
+  	  html += "<textarea rows=\"10\" cols=\"57\" class=\"dtl_cont\" disabled=\"disabled\">" + data.schdl_cont + "</textarea>";			
+  	  html += "</div>";
+  	  html += "</form>";
+  	  
+  			makePopup({
+  				bg : true,
+  				bgClose : false,
+  				title : "상세일정",
+  				contents : html,
+  				width : 540,
+  				height : 520,
+  				buttons : [{
+  					name : "수정",
+  					func:function() {
+  						console.log("One!");
+  						closePopup();
+  					}
+  				}, {
+  					name : "삭제"
+  				},{
+  					name : "닫기"
+  				}]
+  			});
+	}
 	$("#eventChangeBtn").on("click", function() {
 		var newEvents = [ {
 			title : "계획1",
@@ -293,9 +501,6 @@ function reloadList() {
 		}
 	});
 	 
-}
-function drawList(list) {
-	
 }
 function checkEmpty(sel) {
 	if($.trim($(sel).val()) == ""){
@@ -400,15 +605,14 @@ $(document).ready(function() {
 		html += "<div class=\"popup_style\">";
 		html += "<span>범주</span><span class=\"star\"> *</span>";
 		html += "<select class=\"slct_type\" id=\"schdl_ctgry\" name=\"schdl_ctgry\">";
-		html += "<option value=\"1\">전체</option>";
-		html += "<option value=\"2\">업무</option>";
-		html += "<option value=\"3\">휴가</option>";
-		html += "<option value=\"4\">교육</option>";
-		html += "<option value=\"5\">회의</option>";
-		html += "<option value=\"6\">회식</option>";
-		html += "<option value=\"7\">출장</option>";
-		html += "<option value=\"8\">개발</option>";
 		html += "<option value=\"0\">사용자지정</option>";
+		html += "<option value=\"1\">업무</option>";
+		html += "<option value=\"2\">휴가</option>";
+		html += "<option value=\"3\">교육</option>";
+		html += "<option value=\"4\">회의</option>";
+		html += "<option value=\"5\">회식</option>";
+		html += "<option value=\"6\">출장</option>";
+		html += "<option value=\"7\">개발</option>";
 		html += "</select>";
 		html += "<input type=\"text\" placeholder=\"사용자 지정\"id=\"user_ctgry\" name=\"user_ctgry\">";
 		html += "</div>";
