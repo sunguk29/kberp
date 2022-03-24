@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="lead">
 	<select id="getLeadList" resultType="hashmap" parameterType="hashmap">
-		SELECT LL.LEAD_NUM, LL.CLNT_CMPNY_NAME, LL.CLNT_NAME, LL.EMP_NAME, LL.PSNUM, LL.LEAD_NAME, LL.RGSTRTN_DATE
-		FROM (  SELECT L.LEAD_NUM, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NAME, L.LEAD_NAME,
+		SELECT LL.LEAD_NUM, LL.CLNT_CMPNY_NAME, LL.CLNT_NAME, LL.EMP_NAME, LL.PRGRS_STS_NUM, LL.PSNUM, LL.LEAD_NAME, LL.RGSTRTN_DATE
+		FROM (  SELECT L.LEAD_NUM, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NAME, L.LEAD_NAME, L.PRGRS_STS_NUM,
 		               DECODE(PRGRS_STS_NUM, 1, '진행중', 2, '종료(영업기회 전환)', 3, '종료(영업기회 실패)') AS PSNUM, 
 		               TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE, 
 		               ROW_NUMBER() OVER(ORDER BY LEAD_NUM DESC) AS RNUM
@@ -12,9 +12,61 @@
 		                    INNER JOIN ENTRPRS_CLNT EC
 		                            ON L.CLNT_NUM = EC.CLNT_NUM
 		                    INNER JOIN CLNT_CMPNY CC
-		                            ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM ) LL
-		
+		                            ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM 
+				<choose>
+					<when test="psNum != 0">
+						AND L.PRGRS_STS_NUM = #{psNum}
+					</when>
+				</choose>
+				<if test="searchTxt != null and searchTxt != ''">
+					<choose>
+						<when test="srchName == 1">
+							AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="srchName == 2">
+							AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="srchName == 3">
+							AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="srchName == 4">
+							AND L.LEAD_NUM LIKE '%' || #{searchTxt} || '%'
+						</when>			
+					</choose>
+				</if> ) LL
 		WHERE LL.RNUM BETWEEN #{startCount} AND #{endCount}
+	</select>
+	
+	<select id="getLeadCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM LEAD L INNER JOIN EMP E
+		                    ON L.MNGR_EMP_NUM = E.EMP_NUM
+		            INNER JOIN ENTRPRS_CLNT EC
+		                    ON L.CLNT_NUM = EC.CLNT_NUM
+		            INNER JOIN CLNT_CMPNY CC
+		                    ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
+		WHERE 1 = 1
+			<choose>
+				<when test="psNum != 0">
+					AND PRGRS_STS_NUM = #{psNum}
+				</when>
+			</choose>
+			<if test="searchTxt != null and searchTxt != ''">
+					<choose>
+						<when test="srchName == 1">
+							AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="srchName == 2">
+							AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="srchName == 3">
+							AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="srchName == 4">
+							AND L.LEAD_NUM LIKE '%' || #{searchTxt} || '%'
+						</when>			
+					</choose>
+			</if>
 	</select>
 	
 	<select id="getMngrList" resultType="hashmap" parameterType="hashmap">
@@ -102,14 +154,20 @@
 		</choose>         
 	</select>
 	
-	<select id="getLeadCnt" resultType="Integer" parameterType="hashmap">
-		SELECT COUNT(*) AS CNT
-		FROM LEAD
-		WHERE 1 = 1
-	</select>
-
+<!-- 리드 등록 -->
 	<insert id="getLeadAdd" parameterType="hashmap">
 		INSERT INTO LEAD(LEAD_NUM, RGSTRTN_EMP_NUM, MNGR_EMP_NUM, CLNT_NUM, RCGNTN_PATH_NUM, LEAD_NAME)
 		VALUES(LEAD_SEQ.NEXTVAL, #{mn}, #{mn}, #{clntName}, #{rp}, #{leadName}) 
 	</insert>
+<!-- 리드 상세 -->
+	<select id="getLeadCont" resultType="hashmap" parameterType="hashmap">	
+		SELECT LD.LEAD_NAME, EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, CC.GRADE_NUM, LD.RCGNTN_PATH_NUM, E.EMP_NAME
+		FROM LEAD LD INNER JOIN ENTRPRS_CLNT EC
+		                     ON LD.CLNT_NUM = EC.CLNT_NUM
+		             INNER JOIN CLNT_CMPNY CC
+		                     ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
+		             INNER JOIN EMP E
+		                     ON LD.MNGR_EMP_NUM = E.EMP_NUM
+		WHERE LD.LEAD_NUM = #{leadNum}             
+	</select>
 </mapper>

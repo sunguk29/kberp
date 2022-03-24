@@ -128,13 +128,13 @@ $(document).ready(function() {
 					<div class="opt_area">
 						<input id="txt" type="text" value="영역 1" readonly="readonly" size="10px" />
 						<br/>
-						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="images/cmn/plus.png"></div>
+						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="resources/images/CS/plus.png"></div>
 						<input id="txt_file" type="text" value="불러온 파일(제목)" readonly="readonly" size="30px" style="background-color: #f4f4f4;" />
 					</div>
 					<div class="opt_area">
 						<input id="txt" type="text" value="영역 2" readonly="readonly" size="10px" />
 						<br/>
-						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="images/cmn/plus.png"></div>
+						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="resources/images/CS/plus.png"></div>
 						<input id="txt_file" type="text" value="불러온 파일(제목)" readonly="readonly" size="30px" style="background-color: #f4f4f4;" />
 					</div>
 				</div>
@@ -142,13 +142,13 @@ $(document).ready(function() {
 					<div class="opt_area">
 						<input id="txt" type="text" value="영역 3" readonly="readonly" size="10px" />
 						<br/>
-						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="images/cmn/plus.png"></div>
+						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="resources/images/CS/plus.png"></div>
 						<input id="txt_file" type="text" value="불러온 파일(제목)" readonly="readonly" size="30px" style="background-color: #f4f4f4;" />
 					</div>
 					<div class="opt_area">
 						<input id="txt" type="text" value="영역 4" readonly="readonly" size="10px" />
 						<br/>
-						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="images/cmn/plus.png"></div>
+						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="resources/images/CS/plus.png"></div>
 						<input id="txt_file" type="text" value="불러온 파일(제목)" readonly="readonly" size="30px" style="background-color: #f4f4f4;" />
 					</div>
 				</div>
@@ -156,7 +156,7 @@ $(document).ready(function() {
 					<div class="opt_area">
 						<input id="txt" type="text" value="영역 5" readonly="readonly" size="10px" />
 						<br/>
-						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="images/cmn/plus.png"></div>
+						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="resources/images/CS/plus.png"></div>
 						<input id="txt_file" type="text" value="불러온 파일(제목)" readonly="readonly" size="30px" style="background-color: #f4f4f4;" />
 					</div>
 				</div>
@@ -171,13 +171,13 @@ $(document).ready(function() {
 					<div class="opt_area">
 						<input id="txt" type="text" value="영역 1" readonly="readonly" size="10px" />
 						<br/>
-						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="images/cmn/plus.png"></div>
+						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="resources/images/CS/plus.png"></div>
 						<input id="txt_file" type="text" value="불러온 파일(제목)" readonly="readonly" size="30px" style="background-color: #f4f4f4;" />
 					</div>
 					<div class="opt_area">
 						<input id="txt" type="text" value="영역 2" readonly="readonly" size="10px" />
 						<br/>
-						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="images/cmn/plus.png"></div>
+						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="resources/images/CS/plus.png"></div>
 						<input id="txt_file" type="text" value="불러온 파일(제목)" readonly="readonly" size="30px" style="background-color: #f4f4f4;" />
 					</div>
 				</div>
@@ -185,13 +185,13 @@ $(document).ready(function() {
 					<div class="opt_area">
 						<input id="txt" type="text" value="영역 3" readonly="readonly" size="10px" />
 						<br/>
-						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="images/cmn/plus.png"></div>
+						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="resources/images/CS/plus.png"></div>
 						<input id="txt_file" type="text" value="불러온 파일(제목)" readonly="readonly" size="30px" style="background-color: #f4f4f4;" />
 					</div>
 					<div class="opt_area">
 						<input id="txt" type="text" value="영역 4" readonly="readonly" size="10px" />
 						<br/>
-						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="images/cmn/plus.png"></div>
+						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="resources/images/CS/plus.png"></div>
 						<input id="txt_file" type="text" value="불러온 파일(제목)" readonly="readonly" size="30px" style="background-color: #f4f4f4;" />
 					</div>
 				</div>
@@ -199,7 +199,7 @@ $(document).ready(function() {
 					<div class="opt_area">
 						<input id="txt" type="text" value="영역 5" readonly="readonly" size="10px" />
 						<br/>
-						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="images/cmn/plus.png"></div>
+						<div class="cmn_btn_ml"><img id="btn_img" alt="불러오기" src="resources/images/CS/plus.png"></div>
 						<input id="txt_file" type="text" value="불러온 파일(제목)" readonly="readonly" size="30px" style="background-color: #f4f4f4;" />
 					</div>
 				</div>
