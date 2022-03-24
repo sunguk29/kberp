@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 안내글</title>
+<title>guideWrtng</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -32,6 +32,13 @@ $(document).ready(function() {
 			
 			reloadList(); 	
 		});
+	 //상세보기
+ 	$("tbody").on("click", "tr" , function(){
+		$("#no").val($(this).attr("no"));
+		$("#actionForm").attr("action","guides");
+		$("#actionForm").submit();
+		});
+	 
 	function reloadList(){	//목록 조회용 + 페이징 조회용
 		var params= $("#actionForm").serialize();
 		$.ajax({
@@ -150,7 +157,6 @@ function drawPaging(pb){
 			</div>
 		</div>
 	</div>
-	<!-- 글쓰기 form -->
 	<form action="#" id="actionForm" method="post">
 	<input type="hidden" name="top" value="${param.top}">
 		<input type="hidden" name="menuNum" value="${param.menuNum}">

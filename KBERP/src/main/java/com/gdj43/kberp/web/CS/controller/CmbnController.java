@@ -84,4 +84,18 @@ public class CmbnController {
 		return mapper.writeValueAsString(modelMap); 
 	}
 	
+	//상세보기
+	@RequestMapping(value = "/guides")
+	public ModelAndView guides(@RequestParam HashMap<String, String> params,
+							  ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("cm.getaGuide", params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("CS/guides");
+		
+		return mav;
+	}
+	
 }
