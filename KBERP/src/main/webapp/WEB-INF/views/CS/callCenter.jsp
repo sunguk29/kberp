@@ -641,14 +641,14 @@ $(document).ready(function() {
 		var html = "";
 		
 		html += "<div class=\"srch_slct\">";
-		html += "<input type=\"text\" placeholder=\"\" id=\"srch_txt\"/>"
+		html += "<input type=\"text\" id=\"srch_txt\"/>"
 		html += "<input type=\"button\" value=\"검색\" id=\"srch_btn\">"
 		html += "<div class=\"name_box\">정렬순서</div>"
 		html += "<select id=\"clnt_slct\">"
-		html += "	<option value=\"이름\">이름</option>"
-		html += "	<option value=\"등급\">등급</option>"
-		html += "	<option value=\"전화번호\">전화번호</option>"
-		html += "	<option value=\"최근상담일\">최근상담일</option>"
+		html += "	<option value=\"0\">이름</option>"
+		html += "	<option value=\"1\">등급</option>"
+		html += "	<option value=\"2\">전화번호</option>"
+		html += "	<option value=\"3\">최근상담일</option>"
 		html += "</select>"
 		html += "</div>"
 		html += "<div class=\"srch_cont\">"

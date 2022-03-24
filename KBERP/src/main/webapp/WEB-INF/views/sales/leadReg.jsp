@@ -985,6 +985,7 @@ function checkEmpty(sel) {
 											<option value="2">지인소개</option>
 											<option value="3">세미나</option>
 											<option value="4">전화</option>
+											<option value="5">기타</option>
 										</select>
 									</td>
 								</tr>
