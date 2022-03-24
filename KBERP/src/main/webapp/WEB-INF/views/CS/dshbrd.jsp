@@ -197,8 +197,8 @@ $(document).ready(function() {
 				<br/>
 				<div class="graph_slct_see_1"></div>
 				<div class="area_btn_area">
-					<div class=cmn_btn_mr><img id="btn_img" alt="상세보기" src="images/cmn/zoom.png"></div>
-					<div class=cmn_btn_mr><img id="btn_img" alt="전환" src="images/cmn/change.png"></div>
+					<div class=cmn_btn_mr><img id="btn_img" alt="상세보기" src="resources/images/CS/zoom.png"></div>
+					<div class=cmn_btn_mr><img id="btn_img" alt="전환" src="resources/images/CS/change.png"></div>
 				</div>
 			</div> <!-- 영역 1 끝 -->
 			
@@ -208,8 +208,8 @@ $(document).ready(function() {
 				<br/>
 				<div class="graph_slct_see_2_5"></div>
 				<div class="area_btn_area">
-					<div class=cmn_btn_mr><img id="btn_img" alt="상세보기" src="images/cmn/zoom.png"></div>
-					<div class=cmn_btn_mr><img id="btn_img" alt="전환" src="images/cmn/change.png"></div>
+					<div class=cmn_btn_mr><img id="btn_img" alt="상세보기" src="resources/images/CS/zoom.png"></div>
+					<div class=cmn_btn_mr><img id="btn_img" alt="전환" src="resources/images/CS/change.png"></div>
 				</div>
 			</div> <!-- 영역 2 끝 -->
 			
@@ -221,8 +221,8 @@ $(document).ready(function() {
 					<br/>
 					<div class="graph_slct_see_3_4"></div>
 					<div class="area_btn_area">
-						<div class=cmn_btn_mr><img id="btn_img" alt="상세보기" src="images/cmn/zoom.png"></div>
-						<div class=cmn_btn_mr><img id="btn_img" alt="전환" src="images/cmn/change.png"></div>
+						<div class=cmn_btn_mr><img id="btn_img" alt="상세보기" src="resources/images/CS/zoom.png"></div>
+						<div class=cmn_btn_mr><img id="btn_img" alt="전환" src="resources/images/CS/change.png"></div>
 					</div>				
 				</div> <!-- 영역 3 끝 -->
 				<!-- 영역 4 시작 -->
@@ -237,8 +237,8 @@ $(document).ready(function() {
 				        </table>
 					</div>
 					<div class="area_btn_area">
-						<div class=cmn_btn_mr><img id="btn_img" alt="상세보기" src="images/cmn/zoom.png"></div>
-						<div class=cmn_btn_mr><img id="btn_img" alt="전환" src="images/cmn/change.png"></div>
+						<div class=cmn_btn_mr><img id="btn_img" alt="상세보기" src="resources/images/CS/zoom.png"></div>
+						<div class=cmn_btn_mr><img id="btn_img" alt="전환" src="resources/images/CS/change.png"></div>
 					</div>
 				</div><!-- 영역 4 끝 -->
 			</div><!-- 영역지정 3,4 끝 -->
@@ -249,8 +249,8 @@ $(document).ready(function() {
 				<br/>
 				<div class="graph_slct_see_2_5"></div>
 				<div class="area_btn_area">
-					<div class=cmn_btn_mr><img id="btn_img" alt="상세보기" src="images/cmn/zoom.png"></div>
-					<div class=cmn_btn_mr><img id="btn_img" alt="전환" src="images/cmn/change.png"></div>
+					<div class=cmn_btn_mr><img id="btn_img" alt="상세보기" src="resources/images/CS/zoom.png"></div>
+					<div class=cmn_btn_mr><img id="btn_img" alt="전환" src="resources/images/CS/change.png"></div>
 				</div>			
 			</div><!-- 영역 5 끝 -->
 			
@@ -266,7 +266,6 @@ $(document).ready(function() {
 					<div class="page_btn page_next">next</div>
 					<div class="page_btn page_last">last</div>
 				</div>
-				<div class="cmn_btn_ml">글쓰기</div>
 			</div>
 		</div>
 	</div>
