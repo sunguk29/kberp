@@ -72,7 +72,7 @@ $(document).ready(function() {
 		
 	});
 	
-	$("#paging_wrap").on("click", "span", function() {
+	$("#pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
 		
 		$("#searchGbn").val($("#oldSearchGbn").val());
@@ -168,6 +168,9 @@ function drawPaging(pb) {
 	<form action="#" id="actionForm" method="post">
 		<input type="hidden" id="no" name="no" />
 		<input type="hidden" id="page" name="page" value="${page}" />
+		<input type="hidden" id="top" name="top" value="68"/>
+		<input type="hidden" id="menuNum" name="menuNum" value="74"/>
+		<input type="hidden" id="menuType" name="menuType" value="M"/>
 	</form>
 	<!-- 내용영역 -->
 	<div class="cont_wrap">

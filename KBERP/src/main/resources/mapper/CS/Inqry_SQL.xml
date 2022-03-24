@@ -5,10 +5,10 @@
 		SELECT COUNT(*) AS CNT
 		FROM INQRY I INNER JOIN INQRY_CTGRY ICT
 		                   ON I.CTGRY_NUM = ICT.CTGRY_NUM
-		             INNER JOIN EMP E
-		                     ON I.EMP_NUM = E.EMP_NUM
 		             INNER JOIN INDVDL_CLNT ICL
 		                     ON I.CLNT_NUM = ICL.CLNT_NUM
+		             LEFT OUTER JOIN EMP E
+		                     ON I.EMP_NUM = E.EMP_NUM
 		WHERE 1 = 1
 		<if test="searchTxt != null and searchTxt != ''"> <!-- 검색어가 있다면 -->
 			<choose>
