@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="md">
+
+<!--============================= 목록 : 전체 글 개수 ==============================-->
 <select id="getTotalCnt" resultType="Integer" parameterType="hashmap">
 	SELECT COUNT(*) AS CNT
 	FROM MD
@@ -46,21 +48,23 @@
 	</if>
 </select>
 
-<!-- 판매중 글 수 -->
+<!--============================= 목록 : 판매중 글 수 ==============================-->
 <select id="getOnSaleCnt" resultType="Integer" parameterType="hashmap">
 	SELECT COUNT(*) AS CNT
 	FROM MD
 	WHERE DEL_CHECK IS NULL
 	AND SALES_STS_NUM = '0'
 </select>
-<!-- 출시예정 글 수 -->
+
+<!--============================= 목록 : 출시예정 글 수 ==============================-->
 <select id="getRlsExpctdCnt" resultType="Integer" parameterType="hashmap">
 	SELECT COUNT(*) AS CNT
 	FROM MD
 	WHERE DEL_CHECK IS NULL
 	AND SALES_STS_NUM = '2'
 </select>
-<!-- 판매중단 글 수 -->
+
+<!--============================= 목록 : 판매중단 글 수 ==============================-->
 <select id="getOffSaleCnt" resultType="Integer" parameterType="hashmap">
 	SELECT COUNT(*) AS CNT
 	FROM MD
@@ -68,6 +72,7 @@
 	AND SALES_STS_NUM = '1'
 </select>
 
+<!--============================= 목록 : 리스트 ====================================-->
 <select id="getDataList" resultType="hashmap" parameterType="hashmap">
 	SELECT 	 MD_NUM
 			,MD_GRADE_NUM
@@ -132,7 +137,27 @@
 			</when>
 		</choose>
 	</if>
-	
-	
 </select>
+<!--============================= 상세보기  ====================================-->
+<select id="getMdContData" resultType="hashmap" parameterType="hashmap">
+
+</select>
+
+
+<!--============================= 등록 ====================================-->
+<insert id="insertMdData" parameterType="hashmap">
+
+</insert>
+
+
+<!--============================= 수정 ====================================-->
+<update id="updateMdData" parameterType="hashmap">
+
+</update>
+
+
+<!--============================= 삭제 ====================================-->
+<delete id="deleteMdData" parameterType="hashmap">
+
+</delete>
 </mapper>
