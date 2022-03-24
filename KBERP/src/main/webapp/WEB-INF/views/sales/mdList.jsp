@@ -4,7 +4,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
 <%
 	LocalDateTime version = LocalDateTime.now() ;	
 	request.setAttribute("version", version);		//캐시 처리
@@ -25,16 +24,19 @@
 <!-- common_sales javaScript파일 -->
 <script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 
+<!-- md javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/md/md.js?version=${version}"></script>
+
 <!-- mdList javaScript파일 -->
 <script type="text/javascript" src="resources/script/sales/md/mdList.js?version=${version}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	//######## 목록조회 ########
+	//목록 조회
 	reloadList(); 
 	
 	
-	//######## 상단 박스 ########
+	//상단 박스
 	$("#sts_listA").on("click", function() {
 		
 	});
@@ -48,75 +50,43 @@ $(document).ready(function() {
 		
 	});
 	
-	//######## 검색 테이블 ########
 	
+	//검색 테이블
+	changeCheckBoxSts(); /* 판매상태 체크박스 체크 처리 함수 */
 	
-	//판매상태 체크박스 체크 처리
-	$("#sales_stsA").change(checkboxFunc1);
-	$(".sales_sts").change(checkboxFunc2);
+	dateChoiceFunc(); /* 검색-기간 [오늘] [어제].. 버튼 클릭시 해당 날짜를 출력하는 함수 */
 
-	
-	/* 검색-기간 [오늘] [어제].. 버튼 클릭시 해당 날짜를 출력하는 함수 */
-	dateChoiceFunc();
-
-	
-	//######## 리스트 ########
+	goDetailView();
 	
 	
+	//페이징 
 	
-	//######## 페이징 ########
-	$("#pgn_area").on("click", "div", function() {
-	$("#page").val($(this).attr("page"));
 	
-	$("#searchGbn").val($("#oldSearchGbn").val());
-	$("#searchTxt").val($("#oldSearchTxt").val());
-
-	reloadList();		//목록조회
+	//작성
+	$("#cmn_btn_ml").on("click", function(){	
+		oldSrchDataSave (); 
+	
+		$("#actionForm").attr("action", "mdReg");
+		$("#actionForm").submit();	
 	});
 	
-	
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
-	});
 }); //documentReady end
 
 </script>
 </head>
 <body>
+<!-- 검색 데이터 유지용 -->
+<input type="hidden" id="old_md_grade" 			value="${param.md_grade}" />
+<input type="hidden" id="old_sales_stsA" 		value="${param.sales_stsA}" />
+<input type="hidden" id="old_sales_sts0"	  	value="${param.sales_sts0}" />
+<input type="hidden" id="old_sales_sts1"	   	value="${param.sales_sts1}" />
+<input type="hidden" id="old_sales_sts2"	   	value="${param.sales_sts2}" />
+<input type="hidden" id="old_sales_start_date" 	value="${param.sales_start_date}" />
+<input type="hidden" id="old_sales_end_date" 	value="${param.sales_end_date}" />
+<input type="hidden" id="old_srch_gbn" 			value="${param.srch_gbn}" />
+<input type="hidden" id="old_srch_txt" 			value="${param.srch_txt}" />
+<input type="hidden" id="old_sort_gbn" 			value="${param.sort_gbn}" />
+
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -125,7 +95,6 @@ $(document).ready(function() {
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
 	
-	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
@@ -133,15 +102,12 @@ $(document).ready(function() {
 		</div>
 		
 	<!-- 해당 내용에 작업을 진행하시오. -->
-	
-	<!-- 검색 데이터 유지용 -->
-	<input type="hidden" id="old_srch_txt" value="${param.srch_txt}" />
-	<input type="hidden" id="old_srch_gbn" value="${param.srch_gbn}" />
-	
-	<!-- 폼 태그 -->
 	<form action="#" id="actionForm" method="post">
-	<input type="hidden" name="no" id="no">   
-	<input type="hidden" name="page" id="page" value="${page}"> 
+		<input type="hidden" name="no" 	 id="no">   							<!-- 글번호 -->
+		<input type="hidden" name="page" id="page" value="${page}"> 			<!-- 페이지 -->
+		<input type="hidden" name="top" 		   value="${params.top}"> 		<!-- top정보 -->
+		<input type="hidden" name="menuNum" 	   value="${params.menuNum}"> 	<!-- 메뉴정보 -->
+		<input type="hidden" name="menuType" 	   value="${params.menuType}"> 	<!-- 메뉴정보 -->
 	
 		<div class="cont_area">
 			<div class="body">
@@ -178,7 +144,7 @@ $(document).ready(function() {
 									<span class="srch_name">상품 등급</span>				
 								</td>
 								<td colspan="9">																						
-									<select name="md_grade">															<!-- 보낼값1 -->
+									<select name="md_grade" id="md_grade">															<!-- 보낼값1 -->
 										<option value="-1" selected>선택안함</option>
 										<option value="0">S 등급</option>
 										<option value="1">A 등급</option>
@@ -191,7 +157,7 @@ $(document).ready(function() {
 							</tr>
 							<tr>
 								<td>
-									<span class="srch_name">판매 상태</span>								<!-- 보낼값2 -->
+									<span class="srch_name">판매 상태</span>												<!-- 보낼값2 -->
 								</td>
 								<td colspan="9">
 									<label><input type="checkbox"  name="sales_stsA" id="sales_stsA" class="sales_sts" value="-1" checked="checked" /><span id="totalCnt">전체 : 252건</span></label> 	
@@ -235,7 +201,7 @@ $(document).ready(function() {
 									<span class="srch_name">검색어</span>
 								</td>
 								<td>
-									<select name="srch_gbn">																				<!-- 보낼값5 -->
+									<select name="srch_gbn" id="srch_gbn">																				<!-- 보낼값5 -->
 										<option value="-1" selected>선택안함</option>
 										<option value="0">상품명</option>
 										<option value="1">상품번호</option>
@@ -243,7 +209,7 @@ $(document).ready(function() {
 								</td>
 								
 								<td colspan="4">
-									<input type="text" class="srch_msg" name="srch_txt" placeholder="검색 조건을 선택한 후 입력해주세요." />			<!-- 보낼값6 -->
+									<input type="text" class="srch_msg" name="srch_txt" id="srch_txt" placeholder="검색 조건을 선택한 후 입력해주세요." />			<!-- 보낼값6 -->
 								</td>
 								<td>
 									<span class="cmn_btn">검색</span>
@@ -255,7 +221,7 @@ $(document).ready(function() {
 									<span class="srch_name">정렬</span>
 								</td>
 								<td>
-									<select name="sort_gbn">
+									<select name="sort_gbn" id="sort_gbn">
 										<option selected="selected" value="0">등록일</option>										<!-- 보낼값7 -->
 										<option value="1" >상품이름</option>
 										<option value="2">상품등급</option>
@@ -308,10 +274,7 @@ $(document).ready(function() {
 		
 			<div class="board_bottom">
 				<div class="pgn_area" id="pgn_area"></div>
-				<div class="cmn_btn_ml">글쓰기</div>
-				<div class="cmn_btn_ml" id="alertBtn">알림</div>
-				<div class="cmn_btn_ml" id="btn1Btn">버튼1개</div>
-				<div class="cmn_btn_ml" id="btn2Btn">버튼2개</div>
+				<div class="cmn_btn_ml" id="cmn_btn_ml">글쓰기</div>
 			</div>
 	</div>	<!-- class="cont_wrap" end -->
 	
