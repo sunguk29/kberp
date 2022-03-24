@@ -1,5 +1,8 @@
 package com.gdj43.kberp.web.sales.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +41,26 @@ public class LeadController {
 			params.put("page", "1");
 		}
 		
+		Date dt = new Date();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dt);
+		cal.add(Calendar.DATE, -30);
+		
+		
+		String searchDate = sdf.format(cal.getTime());
+		String searchDate2 = sdf.format(dt);
+		
+		if(params.get("searchDate") == null || params.get("searchDate") == "") {
+			params.put("searchDate", searchDate); 
+			params.put("searchDate2", searchDate2); // 넘어오는게 없으면 현재날짜뽑아온거를 추가.
+		}
+		
 		mav.addObject("page", params.get("page"));
+		mav.addObject("searchDate", params.get("searchDate"));
+		mav.addObject("searchDate2", params.get("searchDate2"));
 		
 		mav.setViewName("sales/leadList");
 		
