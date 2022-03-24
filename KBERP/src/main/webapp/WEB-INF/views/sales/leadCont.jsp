@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오 ERP - 리드상세보기</title>
+<title>카카오 ERP - 리드 상세보기</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -302,8 +302,25 @@ textarea {
 	cursor: pointer;
 }
 </style>
+<script type="text/javascript">
+$(document).ready(function () {
+	
+	$("#listBtn").on("click", function() {
+		
+		$("#actionForm").attr("action", "leadList");
+		$("#actionForm").submit();
+	});
+});
+</script>
 </head>
 <body>
+<form action="#" id="actionForm" method="post">
+	<input type="hidden" name="page" value="${param.page}" />	
+	<input type="hidden" name="leadNum" value="${param.leadNum}" />	
+	<input type="hidden" name="top" value="${param.top}" />
+	<input type="hidden" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />
+</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -316,7 +333,7 @@ textarea {
 		<div class="page_title_bar">
 			<div class="page_title_text">리드 상세보기</div>
 			<!-- 검색영역 선택적 사항 -->
-			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" />			
+			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />			
 			<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" />
 			<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" />
 		</div>
@@ -334,49 +351,75 @@ textarea {
 						<tbody>
 							<tr>
 								<td><input type="button" class="btn" value="리드명 *" readonly="readonly"/></td>
-								<td><input type="text" class="txt" readonly="readonly" disabled="disabled" /></td>
+								<td><input type="text" class="txt" value="${data.LEAD_NAME}" readonly="readonly" /></td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="고객명 *" readonly="readonly"/></td>
 								<td>
-									<input type="text" class="txt" readonly="readonly" disabled="disabled" />
+									<input type="text" class="txt" value="${data.CLNT_NAME}" readonly="readonly" />
 								</td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="고객사 *" readonly="readonly"/></td>
 								<td>
-									<input type="text" class="txt" readonly="readonly" disabled="disabled" />
+									<input type="text" class="txt" value="${data.CLNT_CMPNY_NAME}" readonly="readonly" />
 								</td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="고객사 등급" readonly="readonly"/></td>
 								<td><select class="txt_in" disabled="disabled">
 										<optgroup>
-											<option>고객사 등록 후 자동 입력</option>
-											<option>S</option>
-											<option>A</option>
-											<option>B</option>
-											<option>C</option>
-											<option>D</option>
+											<c:choose>
+												<c:when test="${data.GRADE_NUM eq 0}">
+													<option value="0" selected="selected">S</option>										
+												</c:when>
+												<c:when test="${data.GRADE_NUM eq 1}">
+													<option value="1" selected="selected">A</option>										
+												</c:when>
+												<c:when test="${data.GRADE_NUM eq 2}">
+													<option value="2" selected="selected">B</option>										
+												</c:when>
+												<c:when test="${data.GRADE_NUM eq 3}">
+													<option value="3" selected="selected">C</option>										
+												</c:when>
+												<c:when test="${data.GRADE_NUM eq 4}">
+													<option value="4" selected="selected">D</option>										
+												</c:when>
+											</c:choose>
 										</optgroup>
 								</select></td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="인지경로 *" readonly="readonly"/></td>
-								<td><select class="txt_in" disabled="disabled">
+								<td><select class="txt_in" disabled="disabled" >
 										<optgroup>
-											<option>자사홈페이지</option>
-											<option>인터넷검색</option>
-											<option>지인소개</option>
-											<option>세미나</option>
-											<option>전화</option>
+											<c:choose>
+												<c:when test="${data.RCGNTN_PATH_NUM eq 0}">
+													<option value="0" selected="selected">자사홈페이지</option>										
+												</c:when>
+												<c:when test="${data.RCGNTN_PATH_NUM eq 1}">
+													<option value="1" selected="selected">인터넷검색</option>										
+												</c:when>
+												<c:when test="${data.RCGNTN_PATH_NUM eq 2}">
+													<option value="2" selected="selected">지인소개</option>										
+												</c:when>
+												<c:when test="${data.RCGNTN_PATH_NUM eq 3}">
+													<option value="3" selected="selected">세미나</option>										
+												</c:when>	
+												<c:when test="${data.RCGNTN_PATH_NUM eq 4}">
+													<option value="4" selected="selected">전화</option>										
+												</c:when>
+												<c:when test="${data.RCGNTN_PATH_NUM eq 5}">
+													<option value="5" selected="selected">기타</option>										
+												</c:when>						
+											</c:choose>
 										</optgroup>
 								</select></td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="담당자 *" readonly="readonly"/></td>
 								<td>
-									<input type="text" class="txt" readonly="readonly" disabled="disabled" />
+									<input type="text" class="txt" value="${data.EMP_NAME}" readonly="readonly"  />
 									<img class="btnImg_in" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
 								</td>
 							</tr>

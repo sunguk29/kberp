@@ -58,7 +58,7 @@ public class LeadController {
 		// 총 게시글 수
 		int cnt = iCommonService.getIntData("lead.getLeadCnt", params);
 		
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 3, 5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
 				
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
@@ -164,7 +164,12 @@ public class LeadController {
 	
 	
 	@RequestMapping(value = "/leadCont")
-	public ModelAndView leadCont(ModelAndView mav) throws Throwable {
+	public ModelAndView leadCont(@RequestParam HashMap<String, String> params, 
+								 ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("lead.getLeadCont", params);
+		
+		mav.addObject("data", data);
 		
 		mav.setViewName("sales/leadCont");
 		
