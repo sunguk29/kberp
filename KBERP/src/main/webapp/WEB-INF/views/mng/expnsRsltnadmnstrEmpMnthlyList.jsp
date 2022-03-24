@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP Sample</title>
+<title>카카오뱅크 ERP - 지출결의서관리 사원별 월별 목록</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -186,15 +186,33 @@ function drawSum(data) {
 	
 	html += "<tr>";
 	html += "<td>개인 지출 합계</td>";
-	if((data != undefined && data != null) ? data.IND : undefined) {
+	/* if((data != null) ? data.IND : undefined) {
 		html += "<td>" + data.IND + "원</td>";
 	} else {
 		html += "<td>0원</td>";
+	} */
+	
+	if(data != null) {
+		if(data.IND) {
+			html += "<td>" + data.IND + "원</td>";
+		} else {
+			html += "<td>0원</td>";
+		}
+	} else {
+		html += "<td>0원</td>";
 	}
+	
+	var test = 1;
+	if(test) {
+		console.log("true");
+	} else {
+		console.log("false");
+	}
+	
 	html += "</tr>";
 	html += "<tr>";
 	html += "<td>법인 지출 합계</td>";
-	if((data != undefined && data != null) ? data.CRP : undefined) {
+	if((data != null) ? data.CRP : undefined) {
 		html += "<td>" + data.CRP + "원</td>";
 	} else {
 		html += "<td>0원</td>";
@@ -202,7 +220,7 @@ function drawSum(data) {
 	html += "</tr>";
 	html += "<tr>";
 	html += "<td>총 합계</td>";
-	if((data != undefined && data != null) ? data.TOTAL : undefined) {
+	if((data != null) ? data.TOTAL : undefined) {
 		html += "<td>" + data.TOTAL + "원</td>";
 	} else {
 		html += "<td>0원</td>";
