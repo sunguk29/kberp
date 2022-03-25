@@ -259,28 +259,20 @@ $(document).ready(function() {
 	$("#addBtn").on("click", function() {
 		if(checkEmpty("#ccName")) {
 			makeAlert("필수 항목 알림", "고객사를 입력하세요");
-			$("#ccName").focus;
 		} else if(checkEmpty("#ccClsfy")) {
 			makeAlert("필수 항목 알림", "대표를 입력하세요");
-			$("#ccClsfy").focus();
 		} else if(checkEmpty("#ccGrade")) {
 			makeAlert("필수 항목 알림", "등급을 선택하세요");
-			$("#ccGrade").focus();
 		} else if(checkEmpty("#zipCodeNum")) {
 			makeAlert("필수 항목 알림", "우편번호를 입력하세요");
-			$("#zipCodeNum").focus();
 		} else if(checkEmpty("#adrs")) {
 			makeAlert("필수 항목 알림", "주소를 입력하세요");
-			$("#adrs").focus();
 		} else if(checkEmpty("#dtlAdrs")) {
 			makeAlert("필수 항목 알림", "상세주소를 입력하세요");
-			$("#dtlAdrs").focus();
 		} else if(checkEmpty("#rvn")) {
 			makeAlert("필수 항목 알림", "매출를 입력하세요");
-			$("#rvn").focus();
 		} else if(checkEmpty("#rp")) {
 			makeAlert("필수 항목 알림", "인지경로를 선택하세요");
-			$("#rp").focus();
 		} else {
 			makePopup({
 				bg : true,
@@ -377,9 +369,6 @@ function findAddr(){
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
-	<input type="hidden" id="clntCmpnyClsfyNum" value="${param.clntCmpnyClsfyNum}" />
-	<input type="hidden" id="searchType" value="${param.searchType}" />
-	<input type="hidden" id="searchTxt" value="${param.searchTxt}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="IntrnlCostMng">
+
+	<select id="getIntrnlCostMngCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM ( SELECT ROW_NUMBER() OVER(ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
+			   FROM INTRNL_COST_MNG
+			   WHERE 1 = 1
+			   <if test="searchMonth != null and searchMonth != ''">
+				   AND TO_CHAR(DATE_HR, 'YYYY-MM') = #{searchMonth}
+			   </if>
+			   GROUP BY TO_CHAR(DATE_HR, 'YYYY-MM') )
+	</select>
+	
+	<select id="getIntrnlCostMngList" resultType="hashmap" parameterType="hashmap">
+		SELECT TO_CHAR(DATE_HR, 'YYYY-MM') AS DATE_MON, SUM(AMNT) AS AMNT_SUM, 
+			   ROW_NUMBER() OVER(ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
+		FROM INTRNL_COST_MNG
+		WHERE 1 = 1
+		<if test="searchMonth != null and searchMonth != ''">
+			AND TO_CHAR(DATE_HR, 'YYYY-MM') = #{searchMonth}
+		</if>
+		GROUP BY TO_CHAR(DATE_HR, 'YYYY-MM')
+	</select>
+	
+</mapper>

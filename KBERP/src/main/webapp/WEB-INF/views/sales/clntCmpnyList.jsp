@@ -52,19 +52,6 @@
 	background-color: #f2f2f2;
 	border-radius: 5px;
 }
-/* .sts_list:hover {
-   font-weight: bold;
-   cursor: pointer;
-   background-color: #F2B705;
-} */
-/* .sts_list:active {
-   width: 110px;
-   margin: 0 5px;
-   padding: 8px 5px;
-   background-color: #F2CB05;
-   cursor: pointer;
-   font-weight: bold;
-} */
 .tLine{
 	background-color: #4B94F2;
 	width: 927px;
