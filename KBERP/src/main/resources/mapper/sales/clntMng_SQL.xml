@@ -659,7 +659,14 @@
 		                         INNER JOIN RANK R
 		                                 ON A.RANK_NUM = R.RANK_NUM
 		WHERE CCC.DEL_CHECK IS NULL
-		<!-- ORDER BY CCC.CMNT_NUM DESC -->
+		ORDER BY CCC.CMNT_NUM DESC
+	</select>
+	
+	<select id="getClList" parameterType="hashmap" resultType="hashmap">
+		SELECT EC.CLNT_NAME, EC.DUTY, EC.DEPT, EC.MBL, EC.EMAIL
+		FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
+		                           ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
+		WHERE CC.CLNT_CMPNY_NUM = #{ccn}
 	</select>
 	
 	<update id="opContUpdate" parameterType="hashmap">

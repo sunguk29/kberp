@@ -352,29 +352,51 @@ $(document).ready(function() {
 		var cmntNum = $(this).children("#cmntNum").val();
 		document.getElementById("cmNum").value = cmntNum;
 		
-		var params = $("#botActionForm").serialize();
-		
-		$.ajax({
-			type : "post",
-			url : "ccBotActionAjax/update",
-			dataType : "json",
-			data : params,
-			success : function(res) {
-				if(res.res == "success") {
-					reloadOpList();
-				} else {
-					alert("삭제중 문제가 발생하였습니다.");
-				}
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "경고",
+			contents : "삭제하시겠습니까?",
+			contentsEvent : function() {
+				$("#popup1").draggable();
 			},
-			error : function(request, status, error) {
-				console.log(request.responseText);
-			}
+			buttons : [{
+				name : "예",
+				func:function() {
+					
+					var params = $("#botOpActionForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "ccBotActionAjax/update",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							if(res.res == "success") {
+								reloadOpList();
+							} else {
+								alert("삭제중 문제가 발생하였습니다.");
+							}
+						},
+						error : function(request, status, error) {
+							console.log(request.responseText);
+						}
+					});
+					
+					closePopup();
+					
+				}
+			}, {
+				name : "아니오"
+			}]
 		});
+		
+		
 		
 	});
 /***********************************************************************************/
 	
-/*************************************** 삭제 ***************************************/
+/*************************************** 글 삭제 ***************************************/
 	$("#deleteBtn").on("click", function() {
 		makePopup({
 			bg : false,
@@ -420,7 +442,7 @@ $(document).ready(function() {
 /*************************************** 의견 ***************************************/
 	reloadOpList();
 	$(".subm").on("click", function() {
-		var params = $("#botActionForm").serialize();
+		var params = $("#botOpActionForm").serialize();
 		
 		$.ajax({
 			type : "post",
@@ -442,15 +464,17 @@ $(document).ready(function() {
 	});
 /***********************************************************************************/
 	
+	reloadCList(); // 하단 고객
+	
 }); // JQuery End
 
 /*************************************** 의견 ***************************************/
 function reloadOpList() {
-	var params = $("#botActionForm").serialize();
+	var params = $("#botOpActionForm").serialize();
 	
 	$.ajax({
 		type : "post",
-		url : "ccBotListAjax",
+		url : "opBotListAjax",
 		data : params,
 		dataType : "json",
 		success : function(res) {
@@ -476,7 +500,46 @@ function drawOpList(list) {
 		html += "</div>";
 	}
 	
-	$(".opbx").before(html);
+	$(".opbx").html(html);
+	
+}
+/***********************************************************************************/
+
+/*************************************** 고객 ***************************************/
+ 
+function reloadCList() {
+	var params = $("#botClActionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "clBotListAjax",
+		data : params,
+		dataType : "json",
+		success : function(res) {
+			drawClList(res.list);
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	});
+}
+
+function drawClList(list) {
+	var html = "";
+	
+	for(var data of list) {
+		html += "<div class=\"OpinionBox\">";
+		html += "<div class=\"cc_box_in\"><span class=\"boldname\">" + data.CLNT_NAME + "(" + data.DUTY + " / " + data.DEPT + ")</span><br/>tel	" + data.MBL + "<br/>mail	" + data.EMAIL + "</div>";
+		html += "<div class=\"cc_box_right\">";
+		html += "	<div class=\"right_box\">";
+		html += "		<div class=\"hands\"></div>";
+		html += "2건";
+		html += "	</div>";
+		html += "</div>";
+		html += "</div>";
+	}
+	
+	$(".cbx").html(html);
 	
 }
 
@@ -639,7 +702,7 @@ function drawOpList(list) {
 				<div class="cntrct_box_in">
 				</div>
 <!-- ************************************************ 상세보기 하단 *********************************************** -->
-			<form action="#" id="botActionForm" method="post">
+			<form action="#" id="botOpActionForm" method="post">
 				<input type="hidden" name="ccn" value="${param.ccn}" />
 				<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
 				<input type="hidden" id="cmNum" name="cmNum" />
@@ -653,22 +716,14 @@ function drawOpList(list) {
 					<div class="cmn_btn subm">등록</div>
 				</div>
 			</form>
+			<form action="#" id="botClActionForm" method="post">
+				<input type="hidden" name="ccn" value="${param.ccn}" />
 				<!-- 고객 -->
 				<div class="mgtop"></div>
 				<div class="bot_title"><h3>고객(6)<div class="drop_btn"></div><div class="plus_btn_bot"></div></h3></div>
 				<hr color="#F2B705" width="925px">
-				<div class="cbx">
-					<div class="OpinionBox">
-						<div class="cc_box_in"><span class="boldname">최원용 대리 / 영업부</span><br/>tel	010-2011-4708<br/>mail	wechemical@daum.net</div>
-						<div class="cc_box_right">
-							<div class="right_box">
-								<div class="hands"></div>
-								2건
-							</div>
-						</div>
-					</div>
-				</div>
-				
+				<div class="cbx"></div>
+			</form>
 				<!-- 히스토리 -->
 				<div class="mgtop"></div>
 				<div class="bot_title"><h3>히스토리(5)<div class="drop_btn"></div></h3></div>

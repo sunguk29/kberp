@@ -247,9 +247,9 @@ public class ClntMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	@RequestMapping(value = "/ccBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@RequestMapping(value = "/opBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String ccBotListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+	public String opBotListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -287,6 +287,21 @@ public class ClntMngController {
 		
 		return mapper.writeValueAsString(modelMap);
 		
+	}
+	
+	@RequestMapping(value = "/clBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String clBotListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("clntCmpnyMng.getClList", params);
+		
+		modelMap.put("list", list);
+		
+		return mapper.writeValueAsString(modelMap);
 	}
 	
 }
