@@ -151,17 +151,6 @@ td:nth-child(1), td:nth-child(3){
 .boldname{
 	font-weight: bold;
 }
-/* 팝업 버튼 */
-.btn_pos {
-	text-align: center;
-}
-.btn_wd {
-	width: 60px;
-}
-.cont_pos {
-	line-height: 100px;
-	text-align: center;
-}
 /* 첨부자료 */
 .cntrct_box_in {
 	width: 885px;
@@ -189,17 +178,6 @@ td:nth-child(1), td:nth-child(3){
 	margin-left: 40px;
 	margin-bottom: 5px;
 }
-.plus_btn {
-	display:inline-block;
-	vertical-align: middle;
-	width: 18px;
-	height: 18px;
-	background-image: url("resources/images/sales/plus.png");
-	background-size: 18px 18px;
-	float: right;
-	margin-right: 5px;
-	margin-top: 5.5px;
-}
 .plus_btn_bot {
 	display:inline-block;
 	vertical-align: middle;
@@ -217,9 +195,149 @@ td:nth-child(1), td:nth-child(3){
 #att {
 	display: none;
 }
+/* 의견 */
+.opbx { /* 스크롤때문에 div 박스 추가 */
+	width: 860px;
+	height: 305px;
+	margin-left: 47.5px;
+	overflow-y: auto;
+}
+.cbx { /* 스크롤때문에 div 박스 추가 */
+	width: 860px;
+	height: 305px;
+	margin-left: 47.5px;
+	overflow-y: auto;
+}
+.hbx { /* 스크롤때문에 div 박스 추가 */
+	width: 860px;
+	height: 305px;
+	margin-left: 47.5px;
+	overflow-y: auto;
+}
+hr { /* 구분선 */
+	margin-bottom: 10px;
+}
+.bot_title { 
+	font-size: 11pt;
+}
+textarea {
+	width: 757px;
+	height: 52px;
+	font-size: 10.5pt;
+	white-space: pre-wrap;
+	resize: none;
+	font-family: "맑은 고딕";
+	display: inline-block;
+	vertical-align: top;
+	outline: none;
+}
+.subm {
+	margin-left: 14px;
+	width: 35px;
+	height: 56px;
+	line-height: 56px;
+}
+.OpinionBox {
+	width: 830px;
+	height: 70px;
+	font-size: 10pt;
+	border: 1px solid gray;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+	margin-bottom: 5px;
+	background-color: #F2F2F2;
+}
+
+.name {
+	margin-top: 3px;
+	font-weight: bold;
+	padding-top: 5px;
+	padding-left: 20px;
+}
+.txtOp, .dt, .del {
+	padding-left: 20px;
+}
+.dt {
+	padding-right: 590px;
+}
+.del:hover {
+	cursor: pointer;
+	color: #F2CB05;
+}
+.dt, .del {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 9pt;
+	color: gray;
+}
+.opBox {
+	width: 860px;
+	height: 56px;
+	margin: 15px 0px 5px 47.5px;
+}
+/* 히스토리 */
+.dwon_icon {
+	display:inline-block;
+	vertical-align: middle;
+	width: 24px;
+	height: 24px;
+	background-image: url("../../images/sales/downarrow.png");
+	background-size: 24px 24px;
+	float: right;
+	margin-top: 3px;
+}
+.dwon_icon:hover {
+	cursor: pointer;
+}
+.side_btn_area {
+	display: inline-block;
+	vertical-align: top;
+	text-align: right;
+	width: 827px;
+	height: 30px;
+	margin-left: 100px;
+	line-height: 30px;
+}
+
+.save_btn, .list_btn {
+	display: inline-block;
+	vertical-align: top;
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	font-size: 11pt;
+	font-weight: bold;
+	margin: 0px 5px;
+	border-radius: 2px;
+	cursor: pointer;
+	color: #7b7b7b;
+}
+.mgtop {
+	margin-top: 50px;
+}
+.sc_title {
+	width: 927px;
+	height: 30px;
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 30px;
+	background-color: #F2CB05;
+}
+.hands{
+	display: inline-block;
+	vertical-align: middle;
+	width: 48px;
+	height: 48px;
+	background-image: url("resources/images/sales/hands.png");
+	background-size: 48px 48px;
+	margin-right: 10px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	
 	$("#listBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntCmpnyList");
 		$("#actionForm").submit();
@@ -229,7 +347,56 @@ $(document).ready(function() {
 		$("#actionForm").attr("action", "clntCmpnyUpdate");
 		$("#actionForm").submit();
 	});
+/*************************************** 의견삭제 ***************************************/	
+	$(".opbx").on("click", ".del", function() {
+		var cmntNum = $(this).children("#cmntNum").val();
+		document.getElementById("cmNum").value = cmntNum;
+		
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "경고",
+			contents : "삭제하시겠습니까?",
+			contentsEvent : function() {
+				$("#popup1").draggable();
+			},
+			buttons : [{
+				name : "예",
+				func:function() {
+					
+					var params = $("#botOpActionForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "ccBotActionAjax/update",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							if(res.res == "success") {
+								reloadOpList();
+							} else {
+								alert("삭제중 문제가 발생하였습니다.");
+							}
+						},
+						error : function(request, status, error) {
+							console.log(request.responseText);
+						}
+					});
+					
+					closePopup();
+					
+				}
+			}, {
+				name : "아니오"
+			}]
+		});
+		
+		
+		
+	});
+/***********************************************************************************/
 	
+/*************************************** 글 삭제 ***************************************/
 	$("#deleteBtn").on("click", function() {
 		makePopup({
 			bg : false,
@@ -247,7 +414,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "clntCmpnyMngAction/delete",
+						url : "clntCmpnyMngActionAjax/delete",
 						dataType : "json",
 						data : params,
 						success : function(res) {
@@ -270,19 +437,124 @@ $(document).ready(function() {
 			}]
 		});		
 	});
+/***********************************************************************************/
 	
-});
+/*************************************** 의견 ***************************************/
+	reloadOpList();
+	$(".subm").on("click", function() {
+		var params = $("#botOpActionForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "ccBotActionAjax/insert",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				if(res.res == "success") {
+					$("#tatacont").val("");
+					reloadOpList();
+				} else {
+					alert("등록중 문제가 발생하였습니다.");
+				}
+			},
+			error : function(request, status, error) {
+				console.log(request.responseText);
+			}
+		});
+	});
+/***********************************************************************************/
+	
+	reloadCList(); // 하단 고객
+	
+}); // JQuery End
+
+/*************************************** 의견 ***************************************/
+function reloadOpList() {
+	var params = $("#botOpActionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "opBotListAjax",
+		data : params,
+		dataType : "json",
+		success : function(res) {
+			drawOpList(res.list);
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	});
+}
+
+function drawOpList(list) {
+	var html = "";
+	
+	for(var data of list) {
+		html += "<div class=\"OpinionBox\">";
+		html += "<div class=\"name\">" + data.EMP_NAME + "(" + data.DEPT_NAME + " / " + data.RANK_NAME + ")" + "</div>";
+		html += "<div class=\"txtOp\">" + data.CONT + "</div>";
+		html += "<div class=\"dt\">" + data.RGSTRTN_DATE + "</div>";
+		html += "<div class=\"del\">삭제";
+		html += "<input type=\"hidden\" id=\"cmntNum\" name=\"cmntNum\" value=\"" + data.CMNT_NUM + "\" />";
+		html += "</div>";
+		html += "</div>";
+	}
+	
+	$(".opbx").html(html);
+	
+}
+/***********************************************************************************/
+
+/*************************************** 고객 ***************************************/
+ 
+function reloadCList() {
+	var params = $("#botClActionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "clBotListAjax",
+		data : params,
+		dataType : "json",
+		success : function(res) {
+			drawClList(res.list);
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	});
+}
+
+function drawClList(list) {
+	var html = "";
+	
+	for(var data of list) {
+		html += "<div class=\"OpinionBox\">";
+		html += "<div class=\"cc_box_in\"><span class=\"boldname\">" + data.CLNT_NAME + "(" + data.DUTY + " / " + data.DEPT + ")</span><br/>tel	" + data.MBL + "<br/>mail	" + data.EMAIL + "</div>";
+		html += "<div class=\"cc_box_right\">";
+		html += "	<div class=\"right_box\">";
+		html += "		<div class=\"hands\"></div>";
+		html += "2건";
+		html += "	</div>";
+		html += "</div>";
+		html += "</div>";
+	}
+	
+	$(".cbx").html(html);
+	
+}
+
+/***********************************************************************************/
 </script>
 </head>
 <body>
-
+<!-- 목록이동 -->
 <form action="#" id="actionForm" method="post">
-	<input type="hidden" id="ccn" name="ccn" value="${param.ccn}" />
 	<input type="hidden" id="page" name="page" value="${param.page}" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 </form>
+
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -290,6 +562,7 @@ $(document).ready(function() {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
+	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
@@ -298,7 +571,6 @@ $(document).ready(function() {
 			<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
 			<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" id="deleteBtn" />
 			<!-- 검색영역 선택적 사항 -->
-			
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
@@ -429,6 +701,42 @@ $(document).ready(function() {
 				</div>
 				<div class="cntrct_box_in">
 				</div>
+<!-- ************************************************ 상세보기 하단 *********************************************** -->
+			<form action="#" id="botOpActionForm" method="post">
+				<input type="hidden" name="ccn" value="${param.ccn}" />
+				<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
+				<input type="hidden" id="cmNum" name="cmNum" />
+				<!-- 의견 -->
+				<div class="mgtop"></div>
+				<div class="bot_title"><h3>의견(7)</h3></div>
+				<hr color="#F2B705" width="925px">
+				<div class="opbx"></div>
+				<div class="opBox">
+					<textarea id="tatacont" name="tacont"></textarea>
+					<div class="cmn_btn subm">등록</div>
+				</div>
+			</form>
+			<form action="#" id="botClActionForm" method="post">
+				<input type="hidden" name="ccn" value="${param.ccn}" />
+				<!-- 고객 -->
+				<div class="mgtop"></div>
+				<div class="bot_title"><h3>고객(6)<div class="drop_btn"></div><div class="plus_btn_bot"></div></h3></div>
+				<hr color="#F2B705" width="925px">
+				<div class="cbx"></div>
+			</form>
+				<!-- 히스토리 -->
+				<div class="mgtop"></div>
+				<div class="bot_title"><h3>히스토리(5)<div class="drop_btn"></div></h3></div>
+				<hr color="#F2B705" width="925px">
+				<div class="hbx">
+					<div class="OpinionBox">
+						<div class="name">영업기회 (21/12/27 17:01:00)</div>
+						<div class="txtOp">내용: 등록된 영업기회 표시</div>
+						<div class="txtOp">담당자:000</div>
+					</div>
+				</div>
+				<!-- 끝 -->
+<!-- *********************************************************************************************************** -->
 			</div>
 		</div>
 	</div>
