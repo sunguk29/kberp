@@ -514,9 +514,10 @@ function drawPaging(pb) {
 				<div class="srch_wrap">
 					<div class="page_srch_area">
 						<select class="srch_sel" name="srch_sel">
-							<option>제목</option>
-							<option>내용</option>
-							<option>작성자</option>
+							<option selected>전체</option>
+							<option>사원번호</option>
+							<option>사원명</option>
+							<option>부서명</option>
 						</select>
 						<div class="srch_text_wrap">
 							<input type="text" id="srch_txt" name="srch_txt" />
