@@ -555,6 +555,11 @@
 		VALUES (CLNT_CMPNY_ATT_FILE_SEQ.NEXTVAL, CLNT_CMPNY_SEQ.CURRVAL, #{attFile})
 	</insert>
 	
+	<insert id="clntAttAdd" parameterType="hashmap">
+		INSERT INTO CLNT_ATT_FILE (ATT_FILE_NUM, CLNT_NUM, ATT_FILE_NAME)
+		VALUES (CLNT_ATT_FILE_SEQ.NEXTVAL, ENTRPRS_CLNT_SEQ.CURRVAL, #{attFile})
+	</insert>
+	
 	<select id="getClntList" parameterType="hashmap" resultType="hashmap">
 		SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM
 		FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM,
@@ -592,8 +597,8 @@
 	</delete>
 	
 	<select id="clntAdd" parameterType="hashmap" resultType="hashmap">
-		INSERT INTO ENTRPRS_CLNT (CLNT_NUM, CLNT_NAME, CLNT_CMPNY_NUM, MNGR_EMP_NUM, RHSTRTN_EMP_NUM, DEPT, DUTY, MBL)
-		VALUES (ENTRPRS_CLNT_SEQ.NEXTVAL)
+		INSERT INTO ENTRPRS_CLNT (CLNT_NUM, CLNT_NAME, CLNT_CMPNY_NUM, MNGR_EMP_NUM, RGSTRTN_EMP_NUM, DEPT, DUTY, MBL, EMAIL)
+		VALUES (ENTRPRS_CLNT_SEQ.NEXTVAL, #{cName}, #{ccNum}, #{mngNum}, #{sEmpNum}, #{dept}, #{duty}, #{mbl}, #{email})
 	</select>
 	
 	<select id="popupCcListCnt" parameterType="hashmap" resultType="Integer">

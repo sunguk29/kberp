@@ -272,6 +272,13 @@ td:nth-child(1), td:nth-child(3){
    margin-top: 13px;
    margin-left: 45px;
 }
+.mngIcon {
+   display: inline-block;
+   width: 42px;
+   height: 25px;
+   margin-top: 13px;
+   margin-left: 45px;
+}
 .boldname{
 	font-weight: bold;
 	font-size : 12px;
@@ -282,6 +289,10 @@ td:nth-child(1), td:nth-child(3){
 .popCmnBtn {
 	margin-top: 35px;
 	margin-left: 200px;
+}
+.popMngBtn {
+	margin-top: 5px;
+	margin-left: 25px;
 }
 </style>
 <script type="text/javascript">
@@ -360,7 +371,9 @@ $(document).ready(function() {
 					for(var i = 1; i < 5; i++) {
 						if(a.substr(3,1) == $("#ccn" + i + "").attr("id").substr(3,1)) {
 							var ccn = $("#ccn" + i + "").val(); 
+							var cnn = $("#cnn" + i + "").val(); 
 							document.getElementById("ccName").value = ccn;
+							document.getElementById("ccNum").value = cnn;
 							closePopup();
 							break;
 						}
@@ -421,7 +434,7 @@ $(document).ready(function() {
 		html += 		"<div class=\"ptm_right\">";
 		html +=				"<div class=\"ptm_right_top\"></div>";
 		html +=				"<div class=\"ptm_right_bot\">";
-		html +=					"<div class=\"cmn_btn popCmnBtn\">검색</div>";
+		html +=					"<div class=\"cmn_btn popMngBtn\">검색</div>";
 		html +=				"</div>";
 		html +=			"</div>";
 		html += 	"</form>";
@@ -437,19 +450,21 @@ $(document).ready(function() {
 			depth : 1,
 			bg : true,
 			width : 600,
-			height : 524,
-			title : "고객사 조회",
+			height : 500,
+			title : "담당자 조회",
 			contents : html,
 			contentsEvent : function() {
 				
 				drawMngList();
 				
-/* 				$(".popup_box").on("click", ".popup_box_in", function() {
+				$(".popup_box_mng").on("click", ".popup_box_in", function() {
 					var a = $(this).attr("id");
 					for(var i = 1; i < 5; i++) {
-						if(a.substr(3,1) == $("#ccn" + i + "").attr("id").substr(3,1)) {
-							var ccn = $("#ccn" + i + "").val(); 
-							document.getElementById("ccName").value = ccn;
+						if(a.substr(3,1) == $("#mng" + i + "").attr("id").substr(3,1)) {
+							var mng = $("#mng" + i + "").val(); 
+							var mge = $("#mge" + i + "").val(); 
+							document.getElementById("mngEmp").value = mng;
+							document.getElementById("mngNum").value = mge;
 							closePopup();
 							break;
 						}
@@ -459,9 +474,8 @@ $(document).ready(function() {
 				$(".pgn_area").on("click", "div", function() {
 					$("#page").val($(this).attr("page"));
 
-					drawCcList();
-				}); */
-				
+					drawMngList();
+				});
 			},
 			buttons : {
 				name : "닫기",
@@ -480,30 +494,14 @@ $(document).ready(function() {
 	});
 	
 	$("#addBtn").on("click", function() {
-		if(checkEmpty("#ccName")) {
+		if(checkEmpty("#cName")) {
+			makeAlert("필수 항목 알림", "고객을 입력하세요");
+		} else if(checkEmpty("#ccName")) {
 			makeAlert("필수 항목 알림", "고객사를 입력하세요");
-			$("#ccName").focus;
-		} else if(checkEmpty("#ccClsfy")) {
-			makeAlert("필수 항목 알림", "대표를 입력하세요");
-			$("#ccClsfy").focus();
-		} else if(checkEmpty("#ccGrade")) {
-			makeAlert("필수 항목 알림", "등급을 선택하세요");
-			$("#ccGrade").focus();
-		} else if(checkEmpty("#zipCodeNum")) {
-			makeAlert("필수 항목 알림", "우편번호를 입력하세요");
-			$("#zipCodeNum").focus();
-		} else if(checkEmpty("#adrs")) {
-			makeAlert("필수 항목 알림", "주소를 입력하세요");
-			$("#adrs").focus();
-		} else if(checkEmpty("#dtlAdrs")) {
-			makeAlert("필수 항목 알림", "상세주소를 입력하세요");
-			$("#dtlAdrs").focus();
-		} else if(checkEmpty("#rvn")) {
-			makeAlert("필수 항목 알림", "매출를 입력하세요");
-			$("#rvn").focus();
-		} else if(checkEmpty("#rp")) {
-			makeAlert("필수 항목 알림", "인지경로를 선택하세요");
-			$("#rp").focus();
+		} else if(checkEmpty("#mbl")) {
+			makeAlert("필수 항목 알림", "휴대폰번호를 입력하세요");
+		} else if(checkEmpty("#mngEmp")) {
+			makeAlert("필수 항목 알림", "담당자를 입력하세요");
 		} else {
 			makePopup({
 				bg : true,
@@ -528,7 +526,7 @@ $(document).ready(function() {
 								
 								$.ajax({
 									type : "post",
-									url : "clntCmpnyMngAction/insert",
+									url : "clntMngAjax/insert",
 									dataType : "json",
 									data : params,
 									success : function(res) {
@@ -592,11 +590,13 @@ function drawCcList() {
 function drawList(list) {
 	var html = "";
 	var i = 1;
-	var j = 1
+	var j = 1;
+	var k = 1;
 	
 	for(var data of list) {                                                                               
 		html += "<div class=\"popup_box_in\" id=\"box" + (i++) + "\">                                                               ";
 		html += "<input type=\"hidden\" id=\"ccn" + (j++) + "\" value=\"" + data.CLNT_CMPNY_NAME + "\" />";
+		html += "<input type=\"hidden\" id=\"cnn" + (k++) + "\" value=\"" + data.CLNT_CMPNY_NUM + "\" />";
 		html += "<div class=\"popup_cc_box_left\">                                                          ";
 		html += "	<span class=\"company\"></span>                                                         ";
 		html += "</div>                                                                                   ";
@@ -642,6 +642,8 @@ function drawPaging(pb) {
 }
 // *********************************************** 고객사 팝업 END ***********************************************
 
+
+
 // *********************************************** 담당자 팝업 ***********************************************
 function drawMngList() {
 	var params = $("#popupMngForm").serialize();
@@ -652,7 +654,7 @@ function drawMngList() {
 		dataType : "json",
 		data : params,
 		success : function(res) {
-			drawMngList(res.mngList);
+			drawMngCont(res.mngList);
 			drawMngPaging(res.mngPb);
 		},
 		error : function(req) {
@@ -661,16 +663,21 @@ function drawMngList() {
 	});
 }
 
-function drawMngList(mngList) {
+function drawMngCont(mngList) {
 	var html = "";
+	var i = 1;
+	var j = 1;
+	var k = 1;
 	
-	for(var data of mngList) {                                                                               
-		html +=	"<div class=\"popup_box_in\" no=\"" + data.EMP_NUM + "\">";
+	for(var data of mngList) {
+		html +=	"<div class=\"popup_box_in\" id=\"mlb" + (i++) + "\">";
+		html += "<input type=\"hidden\" id=\"mng" + (j++) + "\" value=\"" + data.EMP_NAME + "\" />";
+		html += "<input type=\"hidden\" id=\"mge" + (k++) + "\" value=\"" + data.EMP_NUM + "\" />";
 		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
+		html +=	"<span><img alt=\"담당자이미지\" class=\"mngIcon\" src=\"resources/images/sales/usericon.png\"></span>";
 		html +=	"</div>";
 		html +=	"<div class=\"popup_cc_box_right\">";
-		html +=	 data.EMP_NUM + "<span class=\"boldname\">" + data.EMP_NAME + " / " + data.RANK_NAME + "</span>";
+		html +=	 data.EMP_NUM + " " + "<span class=\"boldname\">" + data.EMP_NAME + " / " + data.RANK_NAME + "</span>";
 		html +=	"<span class=\"mg_wid\">" + data.DEPT_NAME + "</span>";
 		html +=	"</div>";
 		html +=	"</div>";                                                                      
@@ -759,6 +766,7 @@ function drawMngPaging(mngPb) {
 								<td>
 									<div class="imgPos">
 										<input type="text" class="txt imgName" id="ccName" name="ccName" />
+										<input type="hidden" id="ccNum" name="ccNum" />
 										<img class="btnImg_in" id="ccPop" alt="팝업" src="resources/images/sales/popup.png">
 									</div>
 								</td>
@@ -784,6 +792,7 @@ function drawMngPaging(mngPb) {
 								<td>
 									<div class="imgPos">
 										<input type="text" class="txt imgName" id="mngEmp" name="mngEmp" />
+										<input type="hidden"id="mngNum" name="mngNum" />
 										<img class="btnImg_in" id="mngPop" alt="팝업" src="resources/images/sales/usericon.png">
 									</div>
 								</td>
