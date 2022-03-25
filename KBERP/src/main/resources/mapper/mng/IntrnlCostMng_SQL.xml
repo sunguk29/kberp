@@ -24,4 +24,12 @@
 		GROUP BY TO_CHAR(DATE_HR, 'YYYY-MM')
 	</select>
 	
+	<select id="intrnlCostMngMnthlyCnt">
+	
+	</select>
+	
+	<select id="intrnlCostMngMnthlyList">
+	
+	</select>
+	
 </mapper>
