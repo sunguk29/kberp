@@ -393,8 +393,10 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
-	$(".sts").on("click", "div", function() {
+	$(".sts").on("click", "input[type='button']", function() {
 		$("#page").val("1");
+		
+		$("#psNum").val($(this).attr("num"));
 		
 		reloadList();		
 	});
@@ -549,7 +551,7 @@ function mngrDrawList(list) {
 /* 리드 리스트 */
 function reloadList() {
 	var params = $("#actionForm").serialize();
-	
+	console.log(params);
 	$.ajax({
 		type : "post",
 		url : "leadListAjax",
@@ -621,10 +623,10 @@ function drawList(list) {
 function drawCnt(cnt, ongoingCnt,rcgntnCnt, failCnt) {
 	var html = "";
 	
-	html += "<button class=\"sts_list\" id=\"psNum\" name =\"psNum\" value=\"0\">전체 : "+ cnt + "건</button>";
-	html += "<button class=\"sts_list\" id=\"psNum\" name =\"psNum\" value=\"1\">진행중 : "+ ongoingCnt + "건</button>";
-	html += "<button class=\"sts_list\" id=\"psNum\" name =\"psNum\" value=\"2\">영업기회 전환 : "+ rcgntnCnt + "건</button>";
-	html += "<button class=\"sts_list\" id=\"psNum\" name =\"psNum\" value=\"3\">실패 : "+ failCnt + "건</button>";
+	html += "<input type=\"button\" class=\"sts_list\" num=\"0\" value=\"전체 : "+ cnt + "건\">";
+	html += "<input type=\"button\" class=\"sts_list\" num=\"1\" value=\"진행중 : "+ ongoingCnt + "건\">";
+	html += "<input type=\"button\" class=\"sts_list\" num=\"2\" value=\"영업기회 전환 : "+ rcgntnCnt + "건\">";
+	html += "<input type=\"button\" class=\"sts_list\" num=\"3\" value=\"실패 : "+ failCnt + "건\">";
 	
 /* 	html += "<div class=\"sts_list\" id=\"listCnt\" name=\"listCnt\">전체 : " + cnt + "건</div>";
 	html += "<div class=\"sts_list\" id=\"ongoingCnt\" name=\"ongoingCnt\">진행중 : " + ongoingCnt + "건</div>";
