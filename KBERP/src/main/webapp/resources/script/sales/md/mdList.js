@@ -54,7 +54,7 @@ function drawList(list){
 		html += "</tr>";
 		html += "<tr>";
 		html += "<td>" + data.INTRST_RATE + "%" + "</td>";						//이자율
-		html += "<td class='md_name'>" + data.MD_NAME + "</td>";				//상품명
+		html += "<td class='md_name' no='" + data.MD_NUM + "'>" + data.MD_NAME + "</td>";				//상품명
 		html += "<td>" + data.SALES_STS_NUM + "</td>";							//판매상태
 		html += "</tr>";
 		html += "<tr class='thirdTr'>";
@@ -161,3 +161,42 @@ function getDate(keyword) {
 	$("#sales_start_date").val(dateFormatter(targetDate));
 	$("#sales_end_date").val(dateFormatter(new Date()));
 }
+
+/* 판매상태 체크박스 체크 처리 */
+function changeCheckBoxSts() {
+	$("#sales_stsA").change(checkboxFunc1); /*전체 체크박스 체크시 나머지 체크박스 체크 해제*/
+	$(".sales_sts").change(checkboxFunc2);	/*판매중, 판매중단, 출시예정 체크시 전체 체크박스 해제*/
+}
+
+/* 상세보기 뷰로 이동*/
+function goDetailView() {
+		$("tbody").on("click", ".md_name", function() {
+		$("#no").val($(this).attr("no"));
+		
+		/* 검색데이터 유지하기 위한 함수 */
+		oldSrchDataSave ();
+		
+		$("#actionForm").attr("action", "mdCont");
+		$("#actionForm").submit();
+	});
+}
+
+function pagingProcess() {
+	$("#pgn_area").on("click", "div", function() {
+		$("#page").val($(this).attr("page"));
+		oldSrchDataSave (); 
+		reloadList();		
+	});
+}
+
+
+
+
+
+
+
+
+
+
+
+

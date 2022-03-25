@@ -130,7 +130,7 @@
 .ansr_dtls_see_top {
 	display: inline-block;
 	width: 800px;
-	height: 500px;
+	height: 510px;
 	background-color: #FAFAFA;
 }
 
@@ -194,6 +194,7 @@
 	width: 750px;
 	height: 40px;
 	margin-left: 20px;
+	margin-top: 10px;
 }
 
 .ansr_dtls_see_top .wrtng_title input {
@@ -254,6 +255,12 @@
 	margin-top: 20px;
 	margin-right: 15px;
 }
+
+.popup_cont {
+	text-align: center;
+	line-height: 100px;
+}
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -270,6 +277,44 @@ $(document).ready(function() {
 		
 		$(".open_cnsl_cont").slideToggle(300);
 		  
+	});
+	
+	$("#btn1Btn").on("click", function() {
+		makePopup({
+			depth : 1,
+			bg : false,
+			bgClose : false,
+			width : 500,
+			height : 600,
+			title : "대응가이드",
+			contents : "",
+			buttons : {
+				name : "확인",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}
+		});
+	});
+	
+	$("#btn2Btn").on("click", function() {
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "등록",
+			contents : "게시글을 등록하시겠습니까?",
+			draggable : true,
+			buttons : [{
+				name : "예",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "아니오"
+			}]
+		});
 	});
 });
 </script>
@@ -332,8 +377,8 @@ $(document).ready(function() {
 							<input type="text" readonly="readonly">
 						</div>
 						<div class="ansr_btn">
-							<div class="cmn_btn_mr">대응가이드</div>
-							<div class="cmn_btn_mr">답변등록</div>
+							<div class="cmn_btn_mr" id="btn1Btn">대응가이드</div>
+							<div class="cmn_btn_mr" id="btn2Btn">답변등록</div>
 						</div>
 					</div>
 					</div>

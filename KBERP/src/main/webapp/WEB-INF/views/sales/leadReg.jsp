@@ -916,6 +916,8 @@ function checkEmpty(sel) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" name="searchDate" value="${param.searchDate}" />
+	<input type="hidden" name="searchDate2" value="${param.searchDate2}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -985,6 +987,7 @@ function checkEmpty(sel) {
 											<option value="2">지인소개</option>
 											<option value="3">세미나</option>
 											<option value="4">전화</option>
+											<option value="5">기타</option>
 										</select>
 									</td>
 								</tr>

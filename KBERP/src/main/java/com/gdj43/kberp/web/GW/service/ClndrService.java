@@ -34,6 +34,11 @@ public class ClndrService implements IClndrService{
 		return iClndrDao.getSchdl(params);
 	}
 
+	@Override
+	public List<HashMap<String, String>> dtlSchdl(HashMap<String, String> params) throws Throwable {
+		return iClndrDao.dtlSchdl(params);
+	}
+
 
 
 }

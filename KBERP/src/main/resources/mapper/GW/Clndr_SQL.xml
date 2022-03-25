@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="clndr">
+<select id="getSchdl" parameterType="hashmap" resultType="hashmap">
+SELECT SCHDL_NUM AS ID, SCHDL_TITLE AS TITLE,  TO_CHAR(SCHDL_START_TIME,'YYYY-MM-DD')||'T'||TO_CHAR(SCHDL_START_TIME,'HH24:MI:SS') AS "START",
+TO_CHAR(SCHDL_END_TIME,'YYYY-MM-DD')||'T'||TO_CHAR(SCHDL_END_TIME,'HH24:MI:SS') AS "END", DEL_DVSN
+FROM SCHDL
+WHERE '202203' BETWEEN TO_CHAR(SCHDL_START_TIME,'YYYYMM') AND TO_CHAR(SCHDL_END_TIME, 'YYYYMM')AND DEL_DVSN = 0
+ORDER BY "START" ASC
+</select>
+<select id="dtlSchdl" parameterType="hashmap" resultType="hashmap">
+SELECT SCHDL_NUM AS ID, SCHDL_TITLE AS TITLE,  TO_CHAR(SCHDL_START_TIME,'YYYY-MM-DD')||'T'||TO_CHAR(SCHDL_START_TIME,'HH24:MI:SS') AS "START",
+TO_CHAR(SCHDL_END_TIME,'YYYY-MM-DD')||'T'||TO_CHAR(SCHDL_END_TIME,'HH24:MI:SS') AS "END", SCHDL_TYPE_NUM, SCHDL_CTGRY_NUM,
+SCHDL_PLACE, SCHDL_CONT, ALDY_DVSN, USER_CTGRY_NAME, TO_CHAR(SCHDL_START_TIME,'YYYY"년 "MM"월 "DD"일 "') AS START_DATE, TO_CHAR(SCHDL_START_TIME,'HH24:MI') AS START_TIME,
+TO_CHAR(SCHDL_END_TIME,'YYYY"년 "MM"월 "DD"일 "') AS END_DATE, TO_CHAR(SCHDL_END_TIME,'HH24:MI') AS END_TIME,
+TO_CHAR(SCHDL_START_TIME,'YYYY-MM-DD') AS START_UPDATE, TO_CHAR(SCHDL_END_TIME,'YYYY-MM-DD') AS END_UPDATE
+FROM SCHDL
+WHERE SCHDL_NUM = #{id} AND DEL_DVSN = 0
+</select>
 <insert id="clndrAdd" parameterType="hashmap">
 INSERT INTO SCHDL (SCHDL_NUM, SCHDL_TYPE_NUM, SCHDL_CTGRY_NUM,EMP_NUM,
                    USER_CTGRY_NAME, SCHDL_TITLE, SCHDL_PLACE, SCHDL_CONT,
@@ -8,11 +24,20 @@ INSERT INTO SCHDL (SCHDL_NUM, SCHDL_TYPE_NUM, SCHDL_CTGRY_NUM,EMP_NUM,
 VALUES (SCHDL_SEQ.NEXTVAL, #{schdl_type}, #{schdl_ctgry}, #{emp_num}, #{user_ctgry}, #{schdl_title}, #{schdl_place}, #{schdl_cont},
          TO_DATE(#{schdl_start_date}||' '||#{schdl_start_time}, 'YYYY-MM-DD HH24:MI'),  TO_DATE(#{schdl_end_date}||' '||#{schdl_end_time}, 'YYYY-MM-DD HH24:MI'), #{aldy_dvsn})
 </insert>
-<select id="getSchdl" parameterType="hashmap" resultType="hashmap">
-SELECT SCHDL_NUM AS ID, SCHDL_TITLE AS TITLE,  TO_CHAR(SCHDL_START_TIME,'YYYY-MM-DD')||'T'||TO_CHAR(SCHDL_START_TIME,'HH24:MI:SS') AS "START",
-TO_CHAR(SCHDL_END_TIME,'YYYY-MM-DD')||'T'||TO_CHAR(SCHDL_END_TIME,'HH24:MI:SS') AS "END"
-FROM SCHDL
-WHERE '202203' BETWEEN TO_CHAR(SCHDL_START_TIME,'YYYYMM') AND TO_CHAR(SCHDL_END_TIME, 'YYYYMM')
-ORDER BY "START" ASC
-</select>
+<update id="clndrDelete" parameterType="hashmap">
+UPDATE SCHDL SET DEL_DVSN = 1
+WHERE SCHDL_NUM = #{id}
+</update>
+<update id="clndrUpdate" parameterType="hashmap">
+UPDATE SCHDL SET SCHDL_TYPE_NUM = #{schdl_type},
+                 SCHDL_CTGRY_NUM = #{schdl_ctgry},
+                 USER_CTGRY_NAME = #{user_ctgry},
+                 SCHDL_TITLE = #{schdl_title},
+                 SCHDL_PLACE = #{schdl_place},
+                 SCHDL_CONT = #{schdl_cont},
+                 SCHDL_START_TIME = TO_DATE(#{schdl_start_date}||' '||#{schdl_start_time}, 'YYYY-MM-DD HH24:MI:SS'),
+                 SCHDL_END_TIME = TO_DATE(#{schdl_end_date}||' '||#{schdl_end_time}, 'YYYY-MM-DD HH24:MI:SS'),
+                 ALDY_DVSN = #{aldy_dvsn}
+WHERE SCHDL_NUM = #{emp_num}
+</update>
 </mapper>

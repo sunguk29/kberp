@@ -80,6 +80,20 @@ $(document).ready(function() {
 		$("#actionForm").attr("action", "expnsRsltnadmnstrEmpMnthlyList")
 		$("#actionForm").submit();
 	});	
+	
+	$("#previousBtn2").on("click", function() {
+		$("#top").val("34");
+		$("#menuNum").val("39");
+		$("#menuType").val("M");
+		
+		$("#actionForm").attr("action", "chitMng")
+		$("#actionForm").submit();
+	});
+	
+	if("${param.back}" == "back") {
+		console.log("back");
+		
+	}
 });
 
 
@@ -94,9 +108,9 @@ $(document).ready(function() {
 		<input type="hidden" id="page2" name="page2" value="${param.page2}" />
 		<input type="hidden" id="searchMonth" name="searchMonth" value="${param.searchMonth}">
 		<input type="hidden" id="searchTxt" name="searchTxt" value="${param.searchTxt}"> 
-		<input type="hidden" name="top" value="${param.top}">
-		<input type="hidden" name="menuNum" value="${param.menuNum}">
-		<input type="hidden" name="menuType" value="${param.menuType}">
+		<input type="hidden" id="top" name="top" value="${param.top}">
+		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}">
+		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}">
 	</form>
 
 	<!-- top & left -->
@@ -177,7 +191,12 @@ $(document).ready(function() {
 			</table>
 
 			<div class="btn_wrap">
-				<div class="cmn_btn" id="previousBtn">사원별 월별 목록</div>
+				<c:if test="${empty param.back}">				
+					<div class="cmn_btn" id="previousBtn">사원별 월별 목록</div>
+				</c:if>
+				<c:if test="${!empty param.back}">
+					<div class="cmn_btn" id="previousBtn2">돌아가기</div>
+				</c:if>
 			</div>
 		</div>
 	</div>

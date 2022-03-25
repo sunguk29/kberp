@@ -13,4 +13,7 @@ public interface IClndrDao {
 
 	public List<HashMap<String, String>> getSchdl(HashMap<String, String> params) throws Throwable;
 
+	public List<HashMap<String, String>> dtlSchdl(HashMap<String, String> params)throws Throwable;
+
+
 }

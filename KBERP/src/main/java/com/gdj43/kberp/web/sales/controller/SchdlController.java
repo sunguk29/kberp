@@ -87,7 +87,6 @@ public class SchdlController {
 	
 	Map<String, Object> modelMap = new HashMap<String, Object>();		
 	
-	// 총 게시글 수
 	int cnt = iCommonService.getIntData("salesSchdl.getMgrCnt", params);
 	
 	PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);

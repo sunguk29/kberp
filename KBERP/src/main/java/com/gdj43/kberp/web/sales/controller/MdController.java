@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,7 +42,8 @@ public class MdController {
 		if(params.get("page") == null || params.get("page") == "") {
 			params.put("page", "1");
 		}
-			
+		System.err.println("mdList Controller" + params);
+		mav.addObject("params", params);
 		mav.addObject("page", params.get("page"));
 		mav.setViewName("sales/mdList");
 
@@ -86,5 +88,67 @@ public class MdController {
 
 		return mapper.writeValueAsString(modelMap);
 	}
+	
+	//////상세보기 view
+	@RequestMapping(value="/mdCont")
+	public ModelAndView mdCont(@RequestParam HashMap<String, String> params,
+							ModelAndView mav) throws Throwable {
+		
+		System.err.println("======== /mdCont ==========");
+		
+		/*
+		HashMap<String, String> data = iCommonService.getData("md.getMdContData", params);
+		
+		mav.addObject("data", data);
+		
+		*/
+		System.err.println("mdCont controller" + params);
+		mav.addObject("params", params);
+		mav.setViewName("sales/mdCont");
+		
+		return mav;
+	}
+	
+	//////작성
+	@RequestMapping (value = "/mdReg")
+	public ModelAndView mdReg(@RequestParam HashMap<String, String> params, 
+							   ModelAndView mav) {
+		
+		System.err.println("mdReg controller" + params);
+		mav.addObject("params", params);
+		mav.setViewName("sales/mdReg");
+		return mav;
+	}
+	
+	//////작성 수정 삭제 Ajax
+	@RequestMapping(value = "/mdActionAjax/{gbn}", method = RequestMethod.POST,
+			produces = "text/json;charset=UTF-8")
+	@ResponseBody 
+	public String mdActionAjax(@RequestParam HashMap<String, String> params,
+							@PathVariable String gbn) throws Throwable {
+	ObjectMapper mapper = new ObjectMapper();
+	
+	Map<String, Object> modelMap = new HashMap<String, Object>();
+	
+	try {
+		switch(gbn) {
+		case "insert" :
+			iCommonService.insertData("md.insertMdData", params);
+			break;
+		case "update" :
+			iCommonService.updateData("md.updateMdData", params);
+			break;
+		case "delete" :
+			iCommonService.deleteData("md.deleteMdData", params);
+			break;
+		}
+		modelMap.put("res", "success");
+	}catch (Throwable e) {
+		e.printStackTrace();
+		modelMap.put("res", "failed");
+	}
+	
+	return mapper.writeValueAsString(modelMap);
+}
 	
 }

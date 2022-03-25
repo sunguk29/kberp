@@ -377,32 +377,39 @@ input:focus {
 $(document).ready(function() {
 
 	reloadList();
-	
-	$("#searchBtn").on("click", function() {
+	//리드 상세보기
+	$(".list_table").on("click", ".leadName", function() {
+		$("#leadNum").val($(this).attr("leadNum"));
+		
+		$("#actionForm").attr("action", "leadCont");
 		$("#actionForm").submit();
 	});
+		
+	$("#searchBtn").on("click", function() {
+		$("#page").val("1");
+		
+		reloadList();
+	});
+	
+	if('${param.psNum}' != '' || '${param.srchName}' != '') {
+		$("#psNum").val('${param.psNum}');
+		$("#srchName").val('${param.srchName}');
+	}
 
-/* 페이징 */
+	// 리드목록 페이징
 	$(".pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
 
 		reloadList();
 	});
 
-/* 등록  */	
+	// 리드등록
 	$("#writeBtn").on("click", function() {
 		
 		$("#actionForm").attr("action", "leadReg")
 		$("#actionForm").submit();
 	});
 	
-/* 상세보기 */
-	$(".list_table").on("click", "tr", function() {
-		$("#no").val($(this).attr("no"));
-		
-		$("#actionForm").attr("action", "leadCont");
-		$("#actionForm").submit();
-	});
 
 /* 담당자 팝업  */
 	$(".userIcon").on("click", function() {
@@ -457,7 +464,9 @@ $(document).ready(function() {
 			title : "담당자 조회",
 			contents : html,
 			contentsEvent : function() {
+				
 				mngrList();
+
 				//페이징 
 				$("#mngrpb").on("click", "div", function() {
 					$("#page").val($(this).attr("page"));
@@ -468,8 +477,7 @@ $(document).ready(function() {
 				$("#mngrBtn").on("click", function () {
 					$("#page").val("1");
 					
-					mngrList();
-					
+					mngrList();	
 				});
 				
 				$("#searchTxt").on("keypress", function(event) {
@@ -483,20 +491,18 @@ $(document).ready(function() {
 			},
 			width : 600,
 			height : 500,
-			buttons : [{
-				name : "등록",
+			buttons : {
+				name : "닫기",
 				func:function() {
 					console.log("One!");
 					closePopup();
 				}
-			}, {
-				name : "취소"
-			}]
+			}
 		});
 	});
 }); 
 
-/* 담당자 조회 팝업  */
+/* 담당자 조회 */
 function mngrList() {
 	var params = $("#popupForm").serialize();
 	
@@ -516,7 +522,7 @@ function mngrList() {
 }
 function mngrDrawList(list) {
 	var html = "";
-		
+	
 	for(var data of list) {
 		
 		html +=	"<div class=\"popup_box_in\">";
@@ -582,7 +588,7 @@ function drawList(list) {
 	
 	for(var data of list) {
 		html += "<tbody>";
-		html += "<tr no=\"" + data.LEAD_NUM + "\">";
+		html += "<tr>";
 		html += "<td rowspan=\"3\">" + data.LEAD_NUM + "</td>";
 		html += "<td> LD" + data.LEAD_NUM + "</td>";
 		html += "<td>" + data.CLNT_CMPNY_NAME + " / " + data.CLNT_NAME + "</td>";
@@ -590,7 +596,7 @@ function drawList(list) {
 		html += "</tr>";
 		html += "<tr>";
 		html += "<td>" + data.EMP_NAME + "</td>";
-		html += "<td>" + data.LEAD_NAME + "</td>";
+		html += "<td class=\"leadName\" leadNum=\"" + data.LEAD_NUM + "\">" + data.LEAD_NAME + "</td>";
 		html += "<td><span class=\"sales_psbl_btn\"> 50 % </span></td>";
 		html += "</tr>";
 		html += "<tr>";
@@ -634,13 +640,6 @@ function drawPaging(pb, sel) {
 </script>
 </head>
 <body>
-<form action="#" id="actionForm" method="post">
-	<input type="hidden" id="page" name="page" value="${page}" />
-	<input type="hidden" id="no" name="no" />
-	<input type="hidden" name="top" value="${param.top}" />
-	<input type="hidden" name="menuNum" value="${param.menuNum}" />
-	<input type="hidden" name="menuType" value="${param.menuType}" />	
-</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -648,6 +647,13 @@ function drawPaging(pb, sel) {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
+<form action="#" id="actionForm" method="post">
+	<input type="hidden" id="page" name="page" value="${page}" />
+	<input type="hidden" id="leadNum" name="leadNum" />
+	<input type="hidden" name="top" value="${param.top}" />
+	<input type="hidden" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />
+	
 	<!-- 내용영역 -->
 		<div class="cont_wrap">
 			<div class="page_title_bar">
@@ -683,8 +689,7 @@ function drawPaging(pb, sel) {
 								<col width="10" />
 								<col width="55" />
 							</colgroup>
-							<tbody>
-								<!-- col=10 -->							
+							<tbody>						
 								<tr>
 									<td>
 										<span class="srch_name">가능 여부</span>
@@ -709,7 +714,7 @@ function drawPaging(pb, sel) {
 									</td>
 									<td>
 										<select id="psNum" name="psNum">
-											<option>선택안함</option>
+											<option value="0">선택안함</option>
 											<option value="1">진행중</option>
 											<option value="2">종료(영업기회 전환)</option>
 											<option value="3">종료(영업기회 실패)</option>
@@ -720,7 +725,7 @@ function drawPaging(pb, sel) {
 									</td>
 									<td colspan="7">
 										<div class="findEmp_box">
-											<input type="text" maxlength="20" class="findEmp_box2" style="border:0 solid black" />
+											<input type="text" maxlength="20" class="findEmp_box2" id="mngrSearchTxt" name="mngrSearchTxt" style="border:0 solid black" />
 											<span><img alt="담당자이미지" class="userIcon" src="resources/images/sales/usericon.png"> </span>
 										</div>										
 									</td>
@@ -746,9 +751,9 @@ function drawPaging(pb, sel) {
 									<td></td>
 									<td></td>
 									<td colspan="8">
-										<input type="date" style="font-family : 맑은 고딕;" />
+										<input type="date" id="searchDate" name="searchDate" value="${searchDate}" style="font-family : 맑은 고딕;" />
 										~
-										<input type="date" style="font-family : 맑은 고딕;" />
+										<input type="date" id="searchDate2" name="searchDate2" value="${searchDate2}" style="font-family : 맑은 고딕;" />
 									</td>
 								</tr>
 								<tr>
@@ -756,16 +761,16 @@ function drawPaging(pb, sel) {
 										<span class="srch_name">검색어</span>
 									</td>
 									<td>
-										<select>
-											<option>선택안함</option>
-											<option>리드명</option>
-											<option>고객사명</option>
-											<option>담당자명</option>
-											<option>리드번호</option>
+										<select id="srchType" name="srchType">
+											<option value="0">선택안함</option>
+											<option value="1">리드명</option>
+											<option value="2">고객사명</option>
+											<option value="3">고객명</option>
+											<option value="4">리드번호</option>
 										</select>
 									</td>
 									<td colspan="4">
-										<input type="text" class="srch_msg" placeholder="검색 조건을 선택한 후 입력해주세요." />
+										<input type="text" class="srch_msg" id="searchTxt" name="searchTxt" value="${param.searchTxt}" placeholder="검색 조건을 선택한 후 입력해주세요." />
 									</td>
 									<td>
 										<span class="cmn_btn" id="searchBtn">검색</span>
@@ -791,19 +796,20 @@ function drawPaging(pb, sel) {
 								</tr>
 							</tbody>
 						</table>
-						<div class="SearchResult"><h3>리드 (검색결과: 390건)</h3></div>
-						<!-- list_table -->
-						<table class="list_table"></table>
-						<div class="body_bottom">
-							<div class="board_bottom">
-								<div class="pgn_area"></div>
-								<div class="cmn_btn" id="writeBtn"> 등록</div>								
-							</div>
-						</div>
+					<div class="SearchResult"><h3>리드 (검색결과: 390건)</h3></div>
+
+				<!-- list_table -->
+					<table class="list_table"></table>
+					<div class="body_bottom">
+					<div class="board_bottom">
+						<div class="pgn_area"></div>
+						<div class="cmn_btn" id="writeBtn"> 등록</div>								
 					</div>
 				</div>
-				<!-- class="body" end -->
 			</div>
+		</div>
+	</div>
+</form>
 <!-- bottom -->
 <c:import url="/bottom"></c:import>
 </body>

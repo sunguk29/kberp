@@ -1,73 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hr">
-<select id="getApntmList" resultType="hashmap" parameterType="hashmap">
-SELECT AAA.APNTM_NUM, AAA.EMP_NAME, AAA.APNTM_DVSN_NUM, AAA.DEPT_NAME, AAA.RANK_NAME, AAA.START_DATE, AAA.APRVL_STS 
-FROM(SELECT AA.APNTM_NUM, AA.EMP_NAME, AA.APNTM_DVSN_NUM, AA.DEPT_NAME, AA.RANK_NAME, AA.START_DATE, AA.APRVL_STS
-		FROM( SELECT A.APNTM_NUM, E.EMP_NAME, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, A.START_DATE, AP.APRVL_STS
-				FROM ( SELECT APNTM_NUM, APNTM_DVSN_NUM, EMP_NUM, DEPT_NUM, RANK_NUM, 
-				              TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE , APRVL_NUM
-				       FROM APNTM )  A INNER JOIN EMP E
-				                        	 ON A.EMP_NUM = E.EMP_NUM
-				                       INNER JOIN DEPT D
-				                       		 ON A.DEPT_NUM = D.DEPT_NUM
-				                       INNER JOIN RANK R
-				                       	 	 ON A.RANK_NUM = R.RANK_NUM
-				                       INNER JOIN APRVL_LINE AP
-				                        	 ON A.APRVL_NUM = AP.APRVL_NUM
-			                       <if test="searchTxt != null and searchTxt != ''"> <!--  텍스트 조회 필터링 	-->
-										<choose>
-											<when test="searchGbn == 0">
-										 		WHERE E.EMP_NAME LIKE '%' || #{searchTxt} || '%' 
-												OR A.APNTM_DVSN_NUM LIKE '%' || #{searchTxt} || '%'
-												OR D.DEPT_NAME LIKE '%' || #{searchTxt} || '%'
-												OR R.RANK_NAME LIKE '%' || #{searchTxt} || '%'
-											</when>
-											<when test="searchGbn == 1">
-												WHERE A.APNTM_DVSN_NUM LIKE '%' || #{searchTxt} || '%' 
-											</when>
-											<when test="searchGbn == 2">
-												WHERE  E.EMP_NAME LIKE '%' || #{searchTxt} || '%' 
-											</when>
-											<when test="searchGbn == 3">
-												WHERE D.DEPT_NAME LIKE '%' || #{searchTxt} || '%' 
-											</when>
-											<when test="searchGbn == 4">
-												WHERE R.RANK_NAME LIKE '%' || #{searchTxt} || '%' 
-											</when>
-										</choose>
-									</if> ) AA
-							        <if test="aprvl != 0"><!--  발령구분 조회 필터링 	-->
-										<choose>
-											<when test="aprvl == 1">
-										 		WHERE AA.APRVL_STS LIKE '결재완료' 
-											</when>
-											<when test="aprvl == 2">
-										 		WHERE AA.APRVL_STS LIKE '결재반려' 
-											</when>
-											<when test="aprvl == 3">
-										 		WHERE AA.APRVL_STS LIKE '결재진행중' 
-											</when>
-										</choose>
-									</if> ) AAA
-									<if test="prd != 0"><!--  기간 조회 필터링 	-->
-										WHERE AAA.START_DATE BETWEEN  #{startPrd} AND #{endPrd}
-									</if>
-ORDER BY APNTM_NUM DESC          
- </select>
- 
+<!--    인사발령 쿼리    -->
+	<select id="getApntmList" resultType="hashmap" parameterType="hashmap">
+		SELECT AAA.APNTM_NUM, AAA.EMP_NAME, AAA.APNTM_DVSN_NUM, AAA.DEPT_NAME, AAA.RANK_NAME, AAA.START_DATE, AAA.APRVL_STS 
+		FROM(SELECT AA.APNTM_NUM, AA.EMP_NAME, AA.APNTM_DVSN_NUM, AA.DEPT_NAME, AA.RANK_NAME, AA.START_DATE, AA.APRVL_STS
+				FROM( SELECT A.APNTM_NUM, E.EMP_NAME, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, A.START_DATE, AP.APRVL_STS
+						FROM ( SELECT APNTM_NUM, APNTM_DVSN_NUM, EMP_NUM, DEPT_NUM, RANK_NUM, 
+						              TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE , APRVL_NUM
+						       FROM APNTM )  A INNER JOIN EMP E
+						                        	 ON A.EMP_NUM = E.EMP_NUM
+						                       INNER JOIN DEPT D
+						                       		 ON A.DEPT_NUM = D.DEPT_NUM
+						                       INNER JOIN RANK R
+						                       	 	 ON A.RANK_NUM = R.RANK_NUM
+						                       INNER JOIN APRVL_LINE AP
+						                        	 ON A.APRVL_NUM = AP.APRVL_NUM
+					                       <if test="searchTxt != null and searchTxt != ''"> <!--  텍스트 조회 필터링 	-->
+												<choose>
+													<when test="searchGbn == 0">
+												 		WHERE E.EMP_NAME LIKE '%' || #{searchTxt} || '%' 
+														OR A.APNTM_DVSN_NUM LIKE '%' || #{searchTxt} || '%'
+														OR D.DEPT_NAME LIKE '%' || #{searchTxt} || '%'
+														OR R.RANK_NAME LIKE '%' || #{searchTxt} || '%'
+													</when>
+													<when test="searchGbn == 1">
+														WHERE A.APNTM_DVSN_NUM LIKE '%' || #{searchTxt} || '%' 
+													</when>
+													<when test="searchGbn == 2">
+														WHERE  E.EMP_NAME LIKE '%' || #{searchTxt} || '%' 
+													</when>
+													<when test="searchGbn == 3">
+														WHERE D.DEPT_NAME LIKE '%' || #{searchTxt} || '%' 
+													</when>
+													<when test="searchGbn == 4">
+														WHERE R.RANK_NAME LIKE '%' || #{searchTxt} || '%' 
+													</when>
+												</choose>
+											</if> ) AA
+									        <if test="aprvl != 0"><!--  발령구분 조회 필터링 	-->
+												<choose>
+													<when test="aprvl == 1">
+												 		WHERE AA.APRVL_STS LIKE '결재완료' 
+													</when>
+													<when test="aprvl == 2">
+												 		WHERE AA.APRVL_STS LIKE '결재반려' 
+													</when>
+													<when test="aprvl == 3">
+												 		WHERE AA.APRVL_STS LIKE '결재진행중' 
+													</when>
+												</choose>
+											</if> ) AAA
+											<if test="prd == 1"><!--  기간 조회 필터링 	-->
+												WHERE AAA.START_DATE BETWEEN  #{startPrd} AND #{endPrd}
+											</if>
+		ORDER BY APNTM_NUM DESC          
+	 </select>
+	 
+	
+	 <select id="getApntmCont" resultType="hashmap" parameterType="hashmap">
+	 	 SELECT A.APNTM_NUM, E.EMP_NAME, E.EMP_NUM, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, A.START_DATE, A.END_DATE, A.DTL_CONT 
+		 FROM ( SELECT APNTM_NUM, APNTM_DVSN_NUM, EMP_NUM, DEPT_NUM, RANK_NUM, 
+	                   TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE , TO_CHAR(END_DATE,'YYYY-MM-DD') AS END_DATE ,DTL_CONT
+	       	    FROM APNTM )A INNER JOIN EMP E
+	                                ON A.EMP_NUM = E.EMP_NUM
+	                          INNER JOIN DEPT D
+	                                ON A.DEPT_NUM = D.DEPT_NUM
+	                     	  INNER JOIN RANK R
+	                        		ON A.RANK_NUM = R.RANK_NUM
+		 WHERE APNTM_NUM = #{no}
+	</select>
+	<!--    증명서발급 쿼리    -->
+	 <select id="getEmpInfo" resultType="hashmap" parameterType="hashmap">
+		SELECT EMP_NAME, TO_CHAR(BRTHDT, 'YYYY-MM-DD') AS BRTHDT, ZIP_CODE, ADRS, DTL_ADRS
+		FROM EMP
+		WHERE EMP_NUM = #{sEmpNum}
+	</select>
+	 <select id="getEmpRqstList" resultType="hashmap" parameterType="hashmap">
+		SELECT CRTFCT_NUM, CRTFCT_KIND, TO_CHAR(RQST_DATE, 'YYYY-MM-DD') AS RQST_DATE, TO_CHAR(ISSUE_DATE, 'YYYY-MM-DD') AS ISSUE_DATE , ISSUE_STS_NUM
+		FROM CRTFCT
+		WHERE RQST_EMP_NUM = #{sEmpNum}
+	</select>
 
- <select id="getApntmCont" resultType="hashmap" parameterType="hashmap">
- 	 SELECT A.APNTM_NUM, E.EMP_NAME, E.EMP_NUM, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, A.START_DATE, A.END_DATE, A.DTL_CONT 
-	 FROM ( SELECT APNTM_NUM, APNTM_DVSN_NUM, EMP_NUM, DEPT_NUM, RANK_NUM, 
-                   TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE , TO_CHAR(END_DATE,'YYYY-MM-DD') AS END_DATE ,DTL_CONT
-       	    FROM APNTM )A INNER JOIN EMP E
-                                ON A.EMP_NUM = E.EMP_NUM
-                          INNER JOIN DEPT D
-                                ON A.DEPT_NUM = D.DEPT_NUM
-                     	  INNER JOIN RANK R
-                        		ON A.RANK_NUM = R.RANK_NUM
-	 WHERE APNTM_NUM = #{no}
-</select>
 
 </mapper>
