@@ -657,10 +657,14 @@ function schdlUpdate(data){
 				}else{
 					if(checkEmpty("#schdl_cont")){
 						$("#schdl_cont").val(" ");
-					}else if($("#aldy_dvsn").val() == "1"){
-						$("#schdl_start_time").val(0);
-						$("#schdl_end_time").val(0);
 					}
+					 if(checkEmpty("#schdl_place")){
+							$("#schdl_place").val(" ");
+						}
+					 if($("#aldy_dvsn").val() == "1"){
+							$("#schdl_start_time").val(0);
+							$("#schdl_end_time").val(0);
+						}
 					var params = $("#updateForm").serialize();
 					console.log(params);
 					$.ajax({
@@ -879,10 +883,14 @@ $(document).ready(function() {
 					}else{
 						if(checkEmpty("#schdl_cont")){
 							$("#schdl_cont").val(" ");
-						}else if($("#aldy_dvsn").val() == "1"){
-							$("#schdl_start_time").val("");
-							$("#schdl_end_time").val("");
 						}
+						 if(checkEmpty("#schdl_place")){
+								$("#schdl_place").val(" ");
+							}
+						 if($("#aldy_dvsn").val() == "1"){
+								$("#schdl_start_time").val(0);
+								$("#schdl_end_time").val(0);
+							}
 						var params = $("#addForm").serialize();
 						console.log(params);
 						$.ajax({
