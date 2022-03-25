@@ -464,7 +464,9 @@ $(document).ready(function() {
 			title : "담당자 조회",
 			contents : html,
 			contentsEvent : function() {
+				
 				mngrList();
+
 				//페이징 
 				$("#mngrpb").on("click", "div", function() {
 					$("#page").val($(this).attr("page"));
@@ -475,8 +477,7 @@ $(document).ready(function() {
 				$("#mngrBtn").on("click", function () {
 					$("#page").val("1");
 					
-					mngrList();
-					
+					mngrList();	
 				});
 				
 				$("#searchTxt").on("keypress", function(event) {
@@ -490,15 +491,13 @@ $(document).ready(function() {
 			},
 			width : 600,
 			height : 500,
-			buttons : [{
-				name : "등록",
+			buttons : {
+				name : "닫기",
 				func:function() {
 					console.log("One!");
 					closePopup();
 				}
-			}, {
-				name : "취소"
-			}]
+			}
 		});
 	});
 }); 
@@ -523,7 +522,7 @@ function mngrList() {
 }
 function mngrDrawList(list) {
 	var html = "";
-		
+	
 	for(var data of list) {
 		
 		html +=	"<div class=\"popup_box_in\">";
@@ -531,7 +530,7 @@ function mngrDrawList(list) {
 		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
 		html +=	"</div>";
 		html +=	"<div class=\"popup_cc_box_right\">";
-		html +=	 data.EMP_NUM + "<span class=\"boldname\" empNum=\"" + data.EMP_NAME +"\">" + data.EMP_NAME + " / " + data.RANK_NAME + "</span>";
+		html +=	 data.EMP_NUM + "<span class=\"boldname\">" + data.EMP_NAME + " / " + data.RANK_NAME + "</span>";
 		html +=	"<span class=\"mg_wid\">" + data.DEPT_NAME + "</span>";
 		html +=	"</div>";
 		html +=	"</div>";	
@@ -726,7 +725,7 @@ function drawPaging(pb, sel) {
 									</td>
 									<td colspan="7">
 										<div class="findEmp_box">
-											<input type="text" maxlength="20" class="findEmp_box2" style="border:0 solid black" />
+											<input type="text" maxlength="20" class="findEmp_box2" id="mngrSearchTxt" name="mngrSearchTxt" style="border:0 solid black" />
 											<span><img alt="담당자이미지" class="userIcon" src="resources/images/sales/usericon.png"> </span>
 										</div>										
 									</td>
@@ -752,9 +751,9 @@ function drawPaging(pb, sel) {
 									<td></td>
 									<td></td>
 									<td colspan="8">
-										<input type="date" style="font-family : 맑은 고딕;" />
+										<input type="date" id="searchDate" name="searchDate" value="${searchDate}" style="font-family : 맑은 고딕;" />
 										~
-										<input type="date" style="font-family : 맑은 고딕;" />
+										<input type="date" id="searchDate2" name="searchDate2" value="${searchDate2}" style="font-family : 맑은 고딕;" />
 									</td>
 								</tr>
 								<tr>
@@ -762,11 +761,11 @@ function drawPaging(pb, sel) {
 										<span class="srch_name">검색어</span>
 									</td>
 									<td>
-										<select id="srchName" name="srchName">
+										<select id="srchType" name="srchType">
 											<option value="0">선택안함</option>
 											<option value="1">리드명</option>
 											<option value="2">고객사명</option>
-											<option value="3">담당자명</option>
+											<option value="3">고객명</option>
 											<option value="4">리드번호</option>
 										</select>
 									</td>

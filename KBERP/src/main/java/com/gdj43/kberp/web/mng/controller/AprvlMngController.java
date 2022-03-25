@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,7 +54,7 @@ public class AprvlMngController {
 		int cnt = ics.getIntData("aprvlMng.getCnt", params);
 		
 		// 페이징 계산
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 1, 5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
@@ -79,6 +80,34 @@ public class AprvlMngController {
 		
 		return mav;
 	}
+	
+	@RequestMapping(value="/aprvlMngAction/{gbn}", method = RequestMethod.POST,
+			produces = "text/json;charset=UTF-8") 
+	@ResponseBody 
+	public String aprvlMngActionAjax(@RequestParam HashMap<String, String> params,
+							@PathVariable String gbn) throws Throwable{
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String,Object> modelMap = new HashMap<String,Object>();
+		
+		try {			
+			switch(gbn) {
+			case "aprvl" :
+				ics.updateData("aprvlMng.aprvl", params);
+				break;
+			case "reject" :
+				ics.updateData("aprvlMng.reject", params);
+				break;
+			}
+			modelMap.put("res", "success");
+		} catch (Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "failed");
+		}
+		return mapper.writeValueAsString(modelMap);
+	}
+	
 	
 	
 }

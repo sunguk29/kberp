@@ -90,7 +90,7 @@ $(document).ready(function() {
 	});
 	
 	$("#listTbody").on("click", "#chitNum", function() {
-		$("#sendChitNum").val($("#chitNum").attr("chitNum"));
+		$("#sendChitNum").val($(this).attr("chitnum"));
 		
 		$("#actionForm").attr("action", "expnsRsltnadmnstrEmpMnthly");
 		$("#actionForm").submit();
@@ -139,7 +139,7 @@ function drawList(list) {
 	for(var data of list) {
 		html += "<tr>";
 		html += "<td>" + data.EXPNS_DATE + "</td>";
-		html += "<td class=\"board_table_hover\" id=\"chitNum\" chitNum=\"" + data.CHIT_NUM + "\">" + data.CHIT_NUM + "</td>";
+		html += "<td class=\"board_table_hover\" id=\"chitNum\" chitnum=\"" + data.CHIT_NUM + "\">" + data.CHIT_NUM + "</td>";
 		html += "<td>" + data.EXPNS_TYPE + "</td>";
 		html += "<td>" + data.AMNT + "</td>";
 		html += "<td>" + data.EXPNS + "</td>";

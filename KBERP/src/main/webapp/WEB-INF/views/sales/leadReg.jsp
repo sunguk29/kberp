@@ -916,6 +916,8 @@ function checkEmpty(sel) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" name="searchDate" value="${param.searchDate}" />
+	<input type="hidden" name="searchDate2" value="${param.searchDate2}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">

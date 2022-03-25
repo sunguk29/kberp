@@ -147,9 +147,9 @@ $(document).ready(function() {
 	
 	
 	$("#listTbody").on("click", "#chitNum", function() {
-		$("#sendChitNum").val($("#chitNum").attr("chitNum"));
+		$("#sendChitNum").val($(this).attr("chitnum"));
 		
-		$("#actionForm").attr("action", "expnsRsltnadmnstrEmpMnthly");
+		$("#actionForm").attr("action", "chitNumCheck");
 		$("#actionForm").submit();
 	});
 	
@@ -181,7 +181,7 @@ function drawList(list) {
 	
 	for(data of list) {
 		html += "<tr>";
-		html += "<td class=\"board_table_hover\" id=\"chitNum\" chitNum=\"" + data.CHIT_NUM + "\">" + data.CHIT_NUM + "</td>";
+		html += "<td class=\"board_table_hover\" id=\"chitNum\" chitnum=\"" + data.CHIT_NUM + "\">" + data.CHIT_NUM + "</td>";
 		html += "<td>" + data.AMNT + "원</td>";
 		html += "<td>-</td>";
 		if(data.RMRKS != null) {

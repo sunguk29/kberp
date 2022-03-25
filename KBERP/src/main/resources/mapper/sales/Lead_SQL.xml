@@ -7,29 +7,41 @@
 		               DECODE(PRGRS_STS_NUM, 1, '진행중', 2, '종료(영업기회 전환)', 3, '종료(영업기회 실패)') AS PSNUM, 
 		               TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE, 
 		               ROW_NUMBER() OVER(ORDER BY LEAD_NUM DESC) AS RNUM
-		        FROM LEAD L INNER JOIN EMP E
+		        FROM LEAD L LEFT OUTER JOIN EMP E
 		                            ON L.MNGR_EMP_NUM = E.EMP_NUM
 		                    INNER JOIN ENTRPRS_CLNT EC
 		                            ON L.CLNT_NUM = EC.CLNT_NUM
 		                    INNER JOIN CLNT_CMPNY CC
 		                            ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM 
+		        AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{searchDate} AND #{searchDate2}
 				<choose>
 					<when test="psNum != 0">
 						AND L.PRGRS_STS_NUM = #{psNum}
 					</when>
 				</choose>
+				<choose>
+					<when test="mngrSearchTxt != null and mngrSearchTxt != ''">
+						AND E.EMP_NAME LIKE '%' || #{mngrSearchTxt} || '%'
+					</when>
+				</choose>
 				<if test="searchTxt != null and searchTxt != ''">
 					<choose>
-						<when test="srchName == 1">
+						<when test="srchType == 0">
+							AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
+							OR CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+							OR EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
+							OR L.LEAD_NUM LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="srchType == 1">
 							AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
 						</when>
-						<when test="srchName == 2">
+						<when test="srchType == 2">
 							AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
 						</when>
-						<when test="srchName == 3">
-							AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
+						<when test="srchType == 3">
+							AND EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
 						</when>
-						<when test="srchName == 4">
+						<when test="srchType == 4">
 							AND L.LEAD_NUM LIKE '%' || #{searchTxt} || '%'
 						</when>			
 					</choose>
@@ -39,30 +51,42 @@
 	
 	<select id="getLeadCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
-		FROM LEAD L INNER JOIN EMP E
-		                    ON L.MNGR_EMP_NUM = E.EMP_NUM
+		FROM LEAD L LEFT OUTER JOIN EMP E
+		                   		 ON L.MNGR_EMP_NUM = E.EMP_NUM
 		            INNER JOIN ENTRPRS_CLNT EC
 		                    ON L.CLNT_NUM = EC.CLNT_NUM
 		            INNER JOIN CLNT_CMPNY CC
 		                    ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
 		WHERE 1 = 1
+		AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{searchDate} AND #{searchDate2}
 			<choose>
 				<when test="psNum != 0">
 					AND PRGRS_STS_NUM = #{psNum}
 				</when>
 			</choose>
+			<choose>
+				<when test="mngrSearchTxt != null and mngrSearchTxt != ''">
+					AND E.EMP_NAME LIKE '%' || #{mngrSearchTxt} || '%'
+				</when>
+			</choose>
 			<if test="searchTxt != null and searchTxt != ''">
 					<choose>
-						<when test="srchName == 1">
+						<when test="srchType == 0">
+							AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
+							OR CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+							OR EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
+							OR L.LEAD_NUM LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="srchType == 1">
 							AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
 						</when>
-						<when test="srchName == 2">
+						<when test="srchType == 2">
 							AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
 						</when>
-						<when test="srchName == 3">
-							AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
+						<when test="srchType == 3">
+							AND EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
 						</when>
-						<when test="srchName == 4">
+						<when test="srchType == 4">
 							AND L.LEAD_NUM LIKE '%' || #{searchTxt} || '%'
 						</when>			
 					</choose>
