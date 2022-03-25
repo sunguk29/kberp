@@ -202,7 +202,7 @@
 .cal_text1 {
 	width: 317px;
 	height: 82px;
-	line-height : 22px;
+	line-height : 15px;
 	border-bottom: 1px dotted #616161;
 	background-color: #EEEEEE;
 }
@@ -463,13 +463,7 @@ $(document).ready(function() {
 				html +=	"<div class=\"nrml_cal_big\"></div>";
 			}
 			html +=	"</div>";
-			if(!data.LEAD_CC_NAME == ""){				
-				html +=	"<div class=\"text_right\"><br/>" + data.START_DATE_HR + " ~ " + data.END_DATE_HR + "<br/>" + data.LEAD_CC_NAME + "</div>";
-			} else if(!data.SALES_CC_NAME == ""){
-				html +=	"<div class=\"text_right\"><br/>" + data.START_DATE_HR + " ~ " + data.END_DATE_HR + "<br/>" + data.SALES_CC_NAME + "</div>";
-			} else {
-				html +=	"<div class=\"text_right\"><br/>" + data.START_DATE_HR + " ~ " + data.END_DATE_HR + "<br/></div>";
-			}
+			html +=	"<div class=\"text_right\"><br/>" + data.START_DATE_HR + " ~ " + data.END_DATE_HR + "<br/>" + data.SCHDL_NAME + "<br/>" + data.EMP_NAME + " / " + data.RANK_NAME + "</div>";
 			html += "</div>";
 			html += "</div>";
 		}

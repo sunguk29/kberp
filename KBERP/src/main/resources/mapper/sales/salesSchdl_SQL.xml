@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="salesSchdl">
+	<!-- 영업 일정 등록 시 첨부파일 뺴고 저장 -->
 	<insert id="salesSchdlAdd" parameterType="hashmap">
-		INSERT INTO  SALES_SCHDL(SCHDL_NUM, EMP_NUM, SALES_NUM, LEAD_NUM, ACTVTY_CLSFY_NUM, START_DATE_HR, END_DATE_HR, ACTVTY_CONT)
-		VALUES (SALES_SCHDL_SEQ.NEXTVAL, #{sEmpNum}, #{sNum}, #{lNum}, #{ssactvtyclsfy}, #{sdt}, #{edt}, #{ssactvtycont})
+		INSERT INTO  SALES_SCHDL(SCHDL_NUM, EMP_NUM, SALES_NUM, LEAD_NUM, ACTVTY_CLSFY_NUM, START_DATE_HR, END_DATE_HR, ACTVTY_CONT, SCHDL_NAME)
+		VALUES (SALES_SCHDL_SEQ.NEXTVAL, #{sEmpNum}, #{sNum}, #{lNum}, #{ssactvtyclsfy}, #{sdt}, #{edt}, #{ssactvtycont}, #{ssname})
 	</insert>
+	<!-- 영업 일정 등록 시 첨부파일 저장 -->
+	<insert id="salesSchdlAttFile" parameterType="hashmap">
+		INSERT INTO SALES_SCHDL_ATT_FILE(ATT_FILE_NUM, SCHDL_NUM, ATT_FILE_NAME)
+		VALUES (SALES_SCHDL_ATT_FILE_SEQ.NEXTVAL, SALES_SCHDL_SEQ.CURRVAL, #{schdlAttFile})
+	</insert>
+	<!-- 영업 일정 일일 데이터 가져올 떄 사용 -->
 	<select id="getSalesSchdlList" parameterType="hashmap" resultType="hashmap">
-		SELECT A.START_DATE_HR, A.END_DATE_HR, A.ACTVTY_CLSFY_NUM, L.LEAD_NAME AS SALES_NAME, A.LEAD_NAME, A.LEAD_NUM, A.SALES_NUM, A.CLNT_CMPNY_NAME AS LEAD_CC_NAME, CC.CLNT_CMPNY_NAME AS SALES_CC_NAME
-		FROM( SELECT A.START_DATE_HR, DECODE(A.END_DATE_HR, NULL, '미정', A.END_DATE_HR) AS END_DATE_HR, A.ACTVTY_CLSFY_NUM, A.CLNT_CMPNY_NAME, A.LEAD_NAME, A.LEAD_NUM, A.SALES_NUM
+		SELECT A.START_DATE_HR, A.END_DATE_HR, A.ACTVTY_CLSFY_NUM, L.LEAD_NAME AS SALES_NAME, A.LEAD_NAME, A.LEAD_NUM, A.SALES_NUM, A.CLNT_CMPNY_NAME AS LEAD_CC_NAME, CC.CLNT_CMPNY_NAME AS SALES_CC_NAME, A.EMP_NAME, A.RANK_NAME, A.SCHDL_NAME
+		FROM( SELECT A.START_DATE_HR, DECODE(A.END_DATE_HR, NULL, '미정', A.END_DATE_HR) AS END_DATE_HR, A.ACTVTY_CLSFY_NUM, A.CLNT_CMPNY_NAME, A.LEAD_NAME, A.LEAD_NUM, A.SALES_NUM, A.EMP_NAME, A.RANK_NAME, A.SCHDL_NAME
       		  FROM ( SELECT SUBSTR(SS.START_DATE_HR, 12, 16) AS START_DATE_HR, SUBSTR(SS.END_DATE_HR, 12, 16) AS END_DATE_HR,
 					  		CASE WHEN SS.ACTVTY_CLSFY_NUM = 0 THEN '전화'
 					  	   		 WHEN SS.ACTVTY_CLSFY_NUM = 1 THEN '메일'
 					  	   		 WHEN SS.ACTVTY_CLSFY_NUM = 2 THEN '방문'
 					       		 ELSE '기타'
 					  		END AS ACTVTY_CLSFY_NUM,CC.CLNT_CMPNY_NAME,L.LEAD_NAME, L.LEAD_NUM, S.SALES_NUM,
-					  		ROW_NUMBER() OVER(ORDER BY SS.START_DATE_HR DESC) AS RNUM
+					  		ROW_NUMBER() OVER(ORDER BY SS.START_DATE_HR DESC) AS RNUM,
+                            E.EMP_NAME, R.RANK_NAME, SS.SCHDL_NAME
 			   		 FROM SALES_SCHDL SS LEFT OUTER JOIN LEAD L
 						   		   			    	  ON SS.LEAD_NUM = L.LEAD_NUM
 								   		 LEFT OUTER JOIN SALES S
@@ -23,16 +31,23 @@
 										  			  ON L.CLNT_NUM = CL.CLNT_NUM
 								   		 LEFT OUTER JOIN CLNT_CMPNY CC
 										  			  ON CL.CLNT_NAME = CC.CLNT_NAME
-			  		 WHERE SUBSTR(SS.START_DATE_HR, 1, 10) = TRIM(#{ctt}) ) A
-	     ORDER BY A.RNUM DESC) A LEFT OUTER JOIN SALES S 
-	    			 						  ON A.SALES_NUM = S.SALES_NUM
-                                 LEFT OUTER JOIN LEAD L 
-                            			 	  ON S.LEAD_NUM = L.LEAD_NUM
-                                 LEFT OUTER JOIN ENTRPRS_CLNT CL
-                                			  ON CL.CLNT_NUM = L.CLNT_NUM
-                                 LEFT OUTER JOIN CLNT_CMPNY CC
-                                			  ON CC.CLNT_NAME = CL.CLNT_NAME
+                                              INNER JOIN EMP E
+                                                      ON E.EMP_NUM = SS.EMP_NUM
+                                              INNER JOIN APNTM AE
+                                                      ON SS.EMP_NUM = AE.EMP_NUM
+                                              INNER JOIN RANK R
+                                                      ON R.RANK_NUM = AE.RANK_NUM                                                      
+			  		 WHERE SUBSTR(SS.START_DATE_HR, 1, 10) = TRIM(#{ctt})) A
+	     	  ORDER BY A.RNUM DESC) A LEFT OUTER JOIN SALES S 
+	    			 		    				   ON A.SALES_NUM = S.SALES_NUM
+                                 	  LEFT OUTER JOIN LEAD L 
+                            			 	 	   ON S.LEAD_NUM = L.LEAD_NUM
+                                 	  LEFT OUTER JOIN ENTRPRS_CLNT CL
+                                				   ON CL.CLNT_NUM = L.CLNT_NUM
+                                 	  LEFT OUTER JOIN CLNT_CMPNY CC
+                                		 		   ON CC.CLNT_NAME = CL.CLNT_NAME
 	</select>
+	<!-- 담당자 팝업 목록 가져올 시 사용 -->
 	<select id="getMgrList" resultType="hashmap" parameterType="hashmap">
 		SELECT ME.EMP_NUM, ME.EMP_NAME, ME.RANK_NAME, ME.DEPT_NAME
 		FROM ( SELECT E.EMP_NUM, E.EMP_NAME, R.RANK_NAME, D.DEPT_NUM, D.DEPT_NAME, ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM
@@ -61,6 +76,7 @@
         	</choose>
       	</if>
 	</select>
+	<!-- 담당자 팝업에서 검색 할 시 사용 -->
 	<select id="getMgrCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
 		FROM EMP E INNER JOIN APNTM A
@@ -86,10 +102,40 @@
         	</choose>
       	</if>
 	</select>
+	<!-- 영업 일정 풀캘린더 목록 조회시 사용 -->
 	<select id="getSalesDaySchdlList" parameterType="hashmap" resultType="hashmap">
-		SELECT START_DATE_HR AS "start", SALES_NUM, LEAD_NUM
-		FROM SALES_SCHDL
-		WHERE SUBSTR(START_DATE_HR, 1, 7) = #{month}
-		AND DEL_CHECK IS NULL 
+		SELECT SS.START_DATE_HR AS "start", SS.END_DATE_HR AS "end", SS.SALES_NUM, SS.LEAD_NUM, E.EMP_NAME AS "title",
+       		   CASE WHEN SS.LEAD_NUM IS NOT NULL AND SS.SALES_NUM IS NULL THEN '#FFC107'
+            		WHEN SS.LEAD_NUM IS NULL AND SS.SALES_NUM IS NOT NULL THEN '#4B94F2'
+            		ELSE '#66BB6A'
+       		   END AS "color"
+	    FROM SALES_SCHDL SS INNER JOIN EMP E
+         		                    ON SS.EMP_NUM = E.EMP_NUM 
+		WHERE SUBSTR(SS.START_DATE_HR, 1, 7) = #{month}
+		AND SS.DEL_CHECK IS NULL 
+	</select>
+	<!-- 영업 목록 개수 구하기 -->
+	<select id="getSalesCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SALES
+		WHERE 1 = 1
+	</select>
+	<!-- 영업 팝업 목록 그리기 -->
+	<select id="getSaleslList" parameterType="hashmap" resultType="hashmap">
+		SELECT SS.SALES_NUM, SS.PRGRS_STS, SS.PRGRS_STS2, SS.LEAD_NAME, SS.CLNT_CMPNY_NAME, SS.CLNT_NAME, SS.EMP_NAME
+		FROM ( SELECT S.SALES_NUM, L.LEAD_NAME, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, S.MNGR_EMP_NUM, E.EMP_NAME, 
+		              DECODE(S.PRGRS_STS_NUM, 4, '종료(성공)', 5, '종료(실패)', '진행중') AS PRGRS_STS,
+		              DECODE(S.PRGRS_STS_NUM, 0, '영업기회', 1, '제안', 2, '견적', 3, '계약') AS PRGRS_STS2,
+		              ROW_NUMBER() OVER(ORDER BY SALES_NUM DESC) AS RNUM
+		       FROM SALES S INNER JOIN EMP E
+		                            ON S.MNGR_EMP_NUM = E.EMP_NUM
+		                    INNER JOIN LEAD L
+		                            ON S.LEAD_NUM = L.LEAD_NUM
+		                    INNER JOIN ENTRPRS_CLNT EC
+		                            ON EC.CLNT_NUM = L.CLNT_NUM
+		                    INNER JOIN CLNT_CMPNY CC
+		                            ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
+		      ) SS
+		WHERE SS.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 </mapper>
