@@ -10,6 +10,7 @@
 <title>카카오뱅크 ERP Sample</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
+
 <style type="text/css">
 /* 가로 사이즈 조정용 */
 .cont_wrap { 
@@ -294,6 +295,16 @@
 <script type="text/javascript" src="resources/script/fullcalendar/locale-all.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+	var now = new Date();
+	var clndrYear = now.getFullYear();	// 연도
+	var clndrMonth =now.getMonth()+1;	// 월
+	var Cdate = "";
+	if(clndrMonth >= 10){
+		Cdate = ""+clndrYear+ clndrMonth;
+	}else{
+		Cdate = ""+clndrYear+"0"+clndrMonth;
+	}
+	$('input[name=clndrDate]').attr('value',Cdate);
 	reloadList();
 	var data = [
         {
@@ -336,8 +347,6 @@ $(document).ready(function() {
 	      height: 600,
 	      events: data,
 	      eventClick: function(event) { // 이벤트 클릭
-	    	  // 아이디로 ajax조회 event.id를 네 sql에서 조건을 달아서요? 근데 이거 클릭하면 클릭한것만 가져오던데 맞아요 아아 네 파이팅..넵
-	    	  // alert(event.title);
 	    	  var params = $("#dtlForm").serialize();
 	    	 
 	    	  $.ajax({
@@ -358,12 +367,74 @@ $(document).ready(function() {
 	    	  
 	      },
 	      dayClick: function(date, js, view) { // 일자 클릭
-	    	  alert('Clicked on: ' + date.format());
+	    	  //alert('Clicked on: ' + date.format());
 
 	    	  //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
 
 	    	 //alert('Current view: ' + view.name);
 	      }
+	});
+	
+	$("body").on("click", ".fc-nextYear-button", function() {
+		clndrYear = clndrYear+1;
+		
+		if(clndrMonth >= 10){
+			Cdate = ""+clndrYear+ clndrMonth;
+		}else{
+			Cdate = ""+clndrYear+"0"+clndrMonth;
+		}
+		$('input[name=clndrDate]').attr('value',Cdate);
+		reloadList();
+	});
+	$("body").on("click", ".fc-prevYear-button", function() {
+		clndrYear = clndrYear-1;
+		if(clndrMonth >= 10){
+			Cdate = ""+clndrYear+ clndrMonth;
+		}else{
+			Cdate = ""+clndrYear+"0"+clndrMonth;
+		}
+		$('input[name=clndrDate]').attr('value',Cdate);
+		reloadList();
+	});
+	$("body").on("click", ".fc-next-button", function() {
+		clndrMonth = clndrMonth+1;
+		if(clndrMonth >= 13){
+			clndrMonth = 1;
+		}
+		if(clndrMonth >= 10){
+			Cdate = ""+clndrYear+ clndrMonth;
+		}else{
+			Cdate = ""+clndrYear+"0"+clndrMonth;
+		}
+		$('input[name=clndrDate]').attr('value',Cdate);
+		reloadList();
+		
+	});
+	$("body").on("click", ".fc-prev-button", function() {
+		clndrMonth = clndrMonth-1;
+		
+		if(clndrMonth < 1){
+			clndrMonth = 12;
+		}
+		if(clndrMonth >= 10){
+			Cdate = ""+clndrYear+ clndrMonth;
+		}else{
+			Cdate = ""+clndrYear+"0"+clndrMonth;
+		}
+		$('input[name=clndrDate]').attr('value',Cdate);
+		reloadList();
+		
+	});
+	$(".fc-today-button").on("click", function() {
+		clndrYear = now.getFullYear();
+		clndrMonth =now.getMonth()+1;
+		if(clndrMonth >= 10){
+			Cdate = ""+clndrYear+ clndrMonth;
+		}else{
+			Cdate = ""+clndrYear+"0"+clndrMonth;
+		}
+		$('input[name=clndrDate]').attr('value',Cdate);
+		reloadList();
 	});
 	/* 상세일정 */
 	function drawList(dtl) {
@@ -455,7 +526,21 @@ $(document).ready(function() {
   				}, {
   					name : "삭제",
   					func:function(){
-  						schdlDelete(data);
+  						makePopup({
+  							bg : true,
+  							bgClose : false,
+  							title : "삭제",
+  							contents : "삭제하시겠습니까?",
+  							draggable : true,
+  							buttons : [{
+  								name : "삭제",
+  								func:function() {
+			  						schdlDelete(data);
+  								}
+  							}, {
+  								name : "취소"
+  							}]
+  						});
   					}
   					
   				},{
@@ -550,7 +635,7 @@ function schdlUpdate(data){
 	makePopup({
 		bg : true,
 		bgClose : false,
-		title : "일정등록",
+		title : "일정수정",
 		contents : html,
 		width : 540,
 		height : 620,
@@ -572,6 +657,9 @@ function schdlUpdate(data){
 				}else{
 					if(checkEmpty("#schdl_cont")){
 						$("#schdl_cont").val(" ");
+					}else if($("#aldy_dvsn").val() == "1"){
+						$("#schdl_start_time").val(0);
+						$("#schdl_end_time").val(0);
 					}
 					var params = $("#updateForm").serialize();
 					console.log(params);
@@ -623,7 +711,7 @@ function schdlDelete(data){
 }
 /* 일정 불러오기 */
 function reloadList() {
-	var params = $("#actionForm").serialize();
+	var params = $("#dateForm").serialize();	
 	$.ajax({
 		type: "post", 
 		url : "clndrAjax", 
@@ -791,6 +879,9 @@ $(document).ready(function() {
 					}else{
 						if(checkEmpty("#schdl_cont")){
 							$("#schdl_cont").val(" ");
+						}else if($("#aldy_dvsn").val() == "1"){
+							$("#schdl_start_time").val("");
+							$("#schdl_end_time").val("");
 						}
 						var params = $("#addForm").serialize();
 						console.log(params);
@@ -843,7 +934,9 @@ $(document).ready(function() {
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->			
-			 
+			 <form action="#" id="dateForm" method="post">
+			 <input type="hidden" name="clndrDate" value="">
+			 </form>
 			<input type="button" value="일정 등록" id="new_schdl">
 	<div id="side_bar">
 		<div class="schdl_type">
