@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 import com.gdj43.kberp.web.hr.service.IPrsnlService;
@@ -30,7 +31,7 @@ public class PrsnlController {
 	public ICommonService iCommonService;
 	
 	@Autowired
-	public IPagingService ips;
+	public IPagingService iPagingService;
 	
 	@RequestMapping(value = "/prsnlCard")
 	public ModelAndView prsnlCard(@RequestParam HashMap<String, String> params, HttpSession session, ModelAndView mav) throws Throwable {
@@ -53,35 +54,6 @@ public class PrsnlController {
 				mav.addObject("basicInfoData", basicInfoData);
 				mav.setViewName("hr/prsnlCard");
 			} else { // 권한 없을 때
-				mav.setViewName("exception/PAGE_NOT_FOUND");
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			mav.addObject("exception", e);
-			mav.setViewName("exception/EXCEPTION_INFO");
-		}
-
-		
-		return mav;
-	}
-	
-	@RequestMapping(value = "/empInqry")
-	public ModelAndView empInqry(@RequestParam HashMap<String, String> params, HttpSession session, ModelAndView mav) throws Throwable {
-		try {
-			if(session.getAttribute("sEmpNum") != null) {
-				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
-			} else {
-				mav.setViewName("redirect:login");
-			}
-			
-			params.put("menuNum", "6");
-			int menuAthrty = iCommonService.getIntData("prsnl.getMenuAthrty", params);
-			
-			if (menuAthrty != 0) {
-				mav.addObject("menuAthrty", menuAthrty);
-				mav.setViewName("hr/empInqry");
-			} else {
 				mav.setViewName("exception/PAGE_NOT_FOUND");
 			}
 			
@@ -148,6 +120,67 @@ public class PrsnlController {
 			modelMap.put("tabName", tabName);
 			modelMap.put("tabData", tabData);
 			modelMap.put("tabDataList", tabDataList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+
+	@RequestMapping(value = "/empInqry")
+	public ModelAndView empInqry(@RequestParam HashMap<String, String> params, HttpSession session, ModelAndView mav) throws Throwable {
+		try {
+			if(session.getAttribute("sEmpNum") != null) {
+				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
+			} else {
+				mav.setViewName("redirect:login");
+			}
+			
+			params.put("menuNum", "6");
+			int menuAthrty = iCommonService.getIntData("prsnl.getMenuAthrty", params);
+			
+			if (menuAthrty != 0) {
+				if (params.get("page") == null || params.get("page") == "") {
+					params.put("page", "1");
+					System.out.println("* page initialize");
+				}
+				
+				mav.addObject("page", params.get("page"));
+				mav.addObject("menuAthrty", menuAthrty);
+				mav.setViewName("hr/empInqry");
+			} else {
+				mav.setViewName("exception/PAGE_NOT_FOUND");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			mav.addObject("exception", e);
+			mav.setViewName("exception/EXCEPTION_INFO");
+		}
+
+		return mav;
+	}
+	
+	@RequestMapping(value = "/empInqryAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String empInqryAjax(@RequestParam HashMap<String, String> params, HttpSession session) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			int cnt = iCommonService.getIntData("prsnl.getEmpCount", params);
+			
+			System.out.println("* page : " + params.get("page"));
+			
+			PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 15, 10);
+
+			params.put("startCount", Integer.toString(pb.getStartCount()));
+			params.put("endCount", Integer.toString(pb.getEndCount()));
+			
+			List<HashMap<String, String>> list = iCommonService.getDataList("prsnl.getEmpList", params);
+			
+			modelMap.put("list", list);
+			modelMap.put("pb", pb);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
