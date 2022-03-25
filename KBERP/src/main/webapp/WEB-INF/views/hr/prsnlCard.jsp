@@ -586,9 +586,9 @@ function tabContChange(tId, data, dataList) {
 		html += "	<div class=\"cont_element\" id=\"lt1_l1_e1\">                                                                         ";
 		html += "		<div class=\"cont_name\">주민등록번호</div>                                                                      ";
 		html += "		<br/>                                                                                                            ";
+		html += "		<input type=\"text\" class=\"cont_text\" id=\"rsdnt_rgstn_num\" readonly=\"readonly\" value=\"";
 		var brthdt = data.BRTHDT.split("-");
 		var year = brthdt[0].slice(-2, 4);
-		html += "		<input type=\"text\" class=\"cont_text\" id=\"rsdnt_rgstn_num\" readonly=\"readonly\" value=\"";
 		html += year + brthdt[1] + brthdt[2] + "-";
 		if (data.GNDR == 0) {
 			if (brthdt[0] < 2000) {

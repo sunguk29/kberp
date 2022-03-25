@@ -149,7 +149,8 @@ input {
 	background-image: url("resources/images/sales/plus.png");
 	background-size: 18px 18px;
 	float: right;
-	margin-right: 5px;
+	margin-right: 7px;
+	margin-top: 7.5px;
 }
 .drop_btn {
 	display:inline-block;
@@ -160,7 +161,7 @@ input {
 	background-size: 18px 18px;
 	float: right;
 }
-.plus_btn, .drop_btn:hover {
+.plus_btn:hover, .drop_btn:hover {
 	cursor: pointer;
 }
 .txt_in {
@@ -263,6 +264,10 @@ input {
 	margin-right: 5px;
 	margin-top: 5.5px;
 }
+
+#att {
+	display : none;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -275,6 +280,10 @@ $(document).ready(function() {
 		$("#backForm").submit();
 	});
 	
+	/* 첨부자료 플러스 버튼 눌렀을 때 */
+	$(".aff_btn").on("click", function() {
+		$("#att").click();
+	});
 	
 	/* 저장 이동 및 알림 이벤트 */
 	$("#saveBtn").on("click", function() {
@@ -311,7 +320,7 @@ $(document).ready(function() {
 						RegForm.ajaxForm({
 							success: function(res) {
 								if(res.fileName.length > 0) {
-									$("#schdl_att_file").val(res.fileName[0]);
+									$("#schdlAttFile").val(res.fileName[0]);
 								}
 								
 								var params = $("#RegForm").serialize();
@@ -349,7 +358,7 @@ $(document).ready(function() {
 		
 	});
 	
-});
+
 
 /* 비어있는지 확인하기 위한 함수 */
 function checkEmpty(sel) {
@@ -383,6 +392,136 @@ function savePop() {
 	});
 }
 
+
+/* 영업관리 팝업 */
+ $("#sNum").on("click", function() {
+	 var html = "";
+		
+	 	html += "<div class=\"popup_title_mid\">"; 
+	 	html += 	"<form id=\"popupForm\">";
+	 	html += 		"<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
+		html += 		"<div class=\"ptm_left\">";
+		html += 			"<div class=\"ptm_left_top\">팀분류</div>";
+		html +=				"<div class=\"ptm_left_bot\">사원분류</div>";		
+		html += 		"</div>";
+		html += 		"<div class=\"ptm_mid\">";
+		html +=				"<div class=\"ptm_mid_top\">";
+		html +=					"<select class=\"sel_size\" id=\"deptS\" name=\"deptS\">"
+		html +=						"<option value=\"6\">영업부</option>";
+		html +=						"<option value=\"7\">영업1팀</option>";
+		html +=						"<option value=\"8\">영업2팀</option>";
+		html +=					"</select>";
+		html +=				"</div>";		
+		html +=				"<div class=\"ptm_mid_bot\">";
+		html +=					"<select class=\"sel_size\" id=\"empS\" name=\"empS\">";
+		html +=						"<option value=\"0\">사원번호</option>";
+		html +=						"<option value=\"1\">사원명</option>";
+		html +=					"</select>";
+		html +=				"</div>";	
+		html += 		"</div>";
+		html += 		"<div class=\"ptm_mid_right\">";
+		html +=				"<div class=\"ptm_mid_right_top\"></div>";
+		html +=				"<div class=\"ptm_mid_right_bot\">";
+		html +=					"<input type=\"text\" id=\"searchTxt\" name=\"searchTxt\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" />";
+		html +=				"</div>";
+		html += 		"</div>";
+		html += 		"<div class=\"ptm_right\">";
+		html +=				"<div class=\"ptm_right_top\"></div>";
+		html +=				"<div class=\"ptm_right_bot\">";
+		html +=					"<div class=\"cmn_btn\" id=\"mngrBtn\">검색</div>";
+		html +=				"</div>";
+		html +=			"</div>";
+		html += 	"</form>";
+		html += "</div>";
+		html += "<div class=\"popup_cont pc_back\">";
+		html +=		"<div class=\"popup_box\" id=\"salesBox\"></div>";
+		html += 	"<div class=\"board_bottom2\">";
+		html +=			"<div class=\"pgn_area\" id=\"salesPb\"></div>";
+		html +=		"</div>"; 
+		html +=	"</div>";
+		
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "영업 조회",
+			contents : html,
+			contentsEvent : function() {
+				salesList();
+				//페이징 
+				$("#mngrpb").on("click", "div", function() {
+					$("#page").val($(this).attr("page"));
+					
+					mngrList();
+				});
+				// 검색버튼
+				$("#mngrBtn").on("click", function () {
+					$("#page").val("1");
+					
+					mngrList();
+					
+				});
+				
+				$("#searchTxt").on("keypress", function(event) {
+					if(event.keyCode == 13 ) {
+						$("#page").val("1");
+						
+						salesList();
+						return false;
+					}
+				});
+			},
+			width : 600,
+			height : 500,
+			buttons : [{
+				name : "등록",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "취소"
+			}]
+		});
+	}); 
+	/* 영업 조회 팝업 목록 함수 */
+	function salesList() {
+		var params = $("#popupForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "salesSchdlPopAjax",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				salesDrawList(res.salesList);
+				drawPaging(res.salesPb, "#salesPb");
+			},
+			error : function(req) {
+				console.log(req.responseText);
+			}
+		});
+	}
+	
+	function salesDrawList(salesList) {
+		var html = "";
+		
+		for(var data of salesList){
+			
+			html +=	"<div class=\"popup_box_in\">";
+			html +=	"<div class=\"popup_cc_box_left\">";
+			html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
+			html +=	"</div>";
+			html +=	"<div class=\"popup_cc_box_right\">";
+			html +=	 data.EMP_NUM + "<span class=\"boldname\">" + data.EMP_NAME + " / " + data.RANK_NAME + "</span>";
+			html +=	"<span class=\"mg_wid\">" + data.DEPT_NAME + "</span>";
+			html +=	"</div>";
+			html +=	"</div>";
+		}
+		
+		$("#salesBox").html(html);
+	}
+	
+});	
 </script>
 </head>
 <body>
@@ -412,7 +551,7 @@ function savePop() {
 			<div class="body">
 				<div class="bodyWrap">
 				<!-- 시작 -->
-					<form action="imageUploadAjax" id="RegForm" method="post" enctype="multipart/form-data">
+					<form action="fileUploadAjax" id="RegForm" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
 					<table>
 						<colgroup>
@@ -476,12 +615,13 @@ function savePop() {
 						</tbody>
 					</table>
 					<!-- 첨부자료 -->
-					<div class="rvn_txt">
-						첨부파일 (0) <input type="file" name="att" />
-						<input type="file" id="schdl_att_file" name="schdl_att_file"' /> 
-						<img class="plus_btn"  src="resources/images/sales/plus.png" border='0' /> 
+					<div class="rvn_txt"> 첨부파일  
+						<img class="plus_btn aff_btn"  src="resources/images/sales/plus.png" border='0' /> 
 					</div>
-					<div class="cntrct_box_in"></div>
+					<div class="cntrct_box_in">
+					</div>
+					<input type="file" id="att" name="att" />
+					<input type="hidden" id="schdlAttFile" name="schdlAttFile" />
 					</form>
 					<!-- 끝 -->
 				</div>

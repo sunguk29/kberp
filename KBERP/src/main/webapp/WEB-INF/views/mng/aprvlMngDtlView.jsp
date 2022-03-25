@@ -12,6 +12,7 @@
 
 .cmn_btn{
 	border: none;
+	margin-left: 10px;
 }
 .cont_wrap {
 	width: 900px;
@@ -74,7 +75,79 @@ $(document).ready(function() {
 		$("#actionForm").attr("action", "aprvlMng");
 		$("#actionForm").submit();
 	});
+	
+	$("#aprvl_btn").on("click", function() {
+		makePopup({
+			bg : true,
+			bgClose : true,
+			title : "승인",
+			contents : "승인하시겠습니까?",
+			buttons : [{
+				name : "승인",
+				func:function() {
+					var params = $("#actionForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "aprvlMngAction/aprvl",
+						dataType : "json",
+						data : params,
+						success : function(res){ 
+							if(res.res == "success"){
+								$("#actionForm").attr("action","aprvlMng");
+								$("#actionForm").submit();
+							}else{
+								alert("취소 중 문제가 발생했습니다.");
+							}
+						},
+						error : function(request, status, error){
+							console.log(request.responseText);
+						}
+					});	
+				}
+			}, {
+				name : "닫기"
+			}]
+		});
+	});
+	
+	$("#reject_btn").on("click", function() {
+		makePopup({
+			bg : true,
+			bgClose : true,
+			title : "승인불가",
+			contents : "거절하시겠습니까?",
+			buttons : [{
+				name : "거절",
+				func:function() {
+					var params = $("#actionForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "aprvlMngAction/reject",
+						dataType : "json",
+						data : params,
+						success : function(res){ 
+							if(res.res == "success"){
+								$("#actionForm").attr("action","aprvlMng");
+								$("#actionForm").submit();
+							}else{
+								alert("취소 중 문제가 발생했습니다.");
+							}
+						},
+						error : function(request, status, error){
+							console.log(request.responseText);
+						}
+					});	
+				}
+			}, {
+				name : "닫기"
+			}]
+		});
+	});
 });
+
+
 </script>
 </head>
 <body>
@@ -85,7 +158,7 @@ $(document).ready(function() {
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
 <form action="#" id="actionForm" method="post">
-	<input type="hidden" name="no" value="${param.no}"/>
+	<input type="hidden" name="num" value="${param.num}"/>
 	<input type="hidden" name="page" value="${param.page}"/>
 </form>
 <div class="cont_wrap">
@@ -120,13 +193,14 @@ $(document).ready(function() {
 							<div>사용 시간 :</div>
 							<div>${data.TIME_DVSN_NUM}</div>				
 						</div>
+	<input type="hidden" id="stsNum" name="stsNum" value="${data.STS_NUM}">	
 						
 					</div>
 						<div class="use"><b>사용 용도</b></div>
 						<input type="text" id="use_cont" readonly="readonly" value="${data.USE_USE}" />
 			<div class="board_bottom">
-				<div class="cmn_btn_mr" id="aprvl_btn">승인</div>
-				<div class="cmn_btn_mr" id="aprvl_impsbl_btn">승인불가</div>
+				<input class="cmn_btn" type="button" id="aprvl_btn" value="승인">
+				<input class="cmn_btn" type="button" id="reject_btn" value="승인불가">
 				<input class="cmn_btn" type="button" value="취소" id="cnclBtn"/>
 			</div>
 		</div>

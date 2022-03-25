@@ -26,7 +26,7 @@
 	margin-top: 2px;
 }
 
- tbody td:nth-child(3):hover {
+ tbody td:nth-child(2):hover {
  	text-decoration: underline;
  	cursor: pointer;
  }
@@ -90,7 +90,7 @@ function reloadList() { // 목록 조회용 + 페이징 조회용
 
 	$.ajax({
 		type : "post", 
-		url : "aprvlMngAjax", 
+		url : "assetMngAjax", 
 		dataType : "json",
 		data : params, 
 		success : function(res) { 
@@ -109,21 +109,19 @@ function drawList(list) {
 	var html = "";
 	
 	for(var data of list) {
-		html += "<tr num=\""+ data.RSVTN_NUM + "\">";
-		html += "<td>" + data.RSVTN_NUM + "</td>";
-		html += "<td>" + data.FCLTY_NUM + "</td>";
-		html += "<td id=\"click\" num=\""+ data.RSVTN_NUM + "\">" + data.FCLTY_NAME + "</td>";
+		html += "<tr num=\""+ data.ASSET_NUM + "\">";
+		html += "<td>" + data.ASSET_NUM + "</td>";
+		html += "<td id=\"click\" num=\""+ data.ASSET_NUM + "\">" + data.ASSET_NAME + "</td>";
+		html += "<td>" + data.ASSET_TYPE_NUM + "</td>";
+		if(data.QUNTY_DVSN_NUM == 0 )
+			html += "<td>" + data.QUNTY +"ea</td>";
+		else if(data.QUNTY_DVSN_NUM == 1)
+			html += "<td>" + data.QUNTY +"set</td>";
+		else
+			html += "<td>" + data.QUNTY +"box</td>";
 		html += "<td>" + data.EMP_NAME + "</td>";
-		html += "<td>" + data.RSVTN_DATE + "</td>";
-		html += "<td>" + data.TIME_DVSN_NUM + "</td>";
-		if(data.STS_NUM==0)
-            html += "<td>승인대기</td>"; 
-        else if(data.STS_NUM==1)
-            html += "<td>예약취소</td>";
-        else if(data.STS_NUM==2)
-            html += "<td>승인</td>";     
-        else
-            html += "<td>불가</td>";
+		html += "<td>" + data.ACQRMNT_DATE + "</td>";
+		html += "<td>" + data.RGSTRTN_DATE + "</td>";
 	}
 	$("tbody").html(html);
 }
@@ -176,12 +174,12 @@ function drawPaging(pb) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">승인관리</div>
+			<div class="page_title_text">자산목록</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
 					<select id="searchGbn" name="searchGbn">
-						<option value="0">예약코드</option>
-						<option value="1">시설물명</option>
+						<option value="1">자산명</option>
+						<option value="2">담당자명</option>
 					</select>
 					<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
 					<input class="cmn_btn" type="button" value="검색" id="searchBtn"/>
@@ -193,23 +191,23 @@ function drawPaging(pb) {
 			<table class="board_table">
 				<colgroup>
 					<col width="100"/>
-					<col width="100"/>
-					<col width="150"/>
-					<col width="150"/>
-					<col width="150"/>
 					<col width="150"/>
 					<col width="100"/>
+					<col width="100">
+					<col width="150"/>
+					<col width="150"/>
+					<col width="150"/>
 					
 				</colgroup>
 				<thead>
 					<tr>
-						<th>예약코드</th>
-						<th>시설물코드</th>
-						<th>시설물 명</th>
-						<th>신청자</th>
-						<th>사용 날짜</th>
-						<th>사용 시간</th>
-						<th>승인처리</th>
+						<th>자산번호</th>
+						<th>자산명</th>
+						<th>자산유형</th>
+						<th>수량</th>
+						<th>담당자명</th>
+						<th>취득일</th>
+						<th>등록일</th>
 					</tr>
 				</thead>
 				<tbody></tbody>

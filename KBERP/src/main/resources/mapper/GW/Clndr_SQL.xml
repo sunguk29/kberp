@@ -3,10 +3,20 @@
 <mapper namespace="clndr">
 <select id="getSchdl" parameterType="hashmap" resultType="hashmap">
 SELECT SCHDL_NUM AS ID, SCHDL_TITLE AS TITLE,  TO_CHAR(SCHDL_START_TIME,'YYYY-MM-DD')||'T'||TO_CHAR(SCHDL_START_TIME,'HH24:MI:SS') AS "START",
-TO_CHAR(SCHDL_END_TIME,'YYYY-MM-DD')||'T'||TO_CHAR(SCHDL_END_TIME,'HH24:MI:SS') AS "END", DEL_DVSN
+TO_CHAR(SCHDL_END_TIME,'YYYY-MM-DD')||'T'||TO_CHAR(SCHDL_END_TIME,'HH24:MI:SS') AS "END", DEL_DVSN,
+    CASE WHEN SCHDL_CTGRY_NUM = 0 THEN '#66BB6A'
+         WHEN SCHDL_CTGRY_NUM = 1 THEN '#a17fed'
+         WHEN SCHDL_CTGRY_NUM = 2 THEN '#ffd352'
+         WHEN SCHDL_CTGRY_NUM = 3 THEN '#a4da90'
+         WHEN SCHDL_CTGRY_NUM = 4 THEN '#fb8484'
+         WHEN SCHDL_CTGRY_NUM = 5 THEN '#76a7f7'
+         WHEN SCHDL_CTGRY_NUM = 6 THEN '#ffb264'
+         WHEN SCHDL_CTGRY_NUM = 7 THEN '#48dac8'  
+         ELSE '#66BB6A'
+    END AS COLOR
 FROM SCHDL
-WHERE '202203' BETWEEN TO_CHAR(SCHDL_START_TIME,'YYYYMM') AND TO_CHAR(SCHDL_END_TIME, 'YYYYMM')AND DEL_DVSN = 0
-ORDER BY "START" ASC
+WHERE #{clndrDate} BETWEEN TO_CHAR(SCHDL_START_TIME,'YYYYMM') AND TO_CHAR(SCHDL_END_TIME, 'YYYYMM')AND DEL_DVSN = 0
+ORDER BY "START" ASC 
 </select>
 <select id="dtlSchdl" parameterType="hashmap" resultType="hashmap">
 SELECT SCHDL_NUM AS ID, SCHDL_TITLE AS TITLE,  TO_CHAR(SCHDL_START_TIME,'YYYY-MM-DD')||'T'||TO_CHAR(SCHDL_START_TIME,'HH24:MI:SS') AS "START",
@@ -38,6 +48,6 @@ UPDATE SCHDL SET SCHDL_TYPE_NUM = #{schdl_type},
                  SCHDL_START_TIME = TO_DATE(#{schdl_start_date}||' '||#{schdl_start_time}, 'YYYY-MM-DD HH24:MI:SS'),
                  SCHDL_END_TIME = TO_DATE(#{schdl_end_date}||' '||#{schdl_end_time}, 'YYYY-MM-DD HH24:MI:SS'),
                  ALDY_DVSN = #{aldy_dvsn}
-WHERE SCHDL_NUM = #{id}
+WHERE SCHDL_NUM = #{emp_num}
 </update>
 </mapper>

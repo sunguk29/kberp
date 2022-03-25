@@ -44,12 +44,22 @@
 	
 	<select id="aprvlMngDtlView" resultType="hashmap" parameterType="hashmap">
 		SELECT FR.RSVTN_NUM, FR.FCLTY_NUM, F.FCLTY_NAME, E.EMP_NAME, 
-				TO_CHAR(RSVTN_DATE, 'YYYY-MM-DD') AS RSVTN_DATE, FR.TIME_DVSN_NUM,USE_NUM_OF_PL, USE_USE,
+				TO_CHAR(RSVTN_DATE, 'YYYY-MM-DD') AS RSVTN_DATE, FR.TIME_DVSN_NUM,USE_NUM_OF_PL, USE_USE,STS_NUM,
 				 ROW_NUMBER() OVER(ORDER BY FR.RSVTN_NUM DESC) AS RNUM
 		FROM FCLTY_RSVTN FR INNER JOIN FCLTY F
 		                    ON FR.FCLTY_NUM = F.FCLTY_NUM
 		                    INNER JOIN EMP E
 		                    ON FR.EMP_NUM = E.EMP_NUM
-		WHERE RSVTN_NUM = #{no}
+		WHERE RSVTN_NUM = #{num}
 	</select>
+	
+	<update id="aprvl" parameterType="hashmap">
+		UPDATE FCLTY_RSVTN SET STS_NUM = 2
+		WHERE RSVTN_NUM = #{num}
+	</update>
+	
+	<update id="reject" parameterType="hashmap">
+		UPDATE FCLTY_RSVTN SET STS_NUM = 3
+		WHERE RSVTN_NUM = #{num}
+	</update>
 </mapper>

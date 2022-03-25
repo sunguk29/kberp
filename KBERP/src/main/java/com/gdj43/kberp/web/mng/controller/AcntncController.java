@@ -39,18 +39,63 @@ public class AcntncController {
 		return mav;
 	}
 	
+	// 내부비용관리
+	@RequestMapping(value ="/intrnlCostMng")
+	public ModelAndView intrnlCostMng(@RequestParam HashMap<String, String> params, ModelAndView mav) {
+		
+		if(params.get("page") == null || params.get("page") == "") {
+			params.put("page", "1");
+		}
+		
+		mav.addObject("page", params.get("page"));
+		mav.setViewName("mng/intrnlCostMngList");
+		
+		return mav;
+	}
+	
+	// 내부비용관리 ajax
+	@RequestMapping(value ="/intrnlCostMngAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String intrnlCostMngAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		// 총 게시글 수
+		int cnt = iCommonService.getIntData("IntrnlCostMng.getIntrnlCostMngCnt", params);
+		
+		// 페이징 계산
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
+		
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("IntrnlCostMng.getIntrnlCostMngList", params);
+		
+		
+		modelMap.put("list", list); 
+		modelMap.put("pb", pb); 
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
 	// 전표관리
 	@RequestMapping(value = "/chitMng")
-	public ModelAndView chitMng(ModelAndView mav) {
+	public ModelAndView chitMng(@RequestParam HashMap<String, String> params, ModelAndView mav) {
 		
-		Date today = new Date();
+		if(params.get("page") == null || params.get("page") == "") {
+			params.put("page", "1");
+		}
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+		if(params.get("mon") == null || params.get("mon") == "") {
+			Date today = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+			String thisMon = sdf.format(today);
+			params.put("mon", thisMon);			
+		}
 		
-		String thisMon = sdf.format(today);
-		
-		mav.addObject("page", "1");
-		mav.addObject("mon", thisMon);
+		mav.addObject("page", params.get("page"));
+		mav.addObject("mon", params.get("mon"));
 		
 		mav.setViewName("mng/chitMng");
 		
@@ -66,7 +111,7 @@ public class AcntncController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		// 총 게시글 수
-		int cnt = iCommonService.getIntData("chitMng.getChitMngCnt", params);
+		int cnt = iCommonService.getIntData("ChitMng.getChitMngCnt", params);
 		
 		// 페이징 계산
 		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
@@ -74,9 +119,9 @@ public class AcntncController {
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
-		List<HashMap<String, String>> list = iCommonService.getDataList("chitMng.getChitMngList", params);
+		List<HashMap<String, String>> list = iCommonService.getDataList("ChitMng.getChitMngList", params);
 		
-		HashMap<String, String> data = iCommonService.getData("chitMng.getChitMngData", params);
+		HashMap<String, String> data = iCommonService.getData("ChitMng.getChitMngData", params);
 		
 		modelMap.put("list", list); 
 		modelMap.put("pb", pb); 
@@ -84,6 +129,38 @@ public class AcntncController {
 		
 		return mapper.writeValueAsString(modelMap);
 		
+	}
+	
+	// 전표관리에서 전표번호 클릭 시 체크
+	@RequestMapping(value = "/chitNumCheck")
+	public ModelAndView chitNumCheck(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		int expnsRsltnCheck = iCommonService.getIntData("ChitMng.expnsRsltnCheck", params);
+		
+		if(expnsRsltnCheck == 1) {
+			// 지출결의서관리 상세보기로 이동
+			mav.addObject("res", "expnsRsltnGo");
+			mav.addObject("top", "34");
+			mav.addObject("menuNum", "84");
+			mav.addObject("menuType", "M");
+			
+			
+		} else {
+			
+			int intrnlCostCheck = iCommonService.getIntData("ChitMng.intrnlCostCheck", params);
+			
+			if(intrnlCostCheck == 1) {
+				// 내부비용관리 상세보기로 이동
+				mav.addObject("res", "intrnlCostGo");
+				
+			} else {
+				System.out.println("조회된 전표가 없음!");
+				mav.addObject("res", "failed");
+			}
+		}
+		
+		mav.setViewName("mng/chitNumCheck");
+		return mav;
 	}
 	
 	// 지출결의서관리 목록
@@ -175,7 +252,7 @@ public class AcntncController {
 	
 	// 지출결의서관리 사원별 월별 상세보기
 	@RequestMapping(value = "/expnsRsltnadmnstrEmpMnthly")
-	public ModelAndView expnsRsltnadmnstrDtl(@RequestParam HashMap<String, String > params, ModelAndView mav) throws Throwable {
+	public ModelAndView expnsRsltnadmnstrDtl(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 	
 	HashMap<String, String> data = iCommonService.getData("expnsRsltnadmnstr.expnsRsltnadmnstrDtl", params);
 		
