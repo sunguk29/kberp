@@ -3,7 +3,6 @@ function nullCheckFunc(obj){
 	if (typeof obj == "undefined" || obj == null || obj == '') {
 		return '';
 	}else {
-		alert("else" + obj);
 		return obj;
 	}
 }
@@ -27,6 +26,33 @@ function checkEmpty(sel){
 	}
 }
 
+/*들어온 값이 -1 인지 확인하는 함수. 값이 -1인경우 true, -1이 아닌경우 false 리턴*/
+function checkMinusOne(sel){
+	if($.trim($(sel).val()) == "-1") {
+		return true;
+	}else{
+		return false;
+	}
+}
+
+/* 셀렉트 박스 안의 값을 확인하는 함수. 값이 null 이거나 -1이면 true 아닌경우 false 리턴 */
+function checkSelect(sel) {
+	if(checkEmpty(sel) || checkMinusOne(sel)){
+		return true;
+	}else{
+		return false;
+	} 
+}
+
+/* 들어온 값이 숫자인지 확인하는 함수. 값이 숫자인 경우 true, 숫자가 아닌 경우false 리턴*/
+function checkNum(sel) {
+	if(isNaN($(sel).val())) {
+		return true;
+	}else {
+		return false;
+	}
+	
+}
 
 /* 날짜 포맷 yyyy-mm-dd 형식으로 변환하는 함수 */
 function dateFormatter(targetDate){
@@ -38,3 +64,4 @@ function dateFormatter(targetDate){
 	
 	return dateString;
 }
+

@@ -146,7 +146,38 @@
 
 <!--============================= 등록 ====================================-->
 <insert id="insertMdData" parameterType="hashmap">
-
+	INSERT INTO MD ( MD_NUM 
+	                ,EMP_NUM 
+	                ,MD_NAME
+	                ,MD_TYPE_NUM
+	                ,MD_GRADE_NUM
+	                ,SALES_STS_NUM
+	                ,LIMIT_AMNT
+	                ,SALES_START_DATE
+	                ,SALES_END_DATE
+	                ,INTRST_RATE
+	                ,INTRST_PYMNT_MTHD_NUM
+	                ,PRNCPL_PYMNT_MTHD_NUM
+	                ,MID_RDMPTN_PSBL_CHECK
+	                ,LOAN_PRD
+	                ,MD_DSCRPTN
+	                ,RGSTRTN_DATE )
+	        VALUES ( MD_SEQ.NEXTVAL
+	                ,'2022000002' 
+	                ,#{md_name}
+	                ,#{md_type}
+	                ,#{md_grade}
+	                ,#{sales_sts}
+	                ,#{limit_amnt}
+	                ,#{sales_start_date}
+	                ,#{sales_end_date}
+	                ,#{intrst_rate}
+	                ,#{intrst_pymnt_mthd}
+	                ,#{prncpl_pymnt_mthd}
+	                ,#{mid_prdmptn_psbl_check}
+	                ,#{loan_prd}
+	                ,#{md_dscrptn}
+	                ,SYSDATE )
 </insert>
 
 

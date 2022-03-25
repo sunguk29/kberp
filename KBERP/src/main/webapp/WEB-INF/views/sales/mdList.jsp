@@ -32,6 +32,10 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	
+
+	
+	
+	
 	//목록 조회
 	reloadList(); 
 	
