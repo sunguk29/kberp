@@ -77,10 +77,88 @@ $(document).ready(function() {
 			}]
 		});
 	});
+	
+	reloadList();
+	
+	$("#srchMonth").on("change", function() {
+		$("#searchMonth").val($("#srchMonth").val());
+		reloadList();
+	});
+	
+	
 });
+
+function reloadList() {
+	var params = $("#actionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "intrnlCostMngAjax",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			console.log(res);
+			drawList(res.list);
+			drawPaging(res.pb);
+		},
+		error : function(request, status, error) {
+			console.log(request.responseText);
+		}
+	});
+}
+
+function drawList(list) {
+	var html = "";
+	
+	for(data of list) {
+		html += "<tr>";
+		html += "<td class=\"board_table_hover\" id=\"mon\" mon=\"" + data.DATE_MON +  "\">" + data.DATE_MON + "</td>";
+		html += "<td>" + data.AMNT_SUM + "</td>";
+		html += "</tr>";
+	}
+
+	$("tbody").html(html);
+}
+
+function drawPaging(pb) {
+	var html = "";
+	
+	html += "<div class=\"page_btn page_first\" page=\"1\">first</div>";
+	
+	if($("#page").val() == "1") {
+		html += "<div class=\"page_btn page_prev\" page=1>prev</div>";
+	} else {
+		html += "<div class=\"page_btn page_prev\" page=\"" + ($("#page").val() * 1 - 1) + "\">prev</div>";		
+	}
+	
+	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
+		if($("#page").val() == i) {
+			html += "<div class=\"page_btn_on\" page=\"" + i + "\">" + i + "</div>";
+		} else {
+			html += "<div class=\"page_btn\" page=\"" + i + "\">" + i + "</div>";
+		}
+	}
+	
+	if($("#page").val() == pb.maxPcount) {
+		html += "<div class=\"page_btn page_next\" page=\"" + pb.maxPcount + "\">next</div>";		
+	} else {
+		html += "<div class=\"page_btn page_next\" page=\"" + ($("#page").val() * 1 + 1) + "\">next</div>";				
+	}
+	
+	html += "<div class=\"page_btn page_last\" page=\"" + pb.maxPcount + "\">last</div>";
+	
+	$("#pgn_area").html(html);
+}
+
 </script>
 </head>
 <body>
+	<form action="#" id="actionForm" method="post">
+		<input type="hidden" id="mon" name="mon">
+		<input type="hidden" id="page" name="page" value="${page}" />
+		<input type="hidden" id="searchMonth" name="searchMonth" value="${param.searchMonth}">
+	</form>
+
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -93,13 +171,17 @@ $(document).ready(function() {
 		<div class="page_title_bar">
 			<div class="page_title_text">내부비용관리 목록</div>
 			<div class="mnthly_slct_wrap">
-				<input type="month" class="mnthly_slct" />
+				<input type="month" class="mnthly_slct" id="srchMonth" value="${param.searchMonth}"/>
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<table class="board_table">
+				<colgroup>
+					<col width="450">
+					<col width="450">
+				</colgroup>
 				<thead>
 					<tr>
 						<th>전표귀속연월</th>
@@ -107,61 +189,10 @@ $(document).ready(function() {
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td class="board_table_hover">2022. 01</td>
-						<td>500,000원</td>
-					</tr>
-					<tr>
-						<td class="board_table_hover">2022. 02</td>
-						<td>200,000원</td>
-					</tr>
-					<tr>
-						<td class="board_table_hover">2022. 03</td>
-						<td>300,000원</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
 				</tbody>
 			</table>
 			<div class="board_bottom">
 				<div class="pgn_area">
-					<div class="page_btn page_first">first</div>
-					<div class="page_btn page_prev">prev</div>
-					<div class="page_btn_on">1</div>
-					<div class="page_btn">2</div>
-					<div class="page_btn">3</div>
-					<div class="page_btn">4</div>
-					<div class="page_btn">5</div>
-					<div class="page_btn page_next">next</div>
-					<div class="page_btn page_last">last</div>
 				</div>
 				<div class="cmn_btn">신규</div>
 			</div>
