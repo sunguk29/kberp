@@ -555,6 +555,11 @@
 		VALUES (CLNT_CMPNY_ATT_FILE_SEQ.NEXTVAL, CLNT_CMPNY_SEQ.CURRVAL, #{attFile})
 	</insert>
 	
+	<insert id="opContAdd" parameterType="hashmap">
+		INSERT INTO CLNT_CMPNY_CMNT(CMNT_NUM, CLNT_CMPNY_NUM, EMP_NUM, CONT)
+		VALUES(CLNT_CMPNY_CMNT_SEQ.NEXTVAL, #{ccn}, #{sEmpNum}, #{tacont})
+	</insert>
+	
 	<insert id="clntAttAdd" parameterType="hashmap">
 		INSERT INTO CLNT_ATT_FILE (ATT_FILE_NUM, CLNT_NUM, ATT_FILE_NAME)
 		VALUES (CLNT_ATT_FILE_SEQ.NEXTVAL, ENTRPRS_CLNT_SEQ.CURRVAL, #{attFile})
@@ -639,5 +644,27 @@
 		    ) ME
 		WHERE ME.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
+	
+	<select id="getOpList" parameterType="hashmap" resultType="hashmap">
+		SELECT E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, CCC.CONT, TO_CHAR(CCC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
+			   CCC.CMNT_NUM
+		FROM CLNT_CMPNY_CMNT CCC INNER JOIN CLNT_CMPNY CC
+		                             ON CCC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM  
+		                         INNER JOIN EMP E
+		                                 ON CCC.EMP_NUM = E.EMP_NUM
+		                         INNER JOIN APNTM A
+		                                 ON E.EMP_NUM = A.EMP_NUM
+		                         INNER JOIN DEPT D
+		                                 ON A.DEPT_NUM = D.DEPT_NUM
+		                         INNER JOIN RANK R
+		                                 ON A.RANK_NUM = R.RANK_NUM
+		WHERE CCC.DEL_CHECK IS NULL
+		<!-- ORDER BY CCC.CMNT_NUM DESC -->
+	</select>
+	
+	<update id="opContUpdate" parameterType="hashmap">
+		UPDATE CLNT_CMPNY_CMNT SET DEL_CHECK = SYSDATE
+		WHERE CMNT_NUM = #{cmNum}
+	</update>
 	
 </mapper>

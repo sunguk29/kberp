@@ -136,13 +136,15 @@ td:nth-child(1), td:nth-child(3){
 .imgName {
 	padding-right: 30px;
 }
-/* 팝업 조회영역 */
+/* 팝업 */
 .popup_title_mid {
+	width: calc(100% + 20px);
 	height: 70px;
 	background-color: #F2F2F2;
-	padding-bottom: 3px;
 	font-size: 11pt;
+	padding-bottom: 3px;
 	border-bottom: 1px solid #d7d7d7;
+    margin: -10px 0px 0px -10px;
 }
 .ptm_left {
 	display: inline-block;
