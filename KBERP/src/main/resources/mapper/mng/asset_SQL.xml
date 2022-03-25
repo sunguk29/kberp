@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="asset">
+
+<select id="getCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM FCLTY_RSVTN FR INNER JOIN FCLTY F
+							ON FR.FCLTY_NUM = F.FCLTY_NUM
+		WHERE 1 = 1
+		<if test="searchTxt != null and searchTxt != ''">
+			<choose>
+				<when test="searchGbn == 1">
+					AND ASSET_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="searchGbn == 2">
+					AND EMP_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+			</choose>
+		</if>
+	</select>
+	 <select id="assetMngList" resultType="hashmap" parameterType="hashmap">
+		SELECT *
+		FROM (SELECT ASSET_NUM, ASSET_NAME, ASSET_TYPE_NUM, QUNTY, QUNTY_DVSN_NUM, EMP_NAME,TO_CHAR(ACQRMNT_DATE, 'YYYY-MM-DD')AS ACQRMNT_DATE,
+		 TO_CHAR(RGSTRTN_DATE, 'YYYY-MM-DD')AS RGSTRTN_DATE,ROW_NUMBER() OVER(ORDER BY ASSET_NUM DESC) AS RNUM
+			FROM ASSET INNER JOIN EMP
+			                    ON MNGR_NUM = EMP_NUM
+			WHERE 1=1
+		<if test="searchTxt != null and searchTxt != ''"> 
+					<choose>
+						<when test="searchGbn == 1">
+							AND ASSET_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="searchGbn == 2">
+							AND EMP_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+					</choose>
+				</if>
+				) A
+				WHERE A.RNUM BETWEEN #{startCount} AND #{endCount} 
+	</select>
+
+</mapper>
