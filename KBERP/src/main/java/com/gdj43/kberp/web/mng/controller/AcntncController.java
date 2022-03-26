@@ -94,6 +94,7 @@ public class AcntncController {
 	
 	// 내부비용관리 월별 목록 ajax
 	@RequestMapping(value ="/intrnlCostMngMnthlyListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
 	public String intrnlCostMngMnthlyListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -109,13 +110,26 @@ public class AcntncController {
 		
 		List<HashMap<String, String>> list = iCommonService.getDataList("IntrnlCostMng.intrnlCostMngMnthlyList", params);
 		
-		HashMap<String, String> data = iCommonService.getData("IntrnlCostMng.getExpnsEmpMnthlyData", params);
+		HashMap<String, String> data = iCommonService.getData("IntrnlCostMng.intrnlCostMngMnthlyData", params);
 		
 		modelMap.put("data", data);
 		modelMap.put("list", list); 
 		modelMap.put("pb", pb); 
 		
 		return mapper.writeValueAsString(modelMap);
+	}
+	
+	// 내부비용관리 상세보기
+	@RequestMapping(value = "/intrnlCostMngDtlView")
+	public ModelAndView intrnlCostMngDtlView(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("IntrnlCostMng.intrnlCostMngDtlView", params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("mng/intrnlCostMngDtlView");
+		
+		return mav;
 	}
 	
 	
@@ -192,6 +206,9 @@ public class AcntncController {
 			if(intrnlCostCheck == 1) {
 				// 내부비용관리 상세보기로 이동
 				mav.addObject("res", "intrnlCostGo");
+				mav.addObject("top", "34");
+				mav.addObject("menuNum", "38");
+				mav.addObject("menuType", "M");
 				
 			} else {
 				System.out.println("조회된 전표가 없음!");
@@ -291,12 +308,12 @@ public class AcntncController {
 	@RequestMapping(value = "/expnsRsltnadmnstrEmpMnthly")
 	public ModelAndView expnsRsltnadmnstrDtl(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 	
-	HashMap<String, String> data = iCommonService.getData("expnsRsltnadmnstr.expnsRsltnadmnstrDtl", params);
+		HashMap<String, String> data = iCommonService.getData("expnsRsltnadmnstr.expnsRsltnadmnstrDtl", params);
+			
+		mav.addObject("data", data);
 		
-	mav.addObject("data", data);
-	
-	mav.setViewName("mng/expnsRsltnadmnstrEmpMnthly");
-	
-	return mav;
-}
+		mav.setViewName("mng/expnsRsltnadmnstrEmpMnthly");
+		
+		return mav;
+	}
 }

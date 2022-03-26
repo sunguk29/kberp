@@ -110,6 +110,24 @@ $(document).ready(function() {
 		$("#page2").val($(this).attr("page"));
 		reloadList();
 	});
+	
+	$("#previousBtn").on("click", function() {
+		$("#actionForm").attr("action", "intrnlCostMng");
+		$("#actionForm").submit();
+		
+	});
+	
+	$("#mnthly_slct").on("change", function() {
+		$("#mon").val($("#mnthly_slct").val());
+		reloadList();
+	});
+	
+	$("#listTbody").on("click", "#chitNum", function() {
+		$("#sendChitNum").val($(this).attr("chitnum"));
+		
+		$("#actionForm").attr("action", "intrnlCostMngDtlView")
+		$("#actionForm").submit();
+	});
 });
 
 function reloadList() {
@@ -124,6 +142,7 @@ function reloadList() {
 			console.log(res);
 			drawList(res.list);
 			drawPaging(res.pb);
+			drawSum(res.data);
 		},
 		error : function(request, status, error) {
 			console.log(request.responseText);
@@ -134,6 +153,36 @@ function reloadList() {
 function drawList(list) {
 	var html = "";
 	
+	for(data of list) {
+		
+		html += "<tr>";
+		html += "<td>" + data.INTRNL_DATE + "</td>"; 
+		html += "<td class=\"board_table_hover\" id=\"chitNum\" chitnum=\"" + data.CHIT_NUM + "\">" + data.CHIT_NUM + "</td>";
+		html += "<td>" + data.CRSPNDNT + "</td>";
+		html += "<td>" + data.AMNT + "</td>";
+		html += "<td>" + data.ACNT_NAME + "</td>";
+		if(data.RMRKS != null) {
+			html += "<td>" + data.RMRKS + "</td>";			
+		} else {
+			html += "<td>-</td>";
+		}
+		html += "</tr>";
+	}
+	
+	$("#listTbody").html(html);
+}
+
+function drawSum(data) {
+	var html = "";
+	
+	html += "<td>총 합계</td>";
+	if(data != null) {
+		html += "<td>" + data.AMNT + "원</td>";		
+	} else {
+		html += "<td>0원</td>";
+	}
+	
+	$("#totalTd").html(html);
 }
 
 function drawPaging(pb) {
@@ -174,9 +223,10 @@ function drawPaging(pb) {
 		<input type="hidden" id="page" name="page" value="${param.page}" />
 		<input type="hidden" id="page2" name="page2" value="${page2}" />
 		<input type="hidden" id="searchMonth" name="searchMonth" value="${param.searchMonth}">
-		<input type="hidden" id="top" name="top" value="${param.top}">
-		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}">
-		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}">
+		<input type="hidden" id="sendChitNum" name="sendChitNum">
+		<input type="hidden" name="top" value="${param.top}">
+		<input type="hidden" name="menuNum" value="${param.menuNum}">
+		<input type="hidden" name="menuType" value="${param.menuType}">
 	</form>
 
 	<!-- top & left -->
@@ -191,7 +241,7 @@ function drawPaging(pb) {
 		<div class="page_title_bar">
 			<div class="page_title_text">내부비용관리 월별 목록</div>
 			<div class="mnthly_slct_wrap">
-				<input type="month" class="mnthly_slct" value="2022-01" />
+				<input type="month" class="mnthly_slct" id="mnthly_slct" value="${param.mon}" />
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -216,55 +266,7 @@ function drawPaging(pb) {
 						<th>비고</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td>2022-01-01</td>
-						<td class="board_table_hover">202201010001</td>
-						<td>건물주</td>
-						<td>150,000원</td>
-						<td>건물임대료</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
+				<tbody id="listTbody">
 				</tbody>
 			</table>
 			<div class="board_bottom">
@@ -278,14 +280,12 @@ function drawPaging(pb) {
 					<col width="800">
 				</colgroup>
 				<tbody>
-					<tr>
-						<td>총 합계</td>
-						<td>150,000원</td>
+					<tr id="totalTd">
 					</tr>
 				</tbody>
 			</table>
 			<div class="btn_wrap">
-				<div class="cmn_btn">목록</div>
+				<div class="cmn_btn" id="previousBtn">전체 목록</div>
 				<div class="cmn_btn_ml">신규</div>
 				<div class="cmn_btn_ml">월 삭제</div>
 			</div>

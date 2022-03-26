@@ -186,12 +186,6 @@ function drawSum(data) {
 	
 	html += "<tr>";
 	html += "<td>개인 지출 합계</td>";
-	/* if((data != null) ? data.IND : undefined) {
-		html += "<td>" + data.IND + "원</td>";
-	} else {
-		html += "<td>0원</td>";
-	} */
-	
 	if(data != null) {
 		if(data.IND) {
 			html += "<td>" + data.IND + "원</td>";
@@ -201,15 +195,8 @@ function drawSum(data) {
 	} else {
 		html += "<td>0원</td>";
 	}
-	
-	var test = 1;
-	if(test) {
-		console.log("true");
-	} else {
-		console.log("false");
-	}
-	
 	html += "</tr>";
+	
 	html += "<tr>";
 	html += "<td>법인 지출 합계</td>";
 	if((data != null) ? data.CRP : undefined) {

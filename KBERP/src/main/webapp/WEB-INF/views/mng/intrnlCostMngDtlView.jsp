@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP - 지출결의서 상세보기(관리자)</title>
+<title>카카오뱅크 ERP - 내부비용관리 상세보기</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -16,6 +16,7 @@
 }
 
 /* 개인 작업 영역 */
+
 .expns_rsltn_dtl_view {
 	border-collapse: collapse;
 	font-size: 10.5pt;
@@ -27,14 +28,14 @@
 	height: 40px;
 }
 
-.expns_rsltn_dtl_view td:nth-child(1) {
+.expns_rsltn_dtl_view td:nth-child(odd) {
 	text-align: center;
 	font-size: 11pt;
 	font-weight: bold;
 	background-color: #F2F2F2;
 }
 
-.expns_rsltn_dtl_view td:nth-child(2) {
+.expns_rsltn_dtl_view td:nth-child(even) {
 	padding-left: 15px;
 	display: table-cell;
 	vertical-align: middle;
@@ -44,7 +45,7 @@
 	display: inline-block;
 	vertical-align: top;
 	text-align: right;
-	width: 850px;
+	width: 900px;
 }
 
 .atchd_file {
@@ -52,7 +53,7 @@
 	vertical-align: middle;
 	width: 30px;
 	height: 40px;
-	background-image: url('resources/images/mng/dwnld_icon.png');
+	background-image: url('./images/cmn/dwnld_icon.png');
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 20px;
@@ -72,14 +73,53 @@
 	cursor: pointer;
 }
 
-
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	$("#alertBtn").on("click", function() {
+		makeAlert("하이", "내용임");
+	});
+	
+	$("#btn1Btn").on("click", function() {
+		makePopup({
+			depth : 1,
+			bg : true,
+			width : 400,
+			height : 300,
+			title : "버튼하나팝업",
+			contents : "내용임",
+			buttons : {
+				name : "하나",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}
+		});
+	});
+	
+	$("#btn2Btn").on("click", function() {
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "버튼두개팝업",
+			contents : "내용임",
+			buttons : [{
+				name : "하나",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "둘닫기"
+			}]
+		});
+	});
+	
 	$("#previousBtn").on("click", function() {
-		$("#actionForm").attr("action", "expnsRsltnadmnstrEmpMnthlyList")
+		$("#actionForm").attr("action", "intrnlCostMngMnthlyList");
 		$("#actionForm").submit();
-	});	
+	});
 	
 	$("#previousBtn2").on("click", function() {
 		$("#top2").val("34");
@@ -90,24 +130,15 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-	if("${param.back}" == "back") {
-		console.log("back");
-		
-	}
 });
-
-
 </script>
 </head>
 <body>
 	<form action="#" id="actionForm" method="post">
-		<input type="hidden" id="empNum" name="empNum" value="${param.empNum}">
-		<input type="hidden" id="empName" name="empName" value="${param.empName}">
 		<input type="hidden" id="mon" name="mon" value="${param.mon}">
 		<input type="hidden" id="page" name="page" value="${param.page}" />
 		<input type="hidden" id="page2" name="page2" value="${param.page2}" />
 		<input type="hidden" id="searchMonth" name="searchMonth" value="${param.searchMonth}">
-		<input type="hidden" id="searchTxt" name="searchTxt" value="${param.searchTxt}"> 
 		<input type="hidden" id="top2" name="top" value="${param.top}">
 		<input type="hidden" id="menuNum2" name="menuNum" value="${param.menuNum}">
 		<input type="hidden" id="menuType2" name="menuType" value="${param.menuType}">
@@ -123,7 +154,7 @@ $(document).ready(function() {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">지출결의서 상세보기(관리자)</div>
+			<div class="page_title_text">내부비용관리 상세보기</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
@@ -131,58 +162,89 @@ $(document).ready(function() {
 			<table class="expns_rsltn_dtl_view">
 				<colgroup>
 					<col width="150" />
-					<col width="700" />
+					<col width="150" />
+					<col width="150" />
+					<col width="150" />
+					<col width="150" />
+					<col width="150" />
 				</colgroup>
 				<tbody>
 					<tr>
-						<td>사원명</td>
-						<td>${data.EMP_NAME}</td>
+						<td>작성자</td>
+						<td colspan="5">${data.EMP_NAME}</td>
 					</tr>
 					<tr>
 						<td>작성일자</td>
-						<td>${data.RGS_DATE}</td>
+						<td colspan="5">${data.DATE_RGS}</td>
+					</tr>
+					<tr>
+						<td>지출일자</td>
+						<td colspan="5">${data.DATE_D}</td>
 					</tr>
 					<tr>
 						<td>전표번호</td>
-						<td>${data.CHIT_NUM}</td>
+						<td colspan="5">${data.CHIT_NUM}</td>
 					</tr>
 					<tr>
 						<td>계정명</td>
-						<td>${data.ACNT_NAME}</td>
+						<td colspan="5">${data.ACNT_NAME}</td>
 					</tr>
 					<tr>
-						<td>지출처</td>
-						<td>${data.EXPNS}</td>
+						<td>거래처</td>
+						<td colspan="5">${data.CRSPNDNT}</td>
 					</tr>
 					<tr>
-						<td>지출금액</td>
-						<td>${data.AMNT}원</td>
+						<td>품목명</td>
+						<td>${data.ITEM}</td>
+						<td>수량</td>
+						<c:choose>
+							<c:when test="${data.QUNTY != null}">
+								<td>${data.QUNTY}</td>								
+							</c:when>
+							<c:otherwise>
+								<td>-</td>
+							</c:otherwise>
+						</c:choose>
+						<td>단가</td>
+						<td>${data.UNIT_PRICE}</td>
 					</tr>
 					<tr>
-						<td>지출일시</td>
-						<td>${data.DATE_D}</td>
+						<td>공급가액</td>
+						<td colspan="5">${data.SPLY_PRICE}</td>
 					</tr>
 					<tr>
-						<td>지출유형</td>
-						<td>${data.EXPNS_TYPE}</td>
+						<td>부가세</td>
+						<td colspan="5">${data.SRTX}</td>
+					</tr>
+					<tr>
+						<td>사업자번호</td>
+						<td colspan="5">${data.BSNSMN_NUM}</td>
+					</tr>
+					<tr>
+						<td>합계</td>
+						<td colspan="5">${data.AMNT}</td>
 					</tr>
 					<tr>
 						<td>비고</td>
-						<td>
-							<c:choose>
-								<c:when test="${data.RMRKS eq null}">-</c:when>
-								<c:otherwise>${data.RMRKS}</c:otherwise>
-							</c:choose>
-						</td>
+						<c:choose>
+							<c:when test="${data.RMRKS != null}">
+								<td colspan="5">${data.RMRKS}</td>
+							</c:when>
+							<c:otherwise>
+								<td colspan="5">-</td>
+							</c:otherwise>
+						</c:choose>
 					</tr>
 					<tr>
 						<td>첨부파일</td>
-						<td>
+						<td colspan="5">
 							<c:choose>
-								<c:when test="${data.ATT_FILE eq null}">-</c:when>
-								<c:otherwise>
+								<c:when test="${data.ATT_FILE != null}">
 									<div class="atchd_file"></div>
-									<div class="file_name">${data.ATT_FILE}</div>
+									<div class="file_name">영수증.jpg</div>
+								</c:when>
+								<c:otherwise>
+									-
 								</c:otherwise>
 							</c:choose>
 						</td>
@@ -192,7 +254,9 @@ $(document).ready(function() {
 
 			<div class="btn_wrap">
 				<c:if test="${empty param.back}">				
-					<div class="cmn_btn" id="previousBtn">사원별 월별 목록</div>
+					<div class="cmn_btn" id="previousBtn">목록</div>
+					<div class="cmn_btn_ml" id="updateBtn">수정</div>
+					<div class="cmn_btn_ml" id="deleteBtn">삭제</div>
 				</c:if>
 				<c:if test="${!empty param.back}">
 					<div class="cmn_btn" id="previousBtn2">돌아가기</div>

@@ -169,9 +169,9 @@ function drawPaging(pb) {
 		<input type="hidden" id="mon" name="mon">
 		<input type="hidden" id="page" name="page" value="${page}" />
 		<input type="hidden" id="searchMonth" name="searchMonth" value="${param.searchMonth}">
-		<input type="hidden" id="top" name="top" value="${param.top}">
-		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}">
-		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}">
+		<input type="hidden" name="top" value="${param.top}">
+		<input type="hidden" name="menuNum" value="${param.menuNum}">
+		<input type="hidden" name="menuType" value="${param.menuType}">
 	</form>
 
 	<!-- top & left -->
