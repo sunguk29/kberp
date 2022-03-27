@@ -232,7 +232,7 @@ td:nth-child(1), td:nth-child(3){
 	text-align: center;
 }
 /* 팝업 내용 */
-.popup_cc_box_left {
+.popup_box_left {
    display: inline-block;
    vertical-align: top;
    width: 120px;
@@ -244,24 +244,32 @@ td:nth-child(1), td:nth-child(3){
    height: 50px;
    font-size: 14px;
 }
-.popup_box_in {
+.popup_mng_box_right {
+   display: inline-block;
+   width: 400px;
+   height: 50px;
+   font-size: 14px;
+   line-height: 50px;
+}
+.popup_cc_box_in {
    width: 550px;
    height: 55px;
    border: 2px solid #d7d7d7;
    border-radius: 7px;
    background-color: #F2F2F2;
    margin-left: 15px;
-   margin-bottom: 10px;
+   margin-bottom: 5px;
 }
-.popup_box {
-	margin-top: 20px;
-	height: 286px;
+.popup_mng_box_in {
+   width: calc(100% - 4px);
+   height: 50px;
+   border: 2px solid #d7d7d7;
+   border-radius: 3px;
+   background-color: #F2F2F2;
+   margin-bottom: 5px;
 }
-.popup_box_mng {
-	margin-top: 20px;
-	height: 286px;
-}
-.popup_box_in:hover {
+
+.popup_mng_box_in:hover, .popup_cc_box_in:hover {
    cursor: pointer;
    border: 2px solid #2E83F2;
 }
@@ -285,6 +293,10 @@ td:nth-child(1), td:nth-child(3){
 	font-weight: bold;
 	font-size : 12px;
 }
+.boldMngName{
+	margin-left: 30px;
+	font-weight: bold;
+}
 .mg_wid {
 	margin-left: 50px;
 }
@@ -295,6 +307,14 @@ td:nth-child(1), td:nth-child(3){
 .popMngBtn {
 	margin-top: 5px;
 	margin-left: 25px;
+}
+.popup_box_mng {
+	height: 297px;
+	padding-top: 8px;
+}
+.popup_box_cc {
+	height: 322px;
+	padding-top: 8px;
 }
 </style>
 <script type="text/javascript">
@@ -352,7 +372,7 @@ $(document).ready(function() {
 		html += " <div class=\"cmn_btn popCmnBtn\">검색</div>                                           ";
 		html += " </div>";
 		html += "</form>";
-		html +=	"<div class=\"popup_box\"></div>";
+		html +=	"<div class=\"popup_box_cc\"></div>";
 		html += "<div class=\"board_bottom\">     ";
 		html += "<div class=\"pgn_area\"></div>   ";
 		html += "</div>                         ";
@@ -368,7 +388,7 @@ $(document).ready(function() {
 				
 				drawCcList();
 				
-				$(".popup_box").on("click", ".popup_box_in", function() {
+				$(".popup_box_cc").on("click", ".popup_cc_box_in", function() {
 					var a = $(this).attr("id");
 					for(var i = 1; i < 5; i++) {
 						if(a.substr(3,1) == $("#ccn" + i + "").attr("id").substr(3,1)) {
@@ -406,40 +426,40 @@ $(document).ready(function() {
 		var html = "";
 		
 	 	html += "<div class=\"popup_title_mid\">"; 
-	 	html += 	"<form action=\"#\" id=\"popupMngForm\">";
-	 	html += 		"<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
-		html += 		"<div class=\"ptm_left\">";
-		html += 			"<div class=\"ptm_left_top\">팀분류</div>";
-		html +=				"<div class=\"ptm_left_bot\">사원분류</div>";		
-		html += 		"</div>";
-		html += 		"<div class=\"ptm_mid\">";
-		html +=				"<div class=\"ptm_mid_top\">";
-		html +=					"<select class=\"sel_size\" id=\"deptS\" name=\"deptS\">"
-		html +=						"<option value=\"6\">영업부</option>";
-		html +=						"<option value=\"7\">영업1팀</option>";
-		html +=						"<option value=\"8\">영업2팀</option>";
-		html +=					"</select>";
-		html +=				"</div>";		
-		html +=				"<div class=\"ptm_mid_bot\">";
-		html +=					"<select class=\"sel_size\" id=\"empS\" name=\"empS\">";
-		html +=						"<option value=\"0\">사원번호</option>";
-		html +=						"<option value=\"1\">사원명</option>";
-		html +=					"</select>";
-		html +=				"</div>";	
-		html += 		"</div>";
-		html += 		"<div class=\"ptm_mid_right\">";
-		html +=				"<div class=\"ptm_mid_right_top\"></div>";
-		html +=				"<div class=\"ptm_mid_right_bot\">";
-		html +=					"<input type=\"text\" id=\"searchT\" name=\"searchT\" placeholder=\"검색어를 입력해주세요\" class=\"text_size2\" />";
-		html +=				"</div>";
-		html += 		"</div>";
-		html += 		"<div class=\"ptm_right\">";
-		html +=				"<div class=\"ptm_right_top\"></div>";
-		html +=				"<div class=\"ptm_right_bot\">";
-		html +=					"<div class=\"cmn_btn popMngBtn\">검색</div>";
-		html +=				"</div>";
-		html +=			"</div>";
-		html += 	"</form>";
+	 	html += "<form action=\"#\" id=\"popupMngForm\">";
+	 	html += "<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
+		html += "<div class=\"ptm_left\">";
+		html += "<div class=\"ptm_left_top\">팀분류</div>";		
+		html += "<div class=\"ptm_left_bot\">사원분류</div>";	
+		html += "</div>";
+		html += "<div class=\"ptm_mid\">";
+		html += "<div class=\"ptm_mid_top\">";
+		html += "<select class=\"sel_size\">";
+		html += "<option>영업1팀</option>";
+		html += "<option>영업2팀</option>";
+		html += "<option>영업3팀</option>";
+		html += "</select>";
+		html += "</div>";
+		html += "<div class=\"ptm_mid_bot\">";
+		html += "<select class=\"sel_size\">";
+		html += "<option>사원번호</option>";
+		html += "<option>사원명</option>";
+		html += "</select>";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class=\"ptm_mid_right\">";
+		html += "<div class=\"ptm_mid_right_top\"></div>";
+		html += "<div class=\"ptm_mid_right_bot\">";
+		html += "<input type=\"text\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" />";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class=\"ptm_right\">";
+		html += "<div class=\"ptm_right_top\"></div>";
+		html += "<div class=\"ptm_right_bot\">";
+		html += "<div class=\"cmn_btn\">검색</div>";
+		html += "</div>";
+		html += "</div>";
+		html += "</form>";
 		html += "</div>";
 		html +=	"<div class=\"popup_box_mng\"></div>";
 		html += "<div class=\"board_bottom\">     ";
@@ -459,7 +479,7 @@ $(document).ready(function() {
 				
 				drawMngList();
 				
-				$(".popup_box_mng").on("click", ".popup_box_in", function() {
+				$(".popup_box_mng").on("click", ".popup_mng_box_in", function() {
 					var a = $(this).attr("id");
 					for(var i = 1; i < 5; i++) {
 						if(a.substr(3,1) == $("#mng" + i + "").attr("id").substr(3,1)) {
@@ -596,10 +616,10 @@ function drawList(list) {
 	var k = 1;
 	
 	for(var data of list) {                                                                               
-		html += "<div class=\"popup_box_in\" id=\"box" + (i++) + "\">                                                               ";
+		html += "<div class=\"popup_cc_box_in\" id=\"box" + (i++) + "\">                                                               ";
 		html += "<input type=\"hidden\" id=\"ccn" + (j++) + "\" value=\"" + data.CLNT_CMPNY_NAME + "\" />";
 		html += "<input type=\"hidden\" id=\"cnn" + (k++) + "\" value=\"" + data.CLNT_CMPNY_NUM + "\" />";
-		html += "<div class=\"popup_cc_box_left\">                                                          ";
+		html += "<div class=\"popup_box_left\">                                                          ";
 		html += "	<span class=\"company\"></span>                                                         ";
 		html += "</div>                                                                                   ";
 		html += "<span class=\"popup_cc_box_right\">                                                        ";
@@ -610,7 +630,7 @@ function drawList(list) {
 		html += "</div>                                                                           ";
 	}                                                                                                     
 	                      
-	$(".popup_box").html(html);
+	$(".popup_box_cc").html(html);
 	
 }
 
@@ -672,14 +692,14 @@ function drawMngCont(mngList) {
 	var k = 1;
 	
 	for(var data of mngList) {
-		html +=	"<div class=\"popup_box_in\" id=\"mlb" + (i++) + "\">";
+		html +=	"<div class=\"popup_mng_box_in\" id=\"mlb" + (i++) + "\">";
 		html += "<input type=\"hidden\" id=\"mng" + (j++) + "\" value=\"" + data.EMP_NAME + "\" />";
 		html += "<input type=\"hidden\" id=\"mge" + (k++) + "\" value=\"" + data.EMP_NUM + "\" />";
-		html +=	"<div class=\"popup_cc_box_left\">";
+		html +=	"<div class=\"popup_box_left\">";
 		html +=	"<span><img alt=\"담당자이미지\" class=\"mngIcon\" src=\"resources/images/sales/usericon.png\"></span>";
 		html +=	"</div>";
-		html +=	"<div class=\"popup_cc_box_right\">";
-		html +=	 data.EMP_NUM + " " + "<span class=\"boldname\">" + data.EMP_NAME + " / " + data.RANK_NAME + "</span>";
+		html +=	"<div class=\"popup_mng_box_right\">";
+		html +=	 data.EMP_NUM + " " + "<span class=\"boldMngName\">" + data.EMP_NAME + " / " + data.RANK_NAME + "</span>";
 		html +=	"<span class=\"mg_wid\">" + data.DEPT_NAME + "</span>";
 		html +=	"</div>";
 		html +=	"</div>";                                                                      

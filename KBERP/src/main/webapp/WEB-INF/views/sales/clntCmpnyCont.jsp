@@ -217,6 +217,12 @@ td:nth-child(1), td:nth-child(3){
 hr { /* 구분선 */
 	margin-bottom: 10px;
 }
+.op_title { 
+	font-size: 11pt;
+}
+.cl_title { 
+	font-size: 11pt;
+}
 .bot_title { 
 	font-size: 11pt;
 }
@@ -465,6 +471,34 @@ $(document).ready(function() {
 /***********************************************************************************/
 	
 	reloadCList(); // 하단 고객
+
+/*************************************** 고객 등록 ***************************************/
+	$(".cl_title").on("click", ".plus_btn_bot", function() {
+ 		var html = "";
+		
+ 		
+		
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "고객 등록",
+			contents : html,
+			contentsEvent : function() {
+				
+			},
+			width : 600,
+			height : 500,
+			buttons : [{
+				name : "등록",
+				func:function() {
+					closePopup();
+				}
+			}, {
+				name : "취소"
+			}]
+		});
+	});
+/***********************************************************************************/	
 	
 }); // JQuery End
 
@@ -478,12 +512,21 @@ function reloadOpList() {
 		data : params,
 		dataType : "json",
 		success : function(res) {
+			drawOpCnt(res.opListCnt);
 			drawOpList(res.list);
 		},
 		error : function(req) {
 			console.log(req.responseText);
 		}
 	});
+}
+
+function drawOpCnt(opListCnt) {
+	var html = "";
+	
+	html = "<h3>의견(" + opListCnt + ")</h3>";
+	
+	$(".op_title").html(html);
 }
 
 function drawOpList(list) {
@@ -516,12 +559,21 @@ function reloadCList() {
 		data : params,
 		dataType : "json",
 		success : function(res) {
+			drawClCnt(res.clListCnt);
 			drawClList(res.list);
 		},
 		error : function(req) {
 			console.log(req.responseText);
 		}
 	});
+}
+
+function drawClCnt(clListCnt) {
+	var html = "";
+	
+	html = "<h3>고객(" + clListCnt + ")<div class=\"drop_btn\"></div><div class=\"plus_btn_bot\"></div></h3>";
+	
+	$(".cl_title").html(html);
 }
 
 function drawClList(list) {
@@ -708,7 +760,7 @@ function drawClList(list) {
 				<input type="hidden" id="cmNum" name="cmNum" />
 				<!-- 의견 -->
 				<div class="mgtop"></div>
-				<div class="bot_title"><h3>의견(7)</h3></div>
+				<div class="op_title"></div>
 				<hr color="#F2B705" width="925px">
 				<div class="opbx"></div>
 				<div class="opBox">
@@ -720,7 +772,7 @@ function drawClList(list) {
 				<input type="hidden" name="ccn" value="${param.ccn}" />
 				<!-- 고객 -->
 				<div class="mgtop"></div>
-				<div class="bot_title"><h3>고객(6)<div class="drop_btn"></div><div class="plus_btn_bot"></div></h3></div>
+				<div class="cl_title"></div>
 				<hr color="#F2B705" width="925px">
 				<div class="cbx"></div>
 			</form>

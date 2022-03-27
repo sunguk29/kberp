@@ -646,8 +646,8 @@
 	</select>
 	
 	<select id="getOpList" parameterType="hashmap" resultType="hashmap">
-		SELECT E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, CCC.CONT, TO_CHAR(CCC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
-			   CCC.CMNT_NUM
+		SELECT CCC.CLNT_CMPNY_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, CCC.CONT, TO_CHAR(CCC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
+		       CCC.CMNT_NUM
 		FROM CLNT_CMPNY_CMNT CCC INNER JOIN CLNT_CMPNY CC
 		                             ON CCC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM  
 		                         INNER JOIN EMP E
@@ -659,6 +659,7 @@
 		                         INNER JOIN RANK R
 		                                 ON A.RANK_NUM = R.RANK_NUM
 		WHERE CCC.DEL_CHECK IS NULL
+		AND CCC.CLNT_CMPNY_NUM = #{ccn}
 		ORDER BY CCC.CMNT_NUM DESC
 	</select>
 	
@@ -673,5 +674,19 @@
 		UPDATE CLNT_CMPNY_CMNT SET DEL_CHECK = SYSDATE
 		WHERE CMNT_NUM = #{cmNum}
 	</update>
+	
+	<select id="opListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM CLNT_CMPNY_CMNT
+		WHERE DEL_CHECK IS NULL
+		AND CLNT_CMPNY_NUM = #{ccn}
+	</select>
+	
+	<select id="clListCnt" parameterType="hashmap" resultType="Integer">
+        SELECT COUNT(*) AS CNT
+		FROM ENTRPRS_CLNT
+		WHERE DEL_CHECK IS NULL
+		AND CLNT_CMPNY_NUM = #{ccn}
+	</select>
 	
 </mapper>
