@@ -52,6 +52,16 @@ td:nth-child(1), td:nth-child(3){
 	width : 90px;
 	height: 40px;
 }
+.popBtn{
+	width: 100px;
+	height: 40px;
+	background-color: #fff;
+	border-radius: 3px;
+	font-weight: bold;
+	font-size: 14px;
+	border: none;
+	text-align: center;
+}
 .btn, .address{
 	background-color: #fff;
 	border-radius: 3px;
@@ -77,6 +87,20 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 33px;
 	border: none;
 }
+.pop_txt{
+	height: 30px;
+	width: 420px;
+	padding: 0 5px;
+	padding-right: 25px;
+	font-size: 10.5px;
+	color: black;
+	vertical-align: middle;
+	box-sizing: border-box;
+	outline: none;
+	border-radius: 3px;
+	line-height: 33px;
+	border: none;
+}
 
 .btnImg{
 	width : 30px;
@@ -85,7 +109,14 @@ td:nth-child(1), td:nth-child(3){
 }
 
 .imgPos{
-	text-align: right;
+	position: relative;
+}
+.btnImg_in {
+    position: absolute;
+    left: 395px;
+    top: 4px;
+    width: 25px;
+    cursor: pointer;
 }
 .title_name {
 	font-size: 15px;
@@ -340,6 +371,16 @@ textarea {
 	background-size: 48px 48px;
 	margin-right: 10px;
 }
+/* 고객 등록 팝업 */
+.popup_table {
+	border-collapse: collapse;
+	display: inline-block;
+	margin: 0px;
+}
+
+.popup_table td:nth-child(1) {
+	width: 100px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -476,65 +517,50 @@ $(document).ready(function() {
 	$(".cl_title").on("click", ".plus_btn_bot", function() {
  		var html = "";
  		
-		html += "<table class=\"popup_table\">                                                                                ";
-		html += "	<colgroup>                                                                                              ";
-		html += "		<col width=\"100\" />                                                                                 ";
-		html += "		<col width=\"auto\" />                                                                                ";
-		html += "	</colgroup>                                                                                             ";
-		html += "	<tbody>                                                                                                 ";
-		html += "		<tr>                                                                                                ";
-		html += "			<td><input type="button" class="btn" value="고객 *" readonly="readonly"/></td>                  ";
-		html += "			<td><input type="text" class="txt" id="cName" name="cName" /></td>                                                      ";
-		html += "		</tr>                                                                                               ";
-		html += "		<tr height=\"10\">                                                                                    ";
-		html += "			<td><input type="button" class="btn" value="고객사 *" /></td>                                 ";
-		html += "			<td>                                                                                            ";
-		html += "				<div class=\"imgPos\">                                                                        ";
-		html += "					<input type=\"text\" class=\"txt imgName\" id=\"ccName\" name=\"ccName\" />                     ";
-		html += "					<input type=\"hidden\" id=\"ccNum\" name=\"ccNum\" />                     ";
-		html += "					<img class=\"btnImg_in\" id="ccPop" alt="팝업" src="resources/images/sales/popup.png">                     ";
-		html += "				</div>                                                                                      ";
-		html += "			</td>                                                                                           ";
-		html += "		</tr>                                                                                               ";
-		html += "		<tr height="10">                                                                                    ";
-		html += "			<td><input type="button" class="btn" value="부서" /></td>                                       ";
-		html += "			<td><input type="text" class="txt" id="dept" name="dept" /></td>                                                      ";
-		html += "		</tr>                                                                                               ";
-		html += "		<tr height="10">                                                                                    ";
-		html += "			<td><input type="button" class="btn" value="직책" /></td>                                       ";
-		html += "			<td><input type="text" class="txt" id="duty" name="duty" /></td>								                        ";
-		html += "		</tr>                                                                                               ";
-		html += "		<tr height="10">                                                                                    ";
-		html += "			<td><input type="button" class="btn" value="휴대폰 번호*" /></td>                               ";
-		html += "			<td><input type="text" class="txt" id="mbl" name="mbl" /></td>															";		
-		html += "		</tr>                                                                                               ";
-		html += "		<tr height="10">                                                                                    ";
-		html += "			<td><input type="button" class="btn" value="메일" /></td>                                       ";
-		html += "			<td><input type="text" class="txt" id="email" name="email" /></td>                                                     ";
-		html += "		</tr>                                                                                               ";
-		html += "		<tr height="10">                                                                                    ";
-		html += "			<td><input type="button" class="btn" value="담당자 *" /></td>                                      ";
-		html += "			<td>                                                     ";
-		html += "				<div class="imgPos">                                                     ";
-		html += "					<input type="text" class="txt imgName" id="mngEmp" name="mngEmp" />                                                    ";
-		html += "					<input type="hidden"id="mngNum" name="mngNum" />                                                    ";
-		html += "					<img class="btnImg_in" id="mngPop" alt="팝업" src="resources/images/sales/usericon.png">                                                    ";
-		html += "				</div>                                                   ";
-		html += "				</td>                                                  ";
-		html += "		</tr>                                                                                               ";
-		html += "		<tr height="10">                                                                                    ";
-		html += "			<td><input type="button" class="btn" value="첨부자료"></td>                                     ";
-		html += "			<td>                                                                                            ";
-		html += "				<div class="imgPos">                                                                        ";
-		html += "					<span>                                                                                  ";
-		html += "						<img class="btnImg" alt="추가" src="resources/images/sales/plus.png"  />                ";
-		html += "						<img class="btnImg" alt="접기" src="resources/images/sales/uparrow.png"  />             ";
-		html += "					</span>                                                                                 ";
-		html += "				</div>                                                                                      ";
-		html += "			</td>                                                                                           ";
-		html += "		</tr>                                                                                               ";
-		html += "	</tbody>                                                                                                ";
-		html += "</table>                                                                                                   ";
+		html += "<table class=\"popup_table\">                                                                                        ";
+		html += "	<tbody>                                                                                                           ";
+		html += "		<tr height=\"10\">                                                                                                          ";
+		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객 *\" readonly=\"readonly\"/></td>                    ";
+		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"cName\" name=\"cName\" /></td>                                ";
+		html += "		</tr>                                                                                                         ";
+		html += "		<tr height=\"10\">                                                                                          ";
+		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객사 *\" /></td>                                       ";
+		html += "			<td>                                                                                                      ";
+		html += "				<div class=\"imgPos\">                                                                                ";
+		html += "					<input type=\"text\" class=\"pop_txt imgName\" id=\"ccName\" name=\"ccName\" readonly=\"readonly\" />                       ";
+		html += "					<input type=\"hidden\" id=\"ccNum\" name=\"ccNum\" />                                             ";
+		html += "					<img class=\"btnImg_in\" id=\"ccPop\" alt=\"팝업\" src=\"resources/images/sales/popup.png\">      ";
+		html += "				</div>                                                                                                ";
+		html += "			</td>                                                                                                     ";
+		html += "		</tr>                                                                                                         ";
+		html += "		<tr height=\"10\">                                                                                            ";
+		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"부서\" /></td>                                           ";
+		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"dept\" name=\"dept\" /></td>                                  ";
+		html += "		</tr>                                                                                                         ";
+		html += "		<tr height=\"10\">                                                                                            ";
+		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"직책\" /></td>                                           ";
+		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"duty\" name=\"duty\" /></td>								  ";
+		html += "		</tr>                                                                                                         ";
+		html += "		<tr height=\"10\">                                                                                            ";
+		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"휴대폰 번호*\" /></td>                                   ";
+		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"mbl\" name=\"mbl\" /></td>									  ";
+		html += "		</tr>                                                                                                         ";
+		html += "		<tr height=\"10\">                                                                                            ";
+		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"메일\" /></td>                                           ";
+		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"email\" name=\"email\" /></td>                                ";
+		html += "		</tr>                                                                                                         ";
+		html += "		<tr height=\"10\">                                                                                            ";
+		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"담당자 *\" /></td>                                       ";
+		html += "			<td>                                                                                                      ";
+		html += "				<div class=\"imgPos\">                                                                                ";
+		html += "					<input type=\"text\" class=\"pop_txt imgName\" id=\"mngEmp\" name=\"mngEmp\" readonly=\"readonly\" />                       ";     
+		html += "					<input type=\"hidden\"id=\"mngNum\" name=\"mngNum\" />                                            ";        
+		html += "					<img class=\"btnImg_in\" id=\"mngPop\" alt=\"팝업\" src=\"resources/images/sales/usericon.png\">  ";          
+		html += "				</div>                                                                                                ";
+		html += "				</td>                                                                                                 ";
+		html += "		</tr>                                                                                                         ";
+		html += "	</tbody>                                                                                                          ";
+		html += "</table>                                                                                                             ";
 		
 		makePopup({
 			bg : true,
