@@ -35,6 +35,8 @@ textarea{
 	border-color:rgba(118, 118, 118, 0.3);
 	font-size: 2pt;
 	background-color: #f4f4f4;
+	line-height: 30px;
+	font-size: 15pt;
 	}
 .inf_wrtr{
 	display: inline-block;
@@ -47,14 +49,17 @@ textarea{
 	float: right;
 	font-size: 2pt;
 	background-color: #f4f4f4;
+	line-height: 30px;
+	font-size: 10pt;
 }
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
 	$("#btn1Btn").on("click", function() {
+		$("#actionForm").attr("action","guideWrtng")
+		$("#actionForm").submit();
+	});
+	$("#btn2Btn").on("click", function() {
 		makePopup({
 			depth : 1,
 			bg : true,
@@ -71,7 +76,7 @@ $(document).ready(function() {
 			}
 		});
 	});
-	$("#btn2Btn").on("click", function() {
+	$("#btn3Btn").on("click", function() {
 		makePopup({
 			bg : false,
 			bgClose : false,
@@ -102,36 +107,32 @@ $(document).ready(function() {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">프로젝트 관리</div>
+			<div class="page_title_text">상세보기</div>
 			<!-- 검색영역 선택적 사항 -->
-			<div class="page_srch_area">
-				<select class="srch_sel">
-					<option>제목</option>
-					<option>내용</option>
-					<option>작성자</option>
-				</select>
-				<div class="srch_text_wrap">
-					<input type="text" />
-				</div>
-				<div class="cmn_btn_ml">검색</div>
-			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
-		<div class="inf_title">${data.BOARD_NUM}</div>
+		<div class="inf_title">${data.EMP_NAME}</div>
 		<div class="inf_wrtr">${data.CMBN_TITLE}</div>
 		<br/>
 		<textarea readonly="readonly" disabled="disabled">${data.CMBN_CONT}</textarea>
 			<div class="board_bottom">
 			
-				<div class="cmn_btn_ml">글쓰기</div>
-				<div class="cmn_btn_ml" id="alertBtn">알림</div>
-				<div class="cmn_btn_ml" id="btn1Btn">버튼1개</div>
-				<div class="cmn_btn_ml" id="btn2Btn">버튼2개</div>
+				<div class="cmn_btn_ml" id="btn1Btn">목록</div>
+				<div class="cmn_btn_ml" id="btn2Btn">수정</div>
+				<div class="cmn_btn_ml" id="btn3Btn">삭제</div>
 			</div>
 		</div>
 	</div>
+	
+	<form action="#" id="actionForm" method="post">
+	<input type="hidden" name="top" value="${param.top}">
+		<input type="hidden" name="menuNum" value="${param.menuNum}">
+		<input type="hidden" name="menuType" value="${param.menuType}">
+		<input type="hidden" id="no" name="no" value="${param.no} "/>
+	<input type="hidden" id="page" name="page" value="${param.page}"/>
+	</form>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

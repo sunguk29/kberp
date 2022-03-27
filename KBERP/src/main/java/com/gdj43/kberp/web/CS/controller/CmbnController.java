@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
+import com.gdj43.kberp.web.CS.service.ICmbnService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 
 
@@ -28,6 +29,9 @@ public class CmbnController {
 	
 	@Autowired
 	public IPagingService ips;
+	
+	@Autowired
+	public ICmbnService ics;
 	
 	@RequestMapping(value="strgBox")
 	public ModelAndView strgBox(ModelAndView mav) {
@@ -89,7 +93,7 @@ public class CmbnController {
 	public ModelAndView guides(@RequestParam HashMap<String, String> params,
 							  ModelAndView mav) throws Throwable {
 		
-		HashMap<String, String> data = iCommonService.getData("cm.getaGuide", params);
+		HashMap<String, String> data = iCommonService.getData("cm.getaGuide",params);
 		
 		mav.addObject("data", data);
 		

@@ -21,10 +21,12 @@ FROM(SELECT BOARD_NUM, CMBN_TITLE ,CMBN_CONT, EMP_NUM, CMBN_HITS,
                 WHERE 1=1) C
 WHERE C.RNUM BETWEEN #{startCount} AND #{endCount}
 </select>
+
 <select id="getaGuide" parameterType="hashmap" resultType="hashmap">
-SELECT BOARD_NUM, CMBN_TITLE, CMBN_CONT
-FROM CMBN_INFO
-WHERE BOARD_NUM =#{no};
+SELECT C.BOARD_NUM, C.CMBN_TITLE, C.CMBN_CONT, E.EMP_NAME
+FROM CMBN_INFO C INNER JOIN EMP E
+                 ON C.EMP_NUM = E.EMP_NUM
+WHERE BOARD_NUM =#{no}
 </select>
 
 </mapper>
