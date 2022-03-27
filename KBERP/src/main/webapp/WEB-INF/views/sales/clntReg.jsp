@@ -389,17 +389,11 @@ $(document).ready(function() {
 				drawCcList();
 				
 				$(".popup_box_cc").on("click", ".popup_cc_box_in", function() {
-					var a = $(this).attr("id");
-					for(var i = 1; i < 5; i++) {
-						if(a.substr(3,1) == $("#ccn" + i + "").attr("id").substr(3,1)) {
-							var ccn = $("#ccn" + i + "").val(); 
-							var cnn = $("#cnn" + i + "").val(); 
-							document.getElementById("ccName").value = ccn;
-							document.getElementById("ccNum").value = cnn;
-							closePopup();
-							break;
-						}
-					}
+					var ccn = $(this).children("#ccn").val(); 
+					var cnn = $(this).children("#cnn").val(); 
+					document.getElementById("ccName").value = ccn;
+					document.getElementById("ccNum").value = cnn;
+					closePopup();
 				});
 				
 				$(".pgn_area").on("click", "div", function() {
@@ -480,17 +474,11 @@ $(document).ready(function() {
 				drawMngList();
 				
 				$(".popup_box_mng").on("click", ".popup_mng_box_in", function() {
-					var a = $(this).attr("id");
-					for(var i = 1; i < 5; i++) {
-						if(a.substr(3,1) == $("#mng" + i + "").attr("id").substr(3,1)) {
-							var mng = $("#mng" + i + "").val(); 
-							var mge = $("#mge" + i + "").val(); 
-							document.getElementById("mngEmp").value = mng;
-							document.getElementById("mngNum").value = mge;
-							closePopup();
-							break;
-						}
-					}
+					var mng = $(this).children("#mng").val();
+					var mge = $(this).children("#mge").val();
+					document.getElementById("mngEmp").value = mng;
+					document.getElementById("mngNum").value = mge;
+					closePopup();
 				});
 				
 				$(".pgn_area").on("click", "div", function() {
@@ -611,14 +599,11 @@ function drawCcList() {
 
 function drawList(list) {
 	var html = "";
-	var i = 1;
-	var j = 1;
-	var k = 1;
-	
+
 	for(var data of list) {                                                                               
-		html += "<div class=\"popup_cc_box_in\" id=\"box" + (i++) + "\">                                                               ";
-		html += "<input type=\"hidden\" id=\"ccn" + (j++) + "\" value=\"" + data.CLNT_CMPNY_NAME + "\" />";
-		html += "<input type=\"hidden\" id=\"cnn" + (k++) + "\" value=\"" + data.CLNT_CMPNY_NUM + "\" />";
+		html += "<div class=\"popup_cc_box_in\" id=\"box\">                                                               ";
+		html += "<input type=\"hidden\" id=\"ccn\" value=\"" + data.CLNT_CMPNY_NAME + "\" />";
+		html += "<input type=\"hidden\" id=\"cnn\" value=\"" + data.CLNT_CMPNY_NUM + "\" />";
 		html += "<div class=\"popup_box_left\">                                                          ";
 		html += "	<span class=\"company\"></span>                                                         ";
 		html += "</div>                                                                                   ";
@@ -687,14 +672,11 @@ function drawMngList() {
 
 function drawMngCont(mngList) {
 	var html = "";
-	var i = 1;
-	var j = 1;
-	var k = 1;
 	
 	for(var data of mngList) {
-		html +=	"<div class=\"popup_mng_box_in\" id=\"mlb" + (i++) + "\">";
-		html += "<input type=\"hidden\" id=\"mng" + (j++) + "\" value=\"" + data.EMP_NAME + "\" />";
-		html += "<input type=\"hidden\" id=\"mge" + (k++) + "\" value=\"" + data.EMP_NUM + "\" />";
+		html +=	"<div class=\"popup_mng_box_in\" id=\"mlb\">";
+		html += "<input type=\"hidden\" id=\"mng\" value=\"" + data.EMP_NAME + "\" />";
+		html += "<input type=\"hidden\" id=\"mge\" value=\"" + data.EMP_NUM + "\" />";
 		html +=	"<div class=\"popup_box_left\">";
 		html +=	"<span><img alt=\"담당자이미지\" class=\"mngIcon\" src=\"resources/images/sales/usericon.png\"></span>";
 		html +=	"</div>";
