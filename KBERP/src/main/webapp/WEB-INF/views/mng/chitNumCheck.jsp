@@ -26,7 +26,7 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 		break;
 	case "intrnlCostGo" :
-		$("#actionForm").attr("action", "intrnlCostMngDtl"); // 내부비용관리 상세보기 jsp 생성 후 수정 필요
+		$("#actionForm").attr("action", "intrnlCostMngDtlView"); // 내부비용관리 상세보기 jsp 생성 후 수정 필요
 		$("#actionForm").submit();
 		break;
 	case "failed" :

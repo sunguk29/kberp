@@ -56,7 +56,6 @@
 											</if>
 		ORDER BY APNTM_NUM DESC          
 	 </select>
-	 
 	
 	 <select id="getApntmCont" resultType="hashmap" parameterType="hashmap">
 	 	 SELECT A.APNTM_NUM, E.EMP_NAME, E.EMP_NUM, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, A.START_DATE, A.END_DATE, A.DTL_CONT 
@@ -70,17 +69,54 @@
 	                        		ON A.RANK_NUM = R.RANK_NUM
 		 WHERE APNTM_NUM = #{no}
 	</select>
+	
 	<!--    증명서발급 쿼리    -->
 	 <select id="getEmpInfo" resultType="hashmap" parameterType="hashmap">
 		SELECT EMP_NAME, TO_CHAR(BRTHDT, 'YYYY-MM-DD') AS BRTHDT, ZIP_CODE, ADRS, DTL_ADRS
 		FROM EMP
 		WHERE EMP_NUM = #{sEmpNum}
 	</select>
+	
 	 <select id="getEmpRqstList" resultType="hashmap" parameterType="hashmap">
 		SELECT CRTFCT_NUM, CRTFCT_KIND, TO_CHAR(RQST_DATE, 'YYYY-MM-DD') AS RQST_DATE, TO_CHAR(ISSUE_DATE, 'YYYY-MM-DD') AS ISSUE_DATE , ISSUE_STS_NUM
 		FROM CRTFCT
 		WHERE RQST_EMP_NUM = #{sEmpNum}
 	</select>
+	
+	<!-- 조직도 쿼리 -->
+	 <select id="getOrgnztDeptList" resultType="hashmap" parameterType="hashmap">
+		 SELECT DEPT_NUM, DEPT_NAME, SUPER_DEPT_NUM, DEPT_LEVEL, DEL_CHECK
+	     FROM DEPT
+	     WHERE DEL_CHECK = '1'
+		<choose>
+			<when test="deptGbn == 0">
+		 		AND DEPT_LEVEL = '1'
+			</when>
+			<when test="deptGbn == 1">
+		 		AND DEPT_LEVEL = '2'
+			</when>
+		</choose>
+	 </select>
+	 
+	 <select id="getOrgnztEmpList" resultType="hashmap" parameterType="hashmap">
+		SELECT E.EMP_NAME, DD.DEPT_NUM, DD.DEPT_NAME, DD.SUPER_DEPT_NUM, DD.DEPT_LEVEL, DD.DEL_CHECK, DD.EMP_NUM, DD.START_DATE, DD.END_DATE
+		FROM( SELECT D.DEPT_NUM, D.DEPT_NAME, D.SUPER_DEPT_NUM, D.DEPT_LEVEL, D.DEL_CHECK, A.EMP_NUM, A.START_DATE, A.END_DATE
+		      FROM ( SELECT DEPT_NUM, DEPT_NAME, SUPER_DEPT_NUM, DEPT_LEVEL, DEL_CHECK
+		             FROM DEPT
+		             WHERE DEL_CHECK = '1')D RIGHT OUTER JOIN APNTM A 
+		                                                   ON D.DEPT_NUM = A.DEPT_NUM
+		      WHERE A.END_DATE IS NULL
+		      OR A.END_DATE > SYSDATE ) DD INNER JOIN EMP E
+                                                   ON DD.EMP_NUM = E.EMP_NUM
+         <choose>
+			<when test="empGbn == 1">
+		 		AND DEPT_NUM = '1'
+			</when>
+			<when test="empGbn == 2">
+		 		AND DEPT_NUM = '2'
+			</when>
 
+		</choose>
+	</select>
 
 </mapper>

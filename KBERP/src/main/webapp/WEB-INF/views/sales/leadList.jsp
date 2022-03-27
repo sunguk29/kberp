@@ -175,13 +175,14 @@
 .sts_list {
 	display: inline-block;
 	vertical-align: middle;
-	width: 135px;
+	width: 150px;
 	margin: 0 30px;
 	padding: 8px 5px;
 	font-size: 10pt;
 	text-align: center;
 	background-color: #f2f2f2;
 	border-radius: 5px;
+	border: none;
 }
 
 .sts_list:hover {
@@ -191,7 +192,7 @@
 }
 
 .sts_list:active {
-   width: 130pxpx;
+   width: 150px;
    margin: 0 30px;
    padding: 8px 5px;
    background-color: #F2CB05;
@@ -377,6 +378,7 @@ input:focus {
 $(document).ready(function() {
 
 	reloadList();
+	
 	//리드 상세보기
 	$(".list_table").on("click", ".leadName", function() {
 		$("#leadNum").val($(this).attr("leadNum"));
@@ -389,6 +391,14 @@ $(document).ready(function() {
 		$("#page").val("1");
 		
 		reloadList();
+	});
+	
+	$(".sts").on("click", "input[type='button']", function() {
+		$("#page").val("1");
+		
+		$("#psNum").val($(this).attr("num"));
+		
+		reloadList();		
 	});
 	
 	if('${param.psNum}' != '' || '${param.srchName}' != '') {
@@ -410,7 +420,6 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-
 /* 담당자 팝업  */
 	$(".userIcon").on("click", function() {
  		var html = "";
@@ -542,7 +551,7 @@ function mngrDrawList(list) {
 /* 리드 리스트 */
 function reloadList() {
 	var params = $("#actionForm").serialize();
-	
+	console.log(params);
 	$.ajax({
 		type : "post",
 		url : "leadListAjax",
@@ -550,6 +559,8 @@ function reloadList() {
 		data : params,
 		success : function(res) {
 			drawList(res.list);
+			drawTotal(res.cnt);
+			drawCnt(res.cnt, res.ongoingCnt, res.rcgntnCnt, res.failCnt);
 			drawPaging(res.pb, ".pgn_area");
 		},
 		error : function(req) {
@@ -609,6 +620,32 @@ function drawList(list) {
 	
 	$(".list_table").html(html);
 }
+function drawCnt(cnt, ongoingCnt,rcgntnCnt, failCnt) {
+	var html = "";
+	
+	html += "<input type=\"button\" class=\"sts_list\" num=\"0\" value=\"전체 : "+ cnt + "건\">";
+	html += "<input type=\"button\" class=\"sts_list\" num=\"1\" value=\"진행중 : "+ ongoingCnt + "건\">";
+	html += "<input type=\"button\" class=\"sts_list\" num=\"2\" value=\"영업기회 전환 : "+ rcgntnCnt + "건\">";
+	html += "<input type=\"button\" class=\"sts_list\" num=\"3\" value=\"실패 : "+ failCnt + "건\">";
+	
+/* 	html += "<div class=\"sts_list\" id=\"listCnt\" name=\"listCnt\">전체 : " + cnt + "건</div>";
+	html += "<div class=\"sts_list\" id=\"ongoingCnt\" name=\"ongoingCnt\">진행중 : " + ongoingCnt + "건</div>";
+	html += "<div class=\"sts_list\">영업기회 전환 : " + rcgntnCnt + "건</div>";
+	html += "<div class=\"sts_list\">실패: " + failCnt + "건</div>"; */
+
+	$(".sts").html(html);
+	
+}
+function drawTotal(cnt) {
+	var html = "";
+	
+	html += "<h3>";
+	html += "리드 (검색결과: " + cnt + "건)";
+	html += "</h3>";
+	
+	$(".SearchResult").html(html);
+
+}
 
 function drawPaging(pb, sel) {
 	var html = "";
@@ -666,12 +703,7 @@ function drawPaging(pb, sel) {
 					<!-- 검색영역 -->
 					<div class="bodyWrap">
 						<!-- sts : 상품현황 -->
-						<div class="sts">
-							<div class="sts_list">전체 : 390건</div>
-							<div class="sts_list">진행중 : 252건</div>
-							<div class="sts_list">영업기회 전환 : 123건</div>
-							<div class="sts_list">실패: 15건</div>
-						</div>
+						<div class="sts"></div>
 						<div class="tLine"></div>
 						<!-- class="sts" end -->
 
@@ -796,7 +828,7 @@ function drawPaging(pb, sel) {
 								</tr>
 							</tbody>
 						</table>
-					<div class="SearchResult"><h3>리드 (검색결과: 390건)</h3></div>
+					<div class="SearchResult"></div>
 
 				<!-- list_table -->
 					<table class="list_table"></table>

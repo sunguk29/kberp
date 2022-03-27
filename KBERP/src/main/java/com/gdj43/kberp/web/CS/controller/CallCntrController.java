@@ -34,6 +34,21 @@ public class CallCntrController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/callCenterPopListAjax", method = RequestMethod.POST, 
+			produces = "text/json;charset=UTF-8")
+		@ResponseBody
+		public String callCenterPopListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+			ObjectMapper mapper = new ObjectMapper();
+			
+			Map<String, Object> modelMap = new HashMap<String, Object>();
+			
+			List<HashMap<String, String>> list = iCommonService.getDataList("CC.getCallCenterClnt", params);
+			
+			modelMap.put("list", list);
+			
+			return mapper.writeValueAsString(modelMap); 
+		}
+	
 	@RequestMapping(value="/callCenterAction/{gbn}", method = RequestMethod.POST,
 			produces = "text/json;charset=UTF-8")
 			@ResponseBody
@@ -59,18 +74,4 @@ public class CallCntrController {
 				return mapper.writeValueAsString(modelMap);
 			}
 	
-	@RequestMapping(value = "/callCenterPopListAjax", method = RequestMethod.POST, 
-					produces = "text/json;charset=UTF-8")
-		@ResponseBody
-		public String callCenterPopListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
-			ObjectMapper mapper = new ObjectMapper();
-			
-			Map<String, Object> modelMap = new HashMap<String, Object>();
-			
-			List<HashMap<String, String>> list = iCommonService.getDataList("CC.getCallCenterClnt", params);
-			
-			modelMap.put("list", list);
-			
-			return mapper.writeValueAsString(modelMap); 
-	}
 }

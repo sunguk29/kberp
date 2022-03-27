@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP - 내부비용관리 목록</title>
+<title>카카오뱅크 ERP - 내부비용관리 월별 목록</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -29,12 +29,38 @@
 	height: 27px;
 }
 
-.mnthly_slct:focus {
-	outline: 2px solid #F2CB05; 
+.btn_wrap {
+	display: inline-block;
+	vertical-align: top;
+	text-align: right;
 }
 
 .board_table tbody td {
-	color: black;
+	color: #000000;
+}
+
+.total {
+	border-collapse: collapse;
+	font-size: 10.5pt;
+	margin: 15px 0 15px;
+	overflow: scroll
+}
+
+.total td {
+	border: 1px solid #DDDDDD;
+	text-align: center;
+}
+
+.total td:nth-child(1) {
+	background-color: #F2F2F2;
+	height: 50px;
+	font-size: 11pt;
+	font-weight: bold;
+}
+
+.btn_wrap {
+	width: 100%;
+	text-align: right;
 }
 
 </style>
@@ -60,7 +86,6 @@ $(document).ready(function() {
 			}
 		});
 	});
-	
 	$("#btn2Btn").on("click", function() {
 		makePopup({
 			bg : false,
@@ -81,22 +106,27 @@ $(document).ready(function() {
 	
 	reloadList();
 	
-	$("#srchMonth").on("change", function() {
-		$("#searchMonth").val($("#srchMonth").val());
-		reloadList();
-	});
-	
-	$("tbody").on("click", "#clickMon", function() {
-		$("#mon").val($(this).attr("mon"));
-		$("#menuNum").val
-		
-		$("#actionForm").attr("action", "intrnlCostMngMnthlyList")
-		$("#actionForm").submit();
-	});
-	
 	$("#pgn_area").on("click", "div", function() {
-		$("#page").val($(this).attr("page"));
+		$("#page2").val($(this).attr("page"));
 		reloadList();
+	});
+	
+	$("#previousBtn").on("click", function() {
+		$("#actionForm").attr("action", "intrnlCostMng");
+		$("#actionForm").submit();
+		
+	});
+	
+	$("#mnthly_slct").on("change", function() {
+		$("#mon").val($("#mnthly_slct").val());
+		reloadList();
+	});
+	
+	$("#listTbody").on("click", "#chitNum", function() {
+		$("#sendChitNum").val($(this).attr("chitnum"));
+		
+		$("#actionForm").attr("action", "intrnlCostMngDtlView")
+		$("#actionForm").submit();
 	});
 });
 
@@ -105,13 +135,14 @@ function reloadList() {
 	
 	$.ajax({
 		type : "post",
-		url : "intrnlCostMngAjax",
+		url : "intrnlCostMngMnthlyListAjax",
 		dataType : "json",
 		data : params,
 		success : function(res) {
 			console.log(res);
 			drawList(res.list);
 			drawPaging(res.pb);
+			drawSum(res.data);
 		},
 		error : function(request, status, error) {
 			console.log(request.responseText);
@@ -123,13 +154,35 @@ function drawList(list) {
 	var html = "";
 	
 	for(data of list) {
+		
 		html += "<tr>";
-		html += "<td class=\"board_table_hover\" id=\"clickMon\" mon=\"" + data.DATE_MON +  "\">" + data.DATE_MON + "</td>";
-		html += "<td>" + data.AMNT_SUM + "</td>";
+		html += "<td>" + data.INTRNL_DATE + "</td>"; 
+		html += "<td class=\"board_table_hover\" id=\"chitNum\" chitnum=\"" + data.CHIT_NUM + "\">" + data.CHIT_NUM + "</td>";
+		html += "<td>" + data.CRSPNDNT + "</td>";
+		html += "<td>" + data.AMNT + "</td>";
+		html += "<td>" + data.ACNT_NAME + "</td>";
+		if(data.RMRKS != null) {
+			html += "<td>" + data.RMRKS + "</td>";			
+		} else {
+			html += "<td>-</td>";
+		}
 		html += "</tr>";
 	}
+	
+	$("#listTbody").html(html);
+}
 
-	$("tbody").html(html);
+function drawSum(data) {
+	var html = "";
+	
+	html += "<td>총 합계</td>";
+	if(data != null) {
+		html += "<td>" + data.AMNT + "원</td>";		
+	} else {
+		html += "<td>0원</td>";
+	}
+	
+	$("#totalTd").html(html);
 }
 
 function drawPaging(pb) {
@@ -166,9 +219,11 @@ function drawPaging(pb) {
 </head>
 <body>
 	<form action="#" id="actionForm" method="post">
-		<input type="hidden" id="mon" name="mon">
-		<input type="hidden" id="page" name="page" value="${page}" />
+		<input type="hidden" id="mon" name="mon" value="${param.mon}">
+		<input type="hidden" id="page" name="page" value="${param.page}" />
+		<input type="hidden" id="page2" name="page2" value="${page2}" />
 		<input type="hidden" id="searchMonth" name="searchMonth" value="${param.searchMonth}">
+		<input type="hidden" id="sendChitNum" name="sendChitNum">
 		<input type="hidden" name="top" value="${param.top}">
 		<input type="hidden" name="menuNum" value="${param.menuNum}">
 		<input type="hidden" name="menuType" value="${param.menuType}">
@@ -184,9 +239,9 @@ function drawPaging(pb) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">내부비용관리 목록</div>
+			<div class="page_title_text">내부비용관리 월별 목록</div>
 			<div class="mnthly_slct_wrap">
-				<input type="month" class="mnthly_slct" id="srchMonth" value="${param.searchMonth}"/>
+				<input type="month" class="mnthly_slct" id="mnthly_slct" value="${param.mon}" />
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -194,22 +249,45 @@ function drawPaging(pb) {
 			<!-- 여기부터 쓰면 됨 -->
 			<table class="board_table">
 				<colgroup>
-					<col width="450">
-					<col width="450">
+					<col width="150">
+					<col width="150">
+					<col width="150">
+					<col width="150">
+					<col width="150">
+					<col width="150">
 				</colgroup>
 				<thead>
 					<tr>
-						<th>전표귀속연월</th>
-						<th>총 합계</th>
+						<th>지출일</th>
+						<th>전표번호</th>
+						<th>거래처</th>
+						<th>금액</th>
+						<th>계정명</th>
+						<th>비고</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody id="listTbody">
 				</tbody>
 			</table>
 			<div class="board_bottom">
 				<div class="pgn_area" id="pgn_area">
 				</div>
-				<div class="cmn_btn">신규</div>
+			</div>
+
+			<table class="total">
+				<colgroup>
+					<col width="200">
+					<col width="800">
+				</colgroup>
+				<tbody>
+					<tr id="totalTd">
+					</tr>
+				</tbody>
+			</table>
+			<div class="btn_wrap">
+				<div class="cmn_btn" id="previousBtn">전체 목록</div>
+				<div class="cmn_btn_ml">신규</div>
+				<div class="cmn_btn_ml">월 삭제</div>
 			</div>
 		</div>
 	</div>

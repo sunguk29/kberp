@@ -248,7 +248,7 @@ thead {
 }
 
 .apntm_list thead tr {
-   background-color: #f1f1f1;
+   background-color: #f3f3f3;
    border-bottom: 1px solid #d7d7d7;
    height: 40px;
    font-size: 10pt;
@@ -266,7 +266,7 @@ thead {
 
 
 .apntm_list tbody tr:hover {
-   background-color: rgb(200,218,248);
+   background-color: #f3f3f3;
 }
 
 /* ================ 오른쪽 ========== */
@@ -526,7 +526,7 @@ $(document).ready(function() {
       $("#oldSearchGbn").val("0");
    }
    
-   //슬림스크롤
+   // 슬림스크롤
    $(".apntm_list_area").slimScroll({height: "450px"});
    
    // 인사발령 메인화면
@@ -536,6 +536,8 @@ $(document).ready(function() {
    // 발령 상세보기 
    $("tbody").on("click", "tr", function() {
       $("#no").val($(this).attr("no"));
+      $("tbody").children("tr").css("background-color", "#ffffff");
+      $(this).css("background-color", "rgb(200,218,248)");
 
       reloadCont();
    });
@@ -566,9 +568,9 @@ $(document).ready(function() {
    
    // 발령 추가
    $("#apntm_add_btn").on("click", function() {
-
       drawNewApntm();
    });
+});
 
 // 발령 리스트 리로드
 function reloadList() {
@@ -614,7 +616,7 @@ function drawList(list) {
    var html = "";
    
    for(var data of list) {                                 
-      html += "<tr no=\"" + data.APNTM_NUM + "\">"        ;
+      html += "<tr id=\"tbodyTr\" no=\"" + data.APNTM_NUM + "\">"        ;
       html += "<td>" + data.APNTM_NUM + "</td>"           ;
       if(data.APNTM_DVSN_NUM == 0) {
      	 html += "<td>입사</td>"      ;
@@ -641,7 +643,7 @@ function drawList(list) {
    $("tbody").html(html);
 }   
 
-//발령 상세정보 생성
+// 발령 상세정보 생성
 function drawCont(cont){
    var html = "";
    
@@ -738,10 +740,9 @@ function drawCont(cont){
    html += "   </div>                                                                                 ";
    html += "</div>                                                                                    ";
    $("#apntm_cont").html(html);
-                                                                                                    
 }
 
-//발령 등록 생성
+// 발령 등록 생성
 function drawNewApntm(){
    var html = "";
    
@@ -857,10 +858,7 @@ function drawNewApntm(){
    html += "   </div>                                                                                 ";
    html += "</div>                                                                                    ";
    $("#apntm_cont").html(html);
-                                                                                                    
 }
-   
-});
 </script>
 </head>
 <body>
@@ -886,6 +884,9 @@ function drawNewApntm(){
       </div>
 <!--------------------- 발령 조회 Form ------------------------->   
          <form action="#" id="actionForm" method="post">
+    		<input type="hidden" name="top" value="${param.top}">
+			<input type="hidden" name="menuNum" value="${param.menuNum}">
+			<input type="hidden" name="menuType" value="${param.menuType}">
             <input type="hidden" id="no" name="no" />
             <div class="srch_wrap">
                <div class="srch_top_area"> 

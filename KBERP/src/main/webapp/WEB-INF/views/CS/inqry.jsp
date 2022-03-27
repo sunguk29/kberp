@@ -15,6 +15,87 @@
 	width: 900px;
 }
 /* 개인 작업 영역 */
+.cont_area {
+	display: inline-block;
+	margin-left: 50px;
+	margin-top: 10px;
+}
+
+.cnsl_page {
+	display: inline-block;
+	width: 900px;
+	height: 40px;
+	line-height: 40px;
+	color: #2E83F2;
+	text-shadow: 0px 0 1px #7b7b7b;
+	font-size: 14pt;
+	font-weight: bold;
+	text-indent: 10px;
+	border-bottom: 2px solid #2E83F2;
+}
+
+.inqry_info {
+	font-size: 11pt;
+}
+
+.inqry_info th {
+	text-align: left;
+	width: 100px;
+	height: 50px;
+}
+
+.th_star {
+	font-size: 12pt;
+	color: #2E83F2;
+	margin-left: -3px;
+}
+
+tbody td {
+	height: 30px;
+}
+
+tbody td input {
+	width: 200px;
+	height: 20px;
+	padding: 5px 10px;
+	border: none;
+	border: 1px solid #d5d5d5;
+	border-radius: 2px;
+}
+
+tbody td input:focus {
+	outline: 1px solid;
+	outline-color: #2E83F2;
+}
+
+.inqry_info td select {
+	width: 210px;
+	height: 30px;
+}
+
+tr:nth-child(4) input, tr:nth-child(6) input {
+	width: 700px;
+	border: 1px solid #d5d5d5;
+	border-radius: 2px;
+}
+
+tr:nth-child(5) {
+	vertical-align: top;
+}
+
+.wrtng_cont {
+	resize: none;
+	font-family: 맑은고딕;
+	border: 1px solid #d5d5d5;
+	border-radius: 2px;
+	padding: 10px 10px;
+}
+
+.wrtng_cont:focus {
+	outline: 1px solid;
+	outline-color: #2E83F2;
+}
+
 .cmn_btn_ml {
 	/* 마우스 드래그 금지 */
 	-ms-user-select: none;
@@ -24,24 +105,6 @@
 	user-select:none;
 }
 
-.cont_area {
-	display: inline-block;
-	margin-left: 80px;
-	margin-top: 30px;
-}
-
-.cnsl_page {
-	display: inline-block;
-	width: 85px;
-	height: 40px;
-	line-height: 40px;
-	color: #2E83F2;
-	text-shadow: 0px 0 1px #7b7b7b;
-	font-size: 14pt;
-	font-weight: bold;
-	text-align: center;
-	border-bottom: 2px solid #2E83F2;
-}
 
 .cnsl_top .ctgr, .cnsl_top .wrtng_title, .cnsl_top .wrtng_wrtr {
 	display: inline-block;
@@ -76,13 +139,11 @@
 	
 }
 
-.wrtng_cont {
-	resize: none;
-	font-family: 맑은고딕;
-}
 
 .cnsl_bottom {
+	float: right;
 	margin-top: 30px;
+	vertical-align: bottom;
 }
 
 .cnsl_bottom input[type="text"] {
@@ -90,15 +151,6 @@
 	height: 20px;
 }
 
-.dwnld {
-	height: 26px;
-	vertical-align: bottom;
-	margin-right: 123px;
-}
-
-.cmn_btn_ml {
-	vertical-align: bottom;
-}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -136,40 +188,72 @@ $(document).ready(function() {
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="cnsl_top">
-				<div class="ctgr">
-					<select disabled="disabled" value="${data.CTGRY_NUM}">
-						<option>인터넷뱅킹</option>
-						<option>스마트폰뱅킹</option>
-						<option>CD/ATM</option>
-						<option>공인인증서</option>
-						<option>인증/OTP/보안카드</option>
-						<option>예금/신탁</option>
-						<option>펀드</option>
-						<option>대출</option>
-						<option>외환</option>
-						<option>로그인관련</option>
-					</select>
-				</div>
-				<div class="wrtng_title">
-					<input type="text" readonly="readonly" value="${data.WRTNG_TITLE}">
-				</div>
-				<div class="wrtng_wrtr">
-					<input type="text" readonly="readonly" value="${data.CLNT_NAME}">
-				</div>
-			</div> <!-- cnsl_top의 끝 -->
-			
-				<div class="cnsl_middle">
-					<textarea class="wrtng_cont" rows="22" cols="116" readonly="readonly">${data.WRTNG_CONT}</textarea>
-				</div>
+				<table class="inqry_info">
+				<tbody>
+					<tr>
+						<th scope="row">이름
+							<span class="th_star">*</span>
+						</th>
+						<td>
+							<input type="text" readonly="readonly" value="${data.CLNT_NAME}">
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">연락처
+							<span class="th_star">*</span>
+						</th>
+						<td>
+							<input type="text" readonly="readonly" value="${data.PHONE_NUM_1}">
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">카테고리
+							<span class="th_star">*</span>
+						</th>
+						<td>
+							<select disabled="disabled">
+								<option>인터넷뱅킹</option>
+								<option>스마트폰뱅킹</option>
+								<option>CD/ATM</option>
+								<option>공인인증서</option>
+								<option>인증/OTP/보안카드</option>
+								<option>예금/신탁</option>
+								<option>펀드</option>
+								<option>대출</option>
+								<option>외환</option>
+								<option>로그인관련</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">문의 제목
+							<span class="th_star">*</span>
+						</th>
+						<td>
+							<input type="text" readonly="readonly" value="${data.WRTNG_TITLE}">
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">문의 내용
+							<span class="th_star">*</span>
+						</th>
+						<td>
+							<textarea class="wrtng_cont" rows="15" cols="110" readonly="readonly">${data.WRTNG_CONT}</textarea>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">첨부파일</th>
+						<td>
+							<input type="text" readonly="readonly" placeholder="첨부된 파일 & 이미지 : ">
+						</td>
+					</tr>
+				</tbody>
+				</table>
 				<div class="cnsl_bottom">
-					<div class="file_atch">
-						<input type="text" readonly="readonly" placeholder="첨부된 파일 & 이미지 : ">
-						<input class="dwnld" type="button" value="다운로드">
 					<div class="cmn_btn_ml" id="ansr_rvs">답변등록</div>
 					<div class="cmn_btn_ml">삭제</div>
 				</div>
 		</div>
-	</div>
 	</div>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>

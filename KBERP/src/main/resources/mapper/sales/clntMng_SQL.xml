@@ -555,6 +555,16 @@
 		VALUES (CLNT_CMPNY_ATT_FILE_SEQ.NEXTVAL, CLNT_CMPNY_SEQ.CURRVAL, #{attFile})
 	</insert>
 	
+	<insert id="opContAdd" parameterType="hashmap">
+		INSERT INTO CLNT_CMPNY_CMNT(CMNT_NUM, CLNT_CMPNY_NUM, EMP_NUM, CONT)
+		VALUES(CLNT_CMPNY_CMNT_SEQ.NEXTVAL, #{ccn}, #{sEmpNum}, #{tacont})
+	</insert>
+	
+	<insert id="clntAttAdd" parameterType="hashmap">
+		INSERT INTO CLNT_ATT_FILE (ATT_FILE_NUM, CLNT_NUM, ATT_FILE_NAME)
+		VALUES (CLNT_ATT_FILE_SEQ.NEXTVAL, ENTRPRS_CLNT_SEQ.CURRVAL, #{attFile})
+	</insert>
+	
 	<select id="getClntList" parameterType="hashmap" resultType="hashmap">
 		SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM
 		FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM,
@@ -592,13 +602,24 @@
 	</delete>
 	
 	<select id="clntAdd" parameterType="hashmap" resultType="hashmap">
-		INSERT INTO ENTRPRS_CLNT (CLNT_NUM, CLNT_NAME, CLNT_CMPNY_NUM, MNGR_EMP_NUM, RHSTRTN_EMP_NUM, DEPT, DUTY, MBL)
-		VALUES (ENTRPRS_CLNT_SEQ.NEXTVAL)
+		INSERT INTO ENTRPRS_CLNT (CLNT_NUM, CLNT_NAME, CLNT_CMPNY_NUM, MNGR_EMP_NUM, RGSTRTN_EMP_NUM, DEPT, DUTY, MBL, EMAIL)
+		VALUES (ENTRPRS_CLNT_SEQ.NEXTVAL, #{cName}, #{ccNum}, #{mngNum}, #{sEmpNum}, #{dept}, #{duty}, #{mbl}, #{email})
 	</select>
 	
 	<select id="popupCcListCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
+	</select>
+	
+	<select id="popupMngListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM EMP E INNER JOIN APNTM A
+		                           ON E.EMP_NUM = A.EMP_NUM
+		                   INNER JOIN DEPT D
+		                           ON A.DEPT_NUM = D.DEPT_NUM
+		                   INNER JOIN RANK R
+		                           ON A.RANK_NUM = R.RANK_NUM
+		WHERE D.DEPT_NAME LIKE '영%'
 	</select>
 	
 	<select id="popupCcList" parameterType="hashmap" resultType="hashmap">
@@ -608,6 +629,64 @@
 		               ROW_NUMBER() OVER(ORDER BY CLNT_CMPNY_NUM DESC) AS RNUM    
 		        FROM CLNT_CMPNY ) CC
 		WHERE CC.RNUM BETWEEN #{startCount} AND #{endCount}
+	</select>
+	
+	<select id="popupMngList" parameterType="hashmap" resultType="hashmap">
+		SELECT ME.EMP_NUM, ME.EMP_NAME, ME.RANK_NAME, ME.DEPT_NAME
+		FROM ( SELECT E.EMP_NUM, E.EMP_NAME, R.RANK_NAME, D.DEPT_NUM, D.DEPT_NAME, ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM
+		        FROM EMP E INNER JOIN APNTM A
+		                           ON E.EMP_NUM = A.EMP_NUM
+		                   INNER JOIN DEPT D
+		                           ON A.DEPT_NUM = D.DEPT_NUM
+		                   INNER JOIN RANK R
+		                           ON A.RANK_NUM = R.RANK_NUM
+		        WHERE D.DEPT_NAME LIKE '영%'
+		    ) ME
+		WHERE ME.RNUM BETWEEN #{startCount} AND #{endCount}
+	</select>
+	
+	<select id="getOpList" parameterType="hashmap" resultType="hashmap">
+		SELECT CCC.CLNT_CMPNY_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, CCC.CONT, TO_CHAR(CCC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
+		       CCC.CMNT_NUM
+		FROM CLNT_CMPNY_CMNT CCC INNER JOIN CLNT_CMPNY CC
+		                             ON CCC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM  
+		                         INNER JOIN EMP E
+		                                 ON CCC.EMP_NUM = E.EMP_NUM
+		                         INNER JOIN APNTM A
+		                                 ON E.EMP_NUM = A.EMP_NUM
+		                         INNER JOIN DEPT D
+		                                 ON A.DEPT_NUM = D.DEPT_NUM
+		                         INNER JOIN RANK R
+		                                 ON A.RANK_NUM = R.RANK_NUM
+		WHERE CCC.DEL_CHECK IS NULL
+		AND CCC.CLNT_CMPNY_NUM = #{ccn}
+		ORDER BY CCC.CMNT_NUM DESC
+	</select>
+	
+	<select id="getClList" parameterType="hashmap" resultType="hashmap">
+		SELECT EC.CLNT_NAME, EC.DUTY, EC.DEPT, EC.MBL, EC.EMAIL
+		FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
+		                           ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
+		WHERE CC.CLNT_CMPNY_NUM = #{ccn}
+	</select>
+	
+	<update id="opContUpdate" parameterType="hashmap">
+		UPDATE CLNT_CMPNY_CMNT SET DEL_CHECK = SYSDATE
+		WHERE CMNT_NUM = #{cmNum}
+	</update>
+	
+	<select id="opListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM CLNT_CMPNY_CMNT
+		WHERE DEL_CHECK IS NULL
+		AND CLNT_CMPNY_NUM = #{ccn}
+	</select>
+	
+	<select id="clListCnt" parameterType="hashmap" resultType="Integer">
+        SELECT COUNT(*) AS CNT
+		FROM ENTRPRS_CLNT
+		WHERE DEL_CHECK IS NULL
+		AND CLNT_CMPNY_NUM = #{ccn}
 	</select>
 	
 </mapper>

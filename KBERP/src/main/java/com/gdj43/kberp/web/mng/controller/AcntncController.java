@@ -39,14 +39,99 @@ public class AcntncController {
 		return mav;
 	}
 	
-	// 내부비용관리
+	// 내부비용관리 전체 목록
 	@RequestMapping(value ="/intrnlCostMng")
-	public ModelAndView intrnlCostMng(ModelAndView mav) {
+	public ModelAndView intrnlCostMng(@RequestParam HashMap<String, String> params, ModelAndView mav) {
 		
+		if(params.get("page") == null || params.get("page") == "") {
+			params.put("page", "1");
+		}
+		
+		mav.addObject("page", params.get("page"));
 		mav.setViewName("mng/intrnlCostMngList");
 		
 		return mav;
 	}
+	
+	// 내부비용관리 ajax
+	@RequestMapping(value ="/intrnlCostMngAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String intrnlCostMngAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		// 총 게시글 수
+		int cnt = iCommonService.getIntData("IntrnlCostMng.getIntrnlCostMngCnt", params);
+		
+		// 페이징 계산
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
+		
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("IntrnlCostMng.getIntrnlCostMngList", params);
+		
+		modelMap.put("list", list); 
+		modelMap.put("pb", pb); 
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
+	// 내부비용관리 월별 목록
+	@RequestMapping(value ="/intrnlCostMngMnthlyList")
+	public ModelAndView intrnlCostMngMnthlyList(@RequestParam HashMap<String, String> params, ModelAndView mav) {
+		
+		if(params.get("page2") == null || params.get("page2") == "") {
+			params.put("page2", "1");
+		}
+		
+		mav.addObject("page2", params.get("page2"));
+		mav.setViewName("mng/intrnlCostMngMnthlyList");
+		
+		return mav;
+	}
+	
+	// 내부비용관리 월별 목록 ajax
+	@RequestMapping(value ="/intrnlCostMngMnthlyListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String intrnlCostMngMnthlyListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		// 총 게시글 수
+		int cnt = iCommonService.getIntData("IntrnlCostMng.intrnlCostMngMnthlyCnt", params);
+		
+		// 페이징 계산
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page2")), cnt, 10, 5);
+		
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("IntrnlCostMng.intrnlCostMngMnthlyList", params);
+		
+		HashMap<String, String> data = iCommonService.getData("IntrnlCostMng.intrnlCostMngMnthlyData", params);
+		
+		modelMap.put("data", data);
+		modelMap.put("list", list); 
+		modelMap.put("pb", pb); 
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
+	// 내부비용관리 상세보기
+	@RequestMapping(value = "/intrnlCostMngDtlView")
+	public ModelAndView intrnlCostMngDtlView(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("IntrnlCostMng.intrnlCostMngDtlView", params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("mng/intrnlCostMngDtlView");
+		
+		return mav;
+	}
+	
 	
 	// 전표관리
 	@RequestMapping(value = "/chitMng")
@@ -80,7 +165,7 @@ public class AcntncController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		// 총 게시글 수
-		int cnt = iCommonService.getIntData("chitMng.getChitMngCnt", params);
+		int cnt = iCommonService.getIntData("ChitMng.getChitMngCnt", params);
 		
 		// 페이징 계산
 		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
@@ -88,9 +173,9 @@ public class AcntncController {
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
-		List<HashMap<String, String>> list = iCommonService.getDataList("chitMng.getChitMngList", params);
+		List<HashMap<String, String>> list = iCommonService.getDataList("ChitMng.getChitMngList", params);
 		
-		HashMap<String, String> data = iCommonService.getData("chitMng.getChitMngData", params);
+		HashMap<String, String> data = iCommonService.getData("ChitMng.getChitMngData", params);
 		
 		modelMap.put("list", list); 
 		modelMap.put("pb", pb); 
@@ -104,7 +189,7 @@ public class AcntncController {
 	@RequestMapping(value = "/chitNumCheck")
 	public ModelAndView chitNumCheck(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
-		int expnsRsltnCheck = iCommonService.getIntData("chitMng.expnsRsltnCheck", params);
+		int expnsRsltnCheck = iCommonService.getIntData("ChitMng.expnsRsltnCheck", params);
 		
 		if(expnsRsltnCheck == 1) {
 			// 지출결의서관리 상세보기로 이동
@@ -116,11 +201,14 @@ public class AcntncController {
 			
 		} else {
 			
-			int intrnlCostCheck = iCommonService.getIntData("chitMng.intrnlCostCheck", params);
+			int intrnlCostCheck = iCommonService.getIntData("ChitMng.intrnlCostCheck", params);
 			
 			if(intrnlCostCheck == 1) {
 				// 내부비용관리 상세보기로 이동
 				mav.addObject("res", "intrnlCostGo");
+				mav.addObject("top", "34");
+				mav.addObject("menuNum", "38");
+				mav.addObject("menuType", "M");
 				
 			} else {
 				System.out.println("조회된 전표가 없음!");
@@ -177,13 +265,10 @@ public class AcntncController {
 	public ModelAndView expnsRsltnadmnstrEmpMnthlyList(@RequestParam HashMap<String, String> params, 
 													   ModelAndView mav) throws Throwable {
 		
-		// HashMap<String, String> data = iCommonService.getData("expnsRsltnadmnstr.getExpnsEmpMnthlyData", params);
-		
 		if(params.get("page2") == null || params.get("page2") == "") {
 			params.put("page2", "1");
 		}
 		
-		// mav.addObject("data", data);
 		mav.addObject("page2", params.get("page2"));
 		
 		mav.setViewName("mng/expnsRsltnadmnstrEmpMnthlyList");
@@ -223,12 +308,12 @@ public class AcntncController {
 	@RequestMapping(value = "/expnsRsltnadmnstrEmpMnthly")
 	public ModelAndView expnsRsltnadmnstrDtl(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 	
-	HashMap<String, String> data = iCommonService.getData("expnsRsltnadmnstr.expnsRsltnadmnstrDtl", params);
+		HashMap<String, String> data = iCommonService.getData("expnsRsltnadmnstr.expnsRsltnadmnstrDtl", params);
+			
+		mav.addObject("data", data);
 		
-	mav.addObject("data", data);
-	
-	mav.setViewName("mng/expnsRsltnadmnstrEmpMnthly");
-	
-	return mav;
-}
+		mav.setViewName("mng/expnsRsltnadmnstrEmpMnthly");
+		
+		return mav;
+	}
 }
