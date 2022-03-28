@@ -84,8 +84,6 @@ $(document).ready(function() {
 	
 	$("#pgn_area").on("click", "div", function() {
 		$("#page2").val($(this).attr("page"));
-		
-		// 목록 조회
 		reloadList();
 	});
 	
