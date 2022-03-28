@@ -120,6 +120,11 @@
     line-height: 32px;
 }
 
+.orgnzt_depth2_wrap{
+	display: none;
+}
+
+
 .orgnzt_depth2 {
 	padding-left: 25px;
     display: inline-block;
@@ -152,8 +157,36 @@
     line-height: 32px;
 }
 
+.depth2_icon_on {
+	display: inline-block;
+    vertical-align: top;
+    width: 50px;
+    height: 30px;
+    background-image: url(resources/images/hr/down_icon.png), url(resources/images/hr/folder_icon.png);
+    background-repeat: no-repeat;
+    background-position: 3% center, 80% center;
+    background-size: 13px, 11px;
+}
+
+
+.depth2_txt_on {
+	padding-left: 5px;
+    display: inline-block;
+    vertical-align: top;
+    width: 150px;
+    height: 25px;
+    color: #2E83F2;
+    font-size: 10pt;
+    font-weight: 600;
+    line-height: 32px;
+}
+
+.orgnzt_depth3_wrap{
+	display: none;
+}
+
 .orgnzt_depth3 {
-	padding-left: 55px;
+	padding-left: 30px;
     display: inline-block;
     vertical-align: top;
     width: 205px;
@@ -186,10 +219,48 @@
 $(document).ready(function() {
    $(".orgnzt_depth1").on("click", function() {
 	   console.log("depth1 click");
-      $(".depth1_icon").removeClass('depth1_icon').addClass('depth1_icon_on');
-      $(".depth1_txt").removeClass('depth1_txt').addClass('depth1_txt_on');
-	});
+      if($(".orgnzt_depth2_wrap").is(":visible")){
+    	  $(".orgnzt_depth2_wrap").css("display","none");
+          $(".depth1_icon_on").removeClass('depth1_icon_on').addClass('depth1_icon');
+          $(".depth1_txt_on").removeClass('depth1_txt_on').addClass('depth1_txt');
+		  console.log("depth1 접음");
+	   console.log(this)
+      } else {
+    	  $(".orgnzt_depth2_wrap").css("display","block");
+          $(".depth1_icon").removeClass('depth1_icon').addClass('depth1_icon_on');
+          $(".depth1_txt").removeClass('depth1_txt').addClass('depth1_txt_on');
+		  console.log("depth1 펼침");
+	   console.log(this)
+      }
+   });
+   
+   $(".orgnzt_depth2").on("click", function() {
+	   console.log("depth2 click");
+      if($(this).children(".orgnzt_depth3_wrap").is(":visible")){
+    	  $(this).children(".orgnzt_depth3_wrap").css("display","none");
+          $(this).find(".depth2_icon_on").removeClass('depth2_icon_on').addClass('depth2_icon');
+          $(this).find(".depth2_txt_on").removeClass('depth2_txt_on').addClass('depth2_txt');
+		  console.log("depth2 접음");
+	   console.log(this)
+      } else {
+    	  $(this).children(".orgnzt_depth3_wrap").css("display","block");
+          $(this).find(".depth2_icon").removeClass('depth2_icon').addClass('depth2_icon_on');
+          $(this).find(".depth2_txt").removeClass('depth2_txt').addClass('depth2_txt_on');
+		  console.log("depth2 펼침");
+	   console.log(this)
+      }
+   });
+   
+   
 });
+
+function drawDept(dept){
+	var html = "";
+	
+	for(var data of list) {
+		
+	}
+}
 
 </script>
 </head>
@@ -226,15 +297,37 @@ $(document).ready(function() {
 							<div class="depth1_icon"></div>
 							<div class="depth1_txt">카카오뱅크</div>
 						</div>
-						<div class="orgnzt_depth2_wrap">
+						<div class="orgnzt_depth2_wrap" >
 							<div class="orgnzt_depth2">
-								<div class="depth2_icon"></div>
-								<div class="depth2_txt">전산팀</div>
+								<div class="orgnzt_depth2_area">
+									<div class="depth2_icon"></div>
+									<div class="depth2_txt">전산팀</div>
+								</div>
+								<div class="orgnzt_depth3_wrap" >
+									<div class="orgnzt_depth3">
+										<div class="depth3_icon"></div>
+										<div class="depth3_txt">유은지</div>
+									</div>
+									<div class="orgnzt_depth3">
+										<div class="depth3_icon"></div>
+										<div class="depth3_txt">유은지</div>
+									</div>
+								</div>
 							</div>
-							<div class="depth3_wrap">
-								<div class="orgnzt_depth3">
-									<div class="depth3_icon"></div>
-									<div class="depth3_txt">유은지</div>
+							<div class="orgnzt_depth2">
+								<div class="orgnzt_depth2_area">
+									<div class="depth2_icon"></div>
+									<div class="depth2_txt">인사팀</div>
+								</div>
+								<div class="orgnzt_depth3_wrap" >
+									<div class="orgnzt_depth3">
+										<div class="depth3_icon"></div>
+										<div class="depth3_txt">유은지</div>
+									</div>
+									<div class="orgnzt_depth3">
+										<div class="depth3_icon"></div>
+										<div class="depth3_txt">유은지</div>
+									</div>
 								</div>
 							</div>
 						</div>

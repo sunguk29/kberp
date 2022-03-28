@@ -74,7 +74,7 @@ public class HrController {
 		return mav;
 	 }
 	
-	// 조직도(관리자)
+	// 조직도
     @RequestMapping(value = "/orgnztChart")
     public ModelAndView orgnzt(@RequestParam HashMap<String,String> params, 
                          ModelAndView mav) {
