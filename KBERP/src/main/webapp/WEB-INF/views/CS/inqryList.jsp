@@ -165,27 +165,27 @@ function drawPaging(pb) {
 	</c:import>
 	<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}" />
 	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
-	<form action="#" id="actionForm" method="post">
-		<input type="hidden" id="no" name="no" />
-		<input type="hidden" id="page" name="page" value="${page}" />
-		<input type="hidden" id="top" name="top" value="68"/>
-		<input type="hidden" id="menuNum" name="menuNum" value="74"/>
-		<input type="hidden" id="menuType" name="menuType" value="M"/>
-	</form>
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">1:1 문의</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
-				<select class="srch_sel" id="searchGbn" name="searchGbn">
-					<option value="0">제목</option>
-					<option value="1">작성자</option>
-				</select>
-				<div class="srch_text_wrap">
-					<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
-				</div>
-				<div class="cmn_btn_ml" id="searchBtn">검색</div>
+				<form action="#" id="actionForm" method="post">
+					<input type="hidden" id="no" name="no" />
+					<input type="hidden" id="page" name="page" value="${page}" />
+					<input type="hidden" id="top" name="top" value="${param.top}"/>
+					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
+					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
+						<select class="srch_sel" id="searchGbn" name="searchGbn">
+							<option value="0">제목</option>
+							<option value="1">작성자</option>
+						</select>
+						<div class="srch_text_wrap">
+							<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
+						</div>
+						<div class="cmn_btn_ml" id="searchBtn">검색</div>
+				</form>
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->

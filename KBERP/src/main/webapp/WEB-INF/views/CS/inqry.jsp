@@ -188,9 +188,9 @@ $(document).ready(function() {
 		<input type="hidden" name="page" value="${param.page}" />
 		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
-		<input type="hidden" id="top" name="top" value="68"/>
-		<input type="hidden" id="menuNum" name="menuNum" value="74"/>
-		<input type="hidden" id="menuType" name="menuType" value="M"/>
+		<input type="hidden" id="top" name="top" value="${param.top}"/>
+		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
+		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
 	</form>
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
