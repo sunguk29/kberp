@@ -133,6 +133,7 @@ function drawList(list) {
 		html += "<td>" + data.EMP_NAME + "</td>";
 		html += "<td>" + data.ACQRMNT_DATE + "</td>";
 		html += "<td>" + data.RGSTRTN_DATE + "</td>";
+		html += "</tr>";
 	}
 	$("tbody").html(html);
 }
