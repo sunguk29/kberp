@@ -115,4 +115,43 @@ public class Utils {
 		
 		return newList;
 	}
+	
+	/**
+	 * List의 MAP Key를 camel식으로 변환
+	 * 
+	 * @return HashMap<String, String>
+	 */
+	public static List<HashMap<String, String>> toCamelListMapKey(List<HashMap<String, String>> oldList) {
+		List<HashMap<String, String>> newList = new ArrayList<HashMap<String, String>>();
+		
+		for(HashMap<String, String> oldMap : oldList) {
+			Set<String> keySet = oldMap.keySet();
+			
+			Iterator<String> keys = keySet.iterator();
+			
+			HashMap<String, String> newMap = new HashMap<String, String>();
+			
+			while(keys.hasNext()) {
+				String key = keys.next();
+				
+				String[] temp = key.split("_");
+				
+				String camelKey = "";
+				
+				for(int i = 0 ; i < temp.length ; i++) {
+					if(i == 0) {
+						camelKey += temp[0].toLowerCase();
+					} else {
+						camelKey += temp[i].substring(0, 1).toUpperCase() + temp[i].substring(1).toLowerCase();
+					}
+				}
+				
+				newMap.put(camelKey, String.valueOf(oldMap.get(key)));
+			}
+			
+			newList.add(newMap);
+		}
+		
+		return newList;
+	}
 }
