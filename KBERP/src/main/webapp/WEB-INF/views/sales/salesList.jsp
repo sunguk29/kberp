@@ -379,11 +379,18 @@ $(document).ready(function() {
 	$(".salesWrap").on("click", ".salesOpportunityName", function() {
 		$("#salesNum").val($(this).attr("salesNum")); // 영업번호 가져오기
 		
-		if($("#prgrs").children("#sts").val() == 0) {
+		if($("#prgrs").children("#sts0").val() == 0) {
 			$("#actionForm").attr("action", "sales1SalesChncCont"); // 우선 영업기회 상세보기로 이동.
 			$("#actionForm").submit();
-		} else {
-			console.log($("#prgrs").children("#sts").val());
+		} else if($("#prgrs").children("#sts1").val() == 1) {
+			$("#actionForm").attr("action", "sales2SalesChncCont"); // 우선 영업기회 상세보기로 이동.
+			$("#actionForm").submit();
+		} else if($("#prgrs").children("#sts2").val() == 2) {
+			$("#actionForm").attr("action", "sales3SalesChncCont"); // 우선 영업기회 상세보기로 이동.
+			$("#actionForm").submit();
+		} else if($("#prgrs").children("#sts3").val() == 3) {
+			$("#actionForm").attr("action", "sales4SalesChncCont"); // 우선 영업기회 상세보기로 이동.
+			$("#actionForm").submit();
 		}
 	});
 	
@@ -473,25 +480,28 @@ function drawList(list) {
 		html += "<tr height=\"10\" id=\"prgrs\">";
 		if(data.PRGRS_STS2 == "영업기회") {
 			html += "<td class=\"colNum1\" rowspan=\"3\"><b>영업기회</b></td>";
-			html += "<input type=\"hidden\" id=\"sts\" value=\"0\"  />";
+			html += "<input type=\"hidden\" id=\"sts0\" value=\"0\"  />";
 		} else {
 			html += "<td class=\"colNum1\" rowspan=\"3\">영업기회</td>";
 		}
 		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "제안") {
-			html += "<td class=\"colNum1\" rowspan=\"3\" no=\"1\"><b>제안</b></td>";
+			html += "<td class=\"colNum1\" rowspan=\"3\"><b>제안</b></td>";
+			html += "<input type=\"hidden\" id=\"sts1\" value=\"1\"  />";
 		} else {
 			html += "<td class=\"colNum1\" rowspan=\"3\">제안</td>";
 		}
 		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "견적") {
-			html += "<td class=\"colNum1\" rowspan=\"3\" no=\"2\"><b>견적</b></td>";
+			html += "<td class=\"colNum1\" rowspan=\"3\"><b>견적</b></td>";
+			html += "<input type=\"hidden\" id=\"sts2\" value=\"2\"  />";
 		} else {
 			html += "<td class=\"colNum1\" rowspan=\"3\">견적</td>";
 		}
 		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "계약") {
-			html += "<td class=\"colNum1\" rowspan=\"3\" no=\"3\"><b>계약</b></td>";
+			html += "<td class=\"colNum1\" rowspan=\"3\"><b>계약</b></td>";
+			html += "<input type=\"hidden\" id=\"sts3\" value=\"3\"  />";
 		} else {
 			html += "<td class=\"colNum1\" rowspan=\"3\">계약</td>";
 		}
