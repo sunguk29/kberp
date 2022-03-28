@@ -44,10 +44,24 @@
 	height: 50px;
 }
 
+.es_text {
+	display: inline;
+	line-height: 50px;
+    font-size: 10pt;
+    text-shadow: none;
+    text-indent: 645px;
+}
+
 .th_star {
-	font-size: 12pt;
+	display: inline-block;
 	color: #2E83F2;
 	margin-left: -3px;
+}
+
+.th_star_input {
+	display: inline;
+	color: #999;
+	font-weight: normal;
 }
 
 tbody td {
@@ -183,7 +197,12 @@ $(document).ready(function() {
 		<div class="page_title_bar">
 			<span class="page_title_text">1:1 문의</span>
 		</div>
-		<div class="cnsl_page">상담글</div>
+		<div class="cnsl_page">상담글
+			<div class="es_text">
+				<div class="th_star">*</div>
+				<div class="th_star_input">항목은 필수입력 항목입니다.</div>
+			</div>
+		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
@@ -253,8 +272,9 @@ $(document).ready(function() {
 					<div class="cmn_btn_ml" id="ansr_rvs">답변등록</div>
 					<div class="cmn_btn_ml">삭제</div>
 				</div>
+			</div> <!-- cnsl_top의 끝 -->
+			</div>
 		</div>
-	</div>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>
