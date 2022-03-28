@@ -18,6 +18,9 @@
 				<when test="searchGbn == 1">
 					AND ICL.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
 				</when>
+				<when test="searchGbn == 2">
+					AND I.WRTNG_DATE LIKE '%' || #{searchTxt} || '%'
+				</when>
 			</choose>
 		</if>
 	</select>
@@ -42,6 +45,9 @@
 						</when>
 						<when test="searchGbn == 1">
 							AND ICL.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="searchGbn == 2">
+							AND TO_CHAR(WRTNG_DATE, 'YYYY-MM-DD') LIKE '%' || #{searchTxt} || '%'
 						</when>
 					</choose>
 				</if>

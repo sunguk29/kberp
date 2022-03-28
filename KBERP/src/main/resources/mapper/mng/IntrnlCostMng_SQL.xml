@@ -58,4 +58,22 @@
 		WHERE ICM.CHIT_NUM = #{sendChitNum}
 	</select>
 	
+	<select id="getAcntSrchCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM ACNT_CODE
+		WHERE MAIN_CTGR_ACNT_CODE = 0
+		<if test="sendSrchTxt != null and sendSrchTxt != ''">
+			AND ACNT_NAME LIKE '%' || #{sendSrchTxt} || '%'
+		</if>
+	</select>
+	
+	<select id="getAcntSrchList" resultType="hashmap" parameterType="hashmap">
+		SELECT SUB_CTGR_ACNT_CODE AS ACNT_CODE, ACNT_NAME, ABSTRCT
+		FROM ACNT_CODE
+		WHERE MAIN_CTGR_ACNT_CODE = 0
+		<if test="sendSrchTxt != null and sendSrchTxt != ''">
+			AND ACNT_NAME LIKE '%' || #{sendSrchTxt} || '%'
+		</if>
+	</select>
+	
 </mapper>

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -89,6 +90,56 @@ public class AssetController {
 		mav.addObject("data", data);
 		
 		mav.setViewName("mng/assetDtlViewExpndblt");
+		
+		return mav;
+	}
+	
+	@RequestMapping(value="/assetRgstrtn")
+	public ModelAndView assetRgstrtn(ModelAndView mav) {
+		
+		mav.setViewName("mng/assetRgstrtn");
+		
+		return mav;
+		
+	}
+	
+	@RequestMapping(value ="/assetAction/{gbn}", method = RequestMethod.POST,
+			produces = "text/json;charset=UTF-8") 
+	@ResponseBody
+	public String assetActionAjax(@RequestParam HashMap<String, String> params,
+							@PathVariable String gbn) throws Throwable {
+
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String,Object>();
+		try {
+		switch(gbn) {
+		case "insert":
+			ics.insertData("asset.assetRgstrtn",params);
+			break;
+		case "update":
+			ics.updateData("asset.drblMdfy",params);
+			break;
+		}
+			modelMap.put("res", "success");
+		} catch (Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "failed");
+		}
+	
+		return mapper.writeValueAsString(modelMap);
+	}
+	
+	@RequestMapping(value= "/assetDtlViewDrblMdfy")
+	public ModelAndView assetDtlViewDrblMdfy(@RequestParam HashMap<String, String> params,
+							ModelAndView mav) throws Throwable {
+		
+		
+		HashMap<String, String> data = ics.getData("asset.assetDtlViewExpndblt",params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("mng/assetDtlViewDrblMdfy");
 		
 		return mav;
 	}

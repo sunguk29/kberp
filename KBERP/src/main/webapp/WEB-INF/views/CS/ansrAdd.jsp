@@ -130,15 +130,13 @@
 .ansr_dtls_see_top {
 	display: inline-block;
 	width: 800px;
-	height: 510px;
-	background-color: #FAFAFA;
 }
 
 .open_ansr_head {
 	display: inline-block;
 	width: 800px;
 	height: 35px;
-	box-shadow: 0px 1px 2px 0px #999;
+	box-shadow: 0px 1px 1px 0px #999;
 	background-color: #F2CB05;
 	vertical-align: top;
 }
@@ -168,6 +166,12 @@
 	line-height: 35px;
 }
 
+.open_ansr_cont {
+	width: 800px;
+	height: 480px;
+	background-color: #FAFAFA;
+}
+
 .ansr_title {
 	display: inline-block;
 	width: 800px;
@@ -175,19 +179,6 @@
 	margin-top: 10px;
 	margin-left: 10px;
 }
-
-/* .ansr_dtls_see_top .ctgr {
-	display: inline-block;
-	margin-right: 10px;
-	height: 40px;
-	margin-left: 20px;
-}
-
-.ansr_dtls_see_top .ctgr select {
-	display: inline-block;
-	width: 130px;
-	height: 30px;
-} */
 
 .ansr_dtls_see_top .wrtng_title {
 	display: inline-block;
@@ -205,17 +196,6 @@
 	outline: none;
 }
 
-/* .wrtng_wrtr {
-	display: inline-block;
-}
-
-.ansr_dtls_see_top .wrtng_wrtr input {
-	display: inline-block;
-	width: 120px;
-	height: 25px;
-	
-} */
-
 .cnsl_middle {
 	width: 800px;
 	height: 350px;
@@ -232,12 +212,13 @@
 	width: 400px;
 	height: 50px;
 	display: inline-block;
+	position: relative;
 	margin-left: 20px;
 }
 
 .cnsl_bottom input[type="file"] {
 	width: 200px;
-	margin-top: 20px;
+	margin-top: 25px;
 	position: absolute;
 }
 
@@ -247,13 +228,13 @@
 	background: none;
 	border: 1px solid #999999ff;
 	vertical-align: top;
-	margin-top: 20px;
+	margin-top: 25px;
 }
 
 .ansr_btn {
 	float: right;
 	margin-top: 20px;
-	margin-right: 15px;
+	margin-right: 37px;
 }
 
 .popup_cont {
@@ -276,6 +257,12 @@ $(document).ready(function() {
 	$(".open_cnsl_btn").on("click", function() {
 		
 		$(".open_cnsl_cont").slideToggle(300);
+		  
+	});
+	
+	$(".open_ansr_btn").on("click", function() {
+		
+		$(".open_ansr_cont").slideToggle(300);
 		  
 	});
 	
@@ -332,6 +319,9 @@ $(document).ready(function() {
 		<input type="hidden" name="page" value="${param.page}" />
 		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+		<input type="hidden" id="top" name="top" value="${param.top}"/>
+		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
+		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
 	</form>
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
@@ -364,23 +354,25 @@ $(document).ready(function() {
 						<div class="open_ansr_btn">+</div>
 						<div class="see_ansr_header">답변글</div>
 					</div>
-					<div class="ansr_title">
-						<div class="wrtng_title">
-							<input type="text" placeholder="제목">
+					<div class="open_ansr_cont">
+						<div class="ansr_title">
+							<div class="wrtng_title">
+								<input type="text" placeholder="제목">
+							</div>
+						<div class="cnsl_middle">
+							<textarea class="wrtng_cont" name="wrtng_cont" rows="15" cols="110" placeholder="내용을 입력하세요."></textarea>
 						</div>
-					<div class="cnsl_middle">
-						<textarea class="wrtng_cont" name="wrtng_cont" rows="15" cols="110" placeholder="내용을 입력하세요."></textarea>
-					</div>
-					<div class="cnsl_bottom">
-						<div class="file_atch">
-							<input type="file">
-							<input type="text" readonly="readonly">
+						<div class="cnsl_bottom">
+							<div class="file_atch">
+								<input type="file">
+								<input type="text" readonly="readonly">
+							</div>
+							<div class="ansr_btn">
+								<div class="cmn_btn_mr" id="btn1Btn">대응가이드</div>
+								<div class="cmn_btn_mr" id="btn2Btn">답변등록</div>
+							</div>
 						</div>
-						<div class="ansr_btn">
-							<div class="cmn_btn_mr" id="btn1Btn">대응가이드</div>
-							<div class="cmn_btn_mr" id="btn2Btn">답변등록</div>
 						</div>
-					</div>
 					</div>
 				</div>
 			</div>
