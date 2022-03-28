@@ -9,13 +9,47 @@
 		WHERE 1 = 1
 	</select>
 	
+	
+	<!-- stage0 : 영업기회 단계 -->
+	<select id="salesStage0" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SALES
+		WHERE 1 = 1
+		AND PRGRS_STS_NUM = '0'
+	</select>
+	
+	<!-- stage1 : 영업기회 단계 -->
+	<select id="salesStage1" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SALES
+		WHERE 1 = 1
+		AND PRGRS_STS_NUM = '1'
+	</select>
+	
+	<!-- stage2 : 영업기회 단계 -->
+	<select id="salesStage2" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SALES
+		WHERE 1 = 1
+		AND PRGRS_STS_NUM = '2'
+	</select>
+	
+	<!-- stage3 : 영업기회 단계 -->
+	<select id="salesStage3" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SALES
+		WHERE 1 = 1
+		AND PRGRS_STS_NUM = '3'
+	</select>
+	
 	<!-- 영업관리 리스트 -->
 	<select id="getSalesList" parameterType="hashmap" resultType="hashmap">
-		SELECT SS.SALES_NUM, SS.PRGRS_STS, SS.PRGRS_STS2, SS.LEAD_NAME, SS.CLNT_CMPNY_NAME, SS.CLNT_NAME, SS.EMP_NAME
-		FROM ( SELECT S.SALES_NUM, L.LEAD_NAME, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, S.MNGR_EMP_NUM, E.EMP_NAME, 
+		SELECT SS.SALES_NUM, SS.PRGRS_STS, SS.PRGRS_STS2, SS.LEAD_NAME, SS.CLNT_CMPNY_NAME, SS.CLNT_NAME, SS.EMP_NAME, SS.EXPCTN_LOAN_SCALE
+		FROM ( SELECT S.SALES_NUM, S.MNGR_EMP_NUM, E.EMP_NUM, LDI.EXPCTN_LOAN_SCALE, E.EMP_NAME, L.LEAD_NAME,
+		              EC.CLNT_NAME, CC.CLNT_CMPNY_NAME,
 		              DECODE(S.PRGRS_STS_NUM, 4, '종료(성공)', 5, '종료(실패)', '진행중') AS PRGRS_STS,
 		              DECODE(S.PRGRS_STS_NUM, 0, '영업기회', 1, '제안', 2, '견적', 3, '계약') AS PRGRS_STS2,
-		              ROW_NUMBER() OVER(ORDER BY SALES_NUM DESC) AS RNUM
+		              ROW_NUMBER() OVER(ORDER BY S.SALES_NUM DESC) AS RNUM
 		       FROM SALES S INNER JOIN EMP E
 		                            ON S.MNGR_EMP_NUM = E.EMP_NUM
 		                    INNER JOIN LEAD L
@@ -24,13 +58,34 @@
 		                            ON EC.CLNT_NUM = L.CLNT_NUM
 		                    INNER JOIN CLNT_CMPNY CC
 		                            ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
+		                    LEFT OUTER JOIN LOAN_DTL_INFO LDI
+		                                 ON S.SALES_NUM = LDI.SALES_NUM
+		      WHERE 1 = 1
+		      <if test="prgrsStage != 9"><!-- 진행단계 -->
+		       	<choose>
+		       		<when test="prgrsStage == 0">
+		       			AND S.PRGRS_STS_NUM = '0'
+		       		</when>
+		       		<when test="prgrsStage == 1">
+		       			AND S.PRGRS_STS_NUM = '1'
+		       		</when>
+		       		<when test="prgrsStage == 2">
+		       			AND S.PRGRS_STS_NUM = '2'
+		       		</when>
+		       		<when test="prgrsStage == 3">
+		       			AND S.PRGRS_STS_NUM = '3'
+		       		</when>
+		       	</choose>
+		       </if>
 		      ) SS
 		WHERE SS.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
 	
-	<!-- 영업기회 기본정보tab -->
-	<select id="getSales1AddLead" parameterType="hashmap" resultType="hashmap">
+	
+	
+	<!-- 영업기회 기본정보tab 리드에서 가져오기 -->
+	<select id="getSales1BringLead" parameterType="hashmap" resultType="hashmap">
 		SELECT L.LEAD_NUM, L.LEAD_NAME, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NUM, E.EMP_NAME,
 		       DECODE(CCG.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME
 		FROM LEAD L INNER JOIN EMP E
@@ -51,29 +106,69 @@
 	</select>
 	
 	<!-- 영업기회 등록 : 영업 먼저 넣어주어야 함. -->
-	<insert id="getSales1AddSales" parameterType="hashmap">
+	<insert id="sales1AddSales" parameterType="hashmap">
 		INSERT INTO SALES(SALES_NUM, MNGR_EMP_NUM, LEAD_NUM)
 		VALUES(#{ss}, #{len}, #{llnum})
 	</insert>
 	
+	
+	<!-- 영업기회 기본정보tab 제안 단계로 가져오기 -->
+	<select id="getSales2BringLead" parameterType="hashmap" resultType="hashmap">
+	SELECT S.SALES_NUM, L.LEAD_NUM, L.LEAD_NAME, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NUM, E.EMP_NAME,
+		   TO_CHAR(S.START_DATE, 'YYYY-MM-DD') AS START_DATE,
+	       DECODE(CCG.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME
+	FROM LEAD L INNER JOIN SALES S
+	                     ON S.LEAD_NUM = L.LEAD_NUM
+	             INNER JOIN EMP E
+	                     ON E.EMP_NUM = L.MNGR_EMP_NUM
+	             INNER JOIN ENTRPRS_CLNT EC
+	                     ON EC.CLNT_NUM = L.CLNT_NUM
+	             INNER JOIN CLNT_CMPNY CC
+	                     ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
+	             INNER JOIN CLNT_CMPNY_GRADE CCG
+	                             ON CCG.GRADE_NUM = CC.GRADE_NUM
+	WHERE S.SALES_NUM = #{salesNum}
+	</select>
+	
+	
 	<!-- 영업기회 대출상세정보tab -->
-	<insert id="getSales1AddLoan" parameterType="hashmap">
+	<insert id="sales1AddLoan" parameterType="hashmap">
 		INSERT INTO LOAN_DTL_INFO ( SALES_NUM, LOAN_CAUSE_NUM, EXPCTN_LOAN_SCALE, LOAN_HOPE_TYPE, LOAN_HOPE_TIME )
 		VALUES ( #{ss}, #{loanCause}, #{expctnLoanScale}, #{loanHopeType}, #{loanHopeTime})
 	</insert>
 	
+	<!-- 영업기회 대출상세정보tab 제안 단계로 가져오기 -->
+	<select id="getSales2BringLoan" parameterType="hashmap" resultType="hashmap">
+		SELECT S.SALES_NUM,
+		       DECODE(LDI.LOAN_CAUSE_NUM, 0, '사업확장', 1, '제품개발', 2, '토지매매', 3, '기타') AS LOAN_CAUSE_NUM,
+		       LDI.EXPCTN_LOAN_SCALE,
+		       DECODE(LDI.LOAN_HOPE_TYPE, 0, '장기대출', 1, '단기대출') AS LOAN_HOPE_TYPE,
+		       DECODE(LDI.LOAN_HOPE_TIME, 0, '근시일 내', 1, '3개월 이후', 2, '6개월 이후', 3, '1년 이후') AS LOAN_HOPE_TIME
+		FROM SALES S LEFT OUTER JOIN LOAN_DTL_INFO LDI
+		                     ON S.SALES_NUM = LDI.SALES_NUM
+		WHERE S.SALES_NUM = #{salesNum}
+	</select>
+	
+	
 	<!-- 예정사업 상세정보tab -->
-	<insert id="getSales1AddBsns" parameterType="hashmap">
+	<insert id="sales1AddBsns" parameterType="hashmap">
 		INSERT INTO EXPCTD_BSNS_INFO ( SALES_NUM, EXPCTD_BSNS_NAME, EXPCTD_BSNS_TYPE, RMKS )
 		VALUES ( #{ss}, #{expctdBsnsName}, #{expctdBsnsType}, #{rmks} )
 	</insert>
 	
-	
+	<!-- 예정사업 상세정보tab 제안 단계로 가져오기 -->
+	<select id="getSales2BringBsns" parameterType="hashmap" resultType="hashmap">
+	SELECT S.SALES_NUM, EXPCTD_BSNS_NAME, EXPCTD_BSNS_TYPE, RMKS
+	FROM SALES S LEFT OUTER JOIN EXPCTD_BSNS_INFO EBI
+	                          ON S.SALES_NUM = EBI.SALES_NUM
+	WHERE S.SALES_NUM = #{salesNum}
+	</select>
 	
 	<!-- 예정사업 첨부파일tab -->
-	<!-- <insert id="getSales1AddBsnsAtt" parameterType="hashmap">
-	
-	</insert> -->
+	<insert id="sales1AddBsnsAtt" parameterType="hashmap">
+		INSERT INTO EXPCTD_BSNS_ATT_FILE ( ATT_FILE_NUM, SALES_NUM, ATT_FILE_NAME )
+		VALUES ( EXPCTD_BSNS_ATT_FILE_SEQ.NEXTVAL, #{ss}, #{attFile} )
+	</insert>
 	
 	
 	<!-- 영업기회 상세보기 -->
@@ -81,7 +176,8 @@
 		SELECT S.SALES_NUM, L.LEAD_NUM, L.LEAD_NAME, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, S.MNGR_EMP_NUM, E.EMP_NAME,
 		       DECODE(CCG.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME,
 		       LDI.LOAN_CAUSE_NUM, LDI.EXPCTN_LOAN_SCALE, LDI.LOAN_HOPE_TYPE, LDI.LOAN_HOPE_TIME,
-		       EBI.EXPCTD_BSNS_NAME, EBI.EXPCTD_BSNS_TYPE, EBI.RMKS, TO_CHAR(S.START_DATE, 'YYYY-MM-DD') AS START_DATE
+		       EBI.EXPCTD_BSNS_NAME, EBI.EXPCTD_BSNS_TYPE, EBI.RMKS, TO_CHAR(S.START_DATE, 'YYYY-MM-DD') AS START_DATE,
+		       EBAF.ATT_FILE_NUM, EBAF.ATT_FILE_NAME
 		FROM SALES S INNER JOIN EMP E
 		                     ON S.MNGR_EMP_NUM = E.EMP_NUM
 		             INNER JOIN LEAD L
@@ -96,8 +192,17 @@
 		                          ON LDI.SALES_NUM = S.SALES_NUM
 		             LEFT OUTER JOIN EXPCTD_BSNS_INFO EBI
 		                          ON EBI.SALES_NUM = S.SALES_NUM
+		             LEFT OUTER JOIN EXPCTD_BSNS_ATT_FILE EBAF
+                         		  ON EBAF.SALES_NUM = S.SALES_NUM
 		WHERE S.SALES_NUM = #{salesNum}
 	</select>
+	
+	
+	
+	<!-- 영업기회 실패 -->
+	<update id="sales1Failure" parameterType="hashmap">
+	
+	</update>
 	
 	
 	

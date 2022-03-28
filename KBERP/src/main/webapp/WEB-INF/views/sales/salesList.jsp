@@ -342,7 +342,38 @@ table {
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	// 검색 후 구분란(searchGbn)에 검색어유지를 위해
+	if('${param.searchGbn}' != '') {
+		$("#searchGbn").val('${param.searchGbn}');
+	} else {
+		$("#oldSearchGbn").val("0");
+	}
+	
+	// 목록 조회
 	reloadList();
+	
+	// 검색
+	$("#searchBtn").on("click", function() {
+		$("#page").val("1");
+		
+		$("#oldSearchGbn").val($("#searchGbn").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
+		
+		reloadList();
+	})
+	
+	$("#searchTxt").on("keypress", function(event) {
+		if(event.keyCode == 13) {
+			$("#searchBtn").click();
+			
+			return flase; // event 실행 않도록.
+		}
+	});
+	
+	// stage 클릭
+	//$("#stage0").on("click", function() {
+		
+	//});
 	
 	// 목록에서 영업명 선택 시 상세보기로 이동
 	$(".salesWrap").on("click", ".salesOpportunityName", function() {
@@ -378,11 +409,34 @@ function reloadList() {
 		success : function(res) {
 			drawList(res.list);
 			drawPaging(res.pb);
+			drawRsltCnt(res.RsltCnt);
+			drawCnt(res.stage0, res.stage1, res.stage2, res.stage3);
 		},
 		error : function(request, status, error) {
 			console.log(request.responseText);
 		}
 	});
+}
+
+function drawCnt(stage0, stage1, stage2, stage3) {
+	var html = "";
+	
+	html += "<div class=\"stage\" id=\"stage0\">영업기회 : " + stage0 + "건</div>";
+	html += "<div class=\"stage\" id=\"stage1\">제안 : " + stage1 + "건</div>";
+	html += "<div class=\"stage\" id=\"stage2\">견적 : " + stage2 + "건</div>";
+	html += "<div class=\"stage\" id=\"stage3\">계약 : " + stage3 + "건</div>";
+	
+	$(".stageM").html(html);
+}
+
+function drawRsltCnt(RsltCnt) {
+	var html = "";
+	
+	html += "<h3>";
+	html += "영업관리 (검색결과: " + RsltCnt + "건)";
+	html += "</h3>";
+	
+	$(".SearchResult").html(html);
 }
 
 
@@ -451,7 +505,11 @@ function drawList(list) {
 		html += "</table>";
 		html += "<div class=\"cliimg\"></div>";
 		html += "<div class=\"client\">" + data.CLNT_CMPNY_NAME + " / " + data.CLNT_NAME + "</div>";
-		html += "<div class=\"fs\">예상매출: 12,000,000원</div>";
+		if(data.EXPCTN_LOAN_SCALE == null) {
+			html += "<div class=\"fs\">예상매출 : 0원</div>";
+		} else {
+			html += "<div class=\"fs\">예상매출 : " + data.EXPCTN_LOAN_SCALE + "원</div>";
+		}
 		html += "<div class=\"pic\">" + data.EMP_NAME + "</div>";
 		html += "<br>";
 		html += "</div>";
@@ -492,12 +550,17 @@ function drawPaging(pb) {
 </script>
 </head>
 <body>
+<!-- 검색 데이터 유지용 -->
+<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}" />
+<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
+
 	<form action="#" id="actionForm" method="post">
 		<input type="hidden" id="page" name="page" value="${page}" />
 		<input type="hidden" name="top" value="${param.top}" />
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
-		<input type="hidden" id="salesNum" name="salesNum" />
+		<input type="hidden" id="salesNum" name="salesNum" /> <!-- 상세보기 갈 때 필요 -->
+		
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -518,12 +581,7 @@ function drawPaging(pb) {
 		<div class="cont_area">
 			<div class="body">
 				<div class="bodyWrap">
-					<div class="stageM">
-						<div class="stage">영업기회 : 10건</div>
-						<div class="stage">제안 : 184건</div>
-						<div class="stage">견적 : 240건</div>
-						<div class="stage">계약 : 1101건</div>
-					</div>
+					<div class="stageM"></div>
 					<div class="tLine"></div>
 					<table class="srch_table">
 
@@ -566,12 +624,12 @@ function drawPaging(pb) {
 									<span class="srch_name">진행 단계</span>
 								</td>
 								<td>
-									<select>
-										<option>선택안함</option>
-										<option>영업기회</option>
-										<option>제안</option>
-										<option>견적</option>
-										<option>계약</option>
+									<select id="prgrsStage" name="prgrsStage">
+										<option value="9">선택안함</option>
+										<option value="0">영업기회</option>
+										<option value="1">제안</option>
+										<option value="2">견적</option>
+										<option value="3">계약</option>
 									</select>
 								</td>
 
@@ -620,18 +678,18 @@ function drawPaging(pb) {
 									<span class="srch_name">검색어</span>
 								</td>
 								<td>
-									<select>
-										<option>선택안함</option>
-										<option>고객사명</option>
-										<option>영업명</option>
-										<option>영업기회번호</option>
+									<select id="searchGbn" name="searchGbn">
+										<option value="9">선택안함</option>
+										<option value="0">고객사명</option>
+										<option value="1">영업명</option>
+										<option value="2">영업기회번호</option>
 									</select>
 								</td>
 								<td colspan="2">
-									<input type="text" class="srch_msg" placeholder="검색 조건을 선택한 후 입력해주세요." />
+									<input type="text" class="srch_msg" id="searchTxt" name="searchTxt" value="${param.searchTxt}" placeholder="검색 조건을 선택한 후 입력해주세요." />
 								</td>
 								<td>
-									<span class="cmn_btn">검색</span>
+									<span class="cmn_btn" id="searchBtn">검색</span>
 								</td>
 							</tr>
 							<tr>
@@ -653,9 +711,7 @@ function drawPaging(pb) {
 							</tr>
 						</tbody>
 					</table>
-					<div class="SearchResult">
-						<h3>영업관리 (검색결과: 83건)</h3>
-					</div>
+					<div class="SearchResult"></div>
 					<div class="salesWrap"></div>
 					<div class="body_bottom">
 						<div class="board_bottom">

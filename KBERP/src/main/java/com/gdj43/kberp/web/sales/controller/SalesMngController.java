@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +45,7 @@ public class SalesMngController {
 		return mav;
 	}
 	
+	// 영업관리 목록 
 	@RequestMapping(value = "/salesListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	
 	@ResponseBody
@@ -53,9 +56,24 @@ public class SalesMngController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		// 총 게시글 수
-		int cnt = iCommonService.getIntData("salesMng.salesListCnt", params);
+		int listCnt = iCommonService.getIntData("salesMng.salesListCnt", params);
 		
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
+		int RsltCnt = iCommonService.getIntData("salesMng.salesListCnt", params);
+		
+		int stage0 = iCommonService.getIntData("salesMng.salesStage0", params);
+		int stage1 = iCommonService.getIntData("salesMng.salesStage1", params);
+		int stage2 = iCommonService.getIntData("salesMng.salesStage2", params);
+		int stage3 = iCommonService.getIntData("salesMng.salesStage3", params);
+		
+		modelMap.put("RsltCnt", RsltCnt);
+		
+		modelMap.put("stage0", stage0);
+		modelMap.put("stage1", stage1);
+		modelMap.put("stage2", stage2);
+		modelMap.put("stage3", stage3);
+		
+		
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), listCnt, 10, 5);
 		
 		// 데이터 시작, 종료 할당
 		params.put("startCount", Integer.toString(pb.getStartCount()));
@@ -71,11 +89,12 @@ public class SalesMngController {
 	}
 	
 	
-	// sales1SalesChncReg : 영업기회 등록 (?리퀘스트파람 받고 리드내용 받기?)
-	@RequestMapping(value="/sales1SalesChncReg")
+	
+	// sales1SalesChncReg : 영업기회 등록
+	@RequestMapping(value= "/sales1SalesChncReg")
 	public ModelAndView sales1SalesChncReg(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
-		params.put("leadNum", "7"); // 나중에 지우기...
+		params.put("leadNum", "12"); // 나중에 지우기...
 		
 		// 영업시작일 넣어주기
 		Date tday = new Date();
@@ -83,20 +102,21 @@ public class SalesMngController {
 		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
 		
 		//조회
-		HashMap<String, String> leadData = iCommonService.getData("salesMng.getSales1AddLead", params);
+		HashMap<String, String> leadData = iCommonService.getData("salesMng.getSales1BringLead", params);
 		
 		mav.addObject("tday", sdf.format(tday));
 		mav.addObject("ln", leadData);
+		
 		mav.setViewName("sales/sales1SalesChncReg");
 		
 		return mav;
 	}
 	
-	// salesMngAction : 등록, 수정, 삭제
-	@RequestMapping(value = "/salesMngAction/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	// salesMng1Action : 영업기회 등록, 수정, 삭제
+	@RequestMapping(value = "/salesMng1Action/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	
 	@ResponseBody
-	public String salesMngActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+	public String salesMng1ActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -107,16 +127,19 @@ public class SalesMngController {
 			case "insert":
 				String seq = iCommonService.getStringData("salesMng.salesSeq"); // 영업번호 시퀀스 가져오기
 				params.put("ss", seq); // 영업번호 시퀀스 넣어주기
-				iCommonService.insertData("salesMng.getSales1AddSales", params); // 영업기회 등록
-				iCommonService.insertData("salesMng.getSales1AddLoan", params); // 영업기회 대출상세정보tab
-				iCommonService.insertData("salesMng.getSales1AddBsns", params); // 예정사업 상세정보tab
-				/* iCommonService.insertData("salesMng.getSales1AddBsnsAtt", params); */
+				iCommonService.insertData("salesMng.sales1AddSales", params); // 영업기회 등록
+				iCommonService.insertData("salesMng.sales1AddLoan", params); // 영업기회 대출상세정보tab
+				iCommonService.insertData("salesMng.sales1AddBsns", params); // 영업기회 예정사업 상세정보tab
+				iCommonService.insertData("salesMng.sales1AddBsnsAtt", params); // 영업기회 예정사업 첨부파일tab
 				break;
 			case "update":
-				
+				iCommonService.updateData("salesMng.sales1UpdateSales", params);
+				iCommonService.updateData("salesMng.sales1UpdateLoan", params);
+				iCommonService.updateData("salesMng.sales1UpdateBsns", params);
+				iCommonService.updateData("salesMng.sales1UpdateBsnsAtt", params);
 				break;
-			case "delete":
-				
+			case "failure":
+				// sales1Failure : 영업기회 실패 (PRGRS_STS 5번으로.)
 				break;
 			}
 			modelMap.put("res", "success");
@@ -142,8 +165,40 @@ public class SalesMngController {
 		return mav;
 	}
 	
+	// sales1Update : 영업기회 수정
+	@RequestMapping(value = "/sales1Update")
+	public ModelAndView sales1Update(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("salesMng.getSales1", params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("sales/sales1Update");
+		
+		return mav;
+	}
+	
+	// sales2SgstnReg : 제안 등록
+	@RequestMapping(value = "/sales2SgstnReg")
+	public ModelAndView sales2SgstnReg(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		
+		//조회
+		HashMap<String, String> sales1DataLead = iCommonService.getData("salesMng.getSales2BringLead", params);
+		HashMap<String, String> sales1DataLoan = iCommonService.getData("salesMng.getSales2BringLoan", params);
+		HashMap<String, String> sales1DataBsns = iCommonService.getData("salesMng.getSales2BringBsns", params);
+		
+		mav.addObject("lead", sales1DataLead);
+		mav.addObject("loan", sales1DataLoan);
+		mav.addObject("bsns", sales1DataBsns);
+		
+		mav.setViewName("sales/sales2SgstnReg");
+		
+		return mav;
+	}
 	
 	
+	// salesMng2Action : 제안 등록, 수정, 삭제
 	
 	
 	

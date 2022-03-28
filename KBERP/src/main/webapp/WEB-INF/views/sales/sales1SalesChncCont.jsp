@@ -1,5 +1,5 @@
 <!-- 
-	영업기회 상세보기
+	영업기회 상세보기 : sales1SalesChncCont
  -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -122,7 +122,7 @@ tr:nth-child(9) td:nth-child(3){
    vertical-align: middle;
    width: 18px;
    height: 18px;
-   background-image: url("../../images/sales/plus.png");
+   background-image: url("resources/images/sales/plus.png");
    background-size: 18px 18px;
    float: right;
    margin-right: 5px;
@@ -133,7 +133,7 @@ tr:nth-child(9) td:nth-child(3){
 	vertical-align: middle;
 	width: 18px;
 	height: 18px;
-	background-image: url("../../images/sales/downarrow.png");
+	background-image: url("resources/images/sales/downarrow.png");
 	background-size: 18px 18px;
 	float: right;
 }
@@ -142,7 +142,7 @@ tr:nth-child(9) td:nth-child(3){
 	vertical-align: middle;
 	width: 18px;
 	height: 18px;
-	background-image: url("../../images/sales/up_arrow.png");
+	background-image: url("resources/images/sales/up_arrow.png");
 	background-size: 18px 18px;
 	float: right;
 	margin-top: 7.5px;
@@ -175,6 +175,12 @@ hr { /* 구분선 */
 	font-size: 11pt;
 }
 .bx { /* 스크롤때문에 div 박스 추가 */
+	width: 860px;
+	height: 305px;
+	margin-left: 47.5px;
+	overflow-y: auto;
+}
+.bx2 { /* 스크롤때문에 div 박스 추가 */
 	width: 860px;
 	height: 305px;
 	margin-left: 47.5px;
@@ -241,7 +247,7 @@ textarea {
 	vertical-align: middle;
 	width: 18px;
 	height: 18px;
-	background-image: url("../../images/sales/downarrow.png");
+	background-image: url("resources/images/sales/downarrow.png");
 	background-size: 18px 18px;
 	float: right;
 	margin-top: 7.5px;
@@ -315,7 +321,6 @@ textarea {
 	width: 25px;
 	height: 25px;
 	float: right;
-	cursor: pointer;
 	margin-right: 5px;
 }
 .mdhr {
@@ -327,7 +332,7 @@ textarea {
    vertical-align: middle;
    width: 15px;
    height: 15px;
-   background-image: url("../../images/sales/downarrow.png");
+   background-image: url("resources/images/sales/downarrow.png");
    background-size: 15px 15px;
    float: right;
    margin-top: 15px;
@@ -361,6 +366,37 @@ textarea {
 }
 /* 끝 */
 </style>
+<script type="text/javascript">
+$(document).ready(function() {
+	// 목록 버튼
+	$("#listBtn").on("click", function() {
+		
+		$("#actionForm").attr("action", "salesList");
+		$("#actionForm").submit();
+	});
+	
+	// 수정 버튼
+	$("#updateBtn").on("click", function() {
+		
+		$("#actionForm").attr("action", "sales1Update");
+		$("#actionForm").submit();
+	});
+	
+	// 다음 단계로 전환하기 버튼 : 제안 등록 페이지
+	$("#nextStageBtn").on("click", function() {
+		$("#actionForm").attr("action", "sales2SgstnReg");
+		$("#actionForm").submit();
+	});
+	
+	
+	// 영업 종료하기 버튼
+	$(".salesOver_btn").on("click", function() {
+		// 수정이랑 같음, 상태를 종료로 변경, ajax로 failure로 보내기
+	});
+});
+
+
+</script>
 </head>
 <body>
 <form action="#" id="actionForm" method="post">
@@ -368,6 +404,7 @@ textarea {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" id="salesNum" name="salesNum" value="${data.SALES_NUM}" /> <!-- 영업번호 -->
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -383,7 +420,6 @@ textarea {
 			<div class="page_title_text">영업관리 - 영업기회 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
 				<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
-				<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" id="deleteBtn" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -545,13 +581,13 @@ textarea {
 						<div class="cntrct_box_in"></div> 
 					</div>
 					<div class="next_bot">
-						<div class="cmn_btn nb">다음단계로 전환하기 ▶</div>
+						<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
 					</div>					
 					<!-- 의견 -->
 					<div class="mgtop"></div>
 					<div class="bot_title"><h3>의견(7)</h3></div>
 					<hr color="#F2B705" width="925px">
-					<div class="bx">
+										<div class="bx">
 						<div class="OpinionBox">
 							<div class="name">구예지(영업1팀 대리)</div>
 							<div class="txtOp">이 고객사와 계약 하려면 키위대리님에게 연락해서 물어보면 꿀팁 주십니다.</div>

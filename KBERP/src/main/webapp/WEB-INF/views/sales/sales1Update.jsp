@@ -1,5 +1,5 @@
 <!-- 
-	영업기회 등록 : sales1SalesChncReg
+	영업기회 수정 : sales1Update
  -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>영업기회 등록</title>
+<title>영업기회 수정</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -165,6 +165,7 @@
 	margin-top: -20px;
 }
 /* 팝업 끝 */
+
 .body {
 	display: block;
 	background-color: white;
@@ -232,19 +233,7 @@ tr:nth-child(9) td:nth-child(3) {
 	line-height: 33px;
 	border: none;
 }
-.txt2 {
-	height: 33px;
-	width: 90%;
-	padding: 0 5px;
-	font-size: 10.5px;
-	color: black;
-	vertical-align: middle;
-	box-sizing: border-box;
-	outline: none;
-	border-radius: 3px;
-	line-height: 33px;
-	border: none;
-}
+
 .btnImg {
 	width: 30px;
 	float: right;
@@ -264,6 +253,10 @@ tr:nth-child(9) td:nth-child(3) {
 	line-height: 33px;
 	border: none;
 	background-color: #F2F2F2;
+}
+
+.imgPos {
+	text-align: right;
 }
 
 .title_name {
@@ -336,6 +329,90 @@ tr:nth-child(9) td:nth-child(3) {
 	border: none;
 	background-color: #F2F2F2;
 }
+/* 의견, 히스토리 */
+.mgtop {
+	margin-top: 50px;
+}
+
+hr { /* 구분선 */
+	margin-bottom: 10px;
+}
+
+.bot_title {
+	font-size: 11pt;
+}
+
+.bx { /* 스크롤때문에 div 박스 추가 */
+	width: 860px;
+	height: 305px;
+	margin-left: 47.5px;
+	overflow-y: auto;
+}
+
+.OpinionBox {
+	width: 830px;
+	height: 70px;
+	font-size: 10pt;
+	border: 1px solid gray;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+	margin-bottom: 5px;
+	background-color: #F2F2F2;
+}
+
+.name {
+	margin-top: 3px;
+	font-weight: bold;
+	padding-top: 5px;
+	padding-left: 20px;
+}
+
+.txtOp, .dt, .del {
+	padding-left: 20px;
+}
+
+.dt {
+	padding-right: 590px;
+}
+
+.dt, .del {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 9pt;
+	color: gray;
+}
+
+.del:hover {
+	cursor: pointer;
+	color: #F2CB05;
+}
+
+.opBox {
+	width: 860px;
+	height: 56px;
+	margin: 15px 0px 5px 47.5px;
+}
+
+textarea {
+	width: 757px;
+	height: 52px;
+	font-size: 10.5pt;
+	white-space: pre-wrap;
+	resize: none;
+	font-family: "맑은 고딕";
+	display: inline-block;
+	vertical-align: top;
+	outline: none;
+}
+
+.subm {
+	margin-left: 14px;
+	width: 35px;
+	height: 56px;
+	line-height: 56px;
+}
 
 .drop_btn {
 	display: inline-block;
@@ -351,7 +428,17 @@ tr:nth-child(9) td:nth-child(3) {
 .drop_btn:hover {
 	cursor: pointer;
 }
+/* 전환 */
+.next_bot {
+	margin-top: 20px;
+	width: 100%;
+	height: 30px;
+}
 
+.nb {
+	font-size: 14px;
+	float: right;
+}
 /* 영업관리 속성들 */
 .page_cont_title_text {
 	display: inline-block;
@@ -434,19 +521,38 @@ tr:nth-child(9) td:nth-child(3) {
 	margin-right: 5px;
 }
 
+/* 영업 종료 */
+.salesOver_btn {
+	display: inline-block;
+	vertical-align: top;
+	padding: 0px 10px;
+	min-width: 30px;
+	height: 30px;
+	line-height: 30px;
+	font-size: 10pt;
+	font-weight: bold;
+	text-align: center;
+	background-color: #d7d7d7;
+	border-radius: 2px;
+	color: #222222;
+	cursor: pointer;
+}
+
+.salesOver_btn:active {
+	background-color: #E1E1E1;
+}
+
 .hr_bot {
 	margin-bottom: 20px;
 }
 
-#att {
-	display: none;
+.mng_txt {
+	width: 680px;
 }
 /* 끝 */
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	console.log("${ln.EMP_NUM}"); 
-	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
 		makePopup({
@@ -457,93 +563,76 @@ $(document).ready(function() {
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
-			buttons : [{
+			buttons : [ {
 				name : "확인",
-				func:function() {
-				$("#listForm").submit();
+				func : function() {
+					$("#backForm").submit();
 					console.log("One!");
 					closePopup();
 				}
 			}, {
 				name : "취소"
-			}]
+			} ]
 		});
 	});
-	
+
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
-		if(checkEmpty("#mngrName")) {
-			alert("담당자를 입력하세요.");
-			$("#mngrName").focus();
-		} else if($("#loanCause").val() == 9) { // select문 선택되어있음...
-			alert("대출원인을 선택하세요.");
-			$("#loanCause").focus();
-		} else if($("#loanHopeType").val() == 9) {
-			alert("대출 희망 유형을 입력하세요.");
-			$("#loanHopeType").focus();
-		} else if($("#loanHopeTime").val() == 9) {
-			alert("대출 희망 시기를 입력하세요.");
-			$("#loanHopeTime").focus();
-		} else {
-			makePopup({
-				bg : true,
-				bgClose : false,
-				title : "알림",
-				contents : "저장하시겠습니까?",
-				contentsEvent : function() {
-					$("#popup1").draggable();
-				},
-				buttons : [{
-					name : "확인",
-					func:function() {
-						/* 여기에 넣기 */
-						var addForm = $("#addForm");
-			
-						addForm.ajaxForm({
-							success : function(res) {
-								// 물리파일명 보관
-								if(res.fileName.length > 0) {
-									$("#attFile").val(res.fileName[0]);
-								}
-								
-								// 글 수정
-								var params = $("#addForm").serialize();
-								
-								$.ajax({
-									type : "post",
-									url : "salesMng1Action/insert",
-									dataType : "json",
-									data : params,
-									success : function(res) {
-										if(res.res == "success") {
-											$("#listForm").submit();
-										} else {
-											alert("등록중 문제가 발생하였습니다.");
-										}
-									},
-									error : function(request, status, error) {
-										console.log(request.responseText);
-									}
-								});
-							},
-							error : function(req) {
-								console.log(req.responseText);
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "알림",
+			contents : "저장하시겠습니까?",
+			contentsEvent : function() {
+				$("#popup1").draggable();
+			},
+			buttons : [ {
+				name : "확인",
+				func : function() {
+					/* 여기에 넣기 */
+					var updateForm = $("#updateForm");
+
+					updateForm.ajaxForm({
+						success : function(res) {
+							// 물리파일명 보관
+							if (res.fileName.length > 0) {
+								$("#attFile").val(res.fileName[0]);
 							}
-						}); // ajaxForm end
-						addForm.submit();
-						console.log("One!");
-						closePopup();
-					}
-				}, {
-					name : "닫기"
-				}]
-			});
-		} // else end
-	});
-	
-	$(".att_btn").on("click", function() {
-		$("#att").click();
-	});
+
+							// 글 수정
+							var params = $("#updateForm").serialize();
+
+							$.ajax({
+								type : "post",
+								url : "salesMngAction/update",
+								dataType : "json",
+								data : params,
+								success : function(res) {
+									if (res.res == "success") {
+										$("#backForm").submit();
+									} else {
+										alert("수정중 문제가 발생하였습니다.");
+									}
+								},
+								error : function(request, status, error) {
+									console.log(request.responseText);
+								}
+							});
+						},
+						error : function(req) {
+							console.log(req.responseText);
+						}
+					}); // ajaxForm end
+
+					updateForm.submit();
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "닫기"
+			} ]
+		}); // makePopup end
+	}); // saveBtn end
 	
 	// 담당자 조회 버튼
 	$("#userIcon").on("click", function() {
@@ -609,7 +698,7 @@ $(document).ready(function() {
 					var mngrN = $(this).children("#mngrN").val();
 					
 					document.getElementById("mngrName").value = mngrNm;
-					document.getElementById("mngrNum").value = mngrN;
+					document.getElementById("empNum").value = mngrN;
 					
 					closePopup();
 				});
@@ -648,11 +737,7 @@ $(document).ready(function() {
 		});
 	});
 	
-
-	
-	
-	
-}); // JS end
+});
 
 /* 담당자 조회 팝업 */
 function mngrList() {
@@ -722,21 +807,17 @@ function drawPaging(pb, sel) {
 	$(sel).html(html);
 }
 
-function checkEmpty(sel) {
-	if($.trim($(sel).val()) == "") {
-		return true;
-	} else {
-		return false;
-	}
-}	
+
 </script>
 </head>
 <body>
-	<form action="salesList" id="listForm" method="post">
+	<form action="sales1SalesChncCont" id="backForm" method="post">
 		<input type="hidden" id="page" name="page" value="${page}" />
 		<input type="hidden" name="top" value="${param.top}" />
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
+		<input type="hidden" id="salesNum" name="salesNum" value="${data.SALES_NUM}" />
+		<!-- 영업번호 -->
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -749,9 +830,8 @@ function checkEmpty(sel) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">영업관리 - 영업기회 등록</div>
-				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
-				<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
+			<div class="page_title_text">영업관리 - 영업기회 수정</div>
+			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" /> <img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -760,11 +840,13 @@ function checkEmpty(sel) {
 			<div class="body">
 				<div class="bodyWrap">
 					<!-- 시작 -->
-					<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
+					<form action="imageUploadAjax" id="updateForm" method="post" enctype="multipart/form-data">
 						<input type="hidden" id="page" name="page" value="${page}" />
 						<input type="hidden" name="top" value="${param.top}" />
 						<input type="hidden" name="menuNum" value="${param.menuNum}" />
 						<input type="hidden" name="menuType" value="${param.menuType}" />
+						<input type="hidden" id="salesNum" name="salesNum" value="${data.SALES_NUM}" />
+						<!-- 영업번호 -->
 
 						<div class="bot_title">
 							<h3>
@@ -774,12 +856,6 @@ function checkEmpty(sel) {
 						</div>
 						<hr class="hr_bot" color="white" width="925px">
 						<div class="page_cont_title_text">기본정보</div>
-						<input type="hidden" name="lcn" value="${ln.CLNT_NAME}" />
-						<input type="hidden" name="lccn" value="${ln.CLNT_CMPNY_NAME}" />
-						<input type="hidden" name="llnum" value="${ln.LEAD_NUM}" />
-						<input type="hidden" name="llname" value="${ln.LEAD_NAME}" />
-						<input type="hidden" name="len" value="${ln.EMP_NUM}" />
-						<input type="hidden" name="lren" value="${ln.RGSTRTN_EMP_NUM}" />
 						<hr class="hr_width">
 						<table>
 							<colgroup>
@@ -794,7 +870,7 @@ function checkEmpty(sel) {
 										<input type="button" class="btn" value="영업명*" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" readonly="readonly" value="${ln.LEAD_NAME}" />
+										<input type="text" class="txt" readonly="readonly" value="${data.LEAD_NAME}" />
 									</td>
 								</tr>
 								<tr height="40">
@@ -802,7 +878,7 @@ function checkEmpty(sel) {
 										<input type="button" class="btn" value="고객사" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" readonly="readonly" value="${ln.CLNT_CMPNY_NAME}" />
+										<input type="text" class="txt" readonly="readonly" value="${data.CLNT_CMPNY_NAME}" />
 									</td>
 								</tr>
 								<tr height="40">
@@ -810,7 +886,7 @@ function checkEmpty(sel) {
 										<input type="button" class="btn" value="고객" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" readonly="readonly" value="${ln.CLNT_NAME}" />
+										<input type="text" class="txt" readonly="readonly" value="${data.CLNT_NAME}" />
 									</td>
 								</tr>
 								<tr height="40">
@@ -818,7 +894,7 @@ function checkEmpty(sel) {
 										<input type="button" class="btn" value="고객사 등급" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" readonly="readonly" value="${ln.GRADE_NAME}" />
+										<input type="text" class="txt" readonly="readonly" value="${data.GRADE_NAME}" />
 									</td>
 								</tr>
 								<tr height="40">
@@ -826,15 +902,16 @@ function checkEmpty(sel) {
 										<input type="button" class="btn" value="영업시작일*" />
 									</td>
 									<td colspan="3">
-										<input type="date" class="txt" readonly="readonly" value="${tday}" />
+										<input type="date" class="txt" readonly="readonly" value="${data.START_DATE}" />
 									</td>
+								</tr>
 								<tr height="40">
 									<td>
 										<input type="button" class="btn" value="담당자 *" readonly="readonly" />
 									</td>
-									<td colspan="3">
-										<input type="text" class="txt2" id="mngrName" name="mngrName" value="${ln.EMP_NAME}" />
-										<input type="hidden" id="mngrNum" name="mngrNum" />
+									<td colspan="3" value="${data.EMP_NUM}">
+										<input type="text" class="txt mng_txt" id="mngrName" name="mngrName" readonly="readonly" value="${data.EMP_NAME}" />
+										<input type="hidden" name="empNum" value="${data.EMP_NUM}" />
 										<img class="btnImg_in" id="userIcon" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
 									</td>
 								</tr>
@@ -855,13 +932,34 @@ function checkEmpty(sel) {
 										<input type="button" class="btn" value="대출 원인*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="loanCause" name="loanCause" required>
+										<select class="txt" name="loanCauseNum" required>
 											<optgroup>
-												<option value="9">선택하세요</option>
-												<option value="0">사업확장</option>
-												<option value="1">제품개발</option>
-												<option value="2">토지매매</option>
-												<option value="3">기타</option>
+												<c:choose>
+													<c:when test="${data.LOAN_CAUSE_NUM eq 0}">
+														<option selected="selected">사업확장</option>
+														<option>제품개발</option>
+														<option>토지매매</option>
+														<option>기타</option>
+													</c:when>
+													<c:when test="${data.LOAN_CAUSE_NUM eq 1}">
+														<option>사업확장</option>
+														<option selected="selected">제품개발</option>
+														<option>토지매매</option>
+														<option>기타</option>
+													</c:when>
+													<c:when test="${data.LOAN_CAUSE_NUM eq 2}">
+														<option>사업확장</option>
+														<option>제품개발</option>
+														<option selected="selected">토지매매</option>
+														<option>기타</option>
+													</c:when>
+													<c:when test="${data.LOAN_CAUSE_NUM eq 3}">
+														<option>사업확장</option>
+														<option>제품개발</option>
+														<option>토지매매</option>
+														<option selected="selected">기타</option>
+													</c:when>
+												</c:choose>
 											</optgroup>
 										</select>
 									</td>
@@ -871,7 +969,7 @@ function checkEmpty(sel) {
 										<input type="button" class="btn" value="예상 대출 규모" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" id="expctnLoanScale" name="expctnLoanScale" />
+										<input type="text" class="txt" name="expctnLoanScale" value="${data.EXPCTN_LOAN_SCALE}" />
 									</td>
 								</tr>
 								<tr height="40">
@@ -879,11 +977,18 @@ function checkEmpty(sel) {
 										<input type="button" class="btn" value="대출 희망 유형*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="loanHopeType" name="loanHopeType" required>
+										<select class="txt" name="loanHopeType" required>
 											<optgroup>
-												<option value="9">선택하세요</option>
-												<option value="0">장기대출</option>
-												<option value="1">단기대출</option>
+												<c:choose>
+													<c:when test="${data.LOAN_HOPE_TYPE eq 0}">
+														<option selected="selected">장기대출</option>
+														<option>단기대출</option>
+													</c:when>
+													<c:when test="${data.LOAN_HOPE_TYPE eq 1}">
+														<option>장기대출</option>
+														<option selected="selected">단기대출</option>
+													</c:when>
+												</c:choose>
 											</optgroup>
 										</select>
 									</td>
@@ -893,13 +998,34 @@ function checkEmpty(sel) {
 										<input type="button" class="btn" value="대출 희망 시기*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="loanHopeTime" name="loanHopeTime" required>
+										<select class="txt" name="loanHopeTime" required>
 											<optgroup>
-												<option value="9">선택하세요</option>
-												<option value="0">근시일 내</option>
-												<option value="1">3개월 이후</option>
-												<option value="2">6개월 이후</option>
-												<option value="3">1년 이후</option>
+												<c:choose>
+													<c:when test="${data.LOAN_HOPE_TIME eq 0}">
+														<option selected="selected">근시일 내</option>
+														<option>3개월 이후</option>
+														<option>6개월 이후</option>
+														<option>1년 이후</option>
+													</c:when>
+													<c:when test="${data.LOAN_HOPE_TIME eq 1}">
+														<option>근시일 내</option>
+														<option selected="selected">3개월 이후</option>
+														<option>6개월 이후</option>
+														<option>1년 이후</option>
+													</c:when>
+													<c:when test="${data.LOAN_HOPE_TIME eq 2}">
+														<option>근시일 내</option>
+														<option>3개월 이후</option>
+														<option selected="selected">6개월 이후</option>
+														<option>1년 이후</option>
+													</c:when>
+													<c:when test="${data.LOAN_HOPE_TIME eq 3}">
+														<option>근시일 내</option>
+														<option>3개월 이후</option>
+														<option>6개월 이후</option>
+														<option selected="selected">1년 이후</option>
+													</c:when>
+												</c:choose>
 											</optgroup>
 										</select>
 									</td>
@@ -921,7 +1047,7 @@ function checkEmpty(sel) {
 										<input type="button" class="btn" value="예정 사업명" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" id="expctdBsnsName" name="expctdBsnsName" />
+										<input type="text" class="txt" value="${data.EXPCTD_BSNS_NAME}" />
 									</td>
 								</tr>
 								<tr height="40">
@@ -929,7 +1055,7 @@ function checkEmpty(sel) {
 										<input type="button" class="btn" value="예정 사업 형태" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" id="expctdBsnsType" name="expctdBsnsType" />
+										<input type="text" class="txt" value="${data.EXPCTD_BSNS_TYPE}" />
 									</td>
 								</tr>
 								<tr height="40">
@@ -937,29 +1063,121 @@ function checkEmpty(sel) {
 										<input type="button" class="btn" value="비고" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="rmks" id="rmks" name="rmks" />
+										<input type="text" class="rmks" id="rmks" name="rmks" value="${data.RMKS}" />
 									</td>
 								</tr>
 							</tbody>
 						</table>
-						<br /> <br />
+						<br />
 						<!-- 첨부자료  -->
 						<div class="spc">
 							<div class="adc_txt">
 								첨부자료 (0)
-								<img class="plus_btn att_btn" src="resources/images/sales/plus.png" border='0' />
+								<input type=file name="att" />
+								<input type="hidden" id="attFile" name="attFile" />
+								<img class="plus_btn" src="resources/images/sales/plus.png" border='0' />
 							</div>
 							<div class="cntrct_box_in"></div>
-								<input type=file id="att" name="att" />
-								<input type="hidden" id="attFile" name="attFile" />
 						</div>
+						<!-- 의견 -->
+						<div class="mgtop"></div>
+						<div class="bot_title">
+							<h3>의견(7)</h3>
+						</div>
+						<hr color="#F2B705" width="925px">
+						<div class="bx">
+							<div class="OpinionBox">
+								<div class="name">구예지(영업1팀 대리)</div>
+								<div class="txtOp">이 고객사와 계약 하려면 키위대리님에게 연락해서 물어보면 꿀팁 주십니다.</div>
+								<div class="dt">2022-01-10 PM 05:39</div>
+								<div class="del">삭제</div>
+							</div>
+							<div class="OpinionBox">
+								<div class="name">구예지(영업1팀 대리)</div>
+								<div class="txtOp">이 고객은 상품권 같은 것 보다는 커피 한잔 사드리는것을 더 좋아하시더라구요..!</div>
+								<div class="dt">2022-01-10 PM 05:39</div>
+								<div class="del">삭제</div>
+							</div>
+							<div class="OpinionBox">
+								<div class="name">김민재(영업1팀 주임)</div>
+								<div class="txtOp">이 고객사와 계약 하려면 키위대리님에게 연락해서 물어보면 꿀팁 주십니다.</div>
+								<div class="dt">2022-01-10 PM 05:39</div>
+								<div class="del">삭제</div>
+							</div>
+							<div class="OpinionBox">
+								<div class="name">유은정(영업1팀 사원)</div>
+								<div class="txtOp">매출이 큰 회사는 아닌듯 합니다.</div>
+								<div class="dt">2022-01-10 PM 05:39</div>
+								<div class="del">삭제</div>
+							</div>
+							<div class="OpinionBox">
+								<div class="name">유은정(영업1팀 사원)</div>
+								<div class="txtOp">하하하</div>
+								<div class="dt">2022-01-10 PM 05:39</div>
+								<div class="del">삭제</div>
+							</div>
+							<div class="OpinionBox">
+								<div class="name">유은정(영업1팀 사원)</div>
+								<div class="txtOp">하하하</div>
+								<div class="dt">2022-01-10 PM 05:39</div>
+								<div class="del">삭제</div>
+							</div>
+							<div class="OpinionBox">
+								<div class="name">유은정(영업1팀 사원)</div>
+								<div class="txtOp">하하하</div>
+								<div class="dt">2022-01-10 PM 05:39</div>
+								<div class="del">삭제</div>
+							</div>
+						</div>
+						<div class="opBox">
+							<textarea></textarea>
+							<div class="cmn_btn subm">등록</div>
+						</div>
+						<!-- 히스토리 -->
+						<div class="mgtop"></div>
+						<div class="bot_title">
+							<h3>
+								히스토리(5)
+								<div class="drop_btn"></div>
+							</h3>
+						</div>
+						<hr color="#F2B705" width="925px">
+						<div class="bx">
+							<div class="OpinionBox">
+								<div class="name">영업기회 (21/12/27 17:01:00)</div>
+								<div class="txtOp">내용: 등록된 영업기회 표시</div>
+								<div class="txtOp">담당자:000</div>
+							</div>
+							<div class="OpinionBox">
+								<div class="name">계약 (21/12/27 17:01:00)</div>
+								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
+								<div class="txtOp">담당자:000</div>
+							</div>
+							<div class="OpinionBox">
+								<div class="name">계약 (21/12/27 17:01:00)</div>
+								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
+								<div class="txtOp">담당자:000</div>
+							</div>
+							<div class="OpinionBox">
+								<div class="name">계약 (21/12/27 17:01:00)</div>
+								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
+								<div class="txtOp">담당자:000</div>
+							</div>
+							<div class="OpinionBox">
+								<div class="name">계약 (21/12/27 17:01:00)</div>
+								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
+								<div class="txtOp">담당자:000</div>
+							</div>
+						</div>
+						<hr class="hr_bot" color="white" width="925px">
+						<hr class="hr_bot" color="white" width="925px">
+						<div class="salesOver_btn nb">영업 종료하기</div>
 					</form>
 					<!-- 끝 -->
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- cont_wrap end -->
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>
