@@ -23,10 +23,17 @@
 	WHERE O.RSUM BETWEEN #{startCount} AND #{endCount} 
 </select>
 
-<select id="fcltyListCnt" resultType="Integer" parameterType="hashmap">
+<select id="fcltyListRqstCnt" resultType="Integer" parameterType="hashmap">
 	SELECT COUNT(*) AS CNT
 	FROM FCLTY_RSVTN  R INNER JOIN FCLTY F ON R.FCLTY_NUM = F.FCLTY_NUM 
-	WHERE F.DEL = 0 AND FCLTY_NAME LIKE '%' || #{searchTxt} || '%'
+	WHERE F.DEL = 0 	
+	<if test="searchTxt != null and searchTxt != ''">
+			<choose>
+				<when test="searchGbn == 0">
+					AND F.FCLTY_NAME LIKE '%' || #{searchTxt} || '%' 
+				</when>
+			</choose>
+	</if>
 </select>
 
 <select id="fcltUseRqstView" resultType="hashmap" parameterType="hashmap">
@@ -45,8 +52,38 @@
 </select>
 
 <select id="fcltyList" resultType="hashmap" parameterType="hashmap">
-	SELECT FCLTY_NAME,PLACE
+	SELECT O.FCLTY_NUM, O.FCLTY_NAME, O.PLACE, O.EMP_NAME, O.ACPT_NUM_OF_PL
+	FROM( SELECT F.FCLTY_NUM, F.FCLTY_NAME, F.PLACE, E.EMP_NAME, F.ACPT_NUM_OF_PL,ROW_NUMBER() OVER(ORDER BY F.FCLTY_NUM) AS RSUM
+	      FROM FCLTY F INNER JOIN EMP E ON F.EMP_NUM = E.EMP_NUM
+	      WHERE DEL = 0 
+	<if test="searchTxt != null and searchTxt != ''">
+			<choose>
+				<when test="searchGbn == 0">
+					AND F.FCLTY_NAME LIKE '%' || #{searchTxt} || '%' 
+				</when>
+				<when test="searchGbn == 1">
+					AND F.PLACE LIKE '%' || #{searchTxt} || '%' 
+				</when>
+			</choose>
+	</if>
+	     ) O 
+	WHERE O.RSUM BETWEEN #{startCount} AND #{endCount} 
+</select>
+
+<select id="fcltyListCnt" resultType="Integer" parameterType="hashmap">
+	SELECT COUNT(*) AS CNT
 	FROM FCLTY
+	WHERE DEL = 0 
+	<if test="searchTxt != null and searchTxt != ''">
+			<choose>
+				<when test="searchGbn == 0">
+					AND FCLTY_NAME LIKE '%' || #{searchTxt} || '%' 
+				</when>
+				<when test="searchGbn == 1">
+					AND PLACE LIKE '%' || #{searchTxt} || '%' 
+				</when>
+			</choose>
+	</if>
 </select>
 
 </mapper>

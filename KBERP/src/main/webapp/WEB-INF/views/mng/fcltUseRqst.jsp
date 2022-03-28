@@ -15,7 +15,9 @@
 	width: 900px;
 }
 /* 개인 작업 영역 */
-
+tbody tr{
+	cursor: pointer;	
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
