@@ -117,6 +117,9 @@ public class AssetController {
 		case "insert":
 			ics.insertData("asset.assetRgstrtn",params);
 			break;
+		case "update":
+			ics.updateData("asset.drblMdfy",params);
+			break;
 		}
 			modelMap.put("res", "success");
 		} catch (Throwable e) {
@@ -125,6 +128,20 @@ public class AssetController {
 		}
 	
 		return mapper.writeValueAsString(modelMap);
+	}
+	
+	@RequestMapping(value= "/assetDtlViewDrblMdfy")
+	public ModelAndView assetDtlViewDrblMdfy(@RequestParam HashMap<String, String> params,
+							ModelAndView mav) throws Throwable {
+		
+		
+		HashMap<String, String> data = ics.getData("asset.assetDtlViewExpndblt",params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("mng/assetDtlViewDrblMdfy");
+		
+		return mav;
 	}
 	
 }
