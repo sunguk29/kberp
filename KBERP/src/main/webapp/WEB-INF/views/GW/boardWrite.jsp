@@ -56,12 +56,79 @@
     background-color: #F2B705;
 }
 .cmn_btn{
-	margin-left: 850px;
+	margin-left: 5px;
+}
+.cmn_btn_box{
+	margin-left: 750px;
+	
 }
 .page_title_text {
 	margin-bottom: 29px;
 }
 </style>
+<script type="text/javascript">
+$(document).ready(function() {
+$("#cancelBtn").on("click", function() {
+	$("#backForm").submit();
+});
+
+$("#writeBtn").on("click", function () {
+	 // getData() : 입력된 데이터 취득
+     if(checkEmpty("#title")){
+        alert("제목을 입력하세요.");
+        $("#title").focus();
+     } else if(checkEmpty("#con")){
+        alert("내용을 입력하세요.");
+        $("#con").focus();
+     } else {
+   	var writeForm = $("#writeForm");
+   	
+   	writeForm.ajaxForm({
+   		success : function(res) {
+				// 물리파일명 보관
+				if(res.fileName.length > 0) {
+					$("#attFile").val(res.fileName[0]);
+				}
+
+				//글 저장
+				var params = $("#writeForm").serialize();
+		        
+		        $.ajax({
+		        	 type : "post",
+		        	 url : "boardAction/insert",
+		        	 dataType : "json",
+		        	 data : params,
+		        	 success : function(res) {
+		        		 if(res.res == "success"){
+		        			 location.href = "board";
+		        		 } else{
+		        			 alert("작성중 문제가 발생하였습니다.");
+		        		 }
+		   			},
+		   			error : function(request, status, error) {
+		   				console.log(request.responseText);
+		   			}
+		     	 }); // ajax end
+			}, // success end
+			error : function(req) {
+				console.log(req.responseText);
+			} // error end
+   	}); // ajaxForm end
+   	
+   	writeForm.submit(); // ajaxForm 실행
+    } // else end
+ }); // writeBtn click end
+});
+
+function checkEmpty(sel) {
+	if($.trim($(sel).val()) == "") {
+		return true;
+	} else {
+		return false;
+	}
+	
+}
+</script>		
 </head>
 <body>
 <!-- top & left -->
@@ -74,17 +141,30 @@
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">자유게시판</div>
+			<div class="page_title_text">임시게시판</div>
 			
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 
 </head>
 <body>
-<input type="text" class="tltle_input_box" placeholder="제목을 입력하세요">
-<textarea rows="20" cols="60" class="cont_input_box" placeholder="내용을 입력하세요"></textarea>
-<input type= "file" />
-<div class="cmn_btn">등록</div>		
+<form action="board" id="backForm" method="post">
+	<input type="hidden" name="no" value="${param.no}">
+	<input type="hidden" name="page" value="${param.page}">
+	<input type="hidden" name="searchGbn" value="${param.searchGbn}">
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}">
+	
+</form>
+<input type="text" id="title" name="title" class="tltle_input_box" placeholder="제목을 입력하세요">
+<textarea rows="20" cols="60" id="con" name="con" class="cont_input_box" placeholder="내용을 입력하세요"></textarea>
+<input type= "file" name="att" /><br/>
+<input type="hidden" id="attFile" name="attFile" /><br/>
+	<div class="cmn_btn_box">
+		<div class="cmn_btn" id="writeBtn">등록</div>	
+		<div class="cmn_btn" id="cancelBtn">취소</div>		
+	</div>
 </div>
+<!-- bottom -->
+	<c:import url="/bottom"></c:import>
 </body>
 </html>
