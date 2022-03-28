@@ -438,7 +438,8 @@ $(document).ready(function() {
 	});
 	/* 상세일정 */
 	function drawList(dtl) {
-		
+		var schdl_type_name = "";
+		var schdl_ctgry_name = "";
 		for(var data of dtl){
 			console.log(data)
 			switch(data.schdl_cont){
@@ -449,39 +450,39 @@ $(document).ready(function() {
 		}
 			switch(data.schdl_type_num){
 				case "0":
-					data.schdl_type_num = "개인"					
+					schdl_type_name = "개인"					
 					break;
 				case "1":
-					data.schdl_type_num = "팀"					
+					schdl_type_name = "팀"					
 					break;
 				case "2":
-					data.schdl_type_num = "전사"					
+					schdl_type_name = "전사"					
 					break;
 			}
 			switch(data.schdl_ctgry_num){
 			case "0":
-				data.schdl_ctgry_num = data.user_ctgry_name				
+				schdl_ctgry_name = data.user_ctgry_name				
 				break;
 			case "1":
-				data.schdl_ctgry_num = "업무"					
+				schdl_ctgry_name = "업무"					
 				break;
 			case "2":
-				data.schdl_ctgry_num = "휴가"					
+				schdl_ctgry_name = "휴가"					
 				break;
 			case "3":
-				data.schdl_ctgry_num = "교육"					
+				schdl_ctgry_name = "교육"					
 				break;
 			case "4":
-				data.schdl_ctgry_num = "회의"					
+				schdl_ctgry_name = "회의"					
 				break;
 			case "5":
-				data.schdl_ctgry_num = "회식"					
+				schdl_ctgry_name = "회식"					
 				break;
 			case "6":
-				data.schdl_ctgry_num = "출장"					
+				schdl_ctgry_name = "출장"					
 				break;
 			case "7":
-				data.schdl_ctgry_num = "개발"					
+				schdl_ctgry_name = "개발"					
 				break;
 			}
 		}
@@ -490,8 +491,8 @@ $(document).ready(function() {
   	  html += "<form action=\"#\" id=\"dtlForm\" method=\"post\">";
   	  html += "<div class=\"dtl_schdl_style\" id=\"dtl_type\">";
   	  html += "<span>일정 종류</span>";
-  	  html += "<input type=\"text\" value=\"" + data.schdl_type_num + "\" class=\"dtl_schdl_type\" disabled=\"disabled\">";
-  	  html += "<input type=\"text\" value=\"" + data.schdl_ctgry_num + "\" class=\"dtl_schdl_type\" disabled=\"disabled\" id=\"dtl_schdl_ctgry\">";
+  	  html += "<input type=\"text\" value=\"" + schdl_type_name + "\" class=\"dtl_schdl_type\" disabled=\"disabled\">";
+  	  html += "<input type=\"text\" value=\"" + schdl_ctgry_name + "\" class=\"dtl_schdl_type\" disabled=\"disabled\" id=\"dtl_schdl_ctgry\">";
   	  html += "</div>";
   	  html += "<div class=\"dtl_schdl_style\">";
   	  html += "<span>제목</span>";
@@ -638,6 +639,7 @@ function schdlUpdate(data){
 	html += "<input type=\"hidden\" id=\"aldy_dvsn_hidden\" name=\"aldy_dvsn\" value=\"0\">";		
 	html += "</div>";
 	html += "</form>";
+
 	$("body").on("click", "#aldy_dvsn", function () {
 		if($("#aldy_dvsn").is(":checked")){
 			 $('input[name=schdl_start_time]').attr('style', "display:none;");
@@ -654,10 +656,10 @@ function schdlUpdate(data){
 	$("body").on("click", "#schdl_ctgry", function () {
 		if($("#schdl_ctgry").val() == 0){
 			$('input[name=user_ctgry]').attr('style', "display:inline;");
-			 $('#user_ctgry').attr('disabled',false);
+			$('#user_ctgry').attr('disabled',false);
 		 }else{
 			$('input[name=user_ctgry]').attr('style', "display:none;");
-			 $('#user_ctgry').attr('disabled',true);
+			$('#user_ctgry').attr('disabled',true);
 		 }
 	});
 	makePopup({
@@ -665,6 +667,17 @@ function schdlUpdate(data){
 		bgClose : false,
 		title : "일정수정",
 		contents : html,
+		contentsEvent : function() {
+			$("#schdl_type").val(data.schdl_type_num);
+			$("#schdl_ctgry").val(data.schdl_ctgry_num);
+			$("#user_ctgry").val(data.user_ctgry_name);
+			if($("#schdl_ctgry").val() != 0){
+				$('input[name=user_ctgry]').attr('style', "display:none;");
+				$('#user_ctgry').attr('disabled',true);
+			 } 
+				
+			
+		},
 		width : 540,
 		height : 620,
 		buttons : [{
@@ -929,13 +942,15 @@ $(document).ready(function() {
 						alert("사용자지정 범주를 입력하세요.");
 						$("#user_ctgry").focus();
 					}else{
-						if(checkEmpty("#schdl_cont")){
+						 if(checkEmpty("#schdl_cont")){
 							$("#schdl_cont").val(" ");
 						}
 						 if(checkEmpty("#schdl_place")){
 								$("#schdl_place").val(" ");
 							}
-						 
+						 if($("#aldy_dvsn").is(":checked")){
+							 $("#hidden_end_time").val("23:59");
+						 }
 						var params = $("#addForm").serialize();
 						console.log(params);
 						$.ajax({
