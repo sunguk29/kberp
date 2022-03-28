@@ -130,7 +130,7 @@
     display: inline-block;
     vertical-align: top;
     width: 235px;
-    height: 25px;;
+   /* height: 25px;*/
 }
 
 
@@ -170,7 +170,6 @@
 
 
 .depth2_txt_on {
-	padding-left: 5px;
     display: inline-block;
     vertical-align: top;
     width: 150px;
@@ -225,13 +224,13 @@ $(document).ready(function() {
           $(".depth1_icon_on").removeClass('depth1_icon_on').addClass('depth1_icon');
           $(".depth1_txt_on").removeClass('depth1_txt_on').addClass('depth1_txt');
 		  console.log("depth1 접음");
-	   console.log(this)
+  		  console.log(this)
       } else {
     	  $(".orgnzt_depth2_wrap").css("display","block");
           $(".depth1_icon").removeClass('depth1_icon').addClass('depth1_icon_on');
           $(".depth1_txt").removeClass('depth1_txt').addClass('depth1_txt_on');
 		  console.log("depth1 펼침");
-	   console.log(this)
+	  	  console.log(this)
       }
    });
 // 2뎁스  
@@ -242,13 +241,13 @@ $(document).ready(function() {
           $(this).find(".depth2_icon_on").removeClass('depth2_icon_on').addClass('depth2_icon');
           $(this).find(".depth2_txt_on").removeClass('depth2_txt_on').addClass('depth2_txt');
 		  console.log("depth2 접음");
-	   console.log(this)
+	 	  console.log(this)
       } else {
     	  $(this).children(".orgnzt_depth3_wrap").css("display","block");
           $(this).find(".depth2_icon").removeClass('depth2_icon').addClass('depth2_icon_on');
           $(this).find(".depth2_txt").removeClass('depth2_txt').addClass('depth2_txt_on');
 		  console.log("depth2 펼침");
-	   console.log(this)
+	 	  console.log(this)
       }
    });
    
@@ -299,32 +298,12 @@ function drawDept(dept){
 							<div class="depth1_txt">카카오뱅크</div>
 						</div>
 						<div class="orgnzt_depth2_wrap" >
-							<div class="orgnzt_depth2">
+							<div class="orgnzt_depth2" name="orgnzt_depth2" value="${dept.DEPT_NUM}">
 								<div class="orgnzt_depth2_area">
 									<div class="depth2_icon"></div>
 									<div class="depth2_txt">전산팀</div>
 								</div>
 								<div class="orgnzt_depth3_wrap" >
-									<div class="orgnzt_depth3">
-										<div class="depth3_icon"></div>
-										<div class="depth3_txt">유은지</div>
-									</div>
-									<div class="orgnzt_depth3">
-										<div class="depth3_icon"></div>
-										<div class="depth3_txt">유은지</div>
-									</div>
-								</div>
-							</div>
-							<div class="orgnzt_depth2">
-								<div class="orgnzt_depth2_area">
-									<div class="depth2_icon"></div>
-									<div class="depth2_txt">인사팀</div>
-								</div>
-								<div class="orgnzt_depth3_wrap" >
-									<div class="orgnzt_depth3">
-										<div class="depth3_icon"></div>
-										<div class="depth3_txt">유은지</div>
-									</div>
 									<div class="orgnzt_depth3">
 										<div class="depth3_icon"></div>
 										<div class="depth3_txt">유은지</div>

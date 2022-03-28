@@ -570,6 +570,11 @@ $(document).ready(function() {
    $("#apntm_add_btn").on("click", function() {
       drawNewApntm();
    });
+
+   // 사원조회
+   $("#prfl_srch_btn").on("click", function() {
+      drawNewApntm();
+   });
 });
 
 // 발령 리스트 리로드
@@ -759,7 +764,7 @@ function drawNewApntm(){
    html += "               <div class=\"prfl_info_emp_num\">                                      ";
    html += "                  <div class=\"prfl_info_text\">사원번호</div>                       ";
    html += "                  <input type=\"text\" class=\"prfl_info_input\" value=\"\" />  ";
-   html += "                  <div class=\"prfl_srch_btn\"></div>                                ";
+   html += "                  <div class=\"prfl_srch_btn\" id=\"prfl_srch_btn\"></div>                                ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
@@ -858,6 +863,10 @@ function drawNewApntm(){
    html += "   </div>                                                                                 ";
    html += "</div>                                                                                    ";
    $("#apntm_cont").html(html);
+}
+
+function prfl_srch(){
+	
 }
 </script>
 </head>
