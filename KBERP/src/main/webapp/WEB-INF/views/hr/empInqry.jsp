@@ -260,9 +260,6 @@ td:nth-child(even) {
 	-webkit-user-select: none;
 	user-select: none;
 }
-.func_btn:hover {
-	cursor: pointer;
-}
 
 #inqry_btn {
 	background-color: #4B94F2;
@@ -313,6 +310,7 @@ td:nth-child(even) {
 <script type="text/javascript">
 $(document).ready(function() {
 	reloadList();
+	btnSetting();
 		
 	$(".rslt_area").on("mouseenter", ".table_item", function() {
 		var state = $(this).find(".item_selected").val();
@@ -344,19 +342,24 @@ $(document).ready(function() {
 				$(this).find(".item_selected").val("true");
 				
 				$("#emp_num").val($(this).attr("num"));
+				$("#inqry_btn").attr("da", "false");
+				$("#del_btn").attr("da", "false");
+				btnSetting();
 				
 				console.log("selected : " + $("#emp_num").val());
 		
 				$(this).parent("tbody").find(".table_item").children("td:nth-child(odd)").css("background-color", "#fafafa");
 				$(this).parent("tbody").find(".table_item").children("td:nth-child(even)").css("background-color", "#f6f6f6");
 				
-				$(this).children("td").css("background-color", "#b3e0ff");/* 
-				$(this).children("td:nth-child(even)").css("background-color", "#99d6ff"); */
+				$(this).children("td").css("background-color", "#b3e0ff");
 			} else {
 				$(this).find(".item_selected").val("false");
 				
 				$("#emp_num").val("-1");
-
+				$("#inqry_btn").attr("da", "true");
+				$("#del_btn").attr("da", "true");
+				btnSetting();
+				
 				console.log("unselected");
 				
 				$(this).children("td:nth-child(odd)").css("background-color", "#fafafa");
@@ -373,10 +376,27 @@ $(document).ready(function() {
 		}
 	});
 	
+	$("#srch_txt").on("keypress", function(event) {
+		if (event.keyCode == 13) {
+			$(".cmn_btn_ml").click();
+			
+			return false;
+		}
+	});
+	
 	$(".cmn_btn_ml").on("click", function() {
 		$("#page").val("1");
 		
 		reloadList();
+	});
+	
+	$(".func_btn").on("mouseenter", function() {
+		if ($(this).attr("da") == "false") {
+			$(this).css("cursor", "pointer");
+		}
+	});	
+	$(".func_btn").on("mouseleave", function() {
+		$(this).css("cursor", "default");
 	});
 	
 	$("#inqry_btn").on("click", function() {
@@ -386,7 +406,9 @@ $(document).ready(function() {
 	});
 	
 	$("#del_btn").click(function() {
-		
+		if ($("#emp_num").val() != "-1") {
+			
+		}
 	});
 	
 	$(".cont_area").on("click", ".popup #cnl_btn", function() {
@@ -493,6 +515,32 @@ function drawPaging(pb) {
 	
 	$(".pgn_area").html(html);	
 }
+
+function btnSetting() {
+	if ($("#inqry_btn").attr("da") == "true") {
+		$("#inqry_btn").css("background-color", "#eeeeee");
+		$("#inqry_btn").css("color", "#999999");
+	} else {
+		$("#inqry_btn").css("background-color", "#4B94F2");
+		$("#inqry_btn").css("color", "#fff");
+	}
+	
+	if ($("#add_btn").attr("da") == "true") {
+		$("#add_btn").css("background-color", "#eeeeee");
+		$("#add_btn").css("color", "#999999");
+	} else {
+		$("#add_btn").css("background-color", "#4B94F2");
+		$("#add_btn").css("color", "#fff");
+	}
+	
+	if ($("#del_btn").attr("da") == "true") {
+		$("#del_btn").css("background-color", "#eeeeee");
+		$("#del_btn").css("color", "#999999");
+	} else {
+		$("#del_btn").css("background-color", "#fe3a40");
+		$("#del_btn").css("color", "#fff");
+	}
+}
 </script>
 </head>
 <body>
@@ -508,9 +556,9 @@ function drawPaging(pb) {
 		<div class="page_title_bar">
 			<div class="page_title_text">사원조회</div>
 			<!-- 검색영역 선택적 사항 -->
-			<div class="func_btn" id="del_btn">삭제</div>
-			<div class="func_btn" id="add_btn">신규</div>
-			<div class="func_btn" id="inqry_btn">조회</div>
+			<div class="func_btn" id="del_btn" da="true">삭제</div>
+			<div class="func_btn" id="add_btn" da="false">신규</div>
+			<div class="func_btn" id="inqry_btn" da="true">조회</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
