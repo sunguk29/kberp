@@ -176,7 +176,7 @@
 }
 
 .schdl_ctgry>label:hover, #new_schdl:hover,
-.schdl_type>label:hover {
+.schdl_type>label:hover, .fc-content {
 	
 	cursor: pointer;
 }
@@ -503,7 +503,11 @@ $(document).ready(function() {
   	  html += "</div>";
   	  html += "<div class=\"dtl_schdl_style\">";
   	  html += "<span>기간</span>";
-  	  html += "<input type=\"text\" value=\"" + data.start_date + data.start_time + " ~ " + data.end_date + data.end_time + "\" id=\"dtl_schdl_time\" disabled=\"disabled\">";
+  	  if(data.start_time == "00:00"){
+	  	  html += "<input type=\"text\" value=\"" + data.start_date + " ~ " + data.end_date + "\" id=\"dtl_schdl_time\" disabled=\"disabled\">";
+  	  }else{
+  	 	  html += "<input type=\"text\" value=\"" + data.start_date + data.start_time + " ~ " + data.end_date + data.end_time + "\" id=\"dtl_schdl_time\" disabled=\"disabled\">";
+  	  }
   	  html += "</div>";
   	  html += "<div class=\"dtl_schdl_dtl_cont\">";
   	  html += "<span>상세내용</span>";
@@ -601,11 +605,13 @@ function schdlUpdate(data){
 	html += "<span>시작 시간</span>";
 	html += "<input type=\"date\" value=\"" + data.start_update + "\"  id=\"schdl_start_date\" name=\"schdl_start_date\">";
 	html += "<input type=\"time\" value=\"" + data.start_time + "\"  id=\"schdl_start_time\" name=\"schdl_start_time\">";
+	html += "<input type=\"hidden\" id=\"hidden_start_time\" name=\"schdl_start_time\">";
 	html += "</div>";	
 	html += "<div class=\"popup_style\">";
 	html += "<span>종료 시간</span>";
 	html += "<input type=\"date\" value=\"" + data.end_update + "\" id=\"schdl_end_date\" name=\"schdl_end_date\">";			
 	html += "<input type=\"time\" value=\"" + data.end_time + "\"  id=\"schdl_end_time\" name=\"schdl_end_time\">";
+	html += "<input type=\"hidden\" id=\"hidden_end_time\" name=\"schdl_end_time\">";
 	html += "</div>";
 	html += "<div class=\"popup_dtl_cont\">";
 	html += "<span>상세내용</span>";
@@ -624,6 +630,7 @@ function schdlUpdate(data){
 	html += "<option value=\"7\">개발</option>";
 	html += "</select>";
 	html += "<input type=\"text\" placeholder=\"사용자 지정\"id=\"user_ctgry\" name=\"user_ctgry\">";
+	html += "<input type=\"hidden\" id=\"hidden_user_ctgry\" name=\"user_ctgry\">";
 	html += "</div>";
 	html += "<div class=\"popup_style\">";
 	html += "<span>종일 일정</span>";
@@ -631,7 +638,28 @@ function schdlUpdate(data){
 	html += "<input type=\"hidden\" id=\"aldy_dvsn_hidden\" name=\"aldy_dvsn\" value=\"0\">";		
 	html += "</div>";
 	html += "</form>";
-	
+	$("body").on("click", "#aldy_dvsn", function () {
+		if($("#aldy_dvsn").is(":checked")){
+			 $('input[name=schdl_start_time]').attr('style', "display:none;");
+			 $('#schdl_start_time').attr('disabled',true);
+			 $('input[name=schdl_end_time]').attr('style', "display:none;");
+			 $('#schdl_end_time').attr('disabled',true);
+		 }else{
+			 $('input[name=schdl_start_time]').attr('style', "display:inline;");
+			 $('#schdl_start_time').attr('disabled',false);
+			 $('input[name=schdl_end_time]').attr('style', "display:inline;");
+			 $('#schdl_end_time').attr('disabled',false);
+		 }
+	});
+	$("body").on("click", "#schdl_ctgry", function () {
+		if($("#schdl_ctgry").val() == 0){
+			$('input[name=user_ctgry]').attr('style', "display:inline;");
+			 $('#user_ctgry').attr('disabled',false);
+		 }else{
+			$('input[name=user_ctgry]').attr('style', "display:none;");
+			 $('#user_ctgry').attr('disabled',true);
+		 }
+	});
 	makePopup({
 		bg : true,
 		bgClose : false,
@@ -660,10 +688,6 @@ function schdlUpdate(data){
 					}
 					 if(checkEmpty("#schdl_place")){
 							$("#schdl_place").val(" ");
-						}
-					 if($("#aldy_dvsn").val() == "1"){
-							$("#schdl_start_time").val(0);
-							$("#schdl_end_time").val(0);
 						}
 					var params = $("#updateForm").serialize();
 					console.log(params);
@@ -827,11 +851,13 @@ $(document).ready(function() {
 		html += "<span>시작 시간</span>";
 		html += "<input type=\"date\" id=\"schdl_start_date\" name=\"schdl_start_date\">";
 		html += "<input type=\"time\" id=\"schdl_start_time\" name=\"schdl_start_time\">";
+		html += "<input type=\"hidden\" id=\"hidden_start_time\" name=\"schdl_start_time\">";
 		html += "</div>";	
 		html += "<div class=\"popup_style\">";
 		html += "<span>종료 시간</span>";
 		html += "<input type=\"date\" id=\"schdl_end_date\" name=\"schdl_end_date\">";			
 		html += "<input type=\"time\" id=\"schdl_end_time\" name=\"schdl_end_time\">";
+		html += "<input type=\"hidden\" id=\"hidden_end_time\" name=\"schdl_end_time\">";
 		html += "</div>";
 		html += "<div class=\"popup_dtl_cont\">";
 		html += "<span>상세내용</span>";
@@ -850,6 +876,7 @@ $(document).ready(function() {
 		html += "<option value=\"7\">개발</option>";
 		html += "</select>";
 		html += "<input type=\"text\" placeholder=\"사용자 지정\"id=\"user_ctgry\" name=\"user_ctgry\">";
+		html += "<input type=\"hidden\" id=\"hidden_user_ctgry\" name=\"user_ctgry\">";
 		html += "</div>";
 		html += "<div class=\"popup_style\">";
 		html += "<span>종일 일정</span>";
@@ -857,7 +884,28 @@ $(document).ready(function() {
 		html += "<input type=\"hidden\" id=\"aldy_dvsn_hidden\" name=\"aldy_dvsn\" value=\"0\">";		
 		html += "</div>";
 		html += "</form>";
-		
+		$("body").on("click", "#aldy_dvsn", function () {
+			if($("#aldy_dvsn").is(":checked")){
+				 $('input[name=schdl_start_time]').attr('style', "display:none;");
+				 $('#schdl_start_time').attr('disabled',true);
+				 $('input[name=schdl_end_time]').attr('style', "display:none;");
+				 $('#schdl_end_time').attr('disabled',true);
+			 }else{
+				 $('input[name=schdl_start_time]').attr('style', "display:inline;");
+				 $('#schdl_start_time').attr('disabled',false);
+				 $('input[name=schdl_end_time]').attr('style', "display:inline;");
+				 $('#schdl_end_time').attr('disabled',false);
+			 }
+		});
+		 $("body").on("click", "#schdl_ctgry", function () {
+			if($("#schdl_ctgry").val() == 0){
+				$('input[name=user_ctgry]').attr('style', "display:inline;");
+				 $('#user_ctgry').attr('disabled',false);
+			 }else{
+				$('input[name=user_ctgry]').attr('style', "display:none;");
+				 $('#user_ctgry').attr('disabled',true);
+			 }
+		});
 		makePopup({
 			bg : true,
 			bgClose : false,
@@ -887,10 +935,7 @@ $(document).ready(function() {
 						 if(checkEmpty("#schdl_place")){
 								$("#schdl_place").val(" ");
 							}
-						 if($("#aldy_dvsn").val() == "1"){
-								$("#schdl_start_time").val(0);
-								$("#schdl_end_time").val(0);
-							}
+						 
 						var params = $("#addForm").serialize();
 						console.log(params);
 						$.ajax({
@@ -919,6 +964,7 @@ $(document).ready(function() {
 		
 		
 	});
+	
 
 });
 
