@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Card">
+
+	<select id="getCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM CARD C INNER JOIN CARD_USER CU
+ 						ON C.MNG_NUM = CU.MNG_NUM
+		WHERE 1 = 1
+		<if test="searchTxt != null and searchTxt != ''">
+			<choose>
+				<when test="searchGbn == 0">
+					AND CARD_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="searchGbn == 1">
+					AND CARD_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+			</choose>
+		</if>
+	</select>
+	 <select id="cardList" resultType="hashmap" parameterType="hashmap">
+		SELECT *
+		FROM (SELECT C.CARD_NUM, C.CARD_NAME, E.EMP_NAME, TO_CHAR(USE_START_DT, 'YYYY-MM-DD')AS USE_START_DT,
+        			 TO_CHAR(USE_END_DT, 'YYYY-MM-DD')AS USE_END_DT,
+        			 ROW_NUMBER()OVER(ORDER BY C.CARD_NUM DESC) AS RNUM
+			  FROM CARD C INNER JOIN CARD_USER CU
+                                  ON C.MNG_NUM = CU.MNG_NUM
+                          INNER JOIN EMP E
+                                  ON C.EMP_NUM = E.EMP_NUM
+		WHERE 1=1
+		<if test="searchTxt != null and searchTxt != ''"> 
+					<choose>
+						<when test="searchGbn == 0">
+							AND CARD_NUM LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="searchGbn == 1">
+							AND CARD_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+					</choose>
+				</if>
+				) A
+				WHERE A.RNUM BETWEEN #{startCount} AND #{endCount} 
+	</select>
+</mapper>
