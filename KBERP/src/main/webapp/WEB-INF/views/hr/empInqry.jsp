@@ -129,7 +129,7 @@
 	margin: 0;
 }
 
-#join_day {
+#join_date {
 	width: 75%;
 }
 
@@ -150,7 +150,7 @@
 	display: inline-block;
 	vertical-align: top;
 	height: 18px;
-	width: 100px;
+	width: 124px;
 	font-size: 10pt;
 	margin-top: 3px;
 }
@@ -162,16 +162,6 @@
 	width: 20px;
 	font-size: 10pt;
 	text-align: center;
-}
-
-.prd_sel_btn {
-	display: inline-block;
-	vertical-align: top;
-	height: 24px;
-	width: 24px;
-	margin: 3px;
-	background-image: url('./images/cmn/calendar.png');
-	background-size: 100%;
 }
 
 .prd_sel_btn:hover {
@@ -188,9 +178,9 @@
 }
 
 .rslt_area {
-	width: calc(100%-20px);
+	width: calc(100% - 8px);
 	height: 400px;
-	padding: 10px;
+	padding: 10px 4px 10px 4px;
 }
 
 .pgn_area {
@@ -244,7 +234,7 @@ td:nth-child(odd) {
 	background-color: #fafafa;
 }
 td:nth-child(even) {
-	background-color: #f3f3f3;
+	background-color: #f6f6f6;
 }
 
 .td_cont {
@@ -360,8 +350,8 @@ $(document).ready(function() {
 				$(this).parent("tbody").find(".table_item").children("td:nth-child(odd)").css("background-color", "#fafafa");
 				$(this).parent("tbody").find(".table_item").children("td:nth-child(even)").css("background-color", "#f6f6f6");
 				
-				$(this).children("td:nth-child(odd)").css("background-color", "#b3e0ff");
-				$(this).children("td:nth-child(even)").css("background-color", "#99d6ff");
+				$(this).children("td").css("background-color", "#b3e0ff");/* 
+				$(this).children("td:nth-child(even)").css("background-color", "#99d6ff"); */
 			} else {
 				$(this).find(".item_selected").val("false");
 				
@@ -373,6 +363,20 @@ $(document).ready(function() {
 				$(this).children("td:nth-child(even)").css("background-color", "#f6f6f6");
 			}
 		}
+	});
+	
+	$("input:radio[name=join_date]").on("click", function() {
+		if ($(this).val() == 0) {
+			$(".prd_text").attr("disabled", false);
+		} else {
+			$(".prd_text").attr("disabled", true);
+		}
+	});
+	
+	$(".cmn_btn_ml").on("click", function() {
+		$("#page").val("1");
+		
+		reloadList();
 	});
 	
 	$("#inqry_btn").on("click", function() {
@@ -399,7 +403,11 @@ $(document).ready(function() {
 });
 
 function reloadList() { // 목록 조회용 + 페이징 조회용
+	$(".prd_text").attr("disabled", false);
 	var params = $("#inqryForm").serialize();
+	if ($("input[name=join_date]:checked").val() == "-1") {
+		$(".prd_text").attr("disabled", true);
+	}
 	
 	$.ajax({
 		type : "post",
@@ -420,33 +428,39 @@ function reloadList() { // 목록 조회용 + 페이징 조회용
 function drawList(list) {
 	var html = "";
 	
-	for (var data of list) {
-		html += "<tr class=\"table_item\" num=\"" + data.EMP_NUM + "\">                 ";
-		html += "	<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
-		html += "	<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
-		html += "	<td><div class=\"td_cont\">" + data.EMP_NUM + "</div></td> ";
-		html += "	<td><div class=\"td_cont\">" + data.EMP_NAME + "</div></td> ";
-		html += "	<td><div class=\"td_cont\">" + data.DEPT_NAME + "</div></td> ";
-		html += "	<td><div class=\"td_cont\">" + data.RANK_NAME + "</div></td> ";
-		html += "	<td><div class=\"td_cont\">" + data.MBL_NUM + "</div></td> ";
-		html += "	<td><div class=\"td_cont\">" + data.JOIN_DATE + "</div></td> ";
-		html += "	<td><div class=\"td_cont\">";
-		if (data.HIRE_TYPE == 0) {
-			html += "정규직";
-		}
-		else if (data.HIRE_TYPE == 1) {
-			html += "계약직";
-		}
-		html += "</div></td> ";
-		html += "	<td><div class=\"td_cont\">";
-		if (data.WORK_TYPE == 1) {
-			html += "재직";
-		} else if (data.WORK_TYPE == 0) {
-			html += "퇴사";
-		}
-		html += "</div></td> ";
-		html += "	<td><div class=\"td_cont\">" + data.RSGNT_DATE + "</div></td> ";
+	if (list.length == 0) {
+		html += "<tr class=\"table_item\">                 ";
+		html += "<td colspan=\"9\">검색 결과가 없습니다.</td> "
 		html += "</tr>                                     ";
+	} else {
+		for (var data of list) {
+			html += "<tr class=\"table_item\" num=\"" + data.EMP_NUM + "\">                 ";
+			html += "	<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
+			html += "	<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
+			html += "	<td><div class=\"td_cont\">" + data.EMP_NUM + "</div></td> ";
+			html += "	<td><div class=\"td_cont\">" + data.EMP_NAME + "</div></td> ";
+			html += "	<td><div class=\"td_cont\">" + data.DEPT_NAME + "</div></td> ";
+			html += "	<td><div class=\"td_cont\">" + data.RANK_NAME + "</div></td> ";
+			html += "	<td><div class=\"td_cont\">" + data.MBL_NUM + "</div></td> ";
+			html += "	<td><div class=\"td_cont\">" + data.JOIN_DATE + "</div></td> ";
+			html += "	<td><div class=\"td_cont\">";
+			if (data.HIRE_TYPE == 0) {
+				html += "정규직";
+			}
+			else if (data.HIRE_TYPE == 1) {
+				html += "계약직";
+			}
+			html += "</div></td> ";
+			html += "	<td><div class=\"td_cont\">";
+			if (data.WORK_TYPE == 0) {
+				html += "재직";
+			} else if (data.WORK_TYPE == 1) {
+				html += "퇴사";
+			}
+			html += "</div></td> ";
+			html += "	<td><div class=\"td_cont\">" + data.RSGNT_DATE + "</div></td> ";
+			html += "</tr>                                     ";
+		}
 	}
 	
 	$("tbody").html(html);
@@ -505,7 +519,7 @@ function drawPaging(pb) {
 			<input type="hidden" id="old_srch_txt" value="${param.srch_txt}" />
 			<input type="hidden" id="old_work_clsftn" value="${param.work_clsftn}" />
 			<input type="hidden" id="old_emplynt_type" value="${param.emplynt_type}" />
-			<input type="hidden" id="old_join_day" value="${param.join_day}" />
+			<input type="hidden" id="old_join_date" value="${param.join_date}" />
 			<input type="hidden" id="old_prd_start" value="${param.prd_start}" />
 			<input type="hidden" id="old_prd_end" value="${param.prd_end}" />
 			<form action="prsnlCard" id="inqryForm" method="post">
@@ -514,10 +528,10 @@ function drawPaging(pb) {
 				<div class="srch_wrap">
 					<div class="page_srch_area">
 						<select class="srch_sel" name="srch_sel">
-							<option selected>전체</option>
-							<option>사원번호</option>
-							<option>사원명</option>
-							<option>부서명</option>
+							<option value="-1" selected>전체</option>
+							<option value="0">사원번호</option>
+							<option value="1">사원명</option>
+							<option value="2">부서명</option>
 						</select>
 						<div class="srch_text_wrap">
 							<input type="text" id="srch_txt" name="srch_txt" />
@@ -528,31 +542,31 @@ function drawPaging(pb) {
 						<div class="item_wrap" id="left_item_wrap">
 							<div class="radio_wrap" id="work_clsftn">
 								<div class="radio_title">재직구분</div>
-								<input type="radio" id="work_clsftn_entr" name="work_clsftn" checked="checked" /><label class="radio_item_name" for="work_clsftn_entr">전체</label>
-								<input type="radio" id="work_clsftn_work" name="work_clsftn" /><label class="radio_item_name" for="work_clsftn_work">재직</label>
-								<input type="radio" id="work_clsftn_rsgnt" name="work_clsftn" /><label class="radio_item_name" for="work_clsftn_rsgnt">퇴사</label>
+								<input type="radio" id="work_clsftn_entr" name="work_clsftn" value="-1" checked="checked" /><label class="radio_item_name" for="work_clsftn_entr">전체</label>
+								<input type="radio" id="work_clsftn_work" name="work_clsftn" value="0" /><label class="radio_item_name" for="work_clsftn_work">재직</label>
+								<input type="radio" id="work_clsftn_rsgnt" name="work_clsftn" value="1" /><label class="radio_item_name" for="work_clsftn_rsgnt">퇴사</label>
 							</div>
 							<div class="radio_wrap" id="emplynt_type">
 								<div class="radio_title">고용형태</div>
-								<input type="radio" id="emplynt_type_entr" name="emplynt_type" checked="checked" /><label class="radio_item_name" for="emplynt_type_entr">전체</label>
-								<input type="radio" id="emplynt_type_rgl_wrk" name="emplynt_type" /><label class="radio_item_name" for="emplynt_type_rgl_wrk">정규직</label>
-								<input type="radio" id="emplynt_type_cntr_wrk" name="emplynt_type" /><label class="radio_item_name" for="emplynt_type_cntr_wrk">계약직</label>
+								<input type="radio" id="emplynt_type_entr" name="emplynt_type" value="-1" checked="checked" /><label class="radio_item_name" for="emplynt_type_entr">전체</label>
+								<input type="radio" id="emplynt_type_rgl_wrk" name="emplynt_type" value="0" /><label class="radio_item_name" for="emplynt_type_rgl_wrk">정규직</label>
+								<input type="radio" id="emplynt_type_cntr_wrk" name="emplynt_type" value="1" /><label class="radio_item_name" for="emplynt_type_cntr_wrk">계약직</label>
 							</div>
 						</div>
 						<div class="item_wrap">
-							<div class="radio_wrap" id="join_day">
+							<div class="radio_wrap" id="join_date">
 								<div class="radio_title">입사일</div>
-								<input type="radio" id="join_day_entr" name="join_day" checked="checked" /><label class="radio_item_name" for="join_day_entr">전체</label>
-								<input type="radio" id="join_day_prd_dsgnt" name="join_day" /><label class="radio_item_name" for="join_day_prd_dsgnt">기간지정</label>
+								<input type="radio" id="join_date_entr" name="join_date" value="-1" checked="checked" /><label class="radio_item_name" for="join_date_entr">전체</label>
+								<input type="radio" id="join_date_prd_dsgnt" name="join_date" value="0" /><label class="radio_item_name" for="join_date_prd_dsgnt">기간지정</label>
 							</div>
 							<div class="prd_wrap">
 								<div id="prd_wrap_empty"></div>
 								<div class="prd_text_wrap">
-									<input type="text" class="prd_text" id="prd_start" name="prd_start" readonly="readonly" value="----/--/--" /><div class="prd_sel_btn" id="prd_start_btn"></div>
+									<input type="date" class="prd_text" id="prd_start" name="prd_start" disabled="disabled" />
 								</div>
 								<div class="prd_clsftn">~</div>
 								<div class="prd_text_wrap">
-									<input type="text" class="prd_text" id="prd_end" name="prd_end" readonly="readonly" value="----/--/--" /><div class="prd_sel_btn" id="prd_end_btn"></div>
+									<input type="date" class="prd_text" id="prd_end" name="prd_end" disabled="disabled" />
 								</div>
 							</div>
 						</div>
