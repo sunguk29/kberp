@@ -59,7 +59,7 @@ $(document).ready(function() {
 		}
 	});
 	
-	$("#searchBtn").on("click", function() {
+	$("#searchBtn").on("click", function() { 
 		$("#page").val("1");
 		
 		$("#oldSearchGbn").val($("#searchGbn").val());
@@ -73,8 +73,8 @@ $(document).ready(function() {
 		$("#searchGbn").val($("#oldSearchGbn").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
 		
-		$("#actionForm").attr("action", "aprvlMngDtlView");
-		$("#actionForm").submit();
+		$("#actionForm").attr("action", "assetDtlViewDrbl");
+		$("#actionForm").submit();	
 	});
 	
 	$(".pgn_area").on("click", "div", function() {
@@ -111,8 +111,11 @@ function drawList(list) {
 	for(var data of list) {
 		html += "<tr num=\""+ data.ASSET_NUM + "\">";
 		html += "<td>" + data.ASSET_NUM + "</td>";
-		html += "<td id=\"click\" num=\""+ data.ASSET_NUM + "\">" + data.ASSET_NAME + "</td>";
-		html += "<td>" + data.ASSET_TYPE_NUM + "</td>";
+		html += "<td id=\"click\" num=\""+ data.ASSET_NUM +"\" type=\""+data.ASSET_TYPE_NUM+"\">" + data.ASSET_NAME + "</td>";
+		if(data.ASSET_TYPE_NUM==0)
+			html += "<td>지속성</td>";
+		else
+			html += "<td>소모성</td>";
 		if(data.QUNTY_DVSN_NUM == 0 )
 			html += "<td>" + data.QUNTY +"ea</td>";
 		else if(data.QUNTY_DVSN_NUM == 1)
@@ -157,10 +160,8 @@ function drawPaging(pb) {
 </script>
 </head>
 <body>
-	<form action="#" id="actionForm" method="post">
-			<input type="hidden" id="num" name="num"/>
-			<input type="hidden" id="page" name="page" value="${page}"/>
-	</form>
+		<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
+		<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -168,21 +169,28 @@ function drawPaging(pb) {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
-<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
-<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
-	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">자산목록</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
+				<form action="#" id="actionForm" method="post">
+					<input type="hidden" id="top" name="top" value="${param.top}" />
+					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+					<input type="hidden" id="page" name="page" value="${page}"/>
+					<input type="hidden" id="type" name="type"/>
+					<input type="hidden" id="num" name="num"/>
+					
 					<select id="searchGbn" name="searchGbn">
-						<option value="1">자산명</option>
-						<option value="2">담당자명</option>
+						<option value="0">자산명</option>
+						<option value="1">담당자명</option>
 					</select>
-					<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
-					<input class="cmn_btn" type="button" value="검색" id="searchBtn"/>
+						<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
+						<input class="cmn_btn" type="button" value="검색" id="searchBtn"/>
+									
+				</form>
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->

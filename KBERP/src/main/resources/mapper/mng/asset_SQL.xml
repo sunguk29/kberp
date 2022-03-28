@@ -4,15 +4,15 @@
 
 <select id="getCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
-		FROM FCLTY_RSVTN FR INNER JOIN FCLTY F
-							ON FR.FCLTY_NUM = F.FCLTY_NUM
+		FROM ASSET A INNER JOIN EMP E
+							ON MNGR_NUM = EMP_NUM
 		WHERE 1 = 1
 		<if test="searchTxt != null and searchTxt != ''">
 			<choose>
-				<when test="searchGbn == 1">
+				<when test="searchGbn == 0">
 					AND ASSET_NAME LIKE '%' || #{searchTxt} || '%'
 				</when>
-				<when test="searchGbn == 2">
+				<when test="searchGbn == 1">
 					AND EMP_NAME LIKE '%' || #{searchTxt} || '%'
 				</when>
 			</choose>
@@ -27,10 +27,10 @@
 			WHERE 1=1
 		<if test="searchTxt != null and searchTxt != ''"> 
 					<choose>
-						<when test="searchGbn == 1">
+						<when test="searchGbn == 0">
 							AND ASSET_NAME LIKE '%' || #{searchTxt} || '%'
 						</when>
-						<when test="searchGbn == 2">
+						<when test="searchGbn == 1">
 							AND EMP_NAME LIKE '%' || #{searchTxt} || '%'
 						</when>
 					</choose>
@@ -38,5 +38,22 @@
 				) A
 				WHERE A.RNUM BETWEEN #{startCount} AND #{endCount} 
 	</select>
+	
+	<select id="assetDtlViewDrbl" resultType="hashmap" parameterType="hashmap">
+		SELECT ASSET_NUM, ASSET_NAME, ASSET_TYPE_NUM, TO_CHAR(ACQRMNT_DATE, 'YYYY-MM-DD')AS ACQRMNT_DATE,
+		 EMP_NAME, A.RMRKS
+		FROM ASSET A INNER JOIN EMP E
+                ON A.MNGR_NUM = E.EMP_NUM
+        WHERE ASSET_NUM = #{num}
+	</select>
+	
+	<select id="assetDtlViewExpndblt" resultType="hashmap" parameterType="hashmap">
+		SELECT ASSET_NUM, ASSET_NAME, ASSET_TYPE_NUM, TO_CHAR(ACQRMNT_DATE, 'YYYY-MM-DD')AS ACQRMNT_DATE,
+		 EMP_NAME, QUNTY, QUNTY_DVSN_NUM,A.RMRKS
+		FROM ASSET A INNER JOIN EMP E
+                ON A.MNGR_NUM = E.EMP_NUM
+        WHERE ASSET_NUM = #{num}
+	</select>
+	
 
 </mapper>

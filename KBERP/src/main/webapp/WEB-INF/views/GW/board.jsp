@@ -19,48 +19,118 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	if('${param.searchGbn}' !='') {
+		$('#searchGbn').val('${param.searchGbn}');
+	} else {
+		$("#oldSearchGbn").val("0");
+	}
+	reloadList();
+	
+	$("#searchTxt").on("keypress", function(event) {
+		if(event.keyCode == 13) {
+			$("#searchBtn").click();
+			
+			return false; // 이벤트를 동작 하지 않겠다
+		}
+	});
+	
+	$("#searchBtn").on("click", function() {
+		$("#page").val("1");
+		
+		$("#oldSearchGbn").val($("#searchGbn").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
+		
+		// 목록 조회
+		reloadList();
+	});	
 	$("#writeBtn").on("click", function() {
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		console.log("write!");
 		$("#actionForm").attr("action", "boardWrite");
 		$("#actionForm").submit();
 	});
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
+	$("tbody").on("click", "tr", function() {
+		$("#no").val($(this).attr("no"));
+		
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		$("#actionForm").attr("action", "boardView");
+		$("#actionForm").submit();
+	});	
+	$(".pgn_area").on("click", "div", function() {
+		$("#page").val($(this).attr("page"));
+		
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		reloadList();
 	});
 });
+function reloadList() { // 목록 조회용 + 페이징 조회용
+	  var params = $("#actionForm").serialize();
+    
+    $.ajax({
+   	 type : "post",
+   	 url : "boardAjax",
+   	 dataType : "json",
+   	 data : params,
+   	 success : function(res) {
+   		 	console.log(res);
+   		 	drawList(res.list);
+   		 	drawPaging(res.pb);
+			},
+			error : function(request, status, error) {
+				console.log(request.responseText);
+			}
+    });
+	
+}
+function drawList(list) {
+	var html = "";
+	
+	for(var data of list){
+		html += "<tr no=\"" + data.WRTNG_NUM + "\">";
+		html += "<td>" + data.WRTNG_NUM + "</td>";
+		html += "<td>" + data.BOARD_TITLE + "</td>";
+		html += "<td>" + data.EMP_NAME + "</td>";
+		html += "<td>" + data.BOARD_WRTNG_DATE + "</td>";
+		html += "<td>" + data.BOARD_HITS + "</td>";
+	}
+	$("tbody").html(html);
+}
+
+function drawPaging(pb) {
+	var html = "";
+	
+	html +="<div page=\"1\"class=\"page_btn page_first\">first</div>";
+	
+	if($("#page").val() == "1"){
+	html +="<div page=\"1\"class=\"page_btn page_prev\">prev</div>";
+	} else{
+	html +="<div page=\"" + ($("#page").val() * 1 - 1) + "\"class=\"page_btn page_prev\">prev</div>";
+	}
+	
+	for(var i = pb.startPcount ; i <= pb.endPcount ; i++) {
+		if($("#page").val() == i ){
+			html += "<div page=\"" + i +"\" class=\"page_btn_on\">" + i + "</div>";
+			
+		} else{
+			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i +"</div>";
+		}
+	}
+	if($("#page").val() == pb.maxPcount) {
+		html += "<div page=\"" + pb.maxPcount +"\" class=\"page_btn page_next\">next</div>";
+	} else {
+		html += "<div page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</div>";
+	}
+		
+	html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
+		
+	$(".pgn_area").html(html);
+}
 </script>
 </head>
 <body>
@@ -74,22 +144,29 @@ $(document).ready(function() {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">프로젝트 관리</div>
+			<div class="page_title_text">임시게시판</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
-				<select class="srch_sel">
-					<option>제목</option>
-					<option>내용</option>
-					<option>작성자</option>
-				</select>
-				<div class="srch_text_wrap">
-					<input type="text" />
-				</div>
-				<div class="cmn_btn_ml">검색</div>
+			<form action="#" id="actionForm" method="post">
+					<input type="hidden" id="top" name="top" value="${param.top}" />
+					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+					<input type="hidden" id="no" name="no"/>
+					<input type="hidden" id="page" name="page" value="${page}"/>
+					<select id="searchGbn" name="searchGbn">
+						<option value="0">제목</option>
+						<option value="1">내용</option>
+						<option value="2">작성자</option>
+					</select>
+				
+				<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
+				<div class="cmn_btn_ml" id="searchBtn">검색</div>
+			</form>
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
+		
 			<!-- 여기부터 쓰면 됨 -->
 			<table class="board_table">
 				<colgroup>
@@ -108,95 +185,11 @@ $(document).ready(function() {
 						<th>조회수</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td class="board_table_hover board_cont_left">게시판입니다.</td>
-						<td>백종훈 대리</td>
-						<td>2021-12-01</td>
-						<td>3</td>
-					</tr>
-				</tbody>
+				<tbody></tbody>
 			</table>
 			<div class="board_bottom">
-				<div class="pgn_area">
-					<div class="page_btn page_first">first</div>
-					<div class="page_btn page_prev">prev</div>
-					<div class="page_btn_on">1</div>
-					<div class="page_btn">2</div>
-					<div class="page_btn">3</div>
-					<div class="page_btn">4</div>
-					<div class="page_btn">5</div>
-					<div class="page_btn page_next">next</div>
-					<div class="page_btn page_last">last</div>
-				</div>
+				<div class="pgn_area"></div>
 				<div class="cmn_btn_ml" id="writeBtn">글쓰기</div>
-				<div class="cmn_btn_ml" id="alertBtn">알림</div>
-				<div class="cmn_btn_ml" id="btn1Btn">버튼1개</div>
-				<div class="cmn_btn_ml" id="btn2Btn">버튼2개</div>
 			</div>
 		</div>
 	</div>

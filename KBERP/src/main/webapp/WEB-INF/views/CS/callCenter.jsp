@@ -636,47 +636,41 @@ $(document).ready(function() {
 
 	$("#searchBtn").on("click", function() {
 		
-		$("#oldsearchTxt").val($("#searchTxt").val());
-		
 		var html = "";
 		
+		html += "<form action=\"#\" id=\"actionForm\" method=\"post\">"
 		html += "<div class=\"srch_slct\">";
-		html += "<input type=\"text\" id=\"srch_txt\"/>"
-		html += "<input type=\"button\" value=\"검색\" id=\"srch_btn\">"
-		html += "<div class=\"name_box\">정렬순서</div>"
-		html += "<select id=\"clnt_slct\">"
-		html += "	<option value=\"0\">이름</option>"
-		html += "	<option value=\"1\">등급</option>"
-		html += "	<option value=\"2\">전화번호</option>"
-		html += "	<option value=\"3\">최근상담일</option>"
-		html += "</select>"
-		html += "</div>"
-		html += "<div class=\"srch_cont\">"
-		html += "	<table class=\"clnt_srch_table\">"
-		html += "	<colgroup>"
-		html += "		<col width=\"100\"/>"
-		html += "		<col width=\"100\"/>"
-		html += "		<col width=\"200\"/>"
-		html += "		<col width=\"150\"/>"
-		html += "	</colgroup>"
-		html += "	<thead>"
-		html += "		<tr>"
-		html += "			<th>이름</th>"
-		html += "			<th>등급</th>"
-		html += "			<th>전화번호</th>"
-		html += "			<th>최근상담일</th>"
-		html += "		</tr>"
-		html += "	</thead>"
-		html += "	<tbody>"
-		html += "		<tr>"
-		html += "			<td></td>"
-		html += "			<td></td>"
-		html += "			<td></td>"
-		html += "			<td></td>"
-		html += "		</tr>"
-		html += "	</tbody>"
-		html += "	</table>"
-		html += "</div>"
+		html += "<input type=\"text\" id=\"srch_txt\"/>";
+		html += "<input type=\"button\" value=\"검색\" id=\"srch_btn\">";
+		html += "<div class=\"name_box\">정렬순서</div>";
+		html += "<select id=\"clnt_slct\">";
+		html += "	<option value=\"0\">이름</option>";
+		html += "	<option value=\"1\">등급</option>";
+		html += "	<option value=\"2\">전화번호</option>";
+		html += "	<option value=\"3\">최근상담일</option>";
+		html += "</select>";
+		html += "</div>";
+		html += "</form>";
+		html += "<div class=\"srch_cont\">";
+		html += "	<table class=\"clnt_srch_table\">";
+		html += "	<colgroup>";
+		html += "		<col width=\"100\"/>";
+		html += "		<col width=\"100\"/>";
+		html += "		<col width=\"200\"/>";
+		html += "		<col width=\"150\"/>";
+		html += "	</colgroup>";
+		html += "	<thead>";
+		html += "		<tr>";
+		html += "			<th>이름</th>";
+		html += "			<th>등급</th>";
+		html += "			<th>전화번호</th>";
+		html += "			<th>최근상담일</th>";
+		html += "		</tr>";
+		html += "	</thead>";
+		html += "	<tbody id=\"clntPop\">";
+		html += "	</tbody>";
+		html += "	</table>";
+		html += "</div>";
 		
 		makePopup({
 			bg : false,
@@ -685,6 +679,24 @@ $(document).ready(function() {
 			height: 400,
 			title : "고객 검색 결과",
 			contents : html,
+			contentsEvent : function reloadList() {
+				var params = $("#actionForm").serialize();
+				
+				$.ajax({
+					type : "post",
+					url : "callCenterPopListAjax",
+					dataType : "json",
+					data : params,
+					success : function(res) {
+						console.log(res);
+						drawList(res.list);
+					},
+					error : function(request, status, error) {
+						console.log(request.responseText);
+
+					}
+				});
+			},
 			draggable : true,
 			buttons : [{
 				name : "닫기",
@@ -694,7 +706,23 @@ $(document).ready(function() {
 				}
 			}]
 		});
+		$("#oldsearchTxt").val($("#searchTxt").val());
+		reloadList();
 	});
+	
+	function drawList(list) {
+		var html = "";
+		
+		for(var data of list) {
+			html += "<tr no=\"" + data.CLNT_NUM +"\">";
+			html += "<td>" + data.CLNT_NAME + "</td>"
+			html += "<td>" + data.CLNT_GRADE + "</td>"
+			html += "<td>" + data.PHONE_NUM_1 + "</td>"
+			html += "<td>" + data.WRITE_DATE + "</td>"
+			html += "</tr>"
+		}
+		$("#clntPop").html(html);
+	}
 	
 	$(".cmn_btn_mr").on("click", function() {
 		

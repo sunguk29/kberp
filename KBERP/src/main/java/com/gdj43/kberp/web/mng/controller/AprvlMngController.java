@@ -30,7 +30,7 @@ public class AprvlMngController {
 	public IPagingService iPagingService;
 	
 	@RequestMapping(value = "/aprvlMng")
-	public ModelAndView salesList(@RequestParam HashMap<String, String> params, ModelAndView mav) {
+	public ModelAndView aprvlMng(@RequestParam HashMap<String, String> params, ModelAndView mav) {
 		
 		if (params.get("page") == null || params.get("page") == "") {
 			params.put("page", "1");

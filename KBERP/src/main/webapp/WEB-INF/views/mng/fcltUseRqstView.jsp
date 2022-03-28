@@ -96,7 +96,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "fcltAction/delete",
+						url : "fcltRqstAction/delete",
 						dataType : "json",
 						data : params,
 						success : function(res){ 

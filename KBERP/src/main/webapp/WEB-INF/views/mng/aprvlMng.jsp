@@ -123,7 +123,7 @@ function drawList(list) {
         else if(data.STS_NUM==2)
             html += "<td>승인</td>";     
         else
-            html += "<td>불가</td>";
+            html += "<td>승인거절</td>";
 	}
 	$("tbody").html(html);
 }
@@ -159,10 +159,6 @@ function drawPaging(pb) {
 </script>
 </head>
 <body>
-	<form action="#" id="actionForm" method="post">
-			<input type="hidden" id="num" name="num"/>
-			<input type="hidden" id="page" name="page" value="${page}"/>
-	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -179,12 +175,20 @@ function drawPaging(pb) {
 			<div class="page_title_text">승인관리</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
-					<select id="searchGbn" name="searchGbn">
-						<option value="0">예약코드</option>
-						<option value="1">시설물명</option>
-					</select>
-					<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
-					<input class="cmn_btn" type="button" value="검색" id="searchBtn"/>
+					<form action="#" id="actionForm" method="post">
+			<input type="hidden" id="num" name="num"/>
+			<input type="hidden" id="page" name="page" value="${page}"/>
+			<input type="hidden" id="top" name="top" value="${param.top}" />
+		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+	
+		<select id="searchGbn" name="searchGbn">
+			<option value="0">예약코드</option>
+			<option value="1">시설물명</option>
+		</select>
+			<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
+			<input class="cmn_btn" type="button" value="검색" id="searchBtn"/>
+	</form>
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->

@@ -67,4 +67,30 @@ public class AssetController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
+	@RequestMapping(value= "/assetDtlViewDrbl")
+	public ModelAndView assetDtlViewDrbl(@RequestParam HashMap<String, String> params,
+							ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = ics.getData("asset.assetDtlViewDrbl",params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("mng/assetDtlViewDrbl");
+		
+		return mav;
+	}
+	
+	@RequestMapping(value= "/assetDtlViewExpndblt")
+	public ModelAndView assetDtlViewExpndblt(@RequestParam HashMap<String, String> params,
+							ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = ics.getData("asset.assetDtlViewExpndblt",params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("mng/assetDtlViewExpndblt");
+		
+		return mav;
+	}
+	
 }

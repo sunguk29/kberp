@@ -98,6 +98,12 @@ $(document).ready(function() {
 		$("#page").val($(this).attr("page"));
 		reloadList();
 	});
+	
+	$("#addBtn").on("click", function() {
+		
+		$("#actionForm").attr("action", "intrnlCostMngAdd");		
+		$("#actionForm").submit();
+	});
 });
 
 function reloadList() {
@@ -209,7 +215,7 @@ function drawPaging(pb) {
 			<div class="board_bottom">
 				<div class="pgn_area" id="pgn_area">
 				</div>
-				<div class="cmn_btn">신규</div>
+				<div class="cmn_btn" id="addBtn">신규</div>
 			</div>
 		</div>
 	</div>
