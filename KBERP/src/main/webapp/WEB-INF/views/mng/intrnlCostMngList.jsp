@@ -40,56 +40,17 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
-	});
 	
 	reloadList();
 	
 	$("#srchMonth").on("change", function() {
-		$("#searchMonth").val($("#srchMonth").val());
+		$("#page").val("1");
+		$("#mon").val($("#srchMonth").val());
 		reloadList();
 	});
 	
 	$("tbody").on("click", "#clickMon", function() {
 		$("#mon").val($(this).attr("mon"));
-		$("#menuNum").val
-		
 		$("#actionForm").attr("action", "intrnlCostMngMnthlyList")
 		$("#actionForm").submit();
 	});
@@ -100,7 +61,6 @@ $(document).ready(function() {
 	});
 	
 	$("#addBtn").on("click", function() {
-		
 		$("#actionForm").attr("action", "intrnlCostMngAdd");		
 		$("#actionForm").submit();
 	});
@@ -174,7 +134,6 @@ function drawPaging(pb) {
 	<form action="#" id="actionForm" method="post">
 		<input type="hidden" id="mon" name="mon">
 		<input type="hidden" id="page" name="page" value="${page}" />
-		<input type="hidden" id="searchMonth" name="searchMonth" value="${param.searchMonth}">
 		<input type="hidden" name="top" value="${param.top}">
 		<input type="hidden" name="menuNum" value="${param.menuNum}">
 		<input type="hidden" name="menuType" value="${param.menuType}">
@@ -192,7 +151,7 @@ function drawPaging(pb) {
 		<div class="page_title_bar">
 			<div class="page_title_text">내부비용관리 목록</div>
 			<div class="mnthly_slct_wrap">
-				<input type="month" class="mnthly_slct" id="srchMonth" value="${param.searchMonth}"/>
+				<input type="month" class="mnthly_slct" id="srchMonth" "/>
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->

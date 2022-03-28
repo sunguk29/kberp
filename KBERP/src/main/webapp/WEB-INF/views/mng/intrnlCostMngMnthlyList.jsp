@@ -114,17 +114,16 @@ $(document).ready(function() {
 	$("#previousBtn").on("click", function() {
 		$("#actionForm").attr("action", "intrnlCostMng");
 		$("#actionForm").submit();
-		
 	});
 	
-	$("#mnthly_slct").on("change", function() {
-		$("#mon").val($("#mnthly_slct").val());
+	$("#srchMonth").on("change", function() {
+		$("#page2").val("1");
+		$("#mon").val($("#srchMonth").val());
 		reloadList();
 	});
 	
 	$("#listTbody").on("click", "#chitNum", function() {
 		$("#sendChitNum").val($(this).attr("chitnum"));
-		
 		$("#actionForm").attr("action", "intrnlCostMngDtlView")
 		$("#actionForm").submit();
 	});
@@ -222,7 +221,6 @@ function drawPaging(pb) {
 		<input type="hidden" id="mon" name="mon" value="${param.mon}">
 		<input type="hidden" id="page" name="page" value="${param.page}" />
 		<input type="hidden" id="page2" name="page2" value="${page2}" />
-		<input type="hidden" id="searchMonth" name="searchMonth" value="${param.searchMonth}">
 		<input type="hidden" id="sendChitNum" name="sendChitNum">
 		
 		<input type="hidden" name="top" value="${param.top}">
@@ -242,7 +240,7 @@ function drawPaging(pb) {
 		<div class="page_title_bar">
 			<div class="page_title_text">내부비용관리 월별 목록</div>
 			<div class="mnthly_slct_wrap">
-				<input type="month" class="mnthly_slct" id="mnthly_slct" value="${param.mon}" />
+				<input type="month" class="mnthly_slct" id="srchMonth" value="${param.mon}" />
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->

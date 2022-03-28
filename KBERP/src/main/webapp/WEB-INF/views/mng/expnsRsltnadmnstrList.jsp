@@ -47,21 +47,15 @@ $(document).ready(function() {
 		}
 	});
 	
-	
 	$("#searchBtn").on("click", function() {
 		$("#page").val("1");
-		
 		$("#searchTxt").val($("#srchText").val());
 		$("#searchMonth").val($("#srchMonth").val());
-		
-		// 목록 조회
 		reloadList();
 	});
 	
 	$("#pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
-		
-		// 목록 조회
 		reloadList();
 	});
 	

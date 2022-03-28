@@ -7,8 +7,8 @@
 		FROM ( SELECT ROW_NUMBER() OVER(ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
 			   FROM INTRNL_COST_MNG
 			   WHERE 1 = 1
-			   <if test="searchMonth != null and searchMonth != ''">
-				   AND TO_CHAR(DATE_HR, 'YYYY-MM') = #{searchMonth}
+			   <if test="mon != null and mon != ''">
+				   AND TO_CHAR(DATE_HR, 'YYYY-MM') = #{mon}
 			   </if>
 			   GROUP BY TO_CHAR(DATE_HR, 'YYYY-MM') )
 	</select>
@@ -19,8 +19,8 @@
 					   ROW_NUMBER() OVER(ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
 				FROM INTRNL_COST_MNG
 				WHERE 1 = 1
-				<if test="searchMonth != null and searchMonth != ''">
-					AND TO_CHAR(DATE_HR, 'YYYY-MM') = #{searchMonth}
+				<if test="mon != null and mon != ''">
+					AND TO_CHAR(DATE_HR, 'YYYY-MM') = #{mon}
 				</if>
 				GROUP BY TO_CHAR(DATE_HR, 'YYYY-MM')  ) I
 		WHERE I.RNUM BETWEEN #{startCount} AND #{endCount}

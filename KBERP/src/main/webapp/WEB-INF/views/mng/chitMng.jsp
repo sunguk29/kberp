@@ -120,29 +120,28 @@ $(document).ready(function() {
 	});
 	
 	$("#srchMonth").on("change", function() {
+		$("#page").val("1");
 		$("#mon").val($("#srchMonth").val());
 		reloadList();
 	});
 	
 	$("#aprvlRqst").on("click", function() {
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "결재요청확인",
+			contents : "결재를 요청하시겠습니까?",
+			buttons : [{
+				name : "요청",
+				func:function() {
+					console.log("요청!");
+					closePopup();
+				}
+			}, {
+				name : "취소"
+			}]
+		});
 		
-		if(data != null) {
-			makePopup({
-				bg : true,
-				bgClose : false,
-				title : "결재요청확인",
-				contents : "결재를 요청하시겠습니까?",
-				buttons : [{
-					name : "요청",
-					func:function() {
-						console.log("요청!");
-						closePopup();
-					}
-				}, {
-					name : "취소"
-				}]
-			});
-		}
 	});
 	
 	

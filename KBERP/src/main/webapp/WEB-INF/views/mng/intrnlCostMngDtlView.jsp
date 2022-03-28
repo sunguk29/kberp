@@ -138,7 +138,7 @@ $(document).ready(function() {
 		<input type="hidden" id="mon" name="mon" value="${param.mon}">
 		<input type="hidden" id="page" name="page" value="${param.page}" />
 		<input type="hidden" id="page2" name="page2" value="${param.page2}" />
-		<input type="hidden" id="searchMonth" name="searchMonth" value="${param.searchMonth}">
+		
 		<input type="hidden" id="top2" name="top" value="${param.top}">
 		<input type="hidden" id="menuNum2" name="menuNum" value="${param.menuNum}">
 		<input type="hidden" id="menuType2" name="menuType" value="${param.menuType}">

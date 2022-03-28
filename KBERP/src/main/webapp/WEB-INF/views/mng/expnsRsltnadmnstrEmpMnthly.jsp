@@ -90,10 +90,6 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-	if("${param.back}" == "back") {
-		console.log("back");
-		
-	}
 });
 
 
@@ -108,6 +104,7 @@ $(document).ready(function() {
 		<input type="hidden" id="page2" name="page2" value="${param.page2}" />
 		<input type="hidden" id="searchMonth" name="searchMonth" value="${param.searchMonth}">
 		<input type="hidden" id="searchTxt" name="searchTxt" value="${param.searchTxt}"> 
+		
 		<input type="hidden" id="top2" name="top" value="${param.top}">
 		<input type="hidden" id="menuNum2" name="menuNum" value="${param.menuNum}">
 		<input type="hidden" id="menuType2" name="menuType" value="${param.menuType}">

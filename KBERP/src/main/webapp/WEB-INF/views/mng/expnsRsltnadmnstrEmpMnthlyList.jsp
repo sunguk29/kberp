@@ -103,6 +103,7 @@ $(document).ready(function() {
 		$("#mon").val($("#mnthly_slct").val());
 		$("#searchMonth").val(null);
 		$("#searchTxt").val(null);
+		$("#page").val("1");
 		
 		// 목록 조회
 		reloadList();
