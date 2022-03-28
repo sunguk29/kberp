@@ -367,13 +367,15 @@ $(document).ready(function() {
 	
 	$("input:radio[name=join_date]").on("click", function() {
 		if ($(this).val() == 0) {
-			$(".prd_text").attr("readonly", false);
+			$(".prd_text").attr("disabled", false);
 		} else {
-			$(".prd_text").attr("readonly", true);
+			$(".prd_text").attr("disabled", true);
 		}
 	});
 	
 	$(".cmn_btn_ml").on("click", function() {
+		$("#page").val("1");
+		
 		reloadList();
 	});
 	
@@ -401,7 +403,11 @@ $(document).ready(function() {
 });
 
 function reloadList() { // 목록 조회용 + 페이징 조회용
+	$(".prd_text").attr("disabled", false);
 	var params = $("#inqryForm").serialize();
+	if ($("input[name=join_date]:checked").val() == "-1") {
+		$(".prd_text").attr("disabled", true);
+	}
 	
 	$.ajax({
 		type : "post",
@@ -556,11 +562,11 @@ function drawPaging(pb) {
 							<div class="prd_wrap">
 								<div id="prd_wrap_empty"></div>
 								<div class="prd_text_wrap">
-									<input type="date" class="prd_text" id="prd_start" name="prd_start" readonly="readonly" />
+									<input type="date" class="prd_text" id="prd_start" name="prd_start" disabled="disabled" />
 								</div>
 								<div class="prd_clsftn">~</div>
 								<div class="prd_text_wrap">
-									<input type="date" class="prd_text" id="prd_end" name="prd_end" readonly="readonly" />
+									<input type="date" class="prd_text" id="prd_end" name="prd_end" disabled="disabled" />
 								</div>
 							</div>
 						</div>
