@@ -216,6 +216,7 @@
 
 </style>
 <script type="text/javascript">
+// 1뎁스
 $(document).ready(function() {
    $(".orgnzt_depth1").on("click", function() {
 	   console.log("depth1 click");
@@ -233,7 +234,7 @@ $(document).ready(function() {
 	   console.log(this)
       }
    });
-   
+// 2뎁스  
    $(".orgnzt_depth2").on("click", function() {
 	   console.log("depth2 click");
       if($(this).children(".orgnzt_depth3_wrap").is(":visible")){
