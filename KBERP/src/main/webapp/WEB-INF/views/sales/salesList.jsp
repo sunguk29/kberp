@@ -380,16 +380,16 @@ $(document).ready(function() {
 		$("#salesNum").val($(this).attr("salesNum")); // 영업번호 가져오기
 		
 		if($("#prgrs").children("#sts0").val() == 0) {
-			$("#actionForm").attr("action", "sales1SalesChncCont"); // 우선 영업기회 상세보기로 이동.
+			$("#actionForm").attr("action", "sales1SalesChncCont"); // 영업기회 상세보기로 이동.
 			$("#actionForm").submit();
 		} else if($("#prgrs").children("#sts1").val() == 1) {
-			$("#actionForm").attr("action", "sales2SalesChncCont"); // 우선 영업기회 상세보기로 이동.
+			$("#actionForm").attr("action", "sales2SgstnCont"); // 제안 상세보기로 이동.
 			$("#actionForm").submit();
 		} else if($("#prgrs").children("#sts2").val() == 2) {
-			$("#actionForm").attr("action", "sales3SalesChncCont"); // 우선 영업기회 상세보기로 이동.
+			$("#actionForm").attr("action", "sales3QntCont"); // 견적 상세보기로 이동.
 			$("#actionForm").submit();
 		} else if($("#prgrs").children("#sts3").val() == 3) {
-			$("#actionForm").attr("action", "sales4SalesChncCont"); // 우선 영업기회 상세보기로 이동.
+			$("#actionForm").attr("action", "sales4CntrctCont"); // 계약 상세보기로 이동.
 			$("#actionForm").submit();
 		}
 	});
