@@ -180,6 +180,7 @@ function drawPaging(pb) {
 						<select class="srch_sel" id="searchGbn" name="searchGbn">
 							<option value="0">제목</option>
 							<option value="1">작성자</option>
+							<option value="2">작성일</option>
 						</select>
 						<div class="srch_text_wrap">
 							<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
