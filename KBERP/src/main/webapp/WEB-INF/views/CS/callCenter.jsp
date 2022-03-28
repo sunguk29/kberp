@@ -782,9 +782,6 @@ $(document).ready(function() {
 		} else if(checkEmpty("#clnt_grade")) {
 			alert("고객등급을 입력하세요.");
 			$("#clnt_grade").focus();
-		} else if(checkEmpty("#ltl_cnsl")) {
-			alert("최근상담일을 입력하세요.");
-			$("#clnt_grade").focus();
 		} else if(checkEmpty("#phon_num_1")) {
 			alert("전화번호를 입력하세요.");
 			$("#phon_num_1").focus();
@@ -937,10 +934,10 @@ function checkEmpty(sel) {
 							<input type="hidden" id="clnt_num" name="clnt_num" value="${data.CLNT_NUM}"/>
 							<div class="cnsl_type">상담유형</div>
 							<select id="big_sel" name="big_sel">
-								<option>대분류</option>
+								<option value="">대분류</option>
 							</select>
 							<select id="small_sel" name="small_sel">
-								<option>소분류</option>
+								<option value="">소분류</option>
 							</select>
 						</div>
 						<div class="mid_row2">
