@@ -49,7 +49,7 @@
 	
 	<select id="assetDtlViewExpndblt" resultType="hashmap" parameterType="hashmap">
 		SELECT ASSET_NUM, ASSET_NAME, ASSET_TYPE_NUM, TO_CHAR(ACQRMNT_DATE, 'YYYY-MM-DD')AS ACQRMNT_DATE,
-		 EMP_NAME, QUNTY, QUNTY_DVSN_NUM,A.RMRKS
+		 EMP_NAME, QUNTY, QUNTY_DVSN_NUM,RMRKS
 		FROM ASSET A INNER JOIN EMP E
                 ON A.MNGR_NUM = E.EMP_NUM
         WHERE ASSET_NUM = #{num}
@@ -60,5 +60,10 @@
 		VALUES(ASSET_SEQ.NEXTVAL, #{assetName}, #{writer}, #{mngrNum}, #{assetType}, #{qunty}, #{quntyDvsnNum}, #{acqrmntDt})
 	</insert>
 	
+	<update id="drblMdfy" parameterType="hashmap">
+		UPDATE ASSET SET MNGR_NUM = #{mngrNum},
+              	   	 RMRKS =#{rmrks}
+		WHERE ASSET_NUM = #{num}
+	</update>
 
 </mapper>
