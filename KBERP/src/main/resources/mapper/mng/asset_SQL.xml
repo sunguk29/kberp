@@ -55,5 +55,10 @@
         WHERE ASSET_NUM = #{num}
 	</select>
 	
+	<insert id="assetRgstrtn" parameterType="hashmap">
+		INSERT INTO ASSET(ASSET_NUM, ASSET_NAME, RGSTRTN_EMP_NUM, MNGR_NUM, ASSET_TYPE_NUM, QUNTY, QUNTY_DVSN_NUM, ACQRMNT_DATE)
+		VALUES(ASSET_SEQ.NEXTVAL, #{assetName}, #{writer}, #{mngrNum}, #{assetType}, #{qunty}, #{quntyDvsnNum}, #{acqrmntDt})
+	</insert>
+	
 
 </mapper>

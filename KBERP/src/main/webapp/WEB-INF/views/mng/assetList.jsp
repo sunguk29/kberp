@@ -83,6 +83,14 @@ $(document).ready(function() {
 		
 		reloadList();
 	});	
+	
+	$("#rgstrtnBtn").on("click", function() {
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		$("#actionForm").attr("action", "assetRgstrtn");
+		$("#actionForm").submit();
+});
 });
 
 function reloadList() { // 목록 조회용 + 페이징 조회용
@@ -157,6 +165,8 @@ function drawPaging(pb) {
 	$(".pgn_area").html(html);
 
 }
+
+
 </script>
 </head>
 <body>
@@ -189,6 +199,7 @@ function drawPaging(pb) {
 					</select>
 						<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
 						<input class="cmn_btn" type="button" value="검색" id="searchBtn"/>
+						
 									
 				</form>
 			</div>
@@ -223,6 +234,7 @@ function drawPaging(pb) {
 			<div>
 			<div class="board_bottom">
 				<div class="pgn_area"></div>
+				<input class="cmn_btn" type="button" value="등록" id="rgstrtnBtn"/>
 			</div>
 			</div>
 		</div>
