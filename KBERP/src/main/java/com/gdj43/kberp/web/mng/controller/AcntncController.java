@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -168,6 +169,35 @@ public class AcntncController {
 		
 		modelMap.put("list", list); 
 		modelMap.put("pb", pb); 
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
+	// 내부비용관리 Action
+	@RequestMapping(value = "/intrnlCostMngAction/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String intrnlCostMngActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			switch(gbn) {
+			case "insert":
+				iCommonService.insertData("IntrnlCostMng.writeIntrnlCostMng", params);
+				break;
+			case "update":
+				iCommonService.updateData("IntrnlCostMng.updateIntrnlCostMng", params);
+				break;
+			case "delete":
+				iCommonService.deleteData("IntrnlCostMng.deleteIntrnlCostMng", params);
+				break;
+			}
+			modelMap.put("res", "success");
+		} catch (Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "failed");
+		}
 		
 		return mapper.writeValueAsString(modelMap);
 	}

@@ -156,7 +156,7 @@ $(document).ready(function() {
 		makeAlert("하이", "내용임");
 	});
 	
-	$("#btn1Btn").on("click", function() {
+	$("#srchBtn").on("click", function() {
 		
 		var html = "";
 		
@@ -208,7 +208,36 @@ $(document).ready(function() {
 			title : "계정명검색",
 			contents : html,
 			contentsEvent : function() {
+				$("#sendSrchTxt").val("");
+				
 				reloadList();
+				
+				$("#pgn_area").on("click", "div", function() {
+					$("#page").val($(this).attr("page"));
+					reloadList();
+				});
+				
+				$("#acntSrchBtn").on("click", function() {
+					$("#sendSrchTxt").val($("#acntSrchTxt").val());
+					reloadList();
+				});
+				
+				$("#acntSrchTxt").on("keypress", function(event) {
+					if(event.keyCode == 13) {
+						
+						$("#acntSrchBtn").click();
+						
+						return false;
+					}
+				});
+				
+				$("#acntListTbody").on("click", "#acntName", function() {
+					console.log("click!");
+					$("#acntCodeInput").attr("acntcode", $(this).attr("acntcode"));
+					$("#acntCodeInput").val($(this).attr("name"));
+					
+					closePopup(1);
+				});
 			},
 			buttons : {
 				name : "닫기",
@@ -238,19 +267,11 @@ $(document).ready(function() {
 		});
 	});
 	
-	$("#pgn_area").on("click", "div", function() {
-		$("#page").val($(this).attr("page"));
-		reloadList();
-	});
-	
 	$("#acntCodeInput").on("click", function() {
-		$("#btn1Btn").click();
+		$("#srchBtn").click();
 	});
 	
-	$("#acntSrchBtn").on("click", function() {
-		$("#sendSrchTxt").val($("#acntSrchTxt").val());
-		reloadList();
-	});
+	
 	
 	$("#addBtn").on("click", function() {
 		if(checkEmpty("#spendDate")) {
@@ -274,10 +295,9 @@ $(document).ready(function() {
 		} else if(checkEmpty("#bsnsmnNum")) {
 			alert("사업자번호 입력하세요.")
 			$("#bsnsmnNum").focus();
-		} else if(checkEmpty("#rmrks")) {
-			alert("비고를 입력하세요.")
-			$("#rmrks").focus();
 		} else {
+			
+			$("#sendAcntCode").val($("#acntCodeInput").attr("acntcode"));
 			
 			var writeForm = $("#writeForm");
 			
@@ -293,12 +313,12 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post", // 전송 형태
-						url : "atbAction/insert", // 통신 주소
+						url : "intrnlCostMngAction/insert", // 통신 주소
 						dataType : "json", // 받을 데이터 형태
 						data : params, // 보낼 데이터. 보낼 것이 없으면 안 씀
 						success : function(res) { // 성공 시 실행 함수. 인자는 받아온 데이터
 							if(res.res == "success") {
-								location.href = "atbList";
+								$("#backForm").submit();
 							} else {
 								alert("작성 중 문제가 발생했습니다.");
 							}
@@ -310,12 +330,26 @@ $(document).ready(function() {
 				},
 				error : function(req) {
 					console.log(req.responseText);
+					console.log("ajaxForm 실패!");
 					
 				}
 			});
 			writeForm.submit(); // ajaxForm 실행	
 		}
 	});
+	
+	$("#unitPrice").on("change", function() {
+		$("#splyPrice").val($("#unitPrice").val() * $("#qunty").val());
+		$("#srtx").val($("#splyPrice").val() * 0.1);
+		$("#amnt").val($("#splyPrice").val() * 1 + $("#srtx").val() * 1);
+	});
+	
+	$("#qunty").on("change", function() {
+		$("#splyPrice").val($("#unitPrice").val() * $("#qunty").val());
+		$("#srtx").val($("#splyPrice").val() * 0.1);
+		$("#amnt").val($("#splyPrice").val() * 1 + $("#srtx").val() * 1);
+	});
+	
 	
 	$("#cancleBtn").on("click", function() {
 		history.back();
@@ -356,7 +390,7 @@ function drawList(list) {
 	for(data of list) {
 		html += "<tr>";
 		html += "<td>" + data.ACNT_CODE + "</td>";
-		html += "<td class=\"board_table_hover\">" + data.ACNT_NAME + "</td>";
+		html += "<td class=\"board_table_hover\" id=\"acntName\" acntcode=\"" + data.ACNT_CODE + "\" name=\"" + data.ACNT_NAME + "\">" + data.ACNT_NAME + "</td>";
 		if(data.ABSTRCT != null) {
 			html += "<td>" + data.ABSTRCT + "</td>";			
 		} else {
@@ -402,21 +436,6 @@ function drawPaging(pb) {
 </script>
 </head>
 <body>
-	<form action="#" id="acntSrchForm" method="post">
-		<input type="hidden" id="sendSrchTxt" name="sendSrchTxt">
-		<input type="hidden" id="page" name="page" value="${page}">
-	</form>
-	<form action="#" id="writeForm" method="post">
-		<input type="hidden" id="" name="">
-		<input type="hidden" id="" name="">
-		<input type="hidden" id="" name="">
-		<input type="hidden" id="" name="">
-		<input type="hidden" id="" name="">
-		<input type="hidden" name="top" value="${param.top}">
-		<input type="hidden" name="menuNum" value="${param.menuNum}">
-		<input type="hidden" name="menuType" value="${param.menuType}">
-	</form>
-
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -424,75 +443,94 @@ function drawPaging(pb) {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
-	<!-- 내용영역 -->
-	<div class="cont_wrap">
-		<div class="page_title_bar">
-			<div class="page_title_text">내부비용관리 신규</div>
-		</div>
-		<!-- 해당 내용에 작업을 진행하시오. -->
-		<div class="cont_area">
-			<!-- 여기부터 쓰면 됨 -->
-			<table class="intrnl_cost_admnstrtn_new">
-				<tbody>
-					<tr>
-						<td>지출일자</td>
-						<td colspan="5"><input type="date" class="acnt_code_date" id="spendDate">
-						</td>
-					</tr>
-					<tr>
-						<td>계정명</td>
-						<td colspan="5">
-							<input type="text" class="acnt_code_input" readonly="readonly" id="acntCodeInput">
-							<div class="cmn_btn" id="btn1Btn">계정명 검색</div>
-						</td>
-					</tr>
-					<tr>
-						<td>거래처</td>
-						<td colspan="5"><input type="text" class="input" id="expns"></td>
-					</tr>
-					<tr>
-						<td>품목명</td>
-						<td><input type="text" class="input_short" id="item"></td>
-						<td>수량</td>
-						<td><input type="number" class="input_short" id="qunty" value="1"></td>
-						<td>단가</td>
-						<td><input type="number" class="input_short" id="unitPrice"></td>
-					</tr>
-					<tr>
-						<td>공급가액</td>
-						<td colspan="5"><input type="text" class="input"
-							placeholder="수량*단가 자동출력" disabled="disabled" id="splyPrice"></td>
-					</tr>
-					<tr>
-						<td>부가세</td>
-						<td colspan="5"><input type="text" class="input"
-							placeholder="공급가액*10% 자동출력" disabled="disabled" id="srtx"></td>
-					</tr>
-					<tr>
-						<td>사업자번호</td>
-						<td colspan="5"><input type="number" class="input" id="bsnsmnNum"></td>
-					</tr>
-					<tr>
-						<td>합계</td>
-						<td colspan="5"><input type="text" class="input"
-							placeholder="공급가액+공급가액*10% 자동출력" disabled="disabled" id="amnt"></td>
-					</tr>
-					<tr>
-						<td>비고</td>
-						<td colspan="5"><input type="text" class="input" id="rmrks"></td>
-					</tr>
-					<tr>
-						<td>첨부파일</td>
-						<td colspan="5"><input type="file" id="attFile"></td>
-					</tr>
-				</tbody>
-			</table>
-			<div class="btn_wrap">
-				<div class="cmn_btn" id="addBtn">등록</div>
-				<div class="cmn_btn_ml" id="cancleBtn">취소</div>
+	
+	<form action="#" id="acntSrchForm" method="post">
+		<input type="hidden" id="sendSrchTxt" name="sendSrchTxt">
+		<input type="hidden" id="page" name="page" value="${page}">
+	</form>
+	
+	<form action="intrnlCostMng" id="backForm" method="post">
+		<input type="hidden" name="top" value="${param.top}">
+		<input type="hidden" name="menuNum" value="${param.menuNum}">
+		<input type="hidden" name="menuType" value="${param.menuType}">
+	</form>
+	
+	<form action="fileUploadAjax" id="writeForm" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="empNum" value="${sEmpNum}">
+		<input type="hidden" id="sendAcntCode" name="sendAcntCode">
+		<!-- 내용영역 -->
+		<div class="cont_wrap">
+			<div class="page_title_bar">
+				<div class="page_title_text">내부비용관리 신규</div>
+			</div>
+			<!-- 해당 내용에 작업을 진행하시오. -->
+			<div class="cont_area">
+				<!-- 여기부터 쓰면 됨 -->
+				<table class="intrnl_cost_admnstrtn_new">
+					<tbody>
+						<tr>
+							<td>지출일자</td>
+							<td colspan="5"><input type="date" class="acnt_code_date" id="spendDate" name="spendDate">
+							</td>
+						</tr>
+						<tr>
+							<td>계정명</td>
+							<td colspan="5">
+								<input type="text" class="acnt_code_input" readonly="readonly" id="acntCodeInput" >
+								<div class="cmn_btn" id="srchBtn">계정명 검색</div>
+							</td>
+						</tr>
+						<tr>
+							<td>거래처</td>
+							<td colspan="5"><input type="text" class="input" id="expns" name="expns"></td>
+						</tr>
+						<tr>
+							<td>품목명</td>
+							<td><input type="text" class="input_short" id="item" name="item"></td>
+							<td>수량</td>
+							<td><input type="number" class="input_short" id="qunty" name="qunty" value="1"></td>
+							<td>단가</td>
+							<td><input type="number" class="input_short" id="unitPrice" name="unitPrice"></td>
+						</tr>
+						<tr>
+							<td>공급가액</td>
+							<td colspan="5"><input type="number" class="input" placeholder="수량*단가 자동출력" readonly="readonly" id="splyPrice" name="splyPrice"></td>
+						</tr>
+						<tr>
+							<td>부가세</td>
+							<td colspan="5"><input type="number" class="input"
+								placeholder="공급가액*10% 자동출력" readonly="readonly" id="srtx" name="srtx"></td>
+						</tr>
+						<tr>
+							<td>사업자번호</td>
+							<td colspan="5"><input type="number" class="input" id="bsnsmnNum" name="bsnsmnNum"></td>
+						</tr>
+						<tr>
+							<td>합계</td>
+							<td colspan="5"><input type="number" class="input"
+								placeholder="공급가액+공급가액*10% 자동출력" readonly="readonly" id="amnt" name="amnt"></td>
+						</tr>
+						<tr>
+							<td>비고</td>
+							<td colspan="5"><input type="text" class="input" id="rmrks" name="rmrks"></td>
+						</tr>
+						<tr>
+							<td>첨부파일</td>
+							<td colspan="5">
+								<input type="file" name="att">
+								<input type="hidden" id="attFile" name="attFile">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="btn_wrap">
+					<div class="cmn_btn" id="addBtn">등록</div>
+					<div class="cmn_btn_ml" id="cancleBtn">취소</div>
+				</div>
 			</div>
 		</div>
-	</div>
+	</form>
+	
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>
