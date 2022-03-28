@@ -88,38 +88,138 @@
 	<!-- 사원조회 쿼리 -->
 	<select id="getEmpCount" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*)
-		FROM EMP
+		FROM (  SELECT EMP.EMP_NUM, EMP.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, EMP.MBL_NUM, EMP.HIRE_TYPE,
+		               DECODE(A2.END_DATE, NULL, 0, 1) AS WORK_TYPE,
+		               DECODE(A1.START_DATE, NULL, ' ', A1.START_DATE) AS JOIN_DATE,
+		               DECODE(A2.END_DATE, NULL, ' ', A2.END_DATE, 'YYYY-MM-DD') AS RSGNT_DATE
+		        FROM EMP INNER JOIN (   SELECT TO_CHAR(SQ.START_DATE, 'YYYY-MM-DD') AS START_DATE, TO_CHAR(SQ.END_DATE, 'YYYY-MM-DD') AS END_DATE,
+		                                       SQ.EMP_NUM
+		                                FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
+		                                               ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE ASC) AS OLDEST
+		                                        FROM APNTM
+		                                        WHERE STS_NUM = '1' ) SQ
+		                                WHERE SQ.OLDEST = '1'
+		                                ) A1
+		                         ON EMP.EMP_NUM = A1.EMP_NUM
+		                 INNER JOIN (   SELECT TO_CHAR(SQ.START_DATE, 'YYYY-MM-DD') AS START_DATE, TO_CHAR(SQ.END_DATE, 'YYYY-MM-DD') AS END_DATE,
+		                                       SQ.EMP_NUM, SQ.RANK_NUM, SQ.DEPT_NUM
+		                                FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
+		                                               ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE DESC) AS NEWEST
+		                                        FROM APNTM
+		                                        WHERE STS_NUM = '1' ) SQ
+		                                WHERE SQ.NEWEST = '1'
+		                                    ) A2
+		                         ON EMP.EMP_NUM = A2.EMP_NUM
+		                 INNER JOIN RANK R
+		                         ON A2.RANK_NUM = R.RANK_NUM
+		                 INNER JOIN DEPT D
+		                         ON A2.DEPT_NUM = D.DEPT_NUM AND D.DEL_CHECK = '1'
+		        ) S
 		WHERE 1 = 1
+		<if test="srch_txt != '' and srch_txt != null">
+			<choose>
+				<when test="srch_sel == -1">
+					  AND ((S.EMP_NUM LIKE '%' || #{srch_txt} || '%') OR (S.EMP_NAME LIKE '%' || #{srch_txt} || '%') OR (S.DEPT_NAME LIKE '%' || #{srch_txt} || '%'))
+				</when>
+				<when test="srch_sel == 0">
+		              AND S.EMP_NUM LIKE '%' || #{srch_txt} || '%'
+		        </when>
+				<when test="srch_sel == 1">
+		              AND S.EMP_NAME LIKE '%' || #{srch_txt} || '%'
+		        </when>
+				<when test="srch_sel == 2">
+		              AND S.DEPT_NAME LIKE '%' || #{srch_txt} || '%'
+		        </when>
+			</choose>
+		</if>
+		<if test="work_clsftn != -1">
+	              AND S.WORK_TYPE = #{work_clsftn}
+	    </if>
+		<if  test="emplynt_type != -1">
+	              AND S.HIRE_TYPE = #{emplynt_type}
+	    </if>
+		<if test="join_date != -1">
+			<choose>
+				<when test="prd_start != '' and prd_end != ''">
+	            	AND S.JOIN_DATE BETWEEN TO_DATE(#{prd_start}, 'YYYY-MM-DD') AND TO_DATE(#{prd_end}, 'YYYY-MM-DD')
+				</when>
+				<when test="prd_start != '' and prd_end == ''">
+					AND S.JOIN_DATE <![CDATA[>=]]> TO_DATE(#{prd_start}, 'YYYY-MM-DD')
+				</when>
+				<when test="prd_start == '' and prd_end != ''">
+					AND S.JOIN_DATE <![CDATA[<=]]> TO_DATE(#{prd_end}, 'YYYY-MM-DD')
+				</when>
+	        </choose>
+	    </if>
 	</select>
 	<select id="getEmpList" parameterType="hashmap" resultType="hashmap">
 		SELECT E.EMP_NUM, E.EMP_NAME, E.DEPT_NAME, E.RANK_NAME, E.MBL_NUM, E.HIRE_TYPE, E.WORK_TYPE, E.JOIN_DATE, E.RSGNT_DATE
-		FROM (  SELECT EMP.EMP_NUM, EMP.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, EMP.MBL_NUM, EMP.HIRE_TYPE,
-				       DECODE(A2.END_DATE, NULL, 1, 0) AS WORK_TYPE,
-				       DECODE(A1.START_DATE, NULL, ' ', A1.START_DATE) AS JOIN_DATE,
-				       DECODE(A2.END_DATE, NULL, ' ', A2.END_DATE) AS RSGNT_DATE,
-				       ROW_NUMBER() OVER(ORDER BY EMP.EMP_NUM) AS RN
-				FROM EMP INNER JOIN (   SELECT TO_CHAR(SQ.START_DATE, 'YYYY-MM-DD') AS START_DATE, TO_CHAR(SQ.END_DATE, 'YYYY-MM-DD') AS END_DATE,
-				                               SQ.EMP_NUM
-				                        FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
-				                                       ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE ASC) AS OLDEST
-				                                FROM APNTM
-				                                WHERE STS_NUM = '1' ) SQ
-				                        WHERE SQ.OLDEST = '1'
-				                        ) A1
-				                 ON EMP.EMP_NUM = A1.EMP_NUM
-				         INNER JOIN ( SELECT TO_CHAR(SQ.START_DATE, 'YYYY-MM-DD') AS START_DATE, TO_CHAR(SQ.END_DATE, 'YYYY-MM-DD') AS END_DATE,
-				                            SQ.EMP_NUM, SQ.RANK_NUM, SQ.DEPT_NUM
-				                            FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
-				                                           ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE DESC) AS NEWEST
-				                                    FROM APNTM
-				                                    WHERE STS_NUM = '1' ) SQ
-				                            WHERE SQ.NEWEST = '1'
-				                            ) A2
-				                 ON EMP.EMP_NUM = A2.EMP_NUM
-				         INNER JOIN RANK R
-				                 ON A2.RANK_NUM = R.RANK_NUM
-				         INNER JOIN DEPT D
-				                 ON A2.DEPT_NUM = D.DEPT_NUM AND D.DEL_CHECK = '1') E
- 		WHERE E.RN BETWEEN #{startCount} AND #{endCount}
+		FROM (  SELECT S.EMP_NUM, S.EMP_NAME, S.DEPT_NAME, S.RANK_NAME, S.MBL_NUM, S.HIRE_TYPE, S.WORK_TYPE, S.JOIN_DATE, S.RSGNT_DATE,
+		               ROW_NUMBER() OVER(ORDER BY S.EMP_NUM) AS RN
+		        FROM (  SELECT EMP.EMP_NUM, EMP.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, EMP.MBL_NUM, EMP.HIRE_TYPE,
+		                       DECODE(A2.END_DATE, NULL, 0, 1) AS WORK_TYPE,
+		                       DECODE(A1.START_DATE, NULL, ' ', A1.START_DATE) AS JOIN_DATE,
+		                       DECODE(A2.END_DATE, NULL, ' ', A2.END_DATE, 'YYYY-MM-DD') AS RSGNT_DATE
+		                FROM EMP INNER JOIN (   SELECT TO_CHAR(SQ.START_DATE, 'YYYY-MM-DD') AS START_DATE, TO_CHAR(SQ.END_DATE, 'YYYY-MM-DD') AS END_DATE,
+		                                               SQ.EMP_NUM
+		                                        FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
+		                                                       ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE ASC) AS OLDEST
+		                                                FROM APNTM
+		                                                WHERE STS_NUM = '1' ) SQ
+		                                        WHERE SQ.OLDEST = '1'
+		                                        ) A1
+		                                 ON EMP.EMP_NUM = A1.EMP_NUM
+		                         INNER JOIN (   SELECT TO_CHAR(SQ.START_DATE, 'YYYY-MM-DD') AS START_DATE, TO_CHAR(SQ.END_DATE, 'YYYY-MM-DD') AS END_DATE,
+		                                               SQ.EMP_NUM, SQ.RANK_NUM, SQ.DEPT_NUM
+		                                        FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
+		                                                       ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE DESC) AS NEWEST
+		                                                FROM APNTM
+		                                                WHERE STS_NUM = '1' ) SQ
+		                                        WHERE SQ.NEWEST = '1'
+		                                            ) A2
+		                                 ON EMP.EMP_NUM = A2.EMP_NUM
+		                         INNER JOIN RANK R
+		                                 ON A2.RANK_NUM = R.RANK_NUM
+		                         INNER JOIN DEPT D
+		                                 ON A2.DEPT_NUM = D.DEPT_NUM AND D.DEL_CHECK = '1'
+		                ) S
+		        WHERE 1 = 1
+		<if test="srch_txt != '' and srch_txt != null">
+			<choose>
+				<when test="srch_sel == -1">
+					  AND ((S.EMP_NUM LIKE '%' || #{srch_txt} || '%') OR (S.EMP_NAME LIKE '%' || #{srch_txt} || '%') OR (S.DEPT_NAME LIKE '%' || #{srch_txt} || '%'))
+				</when>
+				<when test="srch_sel == 0">
+		              AND S.EMP_NUM LIKE '%' || #{srch_txt} || '%'
+		        </when>
+				<when test="srch_sel == 1">
+		              AND S.EMP_NAME LIKE '%' || #{srch_txt} || '%'
+		        </when>
+				<when test="srch_sel == 2">
+		              AND S.DEPT_NAME LIKE '%' || #{srch_txt} || '%'
+		        </when>
+			</choose>
+		</if>
+		<if test="work_clsftn != -1">
+	              AND S.WORK_TYPE = #{work_clsftn}
+	    </if>
+		<if  test="emplynt_type != -1">
+	              AND S.HIRE_TYPE = #{emplynt_type}
+	    </if>
+		<if test="join_date != -1">
+			<choose>
+				<when test="prd_start != '' and prd_end != ''">
+	            	AND S.JOIN_DATE BETWEEN TO_DATE(#{prd_start}, 'YYYY-MM-DD') AND TO_DATE(#{prd_end}, 'YYYY-MM-DD')
+				</when>
+				<when test="prd_start != '' and prd_end == ''">
+					AND S.JOIN_DATE <![CDATA[>=]]> TO_DATE(#{prd_start}, 'YYYY-MM-DD')
+				</when>
+				<when test="prd_start == '' and prd_end != ''">
+					AND S.JOIN_DATE <![CDATA[<=]]> TO_DATE(#{prd_end}, 'YYYY-MM-DD')
+				</when>
+	        </choose>
+	    </if>
+		        ) E
+		WHERE E.RN BETWEEN #{startCount} AND #{endCount}
 	</select>
 </mapper>
