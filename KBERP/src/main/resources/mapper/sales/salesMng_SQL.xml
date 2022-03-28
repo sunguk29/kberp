@@ -197,6 +197,10 @@
 		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
+	<!-- 영업기회 수정 -->
+	
+	
+	
 	
 	
 	<!-- 영업기회 실패 -->

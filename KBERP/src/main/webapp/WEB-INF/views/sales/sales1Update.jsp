@@ -604,7 +604,7 @@ $(document).ready(function() {
 
 							$.ajax({
 								type : "post",
-								url : "salesMngAction/update",
+								url : "salesMng1Action/update",
 								dataType : "json",
 								data : params,
 								success : function(res) {
