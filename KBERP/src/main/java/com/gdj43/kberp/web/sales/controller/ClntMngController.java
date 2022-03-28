@@ -159,8 +159,7 @@ public class ClntMngController {
 				
 				break;
 			case "delete" :
-				iCommonService.deleteData("clntCmpnyMng.ccAttDelete", params); // 첨부파일삭제
-				iCommonService.deleteData("clntCmpnyMng.ccDelete", params); // 글삭제
+				iCommonService.updateData("clntCmpnyMng.ccDelete", params); // 글삭제
 				break;
 			}
 			modelMap.put("res", "success");

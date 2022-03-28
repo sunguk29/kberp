@@ -222,6 +222,11 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
+	$("#sortBtn").on("click", function() {
+		reloadList();
+	});
+	
+	
 });
 
 function reloadList() {
@@ -425,12 +430,12 @@ function drawPaging(pb) {
 						<tr>
 							<td><span class="srch_name">정렬</span></td>
 							<td><select id="listSort" name="listSort">
-									<option selected="selected">선택안함</option>
+									<option value="9" selected="selected">선택안함</option>
 									<option value="0">매출</option>
 									<option value="1">고객사명</option>
 							</select></td>
 							<td>
-								<img class="asc_btn cmn_btn" alt="정렬버튼" src="resources/images/sales/asc.png" />
+								<img class="asc_btn cmn_btn" alt="정렬버튼" src="resources/images/sales/asc.png" id="sortBtn" />
 							</td>
 						</tr>
 					</tbody>

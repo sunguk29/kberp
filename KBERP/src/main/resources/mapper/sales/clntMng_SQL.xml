@@ -3,15 +3,15 @@
 <mapper namespace="clntCmpnyMng">
 
 	<select id="getClntCmpntList" parameterType="hashmap" resultType="hashmap">
-		SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, TRIM(TO_CHAR(RVN, 'L999,999,999,999,999')) AS RVN, A.CNT
+		SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, TRIM(TO_CHAR(RVN, 'L999,999,999,999,999')) AS RVN, A.CNT, A.DEL_CHECK
 		FROM (  SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, A.RVN, A.CNT,
-		               ROW_NUMBER() OVER(ORDER BY A.RNUM DESC) AS RNUM2 
+		               ROW_NUMBER() OVER(ORDER BY A.RNUM DESC) AS RNUM2, A.DEL_CHECK
 		        FROM (  SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, A.RVN, A.CNT,
-		                       A.CLNT_CMPNY_CLSFY_NUM
+		                       A.CLNT_CMPNY_CLSFY_NUM, A.DEL_CHECK
 		                FROM ( SELECT A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, A.RVN, NVL(B.CNT, 0) AS CNT,
-		                              A.CLNT_CMPNY_CLSFY_NUM, ROW_NUMBER() OVER(ORDER BY A.RNUM DESC) AS RNUM
+		                              A.CLNT_CMPNY_CLSFY_NUM, ROW_NUMBER() OVER(ORDER BY A.RNUM DESC) AS RNUM, A.DEL_CHECK
 		                       FROM ( SELECT ROW_NUMBER() OVER(ORDER BY CC.CLNT_CMPNY_NUM DESC) AS RNUM, CC.CLNT_CMPNY_NUM, CCG.GRADE_NAME, CCC.CLNT_CMPNY_CLSFY_NAME,
-		                                     CC.CLNT_CMPNY_NAME, CC.RVN, CC.ADRS || CC.DTL_ADRS AS ADRS, CC.CLNT_CMPNY_CLSFY_NUM
+		                                     CC.CLNT_CMPNY_NAME, CC.RVN, CC.ADRS || CC.DTL_ADRS AS ADRS, CC.CLNT_CMPNY_CLSFY_NUM, CC.DEL_CHECK
 		                              FROM CLNT_CMPNY CC INNER JOIN CLNT_CMPNY_GRADE CCG
 		                                                         ON CC.GRADE_NUM = CCG.GRADE_NUM
 		                                                 INNER JOIN CLNT_CMPNY_CLSFY CCC
@@ -24,68 +24,80 @@
 		                                                                                      INNER JOIN SALES S
 		                                                                                              ON S.LEAD_NUM = L.LEAD_NUM
 		                                                                                      INNER JOIN CNTRCT C
-		                                                                                              ON C.SALES_NUM = S.SALES_NUM
+		                                                                                              ON C.SALES_NUM = S.SALES_NUM                        
 		                                                                   GROUP BY CC.CLNT_CMPNY_NAME ) B
-		                                                              ON A.CLNT_CMPNY_NAME = B.CLNT_CMPNY_NAME ) A ) A
-			   WHERE 1 = 1
-				<if test="searchTxt != null and searchTxt != ''">
-					<choose>
-						<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
-							AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-						</when>
-						<when test="clntCmpnyClsfyNum == 9 and searchType == 1">
-							AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-						</when>
-						<when test="clntCmpnyClsfyNum == 0 and searchType == 0">
-							AND A.CLNT_CMPNY_CLSFY_NUM = 0
-							AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-						</when>
-						<when test="clntCmpnyClsfyNum == 1 and searchType == 0">
-							AND A.CLNT_CMPNY_CLSFY_NUM = 1
-							AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-						</when>
-						<when test="clntCmpnyClsfyNum == 2 and searchType == 0">
-							AND A.CLNT_CMPNY_CLSFY_NUM = 2
-							AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-						</when>
-						<when test="clntCmpnyClsfyNum == 3 and searchType == 0">
-							AND A.CLNT_CMPNY_CLSFY_NUM = 3
-							AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-						</when>
-						<when test="clntCmpnyClsfyNum == 4 and searchType == 0">
-							AND A.CLNT_CMPNY_CLSFY_NUM = 4
-							AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-						</when>
-						<when test="clntCmpnyClsfyNum == 5 and searchType == 0">
-							AND A.CLNT_CMPNY_CLSFY_NUM = 5
-							AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-						</when>
-						<when test="clntCmpnyClsfyNum == 0 and searchType == 1">
-							AND A.CLNT_CMPNY_CLSFY_NUM = 0
-							AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-						</when>
-						<when test="clntCmpnyClsfyNum == 1 and searchType == 1">
-							AND A.CLNT_CMPNY_CLSFY_NUM = 1
-							AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-						</when>
-						<when test="clntCmpnyClsfyNum == 2 and searchType == 1">
-							AND A.CLNT_CMPNY_CLSFY_NUM = 2
-							AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-						</when>
-						<when test="clntCmpnyClsfyNum == 3 and searchType == 1">
-							AND A.CLNT_CMPNY_CLSFY_NUM = 3
-							AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-						</when>
-						<when test="clntCmpnyClsfyNum == 4 and searchType == 1">
-							AND A.CLNT_CMPNY_CLSFY_NUM = 4
-							AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-						</when>
-						<when test="clntCmpnyClsfyNum == 5 and searchType == 1">
-							AND A.CLNT_CMPNY_CLSFY_NUM = 5
-							AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-						</when>
-					</choose>
-				</if> ) A
+		                                                              ON A.CLNT_CMPNY_NAME = B.CLNT_CMPNY_NAME ) A
+		                WHERE A.DEL_CHECK IS NULL ) A
+		WHERE 1 = 1
+		<if test="searchTxt != null and searchTxt != ''">
+			<choose>
+				<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
+					AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 9 and searchType == 1">
+					AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 0 and searchType == 0">
+					AND A.CLNT_CMPNY_CLSFY_NUM = 0
+					AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 1 and searchType == 0">
+					AND A.CLNT_CMPNY_CLSFY_NUM = 1
+					AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 2 and searchType == 0">
+					AND A.CLNT_CMPNY_CLSFY_NUM = 2
+					AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 3 and searchType == 0">
+					AND A.CLNT_CMPNY_CLSFY_NUM = 3
+					AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 4 and searchType == 0">
+					AND A.CLNT_CMPNY_CLSFY_NUM = 4
+					AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 5 and searchType == 0">
+					AND A.CLNT_CMPNY_CLSFY_NUM = 5
+					AND A.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 0 and searchType == 1">
+					AND A.CLNT_CMPNY_CLSFY_NUM = 0
+					AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 1 and searchType == 1">
+					AND A.CLNT_CMPNY_CLSFY_NUM = 1
+					AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 2 and searchType == 1">
+					AND A.CLNT_CMPNY_CLSFY_NUM = 2
+					AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 3 and searchType == 1">
+					AND A.CLNT_CMPNY_CLSFY_NUM = 3
+					AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 4 and searchType == 1">
+					AND A.CLNT_CMPNY_CLSFY_NUM = 4
+					AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="clntCmpnyClsfyNum == 5 and searchType == 1">
+					AND A.CLNT_CMPNY_CLSFY_NUM = 5
+					AND A.CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+			</choose>
+		</if>
+		<if test="listSort != '9'">
+			<choose>
+				<when test="listSort == 0">
+					ORDER BY A.RVN ASC
+				</when>
+				<when test="listSort == 1">
+					ORDER BY A.CLNT_CMPNY_NUM ASC
+				</when>
+			</choose>
+		</if> 
+		) A
 		WHERE A.RNUM2 BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
@@ -93,6 +105,7 @@
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE 1 = 1
+		AND DEL_CHECK IS NULL
 		<if test="searchTxt != null and searchTxt != ''">
 			<choose>
 				<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
@@ -164,6 +177,7 @@
 		SELECT COUNT(*) AS CNT
         FROM CLNT_CMPNY
         WHERE 1 = 1
+        AND DEL_CHECK IS NULL
 		<if test="searchTxt != null and searchTxt != ''">
 			<choose>
 				<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
@@ -229,6 +243,7 @@
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE 1 = 1
+		AND DEL_CHECK IS NULL
 		<if test="searchTxt != null and searchTxt != ''">
 			<choose>
 				<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
@@ -294,6 +309,7 @@
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE 1 = 1
+		AND DEL_CHECK IS NULL
 		<if test="searchTxt != null and searchTxt != ''">
 			<choose>
 				<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
@@ -359,6 +375,7 @@
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE 1 = 1
+		AND DEL_CHECK IS NULL
 		<if test="searchTxt != null and searchTxt != ''">
 			<choose>
 				<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
@@ -424,6 +441,7 @@
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE 1 = 1
+		AND DEL_CHECK IS NULL
 		<if test="searchTxt != null and searchTxt != ''">
 			<choose>
 				<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
@@ -489,6 +507,7 @@
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE 1 = 1
+		AND DEL_CHECK IS NULL
 		<if test="searchTxt != null and searchTxt != ''">
 			<choose>
 				<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
@@ -566,7 +585,7 @@
 	</insert>
 	
 	<select id="getClntList" parameterType="hashmap" resultType="hashmap">
-		SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM
+		SELECT EC.CLNT_NUM, NVL(EC.DEPT, ' ') AS DEPT, NVL(EC.DUTY, ' ') AS DUTY, NVL(EC.EMAIL, ' ') AS EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM
 		FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM,
 		               ROW_NUMBER() OVER(ORDER BY EC.RNUM DESC) AS RNUM2 
 		        FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM
@@ -582,6 +601,8 @@
 	<select id="clntListCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM ENTRPRS_CLNT
+		WHERE 1 = 1
+		AND DEL_CHECK IN NULL
 	</select>
 	
 	<select id="clntCmpnyCont" parameterType="hashmap" resultType="hashmap">
@@ -591,15 +612,10 @@
 		WHERE CLNT_CMPNY_NUM = #{ccn}
 	</select>
 
-	<delete id="ccDelete" parameterType="hashmap">
-		DELETE FROM CLNT_CMPNY
-		WHERE CLNT_CMPNY_NUM = #{ccn}
-	</delete>
-	
-	<delete id="ccAttDelete" parameterType="hashmap">
-		DELETE FROM CLNT_CMPNY_ATT_FILE
-		WHERE CLNT_CMPNY_NUM = #{ccn}
-	</delete>
+	<update id="ccDelete" parameterType="hashmap">
+		UPDATE CLNT_CMPNY SET DEL_CHECK = SYSDATE
+		WHERE CLNT_CMPNY_NUM = #{cmNum}
+	</update>
 	
 	<select id="clntAdd" parameterType="hashmap" resultType="hashmap">
 		INSERT INTO ENTRPRS_CLNT (CLNT_NUM, CLNT_NAME, CLNT_CMPNY_NUM, MNGR_EMP_NUM, RGSTRTN_EMP_NUM, DEPT, DUTY, MBL, EMAIL)
@@ -609,40 +625,74 @@
 	<select id="popupCcListCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
+		WHERE 1 = 1
+		AND DEL_CHECK IS NULL
 	</select>
 	
 	<select id="popupMngListCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM EMP E INNER JOIN APNTM A
-		                           ON E.EMP_NUM = A.EMP_NUM
-		                   INNER JOIN DEPT D
-		                           ON A.DEPT_NUM = D.DEPT_NUM
-		                   INNER JOIN RANK R
-		                           ON A.RANK_NUM = R.RANK_NUM
+                           ON E.EMP_NUM = A.EMP_NUM
+                   INNER JOIN DEPT D
+                           ON A.DEPT_NUM = D.DEPT_NUM
+                   INNER JOIN RANK R
+                           ON A.RANK_NUM = R.RANK_NUM
 		WHERE D.DEPT_NAME LIKE '영%'
+		<choose>
+			<when test="deptS != 6">
+				AND D.DEPT_NUM = #{deptS}
+			</when>
+		</choose>
+			<if test="searchT != null and searchT != ''">
+				<choose>
+					<when test="empS == 0">
+						AND E.EMP_NUM LIKE '%' || #{searchT} || '%'
+					</when>
+					<when test="empS == 1">
+						AND E.EMP_NAME LIKE '%' || #{searchT} || '%'
+					</when>
+				</choose>
+			</if>
 	</select>
 	
 	<select id="popupCcList" parameterType="hashmap" resultType="hashmap">
 		SELECT CC.CLNT_CMPNY_NAME, CC.CLNT_CMPNY_CLSFY_NUM, CC.GRADE_NUM, CC.ADRS, TO_CHAR(CC.RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE,
-			   CC.CLNT_CMPNY_NUM
+		       CC.CLNT_CMPNY_NUM
 		FROM (  SELECT CLNT_CMPNY_NAME, CLNT_CMPNY_CLSFY_NUM, GRADE_NUM, ADRS, RGSTRTN_DATE, CLNT_CMPNY_NUM,
 		               ROW_NUMBER() OVER(ORDER BY CLNT_CMPNY_NUM DESC) AS RNUM    
-		        FROM CLNT_CMPNY ) CC
+		        FROM CLNT_CMPNY
+		        WHERE DEL_CHECK IS NULL) CC
 		WHERE CC.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
 	<select id="popupMngList" parameterType="hashmap" resultType="hashmap">
 		SELECT ME.EMP_NUM, ME.EMP_NAME, ME.RANK_NAME, ME.DEPT_NAME
-		FROM ( SELECT E.EMP_NUM, E.EMP_NAME, R.RANK_NAME, D.DEPT_NUM, D.DEPT_NAME, ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM
-		        FROM EMP E INNER JOIN APNTM A
-		                           ON E.EMP_NUM = A.EMP_NUM
-		                   INNER JOIN DEPT D
-		                           ON A.DEPT_NUM = D.DEPT_NUM
-		                   INNER JOIN RANK R
-		                           ON A.RANK_NUM = R.RANK_NUM
-		        WHERE D.DEPT_NAME LIKE '영%'
-		    ) ME
+		FROM ( SELECT E.EMP_NUM, E.EMP_NAME, R.RANK_NAME, D.DEPT_NUM, D.DEPT_NAME,
+		ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM
+		FROM EMP E INNER JOIN APNTM A
+		ON E.EMP_NUM = A.EMP_NUM
+		INNER JOIN DEPT D
+		ON A.DEPT_NUM = D.DEPT_NUM
+		INNER JOIN RANK R
+		ON A.RANK_NUM = R.RANK_NUM
+		WHERE D.DEPT_NAME LIKE '영%'
+		) ME
 		WHERE ME.RNUM BETWEEN #{startCount} AND #{endCount}
+		<choose>
+			<when test="deptS != 6">
+				AND ME.DEPT_NUM = #{deptS}
+			</when>
+		</choose>
+		<if test="searchT != null and searchT != ''">
+			<choose>
+				<when test="empS == 0">
+					AND ME.EMP_NUM LIKE '%' || #{searchT} || '%'
+				</when>
+				<when test="empS == 1">
+					AND ME.EMP_NAME LIKE '%' || #{searchT} || '%'
+				</when>
+			</choose>
+		</if>
 	</select>
 	
 	<select id="getOpList" parameterType="hashmap" resultType="hashmap">
@@ -664,10 +714,12 @@
 	</select>
 	
 	<select id="getClList" parameterType="hashmap" resultType="hashmap">
-		SELECT EC.CLNT_NAME, EC.DUTY, EC.DEPT, EC.MBL, EC.EMAIL
+		SELECT EC.CLNT_NAME, NVL(EC.DUTY, ' ') AS DUTY, NVL(EC.DEPT, ' ') AS DEPT, EC.MBL, NVL(EC.EMAIL, ' ') AS EMAIL
 		FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
 		                           ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
 		WHERE CC.CLNT_CMPNY_NUM = #{ccn}
+		AND EC.DEL_CHECK IS NULL
+        ORDER BY EC.CLNT_NUM DESC
 	</select>
 	
 	<update id="opContUpdate" parameterType="hashmap">
