@@ -1,6 +1,7 @@
 <!-- 
 	영업기회 목록
  -->
+<%@page import="org.apache.ibatis.reflection.SystemMetaObject"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -376,22 +377,28 @@ $(document).ready(function() {
 	//});
 	
 	// 목록에서 영업명 선택 시 상세보기로 이동
+	
+	
+	
 	$(".salesWrap").on("click", ".salesOpportunityName", function() {
 		$("#salesNum").val($(this).attr("salesNum")); // 영업번호 가져오기
 		
-		if($("#prgrs").children("#sts0").val() == 0) {
+		console.log($(this).children("#test").val());
+		
+		if($(this).children("#test").val() == "영업기회") {
 			$("#actionForm").attr("action", "sales1SalesChncCont"); // 영업기회 상세보기로 이동.
 			$("#actionForm").submit();
-		} else if($("#prgrs").children("#sts1").val() == 1) {
+		} else if($(this).children("#test").val() == "제안") {
 			$("#actionForm").attr("action", "sales2SgstnCont"); // 제안 상세보기로 이동.
 			$("#actionForm").submit();
-		} else if($("#prgrs").children("#sts2").val() == 2) {
+		} else if($(this).children("#test").val() == "견적") {
 			$("#actionForm").attr("action", "sales3QntCont"); // 견적 상세보기로 이동.
 			$("#actionForm").submit();
-		} else if($("#prgrs").children("#sts3").val() == 3) {
+		}  else if($(this).children("#test").val() == "계약") {
 			$("#actionForm").attr("action", "sales4CntrctCont"); // 계약 상세보기로 이동.
 			$("#actionForm").submit();
-		}
+		} 
+		
 	});
 	
 	// 페이징
@@ -457,7 +464,7 @@ function drawList(list) {
 	for(var data of list) {
 		html += "<div class=\"salesOpportunity\">";
 		html += "<div class=\"sledding\">" + data.PRGRS_STS + "</div>";
-		html += "<div class=\"salesOpportunityName\" salesNum = \"" + data.SALES_NUM + "\">" + data.LEAD_NAME + "</div>";
+		html += "<div class=\"salesOpportunityName\" salesNum = \"" + data.SALES_NUM + "\">" + data.LEAD_NAME + "<input type=\"hidden\" id=\"test\" value=\"" + data.PRGRS_STS2 + "\" /></div>";
 		html += "<div class=\"opt\"></div>";
 		html += "<table cellspacing=\"0\">";
 		html += "<colgroup>";
@@ -477,31 +484,27 @@ function drawList(list) {
 		
 		/* 현재 단계 굵게 표시 */
 
-		html += "<tr height=\"10\" id=\"prgrs\">";
+		html += "<tr height=\"10\">";
 		if(data.PRGRS_STS2 == "영업기회") {
 			html += "<td class=\"colNum1\" rowspan=\"3\"><b>영업기회</b></td>";
-			html += "<input type=\"hidden\" id=\"sts0\" value=\"0\"  />";
 		} else {
 			html += "<td class=\"colNum1\" rowspan=\"3\">영업기회</td>";
 		}
 		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "제안") {
 			html += "<td class=\"colNum1\" rowspan=\"3\"><b>제안</b></td>";
-			html += "<input type=\"hidden\" id=\"sts1\" value=\"1\"  />";
 		} else {
 			html += "<td class=\"colNum1\" rowspan=\"3\">제안</td>";
 		}
 		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "견적") {
 			html += "<td class=\"colNum1\" rowspan=\"3\"><b>견적</b></td>";
-			html += "<input type=\"hidden\" id=\"sts2\" value=\"2\"  />";
 		} else {
 			html += "<td class=\"colNum1\" rowspan=\"3\">견적</td>";
 		}
 		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "계약") {
 			html += "<td class=\"colNum1\" rowspan=\"3\"><b>계약</b></td>";
-			html += "<input type=\"hidden\" id=\"sts3\" value=\"3\"  />";
 		} else {
 			html += "<td class=\"colNum1\" rowspan=\"3\">계약</td>";
 		}

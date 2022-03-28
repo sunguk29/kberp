@@ -389,10 +389,10 @@ $(document).ready(function() {
 				drawCcList();
 				
 				$(".popup_box_cc").on("click", ".popup_cc_box_in", function() {
-					var ccn = $(this).children("#ccn").val(); 
 					var cnn = $(this).children("#cnn").val(); 
-					document.getElementById("ccName").value = ccn;
-					document.getElementById("ccNum").value = cnn;
+					var ccn = $(this).children("#ccn").val(); 
+					document.getElementById("ccName").value = cnn;
+					document.getElementById("ccNum").value = ccn;
 					closePopup();
 				});
 				
@@ -428,29 +428,29 @@ $(document).ready(function() {
 		html += "</div>";
 		html += "<div class=\"ptm_mid\">";
 		html += "<div class=\"ptm_mid_top\">";
-		html += "<select class=\"sel_size\">";
-		html += "<option>영업1팀</option>";
-		html += "<option>영업2팀</option>";
-		html += "<option>영업3팀</option>";
+		html += "<select class=\"sel_size\" name=\"deptS\">";
+		html += "<option value=\"6\">영업1팀</option>";
+		html += "<option value=\"7\">영업2팀</option>";
+		html += "<option value=\"8\">영업3팀</option>";
 		html += "</select>";
 		html += "</div>";
 		html += "<div class=\"ptm_mid_bot\">";
-		html += "<select class=\"sel_size\">";
-		html += "<option>사원번호</option>";
-		html += "<option>사원명</option>";
+		html += "<select class=\"sel_size\" name=\"empS\">";
+		html += "<option value=\"0\">사원번호</option>";
+		html += "<option value=\"1\">사원명</option>";
 		html += "</select>";
 		html += "</div>";
 		html += "</div>";
 		html += "<div class=\"ptm_mid_right\">";
 		html += "<div class=\"ptm_mid_right_top\"></div>";
 		html += "<div class=\"ptm_mid_right_bot\">";
-		html += "<input type=\"text\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" />";
+		html += "<input type=\"text\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" id=\"searchT\" name=\"searchT\" />";
 		html += "</div>";
 		html += "</div>";
 		html += "<div class=\"ptm_right\">";
 		html += "<div class=\"ptm_right_top\"></div>";
 		html += "<div class=\"ptm_right_bot\">";
-		html += "<div class=\"cmn_btn\">검색</div>";
+		html += "<div class=\"cmn_btn\" id=\"meBtn\">검색</div>";
 		html += "</div>";
 		html += "</div>";
 		html += "</form>";
@@ -479,6 +479,21 @@ $(document).ready(function() {
 					document.getElementById("mngEmp").value = mng;
 					document.getElementById("mngNum").value = mge;
 					closePopup();
+				});
+				
+				$("#meBtn").on("click", function () {
+					$("#page").val("1");
+					
+					drawMngList();
+					
+				});
+				
+				$("#searchT").on("keypress", function(event) {
+					if(event.keyCode == 13 ) {
+						$("#meBtn").click();
+						
+						return false;
+					}
 				});
 				
 				$(".pgn_area").on("click", "div", function() {
@@ -602,8 +617,8 @@ function drawList(list) {
 
 	for(var data of list) {                                                                               
 		html += "<div class=\"popup_cc_box_in\" id=\"box\">                                                               ";
-		html += "<input type=\"hidden\" id=\"ccn\" value=\"" + data.CLNT_CMPNY_NAME + "\" />";
-		html += "<input type=\"hidden\" id=\"cnn\" value=\"" + data.CLNT_CMPNY_NUM + "\" />";
+		html += "<input type=\"hidden\" id=\"cnn\" value=\"" + data.CLNT_CMPNY_NAME + "\" />";
+		html += "<input type=\"hidden\" id=\"ccn\" value=\"" + data.CLNT_CMPNY_NUM + "\" />";
 		html += "<div class=\"popup_box_left\">                                                          ";
 		html += "	<span class=\"company\"></span>                                                         ";
 		html += "</div>                                                                                   ";
