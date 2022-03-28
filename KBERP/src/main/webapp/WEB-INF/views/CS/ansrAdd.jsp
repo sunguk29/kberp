@@ -138,7 +138,7 @@
 	display: inline-block;
 	width: 800px;
 	height: 35px;
-	box-shadow: 0px 1px 2px 0px #999;
+	box-shadow: 0px 1px 1px 0px #999;
 	background-color: #F2CB05;
 	vertical-align: top;
 }
@@ -232,6 +232,7 @@
 	width: 400px;
 	height: 50px;
 	display: inline-block;
+	position: relative;
 	margin-left: 20px;
 }
 
@@ -253,7 +254,7 @@
 .ansr_btn {
 	float: right;
 	margin-top: 20px;
-	margin-right: 15px;
+	margin-right: 37px;
 }
 
 .popup_cont {
