@@ -45,7 +45,7 @@ public class EventController {
 	}
 	
 	@RequestMapping(value = "/eventListAjax", 
-					method = RequestMethod.GET,
+					method = RequestMethod.POST,
 					produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String eventListAjax(@RequestParam HashMap<String, String> params) throws Throwable {

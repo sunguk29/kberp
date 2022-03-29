@@ -6,8 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <title>event List</title>
-<script type="text/javascript"
-		src="resources/script/jquery/jquery-1.12.4.min.js"></script>
+<!-- 헤더추가 -->
+<c:import url="/header"></c:import>
 <script type="text/javascript">
 $(document).ready(function() {
 	if('${param.searchGbn}' != '') {
