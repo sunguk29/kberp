@@ -346,6 +346,21 @@ $(document).ready(function() {
 		});
 	});
 	
+	$(".rvn_txt").on("click", ".aff_btn", function() {
+		$("#att").click();
+	});
+	
+	$("#fileDelete").on("click", function() {
+		$("#file_name").remove();
+		$(this).remove();
+
+		var html = "";
+		
+		html += "<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
+		
+		$("#uploadBtn").html(html);
+	});
+	
 // ************** 고객사 팝업 **************
 	$("#ccPop").on("click", function() {
 		var html = "";
@@ -522,9 +537,7 @@ $(document).ready(function() {
 		$("#att").click();
 	});
 	
-	
-	
-	$("#addBtn").on("click", function() {
+	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#cName")) {
 			makeAlert("필수 항목 알림", "고객을 입력하세요");
 		} else if(checkEmpty("#ccName")) {
@@ -545,19 +558,20 @@ $(document).ready(function() {
 				buttons : [{
 					name : "저장",
 					func:function() {
-						var addForm = $("#addForm");
+						console.log($("#mngNum").val());
+						var updateForm = $("#updateForm");
 						
-						addForm.ajaxForm({
+						updateForm.ajaxForm({
 							success : function(res) {
 								if(res.fileName.length > 0) {
 									$("#attFile").val(res.fileName[0]);
 								}
 								
-								var params = $("#addForm").serialize();
+								var params = $("#updateForm").serialize();
 								
 								$.ajax({
 									type : "post",
-									url : "clntMngAjax/insert",
+									url : "clntMngAjax/update",
 									dataType : "json",
 									data : params,
 									success : function(res) {
@@ -578,8 +592,7 @@ $(document).ready(function() {
 							}
 						});
 						
-						addForm.submit();
-						console.log("One!");
+						updateForm.submit();
 						closePopup();
 					}
 				}, {
@@ -751,6 +764,9 @@ function uploadName(e) {
 <body>
 <form action="clntList" id="listForm" method="post">
 	<input type="hidden" id="page" name="page" value="${page}" />
+	<input type="hidden" name="cn" value="${param.cn}" />
+	<input type="hidden" name="searchType" value="${param.searchType}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
@@ -765,9 +781,9 @@ function uploadName(e) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">고객 등록</div>
-			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
-			<img alt="등록버튼" src="resources/images/sales/save.png" class="btnImg" id="addBtn" />
+			<div class="page_title_text">고객 수정</div>
+			<img alt="목록버튼" src="resources/images/sales/back.png" class="btnImg" id="listBtn" />
+			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
 			<!-- 검색영역 선택적 사항 -->
 			
 		</div>
@@ -775,12 +791,14 @@ function uploadName(e) {
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="bodyWrap">
-				<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
+				<form action="fileUploadAjax" id="updateForm" method="post" enctype="multipart/form-data">
 					<input type="hidden" id="page" name="page" value="${page}" />
+					<input type="hidden" name="cn" value="${param.cn}" />
+					<input type="hidden" name="searchType" value="${param.searchType}" />
+					<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 					<input type="hidden" name="top" value="${param.top}" />
 					<input type="hidden" name="menuNum" value="${param.menuNum}" />
 					<input type="hidden" name="menuType" value="${param.menuType}" />
-					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
 					<table>
 						<colgroup>
 							<col width="200" />
@@ -789,40 +807,40 @@ function uploadName(e) {
 						<tbody>
 							<tr>
 								<td><input type="button" class="btn" value="고객 *" readonly="readonly"/></td>
-								<td><input type="text" class="txt" id="cName" name="cName" /></td>
+								<td><input type="text" class="txt" id="cName" name="cName" value="${data.CLNT_NAME}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="고객사 *" /></td>
 								<td>
 									<div class="imgPos">
-										<input type="text" class="txt imgName" id="ccName" name="ccName" />
-										<input type="hidden" id="ccNum" name="ccNum" />
+										<input type="text" class="txt imgName" id="ccName" name="ccName" value="${data.CLNT_CMPNY_NAME}" />
+										<input type="hidden" id="ccNum" name="ccNum" value="${data.CLNT_CMPNY_NUM}" />
 										<img class="btnImg_in" id="ccPop" alt="팝업" src="resources/images/sales/popup.png">
 									</div>
 								</td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="부서" /></td>
-								<td><input type="text" class="txt" id="dept" name="dept" /></td>
+								<td><input type="text" class="txt" id="dept" name="dept" value="${data.DEPT}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="직책" /></td>
-								<td><input type="text" class="txt" id="duty" name="duty" /></td>								
+								<td><input type="text" class="txt" id="duty" name="duty" value="${data.DUTY}" /></td>								
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="휴대폰 번호*" /></td>
-								<td><input type="text" class="txt" id="mbl" name="mbl" placeholder="'-' 를 포함하지 않은 숫자만 입력해주세요." /></td>																
+								<td><input type="text" class="txt" id="mbl" name="mbl" placeholder="'-' 를 포함하지 않은 숫자만 입력해주세요." value="${data.MBL}" /></td>																
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="메일" /></td>
-								<td><input type="text" class="txt" id="email" name="email" /></td>
+								<td><input type="text" class="txt" id="email" name="email" value="${data.EMAIL}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="담당자 *" /></td>
 								<td>
 									<div class="imgPos">
-										<input type="text" class="txt imgName" id="mngEmp" name="mngEmp" />
-										<input type="hidden"id="mngNum" name="mngNum" />
+										<input type="text" class="txt imgName" id="mngEmp" name="mngEmp" value="${data.EMP_NAME}" />
+										<input type="hidden"id="mngNum" name="mngNum" value="${data.MNGR_EMP_NUM}" />
 										<img class="btnImg_in" id="mngPop" alt="팝업" src="resources/images/sales/usericon.png">
 									</div>
 								</td>
@@ -830,14 +848,22 @@ function uploadName(e) {
 						</tbody>
 					</table>
 					<!-- 첨부파일 -->
-					<input type="file" id="att" name="att" onchange="uploadName(this)" />
-					<input type="hidden" id="attFile" name="attFile" />
+					<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+					<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
 					<div class="rvn_txt"> 첨부파일
-						<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" />
+						<span id="uploadBtn">
+							<c:if test="${empty data.ATT_FILE_NAME}">
+								<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" />
+							</c:if>
+						</span>
 					</div>
 					<div class="cntrct_box_in">
-						<input type="text" id="fileName" name="fileName" readonly="readonly" />
+						<span id="file_name">${fileName}</span>
+						<input type="button" id="fileDelete" value="삭제" />
+						<input type="text" id="fileName" readonly="readonly" />
 					</div>
+					<input type="file" id="att" name="att" onchange="uploadName(this)" />
+					<input type="hidden" id="attFile" name="attFile" />
 				</form>	
 			</div>
 		</div>

@@ -230,8 +230,6 @@ td:nth-child(1), td:nth-child(3){
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	console.log('${param.ccn}');
-	
 	$("#listBtn").on("click", function() {
 		makePopup({
 			bg : true,
@@ -244,9 +242,8 @@ $(document).ready(function() {
 			buttons : [{
 				name : "나가기",
 				func:function() {
-					$("#listForm").attr("action", "clntCmpnyList");
+					$("#listForm").attr("action", "clntCmpnyCont");
 					$("#listForm").submit();
-					console.log("One!");
 					closePopup();
 				}
 			}, {
@@ -409,7 +406,7 @@ function uploadName(e) {
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">고객사 수정</div>
-			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
+			<img alt="목록버튼" src="resources/images/sales/back.png" class="btnImg" id="listBtn" />
 			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
 			<!-- 검색영역 선택적 사항 -->
 			

@@ -276,7 +276,7 @@ function drawList(list) {
 	$(".list_table").html(html);
 	
 	$(".list_table tbody").on("click", "tr:nth-child(2) td:nth-child(2)", function() {
-		$("#cn").val($(this).attr("ccn"));
+		$("#cn").val($(this).attr("cn"));
 
 		$("#actionForm").attr("action", "clntCont");
 		$("#actionForm").submit();
@@ -336,6 +336,7 @@ function drawPaging(pb) {
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
+	<input type="hidden" id="cn" name="cn" />
 	<input type="hidden" id="page" name="page" value="${page}" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
