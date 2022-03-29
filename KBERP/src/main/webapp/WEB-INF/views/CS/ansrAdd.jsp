@@ -7,10 +7,12 @@
 <head>
 <meta charset="UTF-8">
 <title>카카오뱅크 ERD 답변등록</title>
-<script type="text/javascript"
-		src="resources/script/ckeditor/ckeditor.js"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
+<script type="text/javascript"
+		src="resources/script/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" 
+		src="resources/script/jquery/jquery.form.js"></script>
 <style type="text/css">
 /* 가로 사이즈 조정용 */
 .cont_wrap {
@@ -245,7 +247,7 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	CKEDITOR.replace("wrtng_cont", {
+	CKEDITOR.replace("ansr_cont", {
 		// 옵션
 		resize_enabled : false, // 크기변경
 		language : "ko", // 언어
@@ -295,15 +297,67 @@ $(document).ready(function() {
 			buttons : [{
 				name : "예",
 				func:function() {
-					console.log("One!");
-					closePopup();
+					$("#ansr_cont").val(CKEDITOR.instances['ansr_cont'].getData());
+					if(checkEmpty("#ansr_title")) {
+						alert("제목을 입력하세요.");
+						$("#ansr_title").focus();
+					} else if(checkEmpty("#ansr_cont")) {
+						alert("내용을 입력하세요.");
+						$("#ansr_cont").focus();
+					} else {
+						var writeForm = $("#writeForm");
+						
+						writeForm.ajaxForm({
+							success : function(res) {
+								// 물리파일명 보관
+								if(res.fileName.length > 0) {
+									$("#ansr_attFile").val(res.fileName[0]);
+								}
+								
+								// 글 저장
+								var params =  $("#writeForm").serialize();
+						
+								$.ajax({
+									type : "post",
+									url : "inqryAction/insert",
+									dataType : "json",
+									data : params,
+									success : function(res) {
+										if(res.res == "success") {
+											location.href = "inqryList";
+										} else {
+											alert("작성중 문제가 발생하였습니다.");
+										}
+									}, // success end
+									error : function(request, status, error) {
+										console.log(request.responseText);
+									} // error end
+								}); // ajax end
+							}, // success end
+							error : function(req) {
+								console.log(req.responseText);
+							} // error end
+						});// ajaxForm end
+						
+						writeForm.submit(); // ajaxForm 실행
+							closePopup();
+						} // else end
 				}
-			}, {
-				name : "아니오"
-			}]
-		});
-	});
-});
+					}, {
+						name : "아니오"
+					}]
+		}); // makePopup end
+	}); // btn2Btn end
+}); // document ready end
+
+function checkEmpty(sel) {
+	if($.trim($(sel).val()) == "") {
+		return true;
+	} else {
+		return false;
+	}
+
+}
 </script>
 </head>
 <body>
@@ -314,7 +368,7 @@ $(document).ready(function() {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
-	<form action="#" id="actionForm" method="post">
+	<form action="inqry" id="actionForm" method="post">
 		<input type="hidden" name="no" value="${param.no}" />
 		<input type="hidden" name="page" value="${param.page}" />
 		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
@@ -355,24 +409,33 @@ $(document).ready(function() {
 						<div class="see_ansr_header">답변글</div>
 					</div>
 					<div class="open_ansr_cont">
-						<div class="ansr_title">
-							<div class="wrtng_title">
-								<input type="text" placeholder="제목">
+						<form action="fileUploadAjax" id="writeForm" method="post"
+							  enctype="multipart/form-data">
+							<input type="hidden" name="no" value="${param.no}" />
+							<input type="hidden" id="emp_name" name="emp_name" value="${data.EMP_NUM}" />
+							<input type="hidden" id="top" name="top" value="${param.top}"/>
+							<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
+							<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
+							<div class="ansr_title">
+								<div class="wrtng_title">
+									<input type="text" placeholder="제목" id="ansr_title" name="ansr_title"/>
+								</div>
+							<div class="cnsl_middle">
+								<textarea class="ansr_cont" id="ansr_cont" name="ansr_cont" rows="15" cols="110" placeholder="내용을 입력하세요."></textarea>
 							</div>
-						<div class="cnsl_middle">
-							<textarea class="wrtng_cont" name="wrtng_cont" rows="15" cols="110" placeholder="내용을 입력하세요."></textarea>
-						</div>
-						<div class="cnsl_bottom">
-							<div class="file_atch">
-								<input type="file">
-								<input type="text" readonly="readonly">
+							<div class="cnsl_bottom">
+								<div class="file_atch">
+									<input type="file" name="ansr_file" />
+									<input type="text" id="ansr_att" name="ansr_att" readonly="readonly"/>
+									<input type="hidden" id="ansr_attFile" name="ansr_attFile"/>
+								</div>
+								<div class="ansr_btn">
+									<div class="cmn_btn_mr" id="btn1Btn">대응가이드</div>
+									<div class="cmn_btn_mr" id="btn2Btn">답변등록</div>
+								</div>
 							</div>
-							<div class="ansr_btn">
-								<div class="cmn_btn_mr" id="btn1Btn">대응가이드</div>
-								<div class="cmn_btn_mr" id="btn2Btn">답변등록</div>
 							</div>
-						</div>
-						</div>
+						</form>
 					</div>
 				</div>
 			</div>

@@ -35,38 +35,6 @@
  	width: 120px;
  	margin-top: 20px;
  }
- 
- .fclty_aprvl_mng_cont:nth-child(4) {
- 	margin-top: 40px;
- }
- 
- 
-.fclty_aprvl_mng_cont{
-	margin-bottom: 10px;
-} 
-
-#fclty_img{
-	border: 1px solid black;
-	vertical-align:top;
-	display:inline-block;
-	margin-left: 20px;
-	width: 250px;
-	height: 250px;
-}
-
-
-
-#fclty_aprvl_mng_area{
-	display: inline-block;
-	margin-top: 50px;
-	margin-left: 50px;
-}
-
-.use {
-	margin-left: 20px;
-	color: black;
-	font-size: 16pt;
-}
 
 #rmrks{
 	margin-left: 20px;
@@ -134,6 +102,7 @@ $(document).ready(function() {
 							<td >
 								${data.EMP_NAME}
 							</td>
+							
 							<td>현재 사용자</td>
 							<td>
 							</td>

@@ -675,28 +675,28 @@ $(document).ready(function() {
   	  html += "<form action=\"#\" id=\"dtlForm\" method=\"post\">";
   	  html += "<div class=\"dtl_schdl_style\" id=\"dtl_type\">";
   	  html += "<span>일정 종류</span>";
-  	  html += "<input type=\"text\" value=\"" + schdl_type_name + "\" class=\"dtl_schdl_type\" disabled=\"disabled\">";
-  	  html += "<input type=\"text\" value=\"" + schdl_ctgry_name + "\" class=\"dtl_schdl_type\" disabled=\"disabled\" id=\"dtl_schdl_ctgry\">";
+  	  html += "<input type=\"text\" value=\"" + schdl_type_name + "\" class=\"dtl_schdl_type\" readonly>";
+  	  html += "<input type=\"text\" value=\"" + schdl_ctgry_name + "\" class=\"dtl_schdl_type\" readonly id=\"dtl_schdl_ctgry\">";
   	  html += "</div>";
   	  html += "<div class=\"dtl_schdl_style\">";
   	  html += "<span>제목</span>";
-  	  html += "<input type=\"text\" value=\"" + data.title + "\" id=\"dtl_schdl_title\" disabled=\"disabled\">";
+  	  html += "<input type=\"text\" value=\"" + data.title + "\" id=\"dtl_schdl_title\" readonly>";
   	  html += "</div>";
   	  html += "<div class=\"dtl_schdl_style\">";
   	  html += "<span>위치</span>";
-  	  html += "<input type=\"text\" value=\"" + data.schdl_place + "\" id=\"dtl_schdl_place\" disabled=\"disabled\">";
+  	  html += "<input type=\"text\" value=\"" + data.schdl_place + "\" id=\"dtl_schdl_place\" readonly>";
   	  html += "</div>";
   	  html += "<div class=\"dtl_schdl_style\">";
   	  html += "<span>기간</span>";
   	  if(data.aldy_dvsn == "1"){
-	  	  html += "<input type=\"text\" value=\"" + data.start_date + " ~ " + data.end_date + "\" id=\"dtl_schdl_time\" disabled=\"disabled\">";
+	  	  html += "<input type=\"text\" value=\"" + data.start_date + " ~ " + data.end_date + "\" id=\"dtl_schdl_time\" readonly>";
   	  }else{
-  	 	  html += "<input type=\"text\" value=\"" + data.start_date + data.start_time + " ~ " + data.end_date + data.end_time + "\" id=\"dtl_schdl_time\" disabled=\"disabled\">";
+  	 	  html += "<input type=\"text\" value=\"" + data.start_date + data.start_time + " ~ " + data.end_date + data.end_time + "\" id=\"dtl_schdl_time\" readonly>";
   	  }
   	  html += "</div>";
   	  html += "<div class=\"dtl_schdl_dtl_cont\">";
   	  html += "<span>상세내용</span>";
-  	  html += "<textarea rows=\"10\" cols=\"57\" class=\"dtl_cont\" disabled=\"disabled\">" + data.schdl_cont + "</textarea>";			
+  	  html += "<textarea rows=\"10\" cols=\"57\" class=\"dtl_cont\" readonly>" + data.schdl_cont + "</textarea>";			
   	  html += "</div>";
   	  html += "</form>";
   	  

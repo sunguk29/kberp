@@ -35,7 +35,7 @@
  	width: 120px;
  	margin-top: 20px;
  }
- 
+
 
 #rmrks{
 	margin-left: 20px;
@@ -61,7 +61,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post", 
-						url : "assetAction/update", 
+						url : "assetAction/update1", 
 						dataType : "json",
 						data : params, 
 						success : function(res) { 
@@ -96,7 +96,7 @@ $(document).ready(function() {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
-<form action="assetDtlViewDrbl" id="cnclForm" method="post">
+<form action="assetDtlViewExpndblt" id="cnclForm" method="post">
 	<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
 	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
 	<input type="hidden" name="num" value="${param.num}"/>
@@ -104,9 +104,8 @@ $(document).ready(function() {
 </form>
 <form action="#" id="mdfyForm" method="post">
 <div class="cont_wrap">
-	<input type="hidden" name="num" value="${param.num}" />
 		<div class="page_title_bar">
-			<div class="page_title_text">자산 내용수정</div>
+			<div class="page_title_text">소모성자산 내용수정</div>
 		</div>
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
@@ -123,7 +122,7 @@ $(document).ready(function() {
 							</td>
 							<td>자산유형</td>
 							<td>
-								지속성
+								소모성
 							</td>
 						</tr>
 						<tr class="sixth_row">
@@ -132,21 +131,22 @@ $(document).ready(function() {
 								${data.ACQRMNT_DATE}	
 							</td>
 							<td>담당자</td>
-							<td>
+							<td >
 								<select id="mngrNum" name="mngrNum">
 									<option value="2022000006">강부장</option>
 									<option value="1">set</option>
 									<option value="2">box</option>
 								</select>
 							</td>
-							<td>현재 사용자</td>
+							<td>수량</td>
 							<td>
+								<input type="text" id="qunty" name="qunty" value="${data.QUNTY}" />
 							</td>
 						</tr>
 					</tbody>
 				</table>
-						<div class="rmrks"><b>비고</b></div>
-						<input type="text" id="rmrks" name="rmrks"  value="${data.RMRKS}" />
+						<div class="rmrks1"><b>비고</b></div>
+						<input type="text" id="rmrks" name="rmrks" value="${data.RMRKS}" />
 			<div class="board_bottom">
 				<input class="cmn_btn" type="button" id="mdfyBtn" value="수정">
 				<input class="cmn_btn" type="button" value="취소" id="cnclBtn"/>
