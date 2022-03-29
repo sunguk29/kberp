@@ -141,12 +141,6 @@ public class AcntncController {
 	@RequestMapping(value = "/intrnlCostMngAdd")
 	public ModelAndView intrnlCostMngAdd(@RequestParam HashMap<String, String> params, ModelAndView mav) {
 		
-		if(params.get("page") == null || params.get("page") == "") {
-			params.put("page", "1");
-		}
-		
-		mav.addObject("page", params.get("page"));
-		
 		mav.setViewName("mng/intrnlCostMngAdd");
 		
 		return mav;
