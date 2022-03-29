@@ -327,13 +327,7 @@ $(document).ready(function() {
             id: 999,
             title: 'Repeating Event',
             start: '2019-01-16T16:00:00'
-          },
-          {
-        	  title: '풀캘린더 적용',
-              start: '2022-03-17',
-              color : '#BFA0ED',
-			  textColor : 'black',
-            }
+          }
         ];
 	
 	$("#fullCalendarArea").fullCalendar({
@@ -375,6 +369,17 @@ $(document).ready(function() {
 	      }
 	});
 	
+	$("body").on("click", ".fc-month-button", function() {
+		clndrDvsn
+		$("#clndrDvsn").attr('value',"month");
+		history.go(0);
+	});
+	
+	$("body").on("click", ".fc-agendaWeek-button", function() {
+		clndrDvsn
+		$("#clndrDvsn").attr('value',"week");
+	});
+	
 	$("body").on("click", ".fc-nextYear-button", function() {
 		clndrYear = clndrYear+1;
 		
@@ -386,6 +391,7 @@ $(document).ready(function() {
 		$('input[name=clndrDate]').attr('value',Cdate);
 		reloadList();
 	});
+	
 	$("body").on("click", ".fc-prevYear-button", function() {
 		clndrYear = clndrYear-1;
 		if(clndrMonth >= 10){
@@ -396,21 +402,27 @@ $(document).ready(function() {
 		$('input[name=clndrDate]').attr('value',Cdate);
 		reloadList();
 	});
+	
 	$("body").on("click", ".fc-next-button", function() {
-		clndrMonth = clndrMonth+1;
-		if(clndrMonth >= 13){
-			clndrMonth = 1;
+		if($("#clndrDvsn").val() == "month"){
+			clndrMonth = clndrMonth+1;
+			if(clndrMonth >= 13){
+				clndrMonth = 1;
+			}
+			if(clndrMonth >= 10){
+				Cdate = ""+clndrYear+ clndrMonth;
+			}else{
+				Cdate = ""+clndrYear+"0"+clndrMonth;
+			}
+			$('input[name=clndrDate]').attr('value',Cdate);
+			reloadList();
+		} else{
+			
 		}
-		if(clndrMonth >= 10){
-			Cdate = ""+clndrYear+ clndrMonth;
-		}else{
-			Cdate = ""+clndrYear+"0"+clndrMonth;
-		}
-		$('input[name=clndrDate]').attr('value',Cdate);
-		reloadList();
-		
 	});
+	
 	$("body").on("click", ".fc-prev-button", function() {
+		if($("#clndrDvsn").val() == "month"){
 		clndrMonth = clndrMonth-1;
 		
 		if(clndrMonth < 1){
@@ -423,8 +435,9 @@ $(document).ready(function() {
 		}
 		$('input[name=clndrDate]').attr('value',Cdate);
 		reloadList();
-		
+		}
 	});
+	
 	$(".fc-today-button").on("click", function() {
 		clndrYear = now.getFullYear();
 		clndrMonth =now.getMonth()+1;
@@ -436,6 +449,7 @@ $(document).ready(function() {
 		$('input[name=clndrDate]').attr('value',Cdate);
 		reloadList();
 	});
+	
 	/* 상세일정 */
 	function drawList(dtl) {
 		var schdl_type_name = "";
@@ -504,7 +518,7 @@ $(document).ready(function() {
   	  html += "</div>";
   	  html += "<div class=\"dtl_schdl_style\">";
   	  html += "<span>기간</span>";
-  	  if(data.start_time == "00:00"){
+  	  if(data.aldy_dvsn == "1"){
 	  	  html += "<input type=\"text\" value=\"" + data.start_date + " ~ " + data.end_date + "\" id=\"dtl_schdl_time\" disabled=\"disabled\">";
   	  }else{
   	 	  html += "<input type=\"text\" value=\"" + data.start_date + data.start_time + " ~ " + data.end_date + data.end_time + "\" id=\"dtl_schdl_time\" disabled=\"disabled\">";
@@ -527,6 +541,12 @@ $(document).ready(function() {
   					name : "수정",
   					func:function() {
   						schdlUpdate(data);
+  						if(data.aldy_dvsn == "1"){
+  							$('input[name=schdl_start_time]').attr('style', "display:none;");
+  							$('#schdl_start_time').attr('disabled',true);
+  							$('input[name=schdl_end_time]').attr('style', "display:none;");
+  							$('#schdl_end_time').attr('disabled',true);
+  						 }
   					}
   				}, {
   					name : "삭제",
@@ -635,7 +655,11 @@ function schdlUpdate(data){
 	html += "</div>";
 	html += "<div class=\"popup_style\">";
 	html += "<span>종일 일정</span>";
-	html += "<input type=\"checkbox\" id=\"aldy_dvsn\" name=\"aldy_dvsn\" value=\"1\">";		
+	if(data.aldy_dvsn == "1"){
+	html += "<input type=\"checkbox\" id=\"aldy_dvsn\" name=\"aldy_dvsn\" value=\"1\" checked>";
+	}else{
+	html += "<input type=\"checkbox\" id=\"aldy_dvsn\" name=\"aldy_dvsn\" value=\"1\">";
+	}
 	html += "<input type=\"hidden\" id=\"aldy_dvsn_hidden\" name=\"aldy_dvsn\" value=\"0\">";		
 	html += "</div>";
 	html += "</form>";
@@ -695,6 +719,9 @@ function schdlUpdate(data){
 				}else if($("#schdl_ctgry").val() == "0" && checkEmpty("#user_ctgry")){
 					alert("범주를 입력하세요.");
 					$("#user_ctgry").focus();
+				}else if($("#schdl_start_date").val() > $("#schdl_end_date").val()){
+					alert("종료일이 시작일보다 빠를 수 없습니다.");
+					$("#schdl_end_date").focus();
 				}else{
 					if(checkEmpty("#schdl_cont")){
 						$("#schdl_cont").val(" ");
@@ -702,6 +729,10 @@ function schdlUpdate(data){
 					 if(checkEmpty("#schdl_place")){
 							$("#schdl_place").val(" ");
 						}
+					 /* if($("#aldy_dvsn").is(":checked")){
+						 $("#hidden_end_time").val("23:59"); // 종일일정 시 하루씩 짧아져서 시간 할당
+					 } */
+					 
 					var params = $("#updateForm").serialize();
 					console.log(params);
 					$.ajax({
@@ -711,7 +742,7 @@ function schdlUpdate(data){
 						data : params, 
 						success : function(res) { 
 							if(res.res == "success"){
-								location.href = "clndr";
+								history.go(0);
 							}else{
 								alert("수정중 문제가 발생하였습니다.");
 							}
@@ -730,7 +761,7 @@ function schdlUpdate(data){
 }
 /* 일정삭제 */
 function schdlDelete(data){
-	var params = $("#dtlForm").serialize();
+	var params = "";
  	 
 		$.ajax({
 			type: "post", 
@@ -739,7 +770,7 @@ function schdlDelete(data){
 			data : {id : data.id}, 
 			success : function(res) { 
 				if(res.res == "success"){
-					location.href = "clndr";
+					history.go(0);
 				}else{
 					alert("삭제중 문제가 발생하였습니다.");
 				}
@@ -897,6 +928,7 @@ $(document).ready(function() {
 		html += "<input type=\"hidden\" id=\"aldy_dvsn_hidden\" name=\"aldy_dvsn\" value=\"0\">";		
 		html += "</div>";
 		html += "</form>";
+		/* 종일일정 체크 시 time 비활성화 및 숨기기 */
 		$("body").on("click", "#aldy_dvsn", function () {
 			if($("#aldy_dvsn").is(":checked")){
 				 $('input[name=schdl_start_time]').attr('style', "display:none;");
@@ -910,6 +942,7 @@ $(document).ready(function() {
 				 $('#schdl_end_time').attr('disabled',false);
 			 }
 		});
+		/* 사용자지정 범주를 선택하지 않으면 입력창 비활성화 및 숨기기 */
 		 $("body").on("click", "#schdl_ctgry", function () {
 			if($("#schdl_ctgry").val() == 0){
 				$('input[name=user_ctgry]').attr('style', "display:inline;");
@@ -941,16 +974,16 @@ $(document).ready(function() {
 					}else if($("#schdl_ctgry").val() == "0" && checkEmpty("#user_ctgry")){
 						alert("사용자지정 범주를 입력하세요.");
 						$("#user_ctgry").focus();
+					}else if($("#schdl_start_date").val() > $("#schdl_end_date").val()){
+						alert("종료일이 시작일보다 빠를 수 없습니다.");
+						$("#schdl_end_date").focus();
 					}else{
 						 if(checkEmpty("#schdl_cont")){
-							$("#schdl_cont").val(" ");
+							$("#schdl_cont").val(" "); // 내용을 비워두면 undefined 출력돼서 추가
 						}
 						 if(checkEmpty("#schdl_place")){
-								$("#schdl_place").val(" ");
+								$("#schdl_place").val(" "); // 내용을 비워두면 undefined 출력돼서 추가
 							}
-						 if($("#aldy_dvsn").is(":checked")){
-							 $("#hidden_end_time").val("23:59");
-						 }
 						var params = $("#addForm").serialize();
 						console.log(params);
 						$.ajax({
@@ -960,7 +993,7 @@ $(document).ready(function() {
 							data : params, 
 							success : function(res) { 
 								if(res.res == "success"){
-									location.href = "clndr";
+									history.go(0);
 								}else{
 									alert("작성중 문제가 발생하였습니다.");
 								}
@@ -1001,10 +1034,11 @@ $(document).ready(function() {
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
+				<input type="hidden" id="clndrDvsn" value="month">
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->			
 			 <form action="#" id="dateForm" method="post">
-			 <input type="hidden" name="clndrDate" value="">
+				<input type="hidden" name="clndrDate" value="">
 			 </form>
 			<input type="button" value="일정 등록" id="new_schdl">
 	<div id="side_bar">
