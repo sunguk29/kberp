@@ -55,9 +55,13 @@ public class ClntMngController {
 	@RequestMapping(value = "/clntCmpnyCont")
 	public ModelAndView clntCmpnyCont(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
+		int clCnt = iCommonService.getIntData("clntCmpnyMng.clListCnt", params);
+		
 		HashMap<String, String> data = iCommonService.getData("clntCmpnyMng.clntCmpnyCont", params);
 		
 		mav.addObject("data", data);
+		mav.addObject("clCnt", clCnt);
+		
 		mav.setViewName("sales/clntCmpnyCont");
 		
 		return mav;
@@ -133,6 +137,17 @@ public class ClntMngController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/clntCmpnyUpdate")
+	public ModelAndView clntCmpnyUpdate(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("clntCmpnyMng.clntCmpnyCont", params);
+		
+		mav.addObject("data", data);
+		mav.setViewName("sales/clntCmpnyUpdate");
+		
+		return mav;
+	}
+	
 	@RequestMapping(value = "/clntReg")
 	public ModelAndView clntReg(ModelAndView mav) {
 		
@@ -153,10 +168,11 @@ public class ClntMngController {
 			switch(gbn) {
 			case "insert" :
 				iCommonService.insertData("clntCmpnyMng.ClntCmpnyAdd", params); // 글저장
-				iCommonService.insertData("clntCmpnyMng.ClntCmpnyAttFile", params); // 첨부파일저장
+				iCommonService.insertData("clntCmpnyMng.ClntCmpnyAddAttFile", params); // 첨부파일저장
 				break;
 			case "update" :
-				
+				iCommonService.updateData("clntCmpnyMng.ClntCmpnyUpdate", params); // 글저장
+				iCommonService.updateData("clntCmpnyMng.ClntCmpnyAttFileUpdate", params); // 첨부파일저장
 				break;
 			case "delete" :
 				iCommonService.updateData("clntCmpnyMng.ccDelete", params); // 글삭제

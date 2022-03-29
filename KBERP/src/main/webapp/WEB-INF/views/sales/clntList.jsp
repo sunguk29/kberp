@@ -169,11 +169,21 @@ select {
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	if('${param.searchType}' != '') {
+		$("#searchType").val("${param.searchType}");
+	} else {
+		$("#oldSearchType").val("0");
+	}
+	
 	reloadList();
 	
 	$(".pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
+		$("#listSort").val("9");
 
+		$("#searchType").val($("#oldSearchType").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
 		reloadList();
 	});
 	
@@ -193,6 +203,13 @@ $(document).ready(function() {
 	$("#searchBtn").on("click", function() {
 		$("#page").val("1");
 		
+		$("#oldSearchType").val($("#searchType").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
+		
+		reloadList();
+	});
+	
+	$("#sortBtn").on("click", function() {
 		reloadList();
 	});
 	
@@ -299,6 +316,8 @@ function drawPaging(pb) {
 </script>
 </head>
 <body>
+<input type="hidden" id="oldSearchType" value="${param.searchType}" />
+<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
 <!-- top & left -->
 <c:import url="/topLeft">
 	<c:param name="top">${param.top}</c:param>
@@ -344,18 +363,17 @@ function drawPaging(pb) {
 								<span class="srch_name">검색어</span>
 							</td>
 							<td>
-								<select>
-									<option>선택안함</option>
-									<option>고객명</option>
-									<option>고객사명</option>
-									<option>고객번호</option>
+								<select id="searchType" name="searchType">
+									<option value="0">고객명</option>
+									<option value="1">고객사명</option>
+									<option value="2">고객번호</option>
 								</select>
 							</td>
 							<td colspan="3">
-								<input type="text" class="srch_msg" placeholder="검색 조건을 선택한 후 입력해주세요." />
+								<input type="text" class="srch_msg" placeholder="검색어를 입력해주세요." id="searchTxt" name="searchTxt" />
 							</td>
 							<td colspan="5">
-								<span class="cmn_btn">검색</span>
+								<span class="cmn_btn" id="searchBtn">검색</span>
 							</td>
 						</tr>
 						<tr>
@@ -363,14 +381,14 @@ function drawPaging(pb) {
 								<span class="srch_name">정렬</span>
 							</td>
 							<td>
-								<select>
-									<option selected="selected">선택안함</option>
-									<option>고객명</option>
-									<option>고객사명</option>
+								<select id="listSort" name="listSort">
+									<option value="9">선택안함</option>
+									<option value="0">고객명</option>
+									<option value="1">고객사명</option>
 								</select>
 							</td>
 							<td>
-								<img class="asc_btn cmn_btn" alt="정렬버튼" src="resources/images/sales/asc.png" />
+								<img class="asc_btn cmn_btn" alt="정렬버튼" src="resources/images/sales/asc.png" id="sortBtn" />
 							</td>
 							<td colspan="7"></td>
 						</tr>

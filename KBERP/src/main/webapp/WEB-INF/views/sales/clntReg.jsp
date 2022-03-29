@@ -379,7 +379,7 @@ $(document).ready(function() {
 		
 		makePopup({
 			depth : 1,
-			bg : true,
+			bg : false,
 			width : 600,
 			height : 524,
 			title : "고객사 조회",
@@ -464,7 +464,7 @@ $(document).ready(function() {
 		
 		makePopup({
 			depth : 1,
-			bg : true,
+			bg : false,
 			width : 600,
 			height : 500,
 			title : "담당자 조회",

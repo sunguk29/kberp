@@ -23,7 +23,6 @@
 	height: 100%;
 	margin: auto;
 }
-
 .bodyWrap {
 	display: block;
 	background-color: white;
@@ -31,8 +30,6 @@
 	height: 100%;
 	margin: 20px auto;
 }
-
-/* sts */
 .sts {
 	display: inline-block;
 	width: 100%;
@@ -40,7 +37,6 @@
 	text-align: center;
 	margin-top: 10px;
 }
-
 .sts_list {
 	display: inline-block;
 	vertical-align: middle;
@@ -58,7 +54,6 @@
 	height: 3px;
 	margin: 10px auto;
 }
-/********** srch_table **********/
 .srch_table {
 	border-collapse: collapse;
 	background-color: #f2f2f2;
@@ -67,49 +62,40 @@
 	text-align: left;
 	margin: 10px 0px;
 }
-
 .srch_table tr {
 	height: 50px;
 }
-
 .srch_table tr:nth-child(3) {
 	height: 45px;
 	border-top: 0.5px solid #d7d7d7;
 }
-
 .asc_btn {
 	width: 30px;
 	height: 25px;
 }
-
 .asc_btn:hover {
 	cursor: pointer;
 }
-
 select {
 	height: 23px;
 	width: 150px;
 	font-size: 12px;
 }
-
 .srch_name {
 	margin: 0px 10px 0px 20px;
 	font-weight: bold;
 }
-
 .srch_msg {
 	height: 20px;
 	width: 305px;
 	font-size: 12px;
 }
-/*---------  검색결과 : n건 --------- */
 .SearchResult { /* 영업기회 검색결과 */
 	width: 927px;
 	font-size: 11pt;
 	text-align: left;
 	margin-top: 30px;
 }
-/********** list_table **********/
 .list_table {
 	border-collapse: collapse;
 	background-color: #FFF;
@@ -136,12 +122,9 @@ select {
 .list_table tbody tr:nth-child(3) {
 	border-bottom: 1px solid gray;
 }
-
-/* 글번호 */
 .list_table thead tr:nth-child(1) th:nth-child(1), .list_table tbody tr:nth-child(1) td:nth-child(1) {
 	text-align: center;
 }
-/* 고객사명 */
 .list_table tbody tr:nth-child(2) td:nth-child(2) {
 	font-weight: bold;
 	font-size: 10pt;
@@ -152,7 +135,6 @@ select {
 	font-size: 10pt;
 	text-decoration: underline;
 }
-/* 거래 횟수 이미지 */
 .deal{
 	height: 36px;
 }
@@ -161,8 +143,6 @@ select {
 	top: -15px;
 	right: -5px;
 }
-
-/* 상단 버튼 */
 .sales_psbl_btn {
 	display: inline-block;
 	vertical-align: top;
@@ -179,7 +159,6 @@ select {
 	color: #f2f2f2;
 	cursor: pointer;
 }
-
 .sales_psbl_btn:active {
 	background-color: #2e83f2;
 }
@@ -195,11 +174,28 @@ select {
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	if('${param.clntCmpnyClsfyNum}' != '') {
+		$("#clntCmpnyClsfyNum").val('${param.clntCmpnyClsfyNum}');
+	} else {
+		$("#oldClntCmpnyClsfyNum").val("9");
+	}
+	
+	if('${param.searchType}' != '') {
+		$("#searchType").val('${param.searchType}');
+	} else {
+		$("#oldSearchType").val("0");
+	}
+	
 	reloadList();
 	
 	$(".pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
-
+		$("#listSort").val("9");
+		
+		$("#clntCmpnyClsfyNum").val($("#oldClntCmpnyClsfyNum").val());
+		$("#searchType").val($("#oldSearchType").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+				
 		reloadList();
 	});
 	
@@ -208,16 +204,20 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-	$("#searchTxt").on("keypress", function(event) { // 엔터 처리
+	$("#searchTxt").on("keypress", function(event) {
 		if(event.keyCode == 13) {
 			$("#searchBtn").click(); 
 			
-			return false; // event를 실행하지 않겠다.
+			return false;
 		}
 	});
 	
 	$("#searchBtn").on("click", function() {
 		$("#page").val("1");
+		
+		$("#oldClntCmpnyClsfyNum").val($("#clntCmpnyClsfyNum").val());
+		$("#oldSearchType").val($("#searchType").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
 		
 		reloadList();
 	});
@@ -336,8 +336,6 @@ function drawList(list) {
 	
 }
 
-
-
 function drawPaging(pb) {
 	var html = "";
 	
@@ -366,10 +364,13 @@ function drawPaging(pb) {
 	$(".pgn_area").html(html);
 
 }
-
 </script>
 </head>
 <body>
+<input type="hidden" id="oldClntCmpnyClsfyNum" value="${param.clntCmpnyClsfyNum}" />
+<input type="hidden" id="oldSearchType" value="${param.searchType}" />
+<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
+
 <!-- top & left -->
 <c:import url="/topLeft">
 	<c:param name="top">${param.top}</c:param>
@@ -424,13 +425,13 @@ function drawPaging(pb) {
 									<option value="0">고객사명</option>
 									<option value="1">고객사번호</option>
 							</select></td>
-							<td><input type="text" class="srch_msg" placeholder="검색어를 입력해주세요." id="searchTxt" name="searchTxt" /></td>
+							<td><input type="text" class="srch_msg" placeholder="검색어를 입력해주세요." id="searchTxt" name="searchTxt" value="${param.searchTxt}" /></td>
 							<td><span class="cmn_btn" id="searchBtn">검색</span></td>
 						</tr>
 						<tr>
 							<td><span class="srch_name">정렬</span></td>
 							<td><select id="listSort" name="listSort">
-									<option value="9" selected="selected">선택안함</option>
+									<option value="9">선택안함</option>
 									<option value="0">매출</option>
 									<option value="1">고객사명</option>
 							</select></td>

@@ -569,7 +569,7 @@
 		AND CLNT_CMPNY_CLSFY_NUM = 5
 	</select>
 	
-	<insert id="ClntCmpnyAttFile" parameterType="hashmap">
+	<insert id="ClntCmpnyAddAttFile" parameterType="hashmap">
 		INSERT INTO CLNT_CMPNY_ATT_FILE (ATT_FILE_NUM, CLNT_CMPNY_NUM, ATT_FILE_NAME)
 		VALUES (CLNT_CMPNY_ATT_FILE_SEQ.NEXTVAL, CLNT_CMPNY_SEQ.CURRVAL, #{attFile})
 	</insert>
@@ -594,7 +594,31 @@
 		                        FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME,
 		                                       EC.MBL, ROW_NUMBER() OVER(ORDER BY EC.CLNT_NUM DESC) AS RNUM
 		                                FROM ENTRPRS_CLNT EC INNER JOIN CLNT_CMPNY CC
-		                                                             ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM ) EC ) EC ) EC ) EC
+		                                                             ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM ) EC ) EC ) EC
+		        WHERE 1 = 1 
+		        <if test="searchTxt != null and searchTxt != ''">
+		        	<choose>
+		        		<when test="searchType == 0">
+		        			AND EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
+		        		</when>
+		        		<when test="searchType == 1">
+		        			AND EC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+		        		</when>
+		        		<when test="searchType == 2">
+		        			AND EC.CLNT_NUM LIKE '%' || #{searchTxt} || '%'
+		        		</when>
+		        	</choose>
+		        </if>
+		        <if test="listSort != '9'">
+					<choose>
+						<when test="listSort == 0">
+							ORDER BY EC.CLNT_NUM ASC
+						</when>
+						<when test="listSort == 1">
+							ORDER BY EC.CLNT_CMPNY_NAME ASC
+						</when>
+					</choose>
+				</if> ) EC
 		WHERE EC.RNUM2 BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
@@ -607,7 +631,7 @@
 	
 	<select id="clntCmpnyCont" parameterType="hashmap" resultType="hashmap">
 		SELECT CLNT_CMPNY_NAME, CLNT_CMPNY_CLSFY_NUM, GRADE_NUM, BSNSMN_RGSTRTN_NUM, CLNT_NAME,
-		       PHONE_NUM, FAX, HMPG, ZIP_CODE_NUM, ADRS, DTL_ADRS, TRIM(TO_CHAR(RVN, 'L999,999,999,999,999')) AS RVN, RCGNTN_PATH_NUM
+		       PHONE_NUM, FAX, HMPG, ZIP_CODE_NUM, ADRS, DTL_ADRS, TRIM(TO_CHAR(RVN, '999999999999999')) AS RVN, RCGNTN_PATH_NUM
 		FROM CLNT_CMPNY
 		WHERE CLNT_CMPNY_NUM = #{ccn}
 	</select>
@@ -740,5 +764,29 @@
 		WHERE DEL_CHECK IS NULL
 		AND CLNT_CMPNY_NUM = #{ccn}
 	</select>
+	
+	<update id="ClntCmpnyUpdate" parameterType="hashmap">
+		UPDATE CLNT_CMPNY SET CLNT_CMPNY_CLSFY_NUM = #{ccClsfy},
+		                      GRADE_NUM = #{ccGrade},
+		                      RCGNTN_PATH_NUM = #{rp},
+		                      CLNT_CMPNY_NAME = #{ccName},
+		                      BSNSMN_RGSTRTN_NUM = #{brNum},
+		                      CLNT_NAME = #{cName},
+		                      PHONE_NUM = #{phoneNum},
+		                      FAX = #{fax},
+		                      HMPG = #{hmpg},
+		                      ZIP_CODE_NUM = #{zipCodeNum},
+		                      ADRS = #{adrs},
+		                      DTL_ADRS = #{dtlAdrs},
+		                      RVN = #{rvn},
+		                      EMP_NUM = #{sEmpNum}
+		WHERE CLNT_CMPNY_NUM = #{ccn}
+	</update>
+	
+	<update id="ClntCmpnyAttFileUpdate" parameterType="hashmap">
+		UPDATE CLNT_CMPNY_ATT_FILE SET ATT_FILE_NAME = #{attFile}
+		WHERE CLNT_CMPNY_NUM = #{ccn}
+	</update>
+	
 	
 </mapper>

@@ -226,6 +226,8 @@ td:nth-child(1), td:nth-child(3){
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	console.log('${param.ccn}');
+	
 	$("#listBtn").on("click", function() {
 		makePopup({
 			bg : true,
@@ -238,6 +240,7 @@ $(document).ready(function() {
 			buttons : [{
 				name : "나가기",
 				func:function() {
+					$("#listForm").attr("action", "clntCmpnyList");
 					$("#listForm").submit();
 					console.log("One!");
 					closePopup();
@@ -256,7 +259,7 @@ $(document).ready(function() {
 		$("#att").click();
 	});
 	
-	$("#addBtn").on("click", function() {
+	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#ccName")) {
 			makeAlert("필수 항목 알림", "고객사를 입력하세요");
 		} else if(checkEmpty("#ccClsfy")) {
@@ -297,11 +300,12 @@ $(document).ready(function() {
 								
 								$.ajax({
 									type : "post",
-									url : "clntCmpnyMngActionAjax/insert",
+									url : "clntCmpnyMngActionAjax/update",
 									dataType : "json",
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
+											$("#listForm").attr("action", "clntCmpnyCont");
 											$("#listForm").submit();
 										} else {
 											alert("등록중 문제가 발생하였습니다.");
@@ -364,11 +368,15 @@ function findAddr(){
 </script>
 </head>
 <body>
-<form action="clntCmpnyList" id="listForm" method="post">
-	<input type="hidden" id="page" name="page" value="${page}" />
+<form action="#" id="listForm" method="post">
+	<input type="hidden" id="page" name="page" value="${param.page}" />
+	<input type="hidden" name="ccn" value="${param.ccn}" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" name="clntCmpnyClsfyNum" value="${param.clntCmpnyClsfyNum}" />
+	<input type="hidden" name="searchType" value="${param.searchType}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -380,9 +388,9 @@ function findAddr(){
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">고객사 등록</div>
+			<div class="page_title_text">고객사 수정</div>
 			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
-			<img alt="등록버튼" src="resources/images/sales/save.png" class="btnImg" id="addBtn" />
+			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
 			<!-- 검색영역 선택적 사항 -->
 			
 		</div>
@@ -391,11 +399,15 @@ function findAddr(){
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="bodyWrap">
 				<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
-					<input type="hidden" id="page" name="page" value="${page}" />
+					<input type="hidden" id="page" name="page" value="${param.page}" />
+					<input type="hidden" name="ccn" value="${param.ccn}" />
 					<input type="hidden" name="top" value="${param.top}" />
 					<input type="hidden" name="menuNum" value="${param.menuNum}" />
 					<input type="hidden" name="menuType" value="${param.menuType}" />
 					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
+					<input type="hidden" name="clntCmpnyClsfyNum" value="${param.clntCmpnyClsfyNum}" />
+					<input type="hidden" name="searchType" value="${param.searchType}" />
+					<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 					<table>
 						<colgroup>
 							<col width="200" />
@@ -404,18 +416,30 @@ function findAddr(){
 						<tbody>
 							<tr>
 								<td><input type="button" class="btn" value="고객사 *" readonly="readonly" /></td>
-								<td><input type="text" class="txt" id="ccName" name="ccName" /></td>
+								<td><input type="text" class="txt" id="ccName" name="ccName" value="${data.CLNT_CMPNY_NAME}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="고객사 분류 *" /></td>
 								<td>
 									<select class="txt" id="ccClsfy" name="ccClsfy">
-											<option value="0">거래고객사</option>
-											<option value="1">파트너사</option>
-											<option value="2">해지고객사</option>
-											<option value="3">정지고객사</option>
-											<option value="4">외국고객사</option>
-											<option value="5">기타</option>
+										<c:if test="${data.CLNT_CMPNY_CLSFY_NUM eq 0}">
+											<option value="0" selected="selected">거래고객사</option>
+										</c:if>
+										<c:if test="${data.CLNT_CMPNY_CLSFY_NUM eq 1}">
+											<option value="1" selected="selected">파트너사</option>
+										</c:if>
+										<c:if test="${data.CLNT_CMPNY_CLSFY_NUM eq 2}">
+											<option value="2" selected="selected">해지고객사</option>
+										</c:if>
+										<c:if test="${data.CLNT_CMPNY_CLSFY_NUM eq 3}">
+											<option value="3" selected="selected">정지고객사</option>
+										</c:if>
+										<c:if test="${data.CLNT_CMPNY_CLSFY_NUM eq 4}">
+											<option value="4" selected="selected">외국고객사</option>
+										</c:if>
+										<c:if test="${data.CLNT_CMPNY_CLSFY_NUM eq 5}">
+											<option value="5" selected="selected">기타</option>
+										</c:if>
 									</select>
 								</td>
 							</tr>
@@ -423,66 +447,87 @@ function findAddr(){
 								<td><input type="button" class="btn" value="등급 *" /></td>
 								<td>
 									<select class="txt" id="ccGrade" name="ccGrade">
-											<option value="0">S</option>
-											<option value="1">A</option>
-											<option value="2">B</option>
-											<option value="3">C</option>
-											<option value="4">D</option>
+										<c:if test="${data.GRADE_NUM eq 0}">
+											<option value="0" selected="selected">S</option>
+										</c:if>
+										<c:if test="${data.GRADE_NUM eq 1}">
+											<option value="1" selected="selected">A</option>
+										</c:if>
+										<c:if test="${data.GRADE_NUM eq 2}">
+											<option value="2" selected="selected">B</option>
+										</c:if>
+										<c:if test="${data.GRADE_NUM eq 3}">
+											<option value="3" selected="selected">C</option>
+										</c:if>
+										<c:if test="${data.GRADE_NUM eq 4}">
+											<option value="4" selected="selected">D</option>
+										</c:if>
 									</select>
 								</td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="사업자번호" /></td>
-								<td><input type="text" class="txt" id="brNum" name="brNum" /></td>
+								<td><input type="text" class="txt" id="brNum" name="brNum" value="${data.BSNSMN_RGSTRTN_NUM}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="대표" /></td>
-								<td><input type="text" class="txt" id="cName" name="cName" /></td>
+								<td><input type="text" class="txt" id="cName" name="cName" value="${data.CLNT_NAME}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="유선번호" /></td>
-								<td><input type="text" class="txt" id="phoneNum" name="phoneNum" /></td>
+								<td><input type="text" class="txt" id="phoneNum" name="phoneNum" value="${data.PHONE_NUM}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="팩스번호" /></td>
-								<td><input type="text" class="txt" id="fax" name="fax" /></td>
+								<td><input type="text" class="txt" id="fax" name="fax" value="${data.FAX}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="웹사이트" /></td>
-								<td><input type="text" class="txt" id="hmpg" name="hmpg" /></td>
+								<td><input type="text" class="txt" id="hmpg" name="hmpg" value="${data.HMPG}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="우편번호" /></td>
-								<td><input type="text" class="txt" id="zipCodeNum" name="zipCodeNum" /></td>
+								<td><input type="text" class="txt" id="zipCodeNum" name="zipCodeNum" value="${data.ZIP_CODE_NUM}" /></td>
 							</tr>
 							<tr height="40">
 								<td rowspan="2"><input type="button" class="address" value="주소 *" /></td>
-								<td><input type="text" class="txt search_text" id="adrs" name="adrs" readonly="readonly" />
-									<img class="btnImg" id="search_icon" alt="돋보기" src="resources/images/sales/mg.png" /></td>
+								<td><input type="text" class="txt search_text" id="adrs" name="adrs" value="${data.ADRS}" />
+									<img class="btnImg" id="search_icon" alt="돋보기" src="resources/images/sales/mg.png" /></td></td>
 							</tr>
 							<tr height="40">
-								<td><input type="text" class="txt" placeholder="상세주소" id="dtlAdrs" name="dtlAdrs"/></td>
+								<td><input type="text" class="txt" placeholder="상세주소" id="dtlAdrs" name="dtlAdrs" value="${data.DTL_ADRS}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="매출(년)*" /></td>
-								<td><input type="text" class="txt" id="rvn" name="rvn" /></td>
+								<td><input type="text" class="txt" id="rvn" name="rvn" value="${data.RVN}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="인지경로"></td>
 								<td>
 									<select class="txt" id="rp" name="rp">
-											<option value="0">자사홈페이지</option>
-											<option value="1">인터넷검색</option>
-											<option value="2">지인소개</option>
-											<option value="3">세미나</option>
-											<option value="4">전화</option>
-											<option value="5">기타</option>
+										<c:if test="${data.RCGNTN_PATH_NUM eq 0}">
+											<option value="0" selected="selected">자사홈페이지</option>
+										</c:if>
+										<c:if test="${data.RCGNTN_PATH_NUM eq 1}">
+											<option value="1" selected="selected">인터넷검색</option>
+										</c:if>
+										<c:if test="${data.RCGNTN_PATH_NUM eq 2}">
+											<option value="2" selected="selected">지인소개</option>
+										</c:if>
+										<c:if test="${data.RCGNTN_PATH_NUM eq 3}">
+											<option value="3" selected="selected">세미나</option>
+										</c:if>
+										<c:if test="${data.RCGNTN_PATH_NUM eq 4}">
+											<option value="4" selected="selected">전화</option>
+										</c:if>
+										<c:if test="${data.RCGNTN_PATH_NUM eq 5}">
+											<option value="5" selected="selected">기타</option>
+										</c:if>
 									</select>
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					<!-- 첨부파일 -->
 					<div class="rvn_txt"> 첨부파일
 						<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" border='0' />
 					</div>

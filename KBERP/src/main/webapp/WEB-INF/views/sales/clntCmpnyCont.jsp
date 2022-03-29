@@ -15,6 +15,7 @@
 	width: 1013px;
 }
 
+/* 개인 작업 영역 */
 .body {
 	display: block;
 	background-color: white;
@@ -29,8 +30,6 @@
 	height: 100%;
 	margin: 20px auto;
 }
-
-/* 개인 작업 영역 */
 table{	
 	border: 1px;
 	width: 927px;
@@ -42,9 +41,6 @@ td:nth-child(2), td:nth-child(4){
 tr:nth-child(11) > td:nth-child(1){
 	border-bottom: 1px solid #d7d7d7;
 }
-/* tr:nth-child(9) > td:nth-child(2){
-	background-color: #F2F2F2;
-} */
 td:nth-child(1), td:nth-child(3){
 	text-align: center;
 }
@@ -101,13 +97,11 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 33px;
 	border: none;
 }
-
 .btnImg{
 	width : 30px;
 	float: right;
 	margin-left: 10px;
 }
-
 .imgPos{
 	position: relative;
 }
@@ -135,6 +129,29 @@ td:nth-child(1), td:nth-child(3){
 	background-size: 18px 18px;
 	float: right;
 	margin-top: 7.5px;
+}
+.drop_btn_bot {
+	position: absolute;
+	top: 7px;
+	left: 909px;
+	width: 18px;
+	height: 18px;
+	background-image: url("resources/images/sales/downarrow.png");
+	background-size: 18px 18px;
+	float: right;
+}
+.up_btn_bot {
+	position: absolute;
+	top: 7px;
+	left: 909px;
+	width: 18px;
+	height: 18px;
+	background-image: url("resources/images/sales/up_arrow.png");
+	background-size: 18px 18px;
+	float: right;
+}
+.drop_btn_bot:hover, .up_btn_bot:hover {
+	cursor: pointer;
 }
 .up_btn {
 	display:inline-block;
@@ -186,7 +203,6 @@ td:nth-child(1), td:nth-child(3){
 	font-weight: bold;
 	font-size : 12px;
 }
-/* 첨부자료 */
 .cntrct_box_in {
 	width: 885px;
 	height: 100px;
@@ -249,15 +265,14 @@ td:nth-child(1), td:nth-child(3){
     margin-top: 3px;
 }
 .plus_btn_bot {
-	display:inline-block;
-	vertical-align: middle;
+	position: absolute;
+	top: 7px;
+	left: 884px;
 	width: 18px;
 	height: 18px;
 	background-image: url("resources/images/sales/plus.png");
 	background-size: 18px 18px;
 	float: right;
-	margin-right: 7px;
-	margin-top: 7.5px;
 }
 .plus_btn_bot:hover {
 	cursor: pointer;
@@ -265,32 +280,32 @@ td:nth-child(1), td:nth-child(3){
 #att {
 	display: none;
 }
-/* 의견 */
-.opbx { /* 스크롤때문에 div 박스 추가 */
+.opbx {
 	width: 860px;
 	height: 305px;
 	margin-left: 47.5px;
 	overflow-y: auto;
 }
-.cbx { /* 스크롤때문에 div 박스 추가 */
+.cbx {
 	width: 860px;
 	height: 305px;
 	margin-left: 47.5px;
 	overflow-y: auto;
 }
-.hbx { /* 스크롤때문에 div 박스 추가 */
+.hbx {
 	width: 860px;
 	height: 305px;
 	margin-left: 47.5px;
 	overflow-y: auto;
 }
-hr { /* 구분선 */
+hr {
 	margin-bottom: 10px;
 }
 .op_title { 
 	font-size: 11pt;
 }
 .cl_title { 
+	position: relative;
 	font-size: 11pt;
 }
 .bot_title { 
@@ -325,7 +340,6 @@ textarea {
 	margin-bottom: 5px;
 	background-color: #F2F2F2;
 }
-
 .name {
 	margin-top: 3px;
 	font-weight: bold;
@@ -353,7 +367,6 @@ textarea {
 	height: 56px;
 	margin: 15px 0px 5px 47.5px;
 }
-/* 히스토리 */
 .dwon_icon {
 	display:inline-block;
 	vertical-align: middle;
@@ -376,7 +389,6 @@ textarea {
 	margin-left: 100px;
 	line-height: 30px;
 }
-
 .save_btn, .list_btn {
 	display: inline-block;
 	vertical-align: top;
@@ -410,7 +422,6 @@ textarea {
 	background-size: 48px 48px;
 	margin-right: 10px;
 }
-/* 고객 등록 팝업 */
 .popup_table {
 	border-collapse: collapse;
 	display: table-cell;
@@ -420,7 +431,6 @@ textarea {
 .popup_table td:nth-child(1) {
 	width: 100px;
 }
-/* 고객사 팝업 */
 .popup_title_mid {
 	width: calc(100% + 20px);
 	height: 70px;
@@ -515,7 +525,6 @@ textarea {
 	height: 32px;
 	text-align: center;
 }
-/* 팝업 내용 */
 .popup_box_left {
    display: inline-block;
    vertical-align: top;
@@ -552,7 +561,6 @@ textarea {
    background-color: #F2F2F2;
    margin-bottom: 5px;
 }
-
 .popup_mng_box_in:hover, .popup_cc_box_in:hover {
    cursor: pointer;
    border: 2px solid #2E83F2;
@@ -600,6 +608,18 @@ textarea {
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	$("#clListCnt_right").on("click", ".drop_btn_bot", function() {
+		$(".cbx").hide();
+		html = "<div class=\"up_btn_bot\"></div>";
+		$("#clListCnt_right").html(html);
+	});
+	
+	$("#clListCnt_right").on("click", ".up_btn_bot", function() {
+		$(".cbx").show();
+		html = "<div class=\"drop_btn_bot\"></div><div class=\"plus_btn_bot\"></div>";
+		$("#clListCnt_right").html(html);
+	});
+	
 	$("#listBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntCmpnyList");
 		$("#actionForm").submit();
@@ -609,7 +629,73 @@ $(document).ready(function() {
 		$("#actionForm").attr("action", "clntCmpnyUpdate");
 		$("#actionForm").submit();
 	});
-/*************************************** 의견삭제 ***************************************/	
+
+	$("#deleteBtn").on("click", function() {
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "경고",
+			contents : "삭제하시겠습니까?",
+			contentsEvent : function() {
+				$("#popup1").draggable();
+			},
+			buttons : [{
+				name : "삭제",
+				func:function() {
+					
+					var params = $("#actionForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "clntCmpnyMngActionAjax/delete",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							if(res.res == "success") {
+								$("#actionForm").attr("action", "clntCmpnyList");
+								$("#actionForm").submit();
+							} else {
+								alert("삭제중 문제가 발생하였습니다.");
+							}
+						},
+						error : function(request, status, error) {
+							console.log(request.responseText);
+						}
+					});
+					
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "취소"
+			}]
+		});		
+	}); // 글 삭제 버튼 end
+
+	reloadOpList(); // 의견 리스트
+	
+	$(".subm").on("click", function() {
+		var params = $("#botOpActionForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "ccBotActionAjax/insert",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				if(res.res == "success") {
+					$("#tatacont").val("");
+					reloadOpList();
+				} else {
+					alert("등록중 문제가 발생하였습니다.");
+				}
+			},
+			error : function(request, status, error) {
+				console.log(request.responseText);
+			}
+		});
+	}); // 의견 등록 버튼 end
+	
 	$(".opbx").on("click", ".del", function() {
 		var cmntNum = $(this).children("#cmntNum").val();
 		document.getElementById("cmNum").value = cmntNum;
@@ -653,83 +739,10 @@ $(document).ready(function() {
 			}]
 		});
 		
-		
-		
-	});
-/***********************************************************************************/
+	}); // 의견 삭제 버튼 end
 	
-/*************************************** 글 삭제 ***************************************/
-	$("#deleteBtn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "경고",
-			contents : "삭제하시겠습니까?",
-			contentsEvent : function() {
-				$("#popup1").draggable();
-			},
-			buttons : [{
-				name : "삭제",
-				func:function() {
-					
-					var params = $("#actionForm").serialize();
-					
-					$.ajax({
-						type : "post",
-						url : "clntCmpnyMngActionAjax/delete",
-						dataType : "json",
-						data : params,
-						success : function(res) {
-							if(res.res == "success") {
-								$("#actionForm").attr("action", "clntCmpnyList");
-								$("#actionForm").submit();
-							} else {
-								alert("삭제중 문제가 발생하였습니다.");
-							}
-						},
-						error : function(request, status, error) {
-							console.log(request.responseText);
-						}
-					});
-					
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "취소"
-			}]
-		});		
-	});
-/***********************************************************************************/
-	
-/*************************************** 의견 ***************************************/
-	reloadOpList();
-	$(".subm").on("click", function() {
-		var params = $("#botOpActionForm").serialize();
-		
-		$.ajax({
-			type : "post",
-			url : "ccBotActionAjax/insert",
-			dataType : "json",
-			data : params,
-			success : function(res) {
-				if(res.res == "success") {
-					$("#tatacont").val("");
-					reloadOpList();
-				} else {
-					alert("등록중 문제가 발생하였습니다.");
-				}
-			},
-			error : function(request, status, error) {
-				console.log(request.responseText);
-			}
-		});
-	});
-/***********************************************************************************/
-	
-	reloadCList(); // 하단 고객
+	reloadCList(); // 상세보기 하단 고객
 
-/*************************************** 고객 등록 ***************************************/
 	$(".cl_title").on("click", ".plus_btn_bot", function() {
  		var html = "";
  		
@@ -790,12 +803,12 @@ $(document).ready(function() {
 		
 		makePopup({
 			depth : 1,
-			bg : true,
+			bg : false,
 			bgClose : false,
 			title : "고객 등록",
 			contents : html,
 			contentsEvent : function() {
-				// ************** 고객사 팝업 **************
+				
 				$("#ccPop").on("click", function() {
 					var html = "";
 			        
@@ -865,9 +878,9 @@ $(document).ready(function() {
 							}
 						}
 					});
-				});
-				// ************** 고객사 팝업 END **************
-				// ************** 담당자 팝업 **************
+				}); // 고객사 팝업 end
+				
+				
 				$("#mngPop").on("click", function() {
 					
 					var html = "";
@@ -917,7 +930,7 @@ $(document).ready(function() {
 					
 					makePopup({
 						depth : 2,
-						bg : true,
+						bg : false,
 						width : 600,
 						height : 500,
 						title : "담당자 조회",
@@ -965,8 +978,7 @@ $(document).ready(function() {
 						}
 					});
 					
-				});
-				// ************** 담당자 팝업 END **************
+				}); // 담당자 팝업 end
 			},
 			width : 600,
 			height : 500,
@@ -1017,6 +1029,7 @@ $(document).ready(function() {
 						
 						addForm.submit();
 						closePopup(1);
+						reloadCList();
 					} // if end
 					
 				} // button 함수 end
@@ -1024,8 +1037,7 @@ $(document).ready(function() {
 				name : "취소"
 			}]
 		});
-	});
-/***********************************************************************************/	
+	}); // 고객 등록 버튼 end
 
 }); // JQuery End
 
@@ -1098,7 +1110,7 @@ function reloadCList() {
 function drawClCnt(clListCnt) {
 	var html = "";
 	
-	html = "<h3>고객(" + clListCnt + ")<div class=\"drop_btn\"></div><div class=\"plus_btn_bot\"></div></h3>";
+	html = "<h3>고객(" + clListCnt + ")</h3><div id=\"clListCnt_right\"><div class=\"drop_btn_bot\"></div><div class=\"plus_btn_bot\"></div><div>";
 	
 	$(".cl_title").html(html);
 }
@@ -1265,6 +1277,10 @@ function drawMngPaging(mngPb) {
 <form action="#" id="actionForm" method="post">
 	<input type="hidden" id="page" name="page" value="${param.page}" />
 	<input type="hidden" id="cmNum" name="cmNum" value="${param.ccn}" />
+	<input type="hidden" name="ccn" value="${param.ccn}" />
+	<input type="hidden" name="clntCmpnyClsfyNum" value="${param.clntCmpnyClsfyNum}" />
+	<input type="hidden" name="searchType" value="${param.searchType}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
