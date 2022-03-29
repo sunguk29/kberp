@@ -61,6 +61,7 @@
     height: 506px;
     border: solid 1px gray;
     border-radius: 6px;
+    user-select: none;
 }
 
 .orgnzt_area > div{
@@ -143,7 +144,7 @@
 
 
 .orgnzt_depth2 {
-	padding-left: 25px;
+	padding-left: 15px;
     display: inline-block;
     vertical-align: top;
     width: 235px;
@@ -175,7 +176,7 @@
 }
 
 .orgnzt_depth3 {
-	padding-left: 30px;
+	padding-left: 15px;
     display: inline-block;
     vertical-align: top;
     width: 205px;
@@ -197,7 +198,7 @@
 	display: none;
 }
 .orgnzt_depth4 {
-	padding-left: 30px;
+	padding-left: 15px;
     display: inline-block;
     vertical-align: top;
     width: 205px;
@@ -207,20 +208,19 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	var selected1 = false;
-	var selected2 = false;
-	var selected3 = false;
 // 1뎁스  
    $(".orgnzt_depth1").on("click", function() {
 	   console.log("depth1 click!", this)
 	   $(".orgnzt_depth2_wrap").toggle("fast"); // 토글 show/hide   
 	   // 선택유무에 따른 css 변경
-       if(selected1 == false){
-       	 selected1 = true;
-		 $(this).css({"color":"#2E83F2", "font-weight":"bold"});        	 
+       if($(this).find("input[type=hidden]").val() == "false") {
+		   console.log("selected", true)
+    	   $(this).find("input[type=hidden]").val("true")
+		   $(this).css({"color":"#2E83F2", "font-weight":"bold"});        	 
        } else {
-       	 selected1 = false;
-       	 $(this).css({"color":"black", "font-weight":""}); 
+		   console.log("selected", false)
+    	   $(this).find("input[type=hidden]").val("false")
+       	   $(this).css({"color":"black", "font-weight":""}); 
        }
    });
 // 2뎁스  
@@ -229,14 +229,15 @@ $(document).ready(function() {
 	   e.stopPropagation(); // 버블업 방지
 	   $(this).children(".orgnzt_depth3_wrap").toggle("fast"); // 토글 show/hide   
 	   // 선택유무에 따른 css 변경
-       if(selected2 == false){
-    	 selected2 = true;
-	  	 $(this).find(".orgnzt_depth2_area").css({"color":"#2E83F2", "font-weight":"bold"});        	 
+       if($(this).find("input[type=hidden]").val() == "false") {
+		   console.log("selected", true)
+    	   $(this).find("input[type=hidden]").val("true")
+	  	   $(this).find(".orgnzt_depth2_area").css({"color":"#2E83F2", "font-weight":"bold"});        	 
        } else {
-    	 selected2 = false;
-      	 $(this).find(".orgnzt_depth2_area").css({"color":"black", "font-weight":""}); 
+		   console.log("selected", false)
+    	   $(this).find("input[type=hidden]").val("false")
+      	   $(this).find(".orgnzt_depth2_area").css({"color":"black", "font-weight":""}); 
        }
-	  
    });
 // 3뎁스  
    $(".orgnzt_depth3").on("click", function(e) {
@@ -244,12 +245,14 @@ $(document).ready(function() {
 	   e.stopPropagation(); // 버블업 방지
 	   $(this).children(".orgnzt_depth4_wrap").toggle("fast"); // 토글 show/hide  
 	   // 선택유무에 따른 css 변경
-       if(selected3 == false){
-    	 selected3 = true;
-	  	 $(this).find(".orgnzt_depth3_area").css({"color":"#2E83F2", "font-weight":"bold"});        	 
+       if($(this).find("input[type=hidden]").val() == "false") {
+		   console.log("selected", true)
+    	   $(this).find("input[type=hidden]").val("true")
+	  	   $(this).find(".orgnzt_depth3_area").css({"color":"#2E83F2", "font-weight":"bold"});        	 
        } else {
-    	 selected3 = false;
-      	 $(this).find(".orgnzt_depth3_area").css({"color":"black", "font-weight":""}); 
+		   console.log("selected", false)
+    	   $(this).find("input[type=hidden]").val("false")
+      	   $(this).find(".orgnzt_depth3_area").css({"color":"black", "font-weight":""}); 
        }
    });
 });
@@ -305,12 +308,14 @@ function drawDept(dept){
 				<div class="orgnzt_area">
 					<div class="orgnzt_depth1_wrap">
 						<div class="orgnzt_depth1" >
+							<input type="hidden" class="item_selected" value="false" />
 							<div class="depth_slc_icon"></div>
 							<div class="kb_icon"></div>
 							<div class="depth_txt">카카오뱅크</div>
 						</div>
 						<div class="orgnzt_depth2_wrap">
 							<div class="orgnzt_depth2" >
+								<input type="hidden" class="item_selected" value="false" />
 								<div class="orgnzt_depth2_area">
 									<div class="depth_slc_icon"></div>
 									<div class="folder_icon"></div>
@@ -318,6 +323,7 @@ function drawDept(dept){
 								</div>
 								<div class="orgnzt_depth3_wrap" >
 									<div class="orgnzt_depth3">
+									<input type="hidden" class="item_selected" value="false" />
 										<div class="orgnzt_depth3_area">
 											<div class="depth_slc_icon"></div>
 											<div class="folder_icon"></div>
@@ -325,6 +331,7 @@ function drawDept(dept){
 										</div>
 										<div class="orgnzt_depth4_wrap" >
 											<div class="orgnzt_depth4" >
+											<input type="hidden" class="item_selected" value="false" />
 												<div class="orgnzt_depth4_area">
 													<div class="depth_slc_icon"></div>
 													<div class="profile_icon"></div>
@@ -332,6 +339,7 @@ function drawDept(dept){
 												</div>
 											</div>
 											<div class="orgnzt_depth4">
+											<input type="hidden" class="item_selected" value="false" />
 												<div class="orgnzt_depth4_area">
 													<div class="depth_slc_icon"></div>
 													<div class="profile_icon"></div>
@@ -341,6 +349,7 @@ function drawDept(dept){
 										</div>
 									</div>
 									<div class="orgnzt_depth3">
+											<input type="hidden" class="item_selected" value="false" />
 										<div class="orgnzt_depth3_area">
 											<div class="depth_slc_icon"></div>
 											<div class="folder_icon"></div>
@@ -348,6 +357,7 @@ function drawDept(dept){
 										</div>
 										<div class="orgnzt_depth4_wrap" >
 											<div class="orgnzt_depth4" >
+											<input type="hidden" class="item_selected" value="false" />
 												<div class="orgnzt_depth4_area">
 													<div class="depth_slc_icon"></div>
 													<div class="profile_icon"></div>
@@ -355,6 +365,7 @@ function drawDept(dept){
 												</div>
 											</div>
 											<div class="orgnzt_depth4">
+											<input type="hidden" class="item_selected" value="false" />
 												<div class="orgnzt_depth4_area">
 													<div class="depth_slc_icon"></div>
 													<div class="profile_icon"></div>
@@ -366,6 +377,7 @@ function drawDept(dept){
 								</div>
 							</div>
 							<div class="orgnzt_depth2" >
+								<input type="hidden" class="item_selected" value="false" />
 								<div class="orgnzt_depth2_area">
 									<div class="depth_slc_icon"></div>
 									<div class="folder_icon"></div>
@@ -373,6 +385,7 @@ function drawDept(dept){
 								</div>
 								<div class="orgnzt_depth3_wrap" >
 									<div class="orgnzt_depth3">
+									<input type="hidden" class="item_selected" value="false" />
 										<div class="orgnzt_depth3_area">
 											<div class="depth_slc_icon"></div>
 											<div class="folder_icon"></div>
@@ -380,6 +393,7 @@ function drawDept(dept){
 										</div>
 										<div class="orgnzt_depth4_wrap" >
 											<div class="orgnzt_depth4">
+											<input type="hidden" class="item_selected" value="false" />
 												<div class="orgnzt_depth4_area">
 													<div class="depth_slc_icon"></div>
 													<div class="profile_icon"></div>
@@ -387,6 +401,7 @@ function drawDept(dept){
 												</div>
 											</div>
 											<div class="orgnzt_depth4">
+											<input type="hidden" class="item_selected" value="false" />
 												<div class="orgnzt_depth4_area">
 													<div class="depth_slc_icon"></div>
 													<div class="profile_icon"></div>
@@ -396,6 +411,7 @@ function drawDept(dept){
 										</div>
 									</div>
 									<div class="orgnzt_depth3">
+									<input type="hidden" class="item_selected" value="false" />
 										<div class="orgnzt_depth3_area">
 											<div class="depth_slc_icon"></div>
 											<div class="folder_icon"></div>
@@ -403,6 +419,7 @@ function drawDept(dept){
 										</div>
 										<div class="orgnzt_depth4_wrap" >
 											<div class="orgnzt_depth4" >
+											<input type="hidden" class="item_selected" value="false" />
 												<div class="orgnzt_depth4_area">
 													<div class="depth_slc_icon"></div>
 													<div class="profile_icon"></div>
@@ -410,6 +427,7 @@ function drawDept(dept){
 												</div>
 											</div>
 											<div class="orgnzt_depth4">
+											<input type="hidden" class="item_selected" value="false" />
 												<div class="orgnzt_depth4_area">
 													<div class="depth_slc_icon"></div>
 													<div class="profile_icon"></div>
