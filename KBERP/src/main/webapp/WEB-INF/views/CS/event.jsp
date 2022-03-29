@@ -6,14 +6,16 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP Sample</title>
+<title>카카오뱅크 ERP - 고객센터 > 이벤트 > 진행중 이벤트 글 상세보기</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
+<link rel="stylesheet" type="text/css" href="resources/css/CS/content.css" />
 <style type="text/css">
 /* 가로 사이즈 조정용 */
 .cont_wrap {
-	width: 900px;
+	width: 1000px;
 }
+
 /* 개인 작업 영역 */
 
 #wrap {
@@ -66,7 +68,7 @@
 	font-size: 15px;
 }
 
-#contents{
+.contents{
 
 	width: 1000px;
 	height: 500px;
@@ -328,6 +330,7 @@
 
 }
 
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -383,72 +386,56 @@ $(document).ready(function() {
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">진행중 이벤트</div>
-			<!-- 검색영역 선택적 사항 -->
-			<div class="page_srch_area">
-				<select class="srch_sel">
-					<option>제목</option>
-					<option>내용</option>
-					<option>작성자</option>
-				</select>
-				<div class="srch_text_wrap">
-					<input type="text" />
-				</div>
-				<div class="cmn_btn_ml">검색</div>
-			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
-			<div id="wrap">
-			<div id="header">
-			
-			너굴맨의 하루
-			</div>
-			<div id="header2">
-				<span id="header2_writer">너굴맨</span>
-				<sapn id="header2_date">2022-01-01 15:21</sapn>
-			</div>
-			<div id="contents">
-				<img src="rac_01.JPG" alt="너굴맨" id="img_rac">
-				<div>오류는 너굴맨이 처리했으니 안심하라구</div>				
-			</div>
-			
-			<div id="footer">
-				<div><input type="submit" value="목록" id="btn_list"></div>
-				<div><input type="submit" value="수정" id="btn_correct"></div>
-				<div><input type="submit" value="삭제" id="btn_cancle"></div>
-			</div>
-		</div>
-		
-		<div id="wrap_comment">
-			<div id="comment_header">
-			댓글 20개
-			</div>
-			
-			<div id="comment_header2">
-				<div><input type="button" id="more_Btn" value="댓글 더 보기" ></div>
-			</div>
-			
-			<div id="comment_content">
-				<div id="commnet_writer">
-				랫서판다 <span id="com_writer_date">2022-01-01 17:10</span>
-				<!-- <div><input type="submit" value="수정" id="com_correct"></div> -->
-				<div><input type="submit" value="삭제" id="com_cancle"></div>
-				</div>
-				<div id="comment_cont">
-				<div>너굴맨 오류가 생겨요</div>
+			<div class="title-area">
+				<div class="title"> 너굴맨의 하루 </div>
+				<div class="writer_area">
+					<div class="write_info">
+						<div class="writer">너굴맨</div>
+						<div class="date">2022-01-01 15:21</div>
+					</div>
 				</div>
 			</div>
-			
-			<div id="comment_write">
-				<div id="co_writer">
-				관리자
-				</div>
-				<div id="co_content"><textarea id="co_cont"></textarea></div>
-				<div><input type="submit" value="댓글 쓰기" id="btn_cowrite"></div>		
+			<div class="contents">
+				<div>오류는 너굴맨이 처리했으니 안심하라구</div>	
 			</div>
-		</div>
-	</div>
+			<div class="content_footer">
+				<div class="list"><input type="submit" value="목록" class="btn"></div>
+				<div class="correct"><input type="submit" value="수정" class="btn"></div>
+				<div class="delete"><input type="submit" value="삭제" class="btn"></div>
+			</div>
+			<div class="wrap_comment">
+				<div id="comment_header">
+					댓글 20개
+				</div>
+					
+				<div id="comment_header2">
+					<div><input type="button" id="more_Btn" value="댓글 더 보기" ></div>
+				</div>
+				
+				<div id="comment_content">
+					<div id="commnet_writer">
+					랫서판다 <span id="com_writer_date">2022-01-01 17:10</span>
+					<!-- <div><input type="submit" value="수정" id="com_correct"></div> -->
+					<div><input type="submit" value="삭제" id="com_cancle"></div>
+					</div>
+					<div id="comment_cont">
+					<div>너굴맨 오류가 생겨요</div>
+					</div>
+				</div>
+				
+				<div id="comment_write">
+					<div id="co_writer">
+					관리자
+					</div>
+					<div id="co_content"><textarea id="co_cont"></textarea></div>
+					<div><input type="submit" value="댓글 쓰기" id="btn_cowrite"></div>		
+				</div>
+			</div>
+		</div><!-- cont_area end -->
 	</div>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
