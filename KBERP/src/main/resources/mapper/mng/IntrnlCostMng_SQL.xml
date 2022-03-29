@@ -53,7 +53,7 @@
 	
 	<select id="intrnlCostMngDtlView" resultType="hashmap" parameterType="hashmap">
 		SELECT E.EMP_NAME, TO_CHAR(ICM.RGSTRTN_DATE_HR, 'YYYY-MM-DD') AS DATE_RGS, TO_CHAR(ICM.DATE_HR, 'YYYY-MM-DD') AS DATE_D,
-		       ICM.CHIT_NUM, AC.ACNT_NAME, ICM.CRSPNDNT, ICM.ITEM, ICM.QUNTY, ICM.UNIT_PRICE, ICM.SPLY_PRICE, ICM.SRTX, ICM.BSNSMN_NUM,
+		       ICM.CHIT_NUM, ICM.ACNT_NUM, AC.ACNT_NAME, ICM.CRSPNDNT, ICM.ITEM, ICM.QUNTY, ICM.UNIT_PRICE, ICM.SPLY_PRICE, ICM.SRTX, ICM.BSNSMN_NUM,
 		       ICM.AMNT, ICM.RMRKS, ICM.ATT_FILE
 		FROM INTRNL_COST_MNG ICM INNER JOIN ACNT_CODE AC
 		                                 ON ICM.ACNT_NUM = AC.SUB_CTGR_ACNT_CODE
@@ -91,11 +91,23 @@
 			   #{splyPrice}, #{srtx}, #{amnt}, #{spendDate}, #{rmrks}, #{attFile})
 	</insert>
 	
-	<update id="updateIntrnlCostMng">
-		
+	<update id="updateIntrnlCostMng" parameterType="hashmap">
+		UPDATE INTRNL_COST_MNG SET ACNT_NUM = #{sendAcntCode},
+							   	   CRSPNDNT = #{expns},
+							   	   BSNSMN_NUM = #{bsnsmnNum},
+							   	   ITEM = #{item},
+							   	   QUNTY = #{qunty},
+							   	   UNIT_PRICE = #{unitPrice},
+							   	   SPLY_PRICE = #{splyPrice},
+							   	   SRTX = #{srtx},
+							   	   AMNT = #{amnt},
+							   	   DATE_HR = #{spendDate},
+							   	   RMRKS = #{rmrks},
+							   	   ATT_FILE = #{attFile}
+		WHERE CHIT_NUM = #{sendChitNum}
 	</update>
 	
-	<delete id="deleteIntrnlCostMng">
+	<delete id="deleteIntrnlCostMng" parameterType="hashmap">
 		
 	</delete>
 	

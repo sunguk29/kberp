@@ -53,7 +53,7 @@
 	vertical-align: middle;
 	width: 30px;
 	height: 40px;
-	background-image: url('./images/cmn/dwnld_icon.png');
+	background-image: url('resources/images/mng/dwnld_icon.png');
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 20px;
@@ -126,7 +126,12 @@ $(document).ready(function() {
 		$("#menuNum2").val("39");
 		$("#menuType2").val("M");
 		
-		$("#actionForm").attr("action", "chitMng")
+		$("#actionForm").attr("action", "chitMng");
+		$("#actionForm").submit();
+	});
+	
+	$("#updateBtn").on("click", function() {
+		$("#actionForm").attr("action", "intrnlCostMngUpdate");
 		$("#actionForm").submit();
 	});
 	
@@ -138,6 +143,7 @@ $(document).ready(function() {
 		<input type="hidden" id="mon" name="mon" value="${param.mon}">
 		<input type="hidden" id="page" name="page" value="${param.page}" />
 		<input type="hidden" id="page2" name="page2" value="${param.page2}" />
+		<input type="hidden" id="sendChitNum" name="sendChitNum" value="${param.sendChitNum}">
 		
 		<input type="hidden" id="top2" name="top" value="${param.top}">
 		<input type="hidden" id="menuNum2" name="menuNum" value="${param.menuNum}">
