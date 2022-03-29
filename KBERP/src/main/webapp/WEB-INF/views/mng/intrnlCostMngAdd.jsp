@@ -454,7 +454,7 @@ function drawPaging(pb) {
 	
 	<form action="#" id="acntSrchForm" method="post">
 		<input type="hidden" id="sendSrchTxt" name="sendSrchTxt">
-		<input type="hidden" id="page" name="page" value="${page}">
+		<input type="hidden" id="page" name="page" value="1">
 	</form>
 	
 	<form action="intrnlCostMng" id="backForm" method="post">
