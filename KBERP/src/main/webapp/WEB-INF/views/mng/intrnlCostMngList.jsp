@@ -137,6 +137,7 @@ function drawPaging(pb) {
 		<input type="hidden" name="top" value="${param.top}">
 		<input type="hidden" name="menuNum" value="${param.menuNum}">
 		<input type="hidden" name="menuType" value="${param.menuType}">
+		<input type="hidden" name ="backCheck" value="0">
 	</form>
 
 	<!-- top & left -->
