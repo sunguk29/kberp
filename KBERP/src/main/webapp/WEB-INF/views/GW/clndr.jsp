@@ -283,6 +283,37 @@
 #dtl_schdl_ctgry{
 	margin-left: 20px;
 }
+.schdl_ctgry div{
+	border-radius: 12px;
+	width: 12px;
+	height: 12px;
+	display: inline-block;
+	margin-left: 3px;
+}
+#bsns_color{
+	background-color: #fb8484;
+}
+#leave_color{
+	background-color: #ffb264;
+}
+#edctn_color{
+	background-color: #ffd352;
+}
+#mtng_color{
+	background-color: #66BB6A;
+}
+#get_tgthr_color{
+	background-color: #2fc1af;
+}
+#bsns_trip_color{
+	background-color: #76a7f7;
+}
+#devel_color{
+	background-color: #4d75b5;
+}
+#user_dsgnt_color{
+	background-color: #a17fed;
+}
 </style>
 <!-- Fullcalendar css -->
 <link rel="stylesheet" type="text/css" href="resources/script/fullcalendar/fullcalendar.css" />
@@ -361,11 +392,150 @@ $(document).ready(function() {
 	    	  
 	      },
 	      dayClick: function(date, js, view) { // 일자 클릭
-	    	  //alert('Clicked on: ' + date.format());
-
+	    	 // alert('Clicked on: ' + date.format());
+	    	  
 	    	  //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
 
 	    	 //alert('Current view: ' + view.name);
+	    	 
+	    	  var html = "";
+	  		
+	  		html += "<form action=\"#\" id=\"addForm\" method=\"post\">";
+	  		html += "<input type=\"hidden\" id=\"emp_num\" name=\"emp_num\" value=\"${sEmpNum}\">";
+	  		html += "<div class=\"popup_style\">";
+	  		html += "<span>일정 종류</span><span class=\"star\"> *</span>";
+	  		html += "<select class=\"slct_type\" id=\"schdl_type\" name=\"schdl_type\">";
+	  		html += "<option value=\"0\">개인</option>";
+	  		html += "<option value=\"1\">팀</option>";
+	  		html += "<option value=\"2\">전사</option>";
+	  		html += "</select>";
+	  		html += "</div>";
+	  		html += "<div class=\"popup_style\">";
+	  		html += "<span>제목</span><span class=\"star\"> *</span>";
+	  		html += "<input type=\"text\" id=\"schdl_title\" name=\"schdl_title\">";
+	  		html += "</div>";
+	  		html += "<div class=\"popup_style\">";
+	  		html += "<span>위치</span>";
+	  		html += "<input type=\"text\" id=\"schdl_place\" name=\"schdl_place\">";
+	  		html += "</div>";
+	  		html += "<div class=\"popup_style\">";
+	  		html += "<span>시작 시간</span>";
+	  		html += "<input type=\"date\" value=\"" + date.format() + "\"  id=\"schdl_start_date\" name=\"schdl_start_date\">";
+	  		html += "<input type=\"time\" id=\"schdl_start_time\" name=\"schdl_start_time\">";
+	  		html += "<input type=\"hidden\" id=\"hidden_start_time\" name=\"schdl_start_time\">";
+	  		html += "</div>";	
+	  		html += "<div class=\"popup_style\">";
+	  		html += "<span>종료 시간</span>";
+	  		html += "<input type=\"date\" value=\"" + date.format() + "\"  id=\"schdl_end_date\" name=\"schdl_end_date\">";			
+	  		html += "<input type=\"time\" id=\"schdl_end_time\" name=\"schdl_end_time\">";
+	  		html += "<input type=\"hidden\" id=\"hidden_end_time\" name=\"schdl_end_time\">";
+	  		html += "</div>";
+	  		html += "<div class=\"popup_dtl_cont\">";
+	  		html += "<span>상세내용</span>";
+	  		html += "<textarea rows=\"10\" cols=\"57\" class=\"dtl_cont\" id=\"schdl_cont\" name=\"schdl_cont\"></textarea>";			
+	  		html += "</div>";
+	  		html += "<div class=\"popup_style\">";
+	  		html += "<span>범주</span><span class=\"star\"> *</span>";
+	  		html += "<select class=\"slct_type\" id=\"schdl_ctgry\" name=\"schdl_ctgry\">";
+	  		html += "<option value=\"0\">사용자지정</option>";
+	  		html += "<option value=\"1\">업무</option>";
+	  		html += "<option value=\"2\">휴가</option>";
+	  		html += "<option value=\"3\">교육</option>";
+	  		html += "<option value=\"4\">회의</option>";
+	  		html += "<option value=\"5\">회식</option>";
+	  		html += "<option value=\"6\">출장</option>";
+	  		html += "<option value=\"7\">개발</option>";
+	  		html += "</select>";
+	  		html += "<input type=\"text\" placeholder=\"사용자 지정\"id=\"user_ctgry\" name=\"user_ctgry\">";
+	  		html += "<input type=\"hidden\" id=\"hidden_user_ctgry\" name=\"user_ctgry\">";
+	  		html += "</div>";
+	  		html += "<div class=\"popup_style\">";
+	  		html += "<span>종일 일정</span>";
+	  		html += "<input type=\"checkbox\" id=\"aldy_dvsn\" name=\"aldy_dvsn\" value=\"1\">";		
+	  		html += "<input type=\"hidden\" id=\"aldy_dvsn_hidden\" name=\"aldy_dvsn\" value=\"0\">";		
+	  		html += "</div>";
+	  		html += "</form>";
+	  		/* 종일일정 체크 시 time 비활성화 및 숨기기 */
+	  		$("body").on("click", "#aldy_dvsn", function () {
+	  			if($("#aldy_dvsn").is(":checked")){
+	  				 $('input[name=schdl_start_time]').attr('style', "display:none;");
+	  				 $('#schdl_start_time').attr('disabled',true);
+	  				 $('input[name=schdl_end_time]').attr('style', "display:none;");
+	  				 $('#schdl_end_time').attr('disabled',true);
+	  			 }else{
+	  				 $('input[name=schdl_start_time]').attr('style', "display:inline;");
+	  				 $('#schdl_start_time').attr('disabled',false);
+	  				 $('input[name=schdl_end_time]').attr('style', "display:inline;");
+	  				 $('#schdl_end_time').attr('disabled',false);
+	  			 }
+	  		});
+	  		/* 사용자지정 범주를 선택하지 않으면 입력창 비활성화 및 숨기기 */
+	  		 $("body").on("click", "#schdl_ctgry", function () {
+	  			if($("#schdl_ctgry").val() == 0){
+	  				$('input[name=user_ctgry]').attr('style', "display:inline;");
+	  				 $('#user_ctgry').attr('disabled',false);
+	  			 }else{
+	  				$('input[name=user_ctgry]').attr('style', "display:none;");
+	  				 $('#user_ctgry').attr('disabled',true);
+	  			 }
+	  		});
+	  		makePopup({
+	  			bg : true,
+	  			bgClose : false,
+	  			title : "일정등록",
+	  			contents : html,
+	  			width : 540,
+	  			height : 620,
+	  			buttons : [{
+	  				name : "저장",
+	  				func:function() {
+	  					if(checkEmpty("#schdl_title")){
+	  						alert("제목을 입력하세요.");
+	  						$("#schdl_title").focus();
+	  					}else if(checkEmpty("#schdl_start_date")){
+	  						alert("시작 시간을 선택하세요.");
+	  						$("#schdl_start_date").focus();
+	  					}else if(checkEmpty("#schdl_end_date")){
+	  						alert("종료 시간을 선택하세요.");
+	  						$("#schdl_end_date").focus();
+	  					}else if($("#schdl_ctgry").val() == "0" && checkEmpty("#user_ctgry")){
+	  						alert("사용자지정 범주를 입력하세요.");
+	  						$("#user_ctgry").focus();
+	  					}else if($("#schdl_start_date").val() > $("#schdl_end_date").val()){
+	  						alert("종료일이 시작일보다 빠를 수 없습니다.");
+	  						$("#schdl_end_date").focus();
+	  					}else{
+	  						 if(checkEmpty("#schdl_cont")){
+	  							$("#schdl_cont").val(" "); // 내용을 비워두면 undefined 출력돼서 추가
+	  						}
+	  						 if(checkEmpty("#schdl_place")){
+	  								$("#schdl_place").val(" "); // 내용을 비워두면 undefined 출력돼서 추가
+	  							}
+	  						var params = $("#addForm").serialize();
+	  						console.log(params);
+	  						$.ajax({
+	  							type: "post", 
+	  							url : "clndrAction/insert",
+	  							dataType : "json",
+	  							data : params, 
+	  							success : function(res) { 
+	  								if(res.res == "success"){
+	  									history.go(0);
+	  								}else{
+	  									alert("작성중 문제가 발생하였습니다.");
+	  								}
+	  							},
+	  							error : function(request, status, error) { 
+	  								console.log(request.responseText); 
+	  							}
+	  						});
+	  					}
+	  				}
+	  			
+	  			}, {
+	  				name : "취소"
+	  			}]
+	  		});
 	      }
 	});
 	
@@ -1051,14 +1221,14 @@ $(document).ready(function() {
 		</div>
 		<div class="schdl_ctgry">
 			<h5 class="side_bar_title">범주</h5>
-			<input type="checkbox" class="ctgry_box" id="bsns"><label for="bsns" class="type_label">업무</label><br>
-			<input type="checkbox" class="ctgry_box" id="leave"><label for="leave" class="type_label">휴가</label><br>
-			<input type="checkbox" class="ctgry_box" id="edctn"><label for="edctn" class="type_label">교육</label><br>
-			<input type="checkbox" class="ctgry_box" id="mtng"><label for="mtng" class="type_label">회의</label><br>
-			<input type="checkbox" class="ctgry_box" id="get_tgthr"><label for="get_tgthr" class="type_label">회식</label><br>
-			<input type="checkbox" class="ctgry_box" id="bsns_trip"><label for="bsns_trip" class="type_label">출장</label><br>
-			<input type="checkbox" class="ctgry_box" id="devel"><label for="devel" class="type_label">개발</label><br>
-			<input type="checkbox" class="ctgry_box" id="user_dsgnt"><label for="user_dsgnt" class="type_label">사용자 지정</label>
+			<input type="checkbox" class="ctgry_box" id="bsns"><label for="bsns" class="type_label">업무</label><div id="bsns_color"></div><br>
+			<input type="checkbox" class="ctgry_box" id="leave"><label for="leave" class="type_label">휴가</label><div id="leave_color"></div><br>
+			<input type="checkbox" class="ctgry_box" id="edctn"><label for="edctn" class="type_label">교육</label><div id="edctn_color"></div><br>
+			<input type="checkbox" class="ctgry_box" id="mtng"><label for="mtng" class="type_label">회의</label><div id="mtng_color"></div><br>
+			<input type="checkbox" class="ctgry_box" id="get_tgthr"><label for="get_tgthr" class="type_label">회식</label><div id="get_tgthr_color"></div><br>
+			<input type="checkbox" class="ctgry_box" id="bsns_trip"><label for="bsns_trip" class="type_label">출장</label><div id="bsns_trip_color"></div><br>
+			<input type="checkbox" class="ctgry_box" id="devel"><label for="devel" class="type_label">개발</label><div id="devel_color"></div><br>
+			<input type="checkbox" class="ctgry_box" id="user_dsgnt"><label for="user_dsgnt" class="type_label">사용자 지정</label><div id="user_dsgnt_color"></div>
 			
 			
 		</div>
