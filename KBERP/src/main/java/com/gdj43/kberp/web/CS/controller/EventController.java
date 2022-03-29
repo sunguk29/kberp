@@ -13,52 +13,89 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
-import com.gdj43.kberp.web.CS.service.IEventService;
-
+import com.gdj43.kberp.web.common.service.ICommonService;
 
 @Controller
 //@RequestMapping("/event")	
 public class EventController {
 	@Autowired
-	public IEventService iEventService;
+	public ICommonService iCommonService;
 	
 	@Autowired
-	public IPagingService iPagingService;
+	public IPagingService ips;
 	
 	/* 
 	 현재 진행중인 event 목록글 보여주는 페이지
 	 * */
-	@RequestMapping(value="/prgrsEvent")
-	public ModelAndView prgrsEvent(@RequestParam HashMap<String, String> params,
-									ModelAndView mav) {
+	
+	@RequestMapping(value = "/prgrsEvent")
+	public ModelAndView eventList(@RequestParam HashMap<String, String> params,
+								ModelAndView mav) {
+		if(params.get("page") == null || params.get("page") == "") {
+			params.put("page", "1");
+		}
 		
-		mav.setViewName("CS/prgrsEvent");
+		mav.addObject("page", params.get("page"));
+		
+		mav.setViewName("CS/eventList");
 		
 		return mav;
 	}
 	
 	@RequestMapping(value = "/eventListAjax", 
-					method = RequestMethod.GET,
+					method = RequestMethod.POST,
 					produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String eventListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
-		List<HashMap<String, String>> list = iEventService.getEventList(params);
+		
+		// 총 게시글 수
+		int cnt= iCommonService.getIntData("ev.getEventCnt",params);
+		//
+		PagingBean pb = ips.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
+		
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("in.getEventList", params);
 		
 		modelMap.put("list", list);
+		modelMap.put("pb", pb);
+		
 		return mapper.writeValueAsString(modelMap);
 	
 	}
 	
-	@RequestMapping(value="/endEvent")
-	public ModelAndView endEvent(ModelAndView mav) {
+	//
+	@RequestMapping(value = "/event")
+	public ModelAndView event(@RequestParam HashMap<String, String> params,
+							  ModelAndView mav) throws Throwable {
 		
-		mav.setViewName("CS/endEvent");
+		HashMap<String, String> data = iCommonService.getData("ev.getEvent", params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("CS/event");
 		
 		return mav;
 	}
+	
+	// 
+		@RequestMapping(value = "/eventAdd")
+		public ModelAndView eventAdd(@RequestParam HashMap<String, String> params,
+				  					ModelAndView mav) throws Throwable {
+			
+			HashMap<String, String> data = iCommonService.getData("ev.getEvent", params);
+			
+			mav.addObject("data", data);
+			
+			mav.setViewName("CS/eventAdd");
+			
+			return mav;
+		}
 	
 }
