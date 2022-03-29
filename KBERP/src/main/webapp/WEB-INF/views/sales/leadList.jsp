@@ -199,7 +199,6 @@
    cursor: pointer;
    font-weight: bold;
 }
-
 .tLine{
 	background-color: #4B94F2;
 	width: 927px;
@@ -322,7 +321,7 @@ input:focus {
 }
 
 .list_table thead tr:nth-child(3) {
-	border-bottom: 1.5px solid gray;
+	border-bottom: 1.5px solid #d7d7d7;
 }
 
 .list_table thead tr {
@@ -335,7 +334,7 @@ input:focus {
 }
 
 .list_table tbody tr:nth-child(3) {
-	border-bottom: 1.5px solid #d7d7d7;
+	border-bottom: 1px solid #d7d7d7;
 }
 /* 글번호 */
 .list_table thead tr:nth-child(1) th:nth-child(1), .list_table tbody tr:nth-child(1) td:nth-child(1)
@@ -377,42 +376,72 @@ input:focus {
 <script type="text/javascript">
 $(document).ready(function() {
 
+	if('${param.psNum}' != '' || '${param.srchType}' != '') {
+		$("#psNum").val('${param.psNum}');
+		$("#srchType").val('${param.srchType}');
+	} else {
+		$("#oldPsNum").val("0");
+		$("#oldSrchType").val("0");
+	}
+
 	reloadList();
+	
+	$("#searchBtn").on("click", function() {
+		$("#page").val("1");
+		
+		$("#oldPsNum").val($("#psNum").val());
+		$("#oldSrchType").val($("#srchType").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
+		$("#oldMngEmp").val($("#mngEmp").val());
+		
+		reloadList();
+	});
 	
 	//리드 상세보기
 	$(".list_table").on("click", ".leadName", function() {
 		$("#leadNum").val($(this).attr("leadNum"));
 		
+		$("#psNum").val($("#oldPsNum").val());
+		$("#srchType").val($("#oldSrchType").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		$("#mngEmp").val($("#oldMngEmp").val());
+		
 		$("#actionForm").attr("action", "leadCont");
 		$("#actionForm").submit();
 	});
+
+	// 리드목록 페이징
+	$(".pgn_area").on("click", "div", function() {
 		
-	$("#searchBtn").on("click", function() {
-		$("#page").val("1");
+		$("#page").val($(this).attr("page"));
+		
+		$("#psNum").val($("#oldPsNum").val());
+ 		$("#srchType").val($("#oldSrchType").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		$("#mngEmp").val($("#oldMngEmp").val()); 
+		console.log(oldPsNum);
 		
 		reloadList();
 	});
 	
-	$(".sts").on("click", "input[type='button']", function() {
+	$(".sts").on("click", ".sts_list", function() {
+		
 		$("#page").val("1");
 		
 		$("#psNum").val($(this).attr("num"));
 		
+		if($("#searchTxt").val() != "" || $("mngEmp").val != "") { // 담당자, 검색어 txt가 비어있지 않으면 초기화
+			var txt = document.getElementById("searchTxt");
+			var mngrTxt = document.getElementById("mngEmp");
+			
+			txt.value = "";
+			mngrTxt.value = "";
+		}
 		reloadList();		
 	});
 	
-	if('${param.psNum}' != '' || '${param.srchName}' != '') {
-		$("#psNum").val('${param.psNum}');
-		$("#srchName").val('${param.srchName}');
-	}
 
-	// 리드목록 페이징
-	$(".pgn_area").on("click", "div", function() {
-		$("#page").val($(this).attr("page"));
-
-		reloadList();
-	});
-
+	
 	// 리드등록
 	$("#writeBtn").on("click", function() {
 		
@@ -420,134 +449,10 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-/* 담당자 팝업  */
-	$(".userIcon").on("click", function() {
- 		var html = "";
-		
-	 	html += "<div class=\"popup_title_mid\">"; 
-	 	html += 	"<form id=\"popupForm\">";
-	 	html += 		"<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
-		html += 		"<div class=\"ptm_left\">";
-		html += 			"<div class=\"ptm_left_top\">팀분류</div>";
-		html +=				"<div class=\"ptm_left_bot\">사원분류</div>";		
-		html += 		"</div>";
-		html += 		"<div class=\"ptm_mid\">";
-		html +=				"<div class=\"ptm_mid_top\">";
-		html +=					"<select class=\"sel_size\" id=\"deptS\" name=\"deptS\">"
-		html +=						"<option value=\"6\">영업부</option>";
-		html +=						"<option value=\"7\">영업1팀</option>";
-		html +=						"<option value=\"8\">영업2팀</option>";
-		html +=					"</select>";
-		html +=				"</div>";		
-		html +=				"<div class=\"ptm_mid_bot\">";
-		html +=					"<select class=\"sel_size\" id=\"empS\" name=\"empS\">";
-		html +=						"<option value=\"0\">사원번호</option>";
-		html +=						"<option value=\"1\">사원명</option>";
-		html +=					"</select>";
-		html +=				"</div>";	
-		html += 		"</div>";
-		html += 		"<div class=\"ptm_mid_right\">";
-		html +=				"<div class=\"ptm_mid_right_top\"></div>";
-		html +=				"<div class=\"ptm_mid_right_bot\">";
-		html +=					"<input type=\"text\" id=\"searchTxt\" name=\"searchTxt\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" />";
-		html +=				"</div>";
-		html += 		"</div>";
-		html += 		"<div class=\"ptm_right\">";
-		html +=				"<div class=\"ptm_right_top\"></div>";
-		html +=				"<div class=\"ptm_right_bot\">";
-		html +=					"<div class=\"cmn_btn\" id=\"mngrBtn\">검색</div>";
-		html +=				"</div>";
-		html +=			"</div>";
-		html += 	"</form>";
-		html += "</div>";
-		html += "<div class=\"popup_cont pc_back\">";
-		html +=		"<div class=\"popup_box\" id=\"mngrBox\"></div>";
-		html += 	"<div class=\"board_bottom2\">";
-		html +=			"<div class=\"pgn_area\" id=\"mngrpb\"></div>";
-		html +=		"</div>"; 
-		html +=	"</div>";
-		
-		makePopup({
-			bg : true,
-			bgClose : false,
-			title : "담당자 조회",
-			contents : html,
-			contentsEvent : function() {
-				
-				mngrList();
-
-				//페이징 
-				$("#mngrpb").on("click", "div", function() {
-					$("#page").val($(this).attr("page"));
-					
-					mngrList();
-				});
-				// 검색버튼
-				$("#mngrBtn").on("click", function () {
-					$("#page").val("1");
-					
-					mngrList();	
-				});
-				
-				$("#searchTxt").on("keypress", function(event) {
-					if(event.keyCode == 13 ) {
-						$("#page").val("1");
-						
-						mngrList();
-						return false;
-					}
-				});
-			},
-			width : 600,
-			height : 500,
-			buttons : {
-				name : "닫기",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
+	$("#yesterday").on("click", function() {
+		$("#searchDate").val($("#searchDate").val() - 1);
 	});
-}); 
 
-/* 담당자 조회 */
-function mngrList() {
-	var params = $("#popupForm").serialize();
-	
-	$.ajax({
-		type : "post",
-		url : "mngrListAjax",
-		dataType : "json",
-		data : params,
-		success : function(res) {
-			mngrDrawList(res.list);
-			drawPaging(res.pb, "#mngrpb");
-		},
-		error : function(req) {
-			console.log(req.responseText);
-		}
-	});	
-}
-function mngrDrawList(list) {
-	var html = "";
-	
-	for(var data of list) {
-		
-		html +=	"<div class=\"popup_box_in\">";
-		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_cc_box_right\">";
-		html +=	 data.EMP_NUM + "<span class=\"boldname\">" + data.EMP_NAME + " / " + data.RANK_NAME + "</span>";
-		html +=	"<span class=\"mg_wid\">" + data.DEPT_NAME + "</span>";
-		html +=	"</div>";
-		html +=	"</div>";	
-	}
-	
-	$("#mngrBox").html(html);
-	
-}
 /* 리드 리스트 */
 function reloadList() {
 	var params = $("#actionForm").serialize();
@@ -560,8 +465,9 @@ function reloadList() {
 		success : function(res) {
 			drawList(res.list);
 			drawTotal(res.cnt);
-			drawCnt(res.cnt, res.ongoingCnt, res.rcgntnCnt, res.failCnt);
+			drawCnt(res.listCnt, res.ongoingCnt, res.rcgntnCnt, res.failCnt);
 			drawPaging(res.pb, ".pgn_area");
+			console.log(res.list);
 		},
 		error : function(req) {
 			console.log(req.responseText);
@@ -596,7 +502,7 @@ function drawList(list) {
 	html += "<th></th>";
 	html += "</tr>";
 	html += "</thead>";
-	
+		
 	for(var data of list) {
 		html += "<tbody>";
 		html += "<tr>";
@@ -617,25 +523,161 @@ function drawList(list) {
 		html += "</tr>";
 		html += "</tbody>";
 	}
-	
+		
 	$(".list_table").html(html);
 }
-function drawCnt(cnt, ongoingCnt,rcgntnCnt, failCnt) {
+
+/* 담당자 팝업  */
+	$(".userIcon").on("click", function() {
+ 		var html = "";
+		
+	 	html += "<div class=\"popup_title_mid\">"; 
+	 	html += 	"<form action = \"#\" id=\"popupMngrForm\">";
+	 	html += 		"<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
+		html += 		"<div class=\"ptm_left\">";
+		html += 			"<div class=\"ptm_left_top\">팀분류</div>";
+		html +=				"<div class=\"ptm_left_bot\">사원분류</div>";		
+		html += 		"</div>";
+		html += 		"<div class=\"ptm_mid\">";
+		html +=				"<div class=\"ptm_mid_top\">";
+		html +=					"<select class=\"sel_size\" id=\"deptS\" name=\"deptS\">"
+		html +=						"<option value=\"6\">영업부</option>";
+		html +=						"<option value=\"7\">영업1팀</option>";
+		html +=						"<option value=\"8\">영업2팀</option>";
+		html +=					"</select>";
+		html +=				"</div>";		
+		html +=				"<div class=\"ptm_mid_bot\">";
+		html +=					"<select class=\"sel_size\" id=\"empS\" name=\"empS\">";
+		html +=						"<option value=\"0\">사원번호</option>";
+		html +=						"<option value=\"1\">사원명</option>";
+		html +=					"</select>";
+		html +=				"</div>";	
+		html += 		"</div>";
+		html += 		"<div class=\"ptm_mid_right\">";
+		html +=				"<div class=\"ptm_mid_right_top\"></div>";
+		html +=				"<div class=\"ptm_mid_right_bot\">";
+		html +=					"<input type=\"text\" id=\"searchT\" name=\"searchT\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" />";
+		html +=				"</div>";
+		html += 		"</div>";
+		html += 		"<div class=\"ptm_right\">";
+		html +=				"<div class=\"ptm_right_top\"></div>";
+		html +=				"<div class=\"ptm_right_bot\">";
+		html +=					"<div class=\"cmn_btn\" id=\"mngrBtn\">검색</div>";
+		html +=				"</div>";
+		html +=			"</div>";
+		html += 	"</form>";
+		html += "</div>";
+		html += "<div class=\"popup_cont pc_back\">";
+		html +=		"<div class=\"popup_box\" id=\"mngrBox\"></div>";
+		html += 	"<div class=\"board_bottom2\">";
+		html +=			"<div class=\"pgn_area\" id=\"mngrpb\"></div>";
+		html +=		"</div>"; 
+		html +=	"</div>";
+		
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "담당자 조회",
+			contents : html,
+			contentsEvent : function() {
+				
+				mngrList();
+				
+				$("#mngrBox").on("click", ".popup_box_in", function() {
+					var mng = $(this).children("#mng").val();
+					var mge = $(this).children("#mge").val();
+					document.getElementById("mngEmp").value = mng;
+					document.getElementById("mngNum").value = mge;
+					closePopup();
+				});
+				
+				$()
+				//페이징 
+				$("#mngrpb").on("click", "div", function() {
+					$("#page").val($(this).attr("page"));
+					
+					mngrList();
+				});
+				// 검색버튼
+				$("#mngrBtn").on("click", function () {
+					$("#page").val("1");
+					
+					mngrList();	
+				});
+				
+				$("#searchT").on("keypress", function(event) {
+					if(event.keyCode == 13 ) {
+						$("#mngrBtn").click();
+						
+						return false;
+					}
+				});
+			},
+			width : 600,
+			height : 500,
+			buttons : {
+				name : "닫기",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}
+		});
+	});
+}); 
+
+/****************** 담당자 조회 팝업 *********************/
+function mngrList() {
+	var params = $("#popupMngrForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "mngrListAjax",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			mngrDrawList(res.list);
+			drawPaging(res.pb, "#mngrpb");
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	});	
+}
+function mngrDrawList(list) {
 	var html = "";
 	
-	html += "<input type=\"button\" class=\"sts_list\" num=\"0\" value=\"전체 : "+ cnt + "건\">";
+	for(var data of list) {
+		
+		html +=	"<div class=\"popup_box_in\">";
+		html += "<input type=\"hidden\" id=\"mng\" value=\"" + data.EMP_NAME + "\" />";
+		html += "<input type=\"hidden\" id=\"mge\" value=\"" + data.EMP_NUM + "\" />";
+		html +=	"<div class=\"popup_cc_box_left\">";
+		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_cc_box_right\">";
+		html +=	 data.EMP_NUM + "<span class=\"boldname\">" + data.EMP_NAME + " / " + data.RANK_NAME + "</span>";
+		html +=	"<span class=\"mg_wid\">" + data.DEPT_NAME + "</span>";
+		html +=	"</div>";
+		html +=	"</div>";	
+	}
+	
+	$("#mngrBox").html(html);
+	
+}
+/****************** 담당자 조회 팝업 끝 *********************/
+/* ========================== 진행상태 건수 표시 ========================== */
+function drawCnt(listCnt, ongoingCnt,rcgntnCnt, failCnt) {
+	var html = "";
+	
+	html += "<input type=\"button\" class=\"sts_list\" num=\"0\" value=\"전체 : "+ listCnt + "건\">";
 	html += "<input type=\"button\" class=\"sts_list\" num=\"1\" value=\"진행중 : "+ ongoingCnt + "건\">";
 	html += "<input type=\"button\" class=\"sts_list\" num=\"2\" value=\"영업기회 전환 : "+ rcgntnCnt + "건\">";
 	html += "<input type=\"button\" class=\"sts_list\" num=\"3\" value=\"실패 : "+ failCnt + "건\">";
-	
-/* 	html += "<div class=\"sts_list\" id=\"listCnt\" name=\"listCnt\">전체 : " + cnt + "건</div>";
-	html += "<div class=\"sts_list\" id=\"ongoingCnt\" name=\"ongoingCnt\">진행중 : " + ongoingCnt + "건</div>";
-	html += "<div class=\"sts_list\">영업기회 전환 : " + rcgntnCnt + "건</div>";
-	html += "<div class=\"sts_list\">실패: " + failCnt + "건</div>"; */
 
 	$(".sts").html(html);
-	
 }
+
 function drawTotal(cnt) {
 	var html = "";
 	
@@ -646,7 +688,6 @@ function drawTotal(cnt) {
 	$(".SearchResult").html(html);
 
 }
-
 function drawPaging(pb, sel) {
 	var html = "";
 	
@@ -677,6 +718,12 @@ function drawPaging(pb, sel) {
 </script>
 </head>
 <body>
+<!-- 검색 데이터 유지용  -->
+<input type="hidden" id="oldPsNum" value="${param.psNum}" />
+<input type="hidden" id="oldSrchType" value="${param.srchType}" />
+<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
+<input type="hidden" id="oldMngEmp" value="${param.mngEmp}" />
+<!-- 데이터유지 끝 -->
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -757,7 +804,8 @@ function drawPaging(pb, sel) {
 									</td>
 									<td colspan="7">
 										<div class="findEmp_box">
-											<input type="text" maxlength="20" class="findEmp_box2" id="mngrSearchTxt" name="mngrSearchTxt" style="border:0 solid black" />
+											<input type="text" maxlength="20" class="findEmp_box2" id="mngEmp" name="mngEmp" value="${param.mngEmp}" style="border:0 solid black" />
+											<input type="hidden" id="mngNum" name="mngNum" />
 											<span><img alt="담당자이미지" class="userIcon" src="resources/images/sales/usericon.png"> </span>
 										</div>										
 									</td>
@@ -768,11 +816,11 @@ function drawPaging(pb, sel) {
 									</td>
 									<td>
 										<select>
-											<option selected="selected">리드등록일</option>
+											<option>리드등록일</option>
 										</select>
 									</td>
-									<td colspan="8">
-										<input type="button" value="어제" />
+									<td colspan="8" class="sDate">
+										<input type="button" id="yesterday" name="yesterday" value="어제" />
 										<input type="button" value="오늘" />
 										<input type="button" value="일주일 전" />
 										<input type="button" value="1개월 전" />
@@ -815,10 +863,10 @@ function drawPaging(pb, sel) {
 									</td>
 									<td>
 										<select>
-											<option selected="selected">선택안함</option>
-											<option>등록일</option>
-											<option>리드명</option>
-											<option>고객사명</option>
+											<option value="0">선택안함</option>
+											<option value="1">등록일</option>
+											<option value="2">리드명</option>
+											<option value="3">고객사명</option>
 										</select>
 									</td>
 									<td>

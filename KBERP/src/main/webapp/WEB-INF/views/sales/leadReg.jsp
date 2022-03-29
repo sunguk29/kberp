@@ -24,6 +24,24 @@
 	padding-bottom: 3px;
 	border-bottom: 1px solid #d7d7d7;
 }
+.popup_cont {
+	/* 내용 변경용 */
+	font-size: 13pt;
+	font-weight: 600;
+	text-align: center;
+}
+
+/* 리스트 팝업 개인 작업 영역 */
+.msg_1 {
+	width: 380px;
+	height: 30px;
+	padding-top: 10px;
+}
+.msg_2 {
+	width: 380px;
+	height: 30px;
+	padding-bottom: 10px;
+}
 
 .ptm_left {
 	display: inline-block;
@@ -577,7 +595,31 @@ hr { /* 구분선 */
 $(document).ready(function() {
 	
 	$("#listBtn").on("click", function() {
-		$("#listForm").submit();
+		var html = "";
+		
+	html += "<div class=\"popup_cont\">";
+	html += 	"<div class=\"msg_1\">내용이 저장되지 않았습니다.</div>";
+	html += 	"<div class=\"msg_2\">페이지를 나가시겠습니까?</div>";
+	html += "</div>";
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "알림",
+			contents : html,
+			contentsEvent : function() {
+				
+			},
+			buttons : [{
+				name : "확인",
+				func:function() {
+					$("#listForm").submit();
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "취소"
+			}]			
+		});
 	});	
 	
 	$("#writeBtn").on("click", function() {
@@ -618,6 +660,7 @@ $(document).ready(function() {
 		}	
 	}); 
 	
+	/* **************** 고객사 팝업 **************** */
 	$("#ccIcon").on("click", function() {
 		var html = "";
 		

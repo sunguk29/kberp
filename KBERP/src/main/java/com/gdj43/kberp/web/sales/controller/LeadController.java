@@ -47,8 +47,8 @@ public class LeadController {
 		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(dt);
-		cal.add(Calendar.DATE, -30);
-		
+		cal.add(Calendar.DATE, -60);
+
 		
 		String searchDate = sdf.format(cal.getTime());
 		String searchDate2 = sdf.format(dt);
@@ -80,9 +80,16 @@ public class LeadController {
 		// 총 게시글 수
 		int cnt = iCommonService.getIntData("lead.getLeadCnt", params);
 		
+		int listCnt = iCommonService.getIntData("lead.getListCnt", params);
 		int ongoingCnt = iCommonService.getIntData("lead.getOngoingCnt", params);
 		int rcgntnCnt = iCommonService.getIntData("lead.getRcgntnCnt", params);
 		int failCnt = iCommonService.getIntData("lead.getFailCnt", params);
+		
+		modelMap.put("cnt", cnt);
+		modelMap.put("listCnt", listCnt);
+		modelMap.put("ongoingCnt", ongoingCnt);
+		modelMap.put("rcgntnCnt", rcgntnCnt);
+		modelMap.put("failCnt", failCnt);		
 		
 		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
 				
@@ -91,10 +98,6 @@ public class LeadController {
 		
 		List<HashMap<String, String>> list = iCommonService.getDataList("lead.getLeadList", params);
 		
-		modelMap.put("cnt", cnt);
-		modelMap.put("ongoingCnt", ongoingCnt);
-		modelMap.put("rcgntnCnt", rcgntnCnt);
-		modelMap.put("failCnt", failCnt);		
 		modelMap.put("list", list);
 		modelMap.put("pb", pb);
 		
