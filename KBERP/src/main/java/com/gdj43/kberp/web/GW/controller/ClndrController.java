@@ -42,7 +42,7 @@ public class ClndrController {
 	Map<String, Object> modelMap = new HashMap<String, Object>();
 	
 	List<HashMap<String, String>> list = iClndrService.getSchdl(params);
-	list = Utils.toLowerListMapKey(list); //키를 소문자로
+	list = Utils.toCamelListMapKey(list); //키를 카멜식으로 
 	modelMap.put("list", list);
 	return mapper.writeValueAsString(modelMap);
 	}

@@ -23,7 +23,7 @@ public class FaqDao implements IFaqDao {
 	}
 
 	@Override
-	public HashMap<String, String> getfaq(HashMap<String, String> params) throws Throwable {
-		return sqlSession.selectOne("FQ.getfaq", params);
+	public HashMap<String, String> getfaqdt(HashMap<String, String> params) throws Throwable {
+		return sqlSession.selectOne("FQ.getfaqdt", params);
 	}
 }
