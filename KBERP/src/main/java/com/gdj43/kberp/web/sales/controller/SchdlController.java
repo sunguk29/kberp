@@ -34,6 +34,7 @@ public class SchdlController {
 	@Autowired
 	public IPagingService iPagingService;
 	
+	/* 영업 일정 목록 페이지 */
 	@RequestMapping(value = "/salesSchdl")
 	public ModelAndView salesSchdl(ModelAndView mav) throws Throwable {
 		
@@ -42,6 +43,8 @@ public class SchdlController {
 		return mav;
 	}
 	
+	
+	/* 영업 일정 목록 그리기 */
 	@RequestMapping(value = "/salesSchdlAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String salesSchdlAjax(@RequestParam HashMap<String, String> params) throws Throwable{
@@ -77,7 +80,7 @@ public class SchdlController {
 		return mapper.writeValueAsString(modelMap);
 	}
 
-	
+	/* 담당자 팝업 띄우기 */
 	@RequestMapping(value = "/mgrListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String mgrListAjax(@RequestParam HashMap<String, String> params, 
@@ -101,10 +104,11 @@ public class SchdlController {
 	
 	return mapper.writeValueAsString(modelMap);
 	}
+	
 	//영업일정 등록 - 영업 팝업, 리드 팝업 조회용	
-	@RequestMapping(value = "/salesSchdlPopAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@RequestMapping(value = "/salesPopAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String salesSchdlPopAjax(@RequestParam HashMap<String, String> params) throws Throwable{
+	public String salesPopAjax(@RequestParam HashMap<String, String> params) throws Throwable{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();		
@@ -112,22 +116,55 @@ public class SchdlController {
 		// 영업관리 목록 총 게시글 수
 		int salesCnt = iCommonService.getIntData("salesSchdl.getSalesCnt", params);
 		
-//		 리드 목록 총 게시글 수
-//		int leadCnt = iCommonService.getIntData("salesSchdl.getLeadCnt", params);
 		
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), salesCnt, 5, 5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), salesCnt, 4, 5);
 		
+		// 영업관리 페이지 시작 종료
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
+		
+		// 영업관리 목록 리스트로 가져오기
 		List<HashMap<String, String>> salesList = iCommonService.getDataList("salesSchdl.getSalesList", params);
 		
+		
+		// 영업관리 목록 가져오기 위한 작업
 		modelMap.put("salesList", salesList);
+		modelMap.put("salesPb", pb);
+		
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
+	/* 리드 팝업 띄우기 */
+	@RequestMapping(value = "/leadPopAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String leadPopAjax(@RequestParam HashMap<String, String> params) throws Throwable{
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		// 리드 목록 총 게시글 수
+		int leadCnt = iCommonService.getIntData("salesSchdl.getLeadCnt", params);
+		
+		// 페이징
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("lpage")), leadCnt, 4, 5);
+		
+		//리드 페이지 시작 종료
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		// 리드 목록 리스트로 가져오기
+		List<HashMap<String, String>> leadList = iCommonService.getDataList("salesSchdl.getLeadList", params);
+		
+		// 리드 목록 가져오기 위한 작업
+		modelMap.put("leadList", leadList);
 		modelMap.put("pb", pb);
 		
 		return mapper.writeValueAsString(modelMap);
 	}
 	
+	/* 영업 일정 등록 페이지 이동 */
 	@RequestMapping(value = "/salesSchdlReg")
 	public ModelAndView salesSchdlReg(ModelAndView mav) {
 		mav.setViewName("sales/salesSchdlReg");
@@ -135,6 +172,20 @@ public class SchdlController {
 		return mav;
 	}
 	
+	/* 영업 일정 상세보기 페이지 이동 */
+	@RequestMapping(value = "/salesSchdlCont")
+	public ModelAndView salesSchdlCOnt(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable{
+		
+		HashMap<String, String> data = iCommonService.getData("salesSchdl.salesSchdlCont", params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("sales/salesSchdlCont");
+		
+		return mav;
+	}
+	
+	/* 영업 일정 CRUD */
 	@RequestMapping(value = "/salesSchdlAction/{gbn}", method = RequestMethod.POST, produces = "text/json;charest=UTF-8")
 	@ResponseBody
 	public String salesSchdlActionAjax(@RequestParam HashMap<String, String> params,
@@ -150,10 +201,11 @@ public class SchdlController {
 				iCommonService.insertData("salesSchdl.salesSchdlAttFile", params); // 첨부파일 저장
 				break;
 			case "update":
-				
+				iCommonService.updateData("salesSchdl.salesSchdlAttFileUpdate", params);
+				iCommonService.updateData("salesSchdl.salesSchdlUpdate", params);
 				break;
 			case "delete":
-				
+				iCommonService.updateData("salesSchdl.salesSchdlDelete", params);
 				break;
 			}
 			modelMap.put("res", "success");
