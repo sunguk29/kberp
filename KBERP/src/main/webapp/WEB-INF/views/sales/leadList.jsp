@@ -448,10 +448,6 @@ $(document).ready(function() {
 		$("#actionForm").attr("action", "leadReg")
 		$("#actionForm").submit();
 	});
-	
-	$("#yesterday").on("click", function() {
-		$("#searchDate").val($("#searchDate").val() - 1);
-	});
 
 /* 리드 리스트 */
 function reloadList() {

@@ -49,7 +49,6 @@ public class LeadController {
 		cal.setTime(dt);
 		cal.add(Calendar.DATE, -60);
 
-		
 		String searchDate = sdf.format(cal.getTime());
 		String searchDate2 = sdf.format(dt);
 		
