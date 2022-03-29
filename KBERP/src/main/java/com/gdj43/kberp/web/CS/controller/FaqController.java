@@ -68,17 +68,17 @@ public class FaqController {
 	}
 	
 	
-	/*
-	 * @RequestMapping(value = "/faq") public ModelAndView faq(@RequestParam
-	 * HashMap<String, String> params, ModelAndView mav) throws Throwable {
-	 * HashMap<String, String> data = iFaqService.getfaq(params);
-	 * 
-	 * mav.addObject("data", data);
-	 * 
-	 * mav.setViewName("CS/faq");
-	 * 
-	 * return mav; 
-	 * }
-	 */
+	
+	  @RequestMapping(value = "/faqdt") public ModelAndView faqdt(@RequestParam
+	  HashMap<String, String> params, ModelAndView mav) throws Throwable {
+	  HashMap<String, String> data = iFaqService.getfaqdt(params);
+	  
+	  mav.addObject("data", data);
+	  
+	  mav.setViewName("CS/faqdt");
+	  
+	  return mav; 
+	  }
+	 
 	 
 }
