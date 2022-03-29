@@ -16,6 +16,7 @@
 	width: 1013px;
 }
 
+/* 개인 작업 영역 */
 .body {
 	display: block;
 	background-color: white;
@@ -31,7 +32,6 @@
 	margin: 20px auto;
 }
 
-/* 개인 작업 영역 */
 table{	
 	border: 1px;
 	width: 927px;
@@ -43,9 +43,6 @@ td:nth-child(2), td:nth-child(4){
 tr:nth-child(11) > td:nth-child(1){
 	border-bottom: 1px solid #d7d7d7;
 }
-/* tr:nth-child(9) > td:nth-child(2){
-	background-color: #F2F2F2;
-} */
 td:nth-child(1), td:nth-child(3){
 	text-align: center;
 }
@@ -152,7 +149,6 @@ td:nth-child(1), td:nth-child(3){
 .boldname{
 	font-weight: bold;
 }
-/* 팝업 버튼 */
 .btn_pos {
 	text-align: center;
 }
@@ -163,7 +159,6 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 100px;
 	text-align: center;
 }
-/* 첨부자료 */
 .cntrct_box_in {
 	width: 885px;
 	height: 100px;
@@ -222,10 +217,13 @@ td:nth-child(1), td:nth-child(3){
 #att {
 	display: none;
 }
+#fileName {
+	border: hidden;
+	outline: none;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
 	$("#listBtn").on("click", function() {
 		makePopup({
 			bg : true,
@@ -361,6 +359,12 @@ function findAddr(){
         }
     }).open();
 }
+
+function uploadName(e) {
+	var files = e.files;
+	var filename = files[0].name;
+	$("#fileName").val(filename);
+}
 </script>
 </head>
 <body>
@@ -483,13 +487,14 @@ function findAddr(){
 						</tbody>
 					</table>
 					<!-- 첨부파일 -->
+					<input type="file" id="att" name="att" onchange="uploadName(this)" />
+					<input type="hidden" id="attFile" name="attFile" />
 					<div class="rvn_txt"> 첨부파일
-						<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" border='0' />
+						<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" />
 					</div>
 					<div class="cntrct_box_in">
+						<input type="text" id="fileName" name="fileName" readonly="readonly" />
 					</div>
-					<input type="file" id="att" name="att" />
-					<input type="hidden" id="attFile" name="attFile" />
 				</form>
 			</div>
 		</div>

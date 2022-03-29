@@ -604,6 +604,11 @@ textarea {
 	height: 322px;
 	padding-top: 8px;
 }
+[href] {
+	color: black;
+	text-decoration: none;
+	
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -698,7 +703,7 @@ $(document).ready(function() {
 	
 	$(".opbx").on("click", ".del", function() {
 		var cmntNum = $(this).children("#cmntNum").val();
-		document.getElementById("cmNum").value = cmntNum;
+		document.getElementById("cmntNum").value = cmntNum;
 		
 		makePopup({
 			bg : false,
@@ -711,7 +716,7 @@ $(document).ready(function() {
 			buttons : [{
 				name : "예",
 				func:function() {
-					
+					console.log($("#cmntNum").val());
 					var params = $("#botOpActionForm").serialize();
 					
 					$.ajax({
@@ -774,7 +779,7 @@ $(document).ready(function() {
 		html += "		</tr>                                                                                                         ";
 		html += "		<tr height=\"10\">                                                                                            ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"휴대폰 번호*\" /></td>                                   ";
-		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"mbl\" name=\"mbl\" /></td>									  ";
+		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"mbl\" name=\"mbl\" placeholder=\"'-' 를 포함하지 않은 숫자만 입력해주세요.\" /></td>									  ";
 		html += "		</tr>                                                                                                         ";
 		html += "		<tr height=\"10\">                                                                                            ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"메일\" /></td>                                           ";
@@ -1427,16 +1432,19 @@ function drawMngPaging(mngPb) {
 					</tbody>
 				</table>
 				<!-- 첨부파일 -->
+				<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+				<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
 				<div class="rvn_txt">
 					첨부파일
 				</div>
 				<div class="cntrct_box_in">
+					<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
 				</div>
 <!-- ************************************************ 상세보기 하단 *********************************************** -->
 			<form action="#" id="botOpActionForm" method="post">
 				<input type="hidden" name="ccn" value="${param.ccn}" />
 				<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
-				<input type="hidden" id="cmNum" name="cmNum" />
+				<input type="hidden" id="cmntNum" name="cmntNum" />
 				<!-- 의견 -->
 				<div class="mgtop"></div>
 				<div class="op_title"></div>
@@ -1455,7 +1463,7 @@ function drawMngPaging(mngPb) {
 				<hr color="#F2B705" width="925px">
 				<div class="cbx"></div>
 			</form>
-				<!-- 히스토리 -->
+<!-- 				히스토리
 				<div class="mgtop"></div>
 				<div class="bot_title"><h3>히스토리(5)<div class="drop_btn"></div></h3></div>
 				<hr color="#F2B705" width="925px">
@@ -1465,7 +1473,7 @@ function drawMngPaging(mngPb) {
 						<div class="txtOp">내용: 등록된 영업기회 표시</div>
 						<div class="txtOp">담당자:000</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- 끝 -->
 <!-- *********************************************************************************************************** -->
 			</div>
