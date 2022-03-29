@@ -222,6 +222,10 @@ td:nth-child(1), td:nth-child(3){
 #att {
 	display: none;
 }
+#fileName {
+	border: hidden;
+	outline: none;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -255,8 +259,19 @@ $(document).ready(function() {
 		findAddr();
 	});
 	
-	$(".aff_btn").on("click", function() {
+	$(".rvn_txt").on("click", ".aff_btn", function() {
 		$("#att").click();
+	});
+	
+	$("#fileDelete").on("click", function() {
+		$("#file_name").remove();
+		$(this).remove();
+
+		var html = "";
+		
+		html += "<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
+		
+		$("#uploadBtn").html(html);
 	});
 	
 	$("#saveBtn").on("click", function() {
@@ -288,15 +303,15 @@ $(document).ready(function() {
 				buttons : [{
 					name : "저장",
 					func:function() {
-						var addForm = $("#addForm");
+						var updateForm = $("#updateForm");
 						
-						addForm.ajaxForm({
+						updateForm.ajaxForm({
 							success : function(res) {
 								if(res.fileName.length > 0) {
 									$("#attFile").val(res.fileName[0]);
 								}
 								
-								var params = $("#addForm").serialize();
+								var params = $("#updateForm").serialize();
 								
 								$.ajax({
 									type : "post",
@@ -322,7 +337,7 @@ $(document).ready(function() {
 							}
 						});
 						
-						addForm.submit();
+						updateForm.submit();
 						console.log("One!");
 						closePopup();
 					}
@@ -365,6 +380,11 @@ function findAddr(){
         }
     }).open();
 }
+function uploadName(e) {
+	var files = e.files;
+	var filename = files[0].name;
+	$("#fileName").val(filename);
+}
 </script>
 </head>
 <body>
@@ -398,7 +418,7 @@ function findAddr(){
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="bodyWrap">
-				<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
+				<form action="fileUploadAjax" id="updateForm" method="post" enctype="multipart/form-data">
 					<input type="hidden" id="page" name="page" value="${param.page}" />
 					<input type="hidden" name="ccn" value="${param.ccn}" />
 					<input type="hidden" name="top" value="${param.top}" />
@@ -528,12 +548,22 @@ function findAddr(){
 							</tr>
 						</tbody>
 					</table>
+					<!-- 첨부파일 -->
+					<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+					<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
 					<div class="rvn_txt"> 첨부파일
-						<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" border='0' />
+						<span id="uploadBtn">
+							<c:if test="${empty data.ATT_FILE_NAME}">
+								<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" />
+							</c:if>
+						</span>
 					</div>
 					<div class="cntrct_box_in">
+						<span id="file_name">${fileName}</span>
+						<input type="button" id="fileDelete" value="삭제" />
+						<input type="text" id="fileName" readonly="readonly" />
 					</div>
-					<input type="file" id="att" name="att" />
+					<input type="file" id="att" name="att" onchange="uploadName(this)" />
 					<input type="hidden" id="attFile" name="attFile" />
 				</form>
 			</div>

@@ -1,4 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="FQ">
+<select id="getfaqList" resultType="hashmap" parameterType="hashmap">
+	SELECT F.FAQ_NUM, F.WRTNG_TITLE, F.WRTNG_DATE
+	FROM (SELECT FAQ_NUM, WRTNG_TITLE, TO_CHAR(WRTNG_DATE, 'YYYY-MM-DD') AS WRTNG_DATE,
+	        ROW_NUMBER() OVER(ORDER BY FAQ_NUM DESC) AS RNUM
+	     FROM FAQ)F
+	WHERE F.RNUM BETWEEN #{startCount} AND #{endCount}
+</select>
+
+<select id="getfaqCnt" resultType="Integer" parameterType="hashmap">
+	SELECT COUNT(*) AS CNT
+	FROM FAQ
+	WHERE 1 = 1
+</select>
+
+<select id="getfaqdt" resultType="hashmap" parameterType="hashmap">
+	SELECT FAQ_NUM, WRTNG_TITLE, TO_CHAR(WRTNG_DATE, 'YYYY-MM-DD') AS WRTNG_DATE, WRTNG_CONT
+	FROM FAQ
+	WHERE FAQ_NUM = #{no}
+</select>
+
+<insert id="getfaqAdd" parameterType="hashmap">
+	INSERT INTO FAQ(FAQ_NUM, EMP_NUM, WRTNG_TITLE, WRTNG_CONT, WRTNG_DATE,CTGRY_NUM)
+	VALUES(FAQ_SEQ.NEXTVAL, #{emp_num}, #{title}, #{cont}, #{wrtng_date}, #{ctgry_num})
+</insert>
+
+<update id="faqUpdate" parameterType="hashmap">
+		
+</update>
 </mapper>

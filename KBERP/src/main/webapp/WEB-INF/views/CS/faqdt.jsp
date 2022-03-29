@@ -49,13 +49,20 @@
 .wrt_con {
 	resize: none;
 }
-.bottom {
-	margin-top: 35px;
+
+.bottom1 {
+	
+	float: left;
+}
+.bottom2 {
+	float: right;
+	margin-top: 30px;
+	vertical-align: bottom;
 }
 
-.bottom input[type="text"] {
-	width: 450px;
-	height: 40px;
+.bottom2 input[type="text"] {
+	width: 440px;
+	height: 30px;
 }
 
 .cmn_btn {
@@ -106,7 +113,10 @@
 					<div class="middle">
 						<textarea class="wrt_con" rows="20" cols="98" readonly="readonly">${data.WRTNG_CONT}</textarea>
 					</div>
-					<div class="bottom">
+					<div class="bottom1">
+					<div class="cmn_btn">목록</div>
+					</div>
+					<div class="bottom2">
 					<div class="cmn_btn">수정</div>
 					<div class="cmn_btn">삭제</div>
 					</div>

@@ -19,7 +19,6 @@
 
 </style>
 <script type = "text/javascript">
-<script type="text/javascript">
 $(document).ready(function() {
 	$("#alertBtn").on("click", function() {
 		makeAlert("하이", "내용임");

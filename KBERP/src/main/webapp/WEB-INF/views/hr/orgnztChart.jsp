@@ -61,6 +61,7 @@
     height: 506px;
     border: solid 1px gray;
     border-radius: 6px;
+    user-select: none;
 }
 
 .orgnzt_area > div{
@@ -121,7 +122,6 @@
     vertical-align: top;
     width: 80px;
     height: 25px;
-    color: black;
     font-size: 10pt;
     line-height: 29px;
 }
@@ -144,7 +144,7 @@
 
 
 .orgnzt_depth2 {
-	padding-left: 25px;
+	padding-left: 15px;
     display: inline-block;
     vertical-align: top;
     width: 235px;
@@ -176,7 +176,7 @@
 }
 
 .orgnzt_depth3 {
-	padding-left: 30px;
+	padding-left: 15px;
     display: inline-block;
     vertical-align: top;
     width: 205px;
@@ -198,7 +198,7 @@
 	display: none;
 }
 .orgnzt_depth4 {
-	padding-left: 30px;
+	padding-left: 15px;
     display: inline-block;
     vertical-align: top;
     width: 205px;
@@ -208,36 +208,92 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	$(".orgnzt_area").on("click", ".orgnzt_depth1, .orgnzt_depth2, .orgnzt_depth3", function(e) {
+		var depth = $(this).attr("class").substring(12);
+		var obj = $(this);
+		console.log(depth == "1");
+		if(depth == "1") {
+			$(".orgnzt_depth2_wrap").toggle("fast", function() {
+				if($(".orgnzt_depth2_wrap").is(":visible")) {
+					$(".orgnzt_depth1").css({"color":"#2E83F2", "font-weight":"bold"});
+				} else {
+					$(".orgnzt_depth1").css({"color":"black", "font-weight":""});
+				}
+			}); // 토글 show/hide
+			
+		} else {
+			e.stopPropagation(); // 버블업 방지
+			$(this).children(".orgnzt_depth" + (depth * 1 + 1) + "_wrap").toggle("fast", function() {
+				if(obj.children(".orgnzt_depth" + (depth * 1 + 1) + "_wrap").is(":visible")) {
+					if(depth == "2") {
+						$(".orgnzt_area .orgnzt_depth3_area").css({"color":"black", "font-weight":""});
+					} else if(depth == "3") {
+						$(".orgnzt_area .orgnzt_depth2_area").css({"color":"black", "font-weight":""});
+						
+						obj.parent().parent().children(".orgnzt_depth2_area").css({"color":"#2E83F2", "font-weight":"bold"});
+					}
+					
+					$(".orgnzt_area .orgnzt_depth" + depth + "_area").css({"color":"black", "font-weight":""});
+					
+					obj.children(".orgnzt_depth" + depth + "_area").css({"color":"#2E83F2", "font-weight":"bold"});
+				} else {
+					$(".orgnzt_area .orgnzt_depth" + depth + "_area").css({"color":"black", "font-weight":""});
+				}
+			}); // 토글 show/hide
+			
+		}
+		
+		
+	});
+	/*
 // 1뎁스  
    $(".orgnzt_depth1").on("click", function() {
-	     console.log("depth1 click!")
-         console.log(this)
-         
-     // 클릭 시 css변경 (작동안됨..)
-	 if($(this).hasClass("depth_slc_icon")){ //this가 depth_slc_icon 클래스 가지고 있을시 ( 선택되지 않은 상태일 시 )
-		 console.log("hasClass true")
-          $(".depth_slc_icon").removeClass('depth_slc_icon').addClass('depth_slc_icon_on'); // icon 클래스명 on 추가
-          $(".depth_txt").removeClass('depth_txt').addClass('depth_txt_on'); // txt 클래스명 on 추가
-      } else { 	
-		 console.log("hasClass false") 
-          $(".depth_slc_icon_on").removeClass('depth_slc_icon_on').addClass('depth_slc_icon'); // icon 클래스명 on 제거
-          $(".depth_txt_on").removeClass('depth_txt_on').addClass('depth_txt'); // txt 클래스명 on 제거 
-	  }
-	   // 토글 show/hide  
-	   $(".orgnzt_depth2_wrap").toggle("fast");
+	   console.log("depth1 click!", this)
+	   $(".orgnzt_depth2_wrap").toggle("fast"); // 토글 show/hide   
+	   // 선택유무에 따른 css 변경
+       if($(this).find("input[type=hidden]").val() == "false") {
+		   console.log("selected", true)
+    	   $(this).find("input[type=hidden]").val("true")
+		   $(this).css({"color":"#2E83F2", "font-weight":"bold"});        	 
+       } else {
+		   console.log("selected", false)
+    	   $(this).find("input[type=hidden]").val("false")
+       	   $(this).css({"color":"black", "font-weight":""}); 
+       }
    });
 // 2뎁스  
    $(".orgnzt_depth2").on("click", function(e) {
-	   e.stopPropagation();
-	   console.log("depth2 click!")
-	   $(this).children(".orgnzt_depth3_wrap").toggle("fast");
+	   console.log("depth2 click!", this)
+	   e.stopPropagation(); // 버블업 방지
+	   $(this).children(".orgnzt_depth3_wrap").toggle("fast"); // 토글 show/hide   
+	   // 선택유무에 따른 css 변경
+       if($(this).find("input[type=hidden]").val() == "false") {
+		   console.log("selected", true)
+    	   $(this).find("input[type=hidden]").val("true")
+	  	   $(this).find(".orgnzt_depth2_area").css({"color":"#2E83F2", "font-weight":"bold"});        	 
+       } else {
+		   console.log("selected", false)
+    	   $(this).find("input[type=hidden]").val("false")
+      	   $(this).find(".orgnzt_depth2_area").css({"color":"black", "font-weight":""}); 
+       }
    });
 // 3뎁스  
    $(".orgnzt_depth3").on("click", function(e) {
-	   e.stopPropagation();
-	   console.log("depth3 click!")
-	   $(this).children(".orgnzt_depth4_wrap").toggle("fast");
+	   console.log("depth3 click!", this)
+	   e.stopPropagation(); // 버블업 방지
+	   $(this).children(".orgnzt_depth4_wrap").toggle("fast"); // 토글 show/hide  
+	   // 선택유무에 따른 css 변경
+       if($(this).find("input[type=hidden]").val() == "false") {
+		   console.log("selected", true)
+    	   $(this).find("input[type=hidden]").val("true")
+      	   $(this).find(".orgnzt_depth3_area").css({"color":"black", "font-weight":""}); 
+       } else {
+		   console.log("selected", false)
+    	   $(this).find("input[type=hidden]").val("false")
+	  	   $(this).find(".orgnzt_depth3_area").css({"color":"#2E83F2", "font-weight":"bold"});        	 
+       }
    });
+   */
 });
 
 /* function orgnztOnOff(this){
@@ -291,12 +347,14 @@ function drawDept(dept){
 				<div class="orgnzt_area">
 					<div class="orgnzt_depth1_wrap">
 						<div class="orgnzt_depth1" >
+							<input type="hidden" class="item_selected" value="false" />
 							<div class="depth_slc_icon"></div>
 							<div class="kb_icon"></div>
 							<div class="depth_txt">카카오뱅크</div>
 						</div>
 						<div class="orgnzt_depth2_wrap">
 							<div class="orgnzt_depth2" >
+								<input type="hidden" class="item_selected" value="false" />
 								<div class="orgnzt_depth2_area">
 									<div class="depth_slc_icon"></div>
 									<div class="folder_icon"></div>
@@ -304,6 +362,7 @@ function drawDept(dept){
 								</div>
 								<div class="orgnzt_depth3_wrap" >
 									<div class="orgnzt_depth3">
+									<input type="hidden" class="item_selected" value="false" />
 										<div class="orgnzt_depth3_area">
 											<div class="depth_slc_icon"></div>
 											<div class="folder_icon"></div>
@@ -311,6 +370,7 @@ function drawDept(dept){
 										</div>
 										<div class="orgnzt_depth4_wrap" >
 											<div class="orgnzt_depth4" >
+											<input type="hidden" class="item_selected" value="false" />
 												<div class="orgnzt_depth4_area">
 													<div class="depth_slc_icon"></div>
 													<div class="profile_icon"></div>
@@ -318,6 +378,7 @@ function drawDept(dept){
 												</div>
 											</div>
 											<div class="orgnzt_depth4">
+											<input type="hidden" class="item_selected" value="false" />
 												<div class="orgnzt_depth4_area">
 													<div class="depth_slc_icon"></div>
 													<div class="profile_icon"></div>
@@ -327,15 +388,35 @@ function drawDept(dept){
 										</div>
 									</div>
 									<div class="orgnzt_depth3">
+											<input type="hidden" class="item_selected" value="false" />
 										<div class="orgnzt_depth3_area">
 											<div class="depth_slc_icon"></div>
 											<div class="folder_icon"></div>
 											<div class="depth_txt">영업2팀</div>
 										</div>
+										<div class="orgnzt_depth4_wrap" >
+											<div class="orgnzt_depth4" >
+											<input type="hidden" class="item_selected" value="false" />
+												<div class="orgnzt_depth4_area">
+													<div class="depth_slc_icon"></div>
+													<div class="profile_icon"></div>
+													<div class="depth_txt">유은지</div>
+												</div>
+											</div>
+											<div class="orgnzt_depth4">
+											<input type="hidden" class="item_selected" value="false" />
+												<div class="orgnzt_depth4_area">
+													<div class="depth_slc_icon"></div>
+													<div class="profile_icon"></div>
+													<div class="depth_txt">유은지</div>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
 							<div class="orgnzt_depth2" >
+								<input type="hidden" class="item_selected" value="false" />
 								<div class="orgnzt_depth2_area">
 									<div class="depth_slc_icon"></div>
 									<div class="folder_icon"></div>
@@ -343,6 +424,7 @@ function drawDept(dept){
 								</div>
 								<div class="orgnzt_depth3_wrap" >
 									<div class="orgnzt_depth3">
+									<input type="hidden" class="item_selected" value="false" />
 										<div class="orgnzt_depth3_area">
 											<div class="depth_slc_icon"></div>
 											<div class="folder_icon"></div>
@@ -350,6 +432,7 @@ function drawDept(dept){
 										</div>
 										<div class="orgnzt_depth4_wrap" >
 											<div class="orgnzt_depth4">
+											<input type="hidden" class="item_selected" value="false" />
 												<div class="orgnzt_depth4_area">
 													<div class="depth_slc_icon"></div>
 													<div class="profile_icon"></div>
@@ -357,6 +440,7 @@ function drawDept(dept){
 												</div>
 											</div>
 											<div class="orgnzt_depth4">
+											<input type="hidden" class="item_selected" value="false" />
 												<div class="orgnzt_depth4_area">
 													<div class="depth_slc_icon"></div>
 													<div class="profile_icon"></div>
@@ -366,10 +450,29 @@ function drawDept(dept){
 										</div>
 									</div>
 									<div class="orgnzt_depth3">
+									<input type="hidden" class="item_selected" value="false" />
 										<div class="orgnzt_depth3_area">
 											<div class="depth_slc_icon"></div>
 											<div class="folder_icon"></div>
 											<div class="depth_txt">영업2팀</div>
+										</div>
+										<div class="orgnzt_depth4_wrap" >
+											<div class="orgnzt_depth4" >
+											<input type="hidden" class="item_selected" value="false" />
+												<div class="orgnzt_depth4_area">
+													<div class="depth_slc_icon"></div>
+													<div class="profile_icon"></div>
+													<div class="depth_txt">유은지</div>
+												</div>
+											</div>
+											<div class="orgnzt_depth4">
+											<input type="hidden" class="item_selected" value="false" />
+												<div class="orgnzt_depth4_area">
+													<div class="depth_slc_icon"></div>
+													<div class="profile_icon"></div>
+													<div class="depth_txt">유은지</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
