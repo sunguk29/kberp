@@ -647,7 +647,6 @@ $(document).ready(function() {
 		html += "	<option value=\"0\">이름</option>";
 		html += "	<option value=\"1\">등급</option>";
 		html += "	<option value=\"2\">전화번호</option>";
-		html += "	<option value=\"3\">최근상담일</option>";
 		html += "</select>";
 		html += "</div>";
 		html += "</form>";
@@ -657,14 +656,12 @@ $(document).ready(function() {
 		html += "		<col width=\"100\"/>";
 		html += "		<col width=\"100\"/>";
 		html += "		<col width=\"200\"/>";
-		html += "		<col width=\"150\"/>";
 		html += "	</colgroup>";
 		html += "	<thead>";
 		html += "		<tr>";
 		html += "			<th>이름</th>";
 		html += "			<th>등급</th>";
 		html += "			<th>전화번호</th>";
-		html += "			<th>최근상담일</th>";
 		html += "		</tr>";
 		html += "	</thead>";
 		html += "	<tbody id=\"clntPop\">";
@@ -706,8 +703,7 @@ $(document).ready(function() {
 				}
 			}]
 		});
-		$("#oldsearchTxt").val($("#searchTxt").val());
-		reloadList();
+		
 	});
 	
 	function drawList(list) {
@@ -718,7 +714,6 @@ $(document).ready(function() {
 			html += "<td>" + data.CLNT_NAME + "</td>"
 			html += "<td>" + data.CLNT_GRADE + "</td>"
 			html += "<td>" + data.PHONE_NUM_1 + "</td>"
-			html += "<td>" + data.WRITE_DATE + "</td>"
 			html += "</tr>"
 		}
 		$("#clntPop").html(html);
@@ -791,7 +786,7 @@ $(document).ready(function() {
 			
 			$.ajax({
 				type : "post",
-				url : "callCenterAction/insert",
+				url : "callCenterAction/ClntSave",
 				dataType : "json",
 				data : params,
 				success : function(res) {
@@ -830,7 +825,7 @@ $(document).ready(function() {
 			
 			$.ajax({
 				type : "post",
-				url : "cnslNoteAction/insert",
+				url : "callCenterAction/NoteSave",
 				dataType : "json",
 				data : params,
 				success : function(res) {
@@ -848,6 +843,42 @@ $(document).ready(function() {
 			}); // ajax end
 		} // else end
 	}); // saveBtn end
+	
+	function reloadCnslList() {
+		var params = $("#cnslForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "callCenterCnslListAjax",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				console.log(res);
+				drawCnslList(res.list);
+			},
+			error : function(request, status, error) {
+				console.log(request.responseText);
+
+			}
+		});
+	}
+	
+	function drawCnslList(list) {
+		var html = "";
+		
+		for(var data of list) {
+			html += "<tr no=\"" + data.I.CLNT_NUM + "\">";
+			html += "<td>"+ data.I.CLNT_NAME + "</td>"
+			html += "<td>"+ data.I.PHONE_NUM_1 + "</td>"
+			html += "<td>"+ data.E.EMP_NAME + "</td>"
+			html += "<td>"+ data.N.CNSL_TYPE_NUM + "</td>"
+			html += "<td>"+ data.WRITE_DATE + "</td>"
+			html += "<td>"+ data.N.CNSL_RSLT_NUM + "</td>"
+			html += "</tr>";
+		}
+		$("#cnslList").html(html);
+	}
+	
 });
 
 
@@ -933,7 +964,7 @@ function checkEmpty(sel) {
 							<input type="hidden" id="emp_num" name="emp_num" value="${sEmpNum}"/>
 							<input type="hidden" id="clnt_num" name="clnt_num" value="${data.CLNT_NUM}"/>
 							<div class="cnsl_type">상담유형</div>
-							<select id="big_sel" name="big_sel">
+							<select id="cnsl_type_num" name="cnsl_type_num">
 								<option value="">대분류</option>
 							</select>
 							<select id="small_sel" name="small_sel">
@@ -962,9 +993,11 @@ function checkEmpty(sel) {
 			<!-- 상담이력 시작 -->
 			<div class="call_area">
 				<div class="bottom_1">
+				<form action="#" id="cnslForm" method="post">
 					<div class="cnsl_rcrd_header">
 						<div class="cnsl_rcrd">상담이력</div>
 					</div>
+				
 					<div class="cnsl_rcrd_cont">
 						<table class="cnsl_rcrd_table">
 							<colgroup>
@@ -985,9 +1018,10 @@ function checkEmpty(sel) {
 									<th>상담결과</th>
 								</tr>
 							</thead>
-							<tbody></tbody>
+							<tbody id="cnslList"></tbody>
 						</table>
 					</div>
+				</form>
 				</div>
 				
 				

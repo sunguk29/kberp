@@ -24,7 +24,7 @@ public class FaqService implements IFaqService {
 	}
 
 	@Override
-	public HashMap<String, String> getfaq(HashMap<String, String> params) throws Throwable {
-		return iFaqDao.getfaq(params);
+	public HashMap<String, String> getfaqdt(HashMap<String, String> params) throws Throwable {
+		return iFaqDao.getfaqdt(params);
 	}
 }

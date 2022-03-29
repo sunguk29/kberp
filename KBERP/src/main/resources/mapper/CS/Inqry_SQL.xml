@@ -65,8 +65,12 @@
 		WHERE I.INQRY_NUM = #{no}
 	</select>
 	
-	
-	<select id="ansrAdd" parameterType="hashmap">
-		
-	</select>
+	<update id="ansrAdd" parameterType="hashmap">
+		UPDATE INQRY SET EMP_NUM = #{emp_name},
+		                 ANSR_TITLE = #{ansr_title},
+		                 ANSR_CONT = #{ansr_cont},
+		                 ANSR_ATT_FILE = #{ansr_attFile},
+		                 ANSR_DATE = SYSDATE
+		WHERE INQRY_NUM = #{no}
+	</update>
 </mapper>

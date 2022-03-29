@@ -18,31 +18,31 @@
 					<when test="psNum != 0" > <!-- 선택안함 : 0 이 아니면 해당 번호 목록으로 검색 -->
 						AND L.PRGRS_STS_NUM = #{psNum}
 					</when>
-				</choose>
+				</choose> 
 				<choose>
-					<when test="mngrSearchTxt != null and mngrSearchTxt != ''"> <!-- 담당자텍스트 박스 -->
-						AND E.EMP_NAME LIKE '%' || #{mngrSearchTxt} || '%'
+					<when test="mngEmp != null and mngEmp != ''"> <!-- 담당자텍스트 박스 -->
+						AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'
 					</when>
 				</choose>
-				<if test="searchTxt != null and searchTxt != ''">
+				<if test="searchTxt != null and searchTxt != ''"> <!-- 검색어가 비어있지 않으면 -->
 					<choose>
 						<when test="srchType == 0">
-							AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
-							OR CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-							OR EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
-							OR L.LEAD_NUM LIKE '%' || #{searchTxt} || '%'
+							AND (L.LEAD_NAME LIKE '%' || #{searchTxt} || '%' OR 
+                                 CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%' OR
+                                 EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%' OR 
+                                 L.LEAD_NUM LIKE '%' || #{searchTxt} || '%')
 						</when>
 						<when test="srchType == 1">
-							AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
+							AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%' <!-- 리드명 -->
 						</when>
 						<when test="srchType == 2">
-							AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+							AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%' <!-- 고객사명 -->
 						</when>
 						<when test="srchType == 3">
-							AND EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
+							AND EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%' <!-- 고객명 -->
 						</when>
 						<when test="srchType == 4">
-							AND L.LEAD_NUM LIKE '%' || #{searchTxt} || '%'
+							AND L.LEAD_NUM LIKE '%' || #{searchTxt} || '%' <!-- 리드번호 -->
 						</when>			
 					</choose>
 				</if> ) LL
@@ -60,22 +60,22 @@
 		WHERE 1 = 1
 		AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{searchDate} AND #{searchDate2}
 			<choose>
-				<when test="psNum != 0">
+				<when test="psNum != 0"> 
 					AND PRGRS_STS_NUM = #{psNum}
 				</when>
 			</choose>
 			<choose>
-				<when test="mngrSearchTxt != null and mngrSearchTxt != ''">
-					AND E.EMP_NAME LIKE '%' || #{mngrSearchTxt} || '%'
+				<when test="mngEmp != null and mngEmp != ''">
+					AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'
 				</when>
 			</choose>
 			<if test="searchTxt != null and searchTxt != ''">
 					<choose>
 						<when test="srchType == 0">
-							AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
-							OR CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-							OR EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
-							OR L.LEAD_NUM LIKE '%' || #{searchTxt} || '%'
+							AND (L.LEAD_NAME LIKE '%' || #{searchTxt} || '%' OR 
+                                 CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%' OR
+                                 EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%' OR 
+                                 L.LEAD_NUM LIKE '%' || #{searchTxt} || '%')
 						</when>
 						<when test="srchType == 1">
 							AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
@@ -93,6 +93,18 @@
 			</if>
 	</select>
 	
+	<select id="getListCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM LEAD L LEFT OUTER JOIN EMP E
+		                   		 ON L.MNGR_EMP_NUM = E.EMP_NUM
+		            INNER JOIN ENTRPRS_CLNT EC
+		                    ON L.CLNT_NUM = EC.CLNT_NUM
+		            INNER JOIN CLNT_CMPNY CC
+		                    ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
+		WHERE 1 = 1
+		AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{searchDate} AND #{searchDate2}
+	</select>
+	
 	<select id="getOngoingCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
 		FROM LEAD L LEFT OUTER JOIN EMP E
@@ -103,38 +115,6 @@
 		                    ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
 		WHERE L.PRGRS_STS_NUM = 1
 		AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{searchDate} AND #{searchDate2}
-		<choose>
-			<when test="psNum != 0">
-				AND L.PRGRS_STS_NUM = #{psNum}
-			</when>
-		</choose>
-		<choose>
-			<when test="mngrSearchTxt != null and mngrSearchTxt != ''">
-				AND E.EMP_NAME LIKE '%' || #{mngrSearchTxt} || '%'
-			</when>
-		</choose>
-		<if test="searchTxt != null and searchTxt != ''">
-			<choose>
-				<when test="srchType == 0">
-					AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
-					OR CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-					OR EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
-					OR L.LEAD_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="srchType == 1">
-					AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="srchType == 2">
-					AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="srchType == 3">
-					AND EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="srchType == 4">
-					AND L.LEAD_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>			
-			</choose>
-		</if>
 	</select>
 	
 	<select id="getRcgntnCnt" resultType="Integer" parameterType="hashmap">
@@ -147,38 +127,6 @@
 		                    ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
 		WHERE L.PRGRS_STS_NUM = 2
 		AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{searchDate} AND #{searchDate2}
-		<choose>
-			<when test="psNum != 0">
-				AND PRGRS_STS_NUM = #{psNum}
-			</when>
-		</choose>
-		<choose>
-			<when test="mngrSearchTxt != null and mngrSearchTxt != ''">
-				AND E.EMP_NAME LIKE '%' || #{mngrSearchTxt} || '%'
-			</when>
-		</choose>
-		<if test="searchTxt != null and searchTxt != ''">
-			<choose>
-				<when test="srchType == 0">
-					AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
-					OR CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-					OR EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
-					OR L.LEAD_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="srchType == 1">
-					AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="srchType == 2">
-					AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="srchType == 3">
-					AND EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="srchType == 4">
-					AND L.LEAD_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>			
-			</choose>
-		</if>
 	</select>
 	
 	<select id="getFailCnt" resultType="Integer" parameterType="hashmap">
@@ -191,41 +139,9 @@
 		                    ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
 		WHERE L.PRGRS_STS_NUM = 3
 		AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{searchDate} AND #{searchDate2}
-		<choose>
-			<when test="psNum != 0">
-				AND PRGRS_STS_NUM = #{psNum}
-			</when>
-		</choose>
-		<choose>
-			<when test="mngrSearchTxt != null and mngrSearchTxt != ''">
-				AND E.EMP_NAME LIKE '%' || #{mngrSearchTxt} || '%'
-			</when>
-		</choose>
-		<if test="searchTxt != null and searchTxt != ''">
-			<choose>
-				<when test="srchType == 0">
-					AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
-					OR CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-					OR EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
-					OR L.LEAD_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="srchType == 1">
-					AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="srchType == 2">
-					AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="srchType == 3">
-					AND EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="srchType == 4">
-					AND L.LEAD_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>			
-			</choose>
-		</if>
 	</select>
 	
-	
+<!-- 담당자 팝업 리스트 -->
 	<select id="getMngrList" resultType="hashmap" parameterType="hashmap">
 		SELECT MNGR.EMP_NUM, MNGR.EMP_NAME, MNGR.RANK_NAME, MNGR.DEPT_NAME
 		FROM ( SELECT E.EMP_NUM, E.EMP_NAME, R.RANK_NAME, D.DEPT_NUM, D.DEPT_NAME, ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM
@@ -241,13 +157,13 @@
 		       			AND D.DEPT_NUM = #{deptS}
 					</when>
 				</choose>
-				<if test="searchTxt != null and searchTxt != ''">
+				<if test="searchT != null and searchT != ''">
 		        	<choose>
 		       			<when test="empS == 0">
-		            	   AND E.EMP_NUM LIKE '%' || #{searchTxt} || '%'
+		            	   AND E.EMP_NUM LIKE '%' || #{searchT} || '%'
 		            	</when>
 		       			<when test="empS == 1">
-		            	   AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
+		            	   AND E.EMP_NAME LIKE '%' || #{searchT} || '%'
 		            	</when>
 		        	</choose>
 		      	</if> ) MNGR
@@ -268,13 +184,13 @@
        			AND D.DEPT_NUM = #{deptS}
 			</when>
 		</choose>
-		<if test="searchTxt != null and searchTxt != ''">
+		<if test="searchT != null and searchT != ''">
         	<choose>
        			<when test="empS == 0">
-            	   AND E.EMP_NUM LIKE '%' || #{searchTxt} || '%'
+            	   AND E.EMP_NUM LIKE '%' || #{searchT} || '%'
             	</when>
        			<when test="empS == 1">
-            	   AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
+            	   AND E.EMP_NAME LIKE '%' || #{searchT} || '%'
             	</when>
         	</choose>
       	</if>
@@ -313,7 +229,7 @@
 	
 <!-- 리드 등록 -->
 	<insert id="getLeadAdd" parameterType="hashmap">
-		INSERT INTO LEAD(LEAD_NUM, RGSTRTN_EMP_NUM, MNGR_EMP_NUM, CLNT_NUM, RCGNTN_PATH_NUM, LEAD_NAME)
+		INSERT INTO LEAD(LEAD_NUM, RGSTRTN_EMP_NUM, MNGR_EMP_NUM, CLNT_NUM, RCGNTN_PATH_NUM, LEAD_NAME, DEL_CHECK)
 		VALUES(LEAD_SEQ.NEXTVAL, #{mn}, #{mn}, #{clntName}, #{rp}, #{leadName}) 
 	</insert>
 <!-- 리드 상세 -->

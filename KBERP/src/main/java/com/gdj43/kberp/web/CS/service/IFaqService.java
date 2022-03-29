@@ -9,6 +9,6 @@ public interface IFaqService {
 
 	public int getfaqCnt(HashMap<String, String> params) throws Throwable;
 
-	public HashMap<String, String> getfaq(HashMap<String, String> params) throws Throwable;
+	public HashMap<String, String> getfaqdt(HashMap<String, String> params) throws Throwable;
 
 }

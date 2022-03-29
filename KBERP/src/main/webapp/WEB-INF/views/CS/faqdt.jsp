@@ -19,7 +19,7 @@
 	margin-top: 20px;
 }
 
-.top .cate, .top .wrt_title, .top .wrt_wrter {
+.top .cate, .top .wrt_title, .top .wrt_date {
 	display: inline-block;
 	margin-right:10px;
 	height: 50px;
@@ -34,14 +34,14 @@
 	width: 220px;
 	height: 40px;
 }
-.wrt_wrter {
+.wrt_date {
 	margin-left: 20px;
 }
 .top .wrt_title input {
 	width: 400px;
 	height: 40px;
 }
-.top .wrt_wrter input {
+.top .wrt_date input {
 	width: 160px;
 	height: 40px;
 }
@@ -49,19 +49,27 @@
 .wrt_con {
 	resize: none;
 }
-.bottom {
-	margin-top: 35px;
+
+.bottom1 {
+	
+	float: left;
+}
+.bottom2 {
+	float: right;
+	margin-top: 30px;
+	vertical-align: bottom;
 }
 
-.bottom input[type="text"] {
-	width: 450px;
-	height: 40px;
+.bottom2 input[type="text"] {
+	width: 440px;
+	height: 30px;
 }
 
 .cmn_btn {
 	margin-left:200px;	
 }
 </style>
+
 </head>
 <body>
 <!-- top & left -->
@@ -96,18 +104,21 @@
 							</select>
 						</div>
 							<div class="wrt_title">
-								<input type="text" placeholder="제목(질문글)">
+								<input type="text" readonly="readonly" value="${data.WRTNG_TITLE}">
 							</div>
-							<div class="wrt_wrter">
-								<input type="text" placeholder="작성자">
+							<div class="wrt_date">
+								<input type="text" readonly="readonly" value="${data.WRTNG_DATE}">
 							</div>
 					</div>
 					<div class="middle">
-						<textarea class="wrt_con" rows="20" cols="98" placeholder="내용(답변글)"></textarea>
+						<textarea class="wrt_con" rows="20" cols="98" readonly="readonly">${data.WRTNG_CONT}</textarea>
 					</div>
-					<div class="bottom">
-					<div class="cmn_btn">취소</div>
-					<div class="cmn_btn">등록</div>
+					<div class="bottom1">
+					<div class="cmn_btn">목록</div>
+					</div>
+					<div class="bottom2">
+					<div class="cmn_btn">수정</div>
+					<div class="cmn_btn">삭제</div>
 					</div>
 				</div>
 			</div>
