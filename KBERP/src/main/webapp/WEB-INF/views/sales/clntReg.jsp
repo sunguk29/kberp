@@ -800,7 +800,7 @@ function drawMngPaging(mngPb) {
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="휴대폰 번호*" /></td>
-								<td><input type="text" class="txt" id="mbl" name="mbl" /></td>																
+								<td><input type="text" class="txt" id="mbl" name="mbl" placeholder="'-' 를 포함하지 않은 숫자만 입력해주세요." /></td>																
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="메일" /></td>

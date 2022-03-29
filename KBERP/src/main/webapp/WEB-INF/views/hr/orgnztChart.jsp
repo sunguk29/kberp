@@ -208,6 +208,44 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	$(".orgnzt_area").on("click", ".orgnzt_depth1, .orgnzt_depth2, .orgnzt_depth3", function(e) {
+		var depth = $(this).attr("class").substring(12);
+		var obj = $(this);
+		console.log(depth == "1");
+		if(depth == "1") {
+			$(".orgnzt_depth2_wrap").toggle("fast", function() {
+				if($(".orgnzt_depth2_wrap").is(":visible")) {
+					$(".orgnzt_depth1").css({"color":"#2E83F2", "font-weight":"bold"});
+				} else {
+					$(".orgnzt_depth1").css({"color":"black", "font-weight":""});
+				}
+			}); // 토글 show/hide
+			
+		} else {
+			e.stopPropagation(); // 버블업 방지
+			$(this).children(".orgnzt_depth" + (depth * 1 + 1) + "_wrap").toggle("fast", function() {
+				if(obj.children(".orgnzt_depth" + (depth * 1 + 1) + "_wrap").is(":visible")) {
+					if(depth == "2") {
+						$(".orgnzt_area .orgnzt_depth3_area").css({"color":"black", "font-weight":""});
+					} else if(depth == "3") {
+						$(".orgnzt_area .orgnzt_depth2_area").css({"color":"black", "font-weight":""});
+						
+						obj.parent().parent().children(".orgnzt_depth2_area").css({"color":"#2E83F2", "font-weight":"bold"});
+					}
+					
+					$(".orgnzt_area .orgnzt_depth" + depth + "_area").css({"color":"black", "font-weight":""});
+					
+					obj.children(".orgnzt_depth" + depth + "_area").css({"color":"#2E83F2", "font-weight":"bold"});
+				} else {
+					$(".orgnzt_area .orgnzt_depth" + depth + "_area").css({"color":"black", "font-weight":""});
+				}
+			}); // 토글 show/hide
+			
+		}
+		
+		
+	});
+	/*
 // 1뎁스  
    $(".orgnzt_depth1").on("click", function() {
 	   console.log("depth1 click!", this)
@@ -248,13 +286,14 @@ $(document).ready(function() {
        if($(this).find("input[type=hidden]").val() == "false") {
 		   console.log("selected", true)
     	   $(this).find("input[type=hidden]").val("true")
-	  	   $(this).find(".orgnzt_depth3_area").css({"color":"#2E83F2", "font-weight":"bold"});        	 
+      	   $(this).find(".orgnzt_depth3_area").css({"color":"black", "font-weight":""}); 
        } else {
 		   console.log("selected", false)
     	   $(this).find("input[type=hidden]").val("false")
-      	   $(this).find(".orgnzt_depth3_area").css({"color":"black", "font-weight":""}); 
+	  	   $(this).find(".orgnzt_depth3_area").css({"color":"#2E83F2", "font-weight":"bold"});        	 
        }
    });
+   */
 });
 
 /* function orgnztOnOff(this){
