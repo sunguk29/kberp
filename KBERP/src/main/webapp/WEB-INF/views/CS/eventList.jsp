@@ -8,6 +8,12 @@
 <title>event List</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
+<style type="text/css">
+/* 가로 사이즈 조정용 */
+.cont_wrap {
+	width: 1000px;
+}
+</style>
 <script type="text/javascript">
 $(document).ready(function() {
 	if('${param.searchGbn}' != '') {
@@ -101,10 +107,10 @@ function drawList(list) {
 	for(var data of list) {
 		html += "<tr no=\"" + data.EVENT_NUM + "\">";
 		html += "<td>" + data.EVENT_NUM + "</td>";
-		html += "<td>" + data.EMP_NUM + "</td>";
 		html += "<td>" + data.EVENT_TITLE + "</td>";
-		html += "<td>" + data.EVENT_CONT + "</td>";
+		html += "<td>" + data.EMP_NUM + "</td>";
 		html += "<td>" + data.WRITE_DATE + "</td>";
+		html += "<td>" + data.EVENT_HITS + "</td>";
 		html += "</tr>";
 	}
 	$("tbody").html(html);
@@ -183,7 +189,6 @@ function drawPaging(pb) {
 				<colgroup>
 					<col width="50"/>
 					<col width="150"/>
-					<col width="450"/>
 					<col width="100"/>
 					<col width="100"/>
 					<col width="100"/>
@@ -201,6 +206,7 @@ function drawPaging(pb) {
 			</table>
 			<div class="board_bottom">
 				<div class="pgn_area" id="pgn_area"></div>
+				<div class="cmn_btn_ml" id="writeBtn">글쓰기</div>
 			</div>
 		</div>
 	</div>

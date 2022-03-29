@@ -22,9 +22,9 @@
 	</select>
 	
 	<!-- 점심이후 수정 -->
-	<insert id="eventAdd" parameterType="hashmap">
+	<insert id="EventAdd" parameterType="hashmap">
 		INSERT INTO EVENT(EVENT_NUM, EMP_NUM, EVENT_TITLE, EVENT_CONT, WRITE_DATE, EVENT_HITS)
-		VALUES(EVENT_SEQ.NEXTVAL, '2022000013', 'TEST', '내용 테스트', '2021-02-23', '0')
+		VALUES(EVENT_SEQ.NEXTVAL, #{emp}, , #{title}, #{cont}, #{date}, #{hits})
 	</insert>
 	
 	

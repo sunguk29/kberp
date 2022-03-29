@@ -10,6 +10,7 @@
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <link rel="stylesheet" type="text/css" href="resources/css/CS/content.css" />
+<link rel="stylesheet" type="text/css" href="resources/css/CS/event.css" />
 <style type="text/css">
 /* 가로 사이즈 조정용 */
 .cont_wrap {
@@ -391,16 +392,16 @@ $(document).ready(function() {
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="title-area">
-				<div class="title"> 너굴맨의 하루 </div>
+				<div class="title">${data.EVENT_TITLE}</div>
 				<div class="writer_area">
 					<div class="write_info">
-						<div class="writer">너굴맨</div>
-						<div class="date">2022-01-01 15:21</div>
+						<div class="writer">${data.EMP_NUM}</div>
+						<div class="date">${data.WRITE_DATE}</div>
 					</div>
 				</div>
 			</div>
 			<div class="contents">
-				<div>오류는 너굴맨이 처리했으니 안심하라구</div>	
+			${data.EVENT_CONT}
 			</div>
 			<div class="content_footer">
 				<div class="list"><input type="submit" value="목록" class="btn"></div>
