@@ -35,42 +35,10 @@
  	width: 120px;
  	margin-top: 20px;
  }
- 
- .fclty_aprvl_mng_cont:nth-child(4) {
- 	margin-top: 40px;
- }
- 
- 
-.fclty_aprvl_mng_cont{
-	margin-bottom: 10px;
-} 
 
-#fclty_img{
-	border: 1px solid black;
-	vertical-align:top;
-	display:inline-block;
+#rmrks{
 	margin-left: 20px;
-	width: 250px;
-	height: 250px;
-}
-
-
-
-#fclty_aprvl_mng_area{
-	display: inline-block;
-	margin-top: 50px;
-	margin-left: 50px;
-}
-
-.use {
-	margin-left: 20px;
-	color: black;
-	font-size: 16pt;
-}
-
-#use_cont{
-	margin-left: 20px;
-	width: 900px;
+	width: 870px;
 	height: 150px;
 	margin-bottom: 10px;
 }
@@ -80,6 +48,11 @@
 $(document).ready(function() {
 	$("#listBtn").on("click", function(){
 		$("#actionForm").attr("action", "assetList");
+		$("#actionForm").submit();
+	});
+	
+	$("#mdfyBtn").on("click", function(){
+		$("#actionForm").attr("action", "assetDtlViewExpndbltMdfy");
 		$("#actionForm").submit();
 	});
 });
@@ -117,7 +90,7 @@ $(document).ready(function() {
 							</td>
 							<td>자산유형</td>
 							<td>
-								지속성
+								소모성
 							</td>
 						</tr>
 						<tr class="sixth_row">
@@ -131,15 +104,15 @@ $(document).ready(function() {
 							</td>
 							<td>수량</td>
 							<td>
-								${data.QUNTY}${QUNTY_DVSN_NUM}
+								${data.QUNTY}
 							</td>
 						</tr>
 					</tbody>
 				</table>
 						<div class="rmrks"><b>비고</b></div>
-						<input type="text" id="use_cont" readonly="readonly" value="${data.A.RMRKS}" />
+						<input type="text" id="rmrks" name="rmrks" readonly="readonly" value="${data.RMRKS}" />
 			<div class="board_bottom">
-				<input class="cmn_btn" type="button" id="mdfy" value="수정">
+				<input class="cmn_btn" type="button" id="mdfyBtn" value="수정">
 				<input class="cmn_btn" type="button" value="목록으로" id="listBtn"/>
 			</div>
 		</div>

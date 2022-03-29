@@ -119,6 +119,9 @@ public class AssetController {
 			break;
 		case "update":
 			ics.updateData("asset.drblMdfy",params);
+			break;	
+		case "update1":
+			ics.updateData("asset.expndbltMdfy",params);
 			break;
 		}
 			modelMap.put("res", "success");
@@ -135,11 +138,78 @@ public class AssetController {
 							ModelAndView mav) throws Throwable {
 		
 		
-		HashMap<String, String> data = ics.getData("asset.assetDtlViewExpndblt",params);
+		HashMap<String, String> data = ics.getData("asset.assetDtlViewDrbl",params);
 		
 		mav.addObject("data", data);
 		
 		mav.setViewName("mng/assetDtlViewDrblMdfy");
+		
+		return mav;
+	}
+	
+	@RequestMapping(value= "/assetDtlViewExpndbltMdfy")
+	public ModelAndView assetDtlViewExpndbltMdfy(@RequestParam HashMap<String, String> params,
+							ModelAndView mav) throws Throwable {
+		
+		
+		HashMap<String, String> data = ics.getData("asset.assetDtlViewExpndblt",params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("mng/assetDtlViewExpndbltMdfy");
+		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/assetRntl")
+	public ModelAndView assetRntl(@RequestParam HashMap<String, String> params, ModelAndView mav) {
+		
+		if (params.get("page") == null || params.get("page") == "") {
+			params.put("page", "1");
+		}
+
+		mav.addObject("page", params.get("page"));
+		
+		mav.setViewName("mng/assetRntl");
+		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/assetRntlAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String assetRntlAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		// 총 게시글 수
+		int cnt = ics.getIntData("asset.getRntlCnt", params);
+		
+		// 페이징 계산
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
+		
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		List<HashMap<String, String>> list = ics.getDataList("asset.assetRntlList", params);
+		
+		modelMap.put("list", list); 
+		modelMap.put("pb", pb); 
+		
+		
+		return mapper.writeValueAsString(modelMap);
+	
+	}
+	
+	@RequestMapping(value= "/assetRntlDtlView")
+	public ModelAndView assetRntlDtlView(@RequestParam HashMap<String, String> params,
+							ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = ics.getData("asset.assetRntlDtlView",params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("mng/assetRntlDtlView");
 		
 		return mav;
 	}

@@ -36,6 +36,37 @@
  	margin-top: 20px;
  }
  
+ .fclty_aprvl_mng_cont:nth-child(4) {
+ 	margin-top: 40px;
+ }
+ 
+ 
+.fclty_aprvl_mng_cont{
+	margin-bottom: 10px;
+} 
+
+#fclty_img{
+	border: 1px solid black;
+	vertical-align:top;
+	display:inline-block;
+	margin-left: 20px;
+	width: 250px;
+	height: 250px;
+}
+
+
+
+#fclty_aprvl_mng_area{
+	display: inline-block;
+	margin-top: 50px;
+	margin-left: 50px;
+}
+
+.use {
+	margin-left: 20px;
+	color: black;
+	font-size: 16pt;
+}
 
 #rmrks{
 	margin-left: 20px;
@@ -47,42 +78,14 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#cnclBtn").on("click", function(){
-		$("#cnclForm").submit();
+	$("#listBtn").on("click", function(){
+		$("#actionForm").attr("action", "assetRntl");
+		$("#actionForm").submit();
 	});
 	
-	$("#mdfyBtn").on("click", function() {
-			var mdfyForm = $("#mdfyForm");
-			
-			mdfyForm.ajaxForm({
-				success : function(res) {
-					// 글 수정
-					var params = $("#mdfyForm").serialize();
-					
-					$.ajax({
-						type : "post", 
-						url : "assetAction/update", 
-						dataType : "json",
-						data : params, 
-						success : function(res) { 
-							if(res.res == "success") {
-								$("#cnclForm").submit();
-							} else {
-								alert("수정중 문제가 발생하였습니다.");
-							}
-						},
-						error : function(request, status, error) {
-							console.log(request.responseText); 
-						}
-					});
-				},
-
-			error : function(req) {
-				console.log(req.responseText); 
-			} // error end
-		}); // ajaxForm End
-			
-		mdfyForm.submit(); // ajaxForm 실행
+	$("#mdfyBtn").on("click", function(){
+		$("#actionForm").attr("action", "assetDtlViewDrblMdfy");
+		$("#actionForm").submit();
 	});
 });
 
@@ -96,17 +99,13 @@ $(document).ready(function() {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
-<form action="assetDtlViewDrbl" id="cnclForm" method="post">
-	<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
-	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
+<form action="#" id="actionForm" method="post">
 	<input type="hidden" name="num" value="${param.num}"/>
 	<input type="hidden" name="page" value="${param.page}"/>
 </form>
-<form action="#" id="mdfyForm" method="post">
 <div class="cont_wrap">
-	<input type="hidden" name="num" value="${param.num}" />
 		<div class="page_title_bar">
-			<div class="page_title_text">자산 내용수정</div>
+			<div class="page_title_text">승인관리 상세보기</div>
 		</div>
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
@@ -121,39 +120,36 @@ $(document).ready(function() {
 							<td >
 								${data.ASSET_NAME}
 							</td>
-							<td>자산유형</td>
+							<td>담당자</td>
 							<td>
-								지속성
+								${data.EMP_NAME}
 							</td>
 						</tr>
 						<tr class="sixth_row">
-							<td>취득일</td>
+							<td>사용자</td>
 							<td>
-								${data.ACQRMNT_DATE}	
+								${data.USENAME}	
 							</td>
-							<td>담당자</td>
-							<td>
-								<select id="mngrNum" name="mngrNum">
-									<option value="2022000006">강부장</option>
-									<option value="1">set</option>
-									<option value="2">box</option>
-								</select>
+							<td>사용시작일</td>
+							<td >
+								${data.START_DATE}
 							</td>
-							<td>현재 사용자</td>
+							<td>사용종료일</td>
 							<td>
+								${data.END_DATE}
+								
 							</td>
 						</tr>
 					</tbody>
 				</table>
 						<div class="rmrks"><b>비고</b></div>
-						<input type="text" id="rmrks" name="rmrks"  value="${data.RMRKS}" />
+						<input type="text" id="rmrks" name="rmrks" readonly="readonly" value="${data.RMRKS}" />
 			<div class="board_bottom">
 				<input class="cmn_btn" type="button" id="mdfyBtn" value="수정">
-				<input class="cmn_btn" type="button" value="취소" id="cnclBtn"/>
+				<input class="cmn_btn" type="button" value="목록으로" id="listBtn"/>
 			</div>
 		</div>
 	</div>
-	</form>
 
 </body>
 </html>

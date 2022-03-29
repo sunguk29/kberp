@@ -40,12 +40,13 @@
 	</select>
 	
 	<select id="assetDtlViewDrbl" resultType="hashmap" parameterType="hashmap">
-		SELECT ASSET_NUM, ASSET_NAME, ASSET_TYPE_NUM, TO_CHAR(ACQRMNT_DATE, 'YYYY-MM-DD')AS ACQRMNT_DATE,
-		 EMP_NAME, A.RMRKS
-		FROM ASSET A INNER JOIN EMP E
+      SELECT ASSET_NUM, ASSET_NAME, ASSET_TYPE_NUM, TO_CHAR(ACQRMNT_DATE, 'YYYY-MM-DD')AS ACQRMNT_DATE,
+       EMP_NAME, A.RMRKS
+      FROM ASSET A INNER JOIN EMP E
                 ON A.MNGR_NUM = E.EMP_NUM
         WHERE ASSET_NUM = #{num}
-	</select>
+   </select>
+	
 	
 	<select id="assetDtlViewExpndblt" resultType="hashmap" parameterType="hashmap">
 		SELECT ASSET_NUM, ASSET_NAME, ASSET_TYPE_NUM, TO_CHAR(ACQRMNT_DATE, 'YYYY-MM-DD')AS ACQRMNT_DATE,
@@ -65,5 +66,67 @@
               	   	 RMRKS =#{rmrks}
 		WHERE ASSET_NUM = #{num}
 	</update>
+	
+	<update id="expndbltMdfy" parameterType="hashmap">
+		UPDATE ASSET SET MNGR_NUM = #{mngrNum},
+              	   	 QUNTY = #{qunty},
+              	   	 RMRKS = #{rmrks}
+		WHERE ASSET_NUM = #{num}
+	</update>
 
+	<select id="getRntlCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM ASSET_USE AU INNER JOIN EMP E
+							ON AU.EMP_NUM = E.EMP_NUM
+						  INNER JOIN ASSET A
+						  	ON AU.ASSET_NUM = A.ASSET_NUM
+						  	
+		WHERE 1 = 1
+		<if test="searchTxt != null and searchTxt != ''">
+			<choose>
+				<when test="searchGbn == 0">
+					AND A.ASSET_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="searchGbn == 1">
+					AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+			</choose>
+		</if>
+	</select>
+	
+	<select id="assetRntlList" resultType="hashmap" parameterType="hashmap">
+		 SELECT ASSET_USE_NUM, ASSET_NUM, ASSET_NAME, EMP_NAME, START_DATE, END_DATE
+		FROM (SELECT ASSET_USE_NUM, AU.ASSET_NUM, ASSET_NAME, EMP_NAME,TO_CHAR(START_DATE, 'YYYY-MM-DD')AS START_DATE,
+		 TO_CHAR(END_DATE, 'YYYY-MM-DD')AS END_DATE,ROW_NUMBER() OVER(ORDER BY ASSET_USE_NUM DESC) AS RNUM
+			FROM ASSET_USE AU INNER JOIN EMP E
+			                    ON AU.EMP_NUM = E.EMP_NUM
+			                   INNER JOIN ASSET A
+			                   	ON AU.ASSET_NUM = A.ASSET_NUM
+			WHERE 1=1
+		<if test="searchTxt != null and searchTxt != ''"> 
+					<choose>
+						<when test="searchGbn == 0">
+							AND A.ASSET_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="searchGbn == 1">
+							AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+					</choose>
+				</if>
+				) A
+				WHERE A.RNUM BETWEEN #{startCount} AND #{endCount} 
+	</select>
+	
+	<select id="assetRntlDtlView" resultType="hashmap" parameterType="hashmap">
+		SELECT A.ASSET_NUM, ASSET_NAME, A.EMP_NAME, B.USENAME, START_DATE, END_DATE,B.RMRKS
+        FROM( SELECT ASSET_NUM,ASSET_NAME,EMP_NAME
+      FROM ASSET A INNER JOIN EMP E
+                   ON A.MNGR_NUM = E.EMP_NUM
+               WHERE ASSET_NUM=#{num}) A INNER JOIN
+     (SELECT TO_CHAR(START_DATE,'YYYY-MM-DD')AS START_DATE, TO_CHAR(END_DATE,'YYYY-MM-DD')AS END_DATE,EMP_NAME AS USENAME,RMRKS
+      FROM ASSET_USE AU INNER JOIN EMP E
+                   ON AU.EMP_NUM = E.EMP_NUM
+                   WHERE ASSET_NUM=#{num} AND ASSET_USE_NUM =#{unum}) B
+        ON 1=1
+	</select>
 </mapper>
