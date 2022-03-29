@@ -608,13 +608,13 @@ textarea {
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	$("#clListCnt_right").on("click", ".drop_btn_bot", function() {
+	$(".cl_title").on("click", ".drop_btn_bot", function() {
 		$(".cbx").hide();
 		html = "<div class=\"up_btn_bot\"></div>";
 		$("#clListCnt_right").html(html);
 	});
 	
-	$("#clListCnt_right").on("click", ".up_btn_bot", function() {
+	$(".cl_title").on("click", ".up_btn_bot", function() {
 		$(".cbx").show();
 		html = "<div class=\"drop_btn_bot\"></div><div class=\"plus_btn_bot\"></div>";
 		$("#clListCnt_right").html(html);
