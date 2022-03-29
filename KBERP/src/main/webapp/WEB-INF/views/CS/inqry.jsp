@@ -214,7 +214,7 @@ $(document).ready(function() {
 							<span class="th_star">*</span>
 						</th>
 						<td>
-							<input type="text" readonly="readonly" value="${data.CLNT_NAME}">
+							<input type="text" id="clnt_name" name="clnt_name" readonly="readonly" value="${data.CLNT_NAME}">
 						</td>
 					</tr>
 					<tr>
@@ -230,7 +230,7 @@ $(document).ready(function() {
 							<span class="th_star">*</span>
 						</th>
 						<td>
-							<select disabled="disabled">
+							<select disabled="disabled" id="ctgry_name" name="ctgry_name">
 								<option>인터넷뱅킹</option>
 								<option>스마트폰뱅킹</option>
 								<option>CD/ATM</option>
@@ -249,7 +249,7 @@ $(document).ready(function() {
 							<span class="th_star">*</span>
 						</th>
 						<td>
-							<input type="text" readonly="readonly" value="${data.WRTNG_TITLE}">
+							<input type="text" name="wrtng_title" readonly="readonly" value="${data.WRTNG_TITLE}">
 						</td>
 					</tr>
 					<tr>
@@ -257,13 +257,13 @@ $(document).ready(function() {
 							<span class="th_star">*</span>
 						</th>
 						<td>
-							<textarea class="wrtng_cont" rows="15" cols="110" readonly="readonly">${data.WRTNG_CONT}</textarea>
+							<textarea class="wrtng_cont" name="wrtng_cont" rows="15" cols="110" readonly="readonly">${data.WRTNG_CONT}</textarea>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row">첨부파일</th>
 						<td>
-							<input type="text" readonly="readonly" placeholder="첨부된 파일 & 이미지 : ">
+							<input type="text" id="att" name="att" readonly="readonly" >
 						</td>
 					</tr>
 				</tbody>
