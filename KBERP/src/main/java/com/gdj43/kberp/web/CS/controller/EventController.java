@@ -15,9 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
-import com.gdj43.kberp.web.CS.service.IEventService;
 import com.gdj43.kberp.web.common.service.ICommonService;
-
 
 @Controller
 //@RequestMapping("/event")	
@@ -32,7 +30,7 @@ public class EventController {
 	 현재 진행중인 event 목록글 보여주는 페이지
 	 * */
 	
-	@RequestMapping(value = "/eventList")
+	@RequestMapping(value = "/prgrsEvent")
 	public ModelAndView eventList(@RequestParam HashMap<String, String> params,
 								ModelAndView mav) {
 		if(params.get("page") == null || params.get("page") == "") {
