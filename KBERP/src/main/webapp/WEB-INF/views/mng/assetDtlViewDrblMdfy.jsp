@@ -135,7 +135,7 @@ $(document).ready(function() {
 							<td>
 								<select id="mngrNum" name="mngrNum">
 									<option value="2022000006">강부장</option>
-									<option value="1">set</option>
+									<option value="2022000007">백대리</option>
 									<option value="2">box</option>
 								</select>
 							</td>

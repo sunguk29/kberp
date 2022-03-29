@@ -136,8 +136,8 @@ $(document).ready(function() {
 							</td>
 							<td>사용종료일</td>
 							<td>
-								${data.END_DATE}
-								
+							<c:if test="${data.END_DATE==null}">사용중</c:if>
+							<c:if test="${data.END_DATE!=null}">${data.END_DATE}</c:if>
 							</td>
 						</tr>
 					</tbody>
