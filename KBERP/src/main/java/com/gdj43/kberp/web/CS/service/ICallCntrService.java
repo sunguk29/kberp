@@ -4,9 +4,6 @@ import java.util.HashMap;
 
 public interface ICallCntrService {
 
-	public void clntSave(HashMap<String, String> params) throws Throwable;
-
-	public void noteSave(HashMap<String, String> params) throws Throwable;
 
 
 }
