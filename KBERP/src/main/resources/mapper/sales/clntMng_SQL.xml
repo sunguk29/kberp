@@ -630,10 +630,13 @@
 	</select>
 	
 	<select id="clntCmpnyCont" parameterType="hashmap" resultType="hashmap">
-		SELECT CLNT_CMPNY_NAME, CLNT_CMPNY_CLSFY_NUM, GRADE_NUM, BSNSMN_RGSTRTN_NUM, CLNT_NAME,
-		       PHONE_NUM, FAX, HMPG, ZIP_CODE_NUM, ADRS, DTL_ADRS, TRIM(TO_CHAR(RVN, '999999999999999')) AS RVN, RCGNTN_PATH_NUM
-		FROM CLNT_CMPNY
-		WHERE CLNT_CMPNY_NUM = #{ccn}
+		SELECT CC.CLNT_CMPNY_NAME, CC.CLNT_CMPNY_CLSFY_NUM, CC.GRADE_NUM, CC.BSNSMN_RGSTRTN_NUM, CC.CLNT_NAME,
+		       CC.PHONE_NUM, CC.FAX, CC.HMPG, CC.ZIP_CODE_NUM, CC.ADRS, CC.DTL_ADRS, 
+		       TRIM(TO_CHAR(CC.RVN, '999999999999999')) AS RVN, CC.RCGNTN_PATH_NUM,
+		       CCA.ATT_FILE_NAME
+		FROM CLNT_CMPNY CC LEFT OUTER JOIN CLNT_CMPNY_ATT_FILE CCA
+		                           ON CC.CLNT_CMPNY_NUM = CCA.CLNT_CMPNY_NUM
+		WHERE CC.CLNT_CMPNY_NUM = #{ccn}
 	</select>
 
 	<update id="ccDelete" parameterType="hashmap">
@@ -748,7 +751,7 @@
 	
 	<update id="opContUpdate" parameterType="hashmap">
 		UPDATE CLNT_CMPNY_CMNT SET DEL_CHECK = SYSDATE
-		WHERE CMNT_NUM = #{cmNum}
+		WHERE CMNT_NUM = #{cmntNum}
 	</update>
 	
 	<select id="opListCnt" parameterType="hashmap" resultType="Integer">

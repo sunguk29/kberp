@@ -171,8 +171,8 @@ public class ClntMngController {
 				iCommonService.insertData("clntCmpnyMng.ClntCmpnyAddAttFile", params); // 첨부파일저장
 				break;
 			case "update" :
-				iCommonService.updateData("clntCmpnyMng.ClntCmpnyUpdate", params); // 글저장
 				iCommonService.updateData("clntCmpnyMng.ClntCmpnyAttFileUpdate", params); // 첨부파일저장
+				iCommonService.updateData("clntCmpnyMng.ClntCmpnyUpdate", params); // 글저장
 				break;
 			case "delete" :
 				iCommonService.updateData("clntCmpnyMng.ccDelete", params); // 글삭제
