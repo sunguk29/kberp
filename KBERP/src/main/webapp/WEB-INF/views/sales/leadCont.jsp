@@ -322,6 +322,9 @@ $(document).ready(function () {
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="searchDate" value="${param.searchDate}" />
 	<input type="hidden" name="searchDate2" value="${param.searchDate2}" />
+	<input type="hidden" name="srchType" value="${param.srchType}" />
+	<input type="hidden" name="psNum" value="${param.psNum}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">

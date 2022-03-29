@@ -69,16 +69,12 @@ $(document).ready(function() {
 
 	$("tbody").on("click", "#click", function() {
 		$("#num").val($(this).attr("num"));
-		$("#type").val($(this).attr("type"));
-	
+		$("#unum").val($(this).attr("unum"));
 		
 		$("#searchGbn").val($("#oldSearchGbn").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
-		if($(this).attr("type")=="0"){
-		$("#actionForm").attr("action", "assetDtlViewDrbl");
-		} else {
-			$("#actionForm").attr("action", "assetDtlViewExpndblt");
-		}
+		
+		$("#actionForm").attr("action", "assetRntlDtlView");
 		$("#actionForm").submit();	
 	});
 	
@@ -103,7 +99,7 @@ function reloadList() { // 목록 조회용 + 페이징 조회용
 
 	$.ajax({
 		type : "post", 
-		url : "assetMngAjax", 
+		url : "assetRntlAjax", 
 		dataType : "json",
 		data : params, 
 		success : function(res) { 
@@ -124,20 +120,13 @@ function drawList(list) {
 	for(var data of list) {
 		html += "<tr num=\""+ data.ASSET_NUM + "\">";
 		html += "<td>" + data.ASSET_NUM + "</td>";
-		html += "<td id=\"click\" num=\""+ data.ASSET_NUM +"\" type=\""+data.ASSET_TYPE_NUM+"\">" + data.ASSET_NAME + "</td>";
-		if(data.ASSET_TYPE_NUM==0)
-			html += "<td>지속성</td>";
-		else
-			html += "<td>소모성</td>";
-		if(data.QUNTY_DVSN_NUM == 0 )
-			html += "<td>" + data.QUNTY +"ea</td>";
-		else if(data.QUNTY_DVSN_NUM == 1)
-			html += "<td>" + data.QUNTY +"set</td>";
-		else
-			html += "<td>" + data.QUNTY +"box</td>";
+		html += "<td id=\"click\" num=\""+ data.ASSET_NUM +"\" unum=\""+ data.ASSET_USE_NUM +"\">" + data.ASSET_NAME + "</td>";
 		html += "<td>" + data.EMP_NAME + "</td>";
-		html += "<td>" + data.ACQRMNT_DATE + "</td>";
-		html += "<td>" + data.RGSTRTN_DATE + "</td>";
+		html += "<td>" + data.START_DATE + "</td>";
+		if(data.END_DATE== null)
+			html += "<td>사용중</td>";
+		else
+		html += "<td>" + data.END_DATE + "</td>";
 		html += "</tr>";
 	}
 	$("tbody").html(html);
@@ -196,12 +185,12 @@ function drawPaging(pb) {
 					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 					<input type="hidden" id="page" name="page" value="${page}"/>
-					<input type="hidden" id="type" name="type"/>
 					<input type="hidden" id="num" name="num"/>
+					<input type="hidden" id="unum" name="unum"/>
 					
 					<select id="searchGbn" name="searchGbn">
 						<option value="0">자산명</option>
-						<option value="1">담당자명</option>
+						<option value="1">사용자명</option>
 					</select>
 						<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
 						<input class="cmn_btn" type="button" value="검색" id="searchBtn"/>
@@ -216,23 +205,19 @@ function drawPaging(pb) {
 			<table class="board_table">
 				<colgroup>
 					<col width="100"/>
-					<col width="150"/>
-					<col width="100"/>
-					<col width="100">
-					<col width="150"/>
-					<col width="150"/>
-					<col width="150"/>
+					<col width="200"/>
+					<col width="200"/>
+					<col width="200"/>
+					<col width="200"/>
 					
 				</colgroup>
 				<thead>
 					<tr>
 						<th>자산번호</th>
 						<th>자산명</th>
-						<th>자산유형</th>
-						<th>수량</th>
-						<th>담당자명</th>
-						<th>취득일</th>
-						<th>등록일</th>
+						<th>사용자</th>
+						<th>사용시작일</th>
+						<th>사용종료일</th>
 					</tr>
 				</thead>
 				<tbody></tbody>

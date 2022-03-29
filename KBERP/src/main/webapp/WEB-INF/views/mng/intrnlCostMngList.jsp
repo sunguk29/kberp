@@ -91,7 +91,7 @@ function drawList(list) {
 	for(data of list) {
 		html += "<tr>";
 		html += "<td class=\"board_table_hover\" id=\"clickMon\" mon=\"" + data.DATE_MON +  "\">" + data.DATE_MON + "</td>";
-		html += "<td>" + data.AMNT_SUM + "</td>";
+		html += "<td>" + data.AMNT_SUM + "원</td>";
 		html += "</tr>";
 	}
 
@@ -137,6 +137,7 @@ function drawPaging(pb) {
 		<input type="hidden" name="top" value="${param.top}">
 		<input type="hidden" name="menuNum" value="${param.menuNum}">
 		<input type="hidden" name="menuType" value="${param.menuType}">
+		<input type="hidden" name ="backCheck" value="0">
 	</form>
 
 	<!-- top & left -->

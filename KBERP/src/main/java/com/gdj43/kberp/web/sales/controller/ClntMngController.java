@@ -67,6 +67,30 @@ public class ClntMngController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/clntCont")
+	public ModelAndView clntCont(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("clntCmpnyMng.clntCont", params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("sales/clntCont");
+		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/clntUpdate")
+	public ModelAndView clntUpdate(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("clntCmpnyMng.clntCont", params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("sales/clntUpdate");
+		
+		return mav;
+	}
+	
 	@RequestMapping(value = "/clntCmpnyListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody 
 	public String clntCmpnyListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
@@ -202,8 +226,11 @@ public class ClntMngController {
 				iCommonService.getData("clntCmpnyMng.clntAttAdd", params);
 				break;
 			case "update" :
+				iCommonService.updateData("clntCmpnyMng.clntUpdate", params); // 첨부파일저장
+				iCommonService.updateData("clntCmpnyMng.clntAttUpdate", params); // 글저장
 				break;
 			case "delete" :
+				iCommonService.updateData("clntCmpnyMng.clntDelete", params); // 글삭제
 				break;
 			}
 			modelMap.put("res", "success");
@@ -324,5 +351,6 @@ public class ClntMngController {
 		
 		return mapper.writeValueAsString(modelMap);
 	}
+	
 	
 }

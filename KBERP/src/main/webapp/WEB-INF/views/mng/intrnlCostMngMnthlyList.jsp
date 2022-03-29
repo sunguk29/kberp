@@ -86,6 +86,7 @@ $(document).ready(function() {
 			}
 		});
 	});
+	
 	$("#btn2Btn").on("click", function() {
 		makePopup({
 			bg : false,
@@ -127,6 +128,47 @@ $(document).ready(function() {
 		$("#actionForm").attr("action", "intrnlCostMngDtlView")
 		$("#actionForm").submit();
 	});
+	
+	$("#addBtn").on("click", function() {
+		$("#actionForm").attr("action", "intrnlCostMngAdd");		
+		$("#actionForm").submit();
+	});
+	
+	$("#monDelBtn").on("click", function() {
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "월 삭제",
+			contents : "해당 월 내부비용관리 전표 전체를 삭제하시겠습니까?",
+			buttons : [{
+				name : "삭제",
+				func:function() {
+					var params = $("#actionForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "intrnlCostMngAction/monDelete",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							if(res.res == "success") {
+								$("#actionForm").attr("action", "intrnlCostMng");
+								$("#actionForm").submit();
+							} else {
+								alert("삭제 중 문제가 발생했습니다.");
+							}
+						},
+						error : function(request, status, error) { // 문제 발생 시 실행 함수
+							console.log(request.responseText); // 결과 텍스트
+						}
+					});
+					closePopup();
+				}
+			}, {
+				name : "취소"
+			}]
+		});
+	});
 });
 
 function reloadList() {
@@ -158,7 +200,7 @@ function drawList(list) {
 		html += "<td>" + data.INTRNL_DATE + "</td>"; 
 		html += "<td class=\"board_table_hover\" id=\"chitNum\" chitnum=\"" + data.CHIT_NUM + "\">" + data.CHIT_NUM + "</td>";
 		html += "<td>" + data.CRSPNDNT + "</td>";
-		html += "<td>" + data.AMNT + "</td>";
+		html += "<td>" + data.AMNT + "원</td>";
 		html += "<td>" + data.ACNT_NAME + "</td>";
 		if(data.RMRKS != null) {
 			html += "<td>" + data.RMRKS + "</td>";			
@@ -222,6 +264,7 @@ function drawPaging(pb) {
 		<input type="hidden" id="page" name="page" value="${param.page}" />
 		<input type="hidden" id="page2" name="page2" value="${page2}" />
 		<input type="hidden" id="sendChitNum" name="sendChitNum">
+		<input type="hidden" name ="backCheck" value="1">
 		
 		<input type="hidden" name="top" value="${param.top}">
 		<input type="hidden" name="menuNum" value="${param.menuNum}">
@@ -285,8 +328,8 @@ function drawPaging(pb) {
 			</table>
 			<div class="btn_wrap">
 				<div class="cmn_btn" id="previousBtn">전체 목록</div>
-				<div class="cmn_btn_ml">신규</div>
-				<div class="cmn_btn_ml">월 삭제</div>
+				<div class="cmn_btn_ml" id="addBtn">신규</div>
+				<div class="cmn_btn_ml" id="monDelBtn">월 삭제</div>
 			</div>
 		</div>
 	</div>

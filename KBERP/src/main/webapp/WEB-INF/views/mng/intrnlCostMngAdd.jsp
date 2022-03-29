@@ -242,7 +242,6 @@ $(document).ready(function() {
 			buttons : {
 				name : "닫기",
 				func:function() {
-					console.log("One!");
 					closePopup(1);
 				}
 			}
@@ -318,7 +317,12 @@ $(document).ready(function() {
 						data : params, // 보낼 데이터. 보낼 것이 없으면 안 씀
 						success : function(res) { // 성공 시 실행 함수. 인자는 받아온 데이터
 							if(res.res == "success") {
-								$("#backForm").submit();
+								if($("#backCheck").val() == "0") {
+									$("#backForm").submit();									
+								} else {
+									$("#backForm").attr("action", "intrnlCostMngMnthlyList");
+									$("#backForm").submit();
+								}
 							} else {
 								alert("작성 중 문제가 발생했습니다.");
 							}
@@ -350,9 +354,13 @@ $(document).ready(function() {
 		$("#amnt").val($("#splyPrice").val() * 1 + $("#srtx").val() * 1);
 	});
 	
-	
 	$("#cancleBtn").on("click", function() {
 		history.back();
+	});
+	
+	$("#spendDate").on("change", function() {
+		$("#mon").val($("#spendDate").val().substr(0, 7));
+		console.log($("#mon").val());
 	});
 	
 });
@@ -446,13 +454,15 @@ function drawPaging(pb) {
 	
 	<form action="#" id="acntSrchForm" method="post">
 		<input type="hidden" id="sendSrchTxt" name="sendSrchTxt">
-		<input type="hidden" id="page" name="page" value="${page}">
+		<input type="hidden" id="page" name="page" value="1">
 	</form>
 	
 	<form action="intrnlCostMng" id="backForm" method="post">
 		<input type="hidden" name="top" value="${param.top}">
 		<input type="hidden" name="menuNum" value="${param.menuNum}">
 		<input type="hidden" name="menuType" value="${param.menuType}">
+		<input type="hidden" id="mon" name="mon" value="${param.mon}">
+		<input type="hidden" id="backCheck" value="${param.backCheck}">
 	</form>
 	
 	<form action="fileUploadAjax" id="writeForm" method="post" enctype="multipart/form-data">
@@ -470,7 +480,7 @@ function drawPaging(pb) {
 					<tbody>
 						<tr>
 							<td>지출일자</td>
-							<td colspan="5"><input type="date" class="acnt_code_date" id="spendDate" name="spendDate">
+							<td colspan="5"><input type="date" class="acnt_code_date" id="spendDate" name="spendDate" max="9999-12-31">
 							</td>
 						</tr>
 						<tr>

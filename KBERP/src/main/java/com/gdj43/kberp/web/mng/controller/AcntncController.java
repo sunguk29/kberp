@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.common.service.ICommonService;
+import com.gdj43.kberp.web.mng.service.IAcntncService;
 
 /*** 회계 메뉴 ***/
 
@@ -30,6 +31,9 @@ public class AcntncController {
 	
 	@Autowired
 	public IPagingService iPagingService;
+	
+	@Autowired
+	public IAcntncService iAcntncService;
 	
 	// 지출결의서 상세보기
 	@RequestMapping(value = "/expnsRsltnDtlView")
@@ -137,12 +141,6 @@ public class AcntncController {
 	@RequestMapping(value = "/intrnlCostMngAdd")
 	public ModelAndView intrnlCostMngAdd(@RequestParam HashMap<String, String> params, ModelAndView mav) {
 		
-		if(params.get("page") == null || params.get("page") == "") {
-			params.put("page", "1");
-		}
-		
-		mav.addObject("page", params.get("page"));
-		
 		mav.setViewName("mng/intrnlCostMngAdd");
 		
 		return mav;
@@ -173,7 +171,7 @@ public class AcntncController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	// 내부비용관리 Action
+	// 내부비용관리 Action ajax
 	@RequestMapping(value = "/intrnlCostMngAction/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String intrnlCostMngActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
@@ -192,6 +190,8 @@ public class AcntncController {
 			case "delete":
 				iCommonService.deleteData("IntrnlCostMng.deleteIntrnlCostMng", params);
 				break;
+			case "monDelete":
+				iAcntncService.deleteMonData("IntrnlCostMng.deleteMonIntrnlCostMng", params);
 			}
 			modelMap.put("res", "success");
 		} catch (Throwable e) {

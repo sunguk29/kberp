@@ -92,11 +92,16 @@
 	</insert>
 	
 	<update id="updateIntrnlCostMng">
-	
+		
 	</update>
 	
 	<delete id="deleteIntrnlCostMng">
+		
+	</delete>
 	
+	<delete id="deleteMonIntrnlCostMng" parameterType="hashmap">
+		DELETE FROM INTRNL_COST_MNG
+		WHERE TO_CHAR(DATE_HR, 'YYYY-MM') = #{mon}
 	</delete>
 	
 </mapper>

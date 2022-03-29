@@ -592,33 +592,34 @@
 		                FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME,
 		                               EC.MBL, ROW_NUMBER() OVER(ORDER BY EC.RNUM DESC) AS RNUM
 		                        FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME,
-		                                       EC.MBL, ROW_NUMBER() OVER(ORDER BY EC.CLNT_NUM DESC) AS RNUM
+		                                       EC.MBL, ROW_NUMBER() OVER(ORDER BY EC.CLNT_NUM DESC) AS RNUM, EC.DEL_CHECK
 		                                FROM ENTRPRS_CLNT EC INNER JOIN CLNT_CMPNY CC
-		                                                             ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM ) EC ) EC ) EC
-		        WHERE 1 = 1 
-		        <if test="searchTxt != null and searchTxt != ''">
-		        	<choose>
-		        		<when test="searchType == 0">
-		        			AND EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
-		        		</when>
-		        		<when test="searchType == 1">
-		        			AND EC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-		        		</when>
-		        		<when test="searchType == 2">
-		        			AND EC.CLNT_NUM LIKE '%' || #{searchTxt} || '%'
-		        		</when>
-		        	</choose>
-		        </if>
-		        <if test="listSort != '9'">
-					<choose>
-						<when test="listSort == 0">
-							ORDER BY EC.CLNT_NUM ASC
-						</when>
-						<when test="listSort == 1">
-							ORDER BY EC.CLNT_CMPNY_NAME ASC
-						</when>
-					</choose>
-				</if> ) EC
+		                                                             ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
+		                                WHERE EC.DEL_CHECK IS NULL) EC ) EC ) EC
+		WHERE 1 = 1
+        <if test="searchTxt != null and searchTxt != ''">
+        	<choose>
+        		<when test="searchType == 0">
+        			AND EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
+        		</when>
+        		<when test="searchType == 1">
+        			AND EC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+        		</when>
+        		<when test="searchType == 2">
+        			AND EC.CLNT_NUM LIKE '%' || #{searchTxt} || '%'
+        		</when>
+        	</choose>
+        </if>
+        <if test="listSort != '9'">
+			<choose>
+				<when test="listSort == 0">
+					ORDER BY EC.CLNT_NUM ASC
+				</when>
+				<when test="listSort == 1">
+					ORDER BY EC.CLNT_CMPNY_NAME ASC
+				</when>
+			</choose>
+		</if> ) EC
 		WHERE EC.RNUM2 BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
@@ -626,7 +627,7 @@
 		SELECT COUNT(*) AS CNT
 		FROM ENTRPRS_CLNT
 		WHERE 1 = 1
-		AND DEL_CHECK IN NULL
+		AND DEL_CHECK IS NULL
 	</select>
 	
 	<select id="clntCmpnyCont" parameterType="hashmap" resultType="hashmap">
@@ -638,10 +639,27 @@
 		                           ON CC.CLNT_CMPNY_NUM = CCA.CLNT_CMPNY_NUM
 		WHERE CC.CLNT_CMPNY_NUM = #{ccn}
 	</select>
+	
+	<select id="clntCont" parameterType="hashmap" resultType="hashmap">
+		SELECT EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, EC.DEPT, EC.DUTY, EC.MBL, EC.EMAIL,
+		       E.EMP_NAME, CAF.ATT_FILE_NAME, EC.RGSTRTN_EMP_NUM, EC.MNGR_EMP_NUM, EC.CLNT_CMPNY_NUM
+		FROM ENTRPRS_CLNT EC INNER JOIN CLNT_CMPNY CC
+		                             ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
+		                     INNER JOIN EMP E
+		                             ON EC.MNGR_EMP_NUM = E.EMP_NUM
+		                LEFT OUTER JOIN CLNT_ATT_FILE CAF
+		                             ON EC.CLNT_NUM = CAF.CLNT_NUM 
+		WHERE EC.CLNT_NUM = #{cn}
+	</select>
 
 	<update id="ccDelete" parameterType="hashmap">
 		UPDATE CLNT_CMPNY SET DEL_CHECK = SYSDATE
 		WHERE CLNT_CMPNY_NUM = #{cmNum}
+	</update>
+	
+	<update id="clntDelete" parameterType="hashmap">
+		UPDATE ENTRPRS_CLNT SET DEL_CHECK = SYSDATE
+		WHERE CLNT_NUM = #{cn}
 	</update>
 	
 	<select id="clntAdd" parameterType="hashmap" resultType="hashmap">
@@ -789,6 +807,22 @@
 	<update id="ClntCmpnyAttFileUpdate" parameterType="hashmap">
 		UPDATE CLNT_CMPNY_ATT_FILE SET ATT_FILE_NAME = #{attFile}
 		WHERE CLNT_CMPNY_NUM = #{ccn}
+	</update>
+	
+	<update id="clntUpdate" parameterType="hashmap">
+		UPDATE ENTRPRS_CLNT SET CLNT_NAME = #{cName}, 
+		                        MNGR_EMP_NUM = ${mngNum}, 
+		                        CLNT_CMPNY_NUM = #{ccNum}, 
+		                        DEPT = #{dept}, 
+		                        DUTY = #{duty}, 
+		                        MBL = #{mbl}, 
+		                        EMAIL = #{email}
+		WHERE CLNT_NUM = #{cn}
+	</update>
+	
+	<update id="clntAttUpdate" parameterType="hashmap">
+		UPDATE CLNT_ATT_FILE SET ATT_FILE_NAME = #{attFile}
+		WHERE CLNT_NUM = #{cn}
 	</update>
 	
 	
