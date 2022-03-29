@@ -206,15 +206,15 @@ $(document).ready(function() {
 							</c:otherwise>
 						</c:choose>
 						<td>단가</td>
-						<td>${data.UNIT_PRICE}</td>
+						<td>${data.UNIT_PRICE}원</td>
 					</tr>
 					<tr>
 						<td>공급가액</td>
-						<td colspan="5">${data.SPLY_PRICE}</td>
+						<td colspan="5">${data.SPLY_PRICE}원</td>
 					</tr>
 					<tr>
 						<td>부가세</td>
-						<td colspan="5">${data.SRTX}</td>
+						<td colspan="5">${data.SRTX}원</td>
 					</tr>
 					<tr>
 						<td>사업자번호</td>
@@ -222,7 +222,7 @@ $(document).ready(function() {
 					</tr>
 					<tr>
 						<td>합계</td>
-						<td colspan="5">${data.AMNT}</td>
+						<td colspan="5"><b>${data.AMNT}원</b></td>
 					</tr>
 					<tr>
 						<td>비고</td>
@@ -241,7 +241,7 @@ $(document).ready(function() {
 							<c:choose>
 								<c:when test="${data.ATT_FILE != null}">
 									<div class="atchd_file"></div>
-									<div class="file_name">영수증.jpg</div>
+									<div class="file_name">${data.ATT_FILE}</div>
 								</c:when>
 								<c:otherwise>
 									-
