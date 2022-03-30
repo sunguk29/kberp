@@ -8,6 +8,8 @@
 <meta charset="UTF-8">
 <title>카카오뱅크 ERP Sample</title>
 <!-- 헤더추가 -->
+<script type="text/javascript"
+		src="resources/script/ckeditor/ckeditor.js"></script>
 <c:import url="/header"></c:import>
 <style type="text/css">
 /* 가로 사이즈 조정용 */
@@ -50,6 +52,15 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	CKEDITOR.replace("content",{
+		//옵션
+		resize_enabled:false, //크기 변경
+		language: "ko",       //언어
+		enterMode : 2,        //엔터<br/>처리
+		width: "700",		  //가로
+		height: "300"  	      //세로
+	});
+	
 	$("#cancelBtn").on("click", function(){
 		history.back();
 	});
@@ -62,6 +73,7 @@ $(document).ready(function() {
 			buttons : [{
 				name : "등록",
 				func:function() {
+					$("#content").val(CKEDITOR.instances['content'].getData());
 					if(checkEmpty("#title")){
 						alert("제목을 입력하세요");
 						$("#title").focus();

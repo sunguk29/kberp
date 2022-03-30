@@ -150,7 +150,6 @@ function drawPaging(pbstrg){
 			</table>
 			<div class="board_bottom">
 				<div class="pgn_area"></div>
-				<div class="cmn_btn_ml" id="strgBtn">복원</div>
 			</div>
 		</div>
 	</div>
