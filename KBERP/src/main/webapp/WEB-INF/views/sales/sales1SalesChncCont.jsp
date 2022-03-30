@@ -621,11 +621,15 @@ $(document).ready(function() {
 					</table>
 					<br/>
 					<!-- 첨부자료  -->
+					<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+					<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
 					<div class="spc">
-						<div class="adc_txt"> 첨부자료 (0)
-								<input type=file name='file1' style='display: none;'> 
+						<div class="adc_txt">
+							첨부자료
 						</div>
-						<div class="cntrct_box_in"></div> 
+						<div class="cntrct_box_in">
+							<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
+						</div> 
 					</div>
 					<div class="next_bot">
 						<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
