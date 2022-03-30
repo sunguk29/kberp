@@ -135,6 +135,44 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
+	$("#deleteBtn").on("click", function() {
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "삭제",
+			contents : "해당 내부비용관리 전표를 삭제하시겠습니까?",
+			buttons : [{
+				name : "삭제",
+				func:function() {
+					var params = $("#actionForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "intrnlCostMngAction/delete",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							if(res.res == "success") {
+								$("#page2").val("1");
+								$("#page").val("1");
+								$("#actionForm").attr("action", "intrnlCostMngMnthlyList");
+								$("#actionForm").submit();
+							} else {
+								alert("삭제 중 문제가 발생했습니다.");
+							}
+						},
+						error : function(request, status, error) { // 문제 발생 시 실행 함수
+							console.log(request.responseText); // 결과 텍스트
+						}
+					});
+					closePopup();
+				}
+			}, {
+				name : "취소"
+			}]
+		});
+	});
+	
 });
 </script>
 </head>
