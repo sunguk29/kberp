@@ -116,7 +116,7 @@
 	position:absolute;
 	top: 200px;
 	width: 150px;
-	height: 550px;
+	height: 450px;
 	border: 1px solid #000;
 }
 #new_schdl{
@@ -165,7 +165,7 @@
 	padding: 5px;
 }
 .today_schdl{
-	margin-top: 15px;
+	margin-top: 10px;
 }
 .get_tgthr{
 	background-color: #e9e1f4;
@@ -290,29 +290,42 @@
 	display: inline-block;
 	margin-left: 3px;
 }
-#bsns_color{
+#bsns_color,#bsns_schdl{
 	background-color: #fb8484;
 }
-#leave_color{
+#leave_color,#leave_schdl{
 	background-color: #ffb264;
 }
-#edctn_color{
+#edctn_color,#edctn_schdl{
 	background-color: #ffd352;
 }
-#mtng_color{
+#mtng_color,#mtng_schdl{
 	background-color: #66BB6A;
 }
-#get_tgthr_color{
+#get_tgthr_color,#get_tgthr_schdl{
 	background-color: #2fc1af;
 }
-#bsns_trip_color{
+#bsns_trip_color,#bsns_trip_schdl{
 	background-color: #76a7f7;
 }
-#devel_color{
+#devel_color,#devel_schdl{
 	background-color: #4d75b5;
 }
-#user_dsgnt_color{
+#user_dsgnt_color,#user_dsgnt_schdl{
 	background-color: #a17fed;
+}
+#bsns_schdl,#leave_schdl,#edctn_schdl,#mtng_schdl,#get_tgthr_schdl,#bsns_trip_schdl,#devel_schdl,#user_dsgnt_schdl{
+	display: block;
+	border: none;
+	white-space: nowrap;
+	border-radius : 5px;
+	text-align: center;
+	text-overflow:ellipsis;
+	overflow: hidden;
+	width: 120px;
+}
+#devel_schdl,#bsns_trip_schdl,#user_dsgnt_schdl{
+	color: white;
 }
 </style>
 <!-- Fullcalendar css -->
@@ -329,6 +342,7 @@ $(document).ready(function() {
 	var now = new Date();
 	var clndrYear = now.getFullYear();	// 연도
 	var clndrMonth =now.getMonth()+1;	// 월
+	
 	var Cdate = "";
 	if(clndrMonth >= 10){
 		Cdate = ""+clndrYear+ clndrMonth;
@@ -951,6 +965,39 @@ function schdlDelete(data){
 			}
 		});
 }
+
+/* 오늘 할 일 추가 */
+function drawToDayList(schdl){
+	var now = new Date();
+	var clndrYear = now.getFullYear();	// 연도
+	var clndrMonth =now.getMonth()+1;	// 월
+	var clndrDate =now.getDate();	// 일
+	if(clndrMonth >= 10){
+		var date = clndrYear+"-" + clndrMonth+"-" + clndrDate
+	}else{
+		var date = clndrYear+"-"+"0" + clndrMonth+"-" + clndrDate
+	}
+		var html = "";
+		for(var data of schdl){
+			var sidebar = document.getElementById("side_bar").offsetHeight + 34 +"px";
+			if(date == data.startDate){
+				$("#side_bar").css('height', (sidebar));
+				html += "<input type=\"hidden\" id=\"today_schdl_num\" name=\"today_schdl_num\" value=\"" + data.id + "\" >";
+				if(data.startTime == "00:00"){
+					html +=	"<div class=\"today_schdl\" id=\"" + data.schdlCtgryName +"\">" + "종일 - "  + data.title + "</div>";
+				}else{
+					html +=	"<div class=\"today_schdl\" id=\"" + data.schdlCtgryName +"\">" + data.startTime + " - " + data.title + "</div>";
+				}
+				
+			}else{
+				
+			}
+			
+		}
+		$(".today_schdl").html(html);
+			
+			
+	}
 /* 일정 불러오기 */
 function reloadList() {
 	var params = $("#dateForm").serialize();	
@@ -961,6 +1008,7 @@ function reloadList() {
 		data : params, 
 		success : function(schdl) { 
 			console.log(schdl);
+			drawToDayList(schdl.list);
 			var oldEvents = $("#fullCalendarArea").fullCalendar("getEventSources");
 			//기존 이벤트 제거
 			$("#fullCalendarArea").fullCalendar("removeEventSources", oldEvents);
@@ -1214,7 +1262,7 @@ $(document).ready(function() {
 	<div id="side_bar">
 		<div class="schdl_type">
 			<h5 class="side_bar_title">일정</h5>
-			<input type="checkbox" class="type_box" id="solo"><label for="solo" class="type_label">개인 일정</label><br>
+			<input type="checkbox" class="type_box" id="solo" checked="checked"><label for="solo" class="type_label" >개인 일정</label><br>
 			<input type="checkbox" class="type_box" id="team"><label for="team" class="type_label">팀 일정</label><br>
 			<input type="checkbox" class="type_box" id="all"><label for="all" class="type_label">전사 일정</label>
 			

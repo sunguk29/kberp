@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>guideWrtng</title>
+<title>카카오뱅크 ERP 보관함</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -21,12 +21,34 @@ tr{
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#strgBtn").on("click", function(){
-		$("#actionForm").attr("action","guideWrtngAdd");
-		$("#actionForm").submit(); 	
-	});	
+	
+	if('${param.searchGbn}' != '') {
+		$("#searchGbn").val('${param.searchGbn}');
+	} else {
+		$("#oldSearchGbn").val("0");
+	}
 	
 	 reloadList();
+	
+	$("#searchTxt").on("keypress", function(event) {
+		if(event.keyCode == 13) {
+			$("#searchBtn").click();
+				
+			return false;
+		}
+	});
+	
+	$("#searchBtn").on("click",function(){
+		// $("#page").val("1"): 검색할때 1페이지로 넘어가는것
+		$("#page").val("1");
+		
+		$("#oldSearchGbn").val($("#searchGbn").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
+		
+		reloadList(); 
+	});
+	
+	
 	 $(".pgn_area").on("click", "div",function(){
 			$("#page").val($(this).attr("page"));
 			
@@ -112,20 +134,29 @@ function drawPaging(pbstrg){
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
 	<!-- 내용영역 -->
+	<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}" />
+	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">보관함</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
-				<select class="srch_sel">
-					<option>제목</option>
-					<option>내용</option>
-					<option>작성자</option>
+		<form action="#" id="actionForm" method="post">
+			<input type="hidden" name="top" value="${param.top}">
+			<input type="hidden" name="menuNum" value="${param.menuNum}">
+			<input type="hidden" name="menuType" value="${param.menuType}">
+			<input type="hidden" id="no" name="no"/>
+			<input type="hidden" id="page" name="page" value="${page}"/>
+			
+				<select class="srch_sel" name="searchGbn" id="searchGbn">
+					<option value="0">제목</option>
+					<option value="1">작성자</option>	
 				</select>
 				<div class="srch_text_wrap">
-					<input type="text" />
+					<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
 				</div>
-				<div class="cmn_btn_ml">검색</div>
+				<div class="cmn_btn_ml" id="searchBtn">검색</div>
+			</form>
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -153,13 +184,7 @@ function drawPaging(pbstrg){
 			</div>
 		</div>
 	</div>
-	<form action="#" id="actionForm" method="post">
-	<input type="hidden" name="top" value="${param.top}">
-		<input type="hidden" name="menuNum" value="${param.menuNum}">
-		<input type="hidden" name="menuType" value="${param.menuType}">
-		<input type="hidden" id="no" name="no"/>
-	<input type="hidden" id="page" name="page" value="${page}"/>
-	</form>
+		
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

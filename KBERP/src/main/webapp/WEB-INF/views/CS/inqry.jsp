@@ -35,7 +35,7 @@
 }
 
 .inqry_info {
-	font-size: 11pt;
+	font-size: 10.5pt;
 }
 
 .inqry_info th {
@@ -269,7 +269,14 @@ $(document).ready(function() {
 				</tbody>
 				</table>
 				<div class="cnsl_bottom">
-					<div class="cmn_btn_ml" id="ansr_rvs">답변등록</div>
+					<c:choose>
+						<c:when test="${data.ANSR_TITLE eq null}">
+							<div class="cmn_btn_ml" id="ansr_rvs">수정</div>
+						</c:when>
+						<c:otherwise>
+							<div class="cmn_btn_ml" id="ansr_rvs">답변등록</div>
+						</c:otherwise>
+					</c:choose>
 					<div class="cmn_btn_ml">삭제</div>
 				</div>
 			</div> <!-- cnsl_top의 끝 -->

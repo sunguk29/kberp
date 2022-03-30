@@ -143,7 +143,7 @@ public class FcltyController {
 		 
 		List<HashMap<String, String>> list = iCommonService.getDataList("Fclty.fcltyList", params);
 
-		 modelMap.put("pb", pb);
+		modelMap.put("pb", pb);
 		modelMap.put("list", list);
 
 		return mapper.writeValueAsString(modelMap);

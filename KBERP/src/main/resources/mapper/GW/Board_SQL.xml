@@ -5,13 +5,16 @@
 		SELECT COUNT(*) AS CNT
 		FROM BOARD B INNER JOIN EMP E
             				ON B.EMP_NUM = E.EMP_NUM
-		WHERE 1 = 1
+		WHERE DEL_CHECK = 1
 		<if test="searchTxt != null and searchTxt != ''">
 			<choose>
 				<when test="searchGbn == 0">
 					 AND BOARD_TITLE LIKE '%' || #{searchTxt} || '%'
 				</when>
 				<when test="searchGbn == 1">
+					 AND B.BOARD_CONT LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="searchGbn == 2">
 					 AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
 				</when>
 			</choose>
@@ -21,17 +24,20 @@
 <select id ="getBoardList" resultType="hashmap" parameterType="hashmap">
 		SELECT *
 		FROM (  SELECT B.WRTNG_NUM, B.BOARD_TITLE, E.EMP_NAME,
-               B.BOARD_HITS, TO_CHAR(BOARD_WRTNG_DATE, 'YYYY-MM-DD') AS BOARD_WRTNG_DATE,
+               B.BOARD_HITS, TO_CHAR(BOARD_WRTNG_DATE, 'YYYY-MM-DD') AS BOARD_WRTNG_DATE, B.BOARD_CONT,
                ROW_NUMBER() OVER(ORDER BY B.WRTNG_NUM DESC) AS RNUM
 		        FROM BOARD B INNER JOIN EMP E
 		                                ON B.EMP_NUM = E.EMP_NUM
-		        WHERE 1 = 1
+		        WHERE DEL_CHECK = 1
 		        <if test="searchTxt != null and searchTxt != ''">
 					<choose>
 						<when test="searchGbn == 0">
 							 AND B.BOARD_TITLE LIKE '%' || #{searchTxt} || '%'
 						</when>
 						<when test="searchGbn == 1">
+							 AND B.BOARD_CONT LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="searchGbn == 2">
 							 AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
 						</when>
 						
@@ -53,7 +59,19 @@
 		 WHERE WRTNG_NUM = #{no}
 	</update>
 	<insert id="boardWrite" parameterType="hashmap">
-			INSERT INTO BOARD(WRTNG_NUM, BOARD_TITLE, EMP_NUM, BOARD_CONT, BOARD_ADMNSTRTN_NUM)
-		VALUES(BOARD_SEQ.NEXTVAL, #{title}, #{writer}, #{con} , #{admstrtn_num})
+			INSERT INTO BOARD(WRTNG_NUM, BOARD_TITLE, EMP_NUM, BOARD_CONT, BOARD_ADMNSTRTN_NUM, 
+			ATCHD_FILE )
+			VALUES(BOARD_SEQ.NEXTVAL, #{title}, #{writer}, #{con} , 2,  #{attFile})
 	</insert>
+	<update id="boardUpdate" parameterType="hashmap">
+		UPDATE BOARD SET BOARD_TITLE = #{title},
+             	 	    BOARD_CONT = #{con},
+             	 	   
+		WHERE WRTNG_NUM = #{no}
+	</update>
+	
+	<delete id="boardDelete" parameterType="hashmap">
+		UPDATE BOARD SET DEL_CHECK = 0
+		WHERE WRTNG_NUM = #{no}
+	</delete>
 </mapper>

@@ -124,5 +124,17 @@ public class InqryController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
+	@RequestMapping(value = "/ansrUpdate")
+	public ModelAndView ansrUpdate(@RequestParam HashMap<String, String> params,
+									ModelAndView mav) throws Throwable {
+		HashMap<String, String> data = iCommonService.getData("in.ansrUpdate, params");
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("CS/ansrUpdate");
+		
+		return mav;
+	}
+	
 	
 }

@@ -88,23 +88,31 @@
 
 <select id="getEmpList" resultType="hashmap" parameterType="hashmap">
 	SELECT O.EMP_NUM,O.EMP_NAME
-	FROM       ( SELECT EMP_NUM,EMP_NAME, ROW_NUMBER() OVER(ORDER BY EMP_NUM DESC) AS RNUM
-	             FROM EMP
-	             WHERE 1=1
+	FROM       ( SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM DESC) AS RNUM
+        		FROM DEPT D INNER JOIN APNTM A
+                    		ON D.DEPT_NUM = A.DEPT_NUM
+                   			INNER JOIN EMP E
+                    		ON A.EMP_NUM = E.EMP_NUM
+        		WHERE D.DEPT_NUM = 5 
 	             <if test="sendSrchTxt != null and sendSrchTxt != ''">
-	             	AND EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
+	             	AND E.EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
 	             </if>
 	            )O
 	WHERE O.RNUM BETWEEN #{startCount} AND #{endCount}
 </select>
 
 <select id="getEmpCnt" resultType="Integer" parameterType="hashmap">
-	SELECT COUNT(*) AS CNT
-		FROM EMP
-		WHERE 1=1
+	SELECT COUNT(*)
+	FROM(   SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM DESC) AS RNUM
+       		FROM DEPT D INNER JOIN APNTM A
+                    ON D.DEPT_NUM = A.DEPT_NUM
+                    INNER JOIN EMP E
+                    ON A.EMP_NUM = E.EMP_NUM
+       		WHERE D.DEPT_NUM = 5 
 		<if test="sendSrchTxt != null and sendSrchTxt != ''">
-			AND EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
+			AND E.EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
 		</if>
+		) 
 </select>
 
 <select id="fcltyAdd" parameterType="hashmap">

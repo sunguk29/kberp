@@ -633,22 +633,28 @@ $(document).ready(function() {
 			}]
 		});
 	});
+	
+	$("#searchTxt").on("keypress", function() {
+		if(event.keyCode == 13) {
+			$("#searchBtn").click();
+			
+			return false;
+		}
+	});
 
 	$("#searchBtn").on("click", function() {
 		
-		$("#oldsearchTxt").val($("#searchTxt").val());
-		
 		var html = "";
 		
-		html += "<input type=\"hidden\" id=\"oldsearchTxt\" value=\"${param.searchTxt}\"/>"
 		html += "<form action=\"#\" id=\"actionForm\" method=\"post\">"
 		html += "<div class=\"srch_slct\">";
-		html += "<div class=\"name_box\">정렬순서</div>";
-		html += "<select id=\"clnt_slct\">";
+		html += "<div class=\"name_box\">선택</div>";
+		html += "<select id=\"clnt_slct\" name=\"clnt_slct\">";
 		html += "	<option value=\"0\">이름</option>";
 		html += "	<option value=\"1\">등급</option>";
 		html += "	<option value=\"2\">전화번호</option>";
 		html += "</select>";
+		html += "<input type=\"text\" name=\"searchTxt\" value=\"" + $("#searchTxt").val() + "\"/>"
 		html += "</div>";
 		html += "</form>";
 		html += "<div class=\"srch_cont\">";
@@ -679,7 +685,7 @@ $(document).ready(function() {
 			contents : html,
 			contentsEvent : function reloadList() {
 				var params = $("#actionForm").serialize();
-				
+				console.log(params);
 				$.ajax({
 					type : "post",
 					url : "callCenterPopListAjax",
@@ -721,6 +727,13 @@ $(document).ready(function() {
 		}
 		$("#clntPop").html(html);
 	}
+	
+	$("#clntPop").on("click", "tr" , function() {
+		$("#no").val($(this).attr("no"));
+		
+		
+		
+	});
 	
 	$(".cmn_btn_mr").on("click", function() {
 		
@@ -913,6 +926,7 @@ function checkEmpty(sel) {
 					<div class="clnt_info_cont">
 						<input type="hidden" id="oldsearchTxt" value="${param.searchTxt}"/>
 					<form action="#" id="saveForm" method="post">
+					<input type="hidden" id="no" name="no"/>
 						<div class="clnt_info_Header">
 							<div class="clnt_info">고객정보</div>
 							<div class="srch_text_wrap clnt_srch">

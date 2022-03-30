@@ -161,6 +161,7 @@ function drawPaging(pb) {
 				
 				<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
 				<div class="cmn_btn_ml" id="searchBtn">검색</div>
+				<input type="hidden" name="boardCont" id="boardCont" value="${data.BOARD_CONT}"/>
 			</form>
 			</div>
 		</div>

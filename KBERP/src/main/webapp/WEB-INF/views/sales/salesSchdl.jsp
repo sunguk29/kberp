@@ -211,6 +211,7 @@
 	cursor: pointer;
 }
 .userseach {
+	position: relative;
 	display: inline-block;
 	vertical-align: middle;
 	width: 260px;
@@ -380,8 +381,8 @@
 }
 .btnImg_in{
 	position: absolute;
-	left: 615px;
-    top: 140px;
+	left: 204px;
+    top: 9px;
     width: 20px;
     height: 20px;
     cursor: pointer;
@@ -393,6 +394,15 @@ $(document).ready(function() {
 	drawDayCalc();
 	
 	
+	
+	/* 엔터 입력 시  */
+	$("#usrsrchTxt").on("keypress", function(event) {
+		if(event.keyCode == 13) {
+			$("#searchBtn").click(); 
+			
+			return false;
+		}
+	});
 	
 	/* 검색버튼 누를 시  */
 	$("#searchBtn").on("click", function() {

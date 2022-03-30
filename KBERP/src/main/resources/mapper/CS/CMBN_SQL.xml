@@ -4,14 +4,38 @@
 
 <select id="getGuideCnt" resultType="Integer" parameterType="hashmap">
 	SELECT COUNT(*) AS CNT
-	FROM CMBN_INFO
-	WHERE DEL_CHECK = 1
+	FROM CMBN_INFO C INNER JOIN EMP E
+                        ON C.EMP_NUM = E.EMP_NUM
+                        WHERE DEL_CHECK =1
+	<if test="searchTxt != null and searchTxt != ''">
+		<choose>
+		<!-- searchGbn: 제목, 작성자 -->
+			<when test="searchGbn == 0">
+				AND C.CMBN_TITLE LIKE '%' || #{searchTxt} || '%'
+			</when>
+			<when test="searchGbn == 1">
+				AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
+			</when>
+		</choose>
+	</if>
 </select>
 
 <select id="getStrgCnt" resultType="Integer" parameterType="hashmap">
 	SELECT COUNT(*) AS CNT
-	FROM CMBN_INFO
-	WHERE DEL_CHECK = 0
+	FROM CMBN_INFO C INNER JOIN EMP E
+                        ON C.EMP_NUM = E.EMP_NUM
+                        WHERE DEL_CHECK =0
+	<if test="searchTxt != null and searchTxt != ''">
+		<choose>
+		<!-- searchGbn: 제목, 작성자 -->
+			<when test="searchGbn == 0">
+				AND C.CMBN_TITLE LIKE '%' || #{searchTxt} || '%'
+			</when>
+			<when test="searchGbn == 1">
+				AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
+			</when>
+		</choose>
+	</if>
 </select>
 
 <select id="getStrg" parameterType="hashmap" resultType="hashmap">
@@ -24,7 +48,19 @@ FROM(SELECT BOARD_NUM, CMBN_TITLE ,CMBN_CONT, EMP_NUM, CMBN_HITS,
  WHERE DEL_CHECK = 0
  )C LEFT OUTER JOIN EMP E
                 ON C.EMP_NUM = E.EMP_NUM
-                WHERE 1=1) C
+                WHERE 1=1
+       <if test="searchTxt != null and searchTxt != ''">
+			<choose>
+			<!-- searchGbn: 제목, 작성자 -->
+				<when test="searchGbn == 0">
+				AND C.CMBN_TITLE LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="searchGbn == 1">
+				AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+			</choose>
+	   </if>
+) C
 WHERE C.RNUM BETWEEN #{strgstartCount} AND #{strgendCount}
 </select>
 
@@ -38,7 +74,19 @@ FROM(SELECT BOARD_NUM, CMBN_TITLE ,CMBN_CONT, EMP_NUM, CMBN_HITS,
  WHERE DEL_CHECK = 1
  )C LEFT OUTER JOIN EMP E
                 ON C.EMP_NUM = E.EMP_NUM
-                WHERE 1=1) C
+                WHERE 1=1
+ 	<if test="searchTxt != null and searchTxt != ''">
+		<choose>
+		<!-- searchGbn: 제목, 작성자 -->
+			<when test="searchGbn == 0">
+				AND C.CMBN_TITLE LIKE '%' || #{searchTxt} || '%'
+			</when>
+			<when test="searchGbn == 1">
+				AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
+			</when>
+		</choose>
+	</if>
+ ) C
 WHERE C.RNUM BETWEEN #{startCount} AND #{endCount}
 </select>
 
@@ -58,4 +106,19 @@ VALUES(CMBN_INFO_SEQ.NEXTVAL, #{title} , #{content} , SYSDATE, #{writer},1, 0 )
 UPDATE CMBN_INFO SET DEL_CHECK = 0
 WHERE BOARD_NUM=#{no}
 </update>
+
+<update id="guideUpdate" parameterType="hashmap">
+UPDATE CMBN_INFO SET CMBN_TITLE=#{title}, CMBN_CONT=#{content}
+WHERE BOARD_NUM=#{no}
+</update>
+
+<update id="guideStrg" parameterType="hashmap">
+UPDATE CMBN_INFO SET DEL_CHECK = 1 ,CMBN_HITS=0
+WHERE BOARD_NUM=#{no}
+</update>
+
+<update id="updateHit" parameterType="hashmap">
+		UPDATE CMBN_INFO SET  CMBN_HITS= CMBN_HITS + 1
+		WHERE BOARD_NUM = #{no}
+	</update>
 </mapper>
