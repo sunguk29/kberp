@@ -397,6 +397,14 @@ $(document).ready(function() {
 		}  else if($(this).children("#test").val() == "계약") {
 			$("#actionForm").attr("action", "sales4CntrctCont"); // 계약 상세보기로 이동.
 			$("#actionForm").submit();
+		} else if($(this).children("#test").val() == "종료(성공)") {
+			$("#actionForm").attr("action", "sales4CntrctCont"); // 계약 상세보기로 이동.
+			$("#actionForm").submit();
+		} else if($(this).children("#test").val() == "종료(실패)") {
+			
+			
+			$("#actionForm").attr("action", "sales4CntrctCont"); // 여기는 어디로 이동?? if로...처리?
+			$("#actionForm").submit();
 		} 
 		
 	});
