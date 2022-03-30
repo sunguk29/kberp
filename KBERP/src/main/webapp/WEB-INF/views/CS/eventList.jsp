@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>event List</title>
+<title>카카오뱅크 ERP - 고객센터 > 이벤트 > 진행중 이벤트 목록</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">

@@ -55,7 +55,7 @@ p {
 
 #subject{
 	
-	width:870px;
+	width:800px;
 	height:35px;
 	font-size: 20px;
 	
@@ -83,12 +83,16 @@ p {
 		
 .eventAdd_btn {
 	float: right;
-	margin-top: 10px;
+	margin-top: -30px;
 	margin-right: 37px;
 }
 
 #content{
+
+	width:850px;
+	height: 500px;
 	font-size: 20px;
+	
 }
 
 </style>
@@ -100,7 +104,7 @@ $(document).ready(function() {
 		resize_enabled : false, // 크기변경
 		language : "ko", // 언어
 		enterMode : 2, // 엔터 <br/>처리
-		width : "730", // 가로
+		width : "800", // 가로
 		height : "250" // 세로
 	});
 });
@@ -138,7 +142,7 @@ $(document).ready(function() {
 				<p id="subject_line">제목</p>
 				<input type="text" name="subject" id="subject" placeholder="제목을 입력하세요">
 				<p id="content_line">글내용</p>
-				<textarea name="content" id="content" rows="15" cols="110" placeholder="내용을 입력하세요" ></textarea>
+				<textarea name="content" id="content" placeholder="내용을 입력하세요" ></textarea>
 				<div><input type="file" value="첨부파일" id="btn_file"></div>
 				<div class="eventAdd_btn">
 					<div class="cmn_btn_mr">등록</div>
