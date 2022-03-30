@@ -512,6 +512,8 @@ $(document).ready(function() {
 						var params = $("#addForm").serialize();
 						console.log(params);
 						// 아작스 태우기
+						}
+					
 				}
 			}, { 
 				name : "취소",
@@ -586,6 +588,9 @@ function enterCheck() {
 		return;
 	}
 }
+
+
+
 
 function insert() {
 	$(".chat_dtl").val($(".chat_write").val());
