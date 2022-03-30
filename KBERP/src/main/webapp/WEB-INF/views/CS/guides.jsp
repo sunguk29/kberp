@@ -56,8 +56,7 @@ textarea{
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#btn1Btn").on("click", function() {
-		$("#actionForm").attr("action","guideWrtng")
-		$("#actionForm").submit();
+		history.back();
 	});
 	$("#btn2Btn").on("click", function() {
 		makePopup({
@@ -134,13 +133,18 @@ $(document).ready(function() {
 		<div class="inf_wrtr">${data.CMBN_TITLE}</div>
 		<br/>
 		<textarea readonly="readonly" disabled="disabled">${data.CMBN_CONT}</textarea>
-			<div class="board_bottom">
-			
-				<div class="cmn_btn_ml" id="btn1Btn">목록</div>
-				<div class="cmn_btn_ml" id="btn2Btn">수정</div>
-				<c:if test="${data.DEL_CHECK eq 1}">
-				<div class="cmn_btn_ml" id="deleteBtn">삭제</div>
-				</c:if>
+		<div class="board_bottom">
+		<div class="cmn_btn_ml" id="btn1Btn">목록</div>
+<c:choose>
+	<c:when test="${data.DEL_CHECK eq 1}">
+	<div class="cmn_btn_ml" id="btn2Btn">수정</div>
+	<div class="cmn_btn_ml" id="deleteBtn">삭제</div>
+	</c:when>
+	
+	<c:otherwise>
+		<div class="cmn_btn_ml" id="strgBtn">복원</div>
+	</c:otherwise>
+</c:choose>
 			</div>
 		</div>
 	</div>

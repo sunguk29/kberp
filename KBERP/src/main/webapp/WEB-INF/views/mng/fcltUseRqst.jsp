@@ -29,7 +29,7 @@ $(document).ready(function() {
 	
 	reloadList();
 	
-	$("tbody").on("click","tr",function(){
+	$("tbody").on("click",".board_table_hover",function(){
 		$("#no").val($(this).attr("no"));
 		
 		$("#searchGbn").val($("#oldSearchGbn").val());
@@ -95,10 +95,10 @@ function drawList(list){
 	var html = "";
 	
 	for(var data of list){
-		html += "<tr no=\"" + data.RSVTN_NUM + "\">";
+		html += "<tr>";
 		
 		html += "<td>" + data.RSVTN_NUM + "</td>";
-		html += "<td>" + data.FCLTY_NAME + "</td>";
+		html += "<td class=\"board_table_hover\" no=\"" + data.RSVTN_NUM + "\">" + data.FCLTY_NAME + "</td>";
 		html += "<td>" + data.RSVTN_DATE + "</td>";
 		html += "<td>" + data.START_TIME + " ~ " + data.END_TIME + "</td>";
 		html += "<td>" + data.STS_NUM + "</td>";

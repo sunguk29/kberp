@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,44 +19,134 @@
 </style>
 <script type = "text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
+	if('${param.searchGbn}' != '') {
+		$("#searchGbn").val('${param.searchGbn}');
+	} else {
+		$("#oldSearchGbn").val("0");
+	}
+	
+	//목록조회
+	reloadList();
+	
+	$("#searchTxt").on("keypress", function(event) {
+		if(event.keyCode == 13) {
+			$("#searchBtn").click();
+				
+			return false;
+		}
 	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
+	
+	$("#searchBtn").on("click", function() {
+		$("#page").val("1");
+		
+		$("#oldSearchGbn").val($("#searchGbn").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
+		
+		// 목록 조회
+		reloadList();
 	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
+	
+	$("tbody").on("click", "tr", function() {
+		$("#no").val($(this).attr("no"));
+		
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		$("#actionForm").attr("action", "faqdt");
+		$("#actionForm").submit();
+		
 	});
+	
+	$("#pgn_area").on("click", "div", function() {
+		$("#page").val($(this).attr("page"));
+		
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		reloadList();
+	});
+	
+	$("#paging_wrap").on("click", "span", function() {
+		$("#page").val($(this).attr("page"));
+
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		reloadList();
+	});
+	
+	$("#writeBtn").on("click", function() {
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		$("#actionForm").attr("action", "faqAdd");
+		$("#actionForm").submit();
+	});	
+	
 });
+function reloadList() { // 목록 조회용 + 페이징 조회용
+	var params =  $("#actionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "faqListAjax", 
+		dataType : "json", 
+		data : params, 
+		success : function(res) { 
+			console.log(res);
+			drawList(res.list);
+			drawPaging(res.pb);
+		},
+		error : function(request, status, error) {
+			console.log(request.responseText); 			
+		}
+	});
+}
+
+
+function drawList(list) {
+	var html = "";
+	
+	for(var data of list) {
+		html += "<tr no=\"" + data.FAQ_NUM + "\">";
+		html += "<td>" + data.FAQ_NUM + "</td>";
+		html += "<td>" + data.CTGRY_NUM + "</td>";
+		html += "<td>" + data.WRTNG_TITLE + "</td>";
+		html += "<td>" + data.WRTNG_DATE + "</td>";
+		html += "</tr>";
+	}
+	$("tbody").html(html);
+}
+
+function drawPaging(pb) {
+	var html = "";
+	
+	html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
+	
+	if($("#page").val() == "1") {
+		html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
+	} else {
+		html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
+	}
+	
+	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
+		if($("#page").val() == i) {
+			html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
+		} else {
+			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
+		}
+	}
+	
+	if($("#page").val() == pb.maxPcount) {
+		html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_next\">next</div>";
+	} else {
+		html += "<div page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</div>";
+	}
+	
+	html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
+	
+	$("#pgn_area").html(html);
+}
 </script>
 </head>
 <body>
@@ -68,21 +157,32 @@ $(document).ready(function() {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
+	<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}" />
+	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
+	<input type="hidden" name="page" value="${page}" />
+	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">FAQ</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
-				<select class="srch_sel">
-					<option>제목</option>
-					<option>내용</option>
-					<option>작성자</option>
-				</select>
-				<div class="srch_text_wrap">
-					<input type="text" />
-				</div>
-				<div class="cmn_btn_ml">검색</div>
+				<form action="#" id="actionForm" method="post">
+					<input type="hidden" id="no" name="no" />
+					<input type="hidden" id="page" name="page" value="${page}" />
+					<input type="hidden" id="top" name="top" value="${param.top}"/>
+					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
+					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
+						<select class="srch_sel" id="searchGbn" name="searchGbn">
+							<option value="0">제목</option>
+							<option value="1">작성일</option>
+						</select>
+						<div class="srch_text_wrap">
+							<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
+						</div>
+						<div class="cmn_btn_ml" id="searchBtn">검색</div>
+						<!-- <input type="button" value="글쓰기" id="writeBtn" /> -->
+				</form>
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -103,87 +203,13 @@ $(document).ready(function() {
 						<th>작성일</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td>99</td>
-						<td>입출금/예적금</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>2022-12-01</td>
-					</tr>
-					<tr>
-						<td>98</td>
-						<td>입출금/예적금</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>2022-12-01</td>
-					</tr>
-					<tr>
-						<td>97</td>
-						<td>입출금/예적금</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>2022-12-01</td>
-					</tr>
-					<tr>
-						<td>96</td>
-						<td>입출금/예적금</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>2022-12-01</td>
-					</tr>
-					<tr>
-						<td>95</td>
-						<td>인증/보안</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>2022-12-01</td>
-					</tr>
-					<tr>
-						<td>94</td>
-						<td>인증/보안</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>2022-12-01</td>
-					</tr>
-					<tr>
-						<td>93</td>
-						<td>인증/보안</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>2022-12-01</td>
-					</tr>
-					<tr>
-						<td>92</td>
-						<td>앱이용</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>2022-12-01</td>
-					</tr>
-					<tr>
-						<td>91</td>
-						<td>앱이용</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						
-						<td>2022-12-01</td>
-					</tr>
-					<tr>
-						<td>90</td>
-						<td>앱이용</td>
-						<td class="board_table_hover board_cont_left">질문글입니다.</td>
-						<td>2022-12-01</td>
-					</tr>
-				</tbody>
+				<tbody></tbody>
 			</table>
 			<div class="board_bottom">
-				<div class="pgn_area">
-					<div class="page_btn page_first">first</div>
-					<div class="page_btn page_prev">prev</div>
-					<div class="page_btn_on">1</div>
-					<div class="page_btn">2</div>
-					<div class="page_btn">3</div>
-					<div class="page_btn">4</div>
-					<div class="page_btn">5</div>
-					<div class="page_btn page_next">next</div>
-					<div class="page_btn page_last">last</div>
-				</div>
-				<div class="cmn_btn_ml">글쓰기</div>
+				<div class="pgn_area" id="pgn_area"></div>
 			</div>
 		</div>
 	</div>
-	
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

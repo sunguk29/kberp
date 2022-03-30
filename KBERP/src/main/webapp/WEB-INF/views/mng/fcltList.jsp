@@ -83,10 +83,10 @@ function drawList(list){
 	var html = "";
 	
 	for(var data of list){
-		html += "<tr no=\"" + data.FCLTY_NUM + "\">";
+		html += "<tr>";
 		
 		html += "<td>" + data.FCLTY_NUM + "</td>";
-		html += "<td>" + data.FCLTY_NAME + "</td>";
+		html += "<td class=\"board_table_hover\" no=\"" + data.FCLTY_NUM + "\">" + data.FCLTY_NAME + "</td>";
 		html += "<td>" + data.PLACE + "</td>";
 		html += "<td>" + data.EMP_NAME + "</td>";
 		html += "<td>" + data.ACPT_NUM_OF_PL + "</td>";

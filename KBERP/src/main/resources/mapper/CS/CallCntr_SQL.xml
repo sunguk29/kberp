@@ -24,6 +24,17 @@ WHERE 1 = 1
 ORDER BY I.CLNT_NUM DESC
 </select>
 
+<select id="getRcrdCnslNote" parameterType="hashmap" resultType="hashmap">
+SELECT CLNT_NUM, CNSL_TYPE_NUM, CONT, 
+       CASE WHEN CNSL_RSLT_NUM = 0 THEN '완료'
+            WHEN CNSL_RSLT_NUM = 1 THEN '미처리'
+            WHEN CNSL_RSLT_NUM = 2 THEN '예약'
+            WHEN CNSL_RSLT_NUM = 3 THEN '이관'
+       END CNSL_RSLT_NUM
+FROM CNSL_NOTE
+WHERE 1=1
+</select>
+
 <insert id="clntSave" parameterType="hashmap">
 INSERT INTO INDVDL_CLNT(CLNT_NUM, CLNT_NAME, CLNT_GRADE, PHONE_NUM_1, PHONE_NUM_2, ADRS, DTL_ADRS)
 VALUES (INDVDL_CLNT_SEQ.NEXTVAL, #{clnt_name}, #{clnt_grade}, #{phon_num_1}, #{phon_num_2}, #{adrs}, #{dtl_adrs})
