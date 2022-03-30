@@ -165,7 +165,6 @@
 .cnsl_cont {
 	display: none;
 	width: 800px;
-	height: 377px;
 	font-size: 10.5pt;
 	background-color: #FAFAFA;
 }
@@ -257,9 +256,8 @@ tr:nth-child(2) input, tr:nth-child(4) input {
 
 .ansr_dtls_see_top .wrtng_title input {
 	display: inline-block;
-	width: 710px;
-	height: 20px;
-	padding: 5px 10px;
+	width: 725px;
+	height: 25px;
 	border: 1px solid #d1d1d1;
 	outline: none;
 }
@@ -434,7 +432,7 @@ function checkEmpty(sel) {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
-	<form action="inqry" id="actionForm" method="post">
+	<form action="inqry" id="backForm" method="post">
 		<input type="hidden" name="no" value="${param.no}" />
 		<input type="hidden" name="page" value="${param.page}" />
 		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
@@ -511,10 +509,10 @@ function checkEmpty(sel) {
 							<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
 							<div class="ansr_title">
 								<div class="wrtng_title">
-									<input type="text" placeholder="제목" id="ansr_title" name="ansr_title"/>
+									<input type="text" placeholder="제목" id="ansr_title" name="ansr_title" value="${data.ANSR_TITLE}"/>
 								</div>
 							<div class="cnsl_middle">
-								<textarea class="ansr_cont" id="ansr_cont" name="ansr_cont" rows="15" cols="110" placeholder="내용을 입력하세요."></textarea>
+								<textarea class="ansr_cont" id="ansr_cont" name="ansr_cont" rows="15" cols="110" placeholder="내용을 입력하세요.">${data.ANSR_CONT}</textarea>
 							</div>
 							<div class="cnsl_bottom">
 								<div class="file_atch">
@@ -524,7 +522,8 @@ function checkEmpty(sel) {
 								</div>
 								<div class="ansr_btn">
 									<div class="cmn_btn_mr" id="btn1Btn">대응가이드</div>
-									<div class="cmn_btn_mr" id="btn2Btn">답변등록</div>
+									<div class="cmn_btn_mr" id="btn2Btn">수정</div>
+									<div class="cmn_btn_mr">취소</div>
 								</div>
 							</div>
 							</div>
