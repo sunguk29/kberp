@@ -33,6 +33,22 @@ public class ClntMngController {
 			params.put("page", "1");
 		}
 		
+		int AllCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyListAllCnt", params);
+		int CntrctCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyCntrctCnt", params);
+		int PartnerCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyPartnerCnt", params);
+		int TmnCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyTmnCnt", params);
+		int SspsCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnySspsCnt", params);
+		int ForeignCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyForeignCnt", params);
+		int EtcCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyEtcCnt", params);
+		
+		mav.addObject("AllCnt", AllCnt);
+		mav.addObject("CntrctCnt", CntrctCnt);
+		mav.addObject("PartnerCnt", PartnerCnt);
+		mav.addObject("TmnCnt", TmnCnt);
+		mav.addObject("SspsCnt", SspsCnt);
+		mav.addObject("ForeignCnt", ForeignCnt);
+		mav.addObject("EtcCnt", EtcCnt);
+		
 		mav.addObject("page", params.get("page"));
 		mav.setViewName("sales/clntCmpnyList");
 		
@@ -101,22 +117,6 @@ public class ClntMngController {
 		
 		int listCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyListCnt", params);
 		
-		int MaxCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyListCnt", params);
-		int CntrctCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyCntrctCnt", params);
-		int PartnerCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyPartnerCnt", params);
-		int TmnCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyTmnCnt", params);
-		int SspsCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnySspsCnt", params);
-		int ForeignCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyForeignCnt", params);
-		int EtcCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyEtcCnt", params);
-		
-		modelMap.put("MaxCnt", MaxCnt);
-		modelMap.put("CntrctCnt", CntrctCnt);
-		modelMap.put("PartnerCnt", PartnerCnt);
-		modelMap.put("TmnCnt", TmnCnt);
-		modelMap.put("SspsCnt", SspsCnt);
-		modelMap.put("ForeignCnt", ForeignCnt);
-		modelMap.put("EtcCnt", EtcCnt);
-		
 		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), listCnt, 5, 5);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
@@ -125,6 +125,7 @@ public class ClntMngController {
 		List<HashMap<String, String>> list = iCommonService.getDataList("clntCmpnyMng.getClntCmpntList", params);
 		
 		modelMap.put("list", list);
+		modelMap.put("listCnt", listCnt);
 		modelMap.put("pb", pb);
 		
 		return mapper.writeValueAsString(modelMap);
@@ -149,6 +150,7 @@ public class ClntMngController {
 		
 		modelMap.put("list", list);
 		modelMap.put("pb", pb);
+		modelMap.put("listCnt", listCnt);
 		
 		return mapper.writeValueAsString(modelMap);
 	}

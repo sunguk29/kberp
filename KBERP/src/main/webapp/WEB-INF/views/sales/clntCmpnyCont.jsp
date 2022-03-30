@@ -994,7 +994,7 @@ $(document).ready(function() {
 			height : 500,
 			buttons : [{
 				name : "등록",
-				func:function() {
+				func : function() {
 					if(checkEmpty("#cName")) {
 						makeAlert("필수 항목 알림", "고객을 입력하세요");
 					} else if(checkEmpty("#ccName")) {
@@ -1004,9 +1004,9 @@ $(document).ready(function() {
 					} else if(checkEmpty("#mngEmp")) {
 						makeAlert("필수 항목 알림", "담당자를 입력하세요");
 					} else {
-						var addForm = $("#ClAddForm");
+						var ClAddForm = $("#ClAddForm");
 						
-						addForm.ajaxForm({
+						ClAddForm.ajaxForm({
 							success : function(res) {
 								if(res.fileName.length > 0) {
 									$("#attFile").val(res.fileName[0]);
@@ -1037,7 +1037,7 @@ $(document).ready(function() {
 							}
 						});
 						
-						addForm.submit();
+						ClAddForm.submit();
 						closePopup(1);
 						reloadCList();
 					} // if end
