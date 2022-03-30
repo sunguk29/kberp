@@ -2,9 +2,79 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="msgr">
 
-<insert id = "insertCont" parameterType= "hashmap">
+<!-- 총 채팅방 수 -->
+	<select id = "chatCnt" parameterType="hashmap" resultType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM MSGR M INNER JOIN MSGR_HEAD_COUNT MHC
+		ON M.CHAT_NUM = MHC.CHAT_NUM
+		WHERE 1 = 1
+		<if test="searchTxt != null and searchTxt != ''">
+		<choose>
+			<when test="searchGbn == 0">
+				AND ASSET_NAME LIKE '%' || #{searchTxt} || '%'
+			</when>
+			<when test="searchGbn == 1">
+				AND EMP_NAME LIKE '%' || #{searchTxt} || '%'
+			</when>
+		</choose>
+	</if>
+	</select>
+
+<insert id = "insertChat" parameterType= "hashmap">
 	INSERT INTO MSGR(CHAT_NUM, EMP_NUM, RGSTRTN_DT)
-	VALUES(MSGR_CHAT_SEQ.NEXTVAL, #{empNum}, TO_DATE(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'))
+	VALUES(#{chatsq}, #{emp_num}, TO_DATE(#{rgdt}, 'YYYY-MM-DD HH24:MI:SS'))
 </insert>
+	
+<insert id = "insertCont" parameterType= "hashmap">
+	INSERT INTO MSGR_CONT(CONT_NUM, CHAT_NUM, EMP_NUM, CONT, RGSTRTN_DT)
+	VALUES (#{contsq}, #{chatsq}, #{emp_num}, #{cont_num}, TO_DATE(#{rgdt}, 'YYYY-MM-DD HH24:MI:SS'))
+</insert>
+	
+<select id="chatSeq" resultType="String">
+	SELECT MSGR_CHAT_SEQ.NEXTVAL
+	FROM DUAL
+</select>
+
+<select id="contSeq" resultType="String">
+	SELECT MSGR_CONT_SEQ.NEXTVAL
+	FROM DUAL
+</select>
+
+<!-- <select id = "getChatList" parameterType = "hashmap" resultType="hashmap">
+	SELECT *
+	FROM (SELECT CHAT_NUM, E.EMP_NUM, TO_DATE(RGSTRTN_DT, 'YYYY-MM-DD HH24:MI:SS') AS RGSTRTN_DT,
+	 		EMP_NAME, DEPT_NAME, RANK_NAME
+	FROM MSGR M INNER JOIN EMP E
+	                        ON M.EMP_NUM = E.EMP_NUM
+	            INNER JOIN APNTM A
+	                        ON E.EMP_NUM = A.EMP_NUM
+	            INNER JOIN DEPT D
+	                        ON A.DEPT_NUM = D.DEPT_NUM
+	            INNER JOIN RANK R
+	            			ON A.RANK_NUM = R.RANK_NUM 
+	)
+	WHERE 1 = 1
+</select> -->
+
+<select id = "addListChat" parameterType = "hashmap" resultType="hashmap">
+SELECT *
+FROM (SELECT E.EMP_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME
+FROM  EMP E INNER JOIN APNTM A
+                        ON E.EMP_NUM = A.EMP_NUM
+            INNER JOIN DEPT D
+                        ON A.DEPT_NUM = D.DEPT_NUM
+            INNER JOIN RANK R
+                        ON A.RANK_NUM = R.RANK_NUM 
+     )
+WHERE 1 = 1
+</select>
+
+<update id="joinChat" parameterType="hashmap">
+	UPDATE MSGR SET EMP_NUM = #{emp_num},
+                 RGSTRTN_DT = #{rgdt}
+	WHERE CHAT_NUM = #{chat_num}
+</update>
+
+
 
 </mapper>
