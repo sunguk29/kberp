@@ -430,13 +430,13 @@ $(document).ready(function() {
 		
 		$("#psNum").val($(this).attr("num"));
 		
-		if($("#searchTxt").val() != "" || $("mngEmp").val != "") { // 담당자, 검색어 txt가 비어있지 않으면 초기화
+/* 		if($("#searchTxt").val() != "" || $("mngEmp").val != "") { // 담당자, 검색어 txt가 비어있지 않으면 초기화
 			var txt = document.getElementById("searchTxt");
 			var mngrTxt = document.getElementById("mngEmp");
 			
 			txt.value = "";
 			mngrTxt.value = "";
-		}
+		} */
 		reloadList();		
 	});
 	
@@ -732,7 +732,7 @@ function drawPaging(pb, sel) {
 	<input type="hidden" id="leadNum" name="leadNum" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
-	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />t
 	
 	<!-- 내용영역 -->
 		<div class="cont_wrap">
@@ -800,7 +800,7 @@ function drawPaging(pb, sel) {
 									</td>
 									<td colspan="7">
 										<div class="findEmp_box">
-											<input type="text" maxlength="20" class="findEmp_box2" id="mngEmp" name="mngEmp" value="${param.mngEmp}" style="border:0 solid black" />
+											<input type="text" maxlength="20" class="findEmp_box2" id="mngEmp" name="mngEmp" style="border:0 solid black" />
 											<input type="hidden" id="mngNum" name="mngNum" />
 											<span><img alt="담당자이미지" class="userIcon" src="resources/images/sales/usericon.png"> </span>
 										</div>										
@@ -816,7 +816,7 @@ function drawPaging(pb, sel) {
 										</select>
 									</td>
 									<td colspan="8" class="sDate">
-										<input type="button" id="yesterday" name="yesterday" value="어제" />
+										<input type="button" value="어제" />
 										<input type="button" value="오늘" />
 										<input type="button" value="일주일 전" />
 										<input type="button" value="1개월 전" />
