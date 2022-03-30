@@ -69,12 +69,11 @@ $(document).ready(function() {
 
 	$("tbody").on("click", "#click", function() {
 		$("#num").val($(this).attr("num"));
-		$("#unum").val($(this).attr("unum"));
 		
 		$("#searchGbn").val($("#oldSearchGbn").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
 		
-		$("#actionForm").attr("action", "assetRntlDtlView");
+		$("#actionForm").attr("action", "assetTktDtlView");
 		$("#actionForm").submit();	
 	});
 	
@@ -99,7 +98,7 @@ function reloadList() { // 목록 조회용 + 페이징 조회용
 
 	$.ajax({
 		type : "post", 
-		url : "assetRntlAjax", 
+		url : "assetTktAjax", 
 		dataType : "json",
 		data : params, 
 		success : function(res) { 
@@ -118,15 +117,17 @@ function drawList(list) {
 	var html = "";
 	
 	for(var data of list) {
-		html += "<tr num=\""+ data.ASSET_NUM + "\">";
+		html += "<tr>";
 		html += "<td>" + data.ASSET_NUM + "</td>";
-		html += "<td id=\"click\" num=\""+ data.ASSET_NUM +"\" unum=\""+ data.ASSET_USE_NUM +"\">" + data.ASSET_NAME + "</td>";
-		html += "<td>" + data.EMP_NAME + "</td>";
-		html += "<td>" + data.START_DATE + "</td>";
-		if(data.END_DATE== null)
-			html += "<td>사용중</td>";
+		html += "<td id=\"click\" num=\""+ data.ASSET_NUM +"\">" + data.ASSET_NAME + "</td>";
+		if(data.QUNTY_DVSN_NUM == 0 )
+			html += "<td>" + data.QUNTY +"ea</td>";
+		else if(data.QUNTY_DVSN_NUM == 1)
+			html += "<td>" + data.QUNTY +"set</td>";
 		else
-		html += "<td>" + data.END_DATE + "</td>";
+			html += "<td>" + data.QUNTY +"box</td>";
+		html += "<td>" + data.MNGR_NAME + "</td>";
+		html += "<td>" + data.TKT_DATE + "</td>";
 		html += "</tr>";
 	}
 	$("tbody").html(html);
@@ -186,11 +187,10 @@ function drawPaging(pb) {
 					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 					<input type="hidden" id="page" name="page" value="${page}"/>
 					<input type="hidden" id="num" name="num"/>
-					<input type="hidden" id="unum" name="unum"/>
 					
 					<select id="searchGbn" name="searchGbn">
 						<option value="0">자산명</option>
-						<option value="1">사용자명</option>
+						<option value="1">담당자명</option>
 					</select>
 						<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
 						<input class="cmn_btn" type="button" value="검색" id="searchBtn"/>
@@ -215,9 +215,9 @@ function drawPaging(pb) {
 					<tr>
 						<th>자산번호</th>
 						<th>자산명</th>
-						<th>사용자</th>
-						<th>사용시작일</th>
-						<th>사용종료일</th>
+						<th>수량</th>
+						<th>담당자</th>
+						<th>반출일</th>
 					</tr>
 				</thead>
 				<tbody></tbody>
