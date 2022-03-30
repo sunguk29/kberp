@@ -105,6 +105,15 @@ $(document).ready(function() {
 							<td>수량</td>
 							<td>
 								${data.QUNTY}
+								<c:if test="${data.QUNTY_DVSN_NUM==0}">
+									ea
+								</c:if>
+								<c:if test="${data.QUNTY_DVSN_NUM==1}">
+									set
+								</c:if>
+								<c:if test="${data.QUNTY_DVSN_NUM==2}">
+									box
+								</c:if>
 							</td>
 						</tr>
 					</tbody>

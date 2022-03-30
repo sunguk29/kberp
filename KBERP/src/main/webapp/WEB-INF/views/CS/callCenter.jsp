@@ -640,14 +640,13 @@ $(document).ready(function() {
 		
 		html += "<form action=\"#\" id=\"actionForm\" method=\"post\">"
 		html += "<div class=\"srch_slct\">";
-		html += "<input type=\"text\" id=\"srch_txt\"/>";
-		html += "<input type=\"button\" value=\"검색\" id=\"srch_btn\">";
-		html += "<div class=\"name_box\">정렬순서</div>";
-		html += "<select id=\"clnt_slct\">";
+		html += "<div class=\"name_box\">선택</div>";
+		html += "<select id=\"clnt_slct\" name=\"clnt_slct\">";
 		html += "	<option value=\"0\">이름</option>";
 		html += "	<option value=\"1\">등급</option>";
 		html += "	<option value=\"2\">전화번호</option>";
 		html += "</select>";
+		html += "<input type=\"text\" name=\"searchTxt\" value=\"" + $("#searchTxt").val() + "\"/>"
 		html += "</div>";
 		html += "</form>";
 		html += "<div class=\"srch_cont\">";
@@ -668,7 +667,7 @@ $(document).ready(function() {
 		html += "	</tbody>";
 		html += "	</table>";
 		html += "</div>";
-		
+			
 		makePopup({
 			bg : false,
 			bgClose : false,
@@ -678,7 +677,7 @@ $(document).ready(function() {
 			contents : html,
 			contentsEvent : function reloadList() {
 				var params = $("#actionForm").serialize();
-				
+				console.log(params);
 				$.ajax({
 					type : "post",
 					url : "callCenterPopListAjax",
@@ -703,6 +702,8 @@ $(document).ready(function() {
 				}
 			}]
 		});
+		
+		
 		
 	});
 	
@@ -733,13 +734,45 @@ $(document).ready(function() {
 			title : "저장",
 			contents : html,
 			buttons :  [{
-				name : "취소",
+				name : "확인",
 				func:function() {
-					console.log("One!");
+					if(checkEmpty("#clnt_name")) {
+						alert("고객명을 입력하세요.");
+						$("#clnt_name").focus();
+					} else if(checkEmpty("#clnt_grade")) {
+						alert("고객등급을 입력하세요.");
+						$("#clnt_grade").focus();
+					} else if(checkEmpty("#phon_num_1")) {
+						alert("전화번호를 입력하세요.");
+						$("#phon_num_1").focus();
+					} else {
+						// 저장
+						var params = $("#saveForm").serialize();
+						
+						$.ajax({
+							type : "post",
+							url : "callCenterAction/ClntSave",
+							dataType : "json",
+							data : params,
+							success : function(res) {
+								if(res.res == "success") {
+									location.href = "callCenter";
+								} else {
+									alert("작성중 문제가 발생하였습니다.");
+								}
+
+							},
+							error : function(request, status, error) {
+								console.log(request.responseText);
+
+							}
+						}); // ajax end
+					} // else end
+				saveForm.submit();
 					closePopup();
 				}
 			}, {
-				name : "확인"
+				name : "취소"
 			}]
 		});
 	});
@@ -758,91 +791,52 @@ $(document).ready(function() {
 			title : "저장",
 			contents : html,
 			buttons :  [{
-				name : "취소",
+				name : "확인",
 				func:function() {
-					console.log("One!");
+					if(checkEmpty("#big_sel")) {
+						alert("대분류를 입력하세요.");
+						$("#big_sel").focus();
+					} else if(checkEmpty("#small_sel")) {
+						alert("소분류를 입력하세요.");
+						$("#small_sel").focus();
+					} else if(checkEmpty("#cont")) {
+						alert("상담내용을 입력하세요.");
+						$("#cont").focus();
+					} else if(checkEmpty("#cnsl_rslt")) {
+						alert("상담결과를 입력하세요.");
+						$("#cnsl_rslt").focus();
+					} else {
+						// 저장
+						var params = $("#noteSaveForm").serialize();
+						
+						$.ajax({
+							type : "post",
+							url : "callCenterAction/NoteSave",
+							dataType : "json",
+							data : params,
+							success : function(res) {
+								if(res.res == "success") {
+									location.href = "callCenter";
+								} else {
+									alert("작성중 문제가 발생하였습니다.");
+								}
+
+							},
+							error : function(request, status, error) {
+								console.log(request.responseText);
+
+							}
+						}); // ajax end
+					} // else end
+					noteSaveForm.submit();
 					closePopup();
 				}
 			}, {
-				name : "확인"
+				name : "취소"
 			}]
 		});
 	});
 	
-	$("#saveBtn").on("click", function() {
-		
-		if(checkEmpty("#clnt_name")) {
-			alert("고객명을 입력하세요.");
-			$("#clnt_name").focus();
-		} else if(checkEmpty("#clnt_grade")) {
-			alert("고객등급을 입력하세요.");
-			$("#clnt_grade").focus();
-		} else if(checkEmpty("#phon_num_1")) {
-			alert("전화번호를 입력하세요.");
-			$("#phon_num_1").focus();
-		} else {
-			// 저장
-			var params = $("#saveForm").serialize();
-			
-			$.ajax({
-				type : "post",
-				url : "callCenterAction/ClntSave",
-				dataType : "json",
-				data : params,
-				success : function(res) {
-					if(res.res == "success") {
-						location.href = "callCenter";
-					} else {
-						alert("작성중 문제가 발생하였습니다.");
-					}
-
-				},
-				error : function(request, status, error) {
-					console.log(request.responseText);
-
-				}
-			}); // ajax end
-		} // else end
-	}); // saveBtn end
-	
-	$("#noteSaveBtn").on("click", function() {
-		
-		if(checkEmpty("#big_sel")) {
-			alert("대분류를 입력하세요.");
-			$("#big_sel").focus();
-		} else if(checkEmpty("#small_sel")) {
-			alert("소분류를 입력하세요.");
-			$("#small_sel").focus();
-		} else if(checkEmpty("#cont")) {
-			alert("상담내용을 입력하세요.");
-			$("#cont").focus();
-		} else if(checkEmpty("#cnsl_rslt")) {
-			alert("상담결과를 입력하세요.");
-			$("#cnsl_rslt").focus();
-		} else {
-			// 저장
-			var params = $("#noteSaveForm").serialize();
-			
-			$.ajax({
-				type : "post",
-				url : "callCenterAction/NoteSave",
-				dataType : "json",
-				data : params,
-				success : function(res) {
-					if(res.res == "success") {
-						location.href = "callCenter";
-					} else {
-						alert("작성중 문제가 발생하였습니다.");
-					}
-
-				},
-				error : function(request, status, error) {
-					console.log(request.responseText);
-
-				}
-			}); // ajax end
-		} // else end
-	}); // saveBtn end
 	
 	function reloadCnslList() {
 		var params = $("#cnslForm").serialize();

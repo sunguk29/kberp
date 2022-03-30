@@ -53,7 +53,7 @@
 	vertical-align: middle;
 	width: 30px;
 	height: 40px;
-	background-image: url('./images/cmn/dwnld_icon.png');
+	background-image: url('resources/images/mng/dwnld_icon.png');
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 20px;
@@ -126,8 +126,51 @@ $(document).ready(function() {
 		$("#menuNum2").val("39");
 		$("#menuType2").val("M");
 		
-		$("#actionForm").attr("action", "chitMng")
+		$("#actionForm").attr("action", "chitMng");
 		$("#actionForm").submit();
+	});
+	
+	$("#updateBtn").on("click", function() {
+		$("#actionForm").attr("action", "intrnlCostMngUpdate");
+		$("#actionForm").submit();
+	});
+	
+	$("#deleteBtn").on("click", function() {
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "삭제",
+			contents : "해당 내부비용관리 전표를 삭제하시겠습니까?",
+			buttons : [{
+				name : "삭제",
+				func:function() {
+					var params = $("#actionForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "intrnlCostMngAction/delete",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							if(res.res == "success") {
+								$("#page2").val("1");
+								$("#page").val("1");
+								$("#actionForm").attr("action", "intrnlCostMngMnthlyList");
+								$("#actionForm").submit();
+							} else {
+								alert("삭제 중 문제가 발생했습니다.");
+							}
+						},
+						error : function(request, status, error) { // 문제 발생 시 실행 함수
+							console.log(request.responseText); // 결과 텍스트
+						}
+					});
+					closePopup();
+				}
+			}, {
+				name : "취소"
+			}]
+		});
 	});
 	
 });
@@ -138,6 +181,7 @@ $(document).ready(function() {
 		<input type="hidden" id="mon" name="mon" value="${param.mon}">
 		<input type="hidden" id="page" name="page" value="${param.page}" />
 		<input type="hidden" id="page2" name="page2" value="${param.page2}" />
+		<input type="hidden" id="sendChitNum" name="sendChitNum" value="${param.sendChitNum}">
 		
 		<input type="hidden" id="top2" name="top" value="${param.top}">
 		<input type="hidden" id="menuNum2" name="menuNum" value="${param.menuNum}">

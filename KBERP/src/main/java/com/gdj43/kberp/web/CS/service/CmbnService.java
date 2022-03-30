@@ -12,5 +12,11 @@ public class CmbnService implements ICmbnService{
 	@Autowired
 	public ICmbnDao iCmbnDao;
 
+	@Override
+	public void DataAdd(HashMap<String, String> params) throws Throwable {
+		iCmbnDao.DataAdd(params);
+		
+	}
+
 	}
 

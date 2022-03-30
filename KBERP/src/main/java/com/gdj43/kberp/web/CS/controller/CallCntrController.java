@@ -92,4 +92,17 @@ public class CallCntrController {
 				return mapper.writeValueAsString(modelMap);
 			}
 	
+	@RequestMapping(value = "/rcrdCnslNote")
+	public ModelAndView rcrdCnslNote(@RequestParam HashMap<String, String> params,
+							ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("CC.getRcrdCnslNote", params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("CS/callCenter");
+		
+		return mav;
+	}
+	
 }

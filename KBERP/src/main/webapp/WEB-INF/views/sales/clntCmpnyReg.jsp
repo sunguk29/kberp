@@ -493,7 +493,7 @@ function uploadName(e) {
 						<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" />
 					</div>
 					<div class="cntrct_box_in">
-						<input type="text" id="fileName" name="fileName" readonly="readonly" />
+						<input type="text" id="fileName" readonly="readonly" />
 					</div>
 				</form>
 			</div>

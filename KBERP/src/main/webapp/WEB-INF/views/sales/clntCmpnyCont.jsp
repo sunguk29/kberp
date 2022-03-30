@@ -177,10 +177,6 @@ td:nth-child(1), td:nth-child(3){
 	font-size: 13px;
 	line-height: 20px;
 }
-.cc_box_in:hover {
-	cursor: pointer;
-	color: #2E83F2;
-}
 .cc_box_right {
 	display: inline-block;
 	vertical-align: top;
@@ -609,6 +605,10 @@ textarea {
 	text-decoration: none;
 	
 }
+#fileName, #popFileName {
+	border: hidden;
+	outline: none;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -634,7 +634,7 @@ $(document).ready(function() {
 		$("#actionForm").attr("action", "clntCmpnyUpdate");
 		$("#actionForm").submit();
 	});
-
+	
 	$("#deleteBtn").on("click", function() {
 		makePopup({
 			bg : false,
@@ -798,11 +798,12 @@ $(document).ready(function() {
 		html += "	</tbody>                                                                                                          ";
 		html += "</table>                                                                                                             ";
 		html += "<div class=\"pop_rvn_txt\"> 첨부파일                                                                                        ";
-		html += "<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" border='0' />                                   ";
+		html += "<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />                                   ";
 		html += "</div>                                                                                                                  ";
 		html += "<div class=\"pop_cntrct_box_in\">                                                                                           ";
+		html += "<input type=\"text\" id=\"popFileName\" readonly=\"readonly\" />";
 		html += "</div>                                                                                                                  ";
-		html += "<input type=\"file\" id=\"att\" name=\"att\" />                                                                         ";
+		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />                                                                         ";
 		html += "<input type=\"hidden\" id=\"attFile\" name=\"attFile\" />                                                               ";
 		html += "</form>";
 		
@@ -813,6 +814,10 @@ $(document).ready(function() {
 			title : "고객 등록",
 			contents : html,
 			contentsEvent : function() {
+				
+				$(".aff_btn").on("click", function() {
+					$("#att").click();
+				});
 				
 				$("#ccPop").on("click", function() {
 					var html = "";
@@ -1275,6 +1280,12 @@ function drawMngPaging(mngPb) {
 
 }
 // *********************************************** 담당자 팝업 END ***********************************************
+function uploadName(e) {
+	var files = e.files;
+	var filename = files[0].name;
+	$("#fileName").val(filename);
+	$("#popFileName").val(filename);
+}
 </script>
 </head>
 <body>

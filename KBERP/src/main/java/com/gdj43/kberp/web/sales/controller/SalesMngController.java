@@ -112,8 +112,8 @@ public class SalesMngController {
 		return mav;
 	}
 	
-	// salesMng1Action : 영업기회 등록, 수정, 삭제
-	@RequestMapping(value = "/salesMng1Action/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	// salesMng1ActionAjax : 영업기회 등록, 수정, 삭제
+	@RequestMapping(value = "/salesMng1ActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	
 	@ResponseBody
 	public String salesMng1ActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
@@ -127,19 +127,25 @@ public class SalesMngController {
 			case "insert":
 				String seq = iCommonService.getStringData("salesMng.salesSeq"); // 영업번호 시퀀스 가져오기
 				params.put("ss", seq); // 영업번호 시퀀스 넣어주기
+				modelMap.put("seq", seq); // 영업기회 등록 후 영업기회 상세보기로 이동할 때 필요.
 				iCommonService.insertData("salesMng.sales1AddSales", params); // 영업기회 등록
 				iCommonService.insertData("salesMng.sales1AddLoan", params); // 영업기회 대출상세정보tab
 				iCommonService.insertData("salesMng.sales1AddBsns", params); // 영업기회 예정사업 상세정보tab
-				iCommonService.insertData("salesMng.sales1AddBsnsAtt", params); // 영업기회 예정사업 첨부파일tab
+				if (params.get("attFile") != null) {
+					iCommonService.insertData("salesMng.sales1AddBsnsAtt", params); // 영업기회 예정사업 첨부파일tab
+				}
 				break;
 			case "update":
 				iCommonService.updateData("salesMng.sales1UpdateSales", params);
 				iCommonService.updateData("salesMng.sales1UpdateLoan", params);
 				iCommonService.updateData("salesMng.sales1UpdateBsns", params);
-				iCommonService.updateData("salesMng.sales1UpdateBsnsAtt", params);
+				if (params.get("attFile") != null) {
+					iCommonService.updateData("salesMng.sales1UpdateBsnsAtt", params);
+				}
 				break;
 			case "failure":
 				// sales1Failure : 영업기회 실패 (PRGRS_STS 5번으로.)
+				iCommonService.updateData("salesMng.sales1Failure", params);
 				break;
 			}
 			modelMap.put("res", "success");
@@ -198,8 +204,42 @@ public class SalesMngController {
 	}
 	
 	
-	// salesMng2Action : 제안 등록, 수정, 삭제
+	// salesMng2ActionAjax : 제안 등록, 수정, 삭제
+	@RequestMapping(value = "/salesMng2ActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	
+	@ResponseBody
+	public String salesMng2ActionAjax (@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			switch (gbn) {
+			case "insert" :
+				iCommonService.insertData("salesMng.sales2AddLoan", params); // 제안 대출상세정보tab
+				iCommonService.insertData("salesMng.sales2AddClntCmpny", params); // 제안 고객사 상세정보tab
+				iCommonService.insertData("salesMng.sales2AddDtlInfo", params); // 제안 상세정보tab
+				if (params.get("attFile") != null) {
+					iCommonService.insertData("salesMng.sales2AddDtlInfoAtt", params); // 제안 상세정보 첨부파일tab
+				}
+				
+				break;
+			case "update" :
+				break;
+				
+			case "failure" :
+				break;
+			}
+			modelMap.put("res", "success");
+		} catch (Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "failed");
+		}
+		
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 	
 	
 }

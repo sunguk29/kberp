@@ -103,14 +103,6 @@
 	background-color: #FFC107;
 	border-radius: 3px;
 }
-.lead_cal {
-	display: inline-block;
-	vertical-align: middle;
-	width: 15px;
-	height: 15px;
-	background-color: #FFC107;
-	border-radius: 3px;
-}
 .so_cal {
 	display: inline-block;
 	vertical-align: middle;
@@ -151,23 +143,8 @@
 	margin-left: 26px;
 	margin-top: 26px;
 }
-.so_cal_big {
-	width: 30px;
-	height: 30px;
-	background-color: #4B94F2;
-	border-radius: 3px;
-	margin-left: 26px;
-	margin-top: 26px;
-}
-.pers_cal_big {
-	width: 30px;
-	height: 30px;
-	background-color: #66BB6A;
-	border-radius: 3px;
-	margin-left: 26px;
-	margin-top: 26px;
-}
-.lead_cal_big:hover, .so_cal_big:hover, .pers_cal_big:hover {
+
+.lead_cal_big:hover {
 	cursor: pointer;
 }
 .marg {
@@ -206,25 +183,7 @@
 	border-bottom: 1px dotted #616161;
 	background-color: #EEEEEE;
 }
-.cal_text2 {
-	width: 338px;
-	height: 82px;
-	border-bottom: 1px dotted #616161;
-	background-color: #EEEEEE;
-}
-.cal_text3 {
-	width: 338px;
-	height: 82px;
-	background-color: #EEEEEE;
-	border-bottom: 1px dotted #616161;
-	background-color: #EEEEEE;
-}
-.imgsize {
-	display: inline-block;
-	vertical-align:top;
-	width: 30px;
-	height: 30px;
-}
+
 .newcalsize {
 	width: 48px;
 	height: 48px;
@@ -260,10 +219,6 @@
 }
 #usrsrchTxt{
 	width:  170px;
-	background-image: url(resources/images/sales/usericon.png);
-	background-size: 20px 20px;
-	background-repeat: no-repeat;
-	background-position: 155px center;
 }
 .userseach:hover {
 	cursor: pointer;
@@ -423,29 +378,32 @@
 #ctt{
 	display : none;
 }
+.btnImg_in{
+	position: absolute;
+	left: 615px;
+    top: 140px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	reloadList();
+	drawDayCalc();
 	
-	/* 목록 조회용  */
-	function reloadList() {
-		var params = $("#actionForm").serialize();
+	
+	
+	/* 검색버튼 누를 시  */
+	$("#searchBtn").on("click", function() {
 		
-		$.ajax({
-			type : "post",
-			url : "salesSchdlAjax",
-			dataType : "json",
-			data : params,
-			success : function(res) {
-				darwDayCalc(res.slist);
-			},
-			error : function(req) {
-				console.log(req.responseText);
-			}
-		});
-	}
+		
+		//기존 이벤트 제거
+		$("#fullCalendarArea").fullCalendar("removeEventSources", ${param.oldEvent});
+		$("#fullCalendarArea").fullCalendar("refetchEvents");
+		
+		drawDayCalc();
+	});
 	
 	/* 목록 그리기용  */
 	function drawList(list) {
@@ -454,6 +412,7 @@ $(document).ready(function() {
 		
 		for(var data of list){
 			html +=	"<div class=\"cal_text1\">";
+			html += "<input type=\"hidden\" id=\"schln\"  value=\"" + data.SCHDL_NUM +"\"/>";
 			html += "<div class=\"text_left\">";
 			if(!data.LEAD_NUM == ""){
 				html +=	"<div class=\"lead_cal_big\"></div>";			
@@ -470,6 +429,18 @@ $(document).ready(function() {
 		
 		$(".calendar_text").html(html);
 	} 
+	
+	
+	/* 영업 일정 상세보기로 이동 */
+	$(".calendar_text").on("click", ".cal_text1", function() {
+		var tempSnum = $(this).children("#schln").val();
+		document.getElementById("schdlnum").value = tempSnum;
+		
+		$("#actionForm").attr("action", "salesSchdlCont");
+		$("#actionForm").submit();
+		
+	});
+	
 	/* 담당자 팝업 그리기 */
 	/* 담당자 팝업  */
 	$(".userIcon").on("click", function() {
@@ -548,15 +519,18 @@ $(document).ready(function() {
 					}
 				});
 				
+				$(".popup_box").on("click", ".popup_box_in", function() {
+					var mgrNum = $(this).children("#mnum").val();
+					document.getElementById("usrsrchTxt").value = mgrNum;
+					closePopup();
+					console.log(mgrNum);
+				 	
+			 }); 
+				
 			},
 			width : 600,
 			height : 500,
-			buttons : [{
-				name : "등록",
-				func:function() {
-					closePopup();
-				}
-			}, {
+			buttons : [ {
 				name : "취소"
 			}]
 		});
@@ -586,7 +560,8 @@ $(document).ready(function() {
 		var html = "";
 			
 		for(var data of mgrList) {
-			html +=	"<div class=\"popup_box_in\" no=\"" + data.EMP_NUM + "\">";
+			html +=	"<div class=\"popup_box_in\">";
+			html += "<input type=\"hidden\" id=\"mnum\" value=\"" + data.EMP_NAME + "\" />"; 
 			html +=	"<div class=\"popup_cc_box_left\">";
 			html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
 			html +=	"</div>";
@@ -599,20 +574,6 @@ $(document).ready(function() {
 		
 		$(".popup_box").html(html);
 		
-		 $(".popup_box_in").on("click", function() {
-				var mgrNum = $(".popup_box_in").val("no");
-				console.log(mgrNum);
-				if(mgrNum != ""){ 
-					
-					var mgrName = data.EMP_NAME;
-					
-					document.getElementById("usrsrchTxt").value = mgrName;
-					
-					console.log(mgrName);
-				} 
-				
-			 	
-		 }); 
 	} 
 	
   	
@@ -671,7 +632,7 @@ $(document).ready(function() {
           }
         ];
 	
-	function darwDayCalc(slist) {
+	function drawDayCalc(slist) {
 		var params = $("#actionForm").serialize();
 		$.ajax({
 			type : "post",
@@ -679,6 +640,10 @@ $(document).ready(function() {
 			dataType : "json",
 			data : params,
 			success : function(res){					
+					
+					var oldEvents = $("#fullCalendarArea").fullCalendar("getEventSources");
+					document.getElementById("oldEvent").value = oldEvents;
+					//신규이벤트 추가
 					$("#fullCalendarArea").fullCalendar("addEventSource", res.slist);
 					$("#fullCalendarArea").fullCalendar("refetchEvents");
 			},
@@ -701,7 +666,7 @@ $(document).ready(function() {
 	      height: 400,
 	      events: data,
 	      eventClick: function(event) { // 이벤트 클릭
-	    	  /* alert(event.start); */
+	    	  
 	      },
 	      dayClick: function(date, js, view) { // 일자 클릭
 	    	   
@@ -756,61 +721,8 @@ $(document).ready(function(){
 	showCalendar(d.getFullYear(),(d.getMonth() + 1));
 });
 </script>
-
-<!-- calendar select script -->
-<script type="text/javascript">
-$(document).ready(function() {
-	$.datepicker.setDefaults({
-		monthNames: ['년 1월','년 2월','년 3월','년 4월','년 5월','년 6월','년 7월','년 8월','년 9월','년 10월','년 11월','년 12월'],
-		dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
-		showMonthAfterYear:true,
-		showOn: 'button',
-		closeText: '닫기',
-		buttonImage: 'resources/images/calender.png',
-		buttonImageOnly: true,
-		dateFormat: 'yy/mm/dd'    
-	}); 
-	
-	$("#date_start").datepicker({
-		dateFormat : 'yy-mm-dd',
-		duration: 200,
-		onSelect:function(dateText, inst){
-			var startDate = parseInt($("#date_end").val().replace("-", '').replace("-", ''));
-			var endDate = parseInt(dateText.replace(/-/g,''));
-			
-            if (endDate > startDate) {
-            	alert("조회 기간은 과거로 설정하세요.");
-            	//달력에 종료 날짜 넣어주기
-        		$("#date_start").val($("#stdt").val());
-			} else {
-				$("#stdt").val($("#date_start").val());
-			}
-		}
-	});
-	
-	$("#date_end").datepicker({
-		dateFormat : 'yy-mm-dd',
-		duration: 200,
-		onSelect:function(dateText, inst){
-			var startDate = parseInt($("#date_start").val().replace("-", '').replace("-", ''));
-			var endDate = parseInt(dateText.replace(/-/g,''));
-			
-            if (startDate > endDate) {
-            	alert("조회 기간은 과거로 설정하세요.");
-            	//달력에 종료 날짜 넣어주기
-        		$("#date_end").val($("#eddt").val());
-			} else {
-				$("#eddt").val($("#date_end").val());
-			}
-		}
-	});
-	
-});
-</script>
 </head>
 <body>
-<input type="hidden" id="no" name="no" />
-
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -822,6 +734,8 @@ $(document).ready(function() {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" id="schdlnum" name="schdlnum" value="${param.schdlnum}" />
+	<input type="hidden" id="oldEvent" />
 	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
@@ -836,17 +750,17 @@ $(document).ready(function() {
 						<div class="sc_title">
 						<span class="marg">
 						팀분류
-						<select class="boxsize">
-							<option selected="selected">선택안함</option>
-							<option>영업1팀</option>
-							<option>영업2팀</option>
-							<option>영업3팀</option>
+						<select class="boxsize" name="deptS">
+							<option value="6">영업부</option>
+							<option value="7">영업1팀</option>
+							<option value="8">영업2팀</option>
 						</select>
 						</span>
 						<span class="userseach">
-								담당자 <input type="text" id="usrsrchTxt" class="userIcon" readonly="readonly"  />
+								담당자<input type="text" class="txt imgName" id="usrsrchTxt" name="usrsrchTxt" />
+								<img class="btnImg_in userIcon" src="resources/images/sales/usericon.png">	
 						</span>
-						<div class="cmn_btn bg">검색</div>
+						<div class="cmn_btn bg" id="searchBtn">검색</div>
 						</div>
 						<div class="sc_title_bot">
 							<img alt="일정등록" src="resources/images/sales/newcal.png" class="newcalsize" id="regBtn" />

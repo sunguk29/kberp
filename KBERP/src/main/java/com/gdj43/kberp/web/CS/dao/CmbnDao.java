@@ -12,5 +12,11 @@ public class CmbnDao implements ICmbnDao{
 	@Autowired
 	public SqlSession sqlSession;
 
+	@Override
+	public void DataAdd(HashMap<String, String> params) throws Throwable {
+		sqlSession.insert("cm.guideAdd",params);
+		
+	}
+
 	}
 

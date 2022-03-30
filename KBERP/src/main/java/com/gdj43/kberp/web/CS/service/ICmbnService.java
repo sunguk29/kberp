@@ -4,5 +4,7 @@ import java.util.HashMap;
 
 public interface ICmbnService {
 
+	public void DataAdd(HashMap<String, String> params) throws Throwable;
+
 
 }
