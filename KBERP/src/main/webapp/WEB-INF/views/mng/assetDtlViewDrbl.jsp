@@ -105,6 +105,12 @@ $(document).ready(function() {
 							
 							<td>현재 사용자</td>
 							<td>
+							<c:if test="${data.USERNAME == null}">
+								없음
+							</c:if>
+							<c:if test="${data.USERNAME!= null}">
+								${data.USERNAME}
+							</c:if>
 							</td>
 						</tr>
 					</tbody>

@@ -40,17 +40,26 @@
 	</select>
 	
 	<select id="assetDtlViewDrbl" resultType="hashmap" parameterType="hashmap">
-      SELECT ASSET_NUM, ASSET_NAME, ASSET_TYPE_NUM, TO_CHAR(ACQRMNT_DATE, 'YYYY-MM-DD')AS ACQRMNT_DATE,
+      SELECT  ASSET_NUM, ASSET_NAME, ASSET_TYPE_NUM, ACQRMNT_DATE, A.EMP_NAME, USERNAME
+        FROM(
+        SELECT ASSET_NUM, ASSET_NAME, ASSET_TYPE_NUM, TO_CHAR(ACQRMNT_DATE, 'YYYY-MM-DD')AS ACQRMNT_DATE,
        EMP_NAME, A.RMRKS
       FROM ASSET A INNER JOIN EMP E
                 ON A.MNGR_NUM = E.EMP_NUM
-        WHERE ASSET_NUM = #{num}
+        WHERE ASSET_NUM = #{num}) A LEFT OUTER JOIN
+        (SELECT EMP_NAME AS USERNAME
+        FROM ASSET_USE AU INNER JOIN EMP E
+                            ON AU.EMP_NUM = E.EMP_NUM
+                            INNER JOIN ASSET A
+                            ON A.ASSET_NUM = AU.ASSET_NUM
+                            WHERE A.ASSET_NUM = #{num}) B
+                            ON 1=1
    </select>
 	
 	
 	<select id="assetDtlViewExpndblt" resultType="hashmap" parameterType="hashmap">
 		SELECT ASSET_NUM, ASSET_NAME, ASSET_TYPE_NUM, TO_CHAR(ACQRMNT_DATE, 'YYYY-MM-DD')AS ACQRMNT_DATE,
-		 EMP_NAME, QUNTY, QUNTY_DVSN_NUM,RMRKS
+		 EMP_NAME, QUNTY, QUNTY_DVSN_NUM, A.RMRKS
 		FROM ASSET A INNER JOIN EMP E
                 ON A.MNGR_NUM = E.EMP_NUM
         WHERE ASSET_NUM = #{num}

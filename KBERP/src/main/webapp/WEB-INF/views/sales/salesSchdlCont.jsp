@@ -406,12 +406,13 @@ input {
 	background-color: #fff;
 	padding: 5px 0px;
 }
+/*----- 팝업 CSS 끝 ----- */
+
 /* 첨부파일 */
 #fileName {
 	border : hidden;
 	outline : none;
 }
-/*----- 팝업 CSS 끝 ----- */
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -430,7 +431,7 @@ $(document).ready(function() {
 	});
 	
 	/* 저장 이동 및 알림 이벤트 */
-	$("#saveBtn").on("click", function() {
+	$("#updateBtn").on("click", function() {
 		if(checkEmpty("#ssname")){
 			makeAlert("필수입력", "일정명을 입력하세요");
 			$("#ssname").focus();
@@ -447,8 +448,8 @@ $(document).ready(function() {
 			makePopup({
 				bg : false,
 				bgClose : false,
-				title : "저장",
-				contents : "저장하시겠습니까?",
+				title : "수정",
+				contents : "수정하시겠습니까?",
 				contentsEvent : function() {
 					$("#popup").draggable();
 				},
@@ -471,14 +472,14 @@ $(document).ready(function() {
 								
 								$.ajax({
 									type  : "post",
-									url : "salesSchdlAction/insert",
+									url : "salesSchdlAction/update",
 									dataType : "json",
 									data : params,
 									success : function(res) {
 										if(res.res == "success"){
-											savePop();								
+											updatePop();								
 										} else {
-											alert("등록중 문제가 발생하였습니다.");
+											alert("수정중 문제가 발생하였습니다.");
 										}
 									},
 									error : function(request, status, error) {
@@ -502,6 +503,62 @@ $(document).ready(function() {
 		
 	});
 	
+	$("#deleteBtn").on("click", function() {
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "삭제",
+			contents : "삭제하시겠습니까?",
+			contentsEvent : function() {
+				$("#popup").draggable();
+			},
+			draggable : true,
+			width : 400,
+			height: 180,
+			buttons : [{
+				name : "확인",
+				func:function(){
+					
+					var RegForm = $("#RegForm");
+					
+					RegForm.ajaxForm({
+						success: function(res) {
+							if(res.fileName.length > 0) {
+								$("#schdlAttFile").val(res.fileName[0]);
+							}
+							
+							var params = $("#RegForm").serialize();
+							
+							$.ajax({
+								type  : "post",
+								url : "salesSchdlAction/delete",
+								dataType : "json",
+								data : params,
+								success : function(res) {
+									if(res.res == "success"){
+										$("#backForm").submit();								
+									} else {
+										alert("삭제중 문제가 발생하였습니다.");
+									}
+								},
+								error : function(request, status, error) {
+									console.log(request.responseTxt);
+								}
+							});
+						},
+						error : function(req) {
+							console.log(req.responseTxt);
+						}
+					});
+					
+					RegForm.submit();
+					}
+					}, {
+						name : "취소"
+					}]
+			});
+	});
+	
 
 
 /* 비어있는지 확인하기 위한 함수 */
@@ -514,15 +571,15 @@ function checkEmpty(sel) {
 }
 
 
-function savePop() {
+function updatePop() {
 	var html = "";
 	
-	html += "<div class=\"popup_cont\">저장되었습니다</div>";
+	html += "<div class=\"popup_cont\">수정되었습니다</div>";
 	
 	makePopup({
 		bg : false,
 		bgClose : false,
-		title : "저장",
+		title : "수정",
 		draggable : true,
 		contents : html,
 		width : 400,
@@ -530,11 +587,12 @@ function savePop() {
 		buttons : [{
 			name : "확인",
 			func:function() {
-				$("#backForm").submit();
+				closePopup();
 			}
 		}]
 	});
 }
+
 
 
 /* 영업관리 팝업 */
@@ -878,6 +936,7 @@ function uploadName(e) {
 	var filename = files[0].name;
 	$("#fileName").val(filename);
 }
+
 </script>
 </head>
 <body>
@@ -896,9 +955,10 @@ function uploadName(e) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">영업일정 등록</div>
+			<div class="page_title_text">영업일정 상세보기</div>
 			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg"  id="listBtn"/> 
-			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
+			<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
+			<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" id="deleteBtn" />
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
@@ -907,7 +967,8 @@ function uploadName(e) {
 				<div class="bodyWrap">
 				<!-- 시작 -->
 					<form action="fileUploadAjax" id="RegForm" method="post" enctype="multipart/form-data">
-					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />					
+					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
+					<input type="hidden" name="schdlnum" value="${param.schdlnum}" />
 					<table>
 						<colgroup>
 							<col width="200" />
@@ -921,13 +982,13 @@ function uploadName(e) {
 						<tbody>
 							<tr>
 								<td><input type="button" class="btn" value="일정명 *" readonly="readonly"/></td>
-								<td colspan="5"><input type="text" class="txt" id="ssname" name="ssname"/></td>
+								<td colspan="5"><input type="text" class="txt" id="ssname" name="ssname" value="${data.SCHDL_NAME}"/></td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="영업" /></td>
 								<td colspan="5">
 									<div class="imgP">
-										<input type="text" class="txt imgName" id="sName" name="sName" />
+										<input type="text" class="txt imgName" id="sName" name="sName" value="${data.SALES_NAME}" />
 										<input type="hidden" id="sNum" name="sNum"/>
 										<img class="btnImg_in" id="salesPop" src="resources/images/sales/popup.png">	
 									</div>
@@ -937,7 +998,7 @@ function uploadName(e) {
 								<td><input type="button" class="btn" value="리드" readonly="readonly"/></td>
 								<td colspan="5">
 									<div class="imgP">
-										<input type="text" class="txt imgName" id="lName" name="lName" />
+										<input type="text" class="txt imgName" id="lName" name="lName" value="${data.LEAD_NAME}"/>
 										<input type="hidden" id="lNum" name="lNum"/>
 										<img class="btnImg_in" id="leadPop" src="resources/images/sales/popup.png">	
 									</div>
@@ -945,47 +1006,91 @@ function uploadName(e) {
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="고객명" readonly="readonly"/></td>
-								<td colspan="5"><input type="text" class="txt" id="clName" name="clName"/></td>
+								<td colspan="5">
+									<c:choose>
+										<c:when test="${empty data.LEAD_CLNT_NAME}">
+											<input type="text" class="txt" id="clName" name="clName" value="${data.SALES_CLNT_NAME}"/>
+										</c:when>
+										<c:when test="${empty data.SALES_CLNT_NAME}">
+											<input type="text" class="txt" id="clName" name="clName" value="${data.LEAD_CLNT_NAME}"/>
+										</c:when>
+									</c:choose>
+								</td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="고객사" readonly="readonly"/></td>
-								<td colspan="5"><input type="text" class="txt" id="ccName" name="ccName" /></td>
+								<td colspan="5">
+									<c:choose>
+										<c:when test="${empty data.LEAD_CLNT_CMPNY_NAME}">
+											<input type="text" class="txt" id="ccName" name="ccName" value="${data.SALES_CLNT_CMPNY_NAME}" />
+										</c:when>
+										<c:when test="${empty data.SALES_CLNT_CMPNY_NAME}">
+											<input type="text" class="txt" id="ccName" name="ccName" value="${data.LEAD_CLNT_CMPNY_NAME}" />
+										</c:when>
+									</c:choose>
+								</td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="활동분류 *" readonly="readonly"/></td>
 								<td colspan="5"><select class="txt_in" id="ssactvtyclsfy" name="ssactvtyclsfy">
 										<optgroup>
-											<option>선택하세요</option>
-											<option value="0">전화</option>
-											<option value="1">메일</option>
-											<option value="2">방문</option>
-											<option value="3">기타</option>
+											<c:choose>
+												<c:when test="${data.ACTVTY_CLSFY_NUM eq 0}">												
+													<option value="0" selected="selected">전화</option>
+												</c:when>
+												<c:when test="${data.ACTVTY_CLSFY_NUM eq 1}">												
+													<option value="1" selected="selected">메일</option>
+												</c:when>
+												<c:when test="${data.ACTVTY_CLSFY_NUM eq 2}">												
+													<option value="2" selected="selected">방문</option>
+												</c:when>
+												<c:when test="${data.ACTVTY_CLSFY_NUM eq 3}">												
+													<option value="3" selected="selected">기타</option>
+												</c:when>
+											 </c:choose>
 										</optgroup>
 								</select></td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="날짜 *" readonly="readonly"/></td>
-								<td colspan="2"><input type="datetime-local" class="txt" id="sdt" name="sdt"/></td>
+								<td colspan="2"><input type="datetime-local" class="txt" id="sdt" name="sdt" value="${data.START_DATE_HR}"/></td>
 								<td>
 									<div class="wave"> ~ </div>
 								</td>
-								<td colspan="2"><input type="datetime-local" class="txt" id="edt" name="edt"/></td>
+								<td colspan="2">
+									<c:choose>
+										<c:when test="${data.END_DATE_HR eq null}">
+											<input type="datetime-local" class="txt" id="edt" name="edt"/>										
+										</c:when>
+										<c:when test="${data.END_DATE_HR ne null}">										
+											<input type="datetime-local" class="txt" id="edt" name="edt" value="${data.END_DATE_HR}"/>
+										</c:when>
+									</c:choose>
+								</td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="활동내용 *" readonly="readonly"/></td>
-								<td colspan="5"><textarea class="ta_box" id="ssactvtycont" name="ssactvtycont"></textarea></td>
+								<td colspan="5"><textarea class="ta_box" id="ssactvtycont" name="ssactvtycont">${data.ACTVTY_CONT}</textarea></td>
 							</tr>
 						</tbody>
 					</table>
 					<!-- 첨부파일 -->
-					<input type="file" id="att" name="att" onchange="uploadName(this)"/>
-					<input type="hidden" id="schdlAttFile" name="schdlAttFile" />					
-					<div class="rvn_txt"> 첨부파일  
-						<img class="plus_btn aff_btn"  src="resources/images/sales/plus.png"/> 
+					<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+					<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
+					<div class="rvn_txt"> 첨부파일
+						<span id="uploadBtn">
+							<c:if test="${empty data.ATT_FILE_NAME}">
+								<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" />
+							</c:if>
+						</span>
 					</div>
 					<div class="cntrct_box_in">
-						<input type="text" id="fileName" name="fileName" readonly="readonly">
+						<span id="file_name">${fName}</span>
+						<input type="button" id="fileDelete" value="삭제" />
+						<input type="text" id="fileName" readonly="readonly" />
 					</div>
+					<input type="file" id="att" name="att" onchange="uploadName(this)" />
+					<input type="hidden" id="schdlAttFile" name="schdlAttFile" />
 					</form>
 					<!-- 끝 -->
 				</div>

@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP - 내부비용관리 신규</title>
+<title>카카오뱅크 ERP - 내부비용관리 수정</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -46,7 +46,6 @@
 .acnt_name_srch_table td {
 	width: 60px;
 	padding: 5px 0px 5px 10px;
-	font-weight: bold;
 }
 
 .acnt_name_srch_table input {
@@ -148,13 +147,14 @@ input:focus {
 	vertical-align: middle;
 }
 
+#att {
+	display: none;
+}
+
 
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
 	
 	$("#srchBtn").on("click", function() {
 		
@@ -248,31 +248,13 @@ $(document).ready(function() {
 		});
 	});
 	
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
-	});
 	
 	$("#acntCodeInput").on("click", function() {
 		$("#srchBtn").click();
 	});
 	
 	
-	
-	$("#addBtn").on("click", function() {
+	$("#updateBtn").on("click", function() {
 		if(checkEmpty("#spendDate")) {
 			alert("지출일자를 입력하세요.")
 			$("#spendDate").focus();
@@ -286,7 +268,7 @@ $(document).ready(function() {
 			alert("품목명을 입력하세요.")
 			$("#item").focus();
 		} else if(checkEmpty("#qunty")) {
-			alert("수량을 입력하세요. (수량 파악 어려우면 '1' 입력)")
+			alert("수량을 입력하세요. (수량 파악이 어려우면 '1' 입력)")
 			$("#qunty").focus();
 		} else if(checkEmpty("#unitPrice")) {
 			alert("단가를 입력하세요.")
@@ -298,9 +280,9 @@ $(document).ready(function() {
 			
 			$("#sendAcntCode").val($("#acntCodeInput").attr("acntcode"));
 			
-			var writeForm = $("#writeForm");
+			var updateForm = $("#updateForm");
 			
-			writeForm.ajaxForm({
+			updateForm.ajaxForm({
 				success : function(res) {
 					// 물리파일명 보관
 					if(res.fileName.length > 0) {
@@ -308,21 +290,16 @@ $(document).ready(function() {
 					}
 					
 					// 글 저장
-					var params = $("#writeForm").serialize();
+					var params = $("#updateForm").serialize();
 					
 					$.ajax({
 						type : "post", // 전송 형태
-						url : "intrnlCostMngAction/insert", // 통신 주소
+						url : "intrnlCostMngAction/update", // 통신 주소
 						dataType : "json", // 받을 데이터 형태
 						data : params, // 보낼 데이터. 보낼 것이 없으면 안 씀
 						success : function(res) { // 성공 시 실행 함수. 인자는 받아온 데이터
 							if(res.res == "success") {
-								if($("#backCheck").val() == "0") {
-									$("#backForm").submit();									
-								} else {
-									$("#backForm").attr("action", "intrnlCostMngMnthlyList");
-									$("#backForm").submit();
-								}
+								$("#backForm").submit();
 							} else {
 								alert("작성 중 문제가 발생했습니다.");
 							}
@@ -334,11 +311,10 @@ $(document).ready(function() {
 				},
 				error : function(req) {
 					console.log(req.responseText);
-					console.log("ajaxForm 실패!");
 					
 				}
 			});
-			writeForm.submit(); // ajaxForm 실행	
+			updateForm.submit(); // ajaxForm 실행	
 		}
 	});
 	
@@ -361,6 +337,14 @@ $(document).ready(function() {
 	$("#spendDate").on("change", function() {
 		$("#mon").val($("#spendDate").val().substr(0, 7));
 		console.log($("#mon").val());
+	});
+	
+	$("#fileDelBtn").on("click", function() {
+		$("#attName").remove();
+		$(this).remove();
+		$("#att").show();
+		
+		$("#attFile").val("");
 	});
 	
 });
@@ -457,21 +441,26 @@ function drawPaging(pb) {
 		<input type="hidden" id="page" name="page" value="1">
 	</form>
 	
-	<form action="intrnlCostMng" id="backForm" method="post">
+	<form action="intrnlCostMngDtlView" id="backForm" method="post">
 		<input type="hidden" name="top" value="${param.top}">
 		<input type="hidden" name="menuNum" value="${param.menuNum}">
 		<input type="hidden" name="menuType" value="${param.menuType}">
-		<input type="hidden" id="mon" name="mon" value="${param.mon}">
-		<input type="hidden" id="backCheck" value="${param.backCheck}">
+		
+		<input type="hidden" name="mon" value="${param.mon}">
+		<input type="hidden" name="page" value="${param.page}" />
+		<input type="hidden" name="page2" value="${param.page2}" />
+		
+		<input type="hidden" name="sendChitNum" value="${param.sendChitNum}">
 	</form>
 	
-	<form action="fileUploadAjax" id="writeForm" method="post" enctype="multipart/form-data">
+	<form action="fileUploadAjax" id="updateForm" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="empNum" value="${sEmpNum}">
 		<input type="hidden" id="sendAcntCode" name="sendAcntCode">
+		<input type="hidden" name="sendChitNum" value="${param.sendChitNum}">
 		<!-- 내용영역 -->
 		<div class="cont_wrap">
 			<div class="page_title_bar">
-				<div class="page_title_text">내부비용관리 신규</div>
+				<div class="page_title_text">내부비용관리 수정</div>
 			</div>
 			<!-- 해당 내용에 작업을 진행하시오. -->
 			<div class="cont_area">
@@ -479,62 +468,95 @@ function drawPaging(pb) {
 				<table class="intrnl_cost_admnstrtn_new">
 					<tbody>
 						<tr>
+							<td>작성자</td>
+							<td>${data.EMP_NAME}</td>
+						</tr>
+						<tr>
+							<td>작성일자</td>
+							<td>${data.DATE_RGS}</td>
+						</tr>
+						<tr>
 							<td>지출일자</td>
-							<td colspan="5"><input type="date" class="acnt_code_date" id="spendDate" name="spendDate" max="9999-12-31">
+							<td colspan="5">
+								<input type="date" class="acnt_code_date" id="spendDate" name="spendDate" max="9999-12-31" value="${data.DATE_D}">
 							</td>
 						</tr>
 						<tr>
 							<td>계정명</td>
 							<td colspan="5">
-								<input type="text" class="acnt_code_input" readonly="readonly" id="acntCodeInput" >
+								<input type="text" class="acnt_code_input" readonly="readonly" id="acntCodeInput" value="${data.ACNT_NAME}" acntcode="${data.ACNT_NUM}">
 								<div class="cmn_btn" id="srchBtn">계정명 검색</div>
 							</td>
 						</tr>
 						<tr>
 							<td>거래처</td>
-							<td colspan="5"><input type="text" class="input" id="expns" name="expns"></td>
+							<td colspan="5"><input type="text" class="input" id="expns" name="expns" value="${data.CRSPNDNT}"></td>
 						</tr>
 						<tr>
 							<td>품목명</td>
-							<td><input type="text" class="input_short" id="item" name="item"></td>
+							<td><input type="text" class="input_short" id="item" name="item" value="${data.ITEM}"></td>
 							<td>수량</td>
-							<td><input type="number" class="input_short" id="qunty" name="qunty" value="1"></td>
+							<td><input type="number" class="input_short" id="qunty" name="qunty" value="${data.QUNTY}"></td>
 							<td>단가</td>
-							<td><input type="number" class="input_short" id="unitPrice" name="unitPrice"></td>
+							<td><input type="number" class="input_short" id="unitPrice" name="unitPrice" value="${data.UNIT_PRICE}"></td>
 						</tr>
 						<tr>
 							<td>공급가액</td>
-							<td colspan="5"><input type="number" class="input" placeholder="수량*단가 자동출력" readonly="readonly" id="splyPrice" name="splyPrice"></td>
+							<td colspan="5">
+								<input type="number" class="input" placeholder="수량*단가 자동출력" readonly="readonly" id="splyPrice" name="splyPrice" value="${data.SPLY_PRICE}">
+							</td>
 						</tr>
 						<tr>
 							<td>부가세</td>
-							<td colspan="5"><input type="number" class="input"
-								placeholder="공급가액*10% 자동출력" readonly="readonly" id="srtx" name="srtx"></td>
+							<td colspan="5">
+								<input type="number" class="input" placeholder="공급가액*10% 자동출력" readonly="readonly" id="srtx" name="srtx" value="${data.SRTX}">
+							</td>
 						</tr>
 						<tr>
 							<td>사업자번호</td>
-							<td colspan="5"><input type="number" class="input" id="bsnsmnNum" name="bsnsmnNum"></td>
+							<td colspan="5">
+								<input type="number" class="input" id="bsnsmnNum" name="bsnsmnNum" value="${data.BSNSMN_NUM}">
+							</td>
 						</tr>
 						<tr>
 							<td>합계</td>
-							<td colspan="5"><input type="number" class="input"
-								placeholder="공급가액+공급가액*10% 자동출력" readonly="readonly" id="amnt" name="amnt"></td>
+							<td colspan="5">
+								<input type="number" class="input" placeholder="공급가액+공급가액*10% 자동출력" readonly="readonly" id="amnt" name="amnt" value="${data.AMNT}">
+							</td>
 						</tr>
 						<tr>
 							<td>비고</td>
-							<td colspan="5"><input type="text" class="input" id="rmrks" name="rmrks"></td>
+							<td colspan="5">
+								<input type="text" class="input" id="rmrks" name="rmrks" value="${data.RMRKS}">
+							</td>
 						</tr>
 						<tr>
 							<td>첨부파일</td>
 							<td colspan="5">
-								<input type="file" name="att">
-								<input type="hidden" id="attFile" name="attFile">
+								<c:choose>
+									<c:when test="${empty data.ATT_FILE}">
+										<input type="file" name="att">
+										<br>
+										<input type="hidden" id="attFile" name="attFile">
+									</c:when>
+									<c:otherwise>
+										<c:set var="fileLength" value="${fn:length(data.ATT_FILE)}"></c:set>
+										<c:set var="fileName"
+											value="${fn:substring(data.ATT_FILE, 20, fileLength)}"></c:set>
+										<span id="attName">${fileName}</span>
+										<input type="button" value="첨부파일 삭제" id="fileDelBtn">
+										<input type="hidden" id="attFile" name="attFile"
+											value="${data.ATT_FILE}">
+										<input type="file" id="att" name="att">
+										<br>
+									</c:otherwise>
+								</c:choose>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 				<div class="btn_wrap">
-					<div class="cmn_btn" id="addBtn">등록</div>
+					<div class="cmn_btn" id="updateBtn">수정</div>
 					<div class="cmn_btn_ml" id="cancleBtn">취소</div>
 				</div>
 			</div>

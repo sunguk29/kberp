@@ -104,8 +104,9 @@ $(document).ready(function() {
 </form>
 <form action="#" id="mdfyForm" method="post">
 <div class="cont_wrap">
+<input type="hidden" name="num" value="${param.num}" />
 		<div class="page_title_bar">
-			<div class="page_title_text">소모성자산 내용수정</div>
+			<div class="page_title_text">소모성자산 수정</div>
 		</div>
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
@@ -134,19 +135,19 @@ $(document).ready(function() {
 							<td >
 								<select id="mngrNum" name="mngrNum">
 									<option value="2022000006">강부장</option>
-									<option value="1">set</option>
+									<option value="2022000007">백대리</option>
 									<option value="2">box</option>
 								</select>
 							</td>
 							<td>수량</td>
 							<td>
-								<input type="text" id="qunty" name="qunty" value="${data.QUNTY}" />
-							</td>
+							<input type="text" id="qunty" name="qunty" value="${data.QUNTY}"/>
+								</td>
 						</tr>
 					</tbody>
 				</table>
-						<div class="rmrks1"><b>비고</b></div>
-						<input type="text" id="rmrks" name="rmrks" value="${data.RMRKS}" />
+						<div class="rmrks"><b>비고</b></div>
+						<input type="text" id="rmrks" name="rmrks"  value="${data.RMRKS}" />
 			<div class="board_bottom">
 				<input class="cmn_btn" type="button" id="mdfyBtn" value="수정">
 				<input class="cmn_btn" type="button" value="취소" id="cnclBtn"/>

@@ -139,15 +139,22 @@ public class AcntncController {
 	
 	// 내부비용관리 신규
 	@RequestMapping(value = "/intrnlCostMngAdd")
-	public ModelAndView intrnlCostMngAdd(@RequestParam HashMap<String, String> params, ModelAndView mav) {
-		
-		if(params.get("page") == null || params.get("page") == "") {
-			params.put("page", "1");
-		}
-		
-		mav.addObject("page", params.get("page"));
+	public ModelAndView intrnlCostMngAdd(ModelAndView mav) {
 		
 		mav.setViewName("mng/intrnlCostMngAdd");
+		
+		return mav;
+	}
+	
+	// 내부비용관리 수정
+	@RequestMapping(value = "/intrnlCostMngUpdate")
+	public ModelAndView intrnlCostMngUpdate(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("IntrnlCostMng.intrnlCostMngDtlView", params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("mng/intrnlCostMngUpdate");
 		
 		return mav;
 	}

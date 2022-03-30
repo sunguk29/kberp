@@ -53,7 +53,7 @@
 	vertical-align: middle;
 	width: 30px;
 	height: 40px;
-	background-image: url('./images/cmn/dwnld_icon.png');
+	background-image: url('resources/images/mng/dwnld_icon.png');
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 20px;
@@ -126,7 +126,12 @@ $(document).ready(function() {
 		$("#menuNum2").val("39");
 		$("#menuType2").val("M");
 		
-		$("#actionForm").attr("action", "chitMng")
+		$("#actionForm").attr("action", "chitMng");
+		$("#actionForm").submit();
+	});
+	
+	$("#updateBtn").on("click", function() {
+		$("#actionForm").attr("action", "intrnlCostMngUpdate");
 		$("#actionForm").submit();
 	});
 	
@@ -138,6 +143,7 @@ $(document).ready(function() {
 		<input type="hidden" id="mon" name="mon" value="${param.mon}">
 		<input type="hidden" id="page" name="page" value="${param.page}" />
 		<input type="hidden" id="page2" name="page2" value="${param.page2}" />
+		<input type="hidden" id="sendChitNum" name="sendChitNum" value="${param.sendChitNum}">
 		
 		<input type="hidden" id="top2" name="top" value="${param.top}">
 		<input type="hidden" id="menuNum2" name="menuNum" value="${param.menuNum}">
@@ -206,15 +212,15 @@ $(document).ready(function() {
 							</c:otherwise>
 						</c:choose>
 						<td>단가</td>
-						<td>${data.UNIT_PRICE}</td>
+						<td>${data.UNIT_PRICE}원</td>
 					</tr>
 					<tr>
 						<td>공급가액</td>
-						<td colspan="5">${data.SPLY_PRICE}</td>
+						<td colspan="5">${data.SPLY_PRICE}원</td>
 					</tr>
 					<tr>
 						<td>부가세</td>
-						<td colspan="5">${data.SRTX}</td>
+						<td colspan="5">${data.SRTX}원</td>
 					</tr>
 					<tr>
 						<td>사업자번호</td>
@@ -222,7 +228,7 @@ $(document).ready(function() {
 					</tr>
 					<tr>
 						<td>합계</td>
-						<td colspan="5">${data.AMNT}</td>
+						<td colspan="5"><b>${data.AMNT}원</b></td>
 					</tr>
 					<tr>
 						<td>비고</td>
@@ -241,7 +247,7 @@ $(document).ready(function() {
 							<c:choose>
 								<c:when test="${data.ATT_FILE != null}">
 									<div class="atchd_file"></div>
-									<div class="file_name">영수증.jpg</div>
+									<div class="file_name">${data.ATT_FILE}</div>
 								</c:when>
 								<c:otherwise>
 									-
