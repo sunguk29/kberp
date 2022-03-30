@@ -310,6 +310,12 @@ $(document).ready(function () {
 		$("#actionForm").attr("action", "leadList");
 		$("#actionForm").submit();
 	});
+	
+	/* 고객사 등급 선택되게 */
+	$("#ccGrade").val(${data.GRADE_NUM}).prop("selected", this.selected);
+	
+	/* 인지경로 선택 되게 */
+	$("#rp").val(${data.RCGNTN_PATH_NUM}).prop("selected", this.selected);
 });
 </script>
 </head>
@@ -372,60 +378,44 @@ $(document).ready(function () {
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="고객사 등급" readonly="readonly"/></td>
-								<td><select class="txt_in" disabled="disabled">
+								<td>
+									<select class="txt_in" id="ccGrade" name="ccGrade" disabled="disabled">
 										<optgroup>
-											<c:choose>
-												<c:when test="${data.GRADE_NUM eq 0}">
-													<option value="0" selected="selected">S</option>										
-												</c:when>
-												<c:when test="${data.GRADE_NUM eq 1}">
-													<option value="1" selected="selected">A</option>										
-												</c:when>
-												<c:when test="${data.GRADE_NUM eq 2}">
-													<option value="2" selected="selected">B</option>										
-												</c:when>
-												<c:when test="${data.GRADE_NUM eq 3}">
-													<option value="3" selected="selected">C</option>										
-												</c:when>
-												<c:when test="${data.GRADE_NUM eq 4}">
-													<option value="4" selected="selected">D</option>										
-												</c:when>
-											</c:choose>
+											<option value="0" selected="selected">S</option>										
+											<option value="1" selected="selected">A</option>										
+											<option value="2" selected="selected">B</option>										
+											<option value="3" selected="selected">C</option>										
+											<option value="4" selected="selected">D</option>										
 										</optgroup>
-								</select></td>
+									</select>
+								</td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="인지경로 *" readonly="readonly"/></td>
-								<td><select class="txt_in" disabled="disabled" >
+								<td>
+									<select class="txt_in" id="rp" name="rp" disabled="disabled" >
 										<optgroup>
-											<c:choose>
-												<c:when test="${data.RCGNTN_PATH_NUM eq 0}">
-													<option value="0" selected="selected">자사홈페이지</option>										
-												</c:when>
-												<c:when test="${data.RCGNTN_PATH_NUM eq 1}">
-													<option value="1" selected="selected">인터넷검색</option>										
-												</c:when>
-												<c:when test="${data.RCGNTN_PATH_NUM eq 2}">
-													<option value="2" selected="selected">지인소개</option>										
-												</c:when>
-												<c:when test="${data.RCGNTN_PATH_NUM eq 3}">
-													<option value="3" selected="selected">세미나</option>										
-												</c:when>	
-												<c:when test="${data.RCGNTN_PATH_NUM eq 4}">
-													<option value="4" selected="selected">전화</option>										
-												</c:when>
-												<c:when test="${data.RCGNTN_PATH_NUM eq 5}">
-													<option value="5" selected="selected">기타</option>										
-												</c:when>						
-											</c:choose>
+											<option value="0" selected="selected">자사홈페이지</option>										
+											<option value="1" selected="selected">인터넷검색</option>										
+											<option value="2" selected="selected">지인소개</option>										
+											<option value="3" selected="selected">세미나</option>										
+											<option value="4" selected="selected">전화</option>										
+											<option value="5" selected="selected">기타</option>										
 										</optgroup>
-								</select></td>
+									</select>
+								</td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="담당자 *" readonly="readonly"/></td>
 								<td>
 									<input type="text" class="txt" value="${data.EMP_NAME}" readonly="readonly"  />
 									<img class="btnImg_in" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
+								</td>
+							</tr>
+							<tr>
+								<td><input type="button" class="btn" value="진행상태 *" readonly="readonly"/></td>
+								<td>
+									<input type="text" class="txt" value="${data.PSNUM}" readonly="readonly"  />
 								</td>
 							</tr>
 							
@@ -442,7 +432,9 @@ $(document).ready(function () {
 					</div>
 					<!-- 의견 -->
 					<form action="#" id="botOpActionForm" method="post">
-						
+						<input type="hidden" name="leadNum" value="${param.leadNum}" />	
+						<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
+						<input type="hidden" id="cmntNum" name="cmntNum" />
 					</form>
 					<div class="mgtop"></div>
 					<div class="bot_title"><h3>의견(7)</h3></div>

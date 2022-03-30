@@ -224,9 +224,6 @@
 .userseach:hover {
 	cursor: pointer;
 }
-.userseach:active {
-	outline: 1px solid #000;
-}
 .userIcon2 {
 	width: 20px;
 	height: 20px;
@@ -376,9 +373,7 @@
 	height : 370px;
 }
 
-#ctt{
-	display : none;
-}
+
 .btnImg_in{
 	position: absolute;
 	left: 204px;
@@ -387,6 +382,12 @@
     height: 20px;
     cursor: pointer;
 }
+
+#ctt{
+	display : none;
+}
+
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -411,6 +412,8 @@ $(document).ready(function() {
 		//기존 이벤트 제거
 		$("#fullCalendarArea").fullCalendar("removeEventSources", ${param.oldEvent});
 		$("#fullCalendarArea").fullCalendar("refetchEvents");
+		
+		$(".cal_cont").hide();
 		
 		drawDayCalc();
 	});
@@ -656,6 +659,7 @@ $(document).ready(function() {
 					//신규이벤트 추가
 					$("#fullCalendarArea").fullCalendar("addEventSource", res.slist);
 					$("#fullCalendarArea").fullCalendar("refetchEvents");
+					
 			},
 			error : function(req) {
 				console.log(req.responseText);
@@ -683,6 +687,7 @@ $(document).ready(function() {
 			var tdv = date.format();
 			document.getElementById("ctt").value = "      " + tdv;
 		
+			$(".cal_cont").show();
 			$("#ctt").show();
 			
 			var params = $("#actionForm").serialize();
@@ -768,7 +773,7 @@ $(document).ready(function(){
 						</span>
 						<span class="userseach">
 								담당자<input type="text" class="txt imgName" id="usrsrchTxt" name="usrsrchTxt" />
-								<img class="btnImg_in userIcon" src="resources/images/sales/usericon.png">	
+								<img class="btnImg_in userIcon" src="resources/images/sales/usericon.png" />	
 						</span>
 						<div class="cmn_btn bg" id="searchBtn">검색</div>
 						</div>

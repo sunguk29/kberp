@@ -13,42 +13,42 @@
 	</insert>
 	<!-- 영업 일정 일일 데이터 가져올 떄 사용 -->
 	<select id="getSalesSchdlList" parameterType="hashmap" resultType="hashmap">
-		SELECT SUBSTR(A.START_DATE_HR, 6, 5) || ' ' || SUBSTR(A.START_DATE_HR, 12, 16) AS START_DATE_HR, DECODE(A.END_DATE_HR, NULL, '미정', A.END_DATE_HR) AS END_DATE_HR, A.ACTVTY_CLSFY_NUM, L.LEAD_NAME AS SALES_NAME, A.LEAD_NAME, A.LEAD_NUM, A.SALES_NUM,
-			   A.CLNT_CMPNY_NAME AS LEAD_CC_NAME, CC.CLNT_CMPNY_NAME AS SALES_CC_NAME, A.EMP_NAME, A.RANK_NAME, A.SCHDL_NAME, A.SCHDL_NUM, A.DEL_CHECK
-		FROM( SELECT A.START_DATE_HR, SUBSTR(A.END_DATE_HR, 6, 5) || ' ' || SUBSTR(A.END_DATE_HR, 12, 16) AS END_DATE_HR, A.ACTVTY_CLSFY_NUM, A.CLNT_CMPNY_NAME, A.LEAD_NAME, A.LEAD_NUM, A.SALES_NUM, A.EMP_NAME, A.RANK_NAME, A.SCHDL_NAME, A.SCHDL_NUM, A.DEL_CHECK
-      		  FROM ( SELECT  SS.START_DATE_HR, SS.END_DATE_HR,
-					  		CASE WHEN SS.ACTVTY_CLSFY_NUM = 0 THEN '전화'
-					  	   		 WHEN SS.ACTVTY_CLSFY_NUM = 1 THEN '메일'
-					  	   		 WHEN SS.ACTVTY_CLSFY_NUM = 2 THEN '방문'
-					       		 ELSE '기타'
-					  		END AS ACTVTY_CLSFY_NUM,CC.CLNT_CMPNY_NAME,L.LEAD_NAME, L.LEAD_NUM, S.SALES_NUM,
-					  		ROW_NUMBER() OVER(ORDER BY SS.START_DATE_HR DESC) AS RNUM,
-                            E.EMP_NAME, R.RANK_NAME, SS.SCHDL_NAME, SS.SCHDL_NUM, SS.DEL_CHECK
-			   		 FROM SALES_SCHDL SS LEFT OUTER JOIN LEAD L
-						   		   			    	  ON SS.LEAD_NUM = L.LEAD_NUM
-								   		 LEFT OUTER JOIN SALES S
-										  			  ON SS.SALES_NUM = S.SALES_NUM
-								   		 LEFT OUTER JOIN ENTRPRS_CLNT CL
-										  			  ON L.CLNT_NUM = CL.CLNT_NUM
-								   		 LEFT OUTER JOIN CLNT_CMPNY CC
-										  			  ON CL.CLNT_NAME = CC.CLNT_NAME
+		SELECT SUBSTR(A.START_DATE_HR, 6, 5) || ' ' || SUBSTR(A.START_DATE_HR, 12, 16) AS START_DATE_HR, DECODE(A.END_DATE_HRS, NULL, '미정', A.END_DATE_HRS) AS END_DATE_HR, A.ACTVTY_CLSFY_NUM, L.LEAD_NAME AS SALES_NAME, A.LEAD_NAME, A.LEAD_NUM, A.SALES_NUM,
+               A.CLNT_CMPNY_NAME AS LEAD_CC_NAME, CC.CLNT_CMPNY_NAME AS SALES_CC_NAME, A.EMP_NAME, A.RANK_NAME, A.SCHDL_NAME, A.SCHDL_NUM, A.DEL_CHECK
+      	FROM( SELECT A.START_DATE_HR, SUBSTR(A.END_DATE_HR, 6, 5) || ' ' || SUBSTR(A.END_DATE_HR, 12, 16) AS END_DATE_HRS, A.ACTVTY_CLSFY_NUM, A.CLNT_CMPNY_NAME, 
+                     A.LEAD_NAME, A.LEAD_NUM, A.SALES_NUM, A.EMP_NAME, A.RANK_NAME, A.SCHDL_NAME, A.SCHDL_NUM, A.DEL_CHECK, A.END_DATE_HR
+              FROM ( SELECT  SS.START_DATE_HR, SS.END_DATE_HR,
+                       		 CASE WHEN SS.ACTVTY_CLSFY_NUM = 0 THEN '전화'
+                            	  WHEN SS.ACTVTY_CLSFY_NUM = 1 THEN '메일'
+                            	  WHEN SS.ACTVTY_CLSFY_NUM = 2 THEN '방문'
+                            	  ELSE '기타'
+                       		 END AS ACTVTY_CLSFY_NUM,CC.CLNT_CMPNY_NAME,L.LEAD_NAME, L.LEAD_NUM, S.SALES_NUM,
+                       		 ROW_NUMBER() OVER(ORDER BY SS.START_DATE_HR DESC) AS RNUM,
+                             E.EMP_NAME, R.RANK_NAME, SS.SCHDL_NAME, SS.SCHDL_NUM, SS.DEL_CHECK
+                   	 FROM SALES_SCHDL SS LEFT OUTER JOIN LEAD L
+                                                   	  ON SS.LEAD_NUM = L.LEAD_NUM
+                                  		 LEFT OUTER JOIN SALES S
+                                         		      ON SS.SALES_NUM = S.SALES_NUM
+                                  		 LEFT OUTER JOIN ENTRPRS_CLNT CL
+                                           			  ON L.CLNT_NUM = CL.CLNT_NUM
+                                  		 LEFT OUTER JOIN CLNT_CMPNY CC
+                                          			  ON CL.CLNT_NAME = CC.CLNT_NAME
                                               INNER JOIN EMP E
                                                       ON E.EMP_NUM = SS.EMP_NUM
                                               INNER JOIN APNTM AE
                                                       ON SS.EMP_NUM = AE.EMP_NUM
                                               INNER JOIN RANK R
-                                                      ON R.RANK_NUM = AE.RANK_NUM                                                      
-			  		 WHERE SUBSTR(SS.START_DATE_HR, 1, 10) = TRIM(#{ctt})
-			  		 OR SUBSTR(SS.END_DATE_HR, 1, 10) = TRIM(#{ctt}) ) A
-	     	  ORDER BY A.RNUM DESC) A LEFT OUTER JOIN SALES S 
-	    			 		    				   ON A.SALES_NUM = S.SALES_NUM
-                                 	  LEFT OUTER JOIN LEAD L 
-                            			 	 	   ON S.LEAD_NUM = L.LEAD_NUM
-                                 	  LEFT OUTER JOIN ENTRPRS_CLNT CL
-                                				   ON CL.CLNT_NUM = L.CLNT_NUM
-                                 	  LEFT OUTER JOIN CLNT_CMPNY CC
-                                		 		   ON CC.CLNT_NAME = CL.CLNT_NAME
-		WHERE A.DEL_CHECK IS NULL                                		 		   
+                                                      ON R.RANK_NUM = AE.RANK_NUM ) A
+             ORDER BY A.RNUM DESC) A LEFT OUTER JOIN SALES S 
+                                          ON A.SALES_NUM = S.SALES_NUM
+                                      LEFT OUTER JOIN LEAD L 
+                                                ON S.LEAD_NUM = L.LEAD_NUM
+                                      LEFT OUTER JOIN ENTRPRS_CLNT CL
+                                               ON CL.CLNT_NUM = L.CLNT_NUM
+                                      LEFT OUTER JOIN CLNT_CMPNY CC
+                                                ON CC.CLNT_NAME = CL.CLNT_NAME
+        WHERE TRIM(#{ctt}) BETWEEN SUBSTR(A.START_DATE_HR, 1, 10) AND NVL(SUBSTR(A.END_DATE_HR, 1, 10), SUBSTR(A.START_DATE_HR, 1, 10))
+        AND A.DEL_CHECK IS NULL                                		 		   
 	</select>
 	<!-- 영업 상세보기  -->
 	<select id="salesSchdlCont" parameterType="hashmap" resultType="hashmap">
@@ -292,13 +292,14 @@
 	</select>
 	<!-- 리드 상세 -->
 	<select id="getLeadCont" resultType="hashmap" parameterType="hashmap">	
-		SELECT LD.LEAD_NAME, EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, CC.GRADE_NUM, LD.RCGNTN_PATH_NUM, E.EMP_NAME
+		SELECT LD.LEAD_NAME, EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, CC.GRADE_NUM, LD.RCGNTN_PATH_NUM, E.EMP_NAME,
+        	   DECODE(PRGRS_STS_NUM, 1, '진행중', 2, '종료(영업기회 전환)', 3, '종료(영업기회 실패)') AS PSNUM 
 		FROM LEAD LD INNER JOIN ENTRPRS_CLNT EC
 		                     ON LD.CLNT_NUM = EC.CLNT_NUM
 		             INNER JOIN CLNT_CMPNY CC
 		                     ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
 		             INNER JOIN EMP E
 		                     ON LD.MNGR_EMP_NUM = E.EMP_NUM
-		WHERE LD.LEAD_NUM = #{leadNum}             
+		WHERE LD.LEAD_NUM = #{leadNum}            
 	</select>
 </mapper>
