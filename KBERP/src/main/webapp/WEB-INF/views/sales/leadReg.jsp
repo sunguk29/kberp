@@ -24,8 +24,8 @@
 	padding-bottom: 3px;
 	border-bottom: 1px solid #d7d7d7;
 }
-.popup_cont {
-	/* 내용 변경용 */
+.popup_cont1 {
+	/* 리스트 목록 내용 변경용 */
 	font-size: 13pt;
 	font-weight: 600;
 	text-align: center;
@@ -597,7 +597,7 @@ $(document).ready(function() {
 	$("#listBtn").on("click", function() {
 		var html = "";
 		
-	html += "<div class=\"popup_cont\">";
+	html += "<div class=\"popup_cont1\">";
 	html += 	"<div class=\"msg_1\">내용이 저장되지 않았습니다.</div>";
 	html += 	"<div class=\"msg_2\">페이지를 나가시겠습니까?</div>";
 	html += "</div>";
@@ -635,9 +635,9 @@ $(document).ready(function() {
 		} else if(checkEmpty("#rp")) {
 			alert("인지경로를 입력하세요.");
 			$("#rp").focus();
-		} else if(checkEmpty("#mn")) {
+		} else if(checkEmpty("#mngEmp")) {
 			alert("담당자를 입력하세요.");
-			$("#mn").focus();
+			$("#mngEmp").focus();
 		} else {	
 			var params = $("#writeForm").serialize();
 		
@@ -660,12 +660,172 @@ $(document).ready(function() {
 		}	
 	}); 
 	
+	$("#clntIcon").on("click", function() {
+		var html = "";
+		
+		html += "<div class=\"popup_title_mid\">";
+		html += 	"<form action=\"#\" id=\"ecPopupForm\">";
+	 	html += 		"<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
+		html += 		"<div class=\"ptm_left2\">";
+		html += 			"<div class=\"ptm_left_top\">고객/고객사</div>";			
+		html += 		"</div>";
+		html += 		"<div class=\"ptm_mid2\">";
+		html += 			"<div class=\"ptm_mid_top\">";
+		html += 				"<input type=\"text\" class=\"text_size2\" id=\"ecSearchTxt\" name=\"ecSearchTxt\" placeholder=\"검색어를 입력해주세요\" />";
+		html += 			"</div>";
+		html += 		"</div>";
+		html += 		"<div class=\"ptm_mid_right\"></div>";
+		html += 		"<div class=\"ptm_right2\">";
+		html += 			"<div class=\"ptm_right_top2\">";
+		html += 				"<div class=\"cmn_btn\" id=\"ecBtn\">검색</div>";
+		html += 			"</div>";
+		html += 		"</div>";
+		html +=		"</form>";
+		html += "</div>";
+		html += "<div class=\"popup_cont pc_back\">";
+		html += 	"<div class=\"popup_box\" id=\"ecBox\"></div>";
+		html += 	"<div class=\"board_bottom2\">";
+		html +=			"<div class=\"pgn_area\" id=\"ecpb\"></div>";
+		html +=		"</div>";
+		html +=	"</div>";
+	
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "고객 조회",
+			contents : html,
+			width : 600,
+			height : 500,
+			contentsEvent : function() {
+				
+				ecList();
+				
+				$("#ecBox").on("click", ".popup_box_in", function() {
+					var ecnm = $(this).children("#ecnm").val();
+					var ecn = $(this).children("#ecn").val();
+					
+					var cnn = $(this).children("#cnn").val();
+					var ccn = $(this).children("#ccn").val();
+					var ccgn = $(this).children("#ccgn").val();
+					var ccgNum = $(this).children("#ccgNum").val();					
+					
+					document.getElementById("clntName").value = ecnm;
+					document.getElementById("clntNum").value = ecn;
+					
+					document.getElementById("ccName").value = cnn;
+					document.getElementById("ccNum").value = ccn;
+					document.getElementById("ccGName").value = ccgn;
+					document.getElementById("ccGNum").value = ccgNum;
+					closePopup();					
+				});
+				
+				//페이징
+				$("#ecpb").on("click", "div", function() {
+					$("#page").val($(this).attr("page"));
+					
+					ecList();
+				});
+				
+				// 검색버튼
+				$("#ecBtn").on("click", function () {
+					$("#page").val("1");
+					
+					ecList();
+					
+				});
+				
+				$("#ecSearchTxt").on("keypress", function(event) {
+					if(event.keyCode == 13 ) {
+						$("#page").val("1");
+						
+						ecList();
+						return false;
+					}
+				});	
+			},
+			buttons : [{
+				name : "고객 추가",
+				func:function() {
+					var html = "";
+					
+				html += "<div class=\"popup_cont pc_back\">";
+				html += "<div class=\"popup_table\">";
+				html += "<div class=\"btn2\">고객</div>";
+				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";
+				html += "<div class=\"btn2\">고객사 *</div>";
+				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" />";
+				html += "<span class=\"imgPos2\"><img class=\"btnImg2\" alt=\"돋보기\" src=\"resources/images/sales/mg.png\" /></span>";		
+				html += "</div>";
+				html += "<div class=\"btn2\">부서</div>";
+				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";
+				html += "<div class=\"btn2\">직책</div>";
+				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";							
+				html += "<div class=\"btn2\">휴대폰 번호*</div>";
+				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";															
+				html += "<div class=\"btn2\">메일</div>";
+				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";							
+				html += "<div class=\"btn2\">첨부자료</div>";
+				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" />";
+				html += "<div class=\"imgPos2\">";
+				html += "<span>";
+				html += "<img class=\"btnImg3\" alt=\"추가\" src=\"resources/images/sales/plus.png\" />";
+				html += "<img class=\"btnImg3\" alt=\"접기\" src=\"resources/images/sales/uparrow.png\" />";
+				html += "</span>";
+				html += "</div>";
+				html += "</div>";
+				html += "</div>";
+				html += "</div>";
+
+					makePopup({
+						depth : 2,
+						bg : true,
+						bgClose : false,
+						title : "고객 등록",
+						contents : html,
+						width : 600,
+						height : 400,
+						buttons : [{
+							name : "등록",
+							func: function() {
+								
+								var html = "";
+								
+								html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
+								
+								makePopup({
+									depth : 3,
+									bg : true,
+									bgClose : true,
+									title : "저장 완료",
+									contents : html,
+									width : 400,
+									height : 180,
+									buttons : {
+										name : "확인"	
+									}
+								});
+							}
+						}, {
+							name : "취소"
+						}]
+					});									
+				}
+			},	{
+				name : "닫기",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}]
+		});			
+	});
+	
 	/* **************** 고객사 팝업 **************** */
 	$("#ccIcon").on("click", function() {
 		var html = "";
 		
 		html += "<div class=\"popup_title_mid\">";
-		html += 	"<form id=\"ccPopupForm\">";
+		html += 	"<form action=\"#\" id=\"ccPopupForm\">";
 	 	html += 		"<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
 		html += 		"<div class=\"ptm_left\">";
 		html +=				"<div class=\"ptm_left_top\">고객사분류</div>";	
@@ -684,7 +844,7 @@ $(document).ready(function() {
 		html +=					"</select>";
 		html +=				"</div>";		
 		html +=				"<div class=\"ptm_mid_bot\">";
-		html +=					"<input type=\"text\" class=\"text_size2\" id=\"searchTxt\" name=\"searchTxt\" placeholder=\"검색어를 입력해주세요\" />";
+		html +=					"<input type=\"text\" class=\"text_size2\" id=\"ccSearchTxt\" name=\"ccSearchTxt\" placeholder=\"검색어를 입력해주세요\" />";
 		html +=				"</div>";	
 		html += 		"</div>";
 		html += 		"<div class=\"ptm_mid_right\">";
@@ -713,6 +873,20 @@ $(document).ready(function() {
 			contents : html,
 			contentsEvent : function() {
 				ccList();
+				
+				$("#ccBox").on("click", ".popup_box_in", function() {
+					var cnn = $(this).children("#cnn").val();
+					var ccn = $(this).children("#ccn").val();
+					var ccgn = $(this).children("#ccgn").val();
+					var ccgNum = $(this).children("#ccgNum").val();
+					document.getElementById("ccName").value = cnn;
+					document.getElementById("ccNum").value = ccn;
+					document.getElementById("ccGName").value = ccgn;
+					document.getElementById("ccGNum").value = ccgNum;
+
+					closePopup();
+				});
+				
 				//페이징 
 				$("#ccpb").on("click", "div", function() {
 					$("#page").val($(this).attr("page"));
@@ -728,7 +902,7 @@ $(document).ready(function() {
 					
 				});
 				
-				$("#searchTxt").on("keypress", function(event) {
+				$("#ccSearchTxt").on("keypress", function(event) {
 					if(event.keyCode == 13 ) {
 						$("#page").val("1");
 						
@@ -739,23 +913,22 @@ $(document).ready(function() {
 			},
 			width : 600,
 			height : 500,
-			buttons : [{
-				name : "등록",
+			buttons : {
+				name : "닫기",
 				func:function() {
 					console.log("One!");
 					closePopup();
 				}
-			}, {
-				name : "취소"
-			}]
+			}
 		});		
 	});
 	
+	/* 담당자 팝업  */
 	$("#userIcon").on("click", function() {
  		var html = "";
 		
 	 	html += "<div class=\"popup_title_mid\">"; 
-	 	html += 	"<form id=\"popupForm\">";
+	 	html += 	"<form action=\"#\" id=\"mngrPopupForm\">";
 	 	html += 		"<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
 		html += 		"<div class=\"ptm_left\">";
 		html += 			"<div class=\"ptm_left_top\">팀분류</div>";
@@ -779,7 +952,7 @@ $(document).ready(function() {
 		html += 		"<div class=\"ptm_mid_right\">";
 		html +=				"<div class=\"ptm_mid_right_top\"></div>";
 		html +=				"<div class=\"ptm_mid_right_bot\">";
-		html +=					"<input type=\"text\" id=\"searchTxt\" name=\"searchTxt\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" />";
+		html +=					"<input type=\"text\" id=\"searchT\" name=\"searchT\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" />";
 		html +=				"</div>";
 		html += 		"</div>";
 		html += 		"<div class=\"ptm_right\">";
@@ -803,7 +976,18 @@ $(document).ready(function() {
 			title : "담당자 조회",
 			contents : html,
 			contentsEvent : function() {
+				
 				mngrList();
+				
+				$("#mngrBox").on("click", ".popup_box_in", function() {
+					var mng = $(this).children("#mng").val();
+					var mge = $(this).children("#mge").val();
+					document.getElementById("mngEmp").value = mng;
+					document.getElementById("mngNum").value = mge;
+					closePopup();
+				});
+				
+				$()
 				//페이징 
 				$("#mngrpb").on("click", "div", function() {
 					$("#page").val($(this).attr("page"));
@@ -814,34 +998,70 @@ $(document).ready(function() {
 				$("#mngrBtn").on("click", function () {
 					$("#page").val("1");
 					
-					mngrList();
-					
+					mngrList();	
 				});
 				
-				$("#searchTxt").on("keypress", function(event) {
+				$("#searchT").on("keypress", function(event) {
 					if(event.keyCode == 13 ) {
-						$("#page").val("1");
+						$("#mngrBtn").click();
 						
-						mngrList();
 						return false;
 					}
 				});
 			},
 			width : 600,
 			height : 500,
-			buttons : [{
-				name : "등록",
+			buttons : {
+				name : "닫기",
 				func:function() {
 					console.log("One!");
 					closePopup();
 				}
-			}, {
-				name : "취소"
-			}]
+			}
 		});
-	});	
-});
-/* 고객사 조회 팝업 */
+	});
+}); 
+/* ******************************************* 고객 조회 팝업 ******************************************* */
+function ecList() {
+	var params = $("#ecPopupForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "ecListAjax",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			ecDrawList(res.list);
+			drawPaging(res.pb, "#ecpb");
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}		
+	});
+}
+function ecDrawList(list) {
+	var html = "";
+	
+	for(var data of list) {
+		html += "<div class=\"popup_box_in\">";
+ 		html += "<input type=\"hidden\" id=\"ecnm\" value=\"" + data.CLNT_NAME + "\" />";
+		html += "<input type=\"hidden\" id=\"ecn\" value=\"" + data.CLNT_NUM + "\" />";
+		html += "<input type=\"hidden\" id=\"cnn\" value=\"" + data.CLNT_CMPNY_NAME + "\" />";
+		html += "<input type=\"hidden\" id=\"ccn\" value=\"" + data.CLNT_CMPNY_NUM + "\" />";
+		html += "<input type=\"hidden\" id=\"ccgn\" value=\"" + data.GRADE_NAME + "\" />";
+		html += "<input type=\"hidden\" id=\"ccgNum\" value=\"" + data.GRADE_NUM + "\" />";
+		html += "<div class=\"popup_cc_box_left\">";
+		html += "<span><img alt=\"고객이미지\" class=\"company\" src=\"resources/images/sales/clnt.png\"></span>";
+		html += "</div>";
+		html += "<div class=\"popup_cc_box_right3\">";
+		html += "<div class=\"boldname3\">" + data.CLNT_NAME + " / " + data.CLNT_CMPNY_NAME + " / " + data.GRADE_NAME + "등급</div><br/>";
+		html += "<span class=\"clntCmpny_dt\">등록일 " + data.RDATE + "</span>";
+		html += "</div>";
+		html += "</div>";		
+	}
+		$("#ecBox").html(html);
+}
+/* ******************************************* 고객사 조회 팝업 ******************************************* */
 function ccList() {
 	var params = $("#ccPopupForm").serialize();
 
@@ -861,10 +1081,14 @@ function ccList() {
 }
 function ccDrawList(list) {
 	var html = "";
-	
+
 	for(var data of list) {
 		
 	html += "<div class=\"popup_box_in\">";
+	html += "<input type=\"hidden\" id=\"cnn\" value=\"" + data.CLNT_CMPNY_NAME + "\" />";
+	html += "<input type=\"hidden\" id=\"ccn\" value=\"" + data.CLNT_CMPNY_NUM + "\" />";
+	html += "<input type=\"hidden\" id=\"ccgn\" value=\"" + data.GRADE_NAME + "\" />";
+	html += "<input type=\"hidden\" id=\"ccgNum\" value=\"" + data.GRADE_NUM + "\" />";
 	html +=	"<div class=\"popup_cc_box_left\">";
 	html += "<span><img alt=\"고객사이미지\" class=\"company\" src=\"resources/images/sales/client.png\"></span>";
 	html +=	"</div>";
@@ -875,12 +1099,12 @@ function ccDrawList(list) {
 	html += "</div>";
 	html += "</div>";
 	}
-	
+
 	$("#ccBox").html(html);
 }
-/* 담당자 조회 팝업  */
+/* ******************************************* 담당자 조회 팝업 ******************************************* */
 function mngrList() {
-	var params = $("#popupForm").serialize();
+	var params = $("#mngrPopupForm").serialize();
 	
 	$.ajax({
 		type : "post",
@@ -902,6 +1126,8 @@ function mngrDrawList(list) {
 	for(var data of list) {
 		
 		html +=	"<div class=\"popup_box_in\">";
+		html += "<input type=\"hidden\" id=\"mng\" value=\"" + data.EMP_NAME + "\" />";
+		html += "<input type=\"hidden\" id=\"mge\" value=\"" + data.EMP_NUM + "\" />";
 		html +=	"<div class=\"popup_cc_box_left\">";
 		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
 		html +=	"</div>";
@@ -915,7 +1141,7 @@ function mngrDrawList(list) {
 	$("#mngrBox").html(html);
 	
 }
-
+/* ************************ 페이징 ************************ */
 function drawPaging(pb, sel) {
 	var html = "";
 	
@@ -998,28 +1224,24 @@ function checkEmpty(sel) {
 									<td><input type="button" class="btn" value="고객명 *" readonly="readonly"/></td>
 									<td>
 										<input type="text" class="txt" id="clntName" name="clntName" />
+										<input type="hidden" id="clntNum" name="clntNum" />
 										<img class="btnImg_in" id="clntIcon" alt="팝업" src="resources/images/sales/popup.png" />
 									</td>
 								</tr>
 								<tr>
 									<td><input type="button" class="btn" value="고객사 *" readonly="readonly"/></td>
 									<td>
-										<input type="text" class="txt" id="ccName" name="ccName" />
+										<input type="text" class="txt" id="ccName" name="ccName" readonly="readonly" />
+										<input type="hidden" id="ccNum" name="ccNum" />
 										<img class="btnImg_in" id="ccIcon" alt="팝업" src="resources/images/sales/popup.png" />
 									</td>
 								</tr>
 								<tr>
-									<td><input type="button" class="btn" value="고객사 등급" readonly="readonly"/></td>
-									<td><select class="txt_in" id="ccGrade" name="ccGrade" disabled="disabled">
-											<optgroup>
-												<option>고객사 등록 후 자동 입력</option>
-												<option value="0">S</option>
-												<option value="1">A</option>
-												<option value="2">B</option>
-												<option value="3">C</option>
-												<option value="4">D</option>
-											</optgroup>
-									</select></td>
+									<td><input type="button" class="btn" value="고객사 등급" readonly="readonly"/>
+									<td>
+										<input type="text" class="txt" id="ccGName" name="ccGName" placeholder="고객사 등록 후 자동 입력" readonly="readonly" />
+										<input type="hidden" id="ccGNum" name="ccGNum" />
+									</td>
 								</tr>
 								<tr>
 									<td><input type="button" class="btn" value="인지경로 *" readonly="readonly"/></td>
@@ -1037,7 +1259,8 @@ function checkEmpty(sel) {
 								<tr>
 									<td><input type="button" class="btn" value="담당자 *" readonly="readonly"/></td>
 									<td>
-										<input type="text" class="txt" id="mn" name="mn" />
+										<input type="text" class="txt" id="mngEmp" name="mngEmp" />
+										<input type="hidden" id="mngNum" name="mngNum" />
 										<img class="btnImg_in" id="userIcon" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
 									</td>
 								</tr>					
