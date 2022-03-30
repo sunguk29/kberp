@@ -50,28 +50,61 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
+	$("#cancelBtn").on("click", function(){
+		history.back();
 	});
 	$("#addBtn").on("click", function() {
 		makePopup({
-			depth : 1,
-			bg : true,
+			bg : false,
+			bgClose : false,
 			title : "등록",
-			width: 400,
-			height: 220,
-			contents : "등록이 완료 되었습니다",
-			buttons : {
-				name : "확인",
+			contents : "등록하시겠습니까?",
+			buttons : [{
+				name : "등록",
 				func:function() {
-					console.log("One!");
+					if(checkEmpty("#title")){
+						alert("제목을 입력하세요");
+						$("#title").focus();
+					}else if(checkEmpty("#content")){
+						alert("내용을 입력하세요");
+						$("#content").focus();
+					}
+					else{
+						var params= $("#writeForm").serialize();
+						
+						$.ajax({
+							type: "post", // 전송형태
+							url : "guidesActionAjax/insert" , //통신 주소
+							dataType : "json", //받을 데이터 형태
+							data : params, //보낼 데이터. 보낼 것이 없으면 안씀
+							success : function(res){ // 성공 시 실행 함수. 인자는 받아온 데이터
+								if(res.res=="success"){
+									$("#backForm").submit();
+								}else{
+									alert("작성중 문제가 발생하였습니다");
+								}
+							},
+							error: function(request, status, error){ // 문제 발생 시 실행 함수
+								console.log(request.responseText); //결과텍스트. 스프링 실행 결과
+							}
+						});
+					}
 					closePopup();
 				}
-			}
+			}, {
+				name : "취소"
+			}]
 		});
 	});
-
+	
 });
+function checkEmpty(sel){
+	if($.trim($(sel).val())==""){
+		return true;
+	}else{
+		return false;
+		}
+	}
 </script>
 </head>
 <body>
@@ -90,24 +123,35 @@ $(document).ready(function() {
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
-		
+		<form action="#" id="writeForm" method="post">
 			   <table>
                         <tr>
                         <td>작성자</td>
-                        <td><input type = text name = name size=20> </td>
+                        <td>${sEmpName}<input type = "hidden" name = "writer" value="${sEmpNum}"> </td>
                         </tr>
  
                         <tr>
                         <td>제목</td>
-                        <td><input type = text name = title size=60 ></td>
+                        <td><input type = text id="title" name = "title" size=60 ></td>
                         </tr>
  
                         <tr>
                         <td>내용</td>
-                        <td><textarea name = content cols=85 rows=20 placeholder="내용을 입력하세요"></textarea></td>
+                        <td><textarea id="content" name = "content" cols=85 rows=20 placeholder="내용을 입력하세요"></textarea></td>
                         </tr>
                         </table>
+	<input type="hidden" id="page" name="page" value="${page}"/>
+         </form>
+         
+         <form action="guideWrtng" id="backForm" method="post">
+          <input type="hidden" name="top" value="${param.top}">
+		<input type="hidden" name="menuNum" value="${param.menuNum}">
+		<input type="hidden" name="menuType" value="${param.menuType}">
+		<input type="hidden" id="no" name="no"/>
+         </form>
 					<div class="cmn_btn_ml" id="addBtn">등록</div>
+					<div class="cmn_btn_ml" id="cancelBtn">취소</div>
+					
 		</div>
 	</div>
 	<!-- bottom -->
