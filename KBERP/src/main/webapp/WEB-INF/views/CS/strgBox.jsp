@@ -21,12 +21,10 @@ tr{
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#strgBtn").on("click", function(){
-		$("#actionForm").attr("action","guideWrtngAdd");
-		$("#actionForm").submit(); 	
-	});	
 	
-	 reloadList();
+	reloadList();
+	
+	
 	 $(".pgn_area").on("click", "div",function(){
 			$("#page").val($(this).attr("page"));
 			

@@ -56,8 +56,15 @@ textarea{
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#listBtn").on("click", function() {
-		history.back();
+		$("#actionForm").attr("action","guideWrtng");
+		$("#actionForm").submit();
 	});
+	
+	$("#listBtn2").on("click", function() {
+		$("#actionForm").attr("action","strgBox");
+		$("#actionForm").submit();
+	});
+	
 	$("#updateBtn").on("click", function() {
 		$("#actionForm").attr("action","guideWrtngUpdate")
 		$("#actionForm").submit();
@@ -65,7 +72,7 @@ $(document).ready(function() {
 	
 	$("#strgBtn").on("click", function() {
 		makePopup({
-			bg : false,
+			bg : true,
 			bgClose : false,
 			title : "복원",
 			contents : "복원하시겠습니까?",
@@ -81,7 +88,7 @@ $(document).ready(function() {
 						data : params, //보낼 데이터. 보낼 것이 없으면 안씀
 						success : function(res){ // 성공 시 실행 함수. 인자는 받아온 데이터
 							if(res.res=="success"){
-								$("#backForm").submit();
+								$("#backForm1").submit();
 							}else{
 								alert("복원중 문제가 발생하였습니다");
 							}
@@ -157,14 +164,16 @@ $(document).ready(function() {
 		<br/>
 		<textarea readonly="readonly" disabled="disabled">${data.CMBN_CONT}</textarea>
 		<div class="board_bottom">
-		<div class="cmn_btn_ml" id="listBtn">목록</div>
+		
 <c:choose>
 	<c:when test="${data.DEL_CHECK eq 1}">
+	<div class="cmn_btn_ml" id="listBtn">목록</div>
 	<div class="cmn_btn_ml" id="updateBtn">수정</div>
 	<div class="cmn_btn_ml" id="deleteBtn">삭제</div>
 	</c:when>
 	
 	<c:otherwise>
+	<div class="cmn_btn_ml" id="listBtn2">목록</div>
 		<div class="cmn_btn_ml" id="strgBtn">복원</div>
 	</c:otherwise>
 </c:choose>
@@ -177,7 +186,9 @@ $(document).ready(function() {
 		<input type="hidden" name="menuNum" value="${param.menuNum}">
 		<input type="hidden" name="menuType" value="${param.menuType}">
 		<input type="hidden" id="no" name="no" value="${param.no} "/>
-	<input type="hidden" id="page" name="page" value="${param.page}"/>
+		<input type="hidden" id="page" name="page" value="${param.page}"/>
+		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 	</form>
 	
 	<form action="guideWrtng" id="backForm" method="post">
@@ -185,6 +196,17 @@ $(document).ready(function() {
 		<input type="hidden" name="menuNum" value="${param.menuNum}">
 		<input type="hidden" name="menuType" value="${param.menuType}">
 		<input type="hidden" id="no" name="no"/>
+		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+    </form>
+    
+    <form action="strgBox" id="backForm1" method="post">
+         <input type="hidden" name="top" value="${param.top}">
+		<input type="hidden" name="menuNum" value="${param.menuNum}">
+		<input type="hidden" name="menuType" value="${param.menuType}">
+		<input type="hidden" id="no" name="no"/>
+		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
     </form>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
