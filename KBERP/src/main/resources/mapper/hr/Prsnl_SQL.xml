@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="prsnl">
+	<!--* 인사기록카드 : 가져오기 쿼리 *-->
+	<!-- 인사기록카드 - 기본정보 가져오기 -->
 	<select id="getBasicInfo" parameterType="hashmap" resultType="hashmap">
 		SELECT EMP.EMP_NUM, EMP.EMP_NAME, EMP.EMP_NAME_ENG, EMP.EMP_PCTR_FILE,
 		       A.DEPT_NUM, A.START_DATE, A.END_DATE, R.RANK_NAME, D.DEPT_NAME
@@ -19,17 +21,19 @@
 		                 ON A.DEPT_NUM = D.DEPT_NUM AND D.DEL_CHECK = '1'
 		WHERE EMP.EMP_NUM = #{sEmpNum}
 	</select>
-
+	<!-- 인사기록카드 - 인적정보 가져오기 -->
 	<select id="getHumanInfo" parameterType="hashmap" resultType="hashmap">
 		SELECT TO_CHAR(BRTHDT, 'YYYY-MM-DD') AS BRTHDT, GNDR, EMAIL, ZIP_CODE, ADRS, DTL_ADRS, PHONE_NUM, MBL_NUM
 		FROM EMP
 		WHERE EMP_NUM = #{sEmpNum}
 	</select>
+	<!-- 인사기록카드 - 재직정보 가져오기 -->
 	<select id="getWorkInfo" parameterType="hashmap" resultType="hashmap">
 		SELECT EMP_NUM, HIRE_TYPE, PRBTN_CHECK
 		FROM EMP
 		WHERE EMP_NUM = #{sEmpNum}
 	</select>
+	<!-- 인사기록카드 - 재직정보 : 발령기록 가져오기 -->
 	<select id="getApntmList" parameterType="hashmap" resultType="hashmap">
 		SELECT SQ.APNTM_DVSN_NUM, TO_CHAR(SQ.START_DATE, 'YYYY-MM-DD') AS START_DATE, TO_CHAR(SQ.END_DATE, 'YYYY-MM-DD') AS END_DATE,
 		       CASE WHEN SQ.NEWEST = '1' AND SQ.OLDEST = '1'
@@ -48,13 +52,14 @@
 		              AND A.STS_NUM = '1' ) SQ
 		WHERE SQ.NEWEST = '1' OR SQ.OLDEST = '1'
 	</select>
+	<!-- 인사기록카드 - 급여정보 가져오기 -->
 	<select id="getSlryInfo" parameterType="hashmap" resultType="hashmap">
 		SELECT B.BANK_NAME, SA.ACNT_NUM, SA.DPSTR
 		FROM SLRY_ACNT SA INNER JOIN BANK B
 		                          ON SA.BANK_NUM = B.BANK_NUM
 		WHERE SA.EMP_NUM = #{sEmpNum}
 	</select>
-	
+	<!-- 인사기록카드 - 학력사항 목록 가져오기 -->
 	<select id="getEdctnLevel" parameterType="hashmap" resultType="hashmap">
 		SELECT EDCTN_LEVEL_NUM, SCHL_NAME, TO_CHAR(ADMSN_DATE, 'YYYY-MM-DD') AS ADMSN_DATE,
 		       TO_CHAR(GRDTN_DATE, 'YYYY-MM-DD') AS GRDTN_DATE, GRADE, SCHL_REGSTR_DVSN
@@ -62,21 +67,128 @@
 		WHERE EMP_NUM = #{sEmpNum}
 		ORDER BY ADMSN_DATE DESC <!-- 일단 입학일 순 정렬 :: 정렬 조건도 추가하기? -->
 	</select>
+	<!-- 인사기록카드 - 경력사항 목록 가져오기 -->
 	<select id="getCr" parameterType="hashmap" resultType="hashmap">
-		SELECT CMPNY_NAME, TO_CHAR(JOIN_DATE, 'YYYY-MM-DD') AS JOIN_DATE, TO_CHAR(RSGNT_DATE, 'YYYY-MM-DD') AS RSGNT_DATE,
+		SELECT CR_NUM, CMPNY_NAME, TO_CHAR(JOIN_DATE, 'YYYY-MM-DD') AS JOIN_DATE, TO_CHAR(RSGNT_DATE, 'YYYY-MM-DD') AS RSGNT_DATE,
 		       DEPT, PSTN, JOB
 		FROM CR
 		WHERE EMP_NUM = #{sEmpNum}
 		ORDER BY JOIN_DATE DESC <!-- 얘도 일단 입사일 순 정렬 -->
 	</select>
+	<!-- 인사기록카드 - 자격사항 목록 가져오기 -->
 	<select id="getQlfctn" parameterType="hashmap" resultType="hashmap">
-		SELECT LCNS_NAME, TO_CHAR(ACQRMNT_DATE, 'YYYY-MM-DD') AS ACQRMNT_DATE,
+		SELECT LCNS_NUM, LCNS_NAME, TO_CHAR(ACQRMNT_DATE, 'YYYY-MM-DD') AS ACQRMNT_DATE,
  		       ISSUE_ORGNZT, ACQRMNT_SCORE, TO_CHAR(EXPRTN_DATE, 'YYYY-MM-DD') AS EXPRTN_DATE
 		FROM LCNS
 		WHERE EMP_NUM = #{sEmpNum}
 		ORDER BY ACQRMNT_DATE DESC <!-- 취득일 순 정렬 -->
 	</select>
 	
+	<!--* 인사기록카드 : 수정하기 쿼리 *-->
+	
+	
+	<!--* 인사기록카드 : 추가하기 쿼리 *-->
+	<insert id="addEdctnLevel" parameterType="hashmap">
+		INSERT INTO EDCTN_LEVEL(EDCTN_LEVEL_NUM, EMP_NUM, SCHL_NAME, ADMSN_DATE, GRDTN_DATE, GRADE, SCHL_REGSTR_DVSN, GRDTN_CRTFCT_FILE)
+		VALUES (EDCTN_LEVEL_SEQ.nextval, #{empNum}, #{schl_name}, TO_DATE(#{admsn_date}, 'YYYY-MM-DD'), 
+		<choose>
+			<when test="grdtn_date != '' and grdtn_date != null">
+			   TO_DATE(#{grdtn_date}, 'YYYY-MM-DD'), 
+			</when>
+			<otherwise>
+			   NULL,
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="grade != '' and grade != null">
+			   #{grade}, 
+			</when>
+			<otherwise>
+			   NULL,
+			</otherwise>
+		</choose>
+			   #{schl_regstr_dvsn}, 
+		<choose>
+			<when test="grdtn_crtfct_file != '' and grdtn_crtfct_file != null">
+			   #{grdtn_crtfct_file})
+			</when>
+			<otherwise>
+			   NULL)
+			</otherwise>
+		</choose>
+	</insert>
+ 	<insert id="addCr" parameterType="hashmap">
+		INSERT INTO CR(CR_NUM, EMP_NUM, CMPNY_NAME, JOIN_DATE, RSGNT_DATE, DEPT, PSTN, JOB)
+		VALUES (CR_SEQ.nextval, #{empNum}, #{cmpny_name}, #{join_date}, #{rsgnt_date}, 
+		<choose>
+			<when test="dept != '' and dept != null">
+			   #{dept}, 
+			</when>
+			<otherwise>
+			   NULL,
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="pstn != '' and pstn != null">
+			   #{pstn}, 
+			</when>
+			<otherwise>
+			   NULL,
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="job != '' and job != null">
+			   #{job})
+			</when>
+			<otherwise>
+			   NULL)
+			</otherwise>
+		</choose>
+	</insert>
+	<insert id="addQlfctn" parameterType="hashmap">
+		INSERT INTO LCNS(LCNS_NUM, EMP_NUM, LCNS_NAME, ACQRMNT_DATE, ISSUE_ORGNZT, ACQRMNT_SCORE, EXPRTN_DATE, COPY_FILE)
+		VALUES (LCNS_SEQ.nextval, #{empNum}, #{lcns_name}, #{acqrmnt_date}, #{issue_orgnzt}, 
+		<choose>
+			<when test="acqrmnt_score != '' and acqrmnt_score != null">
+			   #{acqrmnt_score},  
+			</when>
+			<otherwise>
+			   NULL,
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="exprtn_date != '' and exprtn_date != null">
+			   #{exprtn_date}, 
+			</when>
+			<otherwise>
+			   NULL,
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="copy_file != '' and copy_file != null">
+			   #{copy_file})
+			</when>
+			<otherwise>
+			   NULL)
+			</otherwise>
+		</choose>
+	</insert>
+	
+	<!--* 인사기록카드 : 삭제하기 쿼리 *-->
+	<delete id="deleteEdctnLevel" parameterType="hashmap">
+		DELETE FROM EDCTN_LEVEL
+		WHERE EDCTN_LEVEL_NUM = #{selItemNum}
+	</delete>
+	<delete id="deleteCr" parameterType="hashmap">
+		DELETE FROM CR
+		WHERE CR_NUM = #{selItemNum}
+	</delete>
+	<delete id="deleteQlfctn" parameterType="hashmap">
+		DELETE FROM LCNS
+		WHERE LCNS_NUM = #{selItemNum}
+	</delete>
+	
+	<!-- 메뉴 사용 권한 가져오기 -->
 	<select id="getMenuAthrty" parameterType="hashmap" resultType="Integer">
 		SELECT MA.ATHRTY_TYPE_NUM
 			FROM EMP E INNER JOIN MENU_ATHRTY MA
@@ -85,7 +197,8 @@
 			      AND E.EMP_NUM = #{sEmpNum}
 	</select>
 	
-	<!-- 사원조회 쿼리 -->
+	<!--* 사원조회 : 가져오기 쿼리 *-->
+	<!-- 사원조회 - 사원 수 가져오기 -->
 	<select id="getEmpCount" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*)
 		FROM (  SELECT EMP.EMP_NUM, EMP.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, EMP.MBL_NUM, EMP.HIRE_TYPE,
@@ -152,6 +265,7 @@
 	        </choose>
 	    </if>
 	</select>
+	<!-- 사원조회 - 사원목록 가져오기 -->
 	<select id="getEmpList" parameterType="hashmap" resultType="hashmap">
 		SELECT E.EMP_NUM, E.EMP_NAME, E.DEPT_NAME, E.RANK_NAME, E.MBL_NUM, E.HIRE_TYPE, E.WORK_TYPE, E.JOIN_DATE, E.RSGNT_DATE
 		FROM (  SELECT S.EMP_NUM, S.EMP_NAME, S.DEPT_NAME, S.RANK_NAME, S.MBL_NUM, S.HIRE_TYPE, S.WORK_TYPE, S.JOIN_DATE, S.RSGNT_DATE,
@@ -222,4 +336,10 @@
 		        ) E
 		WHERE E.RN BETWEEN #{startCount} AND #{endCount}
 	</select>
+	
+	<!--* 사원조회 : 추가하기 쿼리 *-->
+	
+	
+	<!--* 사원조회 : 삭제하기 쿼리 *-->
+	
 </mapper>
