@@ -512,18 +512,6 @@ $(document).ready(function() {
 						var params = $("#addForm").serialize();
 						console.log(params);
 						// 아작스 태우기
-						
-						$.ajax({
-							type : "post",
-							url : "actionChat/insert",
-							dataType : "json",
-							success : function(res) {
-								if()
-							},
-							error : function(req) {
-								console.log(req.responseText)	
-							}
-						});
 				}
 			}, { 
 				name : "취소",
