@@ -557,7 +557,9 @@ function uploadName(e) {
 					</div>
 					<div class="cntrct_box_in">
 						<span id="file_name">${fileName}</span>
+					<c:if test="${!empty data.ATT_FILE_NAME}">
 						<input type="button" id="fileDelete" value="삭제" />
+					</c:if>	
 						<input type="text" id="fileName" readonly="readonly" />
 					</div>
 					<input type="file" id="att" name="att" onchange="uploadName(this)" />
