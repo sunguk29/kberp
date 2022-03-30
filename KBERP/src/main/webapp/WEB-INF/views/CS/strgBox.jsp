@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>guideWrtng</title>
+<title>카카오뱅크 ERP 보관함</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">

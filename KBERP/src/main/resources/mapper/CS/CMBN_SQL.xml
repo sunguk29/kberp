@@ -58,4 +58,14 @@ VALUES(CMBN_INFO_SEQ.NEXTVAL, #{title} , #{content} , SYSDATE, #{writer},1, 0 )
 UPDATE CMBN_INFO SET DEL_CHECK = 0
 WHERE BOARD_NUM=#{no}
 </update>
+
+<update id="guideUpdate" parameterType="hashmap">
+UPDATE CMBN_INFO SET CMBN_TITLE=#{title}, CMBN_CONT=#{content}
+WHERE BOARD_NUM=#{no}
+</update>
+
+<update id="guideStrg" parameterType="hashmap">
+UPDATE CMBN_INFO SET DEL_CHECK = 1
+WHERE BOARD_NUM=#{no}
+</update>
 </mapper>

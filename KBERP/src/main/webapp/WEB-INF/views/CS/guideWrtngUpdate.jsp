@@ -64,14 +64,14 @@ $(document).ready(function() {
 	$("#cancelBtn").on("click", function(){
 		history.back();
 	});
-	$("#addBtn").on("click", function() {
+	$("#updateBtn").on("click", function() {
 		makePopup({
 			bg : false,
 			bgClose : false,
-			title : "등록",
-			contents : "등록하시겠습니까?",
+			title : "수정",
+			contents : "수정하시겠습니까?",
 			buttons : [{
-				name : "등록",
+				name : "수정",
 				func:function() {
 					$("#content").val(CKEDITOR.instances['content'].getData());
 					if(checkEmpty("#title")){
@@ -82,18 +82,18 @@ $(document).ready(function() {
 						$("#content").focus();
 					}
 					else{
-						var params= $("#writeForm").serialize();
+						var params= $("#updateForm").serialize();
 						
 						$.ajax({
 							type: "post", // 전송형태
-							url : "guidesActionAjax/insert" , //통신 주소
+							url : "guidesActionAjax/update" , //통신 주소
 							dataType : "json", //받을 데이터 형태
 							data : params, //보낼 데이터. 보낼 것이 없으면 안씀
 							success : function(res){ // 성공 시 실행 함수. 인자는 받아온 데이터
 								if(res.res=="success"){
 									$("#backForm").submit();
 								}else{
-									alert("작성중 문제가 발생하였습니다");
+									alert("수정중 문제가 발생하였습니다");
 								}
 							},
 							error: function(request, status, error){ // 문제 발생 시 실행 함수
@@ -130,12 +130,14 @@ function checkEmpty(sel){
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">안내글 등록</div>
+			<div class="page_title_text">수정</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
-		<form action="#" id="writeForm" method="post">
+		<form action="#" id="updateForm" method="post">
+		<!-- 글번호 가져와서 수정 -->
+		<input type="hidden" name="no" value="${param.no}" />
 			   <table>
                         <tr>
                         <td>작성자</td>
@@ -144,12 +146,12 @@ function checkEmpty(sel){
  
                         <tr>
                         <td>제목</td>
-                        <td><input type = text id="title" name = "title" size=60 ></td>
+                        <td><input type = text id="title" name = "title" size=60 value="${data.CMBN_TITLE}"></td>
                         </tr>
  
                         <tr>
                         <td>내용</td>
-                        <td><textarea id="content" name = "content" cols=85 rows=20 placeholder="내용을 입력하세요"></textarea></td>
+                        <td><textarea id="content" name = "content" cols=85 rows=20 >${data.CMBN_CONT}</textarea></td>
                         </tr>
                         </table>
 	<input type="hidden" id="page" name="page" value="${page}"/>
@@ -161,7 +163,7 @@ function checkEmpty(sel){
 		<input type="hidden" name="menuType" value="${param.menuType}">
 		<input type="hidden" id="no" name="no"/>
          </form>
-					<div class="cmn_btn_ml" id="addBtn">등록</div>
+					<div class="cmn_btn_ml" id="updateBtn">수정</div>
 					<div class="cmn_btn_ml" id="cancelBtn">취소</div>
 					
 		</div>
