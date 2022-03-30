@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="CC">
+
+<!-- 고객정보 팝업 -->
 <select id="getCallCenterClnt" parameterType="hashmap" resultType="hashmap">
 SELECT CLNT_NUM, CLNT_NAME, CLNT_GRADE, PHONE_NUM_1
 FROM INDVDL_CLNT
 WHERE 1=1
-<if test="searchTxt != null and searchTxt != ''">
+<if test="searchTxt != null and searchTxt != ''"> <!-- 검색어가 있다면 --> 
 	<choose>
 		<when test="clnt_slct == 0">
 			AND CLNT_NAME LIKE '%' || #{searchTxt} || '%'
@@ -20,6 +22,7 @@ WHERE 1=1
 </if>
 </select>
 
+<!-- 상담이력 -->
 <select id="getCallCenterCnsl" parameterType="hashmap" resultType="hashmap">
 SELECT I.CLNT_NAME, I.PHONE_NUM_1, TO_CHAR(N.WRITE_DATE, 'YYYY-MM-DD') AS WRITE_DATE, E.EMP_NAME , N.CNSL_TYPE_NUM, 
        CASE WHEN N.CNSL_RSLT_NUM = 0 THEN '완료'
@@ -37,6 +40,7 @@ WHERE 1 = 1
 ORDER BY I.CLNT_NUM DESC
 </select>
 
+<!-- [이력]상담노트 -->
 <select id="getRcrdCnslNote" parameterType="hashmap" resultType="hashmap">
 SELECT CLNT_NUM, CNSL_TYPE_NUM, CONT, 
        CASE WHEN CNSL_RSLT_NUM = 0 THEN '완료'
@@ -48,11 +52,13 @@ FROM CNSL_NOTE
 WHERE 1=1
 </select>
 
+<!-- 고객정보 저장 -->
 <insert id="clntSave" parameterType="hashmap">
 INSERT INTO INDVDL_CLNT(CLNT_NUM, CLNT_NAME, CLNT_GRADE, PHONE_NUM_1, PHONE_NUM_2, ADRS, DTL_ADRS)
 VALUES (INDVDL_CLNT_SEQ.NEXTVAL, #{clnt_name}, #{clnt_grade}, #{phon_num_1}, #{phon_num_2}, #{adrs}, #{dtl_adrs})
 </insert>
 
+<!-- 상담노트 저장 -->
 <insert id="noteSave" parameterType="hashmap">
 INSERT INTO CNSL_NOTE(CNSL_NUM, CLNT_NUM, EMP_NUM, CNSL_TYPE_NUM, CONT, CNSL_RSLT_NUM)
 VALUES (CNSL_NOTE_SEQ.NEXTVAL, #{clnt_num}, #{emp_num}, #{cnsl_type_num}, #{cont}, #{cnsl_rslt_num})
