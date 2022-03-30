@@ -392,6 +392,45 @@ $(document).ready(function() {
 	// 영업 종료하기 버튼
 	$(".salesOver_btn").on("click", function() {
 		// 수정이랑 같음, 상태를 종료로 변경, ajax로 failure로 보내기
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "영업 종료하기",
+			contents : "영업을 종료하시겠습니까?",
+			contentsEvent : function() {
+				$("#popup1").draggable();
+			},
+			buttons : [{
+				name : "확인",
+				func:function() {
+					/* 여기에 넣기 */
+					var params = $("#updateForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "salesMng1ActionAjax/failure",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							if(res.res == "success") {
+								$("#updateForm").attr("action", "salesList");
+								$("#updateForm").submit();
+							} else {
+								alert("영업 종료중 문제가 발생하였습니다.");
+							}
+						},
+						error : function(request, status, error) { // 문제 발생 시 실행 함수
+							console.log(request.responseText); // 결과텍스트
+						}
+					});
+					
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "닫기"
+			}]
+		});
 	});
 });
 
@@ -428,6 +467,14 @@ $(document).ready(function() {
 			<div class="body">
 				<div class="bodyWrap">
 				<!-- 시작 -->
+				<form action="#" id="updateForm" method="post">
+						<input type="hidden" id="page" name="page" value="${page}" />
+						<input type="hidden" name="top" value="${param.top}" />
+						<input type="hidden" name="menuNum" value="${param.menuNum}" />
+						<input type="hidden" name="menuType" value="${param.menuType}" />
+						<input type="text" name="prgrsStsNum" value="${data.PRGRS_STS_NUM}" />
+						<input type="text" id="salesNum" name="salesNum" value="${data.SALES_NUM}" />
+				
 					<div class="bot_title"><h3>영업기회<div class="drop_btn"></div></h3></div>
 					<hr class="hr_bot" color="white" width="925px">
 					<div class="page_cont_title_text">기본정보</div>
@@ -462,7 +509,7 @@ $(document).ready(function() {
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="담당자 *" readonly="readonly"/></td>
-								<td colspan="3" value="${data.EMP_NUM}">
+								<td colspan="3" value="${data.MNGR_EMP_NUM}">
 									<input type="text" class="txt mng_txt" readonly="readonly" value="${data.EMP_NAME}" />
 									<img class="btnImg_in" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
 								</td>
@@ -482,7 +529,7 @@ $(document).ready(function() {
 							<tr>
 								<td><input type="button" class="btn" value="대출 원인*" /></td>
 								<td colspan="3">
-									<select class="txt" disabled="disabled" >
+									<select class="txt" disabled="disabled">
 											<optgroup>
 												<c:choose>
 													<c:when test="${data.LOAN_CAUSE_NUM eq 0}">													
@@ -669,6 +716,7 @@ $(document).ready(function() {
 					<hr class="hr_bot" color="white" width="925px">
 					<hr class="hr_bot" color="white" width="925px">
 					<div class="salesOver_btn nb">영업 종료하기</div>
+					</form>
 					<!-- 끝 -->
 				</div>
 			</div>	

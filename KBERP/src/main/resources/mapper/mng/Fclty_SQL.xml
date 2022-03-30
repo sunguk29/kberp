@@ -86,6 +86,33 @@
 	</if>
 </select>
 
+<select id="getEmpList" resultType="hashmap" parameterType="hashmap">
+	SELECT O.EMP_NUM,O.EMP_NAME
+	FROM       ( SELECT EMP_NUM,EMP_NAME, ROW_NUMBER() OVER(ORDER BY EMP_NUM DESC) AS RNUM
+	             FROM EMP
+	             WHERE 1=1
+	             <if test="sendSrchTxt != null and sendSrchTxt != ''">
+	             	AND EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
+	             </if>
+	            )O
+	WHERE O.RNUM BETWEEN #{startCount} AND #{endCount}
+</select>
+
+<select id="getEmpCnt" resultType="Integer" parameterType="hashmap">
+	SELECT COUNT(*) AS CNT
+		FROM EMP
+		WHERE 1=1
+		<if test="sendSrchTxt != null and sendSrchTxt != ''">
+			AND EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
+		</if>
+</select>
+
+<select id="fcltyAdd" parameterType="hashmap">
+	INSERT INTO FCLTY(FCLTY_NUM, EMP_NUM, MNG_EMP_NUM, FCLTY_NAME, ATT_PCTR, 
+					  PLACE, ACPT_NUM_OF_PL, RMRKS)
+	VALUES(FCLT_SEQ.NEXTVAL, #{empNum},#{mngEmpNum},#{fcltyName},
+		   #{attFile},#{place},#{acptNum},#{rmrks})
+</select>
 </mapper>
 
 
