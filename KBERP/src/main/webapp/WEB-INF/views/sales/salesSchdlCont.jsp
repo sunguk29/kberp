@@ -415,20 +415,32 @@ $(document).ready(function() {
 	
 	/* 목록 이동 이벤트 */
 	$("#listBtn").on("click", function() {
-		$("#backForm").submit();
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "알림",
+			contents : "나가면 저장되지않습니다, 나가시겠습니까?",
+			contentsEvent : function() {
+				
+			},
+			buttons : [{
+				name : "나가기",
+				func:function() {
+					$("#backForm").submit();
+				}
+			}, {
+				name : "취소"
+			}]
+		});
 	});
 	
-	/* 첨부자료 플러스 버튼 눌렀을 때 */
-	$(".aff_btn").on("click", function() {
-		$("#att").click();
-	});
 	
 	/* 저장 이동 및 알림 이벤트 */
 	$("#updateBtn").on("click", function() {
 		if(checkEmpty("#ssname")){
 			makeAlert("필수입력", "일정명을 입력하세요");
 			$("#ssname").focus();
-		} else if(checkEmpty("#ssactvtyclsfy")){
+		} else if($("#ssactvtyclsfy").val() == 9){
 			makeAlert("필수입력", "활동분류를 입력하세요");
 			$("#ssactvtyclsfy").focus();
 		} else if(checkEmpty("#sdt")){
@@ -943,6 +955,10 @@ function updatePop() {
 		$("#att").click();
 	});
 	
+	
+	/* 활동분류 선택되게 */
+	$("#ssactvtyclsfy").val(${data.ACTVTY_CLSFY_NUM}).prop("selected", this.selected);
+	
 });
 /* 첨부파일 업로드 관련 */
 function uploadName(e) {
@@ -1045,22 +1061,14 @@ function uploadName(e) {
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="활동분류 *" readonly="readonly"/></td>
-								<td colspan="5"><select class="txt_in" id="ssactvtyclsfy" name="ssactvtyclsfy">
+								<td colspan="5">
+									<select class="txt_in" id="ssactvtyclsfy" name="ssactvtyclsfy">
 										<optgroup>
-											<c:choose>
-												<c:when test="${data.ACTVTY_CLSFY_NUM eq 0}">												
-													<option value="0" selected="selected">전화</option>
-												</c:when>
-												<c:when test="${data.ACTVTY_CLSFY_NUM eq 1}">												
-													<option value="1" selected="selected">메일</option>
-												</c:when>
-												<c:when test="${data.ACTVTY_CLSFY_NUM eq 2}">												
-													<option value="2" selected="selected">방문</option>
-												</c:when>
-												<c:when test="${data.ACTVTY_CLSFY_NUM eq 3}">												
-													<option value="3" selected="selected">기타</option>
-												</c:when>
-											 </c:choose>
+											<option value="9">선택하세요</option>
+											<option value="0">전화</option>
+											<option value="1">메일</option>
+											<option value="2">방문</option>
+											<option value="3">기타</option>
 										</optgroup>
 								</select></td>
 							</tr>
@@ -1099,7 +1107,9 @@ function uploadName(e) {
 					</div>
 					<div class="cntrct_box_in">
 						<a href="resources/upload/${data.ATT_FILE_NAME}" download="${fileName}"><span id="file_name">${fileName}</span></a>
-						<input type="button" id="fileDelete" value="삭제" />
+						<c:if test="${!empty data.ATT_FILE_NAME}">
+								<input type="button" id="fileDelete" value="삭제" />
+							</c:if>
 						<input type="text" id="fileName" readonly="readonly" />
 						<input type="file" id="att" name="att" onchange="uploadName(this)" />
 						<input type="hidden" id="schdlAttFile" name="schdlAttFile" />

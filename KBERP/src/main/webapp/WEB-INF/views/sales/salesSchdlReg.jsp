@@ -411,7 +411,23 @@ $(document).ready(function() {
 	
 	/* 목록 이동 이벤트 */
 	$("#listBtn").on("click", function() {
-		$("#backForm").submit();
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "알림",
+			contents : "나가면 저장되지않습니다, 나가시겠습니까?",
+			contentsEvent : function() {
+				
+			},
+			buttons : [{
+				name : "나가기",
+				func:function() {
+					$("#backForm").submit();
+				}
+			}, {
+				name : "취소"
+			}]
+		});
 	});
 	
 	/* 첨부자료 플러스 버튼 눌렀을 때 */
