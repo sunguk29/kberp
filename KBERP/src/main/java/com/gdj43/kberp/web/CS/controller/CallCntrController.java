@@ -34,6 +34,7 @@ public class CallCntrController {
 		return mav;
 	}
 	
+	// 콜센터 고객 검색 팝업 내용
 	@RequestMapping(value = "/callCenterPopListAjax", method = RequestMethod.POST, 
 			produces = "text/json;charset=UTF-8")
 		@ResponseBody
@@ -49,6 +50,7 @@ public class CallCntrController {
 			return mapper.writeValueAsString(modelMap); 
 		}
 	
+	// 콜센터 상담이력
 	@RequestMapping(value = "/callCenterCnslListAjax", method = RequestMethod.POST, 
 			produces = "text/json;charset=UTF-8")
 		@ResponseBody
@@ -64,6 +66,7 @@ public class CallCntrController {
 			return mapper.writeValueAsString(modelMap); 
 		}
 	
+	// 콜센터 고객정보, 상담노트 저장
 	@RequestMapping(value="/callCenterAction/{gbn}", method = RequestMethod.POST,
 			produces = "text/json;charset=UTF-8")
 			@ResponseBody
@@ -91,5 +94,17 @@ public class CallCntrController {
 				
 				return mapper.writeValueAsString(modelMap);
 			}
+	
+	// [이력] 상담노트
+	@RequestMapping(value = "/rcrdCnslNote")
+	public ModelAndView rcrdCnslNote(@RequestParam HashMap<String, String> params,
+							ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("CC.getRcrdCnslNote", params);
+		
+		mav.addObject("data", data);
+		
+		return mav;
+	}
 	
 }

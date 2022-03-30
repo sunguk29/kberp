@@ -61,7 +61,7 @@ public class EventController {
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
-		List<HashMap<String, String>> list = iCommonService.getDataList("in.getEventList", params);
+		List<HashMap<String, String>> list = iCommonService.getDataList("ev.getEventList", params);
 		
 		modelMap.put("list", list);
 		modelMap.put("pb", pb);

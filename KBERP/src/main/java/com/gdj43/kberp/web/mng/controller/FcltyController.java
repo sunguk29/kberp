@@ -29,6 +29,7 @@ public class FcltyController {
 	@Autowired
 	public IPagingService iPagingService;
 
+	//시설물예약목록
 	@RequestMapping(value = "/fcltUseRqst")
 	public ModelAndView fcltUseRqst(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		if (params.get("page") == null || params.get("page") == "") {
@@ -40,7 +41,7 @@ public class FcltyController {
 
 		return mav;
 	}
-
+	//시설물예약 ajax
 	@RequestMapping(value = "/fcltUseRqstAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String fcltUseRqstAjax(@RequestParam HashMap<String, String> params) throws Throwable {
@@ -63,7 +64,7 @@ public class FcltyController {
 		return mapper.writeValueAsString(modelMap);
 
 	}
-
+	//시설물예약 상세보기
 	@RequestMapping(value = "/fcltUseRqstView")
 	public ModelAndView fcltUseRqstView(@RequestParam HashMap<String, String> params, ModelAndView mav)
 			throws Throwable {
@@ -76,7 +77,7 @@ public class FcltyController {
 
 		return mav;
 	}
-
+	//시설물예약등록
 	@RequestMapping(value = "/fcltUseRqstWrite")
 	public ModelAndView fcltUseRqstWrite(@RequestParam HashMap<String, String> params, ModelAndView mav)
 			throws Throwable {
@@ -85,7 +86,7 @@ public class FcltyController {
 
 		return mav;
 	}
-
+	//시설물 action insert 캘린더 해결안됨
 	@RequestMapping(value = "/fcltRqstAction/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String fcltRqstActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn)
@@ -110,7 +111,7 @@ public class FcltyController {
 		return mapper.writeValueAsString(modelMap);
 	}
 
-	// 시설물 사용신청 안끝냄 위에 만들기
+	//시설물목록
 	@RequestMapping(value = "/fcltList")
 	public ModelAndView fcltList(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		if (params.get("page") == null || params.get("page") == "") {
@@ -122,7 +123,7 @@ public class FcltyController {
 
 		return mav;
 	}
-
+	//시설물목록 ajax
 	@RequestMapping(value = "/fcltAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String fcltAjax(@RequestParam HashMap<String, String> params) throws Throwable {
@@ -142,12 +143,13 @@ public class FcltyController {
 		 
 		List<HashMap<String, String>> list = iCommonService.getDataList("Fclty.fcltyList", params);
 
-		 modelMap.put("pb", pb);
+		modelMap.put("pb", pb);
 		modelMap.put("list", list);
 
 		return mapper.writeValueAsString(modelMap);
 
 	}
+	//시설물등록
 	@RequestMapping(value = "/fcltAdd")
 	public ModelAndView fcltAdd(@RequestParam HashMap<String, String> params, ModelAndView mav)
 			throws Throwable {
@@ -156,7 +158,7 @@ public class FcltyController {
 
 		return mav;
 	}
-
+	//시설물 action
 	@RequestMapping(value = "/fcltAction/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String fcltActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn)
@@ -169,7 +171,7 @@ public class FcltyController {
 		try {
 			switch (gbn) {
 			case "insert":
-				iCommonService.deleteData("Fclty.fcltUseRqstCncl", params);
+				iCommonService.insertData("Fclty.fcltyAdd", params);
 				break;
 			case "delete":
 				iCommonService.deleteData("Fclty.fcltUseRqstCncl", params);
@@ -182,4 +184,40 @@ public class FcltyController {
 		}
 		return mapper.writeValueAsString(modelMap);
 	}
+	
+	//사원검색 ajax
+	@RequestMapping(value = "/empSrchAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String empSrchAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		// 총 게시글 수
+		int cnt = iCommonService.getIntData("Fclty.getEmpCnt", params);
+		
+		// 페이징 계산
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
+		
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("Fclty.getEmpList", params);
+		
+		modelMap.put("list", list); 
+		modelMap.put("pb", pb);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 }
+
+
+
+
+
+
+
+
+
+
+

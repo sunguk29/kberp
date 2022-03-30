@@ -105,6 +105,7 @@
 		FROM DUAL
 	</select>
 	
+	
 	<!-- 영업기회 등록 : 영업 먼저 넣어주어야 함. -->
 	<insert id="sales1AddSales" parameterType="hashmap">
 		INSERT INTO SALES(SALES_NUM, MNGR_EMP_NUM, LEAD_NUM)
@@ -114,19 +115,19 @@
 	
 	<!-- 영업기회 기본정보tab 제안 단계로 가져오기 -->
 	<select id="getSales2BringLead" parameterType="hashmap" resultType="hashmap">
-	SELECT S.SALES_NUM, L.LEAD_NUM, L.LEAD_NAME, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NUM, E.EMP_NAME,
-		   TO_CHAR(S.START_DATE, 'YYYY-MM-DD') AS START_DATE,
-	       DECODE(CCG.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME
-	FROM LEAD L INNER JOIN SALES S
-	                     ON S.LEAD_NUM = L.LEAD_NUM
-	             INNER JOIN EMP E
-	                     ON E.EMP_NUM = L.MNGR_EMP_NUM
-	             INNER JOIN ENTRPRS_CLNT EC
-	                     ON EC.CLNT_NUM = L.CLNT_NUM
-	             INNER JOIN CLNT_CMPNY CC
-	                     ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
-	             INNER JOIN CLNT_CMPNY_GRADE CCG
-	                             ON CCG.GRADE_NUM = CC.GRADE_NUM
+		SELECT S.SALES_NUM, L.LEAD_NUM, L.LEAD_NAME, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NUM, E.EMP_NAME, S.MNGR_EMP_NUM,
+		       TO_CHAR(S.START_DATE, 'YYYY-MM-DD') AS START_DATE,
+		       DECODE(CCG.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME
+		FROM SALES S INNER JOIN EMP E
+		                     ON E.EMP_NUM = S.MNGR_EMP_NUM
+		             INNER JOIN LEAD L
+		                     ON S.LEAD_NUM = L.LEAD_NUM
+		             INNER JOIN ENTRPRS_CLNT EC
+		                     ON EC.CLNT_NUM = L.CLNT_NUM
+		             INNER JOIN CLNT_CMPNY CC
+		                     ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
+		             INNER JOIN CLNT_CMPNY_GRADE CCG
+		                     ON CCG.GRADE_NUM = CC.GRADE_NUM
 	WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
@@ -134,16 +135,16 @@
 	<!-- 영업기회 대출상세정보tab -->
 	<insert id="sales1AddLoan" parameterType="hashmap">
 		INSERT INTO LOAN_DTL_INFO ( SALES_NUM, LOAN_CAUSE_NUM, EXPCTN_LOAN_SCALE, LOAN_HOPE_TYPE, LOAN_HOPE_TIME )
-		VALUES ( #{ss}, #{loanCause}, #{expctnLoanScale}, #{loanHopeType}, #{loanHopeTime})
+		VALUES ( #{ss}, #{loanCauseNum}, #{expctnLoanScale}, #{loanHopeType}, #{loanHopeTime})
 	</insert>
 	
 	<!-- 영업기회 대출상세정보tab 제안 단계로 가져오기 -->
 	<select id="getSales2BringLoan" parameterType="hashmap" resultType="hashmap">
 		SELECT S.SALES_NUM,
-		       DECODE(LDI.LOAN_CAUSE_NUM, 0, '사업확장', 1, '제품개발', 2, '토지매매', 3, '기타') AS LOAN_CAUSE_NUM,
+		       LOAN_CAUSE_NUM,
 		       LDI.EXPCTN_LOAN_SCALE,
-		       DECODE(LDI.LOAN_HOPE_TYPE, 0, '장기대출', 1, '단기대출') AS LOAN_HOPE_TYPE,
-		       DECODE(LDI.LOAN_HOPE_TIME, 0, '근시일 내', 1, '3개월 이후', 2, '6개월 이후', 3, '1년 이후') AS LOAN_HOPE_TIME
+		       LOAN_HOPE_TYPE,
+		       LOAN_HOPE_TIME
 		FROM SALES S LEFT OUTER JOIN LOAN_DTL_INFO LDI
 		                     ON S.SALES_NUM = LDI.SALES_NUM
 		WHERE S.SALES_NUM = #{salesNum}
@@ -158,10 +159,10 @@
 	
 	<!-- 예정사업 상세정보tab 제안 단계로 가져오기 -->
 	<select id="getSales2BringBsns" parameterType="hashmap" resultType="hashmap">
-	SELECT S.SALES_NUM, EXPCTD_BSNS_NAME, EXPCTD_BSNS_TYPE, RMKS
-	FROM SALES S LEFT OUTER JOIN EXPCTD_BSNS_INFO EBI
-	                          ON S.SALES_NUM = EBI.SALES_NUM
-	WHERE S.SALES_NUM = #{salesNum}
+		SELECT S.SALES_NUM, EXPCTD_BSNS_NAME, EXPCTD_BSNS_TYPE, RMKS
+		FROM SALES S LEFT OUTER JOIN EXPCTD_BSNS_INFO EBI
+		                          ON S.SALES_NUM = EBI.SALES_NUM
+		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
 	<!-- 예정사업 첨부파일tab -->
@@ -175,7 +176,7 @@
 	<select id="getSales1" resultType="hashmap" parameterType="hashmap">
 		SELECT S.SALES_NUM, L.LEAD_NUM, L.LEAD_NAME, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, S.MNGR_EMP_NUM, E.EMP_NAME,
 		       DECODE(CCG.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME,
-		       LDI.LOAN_CAUSE_NUM, LDI.EXPCTN_LOAN_SCALE, LDI.LOAN_HOPE_TYPE, LDI.LOAN_HOPE_TIME,
+		       LDI.LOAN_CAUSE_NUM, LDI.EXPCTN_LOAN_SCALE, LDI.LOAN_HOPE_TYPE, LDI.LOAN_HOPE_TIME, S.PRGRS_STS_NUM,
 		       EBI.EXPCTD_BSNS_NAME, EBI.EXPCTD_BSNS_TYPE, EBI.RMKS, TO_CHAR(S.START_DATE, 'YYYY-MM-DD') AS START_DATE,
 		       EBAF.ATT_FILE_NUM, EBAF.ATT_FILE_NAME
 		FROM SALES S INNER JOIN EMP E
@@ -197,16 +198,107 @@
 		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
-	<!-- 영업기회 수정 -->
+	<!-- 영업기회 수정 : 기본정보tab -->
+	<update id="sales1UpdateSales" parameterType="hashmap">
+		UPDATE SALES SET MNGR_EMP_NUM = #{empNum}
+		WHERE SALES_NUM = #{salesNum}
+	</update>
+	
+	<!-- 영업기회 수정 : 대출상세정보tab -->
+	<update id="sales1UpdateLoan" parameterType="hashmap">
+		UPDATE LOAN_DTL_INFO SET LOAN_CAUSE_NUM = #{loanCauseNum},
+		                         EXPCTN_LOAN_SCALE = #{expctnLoanScale},
+		                         LOAN_HOPE_TYPE = #{loanHopeType},
+		                         LOAN_HOPE_TIME = #{loanHopeTime}
+		WHERE SALES_NUM = #{salesNum}
+	</update>
+	
+	<!-- 영업기회 수정 : 예정사업 상세정보tab -->
+	<update id="sales1UpdateBsns" parameterType="hashmap">
+		UPDATE EXPCTD_BSNS_INFO SET EXPCTD_BSNS_NAME = #{expctdBsnsName},
+		                            EXPCTD_BSNS_TYPE = #{expctdBsnsType},
+		                            RMKS = #{rmks}
+		WHERE SALES_NUM = #{salesNum}
+	</update>
+	
+	<!-- 영업기회 수정 : 예정사업 첨부파일tab -->
+	<update id="sales1UpdateBsnsAtt" parameterType="hashmap">
+		UPDATE SALES SET MNGR_EMP_NUM = #{empNum}
+		WHERE SALES_NUM = #{salesNum}
+	</update>
 	
 	
 	
 	
+	<!-- 제안 대출 상세정보tab -->
+	<insert  id="sales2AddLoan" parameterType="hashmap">
+		INSERT INTO SGSTN_LOAN_DTL_INFO ( SALES_NUM, SGSTN_LOAN_CAUSE_NUM, SGSTN_LOAN_SCALE,
+		                                  SGSTN_LOAN_TYPE, SGSTN_LOAN_TIME, SGSTN_RDMPTN_TIME )
+		VALUES ( #{salesNum}, #{sgstnloanCauseNum}, #{sgstnLoanScale}, #{sgstnloanType}, #{sgstnloanTime} || '-01', #{sgstnRdmptnTime}  || '-01' )
+	</insert>
 	
+	<!-- 제안 고객사 상세정보tab -->
+	<insert  id="sales2AddClntCmpny" parameterType="hashmap">
+		INSERT INTO SGSTN_CLNT_CMPNY_DTL_INFO ( SALES_NUM, SGSTN_TOTAL_AMNT, SGSTN_DEBT_AMNT,
+	                                    	    SGSTN_AVG_RVN_AMNT, SGSTN_EMP_COUNT )
+		VALUES ( #{salesNum}, #{sgstnTotalAmnt}, #{sgstnDebtAmnt}, #{sgstnAvgRvnAmnt}, #{sgstnEmpCount} )
+	</insert>
+	
+	<!-- 제안 상세정보tab -->
+	<insert  id="sales2AddDtlInfo" parameterType="hashmap">
+		INSERT INTO SGSTN_DTL_INFO ( SALES_NUM, DTL_CONT, RMRKS, PRCD_DATE )
+		VALUES ( #{salesNum}, #{dtlCont}, #{rmrks}, SYSDATE )
+	</insert>
+	
+	<!-- 제안 상세정보 첨부파일tab -->
+	<insert  id="sales2AddDtlInfoAtt" parameterType="hashmap">
+		INSERT INTO SGSTN_ATT_FILE ( ATT_FILE_NUM, SALES_NUM, ATT_FILE_NAME )
+		VALUES ( SGSTN_ATT_FILE_SEQ.NEXTVAL, #{salesNum}, #{attFile} )
+	</insert>
+	
+		<!-- 제안 상세보기 -->
+	<select id="getSales2" resultType="hashmap" parameterType="hashmap">
+		SELECT S.SALES_NUM, SLDI.SGSTN_LOAN_CAUSE_NUM, SLDI.SGSTN_LOAN_SCALE,
+		       SLDI.SGSTN_LOAN_TYPE, TO_CHAR(SLDI.SGSTN_LOAN_TIME, 'YYYY-MM') AS SGSTN_LOAN_TIME, TO_CHAR(SLDI.SGSTN_RDMPTN_TIME, 'YYYY-MM') AS SGSTN_RDMPTN_TIME,
+		       SCCDI.SGSTN_TOTAL_AMNT, SCCDI.SGSTN_DEBT_AMNT, SCCDI.SGSTN_AVG_RVN_AMNT, SCCDI.SGSTN_EMP_COUNT,
+		       SDI.DTL_CONT, SDI.RMRKS, SDI.PRCD_DATE,
+		       SAF.ATT_FILE_NUM, SAF.ATT_FILE_NAME
+		FROM SALES S INNER JOIN SGSTN_LOAN_DTL_INFO SLDI
+		                     ON S.SALES_NUM = SLDI.SALES_NUM
+		             LEFT OUTER JOIN SGSTN_CLNT_CMPNY_DTL_INFO SCCDI
+		                     ON S.SALES_NUM = SCCDI.SALES_NUM
+		             LEFT OUTER JOIN SGSTN_DTL_INFO SDI
+		                          ON S.SALES_NUM = SDI.SALES_NUM
+		             LEFT OUTER JOIN SGSTN_ATT_FILE SAF
+		                          ON S.SALES_NUM = SAF.SALES_NUM
+		WHERE S.SALES_NUM = #{salesNum}
+	</select>
+	
+	
+	
+	
+	<!-- 영업기회에서 제안으로 단계 변경 -->
+	<update id="sales1to2" parameterType="hashmap">
+		UPDATE SALES SET PRGRS_STS_NUM = '1'
+		WHERE SALES_NUM = #{salesNum}
+	</update>
+	
+	
+	
+
 	<!-- 영업기회 실패 -->
 	<update id="sales1Failure" parameterType="hashmap">
-	
+		UPDATE SALES SET PRGRS_STS_NUM = '5'
+		WHERE SALES_NUM = #{salesNum}
 	</update>
+	
+	<!-- 제안 실패 -->
+	<update id="sales2Failure" parameterType="hashmap">
+		UPDATE SALES SET PRGRS_STS_NUM = '5'
+		WHERE SALES_NUM = #{salesNum}
+	</update>
+	
+	
 	
 	
 	

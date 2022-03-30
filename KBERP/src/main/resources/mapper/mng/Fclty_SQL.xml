@@ -86,6 +86,41 @@
 	</if>
 </select>
 
+<select id="getEmpList" resultType="hashmap" parameterType="hashmap">
+	SELECT O.EMP_NUM,O.EMP_NAME
+	FROM       ( SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM DESC) AS RNUM
+        		FROM DEPT D INNER JOIN APNTM A
+                    		ON D.DEPT_NUM = A.DEPT_NUM
+                   			INNER JOIN EMP E
+                    		ON A.EMP_NUM = E.EMP_NUM
+        		WHERE D.DEPT_NUM = 5 
+	             <if test="sendSrchTxt != null and sendSrchTxt != ''">
+	             	AND E.EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
+	             </if>
+	            )O
+	WHERE O.RNUM BETWEEN #{startCount} AND #{endCount}
+</select>
+
+<select id="getEmpCnt" resultType="Integer" parameterType="hashmap">
+	SELECT COUNT(*)
+	FROM(   SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM DESC) AS RNUM
+       		FROM DEPT D INNER JOIN APNTM A
+                    ON D.DEPT_NUM = A.DEPT_NUM
+                    INNER JOIN EMP E
+                    ON A.EMP_NUM = E.EMP_NUM
+       		WHERE D.DEPT_NUM = 5 
+		<if test="sendSrchTxt != null and sendSrchTxt != ''">
+			AND E.EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
+		</if>
+		) 
+</select>
+
+<select id="fcltyAdd" parameterType="hashmap">
+	INSERT INTO FCLTY(FCLTY_NUM, EMP_NUM, MNG_EMP_NUM, FCLTY_NAME, ATT_PCTR, 
+					  PLACE, ACPT_NUM_OF_PL, RMRKS)
+	VALUES(FCLT_SEQ.NEXTVAL, #{empNum},#{mngEmpNum},#{fcltyName},
+		   #{attFile},#{place},#{acptNum},#{rmrks})
+</select>
 </mapper>
 
 

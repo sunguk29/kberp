@@ -460,9 +460,10 @@ $(document).ready(function() {
 			buttons : [{
 				name : "확인",
 				func:function() {
-				$("#listForm").submit();
-					console.log("One!");
-					closePopup();
+					$("#listForm").attr("action", "salesList");
+					$("#listForm").submit();
+						console.log("One!");
+						closePopup();
 				}
 			}, {
 				name : "취소"
@@ -475,7 +476,7 @@ $(document).ready(function() {
 		if(checkEmpty("#mngrName")) {
 			alert("담당자를 입력하세요.");
 			$("#mngrName").focus();
-		} else if($("#loanCause").val() == 9) { // select문 선택되어있음...
+		} else if($("#loanCauseNum").val() == 9) {
 			alert("대출원인을 선택하세요.");
 			$("#loanCause").focus();
 		} else if($("#loanHopeType").val() == 9) {
@@ -511,11 +512,14 @@ $(document).ready(function() {
 								
 								$.ajax({
 									type : "post",
-									url : "salesMng1Action/insert",
+									url : "salesMng1ActionAjax/insert",
 									dataType : "json",
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
+											$("#salesNum").val(res.seq); // 영업기회 등록 후 영업기회 상세보기로 이동할 때 필요.
+											
+											$("#listForm").attr("action", "sales1SalesChncCont");
 											$("#listForm").submit();
 										} else {
 											alert("등록중 문제가 발생하였습니다.");
@@ -728,15 +732,22 @@ function checkEmpty(sel) {
 	} else {
 		return false;
 	}
-}	
+}
+
+function uploadName(e) {
+	var files = e.files;
+	var filename = files[0].name;
+	$("#fileName").val(filename);
+}
 </script>
 </head>
 <body>
-	<form action="salesList" id="listForm" method="post">
+	<form action="#" id="listForm" method="post">
 		<input type="hidden" id="page" name="page" value="${page}" />
 		<input type="hidden" name="top" value="${param.top}" />
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
+		<input type="hidden" name="salesNum" id="salesNum" />
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -855,7 +866,7 @@ function checkEmpty(sel) {
 										<input type="button" class="btn" value="대출 원인*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="loanCause" name="loanCause" required>
+										<select class="txt" id="loanCauseNum" name="loanCauseNum" required>
 											<optgroup>
 												<option value="9">선택하세요</option>
 												<option value="0">사업확장</option>
@@ -871,7 +882,7 @@ function checkEmpty(sel) {
 										<input type="button" class="btn" value="예상 대출 규모" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" id="expctnLoanScale" name="expctnLoanScale" />
+										<input type="text" class="txt" id="expctnLoanScale" name="expctnLoanScale" placeholder="예상 대출 규모 금액을 입력하세요."/>
 									</td>
 								</tr>
 								<tr height="40">
@@ -944,14 +955,16 @@ function checkEmpty(sel) {
 						</table>
 						<br /> <br />
 						<!-- 첨부자료  -->
+						<input type=file id="att" name="att" onchange="uploadName(this)" />
+						<input type="hidden" id="attFile" name="attFile" />
 						<div class="spc">
 							<div class="adc_txt">
-								첨부자료 (0)
-								<img class="plus_btn att_btn" src="resources/images/sales/plus.png" border='0' />
+								첨부자료
+								<img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
 							</div>
-							<div class="cntrct_box_in"></div>
-								<input type=file id="att" name="att" />
-								<input type="hidden" id="attFile" name="attFile" />
+							<div class="cntrct_box_in">
+								<input type="text" id="fileName" readonly="readonly" />
+							</div>
 						</div>
 					</form>
 					<!-- 끝 -->

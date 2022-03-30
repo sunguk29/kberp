@@ -549,6 +549,15 @@ textarea {
 .mng_txt {
 	width: 680px;
 }
+
+#att {
+	display: none;
+}
+
+#fileName {
+	border: hidden;
+	outline: none;
+}
 /* 끝 */
 </style>
 <script type="text/javascript">
@@ -566,6 +575,7 @@ $(document).ready(function() {
 			buttons : [ {
 				name : "확인",
 				func : function() {
+					$("#backForm").attr("action", "sales1SalesChncCont");
 					$("#backForm").submit();
 					console.log("One!");
 					closePopup();
@@ -576,10 +586,15 @@ $(document).ready(function() {
 		});
 	});
 
+	$(".att_btn").on("click", function() {
+		$("#att").click();
+	});
+	
+	
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
 		makePopup({
-			bg : false,
+			bg : true,
 			bgClose : false,
 			title : "알림",
 			contents : "저장하시겠습니까?",
@@ -604,11 +619,12 @@ $(document).ready(function() {
 
 							$.ajax({
 								type : "post",
-								url : "salesMng1Action/update",
+								url : "salesMng1ActionAjax/update",
 								dataType : "json",
 								data : params,
 								success : function(res) {
 									if (res.res == "success") {
+										$("#backForm").attr("action", "sales1SalesChncCont");
 										$("#backForm").submit();
 									} else {
 										alert("수정중 문제가 발생하였습니다.");
@@ -629,7 +645,7 @@ $(document).ready(function() {
 					closePopup();
 				}
 			}, {
-				name : "닫기"
+				name : "취소"
 			} ]
 		}); // makePopup end
 	}); // saveBtn end
@@ -807,11 +823,16 @@ function drawPaging(pb, sel) {
 	$(sel).html(html);
 }
 
+function uploadName(e) {
+	var files = e.files;
+	var filename = files[0].name;
+	$("#fileName").val(filename);
+}
 
 </script>
 </head>
 <body>
-	<form action="sales1SalesChncCont" id="backForm" method="post">
+	<form action="#" id="backForm" method="post">
 		<input type="hidden" id="page" name="page" value="${page}" />
 		<input type="hidden" name="top" value="${param.top}" />
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
@@ -840,7 +861,7 @@ function drawPaging(pb, sel) {
 			<div class="body">
 				<div class="bodyWrap">
 					<!-- 시작 -->
-					<form action="imageUploadAjax" id="updateForm" method="post" enctype="multipart/form-data">
+					<form action="fileUploadAjax" id="updateForm" method="post" enctype="multipart/form-data">
 						<input type="hidden" id="page" name="page" value="${page}" />
 						<input type="hidden" name="top" value="${param.top}" />
 						<input type="hidden" name="menuNum" value="${param.menuNum}" />
@@ -909,9 +930,9 @@ function drawPaging(pb, sel) {
 									<td>
 										<input type="button" class="btn" value="담당자 *" readonly="readonly" />
 									</td>
-									<td colspan="3" value="${data.EMP_NUM}">
+									<td colspan="3" value="${data.MNGR_EMP_NUM}">
 										<input type="text" class="txt mng_txt" id="mngrName" name="mngrName" readonly="readonly" value="${data.EMP_NAME}" />
-										<input type="hidden" name="empNum" value="${data.EMP_NUM}" />
+										<input type="hidden" id="empNum" name="empNum" value="${data.MNGR_EMP_NUM}" />
 										<img class="btnImg_in" id="userIcon" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
 									</td>
 								</tr>
@@ -932,32 +953,32 @@ function drawPaging(pb, sel) {
 										<input type="button" class="btn" value="대출 원인*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" name="loanCauseNum" required>
+										<select class="txt" id="loanCauseNum" name="loanCauseNum" required>
 											<optgroup>
 												<c:choose>
 													<c:when test="${data.LOAN_CAUSE_NUM eq 0}">
-														<option selected="selected">사업확장</option>
-														<option>제품개발</option>
-														<option>토지매매</option>
-														<option>기타</option>
+														<option value="0" selected="selected">사업확장</option>
+														<option value="1">제품개발</option>
+														<option value="2">토지매매</option>
+														<option value="3">기타</option>
 													</c:when>
 													<c:when test="${data.LOAN_CAUSE_NUM eq 1}">
-														<option>사업확장</option>
-														<option selected="selected">제품개발</option>
-														<option>토지매매</option>
-														<option>기타</option>
+														<option value="0" >사업확장</option>
+														<option value="1" selected="selected">제품개발</option>
+														<option value="2">토지매매</option>
+														<option value="3">기타</option>
 													</c:when>
 													<c:when test="${data.LOAN_CAUSE_NUM eq 2}">
-														<option>사업확장</option>
-														<option>제품개발</option>
-														<option selected="selected">토지매매</option>
-														<option>기타</option>
+														<option value="0" >사업확장</option>
+														<option value="1">제품개발</option>
+														<option value="2" selected="selected">토지매매</option>
+														<option value="3">기타</option>
 													</c:when>
 													<c:when test="${data.LOAN_CAUSE_NUM eq 3}">
-														<option>사업확장</option>
-														<option>제품개발</option>
-														<option>토지매매</option>
-														<option selected="selected">기타</option>
+														<option value="0" >사업확장</option>
+														<option value="1">제품개발</option>
+														<option value="2">토지매매</option>
+														<option value="3" selected="selected">기타</option>
 													</c:when>
 												</c:choose>
 											</optgroup>
@@ -969,7 +990,7 @@ function drawPaging(pb, sel) {
 										<input type="button" class="btn" value="예상 대출 규모" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" name="expctnLoanScale" value="${data.EXPCTN_LOAN_SCALE}" />
+										<input type="text" class="txt" id="expctnLoanScale" name="expctnLoanScale" value="${data.EXPCTN_LOAN_SCALE}" />
 									</td>
 								</tr>
 								<tr height="40">
@@ -977,16 +998,16 @@ function drawPaging(pb, sel) {
 										<input type="button" class="btn" value="대출 희망 유형*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" name="loanHopeType" required>
+										<select class="txt" id="loanHopeType" name="loanHopeType" required>
 											<optgroup>
 												<c:choose>
 													<c:when test="${data.LOAN_HOPE_TYPE eq 0}">
-														<option selected="selected">장기대출</option>
-														<option>단기대출</option>
+														<option value="0" selected="selected">장기대출</option>
+														<option value="1">단기대출</option>
 													</c:when>
 													<c:when test="${data.LOAN_HOPE_TYPE eq 1}">
-														<option>장기대출</option>
-														<option selected="selected">단기대출</option>
+														<option value="0">장기대출</option>
+														<option value="1" selected="selected">단기대출</option>
 													</c:when>
 												</c:choose>
 											</optgroup>
@@ -998,32 +1019,32 @@ function drawPaging(pb, sel) {
 										<input type="button" class="btn" value="대출 희망 시기*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" name="loanHopeTime" required>
+										<select class="txt" id="loanHopeTime" name="loanHopeTime" required>
 											<optgroup>
 												<c:choose>
 													<c:when test="${data.LOAN_HOPE_TIME eq 0}">
-														<option selected="selected">근시일 내</option>
-														<option>3개월 이후</option>
-														<option>6개월 이후</option>
-														<option>1년 이후</option>
+														<option value="0" selected="selected">근시일 내</option>
+														<option value="1">3개월 이후</option>
+														<option value="2">6개월 이후</option>
+														<option value="3">1년 이후</option>
 													</c:when>
 													<c:when test="${data.LOAN_HOPE_TIME eq 1}">
-														<option>근시일 내</option>
-														<option selected="selected">3개월 이후</option>
-														<option>6개월 이후</option>
-														<option>1년 이후</option>
+														<option value="0">근시일 내</option>
+														<option value="1" selected="selected">3개월 이후</option>
+														<option value="2">6개월 이후</option>
+														<option value="3">1년 이후</option>
 													</c:when>
 													<c:when test="${data.LOAN_HOPE_TIME eq 2}">
-														<option>근시일 내</option>
-														<option>3개월 이후</option>
-														<option selected="selected">6개월 이후</option>
-														<option>1년 이후</option>
+														<option value="0">근시일 내</option>
+														<option value="1">3개월 이후</option>
+														<option value="2" selected="selected">6개월 이후</option>
+														<option value="3">1년 이후</option>
 													</c:when>
 													<c:when test="${data.LOAN_HOPE_TIME eq 3}">
-														<option>근시일 내</option>
-														<option>3개월 이후</option>
-														<option>6개월 이후</option>
-														<option selected="selected">1년 이후</option>
+														<option value="0">근시일 내</option>
+														<option value="1">3개월 이후</option>
+														<option value="2">6개월 이후</option>
+														<option value="3" selected="selected">1년 이후</option>
 													</c:when>
 												</c:choose>
 											</optgroup>
@@ -1047,7 +1068,7 @@ function drawPaging(pb, sel) {
 										<input type="button" class="btn" value="예정 사업명" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" value="${data.EXPCTD_BSNS_NAME}" />
+										<input type="text" class="txt" id="expctdBsnsName" name="expctdBsnsName" value="${data.EXPCTD_BSNS_NAME}" />
 									</td>
 								</tr>
 								<tr height="40">
@@ -1055,7 +1076,7 @@ function drawPaging(pb, sel) {
 										<input type="button" class="btn" value="예정 사업 형태" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" value="${data.EXPCTD_BSNS_TYPE}" />
+										<input type="text" class="txt" id="expctdBsnsType" name="expctdBsnsType" value="${data.EXPCTD_BSNS_TYPE}" />
 									</td>
 								</tr>
 								<tr height="40">
@@ -1070,14 +1091,16 @@ function drawPaging(pb, sel) {
 						</table>
 						<br />
 						<!-- 첨부자료  -->
+						<input type=file id="att" name="att" />
+						<input type="hidden" id="attFile" name="attFile" />
 						<div class="spc">
 							<div class="adc_txt">
-								첨부자료 (0)
-								<input type=file name="att" />
-								<input type="hidden" id="attFile" name="attFile" />
-								<img class="plus_btn" src="resources/images/sales/plus.png" border='0' />
+								첨부자료
+								<img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
 							</div>
-							<div class="cntrct_box_in"></div>
+							<div class="cntrct_box_in">
+								<input type="text" id="fileName" readonly="readonly" />
+							</div>
 						</div>
 						<!-- 의견 -->
 						<div class="mgtop"></div>

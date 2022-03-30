@@ -48,14 +48,16 @@ public class LeadController {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(dt);
 		cal.add(Calendar.DATE, -60);
-
+		
 		String searchDate = sdf.format(cal.getTime());
 		String searchDate2 = sdf.format(dt);
+
 		
 		if(params.get("searchDate") == null || params.get("searchDate") == "") {
 			params.put("searchDate", searchDate); 
 			params.put("searchDate2", searchDate2); // 넘어오는게 없으면 현재날짜뽑아온거를 추가.
 		}
+
 		
 		mav.addObject("page", params.get("page"));
 		mav.addObject("searchDate", params.get("searchDate"));
@@ -114,9 +116,9 @@ public class LeadController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();		
 		
 		// 총 게시글 수
-		int cnt = iCommonService.getIntData("lead.getMngrCnt", params);
+		int mngrCnt = iCommonService.getIntData("lead.getMngrCnt", params);
 		
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), mngrCnt, 5, 5);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
@@ -140,9 +142,9 @@ public class LeadController {
 	Map<String, Object> modelMap = new HashMap<String, Object>();		
 	
 	// 총 게시글 수
-	int cnt = iCommonService.getIntData("lead.getCcCnt", params);
+	int ccCnt = iCommonService.getIntData("lead.getCcCnt", params);
 	
-	PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
+	PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), ccCnt, 5, 5);
 	
 	params.put("startCount", Integer.toString(pb.getStartCount()));
 	params.put("endCount", Integer.toString(pb.getEndCount()));
@@ -153,11 +155,40 @@ public class LeadController {
 	modelMap.put("pb", pb);
 	
 	return mapper.writeValueAsString(modelMap);
-	}	
+	}
 	
-	@RequestMapping(value = "/leadReg")
-	public ModelAndView leadReg(ModelAndView mav) {
+// 고객 조회 팝업
+		@RequestMapping(value = "/ecListAjax", method = RequestMethod.POST, 
+					produces = "text/json;charset=UTF-8")
+		@ResponseBody
+		public String ecListAjax(@RequestParam HashMap<String, String> params, 
+							   HttpSession session) throws Throwable {
 		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();		
+		
+		// 총 게시글 수
+		int ecCnt = iCommonService.getIntData("lead.getEcCnt", params);
+		
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), ecCnt, 5, 5);
+		
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		List<HashMap<String, String>> ecList = iCommonService.getDataList("lead.getEcList", params);
+		
+		modelMap.put("list", ecList);
+		modelMap.put("pb", pb);
+		
+		return mapper.writeValueAsString(modelMap);
+		}
+		
+// 리드 등록
+	@RequestMapping(value = "/leadReg")
+	public ModelAndView leadReg(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+
 		mav.setViewName("sales/leadReg");
 		
 		return mav;
@@ -199,7 +230,7 @@ public class LeadController {
 	public ModelAndView leadCont(@RequestParam HashMap<String, String> params, 
 								 ModelAndView mav) throws Throwable {
 		
-		HashMap<String, String> data = iCommonService.getData("lead.getLeadCont", params);
+		HashMap<String, String> data = iCommonService.getData("salesSchdl.getLeadCont", params);
 		
 		mav.addObject("data", data);
 		
