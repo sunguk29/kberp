@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
-import com.gdj43.kberp.web.CS.service.IFaqService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 
 @Controller
@@ -66,9 +65,7 @@ public class FaqController {
 		modelMap.put("pb", pb);
 		
 		return mapper.writeValueAsString(modelMap);
-	}
-	
-	
+		}
 	
 	  @RequestMapping(value = "/faqdt") 
 	  public ModelAndView faqdt(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
@@ -83,8 +80,6 @@ public class FaqController {
 	  return mav; 
 	  }
 	 
-		
-	
 	  @RequestMapping(value = "/faqAdd")
 	  public ModelAndView faqAdd(@RequestParam HashMap<String, String> params, 
 			  						ModelAndView mav) throws Throwable {
