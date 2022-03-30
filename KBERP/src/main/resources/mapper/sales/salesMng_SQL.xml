@@ -105,6 +105,7 @@
 		FROM DUAL
 	</select>
 	
+	
 	<!-- 영업기회 등록 : 영업 먼저 넣어주어야 함. -->
 	<insert id="sales1AddSales" parameterType="hashmap">
 		INSERT INTO SALES(SALES_NUM, MNGR_EMP_NUM, LEAD_NUM)
@@ -227,11 +228,6 @@
 	</update>
 	
 	
-	<!-- 영업기회 실패 -->
-	<update id="sales1Failure" parameterType="hashmap">
-		UPDATE SALES SET PRGRS_STS_NUM = #{prgrsStsNum}
-		WHERE SALES_NUM = #{salesNum}
-	</update>
 	
 	
 	<!-- 제안 대출 상세정보tab -->
@@ -259,6 +255,52 @@
 		INSERT INTO SGSTN_ATT_FILE ( ATT_FILE_NUM, SALES_NUM, ATT_FILE_NAME )
 		VALUES ( SGSTN_ATT_FILE_SEQ.NEXTVAL, #{salesNum}, #{attFile} )
 	</insert>
+	
+		<!-- 제안 상세보기 -->
+	<select id="getSales2" resultType="hashmap" parameterType="hashmap">
+		SELECT S.SALES_NUM, SLDI.SGSTN_LOAN_CAUSE_NUM, SLDI.SGSTN_LOAN_SCALE,
+		       SLDI.SGSTN_LOAN_TYPE, TO_CHAR(SLDI.SGSTN_LOAN_TIME, 'YYYY-MM') AS SGSTN_LOAN_TIME, TO_CHAR(SLDI.SGSTN_RDMPTN_TIME, 'YYYY-MM') AS SGSTN_RDMPTN_TIME,
+		       SCCDI.SGSTN_TOTAL_AMNT, SCCDI.SGSTN_DEBT_AMNT, SCCDI.SGSTN_AVG_RVN_AMNT, SCCDI.SGSTN_EMP_COUNT,
+		       SDI.DTL_CONT, SDI.RMRKS, SDI.PRCD_DATE,
+		       SAF.ATT_FILE_NUM, SAF.ATT_FILE_NAME
+		FROM SALES S INNER JOIN SGSTN_LOAN_DTL_INFO SLDI
+		                     ON S.SALES_NUM = SLDI.SALES_NUM
+		             LEFT OUTER JOIN SGSTN_CLNT_CMPNY_DTL_INFO SCCDI
+		                     ON S.SALES_NUM = SCCDI.SALES_NUM
+		             LEFT OUTER JOIN SGSTN_DTL_INFO SDI
+		                          ON S.SALES_NUM = SDI.SALES_NUM
+		             LEFT OUTER JOIN SGSTN_ATT_FILE SAF
+		                          ON S.SALES_NUM = SAF.SALES_NUM
+		WHERE S.SALES_NUM = #{salesNum}
+	</select>
+	
+	
+	
+	
+	<!-- 영업기회에서 제안으로 단계 변경 -->
+	<update id="sales1to2" parameterType="hashmap">
+		UPDATE SALES SET PRGRS_STS_NUM = '1'
+		WHERE SALES_NUM = #{salesNum}
+	</update>
+	
+	
+	
+
+	<!-- 영업기회 실패 -->
+	<update id="sales1Failure" parameterType="hashmap">
+		UPDATE SALES SET PRGRS_STS_NUM = '5'
+		WHERE SALES_NUM = #{salesNum}
+	</update>
+	
+	<!-- 제안 실패 -->
+	<update id="sales2Failure" parameterType="hashmap">
+		UPDATE SALES SET PRGRS_STS_NUM = '5'
+		WHERE SALES_NUM = #{salesNum}
+	</update>
+	
+	
+	
+	
 	
 	
 	
