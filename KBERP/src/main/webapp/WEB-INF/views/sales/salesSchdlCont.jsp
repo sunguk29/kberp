@@ -146,17 +146,6 @@ input {
 	background-color: #F2F2F2;
 	
 }
-.plus_btn {
-	display:inline-block;
-	vertical-align: middle;
-	width: 18px;
-	height: 18px;
-	background-image: url("resources/images/sales/plus.png");
-	background-size: 18px 18px;
-	float: right;
-	margin-right: 7px;
-	margin-top: 7.5px;
-}
 .drop_btn {
 	display:inline-block;
 	vertical-align: middle;
@@ -240,6 +229,7 @@ input {
 	border-radius: 7px;
 	margin-bottom: 18px;
 	margin-left: 40px;
+	font-size : 12pt;
 }
 .rvn_txt {
 	height: 33px;
@@ -413,6 +403,9 @@ input {
 	border : hidden;
 	outline : none;
 }
+
+/* 첨부파일명 공간 크기 */
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -477,6 +470,7 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success"){
+											closePopup();
 											updatePop();								
 										} else {
 											alert("수정중 문제가 발생하였습니다.");
@@ -559,7 +553,6 @@ $(document).ready(function() {
 			});
 	});
 	
-
 
 /* 비어있는지 확인하기 위한 함수 */
 function checkEmpty(sel) {
@@ -929,14 +922,34 @@ function updatePop() {
 		$(".pgn_area").html(html);
 	}
 	
-});
+	/* 첨부파일 다운로드 관련 */
+	$("#fileDelete").on("click", function() {
+			$("#file_name").remove();
+			$(this).remove();
 
+			var html = "";
+			
+			html += "<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />"; 
+			
+			$("#uploadBtn").html(html);
+	});
+		
+	
+
+	
+	
+	/* 기존 첨부되어있는 파일명 삭제 후, 새로 생긴 십자가에  클릭 이벤트 부여 */
+	$(".rvn_txt").on("click", ".aff_btn", function() {
+		$("#att").click();
+	});
+	
+});
+/* 첨부파일 업로드 관련 */
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
 	$("#fileName").val(filename);
 }
-
 </script>
 </head>
 <body>
@@ -1085,12 +1098,12 @@ function uploadName(e) {
 						</span>
 					</div>
 					<div class="cntrct_box_in">
-						<span id="file_name">${fName}</span>
+						<a href="resources/upload/${data.ATT_FILE_NAME}" download="${fileName}"><span id="file_name">${fileName}</span></a>
 						<input type="button" id="fileDelete" value="삭제" />
 						<input type="text" id="fileName" readonly="readonly" />
+						<input type="file" id="att" name="att" onchange="uploadName(this)" />
+						<input type="hidden" id="schdlAttFile" name="schdlAttFile" />
 					</div>
-					<input type="file" id="att" name="att" onchange="uploadName(this)" />
-					<input type="hidden" id="schdlAttFile" name="schdlAttFile" />
 					</form>
 					<!-- 끝 -->
 				</div>
