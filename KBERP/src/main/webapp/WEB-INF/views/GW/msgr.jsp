@@ -222,13 +222,15 @@
 	font-size: 11pt;
 	text-indent: 10pt;
 	font-weight: bold;
-	
+	width : 400px;
+	height: 25px;
 }
 .srch_srch {
 	margin-top: 10pt;
 	margin-left: 9pt;
 	font-size: 11pt;
 	border: none;
+	
 }
 
 table {
@@ -250,6 +252,11 @@ tbody {
 	height: 40px;
 	font-size: 13px;
 	color: black;
+	
+}
+
+tr {
+	overflow: auto;
 }
 
 th:nth-child(1), th:nth-child(2) {
@@ -267,14 +274,15 @@ th:nth-child(4) {
 	width: 120px;
 	text-align: center; 
 }
-td:nth-child(1), td:nth-child(2) {
+td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 	text-align: center;
 	font-size: 12pt; 
+	width: 120px;
+	height: 39.5px;
 }
 
-td:nth-child(5) {
-	height : 30px;
-	border-bottom : 1px solid #5555;
+#srchEmpNum {
+	overflow: auto;
 }
 
 #srch_check {
@@ -337,14 +345,14 @@ td:nth-child(5) {
 
 .chat_input {
 	display : inline-block;
-	width : 540px;
+	width : 550px;
 	height : 40px;
 	position: relative;
 }
 
 .chat_write {
 	display: inline-block;
-	width : 540px;
+	width : 470px;
 	height : 40px;
 	font-size: 13pt;
 	border-radius: 8px;
@@ -420,18 +428,38 @@ td:nth-child(5) {
 	right: 90px;
 	bottom : 10px;
 }
+
+.cmn_btn_ml {
+	display : inline-block;	
+	border-radius: 5px;
+	position: absolute;
+	margin-top: 5px;
+	margin-left: 0px;
+	height : 35px;
+	font-size: 14px;
+}
+
+.popup_cont {
+
+}
+
 </style>
 <script type="text/javascript">
 
 $(document).ready(function() {
 
-	
 	$("#main_msgr_btn, .srch_img").on("click", function() {
-				
+
 		var html = "";
 		
+		html += "		<form action = \"#\" id = \"addForm\" method = \"post\">";
+		html += "			<input type = \"hidden\" id = \"no\" name = \"no\" />";					
+/* 		html += "			<input type = \"hidden\" id = \"emp_num\" name = \"EMP_NAME\" />";
+		html += "			<input type = \"hidden\" id = \"chat_num\" name = \"DEPT_\"/>";
+/* 		html += "			<input type = \"hidden\" id = \"srch_check\" name = \"srch_check\"/>"; */
+
 		html +=	"		<div class = \"srch_mid\">                                          ";
-		html +=	"		<div class = \"chart\"></div>                                         ";
+		html +=	"		<div class = \"chart\"></div>                                       ";
 		html +=	"			<div class = \"srch_rcpnt\">받는 사람:</div>                      	";
 		html +=	"			<input type=\"text\" placeholder = \"검색...\" class = \"srch_srch\"> 	";
 		html +=	"			<table>                                                         ";
@@ -444,111 +472,133 @@ $(document).ready(function() {
 		html +=	"				</tr>                                                       ";
 		html +=	"				</thead>                                                    ";
 		html +=	"				<tbody>                                                     ";
-		html +=	"					<tr>                                                    ";
-		html +=	"					<th>개발 1팀</th>                                       	";
-		html +=	"					<th>대리</th>                                           	";
-		html +=	"					<th>곽다훈</th>                                         	";
-		html +=	"					<th><input type =\"checkbox\" id = \"srch_check\"></th>                                ";
-		html +=	"				</tr>                                                       ";
-		html +=	"				<tr>                                                        ";
-		html +=	"					<th>영업 1팀</th>                                       	";
-		html +=	"					<th>대리</th>                                          	";
-		html +=	"					<th>이감자</th>                                         	";
-		html +=	"					<th><input type =\"checkbox\" id = \"srch_check\"></th>                                ";
-		html +=	"				</tr>		                                                ";
-		html +=	"				<tr>                                                        ";
-		html +=	"					<th></th>                                               ";
-		html +=	"					<th></th>                                               ";
-		html +=	"					<th></th>                                               ";
-		html +=	"					<th></th>                                               ";
-		html +=	"				</tr>                                                       ";
-		html +=	"				<tr>                                                        ";
-		html +=	"					<th></th>                                               ";
-		html +=	"					<th></th>                                               ";
-		html +=	"					<th></th>                                               ";
-		html +=	"					<th></th>                                               ";
-		html +=	"				</tr>		                                                ";
-		html +=	"				<tr>                                                        ";
-		html +=	"					<th></th>                                               ";
-		html +=	"					<th></th>                                               ";
-		html +=	"					<th></th>                                               ";
-		html +=	"					<th></th>                                               ";
-		html +=	"				</tr>                                                       ";
-		html +=	"				<tr>                                                        ";
-		html +=	"					<th></th>                                               ";
-		html +=	"					<th></th>                                               ";
-		html +=	"					<th></th>                                               ";
-		html +=	"					<th></th>                                               ";
-		html +=	"				</tr>                                                       ";
-		html +=	"				<tr>                                                        ";
-		html +=	"					<th></th>                                               ";
-		html +=	"					<th></th>                                               ";
-		html +=	"					<th></th>                                               ";
-		html +=	"					<th></th>                                               ";
-		html +=	"				</tr>								                        ";
+		
 		html +=	"				</tbody>					                                ";
 		html +=	"			</table>                                                        ";
 		html +=	"		</div>                                                              ";
+		html += "		</form>";
 		
 		makePopup({
 			bg : true,
 			bgClose : false,
 			title : "검색",
+			width : 500,
+			height : 500,
 			contents : html,
+			contentsEvent : function() {
+				// Ajax태우고
+				// list받아서 팝업 테이블에 내용 추가 id추가
+				$.ajax({
+					type : "post",
+					url : "addListChatAjax",
+					dataType : "json",
+					success : function(res) {
+						drawList(res.list);
+					},
+					error : function(req) {
+						console.log(req.responseText)	
+					}
+				});
+ 			},
 			width : 500,
 			height : 500,
 			buttons : [{
 				name : "완료",
-				func:function() {
-					console.log("One!");
-					closePopup();
+				func : function() {
+					if(checkEmpty("#srch_check")) {
+						alert("대화상대를 선택하세요.");
+						$("#srch_check").focus();
+					} else {
+						var params = $("#addForm").serialize();
+						console.log(params);
+						// 아작스 태우기
+						
+						$.ajax({
+							type : "post",
+							url : "actionChat/insert",
+							dataType : "json",
+							success : function(res) {
+								if()
+							},
+							error : function(req) {
+								console.log(req.responseText)	
+							}
+						});
 				}
-			}, {
-				name : "취소"
+			}, { 
+				name : "취소",
+					func : function() {
+						closePopup();
+					}
+				
 			}]
+			
 		});
+		
 	}); // main msgr btn
 	
-	$("")
+
 	
-	$(".chat_list1").on("click", function() {
+	
+	$(".chat_list1").on("click", function() {	
 		
 		var html = "";
 		
 		html += "			<div class = \"right_box\">                                                      ";
 		html += "			<div class = \"rcpnt_rank_box\">                                                 ";
-		html += "				<div id = \"rcpnt_rank\">대화상대 성명 / 부서 / 직급  외 2명</div>          			   ";
-		html += "			</div>		                                                                   ";
-		html += "			                                                                               ";
+		html += "				<div id = \"rcpnt_rank\">대화상대 성명 / 부서 / 직급  외 2명</div>          			 ";
+		html += "			</div>		                                                                  	 ";
+		html += "			                                                                              	 ";
 		html += "			<div class = \"chat_room\">                                                      ";
 		html += "				<div class = \"chat_dtl\">                                                   ";
-		html += "					<div class = \"chat_rcpnt\">반갑습니다.&nbsp;                          	   ";
+		html += "					<div class = \"chat_rcpnt\">반갑습니다.&nbsp;                          	  	 ";
 		html += "						<div class= \"chat_time_rcpnt\"><small>오전 11:20</small></div>        ";
-		html += "					</div>                                                                 ";
+		html += "					</div>                                                                	 ";
 		html += "					<div class = \"chat_user\">저도요.&nbsp;                                   ";
 		html += "						<div class= \"chat_time_user\"><small>오후 12:13</small></div>         ";
-		html += "					</div>					                                               ";
-		html += "				</div>                                                                     ";
-		html += "				<div class = \"chat_input\">                                             ";
-		html += "					<div class = \"chat_img_file\"></div>                                    ";
-		html += "					<div class = \"chat_img_plus\"></div>                                    ";
-		html += "					<input type= \"text\" placeholder = \"메시지 입력..\" class = \"chat_write\" />   ";		
-		html += "				</div>                                                                     ";
-		html += "			</div>	                                                                       ";
-		html += "			</div>	                                                                       ";
+		html += "					</div>					                                              	 ";
+		html += "				</div>                                                                    	 ";
+		html += "				<div class = \"chat_input\">                                            	 ";
+		html += "					<form id = \"insertForm\" method = \"post\">								 ";
+		html += "						<input type = \"hidden\" name = \"empNum\" value = \"${empNum}\"/>			 ";
+		html += "						<input type = \"hidden\" name = \"cont\" id = \"cont\" value = \"${empNum}\"/> ";
+		html += "						<div class= \"cmn_btn_ml\" id = \"insertBtn\" style=\"float: left;\">보내기</div>";
+		html += "						<div class = \"chat_img_file\"></div>                                ";
+		html += "						<div class = \"chat_img_plus\"></div>                                ";
+		html += "						<input type= \"text\" placeholder = \"메시지 입력..\" class = \"chat_write\" id = \"chat_wrtie\" onkeydown= \"enterCheck();\" style = \"float: right;\"/>";
+		html += "					</form>																	 ";
+		html += "				</div>                                                                     	 ";
+		html += "			</div>	                                                                         ";
+		html += "			</div>	                                                                         ";
 		
 		$(".msgr_main").remove();
 		$(".right_box").html(html);
 		
+	
+		
+		$("#insertBtn").on("click", function() {
+			if($.trim($("#chat_write").val()) == "") {
+				alert("내용을 입력하세요.");
+			} else {
+				insert();
+			}
+		});
+		
 	});
 	
-	$(".chat_write").on("keypress", function(event) {
-		if(event.keyCode == 13) {
-			
-			return true;
+}); // ready
+
+function enterCheck() {
+	if(event.keyCode == 13) {
+		if($.trim($("#chat_write").val()) == "") {
+			alert("내용을 입력해 주세요.");
+		} else {
+			insert();
 		}
-	});
-	
+		return;
+	}
+}
+
 function insert() {
 	$(".chat_dtl").val($(".chat_write").val());
 	
@@ -564,22 +614,39 @@ function insert() {
 				$(".chat_dtl").val("");
 				$(".chat_write").val("");
 			},
-			error : function(request, status, error) { 
-				console(request.responseText);
+			error : function(res) { 
+				alert(res.errorMessage);
+				$(".chat_dtl").val("");
+				$(".chat_write").val("");
 			}
 		}); 
 	}
 
-}); // ready
+function checkEmpty(sel) {
+	if($.trim($(sel).val()) == ""){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function drawList(list) {
+	
+	var html = "";
+	
+		for(var data of list) {
+			html +=	"				<tr id = \"srchEmpNum\" no = \"" + data.EMP_NUM + "\">";  
+			html +=	"					<td id = \"srchDept\"> \"" + data.DEPT_NAME + "\"</td>";
+			html +=	"					<td id = \"srchRank\"> \"" + data.RANK_NAME + "\"</td>";
+			html +=	"					<td id = \"srchName\"> \"" + data.EMP_NAME + "\"</td>";
+			html +=	"					<td><input type =\"checkbox\" id = \"srch_check\"></td> ";
+			html +=	"				</tr>                                                       ";
+		}	
+	$("tbody").html(html);
+}
 </script>
 </head>
 <body>
-<!-- <form action = "#" id = "actionForm" method = "post">
-	<input type = hidden id = "chatList"/>
-	<input type = "checkbox" id = "autoScroll" checked = "checked" />자동스크롤
-</form> -->
-
-
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -604,7 +671,7 @@ function insert() {
 		<div class = "chat_box">
 			<div class = "chat_list">
 				<div class = "chat_list1">
-					<input type="text" value = "대화상대1, 대화상대2, 대화상대 3" id = "chat_group" readonly="readonly" />
+					<input type="text" value = "대화상대명" id = "chat_group" readonly="readonly" />
 					<input type="text" value = "3" id = "head_count" readonly="readonly"/>
 					<input type="text" value = "방가방가" id = "chat_view" readonly="readonly" style = "width:150px; color: #85898F" />
 					<div class = "chat_list1_1"></div>
@@ -619,7 +686,6 @@ function insert() {
 			</div>
 		</div>
 	</div>
-	
 	
 	<div class = "right_box">
 		<div class = "msgr_main">
