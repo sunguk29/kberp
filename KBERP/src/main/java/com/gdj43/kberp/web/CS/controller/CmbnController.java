@@ -160,6 +160,8 @@ public class CmbnController {
 	public ModelAndView guides(@RequestParam HashMap<String, String> params,
 							  ModelAndView mav) throws Throwable {
 		
+		iCommonService.updateData("cm.updateHit",params);
+		
 		HashMap<String, String> data = iCommonService.getData("cm.getaGuide",params);
 		
 		mav.addObject("data", data);

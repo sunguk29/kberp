@@ -88,7 +88,8 @@ $(document).ready(function() {
 						data : params, //보낼 데이터. 보낼 것이 없으면 안씀
 						success : function(res){ // 성공 시 실행 함수. 인자는 받아온 데이터
 							if(res.res=="success"){
-								$("#backForm1").submit();
+								$("#backForm").attr("action","strgBox");
+								$("#backForm").submit();
 							}else{
 								alert("복원중 문제가 발생하였습니다");
 							}
@@ -123,6 +124,7 @@ $(document).ready(function() {
 						data : params, //보낼 데이터. 보낼 것이 없으면 안씀
 						success : function(res){ // 성공 시 실행 함수. 인자는 받아온 데이터
 							if(res.res=="success"){
+								$("#backForm").attr("action","guideWrtng");
 								$("#backForm").submit();
 							}else{
 								alert("삭제중 문제가 발생하였습니다");
@@ -191,7 +193,7 @@ $(document).ready(function() {
 		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 	</form>
 	
-	<form action="guideWrtng" id="backForm" method="post">
+	<form action="#" id="backForm" method="post">
          <input type="hidden" name="top" value="${param.top}">
 		<input type="hidden" name="menuNum" value="${param.menuNum}">
 		<input type="hidden" name="menuType" value="${param.menuType}">
@@ -200,14 +202,6 @@ $(document).ready(function() {
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
     </form>
     
-    <form action="strgBox" id="backForm1" method="post">
-         <input type="hidden" name="top" value="${param.top}">
-		<input type="hidden" name="menuNum" value="${param.menuNum}">
-		<input type="hidden" name="menuType" value="${param.menuType}">
-		<input type="hidden" id="no" name="no"/>
-		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
-		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
-    </form>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

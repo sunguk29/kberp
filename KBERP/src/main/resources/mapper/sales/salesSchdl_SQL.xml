@@ -290,4 +290,15 @@
 			  </if> ) LL
 		WHERE LL.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
+	<!-- 리드 상세 -->
+	<select id="getLeadCont" resultType="hashmap" parameterType="hashmap">	
+		SELECT LD.LEAD_NAME, EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, CC.GRADE_NUM, LD.RCGNTN_PATH_NUM, E.EMP_NAME
+		FROM LEAD LD INNER JOIN ENTRPRS_CLNT EC
+		                     ON LD.CLNT_NUM = EC.CLNT_NUM
+		             INNER JOIN CLNT_CMPNY CC
+		                     ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
+		             INNER JOIN EMP E
+		                     ON LD.MNGR_EMP_NUM = E.EMP_NUM
+		WHERE LD.LEAD_NUM = #{leadNum}             
+	</select>
 </mapper>
