@@ -553,6 +553,11 @@ textarea {
 #att {
 	display: none;
 }
+
+#fileName {
+	border: hidden;
+	outline: none;
+}
 /* 끝 */
 </style>
 <script type="text/javascript">
@@ -818,6 +823,11 @@ function drawPaging(pb, sel) {
 	$(sel).html(html);
 }
 
+function uploadName(e) {
+	var files = e.files;
+	var filename = files[0].name;
+	$("#fileName").val(filename);
+}
 
 </script>
 </head>
@@ -1081,14 +1091,16 @@ function drawPaging(pb, sel) {
 						</table>
 						<br />
 						<!-- 첨부자료  -->
+						<input type=file id="att" name="att" />
+						<input type="hidden" id="attFile" name="attFile" />
 						<div class="spc">
 							<div class="adc_txt">
-								첨부자료 (0)
-								<img class="plus_btn att_btn" src="resources/images/sales/plus.png" border='0' />
+								첨부자료
+								<img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
 							</div>
-								<input type=file id="att" name="att" />
-								<input type="hidden" id="attFile" name="attFile" />
-							<div class="cntrct_box_in"></div>
+							<div class="cntrct_box_in">
+								<input type="text" id="fileName" readonly="readonly" />
+							</div>
 						</div>
 						<!-- 의견 -->
 						<div class="mgtop"></div>

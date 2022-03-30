@@ -420,34 +420,6 @@ td:nth-child(even) {
 	left: calc(50% - 260px); /* 너비 반 */
 }
 
-#edctn_level_add_popup, #cr_add_popup, #qlfctn_add_popup {
-	/* 숨김용 */
-	/* display: none; */
-	/* 크기변경용 */
-	width: 520px;
-	height: 310px;
-	top: calc(50% - 155px); /* 높이 반  */
-	left: calc(50% - 260px); /* 너비 반 */
-}
-
-#del_popup {
-	/* 숨김용 */
-	/* display: none; */
-	/* 크기변경용 */
-	width: 300px;
-	height: 140px;
-	top: calc(50% - 70px); /* 높이 반  */
-	left: calc(50% - 150px); /* 너비 반 */
-}
-
-#edctn_level_del_popup .popup_cont {
-	/* 내용 변경용 */
-	font-size: 10.5pt;
-	font-weight: 900;
-	text-align: center;
-	line-height: 40px;
-}
-
 /* 팝업 내용 */
 
 .popup_cont_element {
@@ -478,7 +450,7 @@ td:nth-child(even) {
 .popup_cont_text {
 	display: inline-block;
 	vertical-align: center;
-	width: calc(100% - 88px);
+	width: calc(100% - 98px);
 	height: 24px;
 	background-color: #ffffff;
 	text-align: left;
@@ -507,12 +479,8 @@ td:nth-child(even) {
 	margin-right: 10px;
 }
 
-#edctn_level_add_popup #add_admsn_day, #edctn_level_add_popup #add_grdtn_day {
-	width: calc(100% - 124px);
-	margin-right: 6px;
-}
-#edctn_level_add_popup #add_grdtn_crtft {
-	width: calc(100% - 156px);
+#add_grdtn_crtft {
+	width: calc(100% - 166px);
 }
 
 #cr_add_popup .popup_cont_name {
@@ -521,17 +489,9 @@ td:nth-child(even) {
 #cr_add_popup .popup_cont_text {
 	width: calc(100% - 106px);
 }
-#cr_add_popup #add_join_day, #cr_add_popup #add_rsgnt_day {
-	width: calc(100% - 138px);
-	margin-right: 6px;
-}
 
-#qlfctn_add_popup #add_acqrmnt_day, #qlfctn_add_popup #add_exprtn_day {
-	width: calc(100% - 124px);
-	margin-right: 6px;
-}
-#qlfctn_add_popup #add_evdnc {
-	width: calc(100% - 156px);
+#qlfctn_add_popup #add_copy_file {
+	width: calc(100% - 166px);
 }
 
 .upld_btn {
@@ -545,23 +505,10 @@ td:nth-child(even) {
 	outline: 1px solid #bbbbbb;
 	border-radius: 2px;
 	background-color: #dddddd;
-	margin-left: 8px;
+	margin-left: 4px;
 }
 .upld_btn:hover {
 	background-color: #d6d6d6;
-	cursor: pointer;
-}
-
-.prd_sel_btn {
-	display: inline-block;
-	vertical-align: top;
-	height: 24px;
-	width: 24px;
-	margin: 3px;
-	background-image: url('./images/cmn/calendar.png');
-	background-size: 100%;
-}
-.prd_sel_btn:hover {
 	cursor: pointer;
 }
 </style>
@@ -871,7 +818,7 @@ function tabContChange(tId, data, dataList) {
 		html += "	<tbody>                                                  ";
 		
 		for (var dl of dataList) {
-			html += "		<tr class=\"table_item\">                            ";
+			html += "		<tr class=\"table_item\" no=\"" + dl.EDCTN_LEVEL_NUM + "\">                            ";
 			html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
 			html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
 			html += "			<td><div class=\"td_cont\">" + dl.SCHL_NAME + "</div></td> ";
@@ -930,11 +877,11 @@ function tabContChange(tId, data, dataList) {
 		html += "	<tbody>                                                                  ";
 		
 		for (var dl of dataList) {
-			html += "		<tr class=\"table_item\">                                            ";
+			html += "		<tr class=\"table_item\" no=\"" + dl.CR_NUM + "\">                                            ";
 			html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
 			html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
 			html += "			<td><div class=\"td_cont\">" + dl.CMPNY_NAME + "</div></td>                   ";
-			html += "			<td><div class=\"td_cont\">" + dl.JOIN_DATE + " - " + dl.RSGNT_DATE + "</div></td>    ";
+			html += "			<td><div class=\"td_cont\">" + dl.JOIN_DATE + " ~ " + dl.RSGNT_DATE + "</div></td>    ";
 			html += "			<td><div class=\"td_cont\">";
 			if (dl.DEPT != null) {
 				html += dl.DEPT;
@@ -996,7 +943,7 @@ function tabContChange(tId, data, dataList) {
 		html += "	<tbody>                                                  ";
 		
 		for (var dl of dataList) {
-			html += "		<tr class=\"table_item\">                            ";
+			html += "		<tr class=\"table_item\" no=\"" + dl.LCNS_NUM + "\">                            ";
 			html += "			<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
 			html += "			<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
 			html += "			<td><div class=\"td_cont\">" + dl.LCNS_NAME + "</div></td>      ";
@@ -1046,143 +993,211 @@ function tabContChange(tId, data, dataList) {
 
 function createAddPopup(pId) {
 	console.log(pId);
+	var title = "";
 	var html = "";
+	var size = [520, 320]; // [width, height]
+	
+	html += "<form action=\"#\" id=\"addForm\" method=\"post\">";
+	html += "<input type=\"hidden\" class=\"popup_id\" name=\"popup_id\" value=\"" + pId + "\" />";
+	html += "<input type=\"hidden\" name=\"empNum\" value=\"" + $("#nEmpNum").val() + "\" />";
 	
 	switch (pId) {
 	case "edctn_level_btn" :
-		html += "<div class=\"popup_bg\"></div>                                                                                                                       ";
-		html += "<div class=\"popup\" id=\"edctn_level_add_popup\">                                                                                                   ";
-		html += "	<div class=\"popup_title\">학력사항 추가</div>                                                                                                    ";
-		html += "	<div class=\"popup_cont\">                                                                                                                        ";
+		title = "학력사항 추가";
+
+		html += "	<div class=\"popup_cont\" id=\"edctn_level_add_popup\" >                                                                                                                        ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm1_e1\">                                                                                        ";
 		html += "			<label for=\"add_schl_name\" class=\"popup_cont_name\">학교명 :</label>                                                                   ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_schl_name\" placeholder=\"학교명\" />                                             ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_schl_name\" name=\"schl_name\" placeholder=\"학교명\" />                                             ";
 		html += "		</div>                                                                                                                                        ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm1_e2\">                                                                                        ";
 		html += "			<label for=\"add_admsn_day\" class=\"popup_cont_name\">입학일 :</label>                                                                   ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_admsn_day\" placeholder=\"----/--/--\" readonly=\"readonly\" />                   ";
+		html += "			<input type=\"date\" class=\"popup_cont_text\" id=\"add_admsn_date\" name=\"admsn_date\" />                   ";
 		html += "			<div class=\"prd_sel_btn\" id=\"admsn_day_btn\"></div>                                                                                    ";
 		html += "		</div>                                                                                                                                        ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm1_e3\">                                                                                        ";
 		html += "			<label for=\"add_grdtn_day\" class=\"popup_cont_name\">졸업일 :</label>                                                                   ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_grdtn_day\" placeholder=\"----/--/--\" readonly=\"readonly\" />                   ";
+		html += "			<input type=\"date\" class=\"popup_cont_text\" id=\"add_grdtn_date\" name=\"grdtn_date\" />                   ";
 		html += "			<div class=\"prd_sel_btn\" id=\"grdtn_day_btn\"></div>                                                                                    ";
 		html += "		</div>                                                                                                                                        ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm1_e4\">                                                                                        ";
 		html += "			<label for=\"add_grade\" class=\"popup_cont_name\">학점 :</label>                                                                         ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_grade\" placeholder=\"학점\" />                                                   ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_grade\" name=\"grade\" placeholder=\"학점\" />                                                   ";
 		html += "		</div>                                                                                                                                        ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm1_e5\">                                                                                        ";
 		html += "			<label for=\"add_clsftn\" class=\"popup_cont_name\">학적구분 :</label>                                                                    ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_clsftn\" placeholder=\"학적구분\" />                                              ";
+		html += "		<select class=\"popup_cont_text\" id=\"add_schl_regstr_dvsn\" name=\"schl_regstr_dvsn\">";
+		html += "				<option value=\"0\" selected>졸업</option>";
+		html += "			<option value=\"1\">수료</option>";
+		html += "			<option value=\"2\">휴학</option>";
+		html += "			<option value=\"3\">퇴학</option>";
+		html += "		</select>";
 		html += "		</div>                                                                                                                                        ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm1_e6\">                                                                                        ";
 		html += "			<label for=\"add_grdtn_crtft\" class=\"popup_cont_name\">졸업증명서 :</label>                                                             ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_grdtn_crtft\" placeholder=\"졸업증명서 파일 업로드\" readonly=\"readonly\" />     ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_grdtn_crtft\" name=\"grdtn_crtft\" placeholder=\"졸업증명서 파일 업로드\" readonly=\"readonly\" />     ";
 		html += "			<div class=\"upld_btn\">업로드</div>                                                                                                      ";
 		html += "		</div>                                                                                                                                        ";
 		html += "	</div>                                                                                                                                            ";
-		html += "	<div class=\"popup_btn_area\">                                                                                                                    ";
-		html += "			<div class=\"cmn_btn_mr\" id=\"edctn_level_add_cnfrm_btn\">추가</div>                                                                     ";
-		html += "			<div class=\"cmn_btn_mr\" id=\"cnl_btn\">취소</div>                                                                                       ";
-		html += "	</div>                                                                                                                                            ";
-		html += "</div>                                                                                                                                               ";
-		
-		$(".cont_area").append(html);
-		
-		$(".popup_bg, .popup").hide();
-		$(".popup_bg, .popup").fadeIn();
 		break;
 		
 	case "cr_btn" :
-		html += "<div class=\"popup_bg\"></div>                                                                                                        ";
-		html += "<div class=\"popup\" id=\"cr_add_popup\">                                                                                             ";
-		html += "	<div class=\"popup_title\">경력사항 추가</div>                                                                                     ";
-		html += "	<div class=\"popup_cont\">                                                                                                         ";
+		title = "경력사항 추가";
+		
+		html += "	<div class=\"popup_cont\" id=\"cr_add_popup\" >                                                                                                         ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm2_e1\">                                                                         ";
 		html += "			<label for=\"add_cmpny_name\" class=\"popup_cont_name\">회사(단체)명 :</label>                                             ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_cmpny_name\" placeholder=\"회사(단체)명\" />                       ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_cmpny_name\" name=\"cmpny_name\" placeholder=\"회사(단체)명\" />                       ";
 		html += "		</div>                                                                                                                         ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm2_e2\">                                                                         ";
 		html += "			<label for=\"add_join_day\" class=\"popup_cont_name\">입사일 :</label>                                                     ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_join_day\" placeholder=\"----/--/--\" readonly=\"readonly\" />     ";
+		html += "			<input type=\"date\" class=\"popup_cont_text\" id=\"add_join_date\" name=\"join_date\" />     ";
 		html += "			<div class=\"prd_sel_btn\" id=\"join_day_btn\"></div>                                                                      ";
 		html += "		</div>                                                                                                                         ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm2_e3\">                                                                         ";
 		html += "			<label for=\"add_rsgnt_day\" class=\"popup_cont_name\">퇴사일 :</label>                                                    ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_rsgnt_day\" placeholder=\"----/--/--\" readonly=\"readonly\" />    ";
+		html += "			<input type=\"date\" class=\"popup_cont_text\" id=\"add_rsgnt_date\" name=\"rsgnt_date\" />    ";
 		html += "			<div class=\"prd_sel_btn\" id=\"rsgnt_day_btn\"></div>                                                                     ";
 		html += "		</div>                                                                                                                         ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm2_e4\">                                                                         ";
 		html += "			<label for=\"add_afltn_dprtmn\" class=\"popup_cont_name\">소속부서 :</label>                                               ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_afltn_dprtmn\" placeholder=\"소속부서\" />                         ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_dept\" name=\"dept\" placeholder=\"소속부서\" />                         ";
 		html += "		</div>                                                                                                                         ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm2_e5\">                                                                         ";
 		html += "			<label for=\"add_pstn\" class=\"popup_cont_name\">직위 :</label>                                                           ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_pstn\" placeholder=\"직위\" />                                     ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_pstn\" name=\"pstn\" placeholder=\"직위\" />                                     ";
 		html += "		</div>                                                                                                                         ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm2_e6\">                                                                         ";
 		html += "			<label for=\"add_job\" class=\"popup_cont_name\">직무 :</label>                                                            ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_job\" placeholder=\"직무\" />                                      ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_job\" name=\"job\" placeholder=\"직무\" />                                      ";
 		html += "		</div>                                                                                                                         ";
 		html += "	</div>                                                                                                                             ";
-		html += "	<div class=\"popup_btn_area\">                                                                                                     ";
-		html += "			<div class=\"cmn_btn_mr\" id=\"cr_add_cnfrm_btn\">추가</div>                                                      ";
-		html += "			<div class=\"cmn_btn_mr\" id=\"cnl_btn\">취소</div>                                                                        ";
-		html += "	</div>                                                                                                                             ";
-		html += "</div>                                                                                                                                ";
-		
-		$(".cont_area").append(html);
-		
-		$(".popup_bg, .popup").hide();
-		$(".popup_bg, .popup").fadeIn();
 		break;
 		
 	case "qlfctn_btn" :
-		html += "<div class=\"popup_bg\"></div>                                                                                                              ";
-		html += "<div class=\"popup\" id=\"qlfctn_add_popup\">                                                                                               ";
-		html += "	<div class=\"popup_title\">자격사항 추가</div>                                                                                           ";
-		html += "	<div class=\"popup_cont\">                                                                                                               ";
+		title = "자격사항 추가";
+
+		html += "	<div class=\"popup_cont\" id=\"qlfctn_add_popup\" >                                                                                                               ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm3_e1\">                                                                               ";
 		html += "			<label for=\"add_lcns_name\" class=\"popup_cont_name\">자격증명 :</label>                                                        ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_lcns_name\" placeholder=\"자격증명\" />                                  ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_lcns_name\" name=\"lcns_name\" placeholder=\"자격증명\" />                                  ";
 		html += "		</div>                                                                                                                               ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm3_e2\">                                                                               ";
 		html += "			<label for=\"add_acqrmnt_day\" class=\"popup_cont_name\">취득일자 :</label>                                                      ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_acqrmnt_day\" placeholder=\"----/--/--\" readonly=\"readonly\" />        ";
+		html += "			<input type=\"date\" class=\"popup_cont_text\" id=\"add_acqrmnt_date\" name=\"acqrmnt_date\" />        ";
 		html += "			<div class=\"prd_sel_btn\" id=\"acqrmnt_day_btn\"></div>                                                                         ";
 		html += "		</div>                                                                                                                               ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm3_e3\">                                                                               ";
 		html += "			<label for=\"add_issue_inst\" class=\"popup_cont_name\">발급기관 :</label>                                                       ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_issue_inst\" placeholder=\"발급기관\" />                                 ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_issue_orgnzt\" name=\"issue_orgnzt\" placeholder=\"발급기관\" />                                 ";
 		html += "		</div>                                                                                                                               ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm3_e4\">                                                                               ";
 		html += "			<label for=\"add_score\" class=\"popup_cont_name\">취득점수 :</label>                                                            ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_score\" placeholder=\"취득점수\" />                                      ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_acqrmnt_score\" name=\"acqrmnt_score\" placeholder=\"취득점수\" />                                      ";
 		html += "		</div>                                                                                                                               ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm3_e5\">                                                                               ";
 		html += "			<label for=\"add_exprtn_day\" class=\"popup_cont_name\">만료기한 :</label>                                                       ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_exprtn_day\" placeholder=\"----/--/--\" readonly=\"readonly\" />         ";
+		html += "			<input type=\"date\" class=\"popup_cont_text\" id=\"add_exprtn_date\" name=\"exprtn_date\" />         ";
 		html += "			<div class=\"prd_sel_btn\" id=\"exprtn_btn_day\"></div>                                                                          ";
 		html += "		</div>                                                                                                                               ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm3_e6\">                                                                               ";
 		html += "			<label for=\"add_evdnc\" class=\"popup_cont_name\">증빙자료 :</label>                                                            ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_evdnc\" placeholder=\"자격사항 증빙자료 업로드\" readonly=\"readonly\" />     ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_copy_file\" name=\"copy_file\" placeholder=\"자격사항 증빙자료 업로드\" readonly=\"readonly\" />     ";
 		html += "			<div class=\"upld_btn\">업로드</div>                                                                                             ";
 		html += "		</div>                                                                                                                               ";
-		html += "	</div>                                                                                                                                   ";
-		html += "	<div class=\"popup_btn_area\">                                                                                                           ";
-		html += "			<div class=\"cmn_btn_mr\" id=\"qlfctn_add_cnfrm_btn\">추가</div>                                                                 ";
-		html += "			<div class=\"cmn_btn_mr\" id=\"cnl_btn\">취소</div>                                                                              ";
-		html += "	</div>                                                                                                                                   ";
-		html += "</div>                                                                                                                                      ";
-		
-		$(".cont_area").append(html);
-		
-		$(".popup_bg, .popup").hide();
-		$(".popup_bg, .popup").fadeIn();
+		html += "	</div>                                                                                                                             ";
 		break;
 	}
+	
+	html += "</form>";
+	
+	makePopup({
+		bg : true,
+		bgClose : false,
+		width : size[0],
+		height : size[1],
+		title : title,
+		contents : html,
+		buttons : [{
+			name : "추가",
+			func:function() {
+				var flag = false;
+
+				$(".popup_cont_element input").css("outline", "1px solid #00000033");
+				switch (pId) {
+				case "edctn_level_btn" :
+					if (checkEmpty("#add_schl_name")) {
+						$("#add_schl_name").css("outline", "2px solid #fe3a40");
+						$("#add_schl_name").focus();
+					} else if (checkEmpty("#add_admsn_date")) {
+						$("#add_admsn_date").css("outline", "2px solid #fe3a40");
+						$("#add_admsn_date").focus();
+					} else if (checkEmpty("#add_schl_regstr_dvsn")) {
+						$("#add_schl_regstr_dvsn").css("outline", "2px solid #fe3a40");
+						$("#add_schl_regstr_dvsn").focus();
+					} else {
+						flag = true;
+					}
+					break;
+					
+				case "cr_btn" :
+					if (checkEmpty("#add_cmpny_name")) {
+						$("#add_cmpny_name").css("outline", "2px solid #fe3a40");
+						$("#add_cmpny_name").focus();
+					} else if (checkEmpty("#add_join_date")) {
+						$("#add_join_date").css("outline", "2px solid #fe3a40");
+						$("#add_join_date").focus();
+					} else if (checkEmpty("#add_rsgnt_date")) {
+						$("#add_rsgnt_date").css("outline", "2px solid #fe3a40");
+						$("#add_rsgnt_date").focus();
+					} else {
+						flag = true;
+					}
+					break;
+					
+				case "qlfctn_btn" :
+					if (checkEmpty("#add_lcns_name")) {
+						$("#add_lcns_name").css("outline", "2px solid #fe3a40");
+						$("#add_lcns_name").focus();
+					} else if (checkEmpty("#add_acqrmnt_date")) {
+						$("#add_acqrmnt_date").css("outline", "2px solid #fe3a40");
+						$("#add_acqrmnt_date").focus();
+					} else if (checkEmpty("#add_issue_orgnzt")) {
+						$("#add_issue_orgnzt").css("outline", "2px solid #fe3a40");
+						$("#add_issue_orgnzt").focus();
+					} else {
+						flag = true;
+					}
+					break;
+				}
+				if (flag) {
+					var params = $("#addForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "prsnlCardAjax/insert",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							if (res.res == "success") {
+								var params = $("#bottomTabForm").serialize();
+								reloadTab(params);
+								closePopup();
+								makeAlert("작업 완료", "추가되었습니다.");
+							} else {
+								makeAlert("작업 실패", "작업 중 문제가 발생했습니다.<br/>관리자에게 문의하세요.");
+							}
+						},
+						error : function(request, status, error) {
+							console.log(request.responseText);
+						}
+					});
+				}
+			}
+		}, {
+			name : "취소"
+		}]
+	});
 }
 
 function createEditPopup(pId) {
@@ -1267,21 +1282,45 @@ function createEditPopup(pId) {
 
 function createDelPopup(pId) {
 	console.log(pId);
+	
+	$("#tabId").val($("#selectedBottomTab").val());
+	
 	var html = "";
 	html += "	<div class=\"popup_cont\">                                                             ";
-	html += "	삭제하시겠습니까?                                                                      ";
+	html += "	선택하신 항목을 삭제하시겠습니까?                                                                      ";
 	html += "	</div>                                                                                 ";
 
 	makePopup({
 		bg : true,
 		bgClose : false,
+		height : 140,
 		title : "삭제 확인",
 		contents : html,
 		buttons : [{
 			name : "확인",
 			func:function() {
-				console.log("One!");
-				closePopup();
+				var params = $("#deleteForm").serialize();
+				console.log(params);
+				
+				$.ajax({
+					type : "post",
+					url : "prsnlCardAjax/delete",
+					dataType : "json",
+					data : params,
+					success : function(res) {
+						if (res.res == "success") {
+							var params = $("#bottomTabForm").serialize();
+							reloadTab(params);
+							closePopup();
+							makeAlert("작업 완료", "삭제되었습니다.");
+						} else {
+							makeAlert("작업 실패", "작업 중 문제가 발생했습니다.<br/>관리자에게 문의하세요.");
+						}
+					},
+					error : function(request, status, error) {
+						console.log(request.responseText);
+					}
+				});
 			}
 		}, {
 			name : "취소"
@@ -1320,44 +1359,17 @@ function reloadTab(params) {
 	});
 }
 
+function btnSetting() {
+	if ($("#btm_del_btn").attr("da") == "true") {
+		$("#btm_del_btn").css("background-color", "#eeeeee");
+		$("#btm_del_btn").css("color", "#999999");
+	} else {
+		$("#btm_del_btn").css("background-color", "#fe3a40");
+		$("#btm_del_btn").css("color", "#fff");
+	}
+}
+
 $(document).ready(function() {
-	/* $("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
-	}); */
 	if (${basicInfoData.EMP_PCTR_FILE != null}) {
 		$(".pctr_area").css("background-image", "url(\"" + ${basicInfoData.EMP_PCTR_FILE} + "\")");
 		console.log("파일 있음");
@@ -1376,6 +1388,8 @@ $(document).ready(function() {
 	
 	var params = $("#bottomTabForm").serialize();
 	reloadTab(params);
+	
+	btnSetting();
 	
 	$(".tab_btn").hover(function() {
 		var state;
@@ -1419,23 +1433,41 @@ $(document).ready(function() {
 				$("#selectedBottomTab").val($(this).attr("id"));
 				console.log($(this).attr("id"));
 				var params = $("#bottomTabForm").serialize();
+				$("#selItemNum").val("-1");
+				if ($("#btm_del_btn").attr("da") == "false") {
+					$("#btm_del_btn").attr("da", "true");
+					btnSetting();
+				}
 			} else {
 				console.log("이거 안됨");
 			}
 			reloadTab(params);
 		}
 	});
+	
+	
+	$(".func_btn").on("mouseenter", function() {
+		if ($(this).attr("da") == "false") {
+			$(this).css("cursor", "pointer");
+		}
+	});	
+	$(".func_btn").on("mouseleave", function() {
+		$(this).css("cursor", "default");
+	});
+	
 
 	$("#lt_edit_btn").click(function() {
 		createEditPopup($(this).find("input[type=hidden]").val());
 	});
 
 	$("#btm_add_btn").click(function() {
-		createAddPopup($(this).find("input[type=hidden]").val());
+		createAddPopup($("#selectedBottomTab").val());
 	});
 	
 	$("#btm_del_btn").click(function() {
-		createDelPopup($(this).find("input[type=hidden]").val());
+		if ($("#selItemNum").val() != "-1") {
+			createDelPopup($("#selectedBottomTab").val());
+		}
 	});
 
 
@@ -1475,15 +1507,23 @@ $(document).ready(function() {
 			if (state == "false") {
 				$(this).parent("tbody").find(".table_item .item_selected").val("false");
 				$(this).find(".item_selected").val("true");
+				$("#selItemNum").val($(this).attr("no"));
+				console.log("selected: " + $("#selItemNum").val());
+				$("#btm_del_btn").attr("da", "false");
+				btnSetting();
 		
 				$(this).parent("tbody").find(".table_item").children("td:nth-child(odd)").css("background-color", "#fafafa");
 				$(this).parent("tbody").find(".table_item").children("td:nth-child(even)").css("background-color", "#f6f6f6");
 				
 				
-				$(this).children("td:nth-child(odd)").css("background-color", "#b3e0ff");
-				$(this).children("td:nth-child(even)").css("background-color", "#99d6ff");
+				$(this).children("td").css("background-color", "#b3e0ff");
 			} else {
 				$(this).find(".item_selected").val("false");
+				$("#selItemNum").val("-1");
+				console.log("unselected");
+				$("#btm_del_btn").attr("da", "true");
+				btnSetting();
+				
 				$(this).children("td:nth-child(odd)").css("background-color", "#fafafa");
 				$(this).children("td:nth-child(even)").css("background-color", "#f6f6f6");
 			}
@@ -1508,11 +1548,16 @@ $(document).ready(function() {
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
+			<input type="hidden" id="nEmpNum" name="nEmpNum" value="${basicInfoData.EMP_NUM}" />
 			<form action="#" id="topTabForm" method="post">
 				<input type="hidden" id="selectedTopTab" name="selectedTopTab" value="human_info_btn"/>
 			</form>
 			<form action="#" id="bottomTabForm" method="post">
 				<input type="hidden" id="selectedBottomTab" name="selectedBottomTab" value="edctn_level_btn"/>
+			</form>
+			<form action="#" id="deleteForm" method="post">
+				<input type="hidden" id="selItemNum" name="selItemNum" value="-1" />
+				<input type="hidden" id="tabId" name="tabId" value="edctn_level_btn"/>
 			</form>
 			<div id="top_area">
 				<div class="cont_wrap" id="left_top">
@@ -1520,7 +1565,7 @@ $(document).ready(function() {
 						<div class="tab_btn" id="human_info_btn">인적정보<input type="hidden" value="true" /></div>
 						<div class="tab_btn" id="work_info_btn">재직정보<input type="hidden" value="false" /></div>
 						<div class="tab_btn" id="slry_info_btn">급여정보<input type="hidden" value="false" /></div>
-						<div class="func_btn" id="lt_edit_btn">수정</div>
+						<div class="func_btn" id="lt_edit_btn" da="false">수정</div>
 					</div>
 					<div class="dtl_cont" id="left_top_cont">
 						
@@ -1575,8 +1620,8 @@ $(document).ready(function() {
 						<div class="tab_btn" id="edctn_level_btn">학력사항<input type="hidden" value="true" /></div>
 						<div class="tab_btn" id="cr_btn">경력사항<input type="hidden" value="false" /></div>
 						<div class="tab_btn" id="qlfctn_btn">자격사항<input type="hidden" value="false" /></div>
-						<div class="func_btn" id="btm_add_btn">추가</div>
-						<div class="func_btn" id="btm_del_btn">삭제</div>
+						<div class="func_btn" id="btm_add_btn" da="false">추가</div>
+						<div class="func_btn" id="btm_del_btn" da="true">삭제</div>
 					</div>
 					<div class="dtl_cont" id="bottom_cont">
 						<div id="table_area">

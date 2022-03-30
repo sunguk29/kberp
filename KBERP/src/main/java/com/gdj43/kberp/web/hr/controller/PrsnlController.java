@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -124,6 +125,65 @@ public class PrsnlController {
 			e.printStackTrace();
 		}
 		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
+	@RequestMapping(value = "/prsnlCardAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String prsnlCardAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		// 구현 내용
+		try {
+			int check = 0;
+			
+			switch (gbn) {
+			case "insert" :
+				switch (params.get("popup_id")) {
+				case "edctn_level_btn" :
+					check = iCommonService.insertData("prsnl.addEdctnLevel", params);
+					break;
+					
+				case "cr_btn" :
+					check = iCommonService.insertData("prsnl.addCr", params);
+					break;
+					
+				case "qlfctn_btn" :
+					check = iCommonService.insertData("prsnl.addQlfctn", params);
+					break;
+				}
+				break;
+			case "update" :
+				
+				break;
+			case "delete" :
+				switch (params.get("tabId")) {
+				case "edctn_level_btn" :
+					check = iCommonService.deleteData("prsnl.deleteEdctnLevel", params);
+					break;
+					
+				case "cr_btn" :
+					check = iCommonService.deleteData("prsnl.deleteCr", params);
+					break;
+					
+				case "qlfctn_btn" :
+					check = iCommonService.deleteData("prsnl.deleteQlfctn", params);
+					break;
+				}
+				break;
+			}
+			
+			if (check == 1) {
+				modelMap.put("res", "success");
+			} else {
+				modelMap.put("res", "failed");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			modelMap.put("res", "failed");
+		}
+		System.out.println(mapper.writeValueAsString(modelMap));
 		return mapper.writeValueAsString(modelMap);
 	}
 

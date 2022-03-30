@@ -533,10 +533,6 @@ $(document).ready(function() {
 	});
 // ************** 담당자 팝업 END **************
 
-	$(".aff_btn").on("click", function() {
-		$("#att").click();
-	});
-	
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#cName")) {
 			makeAlert("필수 항목 알림", "고객을 입력하세요");
@@ -847,7 +843,6 @@ function uploadName(e) {
 							</tr>
 						</tbody>
 					</table>
-					<!-- 첨부파일 -->
 					<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
 					<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
 					<div class="rvn_txt"> 첨부파일
@@ -859,7 +854,9 @@ function uploadName(e) {
 					</div>
 					<div class="cntrct_box_in">
 						<span id="file_name">${fileName}</span>
+					<c:if test="${!empty data.ATT_FILE_NAME}">
 						<input type="button" id="fileDelete" value="삭제" />
+					</c:if>	
 						<input type="text" id="fileName" readonly="readonly" />
 					</div>
 					<input type="file" id="att" name="att" onchange="uploadName(this)" />

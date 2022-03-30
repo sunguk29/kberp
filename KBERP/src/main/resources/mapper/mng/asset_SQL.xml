@@ -138,4 +138,71 @@
                    WHERE ASSET_NUM=#{num} AND ASSET_USE_NUM =#{unum}) B
         ON 1=1
 	</select>
+	
+	<update id="rntlMdfy" parameterType="hashmap">
+		UPDATE ASSET_USE SET END_DATE = #{endDt},
+              	   	 RMRKS = #{rmrks}
+		WHERE ASSET_NUM = #{num}
+	</update>
+	
+	<insert id="assetRntlRgstrtn" parameterType="hashmap">
+		INSERT INTO ASSET_USE(ASSET_USE_NUM, ASSET_NUM, EMP_NUM, RMRKS, START_DATE)
+		VALUES(ASSET_USE_SEQ.NEXTVAL, #{assetNum}, #{empNum}, #{rmrks}, #{startDt})
+	</insert>
+	
+	<select id="getTktCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM ASSET A INNER JOIN ASSET_TKT AT
+							ON A.ASSET_NUM = AT.ASSET_NUM
+						  INNER JOIN EMP E
+						  	ON A.MNGR_NUM = E.EMP_NUM						  	
+		WHERE 1 = 1
+		<if test="searchTxt != null and searchTxt != ''">
+			<choose>
+				<when test="searchGbn == 0">
+					AND A.ASSET_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="searchGbn == 1">
+					AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+			</choose>
+		</if>
+	</select>
+	
+	<select id="assetTktList" resultType="hashmap" parameterType="hashmap">
+		SELECT ASSET_NUM, A.ASSET_NAME,MNGR_NAME, QUNTY, QUNTY_DVSN_NUM,TKT_DATE
+		FROM ( SELECT TKT_NUM, AT.ASSET_NUM, A.ASSET_NAME, EMP_NAME AS MNGR_NAME, AT.QUNTY,
+			 AT.QUNTY_DVSN_NUM,TO_CHAR(TKT_DATE, 'YYYY-MM-DD')AS TKT_DATE,ROW_NUMBER() OVER(ORDER BY TKT_NUM DESC) AS RNUM
+			FROM ASSET A INNER JOIN ASSET_TKT AT
+			                    ON A.ASSET_NUM = AT.ASSET_NUM
+			                   INNER JOIN EMP E
+			                   	ON A.MNGR_NUM = E.EMP_NUM
+			WHERE 1=1
+		<if test="searchTxt != null and searchTxt != ''"> 
+					<choose>
+						<when test="searchGbn == 0">
+							AND A.ASSET_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="searchGbn == 1">
+							AND EMP_NAME LIKE '%' || #{searchTxt} || '%'
+						</when>
+					</choose>
+				</if>
+				) A
+				WHERE A.RNUM BETWEEN #{startCount} AND #{endCount} 
+	</select>
+	
+	<select id="assetTktDtlView" resultType="hashmap" parameterType="hashmap">
+		SELECT A.ASSET_NUM, ASSET_NAME, QUNTY, QUNTY_DVSN_NUM, MNGR_NAME,USENAME, TKT_DATE,RMRKS
+		FROM(
+    		SELECT ASSET_NUM, QUNTY, QUNTY_DVSN_NUM, EMP_NAME AS USENAME, TO_CHAR(TKT_DATE, 'YYYY-MM-DD')AS TKT_DATE,RMRKS
+    		FROM ASSET_TKT INNER JOIN EMP 
+                    ON TKT_EMP_NUM = EMP_NUM
+                    WHERE ASSET_NUM=#{num}) A LEFT OUTER JOIN (                 
+    		SELECT ASSET_NUM, ASSET_NAME,EMP_NAME AS MNGR_NAME
+    		FROM ASSET INNER JOIN EMP
+                ON MNGR_NUM = EMP_NUM
+                WHERE ASSET_NUM=#{num}) B
+                ON 1=1
+	</select>
 </mapper>

@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>자산등록</title>
+<title>자산대여 등록</title>
 <c:import url="/header"></c:import>
 <style type="text/css">
 
@@ -67,23 +67,23 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#cnclBtn").on("click", function(){
-		$("#actionForm").attr("action", "assetList");
+		$("#actionForm").attr("action", "assetRntl");
 		$("#actionForm").submit();
 	});
 	
 	$("#rgstrtnBtn").on("click", function() {
-		if(checkEmpty("#assetName")) {
-			alert("자산명을 입력하세요.");
-			$("#assetName").focus();
-		} else if(checkEmpty("#qunty")) {
-			alert("수량을 입력하세요.");
-			$("#qunty").focus();
-		}  else if(checkEmpty("#acqrmntDt")) {
-			alert("취득일을 선택하세요.");
-			$("#acqrmntDt").focus();
-		} else if(checkEmpty("#mngrNum")) {
-			alert("담당자를 선택하세요.");
-			$("#mngrNum").focus();
+		if(checkEmpty("#assetNum")) {
+			alert("자산코드를 입력하세요.");
+			$("#assetNum").focus();
+		} else if(checkEmpty("#empNum")) {
+			alert("사용자를 선택하세요.");
+			$("#empNum").focus();
+		} else if(checkEmpty("#startDt")) {
+			alert("시작일 선택하세요.");
+			$("#startDt").focus();
+		} else if(checkEmpty("#rmrks")) {
+			alert("비고를 입력하세요.");
+			$("#rmrks").focus();
 		} else {
 			var rgstrtnForm = $("#rgstrtnForm");
 			
@@ -94,12 +94,12 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post", 
-						url : "assetAction/insert", 
+						url : "assetAction/insertRntl", 
 						dataType : "json",
 						data : params, 
 						success : function(res) { 
 							if(res.res == "success") {
-								location.href ="assetList";
+								location.href ="assetRntl";
 							} else {
 								alert("작성중 문제가 발생하였습니다.");
 							}
@@ -139,71 +139,48 @@ function checkEmpty(sel) {
 	</c:import>
 <form action="#" id="actionForm" method="post">
 	<input type="hidden" name="num" value="${param.num}"/>
+	<input type="hidden" name="unum" value="${param.unum}"/>
 	<input type="hidden" name="page" value="${param.page}"/>
 	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 </form>
 <div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">자산등록</div>
+			<div class="page_title_text">자산대여 등록</div>
 		</div>
-		<div class="cont_area">
-			<!-- 여기부터 쓰면 됨 -->
 			<form action="#" id="rgstrtnForm" method="post" >
+				<div class="cont_area">
 				<table class="intrnl_cost_admnstrtn_new">
 					<tbody>
 						<tr class="sixth_row">
+							<td>자산코드</td>
+							<td>
+								<input style=width:80px; type="text" id="assetNum" name="assetNum" />
+							</td>
 							<td>자산명</td>
 							<td>
-								<input type="text" id="assetName" name="assetName" />
+								<input style=width:80px; type="text" />
 							</td>
-							<td>자산유형</td>
-							<td >
-								<select id="assetType" name="assetType">
-									<option value="0">지속성</option>
-									<option value="1">소모성</option>
-								</select>
-							</td>
-							<td class="qunty">수량</td>
+							<td>사용자</td>
 							<td>
-								<input type="text" id="qunty" name="qunty" />
-								<select id="quntyDvsnNum" name="quntyDvsnNum">
-									<option value="0">ea</option>
-									<option value="1">set</option>
-									<option value="2">box</option>
-								</select>			
+								<input style=width:120px; type="text" id="empNum" name="empNum" />
 							</td>
 						</tr>
 						<tr class="sixth_row">
-							<td>취득일</td>
-							<td>
-							<input type="date" id="acqrmntDt" name="acqrmntDt" />	
+							<td>사용시작일</td>
+							<td >
+								<input type="date" id="startDt" name="startDt" />
 							</td>
-							<td>담당자</td>
-							<td>
-								<select id="mngrNum" name="mngrNum">
-									<option value="2022000006">강부장</option>
-									<option value="1">set</option>
-									<option value="2">box</option>
-								</select>	
-							</td>
-							<td>등록자</td>
-							<td>
-								${sEmpName}<input type="hidden" name="writer" value="${sEmpNum}" /><br/>
-							</td>
-						</tr>
 					</tbody>
 				</table>
 						<div class="rmrks"><b>비고</b></div>
-						<div id="rmrks">
 						<input type="text" id="rmrks" name="rmrks" />
-						</div>
 			<div class="board_bottom">
-				<input class="cmn_btn" type="button" id="rgstrtnBtn" value="등록">
+				<input class="cmn_btn" type="button" id="rgstrtnBtn" value="수정">
 				<input class="cmn_btn" type="button" value="취소" id="cnclBtn"/>
 			</div>
-			</form>
 		</div>
+			</form>
 	</div>
 
 </body>

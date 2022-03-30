@@ -348,9 +348,6 @@ hr { /* 구분선 */
 	vertical-align: middle;
 }
 
-#att {
-	display: none;
-}
 
 .btnImg_in {
 	display: inline-block;
@@ -360,10 +357,20 @@ hr { /* 구분선 */
 	float: right;
 	margin-right: 5px;
 }
+
+#att {
+	display: none;
+}
+
+#fileName {
+	border: hidden;
+	outline: none;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-
+	console.log(${param.salesNum});
+	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
 		makePopup({
@@ -377,7 +384,7 @@ $(document).ready(function() {
 			buttons : [ {
 				name : "확인",
 				func : function() {
-					$("#listForm").attr("action", "sales1SalesChncCont");
+					$("#listForm").attr("action", "salesList");
 					$("#listForm").submit();
 					console.log("One!");
 					closePopup();
@@ -449,7 +456,8 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
-											$("#listForm").attr("action", "salesList");
+											
+											$("#listForm").attr("action", "sales2SgstnCont");
 											$("#listForm").submit();
 										} else {
 											alert("등록중 문제가 발생하였습니다.");
@@ -486,6 +494,13 @@ function checkEmpty(sel) {
 		return false;
 	}
 }
+
+function uploadName(e) {
+	var files = e.files;
+	var filename = files[0].name;
+	$("#fileName").val(filename);
+}
+
 </script>
 </head>
 <body>
@@ -494,6 +509,7 @@ function checkEmpty(sel) {
 		<input type="hidden" name="top" value="${param.top}" />
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
+		<input type="hidden" name="salesNum" value="${param.salesNum}" />
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -517,6 +533,7 @@ function checkEmpty(sel) {
 			<div class="body">
 				<div class="bodyWrap">
 					<!-- 시작 -->
+				
 					
 					<div class="bot_title">
 						<h3>
@@ -588,7 +605,6 @@ function checkEmpty(sel) {
 								</tbody>
 							</table>
 							<div class="page_cont_title_text">대출 상세정보</div>
-							<input type="hidden" id="salesNum" name="salesNum" value="${loan.SALES_NUM}" /> <!-- 영업번호 -->
 							<hr class="hr_width">
 							<table>
 								<colgroup>
@@ -753,14 +769,14 @@ function checkEmpty(sel) {
 					</div>
 
 					<hr class="hr_bot" color="#4B94F2" width="925px">
-
+	<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
 					<!-- ******************* 제안 시작 ******************* -->
-					<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
+					
 						<input type="hidden" id="page" name="page" value="${page}" />
 						<input type="hidden" name="top" value="${param.top}" />
 						<input type="hidden" name="menuNum" value="${param.menuNum}" />
 						<input type="hidden" name="menuType" value="${param.menuType}" />
-						<input type="hidden" id="salesNum" name="salesNum" value="${lead.SALES_NUM}" /><!-- 넘어올 영업번호... 리드에서 가져옴 -->
+						<input type="hidden" id="salesNum" name="salesNum" value="${param.salesNum}" /><!-- 넘어올 영업번호... 리드에서 가져옴 -->
 						
 						<div class="bot_title">
 							<h3>
@@ -908,14 +924,16 @@ function checkEmpty(sel) {
 							</tbody>
 						</table>
 						<!-- 첨부자료  -->
+						<input type=file id="att" name="att">
+						<input type="hidden" id="attFile" name="attFile" />
 						<div class="spc">
 							<div class="adc_txt">
-								첨부자료 (0)
-								<img class="plus_btn att_btn" src="resources/images/sales/plus.png" border='0' />
+								첨부자료
+								<img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
 							</div>
-							<div class="cntrct_box_in"></div>
-								<input type=file id="att" name="att">
-								<input type="hidden" id="attFile" name="attFile" />
+							<div class="cntrct_box_in">
+								<input type="text" id="fileName" readonly="readonly" />
+							</div>
 						</div>
 					</form>
 					<!-- 끝 -->

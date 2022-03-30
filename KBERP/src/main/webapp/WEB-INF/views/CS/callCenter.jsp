@@ -633,6 +633,14 @@ $(document).ready(function() {
 			}]
 		});
 	});
+	
+	$("#searchTxt").on("keypress", function() {
+		if(event.keyCode == 13) {
+			$("#searchBtn").click();
+			
+			return false;
+		}
+	});
 
 	$("#searchBtn").on("click", function() {
 		
@@ -719,6 +727,13 @@ $(document).ready(function() {
 		}
 		$("#clntPop").html(html);
 	}
+	
+	$("#clntPop").on("click", "tr" , function() {
+		$("#no").val($(this).attr("no"));
+		
+		
+		
+	});
 	
 	$(".cmn_btn_mr").on("click", function() {
 		
@@ -911,6 +926,7 @@ function checkEmpty(sel) {
 					<div class="clnt_info_cont">
 						<input type="hidden" id="oldsearchTxt" value="${param.searchTxt}"/>
 					<form action="#" id="saveForm" method="post">
+					<input type="hidden" id="no" name="no"/>
 						<div class="clnt_info_Header">
 							<div class="clnt_info">고객정보</div>
 							<div class="srch_text_wrap clnt_srch">

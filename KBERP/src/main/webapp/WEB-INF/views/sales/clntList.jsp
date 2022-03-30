@@ -224,6 +224,7 @@ function reloadList() {
 		data : params,
 		dataType : "json",
 		success : function(res) {
+			drawSearchCnt(res.listCnt);
 			drawList(res.list);
 			drawPaging(res.pb);
 		},
@@ -231,6 +232,16 @@ function reloadList() {
 			console.log(req.responseText);
 		}
 	});
+	
+}
+
+function drawSearchCnt(listCnt) {
+	var html = "";
+	html += "<h3>"; 
+	html += "고객 (검색결과: " + listCnt + "건)";
+	html += "</h3>";
+	
+	$(".SearchResult").html(html);
 	
 }
 

@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>자산 상세보기</title>
+<title>자산반출 상세보기</title>
 <c:import url="/header"></c:import>
 <style type="text/css">
 
@@ -47,7 +47,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#listBtn").on("click", function(){
-		$("#actionForm").attr("action", "assetRntl");
+		$("#actionForm").attr("action", "assetTkt");
 		$("#actionForm").submit();
 	});
 	
@@ -69,7 +69,6 @@ $(document).ready(function() {
 	</c:import>
 <form action="#" id="actionForm" method="post">
 	<input type="hidden" name="num" value="${param.num}"/>
-	<input type="hidden" name="unum" value="${param.unum}"/>
 	<input type="hidden" name="page" value="${param.page}"/>
 </form>
 <div class="cont_wrap">
@@ -89,24 +88,25 @@ $(document).ready(function() {
 							<td >
 								${data.ASSET_NAME}
 							</td>
-							<td>담당자</td>
+							<td>수량</td>
 							<td>
-								${data.EMP_NAME}
+							<c:if test="${data.QUNTY_DVSN_NUM==0}">${data.QUNTY}ea</c:if>
+							<c:if test="${data.QUNTY_DVSN_NUM==1}">${data.QUNTY}set</c:if>
+							<c:if test="${data.QUNTY_DVSN_NUM==2}">${data.QUNTY}box</c:if>
 							</td>
 						</tr>
 						<tr class="sixth_row">
+							<td>담당자</td>
+							<td>
+								${data.MNGR_NAME}
+							</td>
 							<td>사용자</td>
 							<td>
 								${data.USENAME}	
 							</td>
-							<td>사용시작일</td>
+							<td>반출일</td>
 							<td >
-								${data.START_DATE}
-							</td>
-							<td>사용종료일</td>
-							<td>
-							<c:if test="${data.END_DATE==null}">사용중</c:if>
-							<c:if test="${data.END_DATE!=null}">${data.END_DATE}</c:if>
+								${data.TKT_DATE}
 							</td>
 						</tr>
 					</tbody>

@@ -402,7 +402,6 @@ $(document).ready(function() {
 			$("#actionForm").submit();
 		} else if($(this).children("#test").val() == "종료(실패)") {
 			
-			
 			$("#actionForm").attr("action", "sales4CntrctCont"); // 여기는 어디로 이동?? if로...처리?
 			$("#actionForm").submit();
 		} 

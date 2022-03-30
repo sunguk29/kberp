@@ -36,6 +36,7 @@
  	margin-top: 20px;
  }
 
+
 #rmrks{
 	margin-left: 20px;
 	width: 870px;
@@ -46,14 +47,42 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#listBtn").on("click", function(){
-		$("#actionForm").attr("action", "assetRntl");
-		$("#actionForm").submit();
+	$("#cnclBtn").on("click", function(){
+		$("#cnclForm").submit();
 	});
 	
-	$("#mdfyBtn").on("click", function(){
-		$("#actionForm").attr("action", "assetRntlDtlViewMdfy");
-		$("#actionForm").submit();
+	$("#mdfyBtn").on("click", function() {
+		var mdfyForm = $("#mdfyForm");
+		
+		mdfyForm.ajaxForm({
+			success : function(res) {
+				// 글 수정
+				var params = $("#mdfyForm").serialize();
+				
+				$.ajax({
+					type : "post", 
+					url : "assetAction/updateRnt", 
+					dataType : "json",
+					data : params, 
+					success : function(res) { 
+						if(res.res == "success") {
+							$("#cnclForm").submit();
+						} else {
+							alert("수정중 문제가 발생하였습니다.");
+						}
+						},
+						error : function(request, status, error) {
+							console.log(request.responseText); 
+						}
+					});
+				},
+	
+			error : function(req) {
+				console.log(req.responseText); 
+			} // error end
+		}); // ajaxForm End
+			
+		mdfyForm.submit(); // ajaxForm 실행
 	});
 });
 
@@ -67,14 +96,20 @@ $(document).ready(function() {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
-<form action="#" id="actionForm" method="post">
+<form action="assetRntlDtlView" id="cnclForm" method="post">
+<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
+	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
 	<input type="hidden" name="num" value="${param.num}"/>
 	<input type="hidden" name="unum" value="${param.unum}"/>
 	<input type="hidden" name="page" value="${param.page}"/>
+	
 </form>
+<form action="#" id="mdfyForm" method="post">
 <div class="cont_wrap">
+	<input type="hidden" name="num" value="${param.num}" />
+	<input type="hidden" name="unum" value="${param.unum}"/>
 		<div class="page_title_bar">
-			<div class="page_title_text">자산대여 상세보기</div>
+			<div class="page_title_text">자산대여 수정</div>
 		</div>
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
@@ -105,20 +140,20 @@ $(document).ready(function() {
 							</td>
 							<td>사용종료일</td>
 							<td>
-							<c:if test="${data.END_DATE==null}">사용중</c:if>
-							<c:if test="${data.END_DATE!=null}">${data.END_DATE}</c:if>
+							<input type="date" id="endDt" name="endDt" value="${data.END_DATE}" />
 							</td>
 						</tr>
 					</tbody>
 				</table>
 						<div class="rmrks"><b>비고</b></div>
-						<input type="text" id="rmrks" name="rmrks" readonly="readonly" value="${data.RMRKS}" />
+						<input type="text" id="rmrks" name="rmrks" value="${data.RMRKS}" />
 			<div class="board_bottom">
 				<input class="cmn_btn" type="button" id="mdfyBtn" value="수정">
-				<input class="cmn_btn" type="button" value="목록으로" id="listBtn"/>
+				<input class="cmn_btn" type="button" value="취소" id="cnclBtn"/>
 			</div>
 		</div>
 	</div>
+	</form>
 
 </body>
 </html>

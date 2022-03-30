@@ -223,12 +223,13 @@ public class SalesMngController {
 				if (params.get("attFile") != null) {
 					iCommonService.insertData("salesMng.sales2AddDtlInfoAtt", params); // 제안 상세정보 첨부파일tab
 				}
-				
+				iCommonService.updateData("salesMng.sales1to2", params); // 진행 단계 전환
 				break;
 			case "update" :
 				break;
 				
 			case "failure" :
+				iCommonService.updateData("salesMng.sales2Failure", params);
 				break;
 			}
 			modelMap.put("res", "success");
@@ -240,6 +241,33 @@ public class SalesMngController {
 		
 		return mapper.writeValueAsString(modelMap);
 	}
+	
+	// sales2SgstnCont : 영업기회 상세보기
+	@RequestMapping(value="/sales2SgstnCont")
+	public ModelAndView sales2SgstnCont(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("salesMng.getSales1", params);
+		HashMap<String, String> data2 = iCommonService.getData("salesMng.getSales2", params);
+		
+		mav.addObject("data", data);
+		mav.addObject("data2", data2);
+		
+		mav.setViewName("sales/sales2SgstnCont");
+		
+		return mav;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }
