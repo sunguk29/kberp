@@ -431,15 +431,19 @@ $(document).ready(function () {
 							
 						</tbody>
 					</table>
-					<!-- 첨부자료 -->
-					<div class="rvn_txt"> 첨부자료 (0)
-						<input type=file name='file1' style='display: none;' /> 
+					<!-- 첨부파일 -->
+					<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+					<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
+					<div class="rvn_txt">
+						첨부파일
 					</div>
-					<div class="cntrct_box_in"></div>
-					<div class="next_bot">
-						<div class="cmn_btn nb">영업기회로 전환하기 ▶</div>
+					<div class="cntrct_box_in">
+						<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
 					</div>
 					<!-- 의견 -->
+					<form action="#" id="botOpActionForm" method="post">
+						
+					</form>
 					<div class="mgtop"></div>
 					<div class="bot_title"><h3>의견(7)</h3></div>
 					<hr color="#F2B705" width="925px">

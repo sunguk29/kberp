@@ -97,6 +97,12 @@ public class CmbnController {
 				break;
 			case "delete":
 				iCommonService.updateData("cm.guideDel",params);
+				break;
+			case "update":
+				iCommonService.updateData("cm.guideUpdate",params);
+				break;
+			case "strg":
+				iCommonService.updateData("cm.guideStrg",params);
 				
 			}
 			modelMap.put("res","success");
@@ -163,4 +169,15 @@ public class CmbnController {
 		return mav;
 	}
 	
+	//수정
+	@RequestMapping(value="/guideWrtngUpdate")
+	public ModelAndView guideWrtngUpdate(@RequestParam HashMap<String, String> params,
+										ModelAndView mav) throws Throwable{
+		
+		HashMap<String, String> data = iCommonService.getData("cm.getaGuide",params);
+		
+		mav.addObject("data", data);
+		mav.setViewName("CS/guideWrtngUpdate");
+		return mav;
+	}
 }

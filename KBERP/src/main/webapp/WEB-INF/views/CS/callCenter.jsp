@@ -636,19 +636,17 @@ $(document).ready(function() {
 
 	$("#searchBtn").on("click", function() {
 		
-		$("#oldsearchTxt").val($("#searchTxt").val());
-		
 		var html = "";
 		
-		html += "<input type=\"hidden\" id=\"oldsearchTxt\" value=\"${param.searchTxt}\"/>"
 		html += "<form action=\"#\" id=\"actionForm\" method=\"post\">"
 		html += "<div class=\"srch_slct\">";
-		html += "<div class=\"name_box\">정렬순서</div>";
-		html += "<select id=\"clnt_slct\">";
+		html += "<div class=\"name_box\">선택</div>";
+		html += "<select id=\"clnt_slct\" name=\"clnt_slct\">";
 		html += "	<option value=\"0\">이름</option>";
 		html += "	<option value=\"1\">등급</option>";
 		html += "	<option value=\"2\">전화번호</option>";
 		html += "</select>";
+		html += "<input type=\"text\" name=\"searchTxt\" value=\"" + $("#searchTxt").val() + "\"/>"
 		html += "</div>";
 		html += "</form>";
 		html += "<div class=\"srch_cont\">";
@@ -679,7 +677,7 @@ $(document).ready(function() {
 			contents : html,
 			contentsEvent : function reloadList() {
 				var params = $("#actionForm").serialize();
-				
+				console.log(params);
 				$.ajax({
 					type : "post",
 					url : "callCenterPopListAjax",

@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>guideWrtng</title>
+<title>카카오뱅크 ERP 안내글</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -21,20 +21,54 @@ tr{
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	
+	 
+	if('${param.searchGbn}' != '') {
+		$("#searchGbn").val('${param.searchGbn}');
+	} else {
+		$("#oldSearchGbn").val("0");
+	}
+	
+	 reloadList();
+	
+	$("#searchTxt").on("keypress", function(event) {
+		if(event.keyCode == 13) {
+			$("#searchBtn").click();
+				
+			return false;
+		}
+	});
+	
+	$("#searchBtn").on("click",function(){
+		// $("#page").val("1"): 검색할때 1페이지로 넘어가는것
+		$("#page").val("1");
+		
+		$("#oldSearchGbn").val($("#searchGbn").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
+		
+		reloadList(); 
+	});
+	
 	$("#writeBtn").on("click", function(){
 		$("#actionForm").attr("action","guideWrtngAdd");
 		$("#actionForm").submit(); 	
 	});	
 	
-	 reloadList();
+	
 	 $(".pgn_area").on("click", "div",function(){
 			$("#page").val($(this).attr("page"));
+			$("#searchGbn").val($("#oldSearchGbn").val());
+			$("#searchTxt").val($("#oldSearchTxt").val());
 			
 			reloadList(); 	
 		});
 	 //상세보기
  	$("tbody").on("click", "tr" , function(){
 		$("#no").val($(this).attr("no"));
+		
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
 		$("#actionForm").attr("action","guides");
 		$("#actionForm").submit();
 		});
@@ -112,21 +146,31 @@ function drawPaging(pb){
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
+	<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}" />
+	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">안내글</div>
 			<!-- 검색영역 선택적 사항 -->
-			<div class="page_srch_area">
-				<select class="srch_sel">
-					<option>제목</option>
-					<option>내용</option>
-					<option>작성자</option>
-				</select>
-				<div class="srch_text_wrap">
-					<input type="text" />
-				</div>
-				<div class="cmn_btn_ml">검색</div>
+		
+		<div class="page_srch_area">
+		<form action="#" id="actionForm" method="post">
+			<input type="hidden" name="top" value="${param.top}">
+			<input type="hidden" name="menuNum" value="${param.menuNum}">
+			<input type="hidden" name="menuType" value="${param.menuType}">
+			<input type="hidden" id="no" name="no"/>
+			<input type="hidden" id="page" name="page" value="${page}"/>
+		
+			<select class="srch_sel" name="searchGbn" id="searchGbn">
+				<option value="0">제목</option>
+				<option value="1">작성자</option>
+			</select>
+			<div class="srch_text_wrap">
+				<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
+			</div>
+			<div class="cmn_btn_ml" id="searchBtn">검색</div>
+		</form>
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -157,13 +201,6 @@ function drawPaging(pb){
 			</div>
 		</div>
 	</div>
-	<form action="#" id="actionForm" method="post">
-	<input type="hidden" name="top" value="${param.top}">
-		<input type="hidden" name="menuNum" value="${param.menuNum}">
-		<input type="hidden" name="menuType" value="${param.menuType}">
-		<input type="hidden" id="no" name="no"/>
-	<input type="hidden" id="page" name="page" value="${page}"/>
-	</form>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

@@ -157,6 +157,7 @@ $(document).ready(function() {
 	});
 	
 	$("#updateBtn").on("click", function() {
+		
 		$("#actionForm").attr("action", "boardUpdate");
 		$("#actionForm").submit();
 	});
@@ -172,7 +173,8 @@ $(document).ready(function() {
 	        	 data : params,
 	        	 success : function(res) {
 	        		 if(res.res == "success"){
-	        			 location.href = "board";
+	        			 $("#locationForm").attr("action", "board");
+	        			 $("#locationForm").submit();
 	        		 } else{
 	        			 alert("삭제중 문제가 발생하였습니다.");
 	        		 }
@@ -200,6 +202,9 @@ $(document).ready(function() {
 			<div class="page_title_text">임시게시판</div>
 			<!-- 선택적 사항 -->
 			<form action="#" id="actionForm" method="post">
+				<input type="hidden" id="top" name="top" value="${param.top}" />
+				<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+				<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 				<input type="hidden" name="no" value="${param.no}" />
 				<input type="hidden" name="page" value="${param.page}" />
 				<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
@@ -213,6 +218,12 @@ $(document).ready(function() {
 		
 			<!-- 첨부파일 존재시  -->
 			<c:if test="${!empty data.ATCHD_FILE}">
+			<div class="dcmnt_area">
+	
+			<img src="resources/images/GW/document_icon.png" class="dcmnt"> 
+			<span class="dcmnt_area_txt">첨부파일sample.exe</span>
+			<img src="resources/images/GW/download_icon.png" class="dwnld">
+			</div>
 			<!-- c:set ==> 변수선언 -->
 			<!-- el에서 fn:length ==> 문자열의 길이나 배열의 크기를 가져옴 -->
 			<c:set var="fileLength" value="${fn:length(data.ATCHD_FILE)}"></c:set>
@@ -233,34 +244,29 @@ $(document).ready(function() {
 		<div class="board_ctgry">자유게시판 >
 		</div>
 		<h3 class="title_text">
-			<div>
+		
 			${data.BOARD_TITLE}
-			</div>
+			
 		</h3>
 		<div class="wrtr_info">
 			<div class="board_wrt">
-				<div>${data.EMP_NAME}</div>
+				${data.EMP_NAME}
 			</div>
 			<!-- <div class="emp_rank">대리</div> 직급넣을때 씀 -->
 				<div class="date_info">
 					<span class="date">
-						<span>${data.BOARD_WRTNG_DATE}</span>
+						${data.BOARD_WRTNG_DATE}
 					</span>
 					<span class="count">조회
-					<span>${data.BOARD_HITS}</span>
+					${data.BOARD_HITS}
 					</span>
 				</div>							
 		</div>
 		<div class="board_cont">
-<div>
+
 ${data.BOARD_CONT}
-</div>
-<div class="dcmnt_area">
-	
-	<img src="resources/images/GW/document_icon.png" class="dcmnt"> 
-	<span class="dcmnt_area_txt">첨부파일sample.exe</span>
-	<img src="resources/images/GW/download_icon.png" class="dwnld">
-	</div>
+
+
 <br/>
 <br/>
 <br/>
@@ -283,9 +289,11 @@ ${data.BOARD_CONT}
 			<textarea rows="10" cols="5" class="cmnt_input_box" placeholder="댓글을 입력하세요"></textarea>
 			</div>
 			<div class="del_button_area">
-				<div class="cmn_btn" id="listBtn"/>목록</div>
-				<div class="cmn_btn" id="updateBtn"/>수정</div>
-				<div class="cmn_btn" id="deleteBtn"/>삭제</div>
+				<div class="cmn_btn" id="listBtn">목록</div>
+				<c:if test="${data.EMP_NAME eq sEmpName}">
+				<div class="cmn_btn" id="updateBtn">수정</div>
+				<div class="cmn_btn" id="deleteBtn">삭제</div>
+				</c:if>
 			</div>		
 		</div>
 		</div>

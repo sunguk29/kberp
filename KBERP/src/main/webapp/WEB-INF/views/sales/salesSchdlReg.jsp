@@ -146,17 +146,7 @@ input {
 	background-color: #F2F2F2;
 	
 }
-.plus_btn {
-	display:inline-block;
-	vertical-align: middle;
-	width: 18px;
-	height: 18px;
-	background-image: url("resources/images/sales/plus.png");
-	background-size: 18px 18px;
-	float: right;
-	margin-right: 7px;
-	margin-top: 7.5px;
-}
+
 .drop_btn {
 	display:inline-block;
 	vertical-align: middle;
@@ -421,7 +411,23 @@ $(document).ready(function() {
 	
 	/* 목록 이동 이벤트 */
 	$("#listBtn").on("click", function() {
-		$("#backForm").submit();
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "알림",
+			contents : "나가면 저장되지않습니다, 나가시겠습니까?",
+			contentsEvent : function() {
+				
+			},
+			buttons : [{
+				name : "나가기",
+				func:function() {
+					$("#backForm").submit();
+				}
+			}, {
+				name : "취소"
+			}]
+		});
 	});
 	
 	/* 첨부자료 플러스 버튼 눌렀을 때 */
@@ -434,7 +440,7 @@ $(document).ready(function() {
 		if(checkEmpty("#ssname")){
 			makeAlert("필수입력", "일정명을 입력하세요");
 			$("#ssname").focus();
-		} else if(checkEmpty("#ssactvtyclsfy")){
+		} else if($("#ssactvtyclsfy").val() == 9){
 			makeAlert("필수입력", "활동분류를 입력하세요");
 			$("#ssactvtyclsfy").focus();
 		} else if(checkEmpty("#sdt")){
@@ -955,7 +961,7 @@ function uploadName(e) {
 								<td><input type="button" class="btn" value="활동분류 *" readonly="readonly"/></td>
 								<td colspan="5"><select class="txt_in" id="ssactvtyclsfy" name="ssactvtyclsfy">
 										<optgroup>
-											<option>선택하세요</option>
+											<option value="9">선택하세요</option>
 											<option value="0">전화</option>
 											<option value="1">메일</option>
 											<option value="2">방문</option>

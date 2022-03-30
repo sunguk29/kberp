@@ -146,13 +146,16 @@ $(document).ready(function() {
 					return false;
 				}
 			});
-			
-			//팝업tbody에서 코드클릭했을 때 인풋관리자사원명에 넣어주기 이름
+			$("#empListTbody").on("click", "#empName", function() {
+				console.log("click!");
+				$("#fcltyEmp").val($(this).attr("name"));
+				$("#numEmp").val($(this).attr("empNum"));
+				closePopup(1);
+			});
 		},
 		buttons : {
 			name : "닫기",
 			func:function() {
-				console.log("One!");
 				closePopup(1);
 			}
 		}
@@ -172,7 +175,7 @@ $(document).ready(function() {
 		}else if(checkEmpty("#fcltyCnt")){
 			alert("수용인원을 입력하세요");
 			$("#fcltyCnt").focus();
-		}else if(checkEmpty("#att")){
+		}else if(checkEmpty("#files")){
 			alert("시설물 사진을 첨부하세요");
 			$("#fcltyEmp").focus();
 		}else{
@@ -180,6 +183,7 @@ $(document).ready(function() {
 			
 			writeForm.ajaxForm({
 				success : function(res){
+					console.log(res);
 					// 물리파일명 보관
 					if(res.fileName.length > 0){
 						$("#attFile").val(res.fileName[0]);						
@@ -194,7 +198,8 @@ $(document).ready(function() {
 						data : params,
 						success : function(res){ 
 							if(res.res == "success"){
-								location.href = "fcltList";
+								$("#actionForm").attr("action","fcltList");
+								$("#actionForm").submit();
 							}else{
 								alert("작성 중 문제가 발생했습니다.");
 							}
@@ -342,7 +347,12 @@ function drawPaging(pb) {
 		<input type="hidden" id="page" name="page" value="1">
 </form>
 		<div class="cont_area">
-		<form action="fileUploadAjax" id="writeForm" method="post">
+		<form action="fileUploadAjax" id="writeForm" method="post" enctype="multipart/form-data">
+		<input type="hidden" id="top" name="top" value="${param.top}" />
+		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+		<input type="hidden" name="mngEmpNum" value="${sEmpNum}">
+		<input type="hidden" name="empNum" id="numEmp"/>
 			<!-- 여기부터 쓰면 됨 -->
 				<div id="file_preview">
 					<div id="previews"></div>
@@ -359,11 +369,11 @@ function drawPaging(pb) {
 					</div>
 					<div class="fclty_input_row">	
 						<div class="fclty_input_text">위치 : </div>
-						<input type="text" class="fclty_input" id="fcltyPlace" name="place">
+						<input type="text" class="fclty_input" id="fcltyPlace" name="place" >
 					</div>
 					<div class="fclty_input_row">
 						<div class="fclty_input_text">관리자 : </div>
-						<input type="text" class="fclty_input" id="fcltyEmp" >			
+						<input type="text" class="fclty_input" id="fcltyEmp"  readonly="readonly">			
 						<div class="cmn_btn" id="srchEmp">관리자 검색</div>
 					</div>
 					<div class="fclty_input_row">
@@ -380,7 +390,8 @@ function drawPaging(pb) {
 					</div>
 				</div>
 				<div id="atchmn_row">
-					<input type="file" id="files" name="attFile"/>
+					<input type="file" id="files" name="att"/>
+					<input type="hidden" id="attFile" name="attFile">
 					<div class="cmn_btn_ml" id="fileUpload" >첨부파일</div>
 				</div>	
 			</form>
