@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +51,7 @@ import com.gdj43.kberp.web.common.service.ICommonService;
 		int cnt = ics.getIntData("board.getBoardCnt", params);
 		// 페이징 계산
 		
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 3, 5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
@@ -73,8 +75,8 @@ import com.gdj43.kberp.web.common.service.ICommonService;
 	@RequestMapping(value = "/boardAction/{gbn}", method = RequestMethod.POST,
 			produces = "test/json;charset=UTF-8")
 	@ResponseBody 
-	public String boardAction(@RequestParam HashMap<String, String> params,
-							@PathVariable String gbn) throws Throwable{
+	public String boardActionAjax(@RequestParam HashMap<String, String> params,
+							@PathVariable String gbn, HttpSession session) throws Throwable{
 		ObjectMapper mapper = new ObjectMapper();
 	
 		Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -118,7 +120,7 @@ import com.gdj43.kberp.web.common.service.ICommonService;
 	@RequestMapping(value = "/boardUpdate")
 	public ModelAndView boardUpdate(@RequestParam HashMap<String, String> params,
 								 ModelAndView mav) throws Throwable {
-		HashMap<String, String> data = ics.getData("board.boardUpdate", params);
+		HashMap<String, String> data = ics.getData("board.boardView", params);
 		
 		mav.addObject("data", data);
 		

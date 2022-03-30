@@ -144,26 +144,34 @@ function checkEmpty(sel) {
 			<div class="page_title_text">임시게시판</div>
 			
 		<!-- 해당 내용에 작업을 진행하시오. -->
+		</div>
 		<div class="cont_area">
 
-</head>
-<body>
 <form action="board" id="backForm" method="post">
+	<input type="hidden" id="top" name="top" value="${param.top}" />
+	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="no" value="${param.no}">
 	<input type="hidden" name="page" value="${param.page}">
 	<input type="hidden" name="searchGbn" value="${param.searchGbn}">
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}">
-	
 </form>
+<form action="fileUploadAjax" id="writeForm" method="post"
+	  enctype="multipart/form-data">
 <input type="text" id="title" name="title" class="tltle_input_box" placeholder="제목을 입력하세요">
 <textarea rows="20" cols="60" id="con" name="con" class="cont_input_box" placeholder="내용을 입력하세요"></textarea>
 <input type= "file" name="att" /><br/>
 <input type="hidden" id="attFile" name="attFile" /><br/>
+<input type="hidden" id="writer" name="writer" value="${sEmpNum}" />
+<input type="hidden" id="admnstrtn" name="admnstrtn" value="${data.BOARD_ADMNSTRTN_NUM}">
 	<div class="cmn_btn_box">
 		<div class="cmn_btn" id="writeBtn">등록</div>	
 		<div class="cmn_btn" id="cancelBtn">취소</div>		
 	</div>
+</form>
 </div>
+</div>
+
 <!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>
