@@ -337,7 +337,6 @@ $(document).ready(function() {
 				name : "나가기",
 				func:function() {
 					$("#listForm").submit();
-					console.log("One!");
 					closePopup();
 				}
 			}, {
@@ -535,13 +534,21 @@ $(document).ready(function() {
 
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#cName")) {
-			makeAlert("필수 항목 알림", "고객을 입력하세요");
+			makeAlert("필수 항목 알림", "고객을 입력하세요", function() {
+				$("#cName").focus();
+			});
 		} else if(checkEmpty("#ccName")) {
-			makeAlert("필수 항목 알림", "고객사를 입력하세요");
+			makeAlert("필수 항목 알림", "고객사를 입력하세요", function() {
+				$("#ccName").focus();
+			});
 		} else if(checkEmpty("#mbl")) {
-			makeAlert("필수 항목 알림", "휴대폰번호를 입력하세요");
+			makeAlert("필수 항목 알림", "휴대폰번호를 입력하세요", function() {
+				$("#mbl").focus();
+			});
 		} else if(checkEmpty("#mngEmp")) {
-			makeAlert("필수 항목 알림", "담당자를 입력하세요");
+			makeAlert("필수 항목 알림", "담당자를 입력하세요", function() {
+				$("#mngEmp").focus();
+			});
 		} else {
 			makePopup({
 				bg : true,
@@ -599,14 +606,6 @@ $(document).ready(function() {
 		}
 	});
 });
-
-function checkEmpty(sel) {
-	if($.trim($(sel).val()) == "") {
-		return true;
-	} else {
-		return false;
-	}
-}
 
 // *********************************************** 고객사 팝업 ***********************************************
 function drawCcList() {
@@ -758,8 +757,8 @@ function uploadName(e) {
 </script>
 </head>
 <body>
-<form action="clntList" id="listForm" method="post">
-	<input type="hidden" id="page" name="page" value="${page}" />
+<form action="clntCont" id="listForm" method="post">
+	<input type="hidden" id="page" name="page" value="${param.page}" />
 	<input type="hidden" name="cn" value="${param.cn}" />
 	<input type="hidden" name="searchType" value="${param.searchType}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
