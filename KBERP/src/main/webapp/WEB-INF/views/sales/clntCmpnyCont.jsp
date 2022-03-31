@@ -613,28 +613,33 @@ textarea {
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	/* 고객 down화살표 클릭시 */
 	$(".cl_title").on("click", ".drop_btn_bot", function() {
 		$(".cbx").hide();
 		html = "<div class=\"up_btn_bot\"></div>";
 		$("#clListCnt_right").html(html);
 	});
 	
+	/* 고객 up화살표 클릭시 */
 	$(".cl_title").on("click", ".up_btn_bot", function() {
 		$(".cbx").show();
 		html = "<div class=\"drop_btn_bot\"></div><div class=\"plus_btn_bot\"></div>";
 		$("#clListCnt_right").html(html);
 	});
 	
+	/* 목록버튼 클릭시 */
 	$("#listBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntCmpnyList");
 		$("#actionForm").submit();
 	});
 	
+	/* 수정버튼 클릭시 */
 	$("#updateBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntCmpnyUpdate");
 		$("#actionForm").submit();
 	});
 	
+	/* 삭제버튼 클릭시 */
 	$("#deleteBtn").on("click", function() {
 		makePopup({
 			bg : false,
@@ -675,10 +680,12 @@ $(document).ready(function() {
 				name : "취소"
 			}]
 		});		
-	}); // 글 삭제 버튼 end
+	});
 
-	reloadOpList(); // 의견 리스트
+	/* 의견 목록 */
+	reloadOpList();
 	
+	/* 의견 등록 버튼 클릭시 */
 	$(".subm").on("click", function() {
 		var params = $("#botOpActionForm").serialize();
 		
@@ -699,8 +706,10 @@ $(document).ready(function() {
 				console.log(request.responseText);
 			}
 		});
-	}); // 의견 등록 버튼 end
+	});
 	
+	
+	/* 의견 삭제 버튼 클릭시 */
 	$(".opbx").on("click", ".del", function() {
 		var cmntNum = $(this).children("#cmntNum").val();
 		document.getElementById("cmntNum").value = cmntNum;
@@ -744,10 +753,12 @@ $(document).ready(function() {
 			}]
 		});
 		
-	}); // 의견 삭제 버튼 end
+	});
 	
-	reloadCList(); // 상세보기 하단 고객
+	/* 고객 목록 */
+	reloadCList();
 
+	/* 고객 등록(+) 버튼 클릭시 */
 	$(".cl_title").on("click", ".plus_btn_bot", function() {
  		var html = "";
  		
@@ -779,7 +790,7 @@ $(document).ready(function() {
 		html += "		</tr>                                                                                                         ";
 		html += "		<tr height=\"10\">                                                                                            ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"휴대폰 번호*\" /></td>                                   ";
-		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"mbl\" name=\"mbl\" placeholder=\"'-' 를 포함하지 않은 숫자만 입력해주세요.\" /></td>									  ";
+		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"mbl\" name=\"mbl\" placeholder=\"&quot; - &quot; 제외한 숫자만 입력하세요\" /></td>									  ";
 		html += "		</tr>                                                                                                         ";
 		html += "		<tr height=\"10\">                                                                                            ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"메일\" /></td>                                           ";
@@ -815,10 +826,12 @@ $(document).ready(function() {
 			contents : html,
 			contentsEvent : function() {
 				
+				/* 파일업로드(+) 버튼 클릭시 */
 				$(".aff_btn").on("click", function() {
 					$("#att").click();
 				});
 				
+				/* 고객사 아이콘 클릭시 */
 				$("#ccPop").on("click", function() {
 					var html = "";
 			        
@@ -863,8 +876,10 @@ $(document).ready(function() {
 						contentsEvent : function() {
 							$("#popup2").draggable();
 							
+							/* 고객사 목록 */
 							drawCcList();
 							
+							/* 클릭한 고객사 가져오기 */
 							$(".popup_box_cc").on("click", ".popup_cc_box_in", function() {
 								var cnn = $(this).children("#cnn").val(); 
 								var ccn = $(this).children("#ccn").val(); 
@@ -873,6 +888,7 @@ $(document).ready(function() {
 								closePopup(2);
 							});
 							
+							/* 페이지버튼 클릭시 */
 							$(".pgn_area").on("click", "div", function() {
 								$("#page").val($(this).attr("page"));
 
@@ -888,9 +904,9 @@ $(document).ready(function() {
 							}
 						}
 					});
-				}); // 고객사 팝업 end
+				});
 				
-				
+				/* 담당자 아이콘 클릭시 */
 				$("#mngPop").on("click", function() {
 					
 					var html = "";
@@ -948,8 +964,10 @@ $(document).ready(function() {
 						contentsEvent : function() {
 							$("#popup2").draggable();
 							
+							/* 담당자 목록 */
 							drawMngList();
 							
+							/* 클릭한 담당자 가져오기 */
 							$(".popup_box_mng").on("click", ".popup_mng_box_in", function() {
 								var mng = $(this).children("#mng").val();
 								var mge = $(this).children("#mge").val();
@@ -958,6 +976,7 @@ $(document).ready(function() {
 								closePopup(2);
 							});
 							
+							/* 검색버튼 클릭시 */
 							$("#meBtn").on("click", function () {
 								$("#page").val("1");
 								
@@ -965,6 +984,7 @@ $(document).ready(function() {
 								
 							});
 							
+							/* 검색칸에 엔터입력시 */
 							$("#searchT").on("keypress", function(event) {
 								if(event.keyCode == 13 ) {
 									$("#meBtn").click();
@@ -973,6 +993,7 @@ $(document).ready(function() {
 								}
 							});
 							
+							/* 페이지버튼 클릭시 */
 							$(".pgn_area").on("click", "div", function() {
 								$("#page").val($(this).attr("page"));
 			
@@ -988,7 +1009,7 @@ $(document).ready(function() {
 						}
 					});
 					
-				}); // 담당자 팝업 end
+				});
 			},
 			width : 600,
 			height : 500,
@@ -996,13 +1017,21 @@ $(document).ready(function() {
 				name : "등록",
 				func : function() {
 					if(checkEmpty("#cName")) {
-						makeAlert("필수 항목 알림", "고객을 입력하세요");
+						makeAlert("필수 항목 알림", "고객을 입력하세요", function() {
+							$("#cName").focus();
+						});
 					} else if(checkEmpty("#ccName")) {
-						makeAlert("필수 항목 알림", "고객사를 입력하세요");
+						makeAlert("필수 항목 알림", "고객사를 입력하세요", function() {
+							$("#ccName").focus();
+						});
 					} else if(checkEmpty("#mbl")) {
-						makeAlert("필수 항목 알림", "휴대폰번호를 입력하세요");
+						makeAlert("필수 항목 알림", "휴대폰번호를 입력하세요", function() {
+							$("#mbl").focus();
+						});
 					} else if(checkEmpty("#mngEmp")) {
-						makeAlert("필수 항목 알림", "담당자를 입력하세요");
+						makeAlert("필수 항목 알림", "담당자를 선택하세요", function() {
+							$("#mngEmp").focus();
+						});
 					} else {
 						var ClAddForm = $("#ClAddForm");
 						
@@ -1040,18 +1069,18 @@ $(document).ready(function() {
 						ClAddForm.submit();
 						closePopup(1);
 						reloadCList();
-					} // if end
+					}
 					
-				} // button 함수 end
+				}
 			}, {
 				name : "취소"
 			}]
 		});
-	}); // 고객 등록 버튼 end
+	});
 
 }); // JQuery End
 
-/*************************************** 의견 ***************************************/
+/* 의견 목록 Ajax */
 function reloadOpList() {
 	var params = $("#botOpActionForm").serialize();
 	
@@ -1070,6 +1099,7 @@ function reloadOpList() {
 	});
 }
 
+/* 의견 목록 개수 html */
 function drawOpCnt(opListCnt) {
 	var html = "";
 	
@@ -1078,6 +1108,7 @@ function drawOpCnt(opListCnt) {
 	$(".op_title").html(html);
 }
 
+/* 의견 목록 html */
 function drawOpList(list) {
 	var html = "";
 	
@@ -1095,10 +1126,8 @@ function drawOpList(list) {
 	$(".opbx").html(html);
 	
 }
-/***********************************************************************************/
 
-/*************************************** 고객 ***************************************/
- 
+/* 고객 목록 Ajax */
 function reloadCList() {
 	var params = $("#botClActionForm").serialize();
 	
@@ -1117,6 +1146,7 @@ function reloadCList() {
 	});
 }
 
+/* 고객 검색 개수 html */
 function drawClCnt(clListCnt) {
 	var html = "";
 	
@@ -1125,6 +1155,7 @@ function drawClCnt(clListCnt) {
 	$(".cl_title").html(html);
 }
 
+/* 고객 목록 html */
 function drawClList(list) {
 	var html = "";
 	
@@ -1138,9 +1169,7 @@ function drawClList(list) {
 	
 }
 
-/***********************************************************************************/
-
-// *********************************************** 고객사 팝업 ***********************************************
+/* 고객사 목록 Ajax */
 function drawCcList() {
 	var params = $("#popupCcForm").serialize();
 	
@@ -1159,6 +1188,7 @@ function drawCcList() {
 	});
 }
 
+/* 고객사 목록 html */
 function drawList(list) {
 	var html = "";
 
@@ -1181,6 +1211,7 @@ function drawList(list) {
 	
 }
 
+/* 고객사 목록 페이징 */
 function drawPaging(pb) {
 	var html = "";
 	
@@ -1209,9 +1240,8 @@ function drawPaging(pb) {
 	$(".pgn_area").html(html);
 
 }
-// *********************************************** 고객사 팝업 END ***********************************************
 
-// *********************************************** 담당자 팝업 ***********************************************
+/* 담당자 목록 Ajax */
 function drawMngList() {
 	var params = $("#popupMngForm").serialize();
 	
@@ -1230,6 +1260,7 @@ function drawMngList() {
 	});
 }
 
+/* 담당자 목록 html */
 function drawMngCont(mngList) {
 	var html = "";
 	
@@ -1251,6 +1282,7 @@ function drawMngCont(mngList) {
 	
 }
 
+/* 담당자 목록 페이징 */
 function drawMngPaging(mngPb) {
 	var html = "";
 	
@@ -1279,7 +1311,8 @@ function drawMngPaging(mngPb) {
 	$(".pgn_area").html(html);
 
 }
-// *********************************************** 담당자 팝업 END ***********************************************
+
+/* 파일명 가져오기 */
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
@@ -1451,7 +1484,7 @@ function uploadName(e) {
 				<div class="cntrct_box_in">
 					<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
 				</div>
-<!-- ************************************************ 상세보기 하단 *********************************************** -->
+			<!-- 상세보기 내용 하단부분 -->
 			<form action="#" id="botOpActionForm" method="post">
 				<input type="hidden" name="ccn" value="${param.ccn}" />
 				<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
@@ -1486,7 +1519,6 @@ function uploadName(e) {
 					</div>
 				</div> -->
 				<!-- 끝 -->
-<!-- *********************************************************************************************************** -->
 			</div>
 		</div>
 	</div>

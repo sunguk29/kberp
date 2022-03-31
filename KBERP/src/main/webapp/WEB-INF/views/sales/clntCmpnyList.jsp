@@ -103,7 +103,7 @@ select {
 	width: 305px;
 	font-size: 12px;
 }
-.SearchResult { /* 영업기회 검색결과 */
+.SearchResult {
 	width: 927px;
 	font-size: 11pt;
 	text-align: left;
@@ -195,20 +195,24 @@ select {
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	/* 고객사 분류 초기값 */
 	if('${param.clntCmpnyClsfyNum}' != '') {
 		$("#clntCmpnyClsfyNum").val('${param.clntCmpnyClsfyNum}');
 	} else {
 		$("#oldClntCmpnyClsfyNum").val("9");
 	}
 	
+	/* 검색어 분류 초기값 */
 	if('${param.searchType}' != '') {
 		$("#searchType").val('${param.searchType}');
 	} else {
 		$("#oldSearchType").val("0");
 	}
 	
+	/* 고객사 목록 */
 	reloadList();
-
+	
+	/* 검색 상단 고객사분류버튼 클릭시 */
 	$(".sts").on("click", ".sts_list", function() {
 		if($(this).attr("num") != "9") {
 			$(".sts").children(".sts_list_on").attr("class", "sts_list");
@@ -232,6 +236,7 @@ $(document).ready(function() {
 		
 	});
 	
+	/* 페이지버튼 클릭시 */
 	$(".pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
 		$("#listSort").val("9");
@@ -243,11 +248,13 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
+	/* 등록버튼 클릭시 */
 	$("#addBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntCmpnyReg");
 		$("#actionForm").submit();
 	});
 	
+	/* 검색칸에 엔터입력시 */
 	$("#searchTxt").on("keypress", function(event) {
 		if(event.keyCode == 13) {
 			$("#searchBtn").click(); 
@@ -256,6 +263,7 @@ $(document).ready(function() {
 		}
 	});
 	
+	/* 검색버튼 클릭시 */
 	$("#searchBtn").on("click", function() {
 		$("#page").val("1");
 		
@@ -266,12 +274,14 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
+	/* 정렬버튼 클릭시 */
 	$("#sortBtn").on("click", function() {
 		reloadList();
 	});
 	
 });
 
+/* 고객사 목록 Ajax */
 function reloadList() {
 	var params = $("#actionForm").serialize();
 	
@@ -292,7 +302,7 @@ function reloadList() {
 	
 }
 
-
+/* 고객사 검색 개수 html */
 function drawSearchCnt(listCnt) {
 	var html = "";
 	html += "<h3>"; 
@@ -303,6 +313,7 @@ function drawSearchCnt(listCnt) {
 	
 }
 
+/* 고객사 목록 html */
 function drawList(list) {
 	var html = "";
 	
@@ -355,6 +366,7 @@ function drawList(list) {
  	
 	$(".list_table").html(html);
 	
+	/* 고객사이름 클릭시 */
 	$(".list_table tbody").on("click", "tr:nth-child(2) td:nth-child(2)", function() {
 		$("#ccn").val($(this).attr("ccn"));
 
@@ -364,6 +376,7 @@ function drawList(list) {
 	
 }
 
+/* 고객사 목록 페이징 */
 function drawPaging(pb) {
 	var html = "";
 	
