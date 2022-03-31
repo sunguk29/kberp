@@ -726,14 +726,6 @@ function drawPaging(pb, sel) {
 	$(sel).html(html);
 }
 
-function checkEmpty(sel) {
-	if($.trim($(sel).val()) == "") {
-		return true;
-	} else {
-		return false;
-	}
-}
-
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
