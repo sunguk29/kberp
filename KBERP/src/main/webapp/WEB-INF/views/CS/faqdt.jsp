@@ -17,8 +17,8 @@
 /* 개인 작업 영역 */
 .buttons_bottom {
     margin-top: 10px;
-
 }
+
 .button_list {
     float: left;
 }
@@ -26,12 +26,10 @@
 .button_up {
     float: right;
     margin-left: 20px;
-    
 }
 
 .button_del{
     float: right;
-    
 }
 
 .page_title_bar {
@@ -75,7 +73,8 @@
 
 </style>
 <script type="text/javascript">
-$(document).ready(function() {
+
+/* $(document).ready(function() {
 	$("#alertBtn").on("click", function() {
 		makeAlert("하이", "내용임");
 	});
@@ -95,7 +94,7 @@ $(document).ready(function() {
 				}
 			}
 		});
-	});
+	}); //btn1Btn end
 	$("#btn2Btn").on("click", function() {
 		makePopup({
 			bg : false,
@@ -110,10 +109,43 @@ $(document).ready(function() {
 				}
 			}, {
 				name : "둘닫기"
-			}]
+			}]//btn2Btn buttons
+		}); //makePopup
+	});//btn2Btn end */
+	$(document).ready(function() {
+		$("#listBtn").on("click", function() {
+			$("#actionForm").attr("action", "faqList");
+			$("#actionForm").submit();
+		});
+		
+		$("#updateBtn").on("click", function() {
+			$("#actionForm").attr("action", "faqUpdate");
+			$("#actionForm").submit();
+		});
+		
+		$("#deleteBtn").on("click", function() {
+			if(confirm("삭제하시겠습니까?")) {
+				var params = $("#actionForm").serialize();
+				
+				$.ajax({
+					type : "post", 
+					url : "faqdtAction/delete", 
+					dataType : "json", 
+					data : params, 
+					success : function(res) { 
+						if(res.res == "success") {
+							location.href = "faqList";
+						} else {
+							alert("삭제중 문제가 발생하였습니다.");
+						}
+					},
+					error : function(request, status, error) { 
+						console.log(request.responseText);
+					}
+				});
+			}
 		});
 	});
-});
 </script>
 </head>
 <body>
@@ -158,13 +190,13 @@ $(document).ready(function() {
 			${data.WRTNG_CONT}
 			</div>
 			<div class="buttons_bottom">
-				<div class="button_list">
+				<div class="button_list" id="listBtn">
 					<div class="cmn_btn">목록</div>
 				</div>
-				<div class="button_up">
+				<div class="button_up" id="updateBtn">
 					<div class="cmn_btn">수정</div>
 				</div>
-				<div class="button_del">
+				<div class="button_del" id="deleteBtn">
 					<div class="cmn_btn">삭제</div>
 				</div>
 			</div>
