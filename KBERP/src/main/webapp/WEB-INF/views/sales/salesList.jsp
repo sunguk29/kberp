@@ -342,6 +342,8 @@ $(document).ready(function() {
 	console.log("테스트");
 	console.log("테스트 2");
 	console.log("테스트테스트테스트테스트테스트테스트테스트");
+	
+	
 	// 검색 후 구분란(searchGbn)에 검색어유지를 위해
 	if('${param.searchGbn}' != '') {
 		$("#searchGbn").val('${param.searchGbn}');
@@ -376,7 +378,7 @@ $(document).ready(function() {
 	//});
 	
 	// 목록에서 영업명 선택 시 상세보기로 이동
-	
+	// 테스트
 	
 	
 	$(".salesWrap").on("click", ".salesOpportunityName", function() {
