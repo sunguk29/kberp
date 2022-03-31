@@ -52,7 +52,7 @@ $(document).ready(function() {
 		$("#searchGbn").val($("#oldSearchGbn").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
 		
-		$("#actionForm").attr("action", "faqdt");
+		$("#actionForm").attr("action", "inqry");
 		$("#actionForm").submit();
 		
 	});
@@ -79,7 +79,7 @@ $(document).ready(function() {
 		$("#searchGbn").val($("#oldSearchGbn").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
 		
-		$("#actionForm").attr("action", "faqAdd");
+		$("#actionForm").attr("action", "eventAdd");
 		$("#actionForm").submit();
 	});	
 	
@@ -110,7 +110,7 @@ function drawList(list) {
 	for(var data of list) {
 		html += "<tr no=\"" + data.FAQ_NUM + "\">";
 		html += "<td>" + data.FAQ_NUM + "</td>";
-		html += "<td>" + data.CTGRY_NUM + "</td>";
+		html += "<td>" + data.CTGRY_NAME + "</td>";
 		html += "<td>" + data.WRTNG_TITLE + "</td>";
 		html += "<td>" + data.WRTNG_DATE + "</td>";
 		html += "</tr>";
@@ -159,8 +159,6 @@ function drawPaging(pb) {
 	</c:import>
 	<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}" />
 	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
-	<input type="hidden" name="page" value="${page}" />
-	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
@@ -181,7 +179,6 @@ function drawPaging(pb) {
 							<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
 						</div>
 						<div class="cmn_btn_ml" id="searchBtn">검색</div>
-						<!-- <input type="button" value="글쓰기" id="writeBtn" /> -->
 				</form>
 			</div>
 		</div>
@@ -207,6 +204,7 @@ function drawPaging(pb) {
 			</table>
 			<div class="board_bottom">
 				<div class="pgn_area" id="pgn_area"></div>
+				<div class="cmn_btn_ml" id="writeBtn">글쓰기</div>
 			</div>
 		</div>
 	</div>
