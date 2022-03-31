@@ -732,7 +732,7 @@ function drawPaging(pb, sel) {
 	<input type="hidden" id="leadNum" name="leadNum" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
-	<input type="hidden" name="menuType" value="${param.menuType}" />t
+	<input type="hidden" name="menuType" value="${param.menuType}" />
 	
 	<!-- 내용영역 -->
 		<div class="cont_wrap">

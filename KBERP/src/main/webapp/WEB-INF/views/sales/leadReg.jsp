@@ -30,7 +30,13 @@
 	font-weight: 600;
 	text-align: center;
 }
-
+.popup_cont2 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+	font-weight: 600;
+	text-align: center;
+	line-height: 80px;
+}
 /* 리스트 팝업 개인 작업 영역 */
 .msg_1 {
 	width: 380px;
@@ -364,6 +370,13 @@ td:nth-child(1) {
 .plus_btn, .btnImg:hover{
 	cursor: pointer;
 }
+#att {
+	display: none;
+}
+#fileName {
+	border: hidden;
+	outline: none;
+}
 .txt{
 	height: 33px;
 	width: 90%;
@@ -594,33 +607,21 @@ hr { /* 구분선 */
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	//목록 버튼 클릭시 
 	$("#listBtn").on("click", function() {
-		var html = "";
 		
-	html += "<div class=\"popup_cont1\">";
-	html += 	"<div class=\"msg_1\">내용이 저장되지 않았습니다.</div>";
-	html += 	"<div class=\"msg_2\">페이지를 나가시겠습니까?</div>";
-	html += "</div>";
-		makePopup({
-			bg : true,
-			bgClose : false,
-			title : "알림",
-			contents : html,
-			contentsEvent : function() {
-				
-			},
-			buttons : [{
-				name : "확인",
-				func:function() {
-					$("#listForm").submit();
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "취소"
-			}]			
-		});
+		// 내용이 입력되어있으면 팝업창 띄움
+		if($("#leadName").val() != "" || $("#clntName").val() != ""  || 
+		   $("#ccName").val() != "" || $("#mngEmp").val() != "" ) {
+				saveCheckPopup();	
+		} else {
+			$("#listForm").submit();
+		}
 	});	
+	
+	$(".plus_btn").on("click", function() {
+		$("#att").click();
+	});
 	
 	$("#writeBtn").on("click", function() {
 		if(checkEmpty("#leadName")) {
@@ -639,25 +640,8 @@ $(document).ready(function() {
 			alert("담당자를 입력하세요.");
 			$("#mngEmp").focus();
 		} else {	
-			var params = $("#writeForm").serialize();
-		
-			$.ajax({
-				type : "post", 
-				url : "leadAction/insert", 
-				dataType : "json", 
-				data : params, 
-				success : function(res) { 
-					if(res.res == "success") {
-						location.href = "leadList";
-					} else {
-						alert("작성중 문제가 발생하였습니다.");
-					}
-				},
-				error : function(request, status, error) {
-					console.log(request.responseText);
-				}
-			}); 
-		}	
+			savePopup();
+		} // else end
 	}); 
 	
 	$("#clntIcon").on("click", function() {
@@ -746,69 +730,7 @@ $(document).ready(function() {
 			buttons : [{
 				name : "고객 추가",
 				func:function() {
-					var html = "";
-					
-				html += "<div class=\"popup_cont pc_back\">";
-				html += "<div class=\"popup_table\">";
-				html += "<div class=\"btn2\">고객</div>";
-				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";
-				html += "<div class=\"btn2\">고객사 *</div>";
-				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" />";
-				html += "<span class=\"imgPos2\"><img class=\"btnImg2\" alt=\"돋보기\" src=\"resources/images/sales/mg.png\" /></span>";		
-				html += "</div>";
-				html += "<div class=\"btn2\">부서</div>";
-				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";
-				html += "<div class=\"btn2\">직책</div>";
-				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";							
-				html += "<div class=\"btn2\">휴대폰 번호*</div>";
-				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";															
-				html += "<div class=\"btn2\">메일</div>";
-				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";							
-				html += "<div class=\"btn2\">첨부자료</div>";
-				html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" />";
-				html += "<div class=\"imgPos2\">";
-				html += "<span>";
-				html += "<img class=\"btnImg3\" alt=\"추가\" src=\"resources/images/sales/plus.png\" />";
-				html += "<img class=\"btnImg3\" alt=\"접기\" src=\"resources/images/sales/uparrow.png\" />";
-				html += "</span>";
-				html += "</div>";
-				html += "</div>";
-				html += "</div>";
-				html += "</div>";
-
-					makePopup({
-						depth : 2,
-						bg : true,
-						bgClose : false,
-						title : "고객 등록",
-						contents : html,
-						width : 600,
-						height : 400,
-						buttons : [{
-							name : "등록",
-							func: function() {
-								
-								var html = "";
-								
-								html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
-								
-								makePopup({
-									depth : 3,
-									bg : true,
-									bgClose : true,
-									title : "저장 완료",
-									contents : html,
-									width : 400,
-									height : 180,
-									buttons : {
-										name : "확인"	
-									}
-								});
-							}
-						}, {
-							name : "취소"
-						}]
-					});									
+					ecAdd();
 				}
 			},	{
 				name : "닫기",
@@ -1021,6 +943,177 @@ $(document).ready(function() {
 		});
 	});
 }); 
+/* ******************************************* 저장 체크 팝업 ******************************************* */
+function saveCheckPopup() {
+	var html = "";
+	
+	html += "<div class=\"popup_cont1\">";
+	html += 	"<div class=\"msg_1\">내용이 저장되지 않았습니다.</div>";
+	html += 	"<div class=\"msg_2\">페이지를 나가시겠습니까?</div>";
+	html += "</div>";
+	
+	makePopup({
+		bg : true,
+		bgClose : false,
+		title : "알림",
+		contents : html,
+		contentsEvent : function() {
+			
+		},
+		buttons : [{
+		name : "확인",
+		func:function() {
+			$("#listForm").submit();
+			console.log("One!");
+			}
+		}, {
+			name : "취소"
+		}]			
+	});
+}
+/* ******************************************* 저장 완료 팝업 ******************************************* */
+function savePopup() {
+	var html = "";
+	
+	html += "<div class=\"popup_cont2\">저장하시겠습니까?</div>";
+	
+	makePopup({
+		depth : 1,
+		bg : false,
+		bgClose : false,
+		title : "알림",
+		contents : html,
+		contentsEvent : function() {					
+		},
+		buttons : [{
+			name : "저장",
+			func:function() {
+				var html = "";
+				
+				html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
+				
+				makePopup({
+					depth : 2,
+					bg : true,
+					bgClose : false,
+					title : "저장 완료",
+					contents : html,
+					width : 400,
+					height : 180,
+					buttons : {
+						name : "확인",
+						func:function() {
+							var writeForm = $("#writeForm");
+							
+							writeForm.ajaxForm({
+								success : function(res) {
+									// 물리파일명 보관
+									if(res.fileName.length > 0) {
+										$("#attFile").val(res.fileName[0]);										
+									}
+									// 글 저장
+									var params = $("#writeForm").serialize();
+							
+									$.ajax({
+										type : "post", 
+										url : "leadAction/insert", 
+										dataType : "json", 
+										data : params, 
+										success : function(res) { 
+											if(res.res == "success") {
+												location.href = "leadList";
+											} else {
+												alert("작성중 문제가 발생하였습니다.");
+											}
+										},
+										error : function(request, status, error) {
+											console.log(request.responseText);
+										}
+									}); //ajax end	
+								},
+								error : function(req) {
+									console.log(req.responseText);
+								}
+							});	
+							writeForm.submit(); // ajaxForm 실행							
+						} // 확인 func end
+					} // buttons1 end
+				}) // popup end
+			console.log("One!");
+			closePopup();
+			} // 저장 func end
+		}, {
+			name : "취소"
+		}] 
+	}); // makePopup end		
+} // savePopup end	
+/* ******************************************* 고객 추가 팝업 ******************************************* */
+function ecAdd() {
+	var html = "";
+	
+	html += "<div class=\"popup_cont pc_back\">";
+	html += "<div class=\"popup_table\">";
+	html += "<div class=\"btn2\">고객</div>";
+	html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";
+	html += "<div class=\"btn2\">고객사 *</div>";
+	html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" />";
+	html += "<span class=\"imgPos2\"><img class=\"btnImg2\" alt=\"돋보기\" src=\"resources/images/sales/mg.png\" /></span>";		
+	html += "</div>";
+	html += "<div class=\"btn2\">부서</div>";
+	html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";
+	html += "<div class=\"btn2\">직책</div>";
+	html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";							
+	html += "<div class=\"btn2\">휴대폰 번호*</div>";
+	html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";															
+	html += "<div class=\"btn2\">메일</div>";
+	html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" /></div>";							
+	html += "<div class=\"btn2\">첨부자료</div>";
+	html += "<div class=\"txt2\"><input type=\"text\" class=\"txt3\" />";
+	html += "<div class=\"imgPos2\">";
+	html += "<span>";
+	html += "<img class=\"btnImg3\" alt=\"추가\" src=\"resources/images/sales/plus.png\" />";
+	html += "<img class=\"btnImg3\" alt=\"접기\" src=\"resources/images/sales/uparrow.png\" />";
+	html += "</span>";
+	html += "</div>";
+	html += "</div>";
+	html += "</div>";
+	html += "</div>";
+
+	makePopup({
+		depth : 2,
+		bg : true,
+		bgClose : false,
+		title : "고객 등록",
+		contents : html,
+		width : 600,
+		height : 400,
+		buttons : [{
+			name : "등록",
+			func: function() {
+					
+				var html = "";
+					
+				html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
+				
+				makePopup({
+					depth : 3,
+					bg : true,
+					bgClose : true,
+					title : "저장 완료",
+					contents : html,
+					width : 400,
+					height : 180,
+					buttons : {
+						name : "확인"	
+					}
+				});
+			}
+		}, {
+			name : "취소"
+		}]
+	});				
+}
+
 /* ******************************************* 고객 조회 팝업 ******************************************* */
 function ecList() {
 	var params = $("#ecPopupForm").serialize();
@@ -1176,12 +1269,17 @@ function checkEmpty(sel) {
 		return false;
 	}
 }	
+
+function uploadName(e) {
+	var files = e.files;
+	var filename = files[0].name;
+	$("#fileName").val(filename);
+}
 </script>
 </head>
 <body>
 <form action="leadList" id="listForm" method="post">
 	<input type="hidden" name="page" value="${param.page}" />
-	<input type="hidden" id="no" name="no" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
@@ -1206,10 +1304,14 @@ function checkEmpty(sel) {
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
+		<form action="fileUploadAjax" id="writeForm" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="page" value="${param.page}" />
+			<input type="hidden" name="top" value="${param.top}" />
+			<input type="hidden" name="menuNum" value="${param.menuNum}" />
+			<input type="hidden" name="menuType" value="${param.menuType}" />
 			<div class="body">
 				<div class="bodyWrap">
-				<!-- 시작 -->
-					<form action="#" id="writeForm" method="post"> 				
+				<!-- 시작 -->		
 						<table>
 							<colgroup>
 								<col width="200" />
@@ -1231,7 +1333,7 @@ function checkEmpty(sel) {
 								<tr>
 									<td><input type="button" class="btn" value="고객사 *" readonly="readonly"/></td>
 									<td>
-										<input type="text" class="txt" id="ccName" name="ccName" readonly="readonly" />
+										<input type="text" class="txt" id="ccName" name="ccName" />
 										<input type="hidden" id="ccNum" name="ccNum" />
 										<img class="btnImg_in" id="ccIcon" alt="팝업" src="resources/images/sales/popup.png" />
 									</td>
@@ -1267,14 +1369,17 @@ function checkEmpty(sel) {
 							</tbody>
 						</table>
 						<!-- 첨부자료 -->
-						<div class="rvn_txt"> 첨부자료 (0)
-							<input type=file name='file1' style='display: none;' /> 
-							<img class="plus_btn" src="resources/images/sales/plus.png" border='0' onclick="document.all.file1.click();" > 
+							<input type="file" id="att" name="att" onchange="uploadName(this)" /> 
+							<input type="hidden" id="attFile" name="attFile" />
+						<div class="rvn_txt"> 첨부파일
+							<img class="plus_btn" src="resources/images/sales/plus.png" border='0' > 
 						</div>
-						<div class="cntrct_box_in"></div>
-					</form>
-				</div> <!-- bodyWrap end -->
-			</div>	
+						<div class="cntrct_box_in">
+							<input type="text" id="fileName" name="fileName" readonly="readonly" />
+						</div>
+					</div> <!-- bodyWrap end -->
+				</div>	
+			</form>
 		</div>
 	</div>
 <!-- bottom -->
