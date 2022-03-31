@@ -644,6 +644,7 @@ $(document).ready(function() {
 		} // else end
 	}); 
 	
+	/* 고객 조회 팝업 */
 	$("#clntIcon").on("click", function() {
 		var html = "";
 		
@@ -1269,7 +1270,6 @@ function checkEmpty(sel) {
 		return false;
 	}
 }	
-
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;

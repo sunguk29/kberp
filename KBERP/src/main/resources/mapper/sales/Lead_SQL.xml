@@ -5,16 +5,16 @@
 	<select id="getLeadList" resultType="hashmap" parameterType="hashmap">
 		SELECT LL.LEAD_NUM, LL.CLNT_CMPNY_NAME, LL.CLNT_NAME, LL.EMP_NAME, LL.PRGRS_STS_NUM, LL.PSNUM, LL.LEAD_NAME, LL.RGSTRTN_DATE
 		FROM (  SELECT L.LEAD_NUM, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NAME, L.LEAD_NAME, L.PRGRS_STS_NUM,
-		               DECODE(PRGRS_STS_NUM, 1, '진행중', 2, '종료(영업기회 전환)', 3, '종료(영업기회 실패)') AS PSNUM, 
+		               DECODE(L.PRGRS_STS_NUM, 1, '진행중', 2, '종료(영업기회 전환)', 3, '종료(영업기회 실패)') AS PSNUM, 
 		               TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE, 
-		               ROW_NUMBER() OVER(ORDER BY LEAD_NUM DESC) AS RNUM
+		               ROW_NUMBER() OVER(ORDER BY L.LEAD_NUM DESC) AS RNUM
 		        FROM LEAD L LEFT OUTER JOIN EMP E
 		                            ON L.MNGR_EMP_NUM = E.EMP_NUM
 		                    INNER JOIN ENTRPRS_CLNT EC
 		                            ON L.CLNT_NUM = EC.CLNT_NUM
 		                    INNER JOIN CLNT_CMPNY CC
-		                            ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM 
-		        AND TO_CHAR(L.RGSTRTN_DATE-1, 'YYYY-MM-DD') BETWEEN #{searchDate} AND #{searchDate2}
+		                            ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
+		        AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{searchDate} AND #{searchDate2}
 				<choose>
 					<when test="psNum != 0" > <!-- 선택안함 : 0 이 아니면 해당 번호 목록으로 검색 -->
 						AND L.PRGRS_STS_NUM = #{psNum}
@@ -101,7 +101,7 @@
 		            INNER JOIN ENTRPRS_CLNT EC
 		                    ON L.CLNT_NUM = EC.CLNT_NUM
 		            INNER JOIN CLNT_CMPNY CC
-		                    ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
+		                    ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM 
 		WHERE 1 = 1
 		AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{searchDate} AND #{searchDate2}
 	</select>

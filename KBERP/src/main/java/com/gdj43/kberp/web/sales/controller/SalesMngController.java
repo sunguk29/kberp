@@ -226,8 +226,11 @@ public class SalesMngController {
 				iCommonService.updateData("salesMng.sales1to2", params); // 진행 단계 전환
 				break;
 			case "update" :
+				iCommonService.updateData("salesMng.sales1UpdateSales", params); // 제안 담당자 수정
+				iCommonService.updateData("salesMng.sales2UpdateLoan", params); // 제안 대출 상세정보tab 수정
+				iCommonService.updateData("salesMng.sales2UpdateClntCmpny", params); // 제안 고객사 상세정보tab 수정
+				iCommonService.updateData("salesMng.sales2UpdateDtl", params); // 제안 상세정보tab 수정
 				break;
-				
 			case "failure" :
 				iCommonService.updateData("salesMng.sales2Failure", params);
 				break;

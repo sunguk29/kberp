@@ -428,17 +428,6 @@ textarea {
 .drop_btn:hover {
 	cursor: pointer;
 }
-/* 전환 */
-.next_bot {
-	margin-top: 20px;
-	width: 100%;
-	height: 30px;
-}
-
-.nb {
-	font-size: 14px;
-	float: right;
-}
 /* 영업관리 속성들 */
 .page_cont_title_text {
 	display: inline-block;
@@ -521,27 +510,6 @@ textarea {
 	margin-right: 5px;
 }
 
-/* 영업 종료 */
-.salesOver_btn {
-	display: inline-block;
-	vertical-align: top;
-	padding: 0px 10px;
-	min-width: 30px;
-	height: 30px;
-	line-height: 30px;
-	font-size: 10pt;
-	font-weight: bold;
-	text-align: center;
-	background-color: #d7d7d7;
-	border-radius: 2px;
-	color: #222222;
-	cursor: pointer;
-}
-
-.salesOver_btn:active {
-	background-color: #E1E1E1;
-}
-
 .hr_bot {
 	margin-bottom: 20px;
 }
@@ -572,10 +540,10 @@ $(document).ready(function() {
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
-			buttons : [ {
+			buttons : [{
 				name : "확인",
 				func : function() {
-					$("#backForm").attr("action", "sales1SalesChncCont");
+					$("#backForm").attr("action", "sales2SgstnCont");
 					$("#backForm").submit();
 					console.log("One!");
 					closePopup();
@@ -589,67 +557,87 @@ $(document).ready(function() {
 	$(".att_btn").on("click", function() {
 		$("#att").click();
 	});
-	
-	
+
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
-		makePopup({
-			bg : true,
-			bgClose : false,
-			title : "알림",
-			contents : "저장하시겠습니까?",
-			contentsEvent : function() {
-				$("#popup1").draggable();
-			},
-			buttons : [ {
-				name : "확인",
-				func : function() {
-					/* 여기에 넣기 */
-					var updateForm = $("#updateForm");
+		if($("#sgstnloanCauseNum").val() == 9) {
+			alert("대출 원인을 입력하세요.");
+			$("#sgstnloanCauseNum").focus();
+		} else if(checkEmpty("#sgstnLoanScale")) {
+			alert("대출 규모를 입력하세요.");
+			$("#sgstnLoanScale").focus();
+		} else if($("#sgstnloanType").val() == 9) {
+			alert("대출 유형을 입력하세요.");
+			$("#sgstnloanType").focus();
+		} else if(checkEmpty("#sgstnTotalAmnt")) {
+			alert("자산 총액을 입력하세요.");
+			$("#sgstnTotalAmnt").focus();
+		} else if(checkEmpty("#sgstnDebtAmnt")) {
+			alert("부채액을 입력하세요.");
+			$("#sgstnDebtAmnt").focus();
+		} else if(checkEmpty("#dtlCont")) {
+			alert("상세내을 입력하세요.");
+			$("#dtlCont").focus();
+		} else {
+			makePopup({
+				bg : true,
+				bgClose : false,
+				title : "알림",
+				contents : "저장하시겠습니까?",
+				contentsEvent : function() {
+					$("#popup1").draggable();
+				},
+				buttons : [{
+					name : "확인",
+					func : function() {
+						/* 여기에 넣기 */
+						var updateForm = $("#updateForm");
 
-					updateForm.ajaxForm({
-						success : function(res) {
-							// 물리파일명 보관
-							if (res.fileName.length > 0) {
-								$("#attFile").val(res.fileName[0]);
-							}
+						updateForm
+								.ajaxForm({
+									success : function(res) {
+										// 물리파일명 보관
+										if (res.fileName.length > 0) {
+											$("#attFile").val(res.fileName[0]);
+										}
 
-							// 글 수정
-							var params = $("#updateForm").serialize();
+										// 글 수정
+										var params = $("#updateForm").serialize();
 
-							$.ajax({
-								type : "post",
-								url : "salesMng1ActionAjax/update",
-								dataType : "json",
-								data : params,
-								success : function(res) {
-									if (res.res == "success") {
-										$("#backForm").attr("action", "sales1SalesChncCont");
-										$("#backForm").submit();
-									} else {
-										alert("수정중 문제가 발생하였습니다.");
+										$.ajax({
+											type : "post",
+											url : "salesMng2ActionAjax/update",
+											dataType : "json",
+											data : params,
+											success : function(res) {
+												if (res.res == "success") {
+													$("#backForm").attr("action", "sales2SgstnCont");
+													$("#backForm").submit();
+												} else {
+													alert("수정중 문제가 발생하였습니다.");
+												}
+											},
+											error : function(request, status, error) {
+												console.log(request.responseText);
+											}
+										});
+									},
+									error : function(req) {
+										console.log(req.responseText);
 									}
-								},
-								error : function(request, status, error) {
-									console.log(request.responseText);
-								}
-							});
-						},
-						error : function(req) {
-							console.log(req.responseText);
-						}
-					}); // ajaxForm end
+								}); // ajaxForm end
 
-					updateForm.submit();
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "취소"
-			} ]
-		}); // makePopup end
+								updateForm.submit();
+								console.log("One!");
+								closePopup();
+					}
+				}, {
+					name : "닫기"
+				}]
+			}); // makePopup end
+		}
 	}); // saveBtn end
-	
+
 	// 담당자 조회 버튼
 	$("#userIcon").on("click", function() {
  		var html = "";
@@ -755,6 +743,7 @@ $(document).ready(function() {
 	
 });
 
+
 /* 담당자 조회 팝업 */
 function mngrList() {
 	var params = $("#popupForm").serialize();
@@ -823,12 +812,19 @@ function drawPaging(pb, sel) {
 	$(sel).html(html);
 }
 
+function checkEmpty(sel) {
+	if($.trim($(sel).val()) == "") {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
 	$("#fileName").val(filename);
 }
-
 </script>
 </head>
 <body>
@@ -851,7 +847,7 @@ function uploadName(e) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">영업관리 - 영업기회 수정</div>
+			<div class="page_title_text">영업관리 - 제안 수정</div>
 			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" /> <img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>
@@ -861,6 +857,7 @@ function uploadName(e) {
 			<div class="body">
 				<div class="bodyWrap">
 					<!-- 시작 -->
+					<!-- ********** 영업기회 시작 ********** -->
 					<form action="fileUploadAjax" id="updateForm" method="post" enctype="multipart/form-data">
 						<input type="hidden" id="page" name="page" value="${page}" />
 						<input type="hidden" name="top" value="${param.top}" />
@@ -953,7 +950,7 @@ function uploadName(e) {
 										<input type="button" class="btn" value="대출 원인*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="loanCauseNum" name="loanCauseNum" required>
+										<select class="txt" id="loanCauseNum" name="loanCauseNum" disabled="disabled">
 											<optgroup>
 												<c:choose>
 													<c:when test="${data.LOAN_CAUSE_NUM eq 0}">
@@ -963,19 +960,19 @@ function uploadName(e) {
 														<option value="3">기타</option>
 													</c:when>
 													<c:when test="${data.LOAN_CAUSE_NUM eq 1}">
-														<option value="0" >사업확장</option>
+														<option value="0">사업확장</option>
 														<option value="1" selected="selected">제품개발</option>
 														<option value="2">토지매매</option>
 														<option value="3">기타</option>
 													</c:when>
 													<c:when test="${data.LOAN_CAUSE_NUM eq 2}">
-														<option value="0" >사업확장</option>
+														<option value="0">사업확장</option>
 														<option value="1">제품개발</option>
 														<option value="2" selected="selected">토지매매</option>
 														<option value="3">기타</option>
 													</c:when>
 													<c:when test="${data.LOAN_CAUSE_NUM eq 3}">
-														<option value="0" >사업확장</option>
+														<option value="0">사업확장</option>
 														<option value="1">제품개발</option>
 														<option value="2">토지매매</option>
 														<option value="3" selected="selected">기타</option>
@@ -990,7 +987,7 @@ function uploadName(e) {
 										<input type="button" class="btn" value="예상 대출 규모" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" id="expctnLoanScale" name="expctnLoanScale" value="${data.EXPCTN_LOAN_SCALE}" />
+										<input type="text" class="txt" id="expctnLoanScale" name="expctnLoanScale" value="${data.EXPCTN_LOAN_SCALE}" readonly="readonly" />
 									</td>
 								</tr>
 								<tr height="40">
@@ -998,7 +995,7 @@ function uploadName(e) {
 										<input type="button" class="btn" value="대출 희망 유형*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="loanHopeType" name="loanHopeType" required>
+										<select class="txt" id="loanHopeType" name="loanHopeType" disabled="disabled">
 											<optgroup>
 												<c:choose>
 													<c:when test="${data.LOAN_HOPE_TYPE eq 0}">
@@ -1019,7 +1016,7 @@ function uploadName(e) {
 										<input type="button" class="btn" value="대출 희망 시기*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="loanHopeTime" name="loanHopeTime" required>
+										<select class="txt" id="loanHopeTime" name="loanHopeTime" disabled="disabled">
 											<optgroup>
 												<c:choose>
 													<c:when test="${data.LOAN_HOPE_TIME eq 0}">
@@ -1068,7 +1065,7 @@ function uploadName(e) {
 										<input type="button" class="btn" value="예정 사업명" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" id="expctdBsnsName" name="expctdBsnsName" value="${data.EXPCTD_BSNS_NAME}" />
+										<input type="text" class="txt" id="expctdBsnsName" name="expctdBsnsName" value="${data.EXPCTD_BSNS_NAME}" readonly="readonly" />
 									</td>
 								</tr>
 								<tr height="40">
@@ -1076,7 +1073,7 @@ function uploadName(e) {
 										<input type="button" class="btn" value="예정 사업 형태" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" id="expctdBsnsType" name="expctdBsnsType" value="${data.EXPCTD_BSNS_TYPE}" />
+										<input type="text" class="txt" id="expctdBsnsType" name="expctdBsnsType" value="${data.EXPCTD_BSNS_TYPE}" readonly="readonly" />
 									</td>
 								</tr>
 								<tr height="40">
@@ -1084,7 +1081,7 @@ function uploadName(e) {
 										<input type="button" class="btn" value="비고" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="rmks" id="rmks" name="rmks" value="${data.RMKS}" />
+										<input type="text" class="rmks" id="rmks" name="rmks" value="${data.RMKS}" readonly="readonly" />
 									</td>
 								</tr>
 							</tbody>
@@ -1094,14 +1091,208 @@ function uploadName(e) {
 						<input type=file id="att" name="att" />
 						<input type="hidden" id="attFile" name="attFile" />
 						<div class="spc">
-							<div class="adc_txt">
-								첨부자료
-								<img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
-							</div>
+							<div class="adc_txt">첨부자료</div>
 							<div class="cntrct_box_in">
 								<input type="text" id="fileName" readonly="readonly" />
 							</div>
 						</div>
+
+						<!-- ********** 영업기회 끝 ********** -->
+						<hr class="hr_bot" color="#4B94F2" width="925px">
+
+
+						<!-- *************** 제안 부분 시작 **************** -->
+
+						<div class="bot_title">
+							<h3>
+								제안
+								<div class="drop_btn"></div>
+							</h3>
+						</div>
+						<div class="page_cont_title_text">대출 상세정보</div>
+						<hr class="hr_width">
+						<table class="detailList">
+							<colgroup>
+								<col width="200" />
+								<col width="250" />
+								<col width="200" />
+								<col width="250" />
+							</colgroup>
+							<tbody>
+								<tr>
+									<td>
+										<input type="button" class="btn" value="대출 원인*" />
+									</td>
+									<td colspan="3">
+										<select class="txt" id="sgstnloanCauseNum" name="sgstnloanCauseNum">
+											<optgroup>
+												<c:choose>
+													<c:when test="${data2.SGSTN_LOAN_CAUSE_NUM eq 0}">
+														<option value="9">선택하세요</option>
+														<option value="0" selected="selected">사업확장</option>
+														<option value="1">제품개발</option>
+														<option value="2">토지매매</option>
+														<option value="3">기타</option>
+													</c:when>
+													<c:when test="${data2.SGSTN_LOAN_CAUSE_NUM eq 1}">
+														<option value="9">선택하세요</option>
+														<option value="0">사업확장</option>
+														<option value="1" selected="selected">제품개발</option>
+														<option value="2">토지매매</option>
+														<option value="3">기타</option>
+													</c:when>
+													<c:when test="${data2.SGSTN_LOAN_CAUSE_NUM eq 2}">
+														<option value="9">선택하세요</option>
+														<option value="0">사업확장</option>
+														<option value="1">제품개발</option>
+														<option value="2" selected="selected">토지매매</option>
+														<option value="3">기타</option>
+													</c:when>
+													<c:when test="${data2.SGSTN_LOAN_CAUSE_NUM eq 3}">
+														<option value="9">선택하세요</option>
+														<option value="0">사업확장</option>
+														<option value="1">제품개발</option>
+														<option value="2">토지매매</option>
+														<option value="3" selected="selected">기타</option>
+													</c:when>
+												</c:choose>
+											</optgroup>
+										</select>
+									</td>
+								</tr>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="대출 규모*" />
+									</td>
+									<td colspan="3">
+										<input type="text" class="txt" id="sgstnLoanScale" name="sgstnLoanScale" value="${data2.SGSTN_LOAN_SCALE}" />
+									</td>
+								</tr>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="대출 유형*" />
+									</td>
+									<td colspan="3">
+										<select class="txt" id="sgstnloanType" name="sgstnloanType">
+											<optgroup>
+												<c:choose>
+													<c:when test="${data2.SGSTN_LOAN_TYPE eq 0}">
+														<option value="9">선택하세요</option>
+														<option value="0" selected="selected">장기 대출</option>
+														<option value="1">단기 대출</option>
+													</c:when>
+													<c:when test="${data2.SGSTN_LOAN_TYPE eq 1}">
+														<option value="9">선택하세요</option>
+														<option value="0">장기 대출</option>
+														<option value="1" selected="selected">단기 대출</option>
+													</c:when>
+												</c:choose>
+											</optgroup>
+										</select>
+									</td>
+								</tr>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="대출 시기*" />
+									</td>
+									<td colspan="3">
+										<input type="month" class="txt" id="sgstnloanTime" name="sgstnloanTime" value="${data2.SGSTN_LOAN_TIME}" />
+									</td>
+								</tr>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="상환 시기*" />
+									</td>
+									<td colspan="3">
+										<input type="month" class="txt" id="sgstnRdmptnTime" name="sgstnRdmptnTime" value="${data2.SGSTN_RDMPTN_TIME}" />
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="page_cont_title_text">고객사 상세정보</div>
+						<hr class="hr_width">
+						<table class="detailList">
+							<colgroup>
+								<col width="200" />
+								<col width="250" />
+								<col width="200" />
+								<col width="250" />
+							</colgroup>
+							<tbody>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="자산 총액*" />
+									</td>
+									<td colspan="3">
+										<input type="text" class="txt" id="sgstnTotalAmnt" name="sgstnTotalAmnt" value="${data2.SGSTN_TOTAL_AMNT}" />
+									</td>
+								</tr>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="부채액*" />
+									</td>
+									<td colspan="3">
+										<input type="text" class="txt" id="sgstnDebtAmnt" name="sgstnDebtAmnt" value="${data2.SGSTN_DEBT_AMNT}" />
+									</td>
+								</tr>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="평균 매출액" />
+									</td>
+									<td colspan="3">
+										<input type="text" class="txt" id="sgstnAvgRvnAmnt" name="sgstnAvgRvnAmnt" value="${data2.SGSTN_AVG_RVN_AMNT}" />
+									</td>
+								</tr>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="사원 수" />
+									</td>
+									<td colspan="3">
+										<input type="text" class="txt" id="sgstnEmpCount" name="sgstnEmpCount" value="${data2.SGSTN_EMP_COUNT}" />
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="page_cont_title_text">상세정보</div>
+						<hr class="hr_width">
+						<table class="detail_info_table">
+							<colgroup>
+								<col width="200" />
+								<col width="250" />
+								<col width="200" />
+								<col width="250" />
+							</colgroup>
+							<tbody>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="상세내용*" />
+									</td>
+									<td colspan="3">
+										<textarea rows="100" cols="50" class="txt_area" id="dtlCont" name="dtlCont">${data2.DTL_CONT}</textarea>
+									</td>
+								</tr>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="비고" />
+									</td>
+									<td colspan="3">
+										<input type="text" class="rmks" id="rmrks" name="rmrks" value="${data2.RMRKS}" />
+									</td>
+								</tr>
+								<tr height="10"></tr>
+							</tbody>
+						</table>
+						<!-- 첨부자료  -->
+						<input type=file id="att" name="att" />
+						<input type="hidden" id="attFile" name="attFile" />
+						<div class="spc">
+							<div class="adc_txt">
+								첨부자료 <img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
+							</div>
+							<div class="cntrct_box_in"></div>
+						</div>
+						<!-- ********** 제안 끝 ********** -->
+
 						<!-- 의견 -->
 						<div class="mgtop"></div>
 						<div class="bot_title">
@@ -1194,7 +1385,6 @@ function uploadName(e) {
 						</div>
 						<hr class="hr_bot" color="white" width="925px">
 						<hr class="hr_bot" color="white" width="925px">
-						<div class="salesOver_btn nb">영업 종료하기</div>
 					</form>
 					<!-- 끝 -->
 				</div>

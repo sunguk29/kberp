@@ -18,7 +18,7 @@ DEL_DVSN, TO_CHAR(SCHDL_START_TIME,'YYYY-MM-DD') AS START_DATE, TO_CHAR(SCHDL_ST
          WHEN SCHDL_CTGRY_NUM = 6 THEN '#76a7f7'
          WHEN SCHDL_CTGRY_NUM = 7 THEN '#4d75b5'
          ELSE '#66BB6A' 
-    END AS COLOR, REPLACE(REPLACE(ALDY_DVSN,'1','true'),'0','false') AS ALL_DAY,
+    END AS COLOR, REPLACE(REPLACE(ALDY_DVSN,'1','true'),'0','false') AS ALL_DAY, 
     CASE WHEN SCHDL_CTGRY_NUM = 0 THEN 'user_dsgnt_schdl'
          WHEN SCHDL_CTGRY_NUM = 1 THEN 'bsns_schdl'
          WHEN SCHDL_CTGRY_NUM = 2 THEN 'leave_schdl'
@@ -28,11 +28,12 @@ DEL_DVSN, TO_CHAR(SCHDL_START_TIME,'YYYY-MM-DD') AS START_DATE, TO_CHAR(SCHDL_ST
          WHEN SCHDL_CTGRY_NUM = 6 THEN 'bsns_trip_schdl'
          WHEN SCHDL_CTGRY_NUM = 7 THEN 'devel_schdl'
          
-    END AS SCHDL_CTGRY_NAME
+    END AS SCHDL_CTGRY_NAME 
     
 FROM SCHDL 
 WHERE #{clndrDate} BETWEEN TO_CHAR(ADD_MONTHS(TRUNC(SCHDL_START_TIME,'MM'),-1),'YYYYMM')
                    AND TO_CHAR(ADD_MONTHS(TRUNC(SCHDL_END_TIME,'MM'),+1),'YYYYMM')AND DEL_DVSN = 0 
+                   AND SCHDL_CTGRY_NUM IN (#{user_dsgnt},#{bsns},#{leave},#{edctn},#{mtng},#{get_tgthr},#{bsns_trip},#{devel})
 ORDER BY "START" ASC
 </select>
 <!-- 상세보기 -->
