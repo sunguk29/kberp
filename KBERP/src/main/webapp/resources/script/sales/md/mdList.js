@@ -1,8 +1,28 @@
 
 function reloadList() {
 	var params = $("#actionForm").serialize(); // name=val&name2=val2
+	var callback = ajaxComm("mdListAjax", params, "");
 	
-	$.ajax({
+	callback.done(function(res){
+		console.log(res);
+		drawList(res.list);												//리스트 
+		drawPaging(res.pb);												//페이징
+		$("#sts_listA").text("전체 : "+ res.totalCnt + " 건");			//상단-전체
+		$("#sts_list0").text("판매중 : "+ res.onSaleCnt + " 건");			//상단-판매중
+		$("#sts_list1").text("판매중단 : "+ res.offSaleCnt + " 건");		//상단-출시예정
+		$("#sts_list2").text("출시예정 : "+ res.rlsExpctdCnt + " 건");		//상단-판매중단
+		$("#totalCnt").text("전체:" + res.totalCnt + "건"); 				//검색-판매상태-전체
+		$("#onSaleCnt").text("판매중:" + res.onSaleCnt + "건"); 			//검색-판매상태-판매중
+		$("#rlsExpctdCnt").text("출시예정:" + res.rlsExpctdCnt + "건"); 	//검색-판매상태-출시예정
+		$("#offSaleCnt").text("판매중단:" + res.offSaleCnt + "건"); 		//검색-판매상태-판매중단
+		$("#SearchResult").text("상품 (검색결과:" + res.totalCnt + "건)");
+	});
+	callback.fail(function(request, status, error) {
+		console.log(request.requestText);
+	});
+	
+	
+/*	$.ajax({
 		type : "post",
 		url : "mdListAjax",
 		dataType : "json",
@@ -24,7 +44,7 @@ function reloadList() {
 		error : function(request, status, error) {
 			console.log(request.requestText);
 		}
-	});
+	});*/
 }
 /* gradeNum을 문자로 바꿔주는 함수 */
 function GradeFormatter(gradeNum){
