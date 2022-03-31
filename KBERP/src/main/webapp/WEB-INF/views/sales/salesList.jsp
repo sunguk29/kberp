@@ -335,7 +335,7 @@ table {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
+	console.log("테스트2");
 	/* 머지 테스트!!!!!!!!!!!!!!!! */
 	/* 머지테스트!!!!!!!2222222222 */
 	
