@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="elctrncAprvl">
+	<select id="getAprvlTmpltBox" resultType="hashmap" parameterType="hashmap">
+	SELECT E.TMPLT_NUM, E.TMPLT_DVSN_NUM, E.TMPLT_NAME, E.TMPLT_CONT, D.TMPLT_DVSN_NAME, E.DEL_CHECK, ROW_NUMBER()OVER(ORDER BY TMPLT_NUM ASC) AS RNUM
+	FROM(SELECT TMPLT_NUM, TMPLT_DVSN_NUM, TMPLT_NAME, TMPLT_CONT, DEL_CHECK,ROW_NUMBER()OVER(ORDER BY TMPLT_NUM ASC) AS RNUM
+	FROM DRAFT_TMPLT) E INNER JOIN DRAFT_TMPLT_DVSN D
+	ON E.TMPLT_DVSN_NUM = D.TMPLT_DVSN_NUM
+
+	</select>
+
+	<select id="draftTmpltBoxWrite" parameterType="hashmap">
+	
+	</select>
+
 </mapper>

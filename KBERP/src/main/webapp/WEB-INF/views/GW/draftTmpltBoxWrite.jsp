@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -87,6 +88,14 @@ span {
 	
 }
 
+.srch_1 {
+	width: 50px;
+	height: 30px;
+	position: relative;
+	top: 10px;
+	
+}
+
 .dcmnt_tlte {
 	margin-left: 100px;
 }
@@ -143,54 +152,213 @@ span {
 #cont_1 {
 	
 	font-size: 14px;
-	margin-left : 70px;
+	margin-left : 170px;
 	margin-top: 20px;
 	width: 500px;
 	height: 200px;
 }
 
+.orgnzt_chart {
+	display:inline-block;
+	width: 300px;
+	height: 400px;
+	border: 1px solid #000;
+	margin-top: 10px;
+	vertical-align: top;
+	text-align: center;
+
+}
+
+.user_aprvl_line {
+	border-collapse: collapse;
+	margin-top: 50px;
+
+}
+
+.user_aprvl_line td {
+	border-top: 1px solid #000;
+	text-align: center;
+	border-right: 1px solid #000;
+}
+
+.user_aprvl_line th {
+	border-right: 1px solid #000;
+}
+
+
+.page_next {
+	background-image: url('resources/images/GW/cmn/next_icon.png'); 
+	background-repeat: no-repeat;
+	background-size: 15px;
+	font-size: 14px;
+	border: 1px solid #000;	
+	width: 100px;
+}
+
+.page_prev {
+	background-image: url('resources/images/GW/cmn/prev_icon.png');
+	background-repeat: no-repeat;
+	border: 1px solid #000;
+	background-size: 15px;
+	font-size: 14px;
+	width: 100px;
+}
+
+
 /* 개인 작업 영역 */
 
 </style>
+<script type="text/javascript"
+		src="resources/script/ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	$("#btn2Btn").on("click", function() {
+	
+	$(".srch").on("click", function() {
+		
+		var html = "";
+		
+			html+= "	<div>																																	";
+			html+= "	<div style= \"border:1px solid #000; width:50px; height: 25px;\" >조직도</div>															";
+			html+= "	</div>                                                                                                                                  ";
+			html+= "	<div style=\"display:inline-block; height: 400px; margin-top: 1opx;\">                                                                  ";
+			html+= "	<div class=\"orgnzt_chart\">                                                                                                        	";
+			html+= "	조직도                                                                                                                              		";
+			html+= "	</div>                                                                                                                            	    ";
+			html+= "	<div style=\" border: 1px solid #000; width: 100px; display:inline-block; vertical-align: top; margin-top: 150px;\">              	    ";
+			html+= "	<span>결재방법</span><br/>                                                                                                      			";	
+			html+= "	<input type = \"radio\" name=\"a\" id=\"r1\"/><label for = \"r1\" >결재</label><br/>                                         	     		";
+			html+= "	<input type = \"radio\" name=\"a\" id=\"r2\"/><label for = \"r2\" >전결</label><br/>                                                     ";
+			html+= "	<input type = \"radio\" name=\"a\" id=\"r3\"/><label for = \"r3\" >후결</label><br/><br/>                                                ";
+			html+= "	<input type=\"button\" class=\"page_next\"><br/>                                                                                        ";
+			html+= "	<input type=\"button\" class=\"page_prev\">                                                                                       ";
+			html+= "	</div>                                                                                                                              	";
+			html+= "	<div style=\"display: inline-block; border: 1px solid #000;  width: 300px; height: 400px; vertical-align: top; margin-top: 10px;\">     ";
+			html+= "	<div style=\"margin-top:30px; margin-left: 10px;\">결재선 정보</div>                                                             		    ";
+			html+= "	<table class=\"user_aprvl_line\">                                                                                                	    ";
+			html+= "	<colgroup>                                                                                                                      		";
+			html+= "	<col width=\"50\">                                                                                                           		    ";
+			html+= "	<col width=\"70\">                                                                                                            			";
+			html+= "	<col width=\"180\">                                                                                                         		    ";
+			html+= "	</colgroup>                                                                                                                    		    ";
+			html+= "	<thead>                                                                                                                     			";
+			html+= "	<tr>                                                                                                                  				    ";
+			html+= "	<th></th>                                                                                                          					    ";
+			html+= "	<th>결재</th>                                                                                                      					    ";
+			html+= "	<th>홍길동 기안 그룹웨어팀</th>                                                                                     							";
+			html+= "	</tr>                                                                                                                  				    ";
+			html+= "	</thead>                                                                                                                  			    ";
+			html+= "	<tbody>                                                                                                                   			    ";
+			html+= "	<tr>                                                                                                                   				    ";
+			html+= "	<td></td>                                                                                                          					    ";
+			html+= "	<td>결재</td>                                                                                                     					    ";
+			html+= "	<td>길동이 그룹웨어팀 팀장</td>                                                                                     							";
+			html+= "	</tr>                                                                                                                 				    ";
+			html+= "	<tr>                                                                                                                  				    ";
+			html+= "	<td></td>                                                                                                          					    ";
+			html+= "	<td>결재</td>                                                                                                      					    ";
+			html+= "	<td>아버지 인사팀 팀장</td>                                                                                         							";
+			html+= "	</tr>                                                                                                                 				    ";
+			html+= "	<tr>                                                                                                                   				    ";
+			html+= "	<td>최종</td>                                                                                                      					    ";
+			html+= "	<td>결재</td>                                                                                                       						";
+			html+= "	<td>나사장 사장</td>                                                                                                						";
+			html+= "	</tr>                                                                                                                   				";
+			html+= "	</tbody>                                                                                                                    			";
+			html+= "	</table>                                                                                                                        		";
+			html+= "	</div>                                                                                                                              	";
+			html+= "	</div>		                                                                                                                            ";
+			
 		makePopup({
 			bg : false,
 			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
+			width : 800,
+			height : 600,
+			title : "결재라인",
+			contents : html,
 			buttons : [{
-				name : "하나",
+				name : "저장",
 				func:function() {
 					console.log("One!");
 					closePopup();
 				}
 			}, {
-				name : "둘닫기"
+				name : "닫기"
 			}]
 		});
 	});
+	
+	$(".srch_1").on("click", function() {
+		
+		var html = "";
+		
+		html+= "	<div>";
+		html+= "	<div style= \"border:1px solid #000; width:50px; height: 25px;\" >조직도</div>		                                                      ";
+		html+= "	</div>                                                                                                                                    ";
+		html+= "	<div style=\"display:inline-block; height: 400px; margin-top: 1opx;\">                                                                      ";
+		html+= "	<div class=\"orgnzt_chart\">                                                                                                                ";
+		html+= "	조직도                                                                                                                                    ";
+		html+= "	</div>                                                                                                                                    ";
+		html+= "	<div style=\" border: 1px solid #000; width: 100px; display:inline-block; vertical-align: top; margin-top: 150px;\">                        ";
+		html+= "	<input type=\"button\" class=\"page_next\"><br/>                                                                                                           ";
+		html+= "	<input type=\"button\" class=\"page_prev\">				                                                                                              ";
+		html+= "	</div>                                                                                                                                    ";
+		html+= "	<div style=\"display: inline-block; border: 1px solid #000;  width: 300px; height: 400px; vertical-align: top; margin-top: 10px;\">         "; 
+		html+= "	<div style=\"margin-top:20px; margin-left: 10px; border-bottom: 1px solid #000;\">선택(1/100)</div>                                         ";
+		html+= "	<div style=\"margin-top:20px;\"> 나사장 사장</div>                                                                                          ";
+		html+= "	</div>                                                                                                                                    ";
+		html+= "	</div>                                                                                                                                    ";
+		
+		
+		makePopup({
+			bg : false,
+			bgClose : false,
+			width : 800,
+			height : 600,
+			title : "참조자",
+			contents : html,
+			buttons : [{
+				name : "저장",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "닫기"
+			}]
+		});
+	});
+
+	
+	CKEDITOR.replace("cont_1", {
+		//옵션
+		resize_enabled : false, // 크기변경
+		language : "ko", //언어
+		enterMode : 2, //엔터 <br/>처리
+		width : "700", //가로
+		height : "300" //세로
+	});
+	
+	$("#writeBtn").on("click", function(){
+		$("#cont_1").val(CKEDITOR.instances['cont_1'].getData());
+		if(checkEmpty("#dcmnt_tlte_1")){
+			alert("문서제목을 입력하세요.");
+			$("#dcmnt_tlte_1").focus();
+		} else if(checkEmpty("#aprvl_line_1")){
+			alert("결재라인을 입력하세요.");
+			$("#aprvl_line_1").focus();
+		}
+		else if(checkEmpty("#cont_1")){
+			alert("내용을 입력하세요.");
+			$("#cont_1").focus();
+		}
+		
+		
+	})
+	
+	
+	
+	
+
 });
 </script>
 </head>
@@ -207,49 +375,46 @@ $(document).ready(function() {
 		<div class="page_title_bar">
 			<div class="page_title_text">프로젝트 관리</div>
 			<!-- 검색영역 선택적 사항 -->
-			<div class="page_srch_area">
-				<select class="srch_sel">
-					<option>제목</option>
-					<option>내용</option>
-					<option>작성자</option>
-				</select>
-				<div class="srch_text_wrap">
-					<input type="text" />
-				</div>
-				<div class="cmn_btn_ml">검색</div>
-			</div>
+		
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
+		
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
+			
+			<form action="draftTmpltBox" id="writeForm" method="post">
 			<div class="board_a">
-				<input type = "button" id="writeBtn" value="저장">
-				<input type = "button" id="cancelBtn" value="취소">
+				<input type="button" id="writeBtn" value="저장"> 
+				<input type="button" id="cancelBtn" value="취소">
+				
 			</div>
 			
 			<div class="dcmnt_tlte">
 				<span>문서제목</span>
 				<input type="text" id="dcmnt_tlte_1">
+				<input style="display:none;" type="text" id="type" name="type" value="${type}">
 			</div>
 			<div class="aprvl_line">
 				<span>결재라인</span>
 				<input type= "text" id="aprvl_line_1">
-				<img class= "srch" alt="srch_icon.png" src="../images/cmn/srch_icon.png"/>
+				<img class= "srch" alt="srch_icon.png" src="resources/images/GW/cmn/srch_icon.png"/>
 			</div>
 			<div class="crbn_copy">
 				<span>참조자</span>
 				<input type= "text" id="crbn_copy_1">
-				<img class= "srch" alt="srch_icon.png" src="../images/cmn/srch_icon.png"/>
+				<img class= "srch_1" alt="srch_icon.png" src="resources/images/GW/cmn/srch_icon.png"/> 
+			</div>
+		
+			
+			<div class="cont">
+				
+				<textarea rows="20" cols="50" id="cont_1" name="cont_1"></textarea><br/> >
 			</div>
 			<div class="atchd_file">
 				<span>첨부파일</span>
 				<input type="file" id="atchd_file_1">
 			</div>
-			<div class="cont">
-				<span>내용</span>
-				<input type="text" id="cont_1">
-			</div>
-		
+			</form>
 		</div>
 	</div>
 	<!-- bottom -->

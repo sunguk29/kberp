@@ -71,7 +71,7 @@
 	
 	<!-- 답변등록 -->
 	<update id="ansrAdd" parameterType="hashmap">
-		UPDATE INQRY SET EMP_NUM = #{emp_name},
+		UPDATE INQRY SET EMP_NUM = #{emp_num},
 		                 ANSR_TITLE = #{ansr_title},
 		                 ANSR_CONT = #{ansr_cont},
 		                 ANSR_ATT_FILE = #{ansr_attFile},
@@ -81,11 +81,20 @@
 	
 	<!-- 답변수정 -->
 	<update id="ansrUpdate" parameterType="hashmap">
-		UPDATE INQRY SET EMP_NUM = #{emp_name},
+		UPDATE INQRY SET EMP_NUM = #{emp_num},
 		                 ANSR_TITLE = #{ansr_title},
 		                 ANSR_CONT = #{ansr_cont},
 		                 ANSR_ATT_FILE = #{ansr_attFile},
 		                 ANSR_DATE = SYSDATE
+		WHERE INQRY_NUM = #{no}
+	</update>
+	
+	<!-- 답변삭제 -->
+	<update id="ansrDelete" parameterType="hashmap">
+		UPDATE INQRY SET EMP_NUM = '',
+		                 ANSR_TITLE = '',
+		                 ANSR_CONT = '',
+		                 ANSR_ATT_FILE = ''
 		WHERE INQRY_NUM = #{no}
 	</update>
 </mapper>
