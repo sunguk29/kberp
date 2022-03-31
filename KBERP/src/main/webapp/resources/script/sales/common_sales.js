@@ -1,3 +1,22 @@
+
+/* ajax 공통함수*/
+function ajaxComm(url, data, type) {
+	var t = "post";
+	
+	if(type == ""){
+		type = t;
+	}; 
+	
+	var callback = $.ajax({
+		url:url,
+		data:data,
+		type:type,
+		dataType:'json'
+	});
+	return callback;
+}
+
+
 /* 값이 null인 경우 '' 리턴 */
 function nullCheckFunc(obj){
 	if (typeof obj == "undefined" || obj == null || obj == '') {
