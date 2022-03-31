@@ -731,7 +731,8 @@ $(document).ready(function() {
 	$("#clntPop").on("click", "tr" , function() {
 		$("#no").val($(this).attr("no"));
 		
-		
+		$("#saveForm").attr("action");
+		$("#saveForm").submit();
 		
 	});
 	
