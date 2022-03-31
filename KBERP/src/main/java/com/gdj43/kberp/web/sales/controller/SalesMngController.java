@@ -242,7 +242,7 @@ public class SalesMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	// sales2SgstnCont : 영업기회 상세보기
+	// sales2SgstnCont : 제안 상세보기
 	@RequestMapping(value="/sales2SgstnCont")
 	public ModelAndView sales2SgstnCont(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
@@ -257,7 +257,20 @@ public class SalesMngController {
 		return mav;
 	}
 	
-	
+	// sales2Update : 제안 수정
+	@RequestMapping(value = "/sales2Update")
+	public ModelAndView sales2Update(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("salesMng.getSales1", params);
+		HashMap<String, String> data2 = iCommonService.getData("salesMng.getSales2", params);
+		
+		mav.addObject("data", data);
+		mav.addObject("data2", data2);
+		
+		mav.setViewName("sales/sales2Update");
+		
+		return mav;
+	}
 	
 	
 	

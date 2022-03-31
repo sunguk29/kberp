@@ -267,7 +267,7 @@ table {
 	padding-left: 70px;
 }
 
-.colNum1, .colNum2, .colNum3, .colNum4 {
+.colNum1 {
 	width: 200px;
 	background-color: #F2CB05;
 	border: none;
@@ -282,25 +282,14 @@ table {
 	background: linear-gradient(90deg, #FFE65A, #FFE150);
 }
 
-.colNum2 {
-	background: linear-gradient(100deg, #FFE150, #FFDC46);
-}
 
-.colNum3 {
-	background: linear-gradient(100deg, #FFDC46, #FFD232);
-}
-
-.colNum4 {
-	background: linear-gradient(100deg, #FFD232, #FFC81E);
-}
-
-.colNum1:active, .colNum2:active, .colNum3:active, .colNum4:active {
+.colNum1:active {
 	font-weight: bold;
-	color: #2E83F2;
+	color: #4B94F2;
 	cursor: pointer;
 }
 
-.colNum1:hover, .colNum2:hover, .colNum3:hover, .colNum4:hover {
+.colNum1:hover {
 	font-weight: bold;
 	cursor: pointer;
 }
@@ -338,6 +327,10 @@ table {
 	width: 38px;
 	border: none;
 	background-color: #F2F2F2;
+}
+
+.boldSts {
+	color: #2E83F2;
 }
 </style>
 <script type="text/javascript">
@@ -493,25 +486,25 @@ function drawList(list) {
 
 		html += "<tr height=\"10\">";
 		if(data.PRGRS_STS2 == "영업기회") {
-			html += "<td class=\"colNum1\" rowspan=\"3\"><b>영업기회</b></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\"><b>영업기회</b></td>";
 		} else {
 			html += "<td class=\"colNum1\" rowspan=\"3\">영업기회</td>";
 		}
 		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "제안") {
-			html += "<td class=\"colNum1\" rowspan=\"3\"><b>제안</b></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\"><b>제안</b></td>";
 		} else {
 			html += "<td class=\"colNum1\" rowspan=\"3\">제안</td>";
 		}
 		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "견적") {
-			html += "<td class=\"colNum1\" rowspan=\"3\"><b>견적</b></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\"><b>견적</b></td>";
 		} else {
 			html += "<td class=\"colNum1\" rowspan=\"3\">견적</td>";
 		}
 		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "계약") {
-			html += "<td class=\"colNum1\" rowspan=\"3\"><b>계약</b></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\"><b>계약</b></td>";
 		} else {
 			html += "<td class=\"colNum1\" rowspan=\"3\">계약</td>";
 		}
