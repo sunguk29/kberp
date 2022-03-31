@@ -157,6 +157,18 @@
     width: 235px;
    height: 25px;
 }
+.orgnzt_depth3_area {
+    display: inline-block;
+    vertical-align: top;
+    width: 235px;
+   height: 25px;
+}
+.orgnzt_depth4_area {
+    display: inline-block;
+    vertical-align: top;
+    width: 235px;
+   height: 25px;
+}
 
 
 .folder_icon {
@@ -208,6 +220,9 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	
+	reloadTree();
+	
 	$(".orgnzt_area").on("click", ".orgnzt_depth1, .orgnzt_depth2, .orgnzt_depth3", function(e) {
 		var depth = $(this).attr("class").substring(12);
 		var obj = $(this);
@@ -245,73 +260,84 @@ $(document).ready(function() {
 		
 		
 	});
-	/*
-// 1뎁스  
-   $(".orgnzt_depth1").on("click", function() {
-	   console.log("depth1 click!", this)
-	   $(".orgnzt_depth2_wrap").toggle("fast"); // 토글 show/hide   
-	   // 선택유무에 따른 css 변경
-       if($(this).find("input[type=hidden]").val() == "false") {
-		   console.log("selected", true)
-    	   $(this).find("input[type=hidden]").val("true")
-		   $(this).css({"color":"#2E83F2", "font-weight":"bold"});        	 
-       } else {
-		   console.log("selected", false)
-    	   $(this).find("input[type=hidden]").val("false")
-       	   $(this).css({"color":"black", "font-weight":""}); 
-       }
-   });
-// 2뎁스  
-   $(".orgnzt_depth2").on("click", function(e) {
-	   console.log("depth2 click!", this)
-	   e.stopPropagation(); // 버블업 방지
-	   $(this).children(".orgnzt_depth3_wrap").toggle("fast"); // 토글 show/hide   
-	   // 선택유무에 따른 css 변경
-       if($(this).find("input[type=hidden]").val() == "false") {
-		   console.log("selected", true)
-    	   $(this).find("input[type=hidden]").val("true")
-	  	   $(this).find(".orgnzt_depth2_area").css({"color":"#2E83F2", "font-weight":"bold"});        	 
-       } else {
-		   console.log("selected", false)
-    	   $(this).find("input[type=hidden]").val("false")
-      	   $(this).find(".orgnzt_depth2_area").css({"color":"black", "font-weight":""}); 
-       }
-   });
-// 3뎁스  
-   $(".orgnzt_depth3").on("click", function(e) {
-	   console.log("depth3 click!", this)
-	   e.stopPropagation(); // 버블업 방지
-	   $(this).children(".orgnzt_depth4_wrap").toggle("fast"); // 토글 show/hide  
-	   // 선택유무에 따른 css 변경
-       if($(this).find("input[type=hidden]").val() == "false") {
-		   console.log("selected", true)
-    	   $(this).find("input[type=hidden]").val("true")
-      	   $(this).find(".orgnzt_depth3_area").css({"color":"black", "font-weight":""}); 
-       } else {
-		   console.log("selected", false)
-    	   $(this).find("input[type=hidden]").val("false")
-	  	   $(this).find(".orgnzt_depth3_area").css({"color":"#2E83F2", "font-weight":"bold"});        	 
-       }
-   });
-   */
 });
 
-/* function orgnztOnOff(this){
-	 if($(this).hasClass(".depth_slc_icon")){
-          console.log(this)
-          $(".depth_slc_icon").removeClass('depth_slc_icon').addClass('depth_slc_icon_on');
-          $(".depth_txt").removeClass('depth_txt').addClass('depth_txt_on');
-      } else {
-          $(".depth_slc_icon_on").removeClass('depth_slc_icon_on').addClass('depth_slc_icon');
-          $(".depth_txt_on").removeClass('depth_txt_on').addClass('depth_txt');
-}
- */
- 
-function drawDept(dept){
-	var html = "";
+// 조직도 리로드
+function reloadTree() {
+    $.ajax({
+       type : "post",
+       url : "orgnztChartAjax",
+       dataType : "json",
+       success : function(res) {
+    	   drawTree(res.dept);
+    	   drawTree2(res.dept);
+    	   drawTree3(res.emp);
+    	   
+       },
+       error : function(req) {
+          console.log(req.responseText);
+       }
+    });
+ } 
+
+// 1뎁스 부서 생성
+function drawTree(dept){
 	
-	for(var data of dept) {
-		
+	for(var data of dept) {                              
+		if(data.SUPER_DEPT_NUM == null) {
+			var html = "";
+			console.log("1뎁스(번호,레벨) : " + data.DEPT_NAME, data.DEPT_NUM, data.DEPT_LEVEL )
+			html += "<div class=\"orgnzt_depth2\" >          ";
+			html += "<div class=\"orgnzt_depth2_area\">      ";
+			html += "	<div class=\"depth_slc_icon\"></div> ";
+			html += "	<div class=\"folder_icon\"></div>    ";
+			html += "	<div class=\"depth_txt\">" + data.DEPT_NAME + "</div>";
+			html += "</div>                                  ";
+			html += "<div class=\"orgnzt_depth3_wrap\" id=\"" + data.DEPT_NUM + "\"></div>";
+			html += "</div>                                  ";
+			$("#depth2").append(html);
+		} 
+	}
+	
+	console.log("1뎁스 끝")
+}
+
+// 1뎁스 외 부서 생성
+function drawTree2(dept) {
+	for(var data of dept){
+		if(data.SUPER_DEPT_NUM != null) {
+			var html = "";
+			console.log("2뎁스(번호,레벨) : " + data.DEPT_NAME, data.DEPT_NUM, data.DEPT_LEVEL )
+			html += "<div class=\"orgnzt_depth3\">                             ";
+			html += "	<div class=\"orgnzt_depth3_area\">                     ";
+			html += "		<div class=\"depth_slc_icon\"></div>               ";
+			html += "		<div class=\"folder_icon\"></div>                 ";
+			html += "		<div class=\"depth_txt\">" + data.DEPT_NAME + "</div>";
+			html += "	</div>                                                 ";
+			html += "<div class=\"orgnzt_depth4_wrap\" id=\"" + data.DEPT_NUM + "\"></div>";
+			html += "</div>                                                    ";
+			$("#" + data.SUPER_DEPT_NUM).append(html);
+		}
+	} 
+	
+	
+	console.log("2뎁스 끝")
+}
+
+// 사원 생성
+function drawTree3(emp) {
+	for(var data of emp){
+		var html = "";
+			console.log( data.EMP_NAME, data.DEPT_NUM, data.DEPT_NAME  )
+			html += "<div class=\"orgnzt_depth3\">                             ";
+			html += "	<div class=\"orgnzt_depth3_area\">                     ";
+			html += "		<div class=\"depth_slc_icon\"></div>               ";
+			html += "		<div class=\"profile_icon\"></div>                 ";
+			html += "		<div class=\"depth_txt\">" + data.EMP_NAME + "</div>";
+			html += "	</div>                                                 ";
+			html += "</div>                                                    ";
+			$("#" + data.DEPT_NUM).append(html);
+			console.log("html " + data.DEPT_NUM, data.DEPT_NAME)
 	}
 }
 
@@ -352,131 +378,7 @@ function drawDept(dept){
 							<div class="kb_icon"></div>
 							<div class="depth_txt">카카오뱅크</div>
 						</div>
-						<div class="orgnzt_depth2_wrap">
-							<div class="orgnzt_depth2" >
-								<input type="hidden" class="item_selected" value="false" />
-								<div class="orgnzt_depth2_area">
-									<div class="depth_slc_icon"></div>
-									<div class="folder_icon"></div>
-									<div class="depth_txt">영업부</div>
-								</div>
-								<div class="orgnzt_depth3_wrap" >
-									<div class="orgnzt_depth3">
-									<input type="hidden" class="item_selected" value="false" />
-										<div class="orgnzt_depth3_area">
-											<div class="depth_slc_icon"></div>
-											<div class="folder_icon"></div>
-											<div class="depth_txt">영업1팀</div>
-										</div>
-										<div class="orgnzt_depth4_wrap" >
-											<div class="orgnzt_depth4" >
-											<input type="hidden" class="item_selected" value="false" />
-												<div class="orgnzt_depth4_area">
-													<div class="depth_slc_icon"></div>
-													<div class="profile_icon"></div>
-													<div class="depth_txt">유은지</div>
-												</div>
-											</div>
-											<div class="orgnzt_depth4">
-											<input type="hidden" class="item_selected" value="false" />
-												<div class="orgnzt_depth4_area">
-													<div class="depth_slc_icon"></div>
-													<div class="profile_icon"></div>
-													<div class="depth_txt">유은지</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="orgnzt_depth3">
-											<input type="hidden" class="item_selected" value="false" />
-										<div class="orgnzt_depth3_area">
-											<div class="depth_slc_icon"></div>
-											<div class="folder_icon"></div>
-											<div class="depth_txt">영업2팀</div>
-										</div>
-										<div class="orgnzt_depth4_wrap" >
-											<div class="orgnzt_depth4" >
-											<input type="hidden" class="item_selected" value="false" />
-												<div class="orgnzt_depth4_area">
-													<div class="depth_slc_icon"></div>
-													<div class="profile_icon"></div>
-													<div class="depth_txt">유은지</div>
-												</div>
-											</div>
-											<div class="orgnzt_depth4">
-											<input type="hidden" class="item_selected" value="false" />
-												<div class="orgnzt_depth4_area">
-													<div class="depth_slc_icon"></div>
-													<div class="profile_icon"></div>
-													<div class="depth_txt">유은지</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="orgnzt_depth2" >
-								<input type="hidden" class="item_selected" value="false" />
-								<div class="orgnzt_depth2_area">
-									<div class="depth_slc_icon"></div>
-									<div class="folder_icon"></div>
-									<div class="depth_txt">인사팀</div>
-								</div>
-								<div class="orgnzt_depth3_wrap" >
-									<div class="orgnzt_depth3">
-									<input type="hidden" class="item_selected" value="false" />
-										<div class="orgnzt_depth3_area">
-											<div class="depth_slc_icon"></div>
-											<div class="folder_icon"></div>
-											<div class="depth_txt">인사1팀</div>
-										</div>
-										<div class="orgnzt_depth4_wrap" >
-											<div class="orgnzt_depth4">
-											<input type="hidden" class="item_selected" value="false" />
-												<div class="orgnzt_depth4_area">
-													<div class="depth_slc_icon"></div>
-													<div class="profile_icon"></div>
-													<div class="depth_txt">유은지</div>
-												</div>
-											</div>
-											<div class="orgnzt_depth4">
-											<input type="hidden" class="item_selected" value="false" />
-												<div class="orgnzt_depth4_area">
-													<div class="depth_slc_icon"></div>
-													<div class="profile_icon"></div>
-													<div class="depth_txt">유은지</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="orgnzt_depth3">
-									<input type="hidden" class="item_selected" value="false" />
-										<div class="orgnzt_depth3_area">
-											<div class="depth_slc_icon"></div>
-											<div class="folder_icon"></div>
-											<div class="depth_txt">영업2팀</div>
-										</div>
-										<div class="orgnzt_depth4_wrap" >
-											<div class="orgnzt_depth4" >
-											<input type="hidden" class="item_selected" value="false" />
-												<div class="orgnzt_depth4_area">
-													<div class="depth_slc_icon"></div>
-													<div class="profile_icon"></div>
-													<div class="depth_txt">유은지</div>
-												</div>
-											</div>
-											<div class="orgnzt_depth4">
-											<input type="hidden" class="item_selected" value="false" />
-												<div class="orgnzt_depth4_area">
-													<div class="depth_slc_icon"></div>
-													<div class="profile_icon"></div>
-													<div class="depth_txt">유은지</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+						<div class="orgnzt_depth2_wrap" id="depth2">
 						</div>
 					</div>	
 				</div>

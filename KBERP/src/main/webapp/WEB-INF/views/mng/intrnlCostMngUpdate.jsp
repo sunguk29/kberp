@@ -232,7 +232,6 @@ $(document).ready(function() {
 				});
 				
 				$("#acntListTbody").on("click", "#acntName", function() {
-					console.log("click!");
 					$("#acntCodeInput").attr("acntcode", $(this).attr("acntcode"));
 					$("#acntCodeInput").val($(this).attr("name"));
 					

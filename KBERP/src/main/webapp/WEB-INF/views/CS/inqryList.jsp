@@ -174,6 +174,7 @@ function drawPaging(pb) {
 				<form action="#" id="actionForm" method="post">
 					<input type="hidden" id="no" name="no" />
 					<input type="hidden" id="page" name="page" value="${page}" />
+					<input type="hidden" id="emp_name" name="emp_name" value="${data.EMP_NAME}" />
 					<input type="hidden" id="top" name="top" value="${param.top}"/>
 					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
 					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
