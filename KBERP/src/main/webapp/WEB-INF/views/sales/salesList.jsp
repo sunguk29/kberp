@@ -133,15 +133,11 @@ select {
 	width: 147px;
 	border-radius: 1px;
 	text-align: right;
+	outline: none;
 }
 
 .findEmp_box:hover {
 	cursor: pointer;
-}
-
-.findEmp_box:active {
-	background-color: white;
-	outline: 1.5px solid #222222;
 }
 
 .userIcon {
@@ -328,9 +324,195 @@ table {
 	border: none;
 	background-color: #F2F2F2;
 }
-
 .boldSts {
 	color: #2E83F2;
+}
+/* 팝업 */
+.popup_title_mid {
+	width: calc(100% + 20px);
+	height: 70px;
+	background-color: #F2F2F2;
+	font-size: 11pt;
+	padding-bottom: 3px;
+	border-bottom: 1px solid #d7d7d7;
+    margin: -10px 0px 0px -10px;
+}
+.ptm_left {
+	display: inline-block;
+	vertical-align: top;
+	width: 100px;
+	height: 70px;
+}
+.ptm_left_top, .ptm_left_bot  {
+	width: 100px;
+	height: 35px;
+	line-height: 35px;
+	text-align: right;
+	font-size: 15px;
+	font-weight: bold;
+}
+.ptm_right_bot {
+	width: 94px;
+	height: 35px;
+	line-height: 35px;
+	text-align: left;
+	font-size: 15px;
+	font-weight: bold;
+}
+.ptm_right_bot2 {
+	width: 94px;
+    height: 32px;
+    margin-top: 5px;
+    text-align: center;
+}
+.ptm_mid {
+	display: inline-block;
+	vertical-align: top;
+	width: 150px;
+	height: 70px;
+}
+.ptm_mid_top, .ptm_mid_bot {
+	width: 150px;
+	height: 35px;
+	line-height: 35px;
+	text-align: center;
+}
+.sel_size {
+	width: 130px;
+	height: 25px;
+	outline: none;
+}
+.ptm_mid_right0 {
+	display: inline-block;
+	vertical-align: top;
+	width: 50px;
+	height: 70px;
+}
+.ptm_mid_right {
+	display: inline-block;
+	vertical-align: top;
+	width: 185px;
+	height: 70px;
+}
+.ptm_mid_right_top, .ptm_mid_right_bot {
+	width: 180px;
+	height: 35px;
+	line-height: 35px;
+	text-align: center;
+}
+.text_size1 {
+	width: 123px;
+	height: 19px;
+	outline: none;
+}
+.text_size2 {
+	width: 170px;
+	height: 19px;
+	margin-left : 12px;
+	outline: none;
+}
+.ptm_right {
+	display: inline-block;
+	vertical-align: top;
+	width: 94px;
+	height: 100%;
+}
+.ptm_right_top {
+	width: 94px;
+	height: 32px;
+	text-align: center;
+}
+/* 팝업 내용 */
+.popup_box_left {
+   display: inline-block;
+   vertical-align: top;
+   width: 120px;
+   height: 50px;
+}
+.popup_cc_box_right {
+   display: inline-block;
+   width: 400px;
+   height: 50px;
+   font-size: 14px;
+}
+.popup_mng_box_right {
+   display: inline-block;
+   width: 400px;
+   height: 50px;
+   font-size: 14px;
+   line-height: 50px;
+}
+.popup_cc_box_in {
+   width: 550px;
+   height: 55px;
+   border: 2px solid #d7d7d7;
+   border-radius: 7px;
+   background-color: #F2F2F2;
+   margin-left: 15px;
+   margin-bottom: 5px;
+}
+.popup_mng_box_in {
+   width: calc(100% - 4px);
+   height: 50px;
+   border: 2px solid #d7d7d7;
+   border-radius: 3px;
+   background-color: #F2F2F2;
+   margin-bottom: 5px;
+}
+
+.popup_mng_box_in:hover, .popup_cc_box_in:hover {
+   cursor: pointer;
+   border: 2px solid #2E83F2;
+}
+.company {
+   display: inline-block;
+   width: 42px;
+   height: 25px;
+   background-image: url("resources/images/sales/client.png");
+   background-size: 42px 25px;
+   margin-top: 13px;
+   margin-left: 45px;
+}
+.mngIcon {
+   display: inline-block;
+   width: 42px;
+   height: 25px;
+   margin-top: 13px;
+   margin-left: 45px;
+}
+.boldname{
+	font-weight: bold;
+	font-size : 12px;
+}
+.boldMngName{
+	margin-left: 30px;
+	font-weight: bold;
+}
+.mg_wid {
+	margin-left: 50px;
+}
+.popCmnBtn {
+	margin-top: 35px;
+	margin-left: 200px;
+}
+.popMngBtn {
+	margin-top: 5px;
+	margin-left: 25px;
+}
+.popup_box_mng {
+	height: 297px;
+	padding-top: 8px;
+}
+.popup_box_cc {
+	height: 322px;
+	padding-top: 8px;
+}
+#mngName {
+	border: none;
+	outline: none;
+	font-size: 11pt;
+	width: 118px;
+	cursor: default;
 }
 </style>
 <script type="text/javascript">
@@ -387,6 +569,105 @@ $(document).ready(function() {
 			$("#actionForm").attr("action", "sales4CntrctCont"); // 여기는 어디로 이동?? if로...처리?
 			$("#actionForm").submit();
 		} 
+		
+	});
+	
+	/* 담당자 팝업 */
+	$(".findEmp_box").on("click", function() {
+		
+		var html = "";
+		
+	 	html += "<div class=\"popup_title_mid\">"; 
+	 	html += "<form action=\"#\" id=\"popupMngForm\">";
+	 	html += "<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
+		html += "<div class=\"ptm_left\">";
+		html += "<div class=\"ptm_left_top\">팀분류</div>";		
+		html += "<div class=\"ptm_left_bot\">사원분류</div>";	
+		html += "</div>";
+		html += "<div class=\"ptm_mid\">";
+		html += "<div class=\"ptm_mid_top\">";
+		html += "<select class=\"sel_size\" name=\"deptS\">";
+		html += "<option value=\"6\">영업1팀</option>";
+		html += "<option value=\"7\">영업2팀</option>";
+		html += "<option value=\"8\">영업3팀</option>";
+		html += "</select>";
+		html += "</div>";
+		html += "<div class=\"ptm_mid_bot\">";
+		html += "<select class=\"sel_size\" name=\"empS\">";
+		html += "<option value=\"0\">사원번호</option>";
+		html += "<option value=\"1\">사원명</option>";
+		html += "</select>";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class=\"ptm_mid_right\">";
+		html += "<div class=\"ptm_mid_right_top\"></div>";
+		html += "<div class=\"ptm_mid_right_bot\">";
+		html += "<input type=\"text\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" id=\"searchT\" name=\"searchT\" />";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class=\"ptm_right\">";
+		html += "<div class=\"ptm_right_top\"></div>";
+		html += "<div class=\"ptm_right_bot\">";
+		html += "<div class=\"cmn_btn\" id=\"meBtn\">검색</div>";
+		html += "</div>";
+		html += "</div>";
+		html += "</form>";
+		html += "</div>";
+		html +=	"<div class=\"popup_box_mng\"></div>";
+		html += "<div class=\"board_bottom\">     ";
+		html += "<div class=\"pgn_area\"></div>   ";
+		html += "</div>                         ";
+		
+		
+		
+		makePopup({
+			depth : 1,
+			bg : false,
+			width : 600,
+			height : 500,
+			title : "담당자 조회",
+			contents : html,
+			contentsEvent : function() {
+				
+				drawMngList();
+				
+				$(".popup_box_mng").on("click", ".popup_mng_box_in", function() {
+					var mng = $(this).children("#mng").val();
+					var mge = $(this).children("#mge").val();
+					document.getElementById("mngName").value = mng;
+					document.getElementById("mngNum").value = mge;
+					closePopup();
+				});
+				
+				$("#meBtn").on("click", function () {
+					$("#page").val("1");
+					
+					drawMngList();
+					
+				});
+				
+				$("#searchT").on("keypress", function(event) {
+					if(event.keyCode == 13 ) {
+						$("#meBtn").click();
+						
+						return false;
+					}
+				});
+				
+				$(".pgn_area").on("click", "div", function() {
+					$("#page").val($(this).attr("page"));
+
+					drawMngList();
+				});
+			},
+			buttons : {
+				name : "닫기",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}
+		});
 		
 	});
 	
@@ -567,6 +848,75 @@ function drawPaging(pb) {
 	$(".pgn_area").html(html);
 }
 
+/* 담당자 팝업 Ajax */
+function drawMngList() {
+	var params = $("#popupMngForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "mngListAjax",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			drawMngCont(res.mngList);
+			drawMngPaging(res.mngPb);
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	});
+}
+
+function drawMngCont(mngList) {
+	var html = "";
+	
+	for(var data of mngList) {
+		html +=	"<div class=\"popup_mng_box_in\" id=\"mlb\">";
+		html += "<input type=\"hidden\" id=\"mng\" value=\"" + data.EMP_NAME + "\" />";
+		html += "<input type=\"hidden\" id=\"mge\" value=\"" + data.EMP_NUM + "\" />";
+		html +=	"<div class=\"popup_box_left\">";
+		html +=	"<span><img alt=\"담당자이미지\" class=\"mngIcon\" src=\"resources/images/sales/usericon.png\"></span>";
+		html +=	"</div>";
+		html +=	"<div class=\"popup_mng_box_right\">";
+		html +=	 data.EMP_NUM + " " + "<span class=\"boldMngName\">" + data.EMP_NAME + " / " + data.RANK_NAME + "</span>";
+		html +=	"<span class=\"mg_wid\">" + data.DEPT_NAME + "</span>";
+		html +=	"</div>";
+		html +=	"</div>";                                                                      
+	}                                                                                                     
+	                      
+	$(".popup_box_mng").html(html);
+	
+}
+
+function drawMngPaging(mngPb) {
+	var html = "";
+	
+	html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
+	if($("#page").val() == "1") {
+		html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
+	} else {
+		html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
+	}
+	
+	for(var i = mngPb.startPcount; i <= mngPb.endPcount; i++) {
+		if($("#page").val() == i) {
+			html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
+		} else {
+			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
+		}
+	}
+	
+	if($("#page").val() == mngPb.maxPcount) {
+		html += "<div page=\"" + mngPb.maxPcount + "\" class=\"page_btn page_next\">next</div>";
+	} else {
+		html += "<div page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</div>";
+	}
+	html += "<div page=\"" + mngPb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
+	
+	$(".pgn_area").html(html);
+
+} 
+ 
 </script>
 </head>
 <body>
@@ -590,6 +940,8 @@ function drawPaging(pb) {
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
 		<input type="hidden" id="salesNum" name="salesNum" /> <!-- 상세보기 갈 때 필요 -->
+		<input type="hidden" id="salesNum" name="salesNum" /> <!-- 상세보기 갈 때 필요 -->
+		
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
@@ -617,24 +969,12 @@ function drawPaging(pb) {
 							<!-- col=5 -->
 							<tr>
 								<td>
-									<span class="srch_name">팀 분류</span>
-								</td>
-								<td>
-									<select>
-										<option>선택안함</option>
-										<option>영업 1팀</option>
-										<option>영업 2팀</option>
-										<option>영업 3팀</option>
-										<option>영업 4팀</option>
-										<option>영업 지원팀</option>
-									</select>
-								</td>
-
-								<td>
-									<span class="srch_name_noMgn">담당자</span>
+									<span class="srch_name">담당자</span>
 								</td>
 								<td colspan="2">
 									<div class="findEmp_box">
+										<input type="text" id="mngName" readonly="readonly" />
+										<input type="hidden" id="mngNum" name="mngNum" />
 										<img class="userIcon" src="resources/images/sales/usericon.png">
 									</div>
 								</td>
@@ -659,7 +999,7 @@ function drawPaging(pb) {
 								<td colspan="2">
 									<select name="prgrsStage2">
 										<option value="9">선택안함</option>
-										<option value="9">진행중</option>
+										<option value="7">진행중</option>
 										<option value="5">종료(성공)</option>
 										<option value="6">종료(실패)</option>
 									</select>

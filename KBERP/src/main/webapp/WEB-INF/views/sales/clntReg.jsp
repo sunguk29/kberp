@@ -522,8 +522,6 @@ $(document).ready(function() {
 		$("#att").click();
 	});
 	
-	
-	
 	$("#addBtn").on("click", function() {
 		if(checkEmpty("#cName")) {
 			makeAlert("필수 항목 알림", "고객을 입력하세요", function() {
