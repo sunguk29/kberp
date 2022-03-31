@@ -133,9 +133,8 @@ public class FcltyController {
 
 		
 		 int cnt = iCommonService.getIntData("Fclty.fcltyListCnt",params);
-		  
-		 PagingBean pb =
-		 iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt,5,10);
+		 
+		 PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt,5,10);
 		
 		 params.put("startCount", Integer.toString(pb.getStartCount()));
 		 params.put("endCount", Integer.toString(pb.getEndCount()));
@@ -149,6 +148,44 @@ public class FcltyController {
 		return mapper.writeValueAsString(modelMap);
 
 	}
+	//시설물상세보기 시설물데이터
+	@RequestMapping(value = "/fcltView")
+	public ModelAndView fcltView(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("Fclty.fcltyView", params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("mng/fcltView");
+		
+		return mav;
+	}
+	//시설물상세보기안에 시설물예약리스트
+	@RequestMapping(value = "/fcltViewListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String fcltViewListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+
+		
+		 int cnt = iCommonService.getIntData("Fclty.fcltyViewListCnt",params);
+		 
+		 PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt,1,10);
+		
+		 params.put("startCount", Integer.toString(pb.getStartCount()));
+		 params.put("endCount", Integer.toString(pb.getEndCount()));
+		  
+		 
+		List<HashMap<String, String>> list = iCommonService.getDataList("Fclty.fcltyViewList", params);
+
+		modelMap.put("pb", pb);
+		modelMap.put("list", list);
+
+		return mapper.writeValueAsString(modelMap);
+
+	}
+	
 	//시설물등록
 	@RequestMapping(value = "/fcltAdd")
 	public ModelAndView fcltAdd(@RequestParam HashMap<String, String> params, ModelAndView mav)
