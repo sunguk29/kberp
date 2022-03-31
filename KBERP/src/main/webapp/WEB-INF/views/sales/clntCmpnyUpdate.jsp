@@ -271,23 +271,47 @@ $(document).ready(function() {
 		$("#uploadBtn").html(html);
 	});
 	
+	$("#ccClsfy").val(${data.CLNT_CMPNY_CLSFY_NUM}).prop("selected", this.selected);
+	$("#ccGrade").val(${data.GRADE_NUM}).prop("selected", this.selected);
+	$("#rp").val(${data.RCGNTN_PATH_NUM}).prop("selected", this.selected);
+	
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#ccName")) {
-			makeAlert("필수 항목 알림", "고객사를 입력하세요");
-		} else if(checkEmpty("#ccClsfy")) {
-			makeAlert("필수 항목 알림", "대표를 입력하세요");
-		} else if(checkEmpty("#ccGrade")) {
-			makeAlert("필수 항목 알림", "등급을 선택하세요");
+			makeAlert("필수 항목 알림", "고객사를 입력하세요", function() {
+				$("#ccName").focus();
+				});
+		} else if($("#ccClsfy").val() == 9) {
+			makeAlert("필수 항목 알림", "고객사 분류를 선택하세요", function() {
+				$("#ccClsfy").focus();
+			});
+		}else if($("#ccGrade").val() == 9) {
+			makeAlert("필수 항목 알림", "등급을 선택하세요", function() {
+				$("#ccGrade").focus();
+			});
+		} else if(checkEmpty("#cName")) {
+			makeAlert("필수 항목 알림", "대표명을 입력하세요", function() {
+				$("#cName").focus();
+			});
 		} else if(checkEmpty("#zipCodeNum")) {
-			makeAlert("필수 항목 알림", "우편번호를 입력하세요");
+			makeAlert("필수 항목 알림", "우편번호를 입력하세요", function() {
+				$("#zipCodeNum").focus();
+			});
 		} else if(checkEmpty("#adrs")) {
-			makeAlert("필수 항목 알림", "주소를 입력하세요");
+			makeAlert("필수 항목 알림", "주소를 입력하세요", function() {
+				$("#adrs").focus();
+			});
 		} else if(checkEmpty("#dtlAdrs")) {
-			makeAlert("필수 항목 알림", "상세주소를 입력하세요");
+			makeAlert("필수 항목 알림", "상세주소를 입력하세요", function() {
+				$("#dtlAdrs").focus();
+			});
 		} else if(checkEmpty("#rvn")) {
-			makeAlert("필수 항목 알림", "매출를 입력하세요");
-		} else if(checkEmpty("#rp")) {
-			makeAlert("필수 항목 알림", "인지경로를 선택하세요");
+			makeAlert("필수 항목 알림", "매출를 입력하세요", function() {
+				$("#rvn").focus();
+			});
+		} else if($("#rp").val() == 9) {
+			makeAlert("필수 항목 알림", "인지경로를 선택하세요", function() {
+				$("#rp").focus();
+			});
 		} else {
 			makePopup({
 				bg : true,
@@ -346,14 +370,6 @@ $(document).ready(function() {
 		}
 	});
 });
-
-function checkEmpty(sel) {
-	if($.trim($(sel).val()) == "") {
-		return true;
-	} else {
-		return false;
-	}
-}
 
 function findAddr(){
 	new daum.Postcode({
@@ -439,24 +455,13 @@ function uploadName(e) {
 								<td><input type="button" class="btn" value="고객사 분류 *" /></td>
 								<td>
 									<select class="txt" id="ccClsfy" name="ccClsfy">
-										<c:if test="${data.CLNT_CMPNY_CLSFY_NUM eq 0}">
-											<option value="0" selected="selected">거래고객사</option>
-										</c:if>
-										<c:if test="${data.CLNT_CMPNY_CLSFY_NUM eq 1}">
-											<option value="1" selected="selected">파트너사</option>
-										</c:if>
-										<c:if test="${data.CLNT_CMPNY_CLSFY_NUM eq 2}">
-											<option value="2" selected="selected">해지고객사</option>
-										</c:if>
-										<c:if test="${data.CLNT_CMPNY_CLSFY_NUM eq 3}">
-											<option value="3" selected="selected">정지고객사</option>
-										</c:if>
-										<c:if test="${data.CLNT_CMPNY_CLSFY_NUM eq 4}">
-											<option value="4" selected="selected">외국고객사</option>
-										</c:if>
-										<c:if test="${data.CLNT_CMPNY_CLSFY_NUM eq 5}">
-											<option value="5" selected="selected">기타</option>
-										</c:if>
+										<option value="9">선택하세요</option>
+										<option value="0">거래고객사</option>
+										<option value="1">파트너사</option>
+										<option value="2">해지고객사</option>
+										<option value="3">정지고객사</option>
+										<option value="4">외국고객사</option>
+										<option value="5">기타</option>
 									</select>
 								</td>
 							</tr>
@@ -464,43 +469,34 @@ function uploadName(e) {
 								<td><input type="button" class="btn" value="등급 *" /></td>
 								<td>
 									<select class="txt" id="ccGrade" name="ccGrade">
-										<c:if test="${data.GRADE_NUM eq 0}">
-											<option value="0" selected="selected">S</option>
-										</c:if>
-										<c:if test="${data.GRADE_NUM eq 1}">
-											<option value="1" selected="selected">A</option>
-										</c:if>
-										<c:if test="${data.GRADE_NUM eq 2}">
-											<option value="2" selected="selected">B</option>
-										</c:if>
-										<c:if test="${data.GRADE_NUM eq 3}">
-											<option value="3" selected="selected">C</option>
-										</c:if>
-										<c:if test="${data.GRADE_NUM eq 4}">
-											<option value="4" selected="selected">D</option>
-										</c:if>
+										<option value="9">선택하세요</option>
+										<option value="0">S</option>
+										<option value="1">A</option>
+										<option value="2">B</option>
+										<option value="3">C</option>
+										<option value="4">D</option>
 									</select>
 								</td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="사업자번호" /></td>
-								<td><input type="text" class="txt" id="brNum" name="brNum" value="${data.BSNSMN_RGSTRTN_NUM}" /></td>
+								<td><input type="text" class="txt" id="brNum" name="brNum" placeholder="&quot; - &quot; 제외한 숫자만 입력하세요" value="${data.BSNSMN_RGSTRTN_NUM}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="대표" /></td>
-								<td><input type="text" class="txt" id="cName" name="cName" value="${data.CLNT_NAME}" /></td>
+								<td><input type="text" class="txt" id="cName" name="cName" placeholder="성명" value="${data.CLNT_NAME}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="유선번호" /></td>
-								<td><input type="text" class="txt" id="phoneNum" name="phoneNum" value="${data.PHONE_NUM}" /></td>
+								<td><input type="text" class="txt" id="phoneNum" name="phoneNum" placeholder="&quot; - &quot; 제외한 숫자만 입력하세요" value="${data.PHONE_NUM}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="팩스번호" /></td>
-								<td><input type="text" class="txt" id="fax" name="fax" value="${data.FAX}" /></td>
+								<td><input type="text" class="txt" id="fax" name="fax" placeholder="&quot; - &quot; 제외한 숫자만 입력하세요" value="${data.FAX}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="웹사이트" /></td>
-								<td><input type="text" class="txt" id="hmpg" name="hmpg" value="${data.HMPG}" /></td>
+								<td><input type="text" class="txt" id="hmpg" name="hmpg" placeholder="홈페이지 주소" value="${data.HMPG}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="우편번호" /></td>
@@ -522,24 +518,13 @@ function uploadName(e) {
 								<td><input type="button" class="btn" value="인지경로"></td>
 								<td>
 									<select class="txt" id="rp" name="rp">
-										<c:if test="${data.RCGNTN_PATH_NUM eq 0}">
-											<option value="0" selected="selected">자사홈페이지</option>
-										</c:if>
-										<c:if test="${data.RCGNTN_PATH_NUM eq 1}">
-											<option value="1" selected="selected">인터넷검색</option>
-										</c:if>
-										<c:if test="${data.RCGNTN_PATH_NUM eq 2}">
-											<option value="2" selected="selected">지인소개</option>
-										</c:if>
-										<c:if test="${data.RCGNTN_PATH_NUM eq 3}">
-											<option value="3" selected="selected">세미나</option>
-										</c:if>
-										<c:if test="${data.RCGNTN_PATH_NUM eq 4}">
-											<option value="4" selected="selected">전화</option>
-										</c:if>
-										<c:if test="${data.RCGNTN_PATH_NUM eq 5}">
-											<option value="5" selected="selected">기타</option>
-										</c:if>
+										<option value="9">선택하세요</option>
+										<option value="0">자사홈페이지</option>
+										<option value="1">인터넷검색</option>
+										<option value="2">지인소개</option>
+										<option value="3">세미나</option>
+										<option value="4">전화</option>
+										<option value="5">기타</option>
 									</select>
 								</td>
 							</tr>

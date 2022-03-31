@@ -370,9 +370,6 @@ hr { /* 구분선 */
 <script type="text/javascript">
 $(document).ready(function() {
 	console.log(${param.salesNum});
-	console.log(${loan.SALES_NUM});
-	console.log(${data.SALES_NUM});
-	console.log("ㅇㅇ");
 	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
@@ -460,7 +457,7 @@ $(document).ready(function() {
 									success : function(res) {
 										if(res.res == "success") {
 											
-											$("#listForm").attr("action", "salesList");
+											$("#listForm").attr("action", "sales2SgstnCont");
 											$("#listForm").submit();
 										} else {
 											alert("등록중 문제가 발생하였습니다.");
@@ -512,7 +509,7 @@ function uploadName(e) {
 		<input type="hidden" name="top" value="${param.top}" />
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
-		<input type="hidden" name="salesNum" value="${data.SALES_NUM}" />
+		<input type="hidden" name="salesNum" value="${param.salesNum}" />
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -608,7 +605,6 @@ function uploadName(e) {
 								</tbody>
 							</table>
 							<div class="page_cont_title_text">대출 상세정보</div>
-							<input type="hidden" id="salesNum" name="salesNum" value="${loan.SALES_NUM}" /> <!-- 영업번호 -->
 							<hr class="hr_width">
 							<table>
 								<colgroup>
@@ -780,7 +776,7 @@ function uploadName(e) {
 						<input type="hidden" name="top" value="${param.top}" />
 						<input type="hidden" name="menuNum" value="${param.menuNum}" />
 						<input type="hidden" name="menuType" value="${param.menuType}" />
-						<input type="hidden" id="salesNum" name="salesNum" value="${lead.SALES_NUM}" /><!-- 넘어올 영업번호... 리드에서 가져옴 -->
+						<input type="hidden" id="salesNum" name="salesNum" value="${param.salesNum}" /><!-- 넘어올 영업번호... 리드에서 가져옴 -->
 						
 						<div class="bot_title">
 							<h3>

@@ -267,7 +267,7 @@ table {
 	padding-left: 70px;
 }
 
-.colNum1, .colNum2, .colNum3, .colNum4 {
+.colNum1 {
 	width: 200px;
 	background-color: #F2CB05;
 	border: none;
@@ -282,25 +282,14 @@ table {
 	background: linear-gradient(90deg, #FFE65A, #FFE150);
 }
 
-.colNum2 {
-	background: linear-gradient(100deg, #FFE150, #FFDC46);
-}
 
-.colNum3 {
-	background: linear-gradient(100deg, #FFDC46, #FFD232);
-}
-
-.colNum4 {
-	background: linear-gradient(100deg, #FFD232, #FFC81E);
-}
-
-.colNum1:active, .colNum2:active, .colNum3:active, .colNum4:active {
+.colNum1:active {
 	font-weight: bold;
-	color: #2E83F2;
+	color: #4B94F2;
 	cursor: pointer;
 }
 
-.colNum1:hover, .colNum2:hover, .colNum3:hover, .colNum4:hover {
+.colNum1:hover {
 	font-weight: bold;
 	cursor: pointer;
 }
@@ -339,9 +328,22 @@ table {
 	border: none;
 	background-color: #F2F2F2;
 }
+
+.boldSts {
+	color: #2E83F2;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	console.log("테스트2");
+	/* 머지 테스트!!!!!!!!!!!!!!!! */
+	/* 머지테스트!!!!!!!2222222222 */
+	/* 나도 머지테스트!!!!!!!3333 */
+	console.log("테스트");
+	console.log("테스트 2");
+	console.log("테스트테스트테스트테스트테스트테스트테스트");
+	console.log("파란색");
+	
 	
 	// 검색 후 구분란(searchGbn)에 검색어유지를 위해
 	if('${param.searchGbn}' != '') {
@@ -377,7 +379,7 @@ $(document).ready(function() {
 	//});
 	
 	// 목록에서 영업명 선택 시 상세보기로 이동
-	
+	// 테스트
 	
 	
 	$(".salesWrap").on("click", ".salesOpportunityName", function() {
@@ -493,25 +495,25 @@ function drawList(list) {
 
 		html += "<tr height=\"10\">";
 		if(data.PRGRS_STS2 == "영업기회") {
-			html += "<td class=\"colNum1\" rowspan=\"3\"><b>영업기회</b></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\"><b>영업기회</b></td>";
 		} else {
 			html += "<td class=\"colNum1\" rowspan=\"3\">영업기회</td>";
 		}
 		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "제안") {
-			html += "<td class=\"colNum1\" rowspan=\"3\"><b>제안</b></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\"><b>제안</b></td>";
 		} else {
 			html += "<td class=\"colNum1\" rowspan=\"3\">제안</td>";
 		}
 		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "견적") {
-			html += "<td class=\"colNum1\" rowspan=\"3\"><b>견적</b></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\"><b>견적</b></td>";
 		} else {
 			html += "<td class=\"colNum1\" rowspan=\"3\">견적</td>";
 		}
 		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "계약") {
-			html += "<td class=\"colNum1\" rowspan=\"3\"><b>계약</b></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\"><b>계약</b></td>";
 		} else {
 			html += "<td class=\"colNum1\" rowspan=\"3\">계약</td>";
 		}
@@ -576,6 +578,8 @@ function drawPaging(pb) {
 </head>
 <body>
 <!-- 검색 데이터 유지용 -->
+<!-- 머지 테스트 -->
+<!-- 머지 테스트 투 -->
 <input type="hidden" id="oldSearchGbn" value="${param.searchGbn}" />
 <input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
 

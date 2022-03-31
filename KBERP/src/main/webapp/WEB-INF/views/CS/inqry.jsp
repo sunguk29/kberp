@@ -17,8 +17,6 @@
 /* 개인 작업 영역 */
 .cont_area {
 	display: inline-block;
-	margin-left: 50px;
-	margin-top: 10px;
 }
 
 .cnsl_page {
@@ -34,13 +32,15 @@
 	border-bottom: 2px solid #2E83F2;
 }
 
-.inqry_info {
+.inqry_info, .ansr_info {
 	font-size: 10.5pt;
+    margin-left: 30px;
+    margin-bottom: 10px;
 }
 
-.inqry_info th {
+.inqry_info th, .ansr_info th {
 	text-align: left;
-	width: 100px;
+	width: 95px;
 	height: 50px;
 }
 
@@ -69,7 +69,7 @@ tbody td {
 }
 
 tbody td input {
-	width: 200px;
+	width: 187px;
 	height: 20px;
 	padding: 5px 10px;
 	border: none;
@@ -110,6 +110,12 @@ tr:nth-child(5) {
 	outline-color: #2E83F2;
 }
 
+.ansr_info tbody tr:nth-child(2) input {
+	width: 700px;
+	border: 1px solid #d5d5d5;
+	border-radius: 2px;
+}
+
 .cmn_btn_ml {
 	/* 마우스 드래그 금지 */
 	-ms-user-select: none;
@@ -119,44 +125,10 @@ tr:nth-child(5) {
 	user-select:none;
 }
 
-
-.cnsl_top .ctgr, .cnsl_top .wrtng_title, .cnsl_top .wrtng_wrtr {
-	display: inline-block;
-	margin-right: 20px;
-	height: 50px;
-}
-
-.cnsl_top .ctgr select {
-	width: 150px;
-	height: 30px;
-}
-
-.cnsl_top .wrtng_title {
-	width: 200px;
-	height: 40px;
-	margin-right: 200px;
-}
-
-.cnsl_top .wrtng_title input {
-	width: 420px;
-	height: 25px;
-	
-}
-
-.wrtng_wrtr {
-	margin-left: 50px;
-}
-
-.cnsl_top .wrtng_wrtr input {
-	width: 115px;
-	height: 25px;
-	
-}
-
-
 .cnsl_bottom {
 	float: right;
-	margin-top: 30px;
+	margin-top: 10px;
+	margin-right: 50px;
 	vertical-align: bottom;
 }
 
@@ -197,84 +169,189 @@ $(document).ready(function() {
 		<div class="page_title_bar">
 			<span class="page_title_text">1:1 문의</span>
 		</div>
-		<div class="cnsl_page">상담글
-			<div class="es_text">
-				<div class="th_star">*</div>
-				<div class="th_star_input">항목은 필수입력 항목입니다.</div>
-			</div>
-		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="cnsl_top">
-				<table class="inqry_info">
-				<tbody>
-					<tr>
-						<th scope="row">이름
-							<span class="th_star">*</span>
-						</th>
-						<td>
-							<input type="text" id="clnt_name" name="clnt_name" readonly="readonly" value="${data.CLNT_NAME}">
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">연락처
-							<span class="th_star">*</span>
-						</th>
-						<td>
-							<input type="text" readonly="readonly" value="${data.PHONE_NUM_1}">
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">카테고리
-							<span class="th_star">*</span>
-						</th>
-						<td>
-							<select disabled="disabled" id="ctgry_name" name="ctgry_name">
-								<option>인터넷뱅킹</option>
-								<option>스마트폰뱅킹</option>
-								<option>CD/ATM</option>
-								<option>공인인증서</option>
-								<option>인증/OTP/보안카드</option>
-								<option>예금/신탁</option>
-								<option>펀드</option>
-								<option>대출</option>
-								<option>외환</option>
-								<option>로그인관련</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">문의 제목
-							<span class="th_star">*</span>
-						</th>
-						<td>
-							<input type="text" name="wrtng_title" readonly="readonly" value="${data.WRTNG_TITLE}">
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">문의 내용
-							<span class="th_star">*</span>
-						</th>
-						<td>
-							<textarea class="wrtng_cont" name="wrtng_cont" rows="15" cols="110" readonly="readonly">${data.WRTNG_CONT}</textarea>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">첨부파일</th>
-						<td>
-							<input type="text" id="att" name="att" readonly="readonly" >
-						</td>
-					</tr>
-				</tbody>
-				</table>
+			<c:choose>
+				<c:when test="${empty data.ANSR_TITLE}">
+					<div class="cnsl_page">상담글
+						<div class="es_text">
+							<div class="th_star">*</div>
+							<div class="th_star_input">항목은 필수입력 항목입니다.</div>
+						</div>
+					</div>
+					<table class="inqry_info">
+					<tbody>
+						<tr>
+							<th scope="row">이름
+								<span class="th_star">*</span>
+							</th>
+							<td>
+								<input type="text" id="clnt_name" name="clnt_name" readonly="readonly" value="${data.CLNT_NAME}">
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">연락처
+								<span class="th_star">*</span>
+							</th>
+							<td>
+								<input type="text" readonly="readonly" value="${data.PHONE_NUM_1}">
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">카테고리
+								<span class="th_star">*</span>
+							</th>
+							<td>
+								<select disabled="disabled" id="ctgry_name" name="ctgry_name">
+									<option>인터넷뱅킹</option>
+									<option>스마트폰뱅킹</option>
+									<option>CD/ATM</option>
+									<option>공인인증서</option>
+									<option>인증/OTP/보안카드</option>
+									<option>예금/신탁</option>
+									<option>펀드</option>
+									<option>대출</option>
+									<option>외환</option>
+									<option>로그인관련</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">문의 제목
+								<span class="th_star">*</span>
+							</th>
+							<td>
+								<input type="text" name="wrtng_title" readonly="readonly" value="${data.WRTNG_TITLE}">
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">문의 내용
+								<span class="th_star">*</span>
+							</th>
+							<td>
+								<textarea class="wrtng_cont" name="wrtng_cont" rows="15" cols="110" readonly="readonly">${data.WRTNG_CONT}</textarea>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">첨부파일</th>
+							<td>
+								<input type="text" id="att" name="att" readonly="readonly" >
+							</td>
+						</tr>
+					</tbody>
+					</table>
+				</c:when>
+				<c:otherwise>
+					<div class="cnsl_page">상담글
+							<div class="es_text">
+								<div class="th_star">*</div>
+								<div class="th_star_input">항목은 필수입력 항목입니다.</div>
+							</div>
+						</div>
+						<table class="inqry_info">
+						<tbody>
+							<tr>
+								<th scope="row">이름
+									<span class="th_star">*</span>
+								</th>
+								<td>
+									<input type="text" id="clnt_name" name="clnt_name" readonly="readonly" value="${data.CLNT_NAME}">
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">연락처
+									<span class="th_star">*</span>
+								</th>
+								<td>
+									<input type="text" readonly="readonly" value="${data.PHONE_NUM_1}">
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">카테고리
+									<span class="th_star">*</span>
+								</th>
+								<td>
+									<select disabled="disabled" id="ctgry_name" name="ctgry_name">
+										<option>인터넷뱅킹</option>
+										<option>스마트폰뱅킹</option>
+										<option>CD/ATM</option>
+										<option>공인인증서</option>
+										<option>인증/OTP/보안카드</option>
+										<option>예금/신탁</option>
+										<option>펀드</option>
+										<option>대출</option>
+										<option>외환</option>
+										<option>로그인관련</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">문의 제목
+									<span class="th_star">*</span>
+								</th>
+								<td>
+									<input type="text" name="wrtng_title" readonly="readonly" value="${data.WRTNG_TITLE}">
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">문의 내용
+									<span class="th_star">*</span>
+								</th>
+								<td>
+									<textarea class="wrtng_cont" name="wrtng_cont" rows="15" cols="110" readonly="readonly">${data.WRTNG_CONT}</textarea>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">첨부파일</th>
+								<td>
+									<input type="text" id="att" name="att" readonly="readonly" value="${data.ATT_FILE}" >
+								</td>
+							</tr>
+						</tbody>
+						</table>
+					<div class="cnsl_page">답변글</div>
+					<table class="ansr_info">
+						<tbody>
+							<tr>
+								<th scope="row">상담자명
+								</th>
+								<td>
+									<input type="text" id="clnt_name" name="clnt_name" readonly="readonly" value="${data.EMP_NAME}">
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">답변 제목
+								</th>
+								<td>
+									<input type="text" name="wrtng_title" readonly="readonly" value="${data.ANSR_TITLE}">
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">답변 내용
+								</th>
+								<td>
+									<textarea class="wrtng_cont" name="wrtng_cont" rows="15" cols="110" readonly="readonly">${data.ANSR_CONT}</textarea>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">첨부파일</th>
+								<td>
+									<input type="text" id="att" name="att" readonly="readonly" value="${data.ANSR_ATT_FILE}" >
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</c:otherwise>
+			</c:choose>
 				<div class="cnsl_bottom">
 					<c:choose>
-						<c:when test="${data.ANSR_TITLE eq null}">
-							<div class="cmn_btn_ml" id="ansr_rvs">수정</div>
+						<c:when test="${empty data.ANSR_TITLE}">
+							<div class="cmn_btn_ml" id="ansr_rvs">답변등록</div>
 						</c:when>
 						<c:otherwise>
-							<div class="cmn_btn_ml" id="ansr_rvs">답변등록</div>
+							<div class="cmn_btn_ml" id="ansr_rvs">수정</div>
 						</c:otherwise>
 					</c:choose>
 					<div class="cmn_btn_ml">삭제</div>

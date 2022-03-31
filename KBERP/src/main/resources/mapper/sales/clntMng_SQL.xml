@@ -29,6 +29,11 @@
 		                                                              ON A.CLNT_CMPNY_NAME = B.CLNT_CMPNY_NAME ) A
 		                WHERE A.DEL_CHECK IS NULL ) A
 		WHERE 1 = 1
+		<choose>
+			<when test="clntCmpnyClsfyNum != 9" > <!-- 선택안함 : 0 이 아니면 해당 번호 목록으로 검색 -->
+				AND A.CLNT_CMPNY_CLSFY_NUM = #{clntCmpnyClsfyNum}
+			</when>
+		</choose> 
 		<if test="searchTxt != null and searchTxt != ''">
 			<choose>
 				<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
@@ -173,69 +178,18 @@
 			    #{zipCodeNum}, #{adrs}, #{dtlAdrs}, #{rvn}, #{sEmpNum})
 	</insert>
 	
+	<select id="clntCmpnyListAllCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM CLNT_CMPNY
+		WHERE 1 = 1
+		AND DEL_CHECK IS NULL
+	</select>
+	
 	<select id="clntCmpnyCntrctCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
         FROM CLNT_CMPNY
         WHERE 1 = 1
         AND DEL_CHECK IS NULL
-		<if test="searchTxt != null and searchTxt != ''">
-			<choose>
-				<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 9 and searchType == 1">
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 0 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 0
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 1 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 1
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 2 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 2
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 3 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 3
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 4 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 4
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 5 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 5
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 0 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 0
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 1 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 1
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 2 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 2
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 3 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 3
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 4 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 4
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 5 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 5
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-			</choose>
-		</if>
 		AND CLNT_CMPNY_CLSFY_NUM = 0
 	</select>
 
@@ -244,64 +198,6 @@
 		FROM CLNT_CMPNY
 		WHERE 1 = 1
 		AND DEL_CHECK IS NULL
-		<if test="searchTxt != null and searchTxt != ''">
-			<choose>
-				<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 9 and searchType == 1">
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 0 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 0
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 1 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 1
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 2 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 2
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 3 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 3
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 4 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 4
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 5 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 5
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 0 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 0
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 1 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 1
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 2 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 2
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 3 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 3
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 4 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 4
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 5 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 5
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-			</choose>
-		</if>
 		AND CLNT_CMPNY_CLSFY_NUM = 1
 	</select>
 	
@@ -310,64 +206,6 @@
 		FROM CLNT_CMPNY
 		WHERE 1 = 1
 		AND DEL_CHECK IS NULL
-		<if test="searchTxt != null and searchTxt != ''">
-			<choose>
-				<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 9 and searchType == 1">
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 0 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 0
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 1 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 1
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 2 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 2
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 3 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 3
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 4 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 4
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 5 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 5
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 0 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 0
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 1 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 1
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 2 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 2
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 3 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 3
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 4 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 4
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 5 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 5
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-			</choose>
-		</if>
 		AND CLNT_CMPNY_CLSFY_NUM = 2
 	</select>
 	
@@ -376,64 +214,6 @@
 		FROM CLNT_CMPNY
 		WHERE 1 = 1
 		AND DEL_CHECK IS NULL
-		<if test="searchTxt != null and searchTxt != ''">
-			<choose>
-				<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 9 and searchType == 1">
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 0 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 0
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 1 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 1
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 2 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 2
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 3 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 3
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 4 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 4
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 5 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 5
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 0 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 0
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 1 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 1
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 2 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 2
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 3 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 3
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 4 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 4
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 5 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 5
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-			</choose>
-		</if>
 		AND CLNT_CMPNY_CLSFY_NUM = 3
 	</select>
 	
@@ -442,64 +222,6 @@
 		FROM CLNT_CMPNY
 		WHERE 1 = 1
 		AND DEL_CHECK IS NULL
-		<if test="searchTxt != null and searchTxt != ''">
-			<choose>
-				<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 9 and searchType == 1">
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 0 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 0
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 1 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 1
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 2 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 2
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 3 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 3
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 4 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 4
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 5 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 5
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 0 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 0
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 1 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 1
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 2 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 2
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 3 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 3
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 4 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 4
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 5 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 5
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-			</choose>
-		</if>
 		AND CLNT_CMPNY_CLSFY_NUM = 4
 	</select>
 	
@@ -508,64 +230,6 @@
 		FROM CLNT_CMPNY
 		WHERE 1 = 1
 		AND DEL_CHECK IS NULL
-		<if test="searchTxt != null and searchTxt != ''">
-			<choose>
-				<when test="clntCmpnyClsfyNum == 9 and searchType == 0">
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 9 and searchType == 1">
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 0 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 0
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 1 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 1
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 2 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 2
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 3 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 3
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 4 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 4
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 5 and searchType == 0">
-					AND CLNT_CMPNY_CLSFY_NUM = 5
-					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 0 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 0
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 1 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 1
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 2 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 2
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 3 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 3
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 4 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 4
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-				<when test="clntCmpnyClsfyNum == 5 and searchType == 1">
-					AND CLNT_CMPNY_CLSFY_NUM = 5
-					AND CLNT_CMPNY_NUM LIKE '%' || #{searchTxt} || '%'
-				</when>
-			</choose>
-		</if>
 		AND CLNT_CMPNY_CLSFY_NUM = 5
 	</select>
 	
@@ -627,6 +291,19 @@
 		SELECT COUNT(*) AS CNT
 		FROM ENTRPRS_CLNT
 		WHERE 1 = 1
+   		<if test="searchTxt != null and searchTxt != ''">
+        	<choose>
+        		<when test="searchType == 0">
+        			AND CLNT_NAME LIKE '%' || #{searchTxt} || '%'
+        		</when>
+        		<when test="searchType == 1">
+        			AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+        		</when>
+        		<when test="searchType == 2">
+        			AND CLNT_NUM LIKE '%' || #{searchTxt} || '%'
+        		</when>
+        	</choose>
+        </if>
 		AND DEL_CHECK IS NULL
 	</select>
 	

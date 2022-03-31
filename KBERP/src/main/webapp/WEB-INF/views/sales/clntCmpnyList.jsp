@@ -47,6 +47,19 @@
 	text-align: center;
 	background-color: #f2f2f2;
 	border-radius: 5px;
+	border: none;
+}
+.sts_list_on {
+	display: inline-block;
+	vertical-align: middle;
+	width: 110px;
+	margin: 0 5px;
+	padding: 8px 5px;
+	font-size: 9pt;
+	text-align: center;
+	background-color: #F2B705;
+	border-radius: 5px;
+	border: none;
 }
 .tLine{
 	background-color: #4B94F2;
@@ -90,7 +103,7 @@ select {
 	width: 305px;
 	font-size: 12px;
 }
-.SearchResult { /* 영업기회 검색결과 */
+.SearchResult {
 	width: 927px;
 	font-size: 11pt;
 	text-align: left;
@@ -170,24 +183,60 @@ select {
 	width: 100%;
 	height: 100%;
 }
+.sts_list:hover {
+	font-weight: bold;
+	cursor: pointer;
+	background-color: #F2B705;
+}
+.sts_list:active {
+   background-color: #F2CB05;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	/* 고객사 분류 초기값 */
 	if('${param.clntCmpnyClsfyNum}' != '') {
 		$("#clntCmpnyClsfyNum").val('${param.clntCmpnyClsfyNum}');
 	} else {
 		$("#oldClntCmpnyClsfyNum").val("9");
 	}
 	
+	/* 검색어 분류 초기값 */
 	if('${param.searchType}' != '') {
 		$("#searchType").val('${param.searchType}');
 	} else {
 		$("#oldSearchType").val("0");
 	}
 	
+	/* 고객사 목록 */
 	reloadList();
 	
+	/* 검색 상단 고객사분류버튼 클릭시 */
+	$(".sts").on("click", ".sts_list", function() {
+		if($(this).attr("num") != "9") {
+			$(".sts").children(".sts_list_on").attr("class", "sts_list");
+			$(this).removeClass();
+			$(this).addClass("sts_list_on");	
+		} else {
+			$(".sts").children(".sts_list_on").attr("class", "sts_list");
+		}
+		
+		$("#page").val("1");
+		
+		$("#clntCmpnyClsfyNum").val($(this).attr("num"));
+		
+		if($("#searchTxt").val() != "") { // 검색어 txt가 비어있지 않으면 초기화
+			var txt = document.getElementById("searchTxt");
+			
+			txt.value = "";
+		}
+		
+		reloadList();
+		
+	});
+	
+	/* 페이지버튼 클릭시 */
 	$(".pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
 		$("#listSort").val("9");
@@ -199,11 +248,13 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
+	/* 등록버튼 클릭시 */
 	$("#addBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntCmpnyReg");
 		$("#actionForm").submit();
 	});
 	
+	/* 검색칸에 엔터입력시 */
 	$("#searchTxt").on("keypress", function(event) {
 		if(event.keyCode == 13) {
 			$("#searchBtn").click(); 
@@ -212,6 +263,7 @@ $(document).ready(function() {
 		}
 	});
 	
+	/* 검색버튼 클릭시 */
 	$("#searchBtn").on("click", function() {
 		$("#page").val("1");
 		
@@ -222,13 +274,14 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
+	/* 정렬버튼 클릭시 */
 	$("#sortBtn").on("click", function() {
 		reloadList();
 	});
 	
-	
 });
 
+/* 고객사 목록 Ajax */
 function reloadList() {
 	var params = $("#actionForm").serialize();
 	
@@ -238,10 +291,9 @@ function reloadList() {
 		data : params,
 		dataType : "json",
 		success : function(res) {
-			drawSearchCnt(res.MaxCnt);
+			drawSearchCnt(res.listCnt);
 			drawList(res.list);
 			drawPaging(res.pb);
-			drawCnt(res.MaxCnt, res.CntrctCnt, res.PartnerCnt, res.TmnCnt, res.SspsCnt, res.ForeignCnt, res.EtcCnt);
 		},
 		error : function(req) {
 			console.log(req.responseText);
@@ -250,31 +302,18 @@ function reloadList() {
 	
 }
 
-function drawCnt(MaxCnt, CntrctCnt, PartnerCnt, TmnCnt, SspsCnt, ForeignCnt, EtcCnt) {
-	var html = "";
-	
-	html += "<div class=\"sts_list\" id=\"maxCnt\">전체 : " + MaxCnt + "건</div>";
-	html += "<div class=\"sts_list\" id=\"CntrctCn\">거래고객사 : " + CntrctCnt + "건</div>";
-	html += "<div class=\"sts_list\" id=\"PartnerCnt\">파트너사 : " + PartnerCnt + "건</div>";
-	html += "<div class=\"sts_list\" id=\"TmnCnt\">해지고객사 : " + TmnCnt + "건</div>";
-	html += "<div class=\"sts_list\" id=\"SspsCnt\">정지고객사 : " + SspsCnt + "</div>";
-	html += "<div class=\"sts_list\" id=\"ForeignCnt\">외국파트너사 : " + ForeignCnt + "건</div>";
-	html += "<div class=\"sts_list\" id=\"EtcCnt\">기타 : " + EtcCnt + "건</div>";
-	
-	$(".sts").html(html);
-	
-}
-
-function drawSearchCnt(MaxCnt) {
+/* 고객사 검색 개수 html */
+function drawSearchCnt(listCnt) {
 	var html = "";
 	html += "<h3>"; 
-	html += "고객사 (검색결과: " + MaxCnt + "건)";
+	html += "고객사 (검색결과: " + listCnt + "건)";
 	html += "</h3>";
 	
 	$(".SearchResult").html(html);
 	
 }
 
+/* 고객사 목록 html */
 function drawList(list) {
 	var html = "";
 	
@@ -327,6 +366,7 @@ function drawList(list) {
  	
 	$(".list_table").html(html);
 	
+	/* 고객사이름 클릭시 */
 	$(".list_table tbody").on("click", "tr:nth-child(2) td:nth-child(2)", function() {
 		$("#ccn").val($(this).attr("ccn"));
 
@@ -336,6 +376,7 @@ function drawList(list) {
 	
 }
 
+/* 고객사 목록 페이징 */
 function drawPaging(pb) {
 	var html = "";
 	
@@ -395,7 +436,15 @@ function drawPaging(pb) {
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 			<div class="bodyWrap">
-				<div class="sts"></div>
+				<div class="sts">
+					<div class="sts_list" num="9">전체: ${AllCnt}건</div>
+					<div class="sts_list" num="0">거래고객사: ${CntrctCnt}건</div>
+					<div class="sts_list" num="1">파트너사: ${PartnerCnt}건</div>
+					<div class="sts_list" num="2">해지고객사: ${TmnCnt}건</div>
+					<div class="sts_list" num="3">정지고객사: ${SspsCnt}건</div>
+					<div class="sts_list" num="4">외국파트너사: ${ForeignCnt}건</div>
+					<div class="sts_list" num="5">기타: ${EtcCnt}건</div>
+				</div>
 				<div class="tLine"></div>
 				<table class="srch_table">
 					<colgroup>

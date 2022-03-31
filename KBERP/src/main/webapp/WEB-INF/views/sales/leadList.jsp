@@ -254,7 +254,9 @@ select {
 	width: 305px;
 	font-size: 12px;
 }
-
+.attImage {
+	width : 12px;
+}
 /* 직원검색 */
 .findEmp_box {
 	background-color: white;
@@ -732,7 +734,7 @@ function drawPaging(pb, sel) {
 	<input type="hidden" id="leadNum" name="leadNum" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
-	<input type="hidden" name="menuType" value="${param.menuType}" />t
+	<input type="hidden" name="menuType" value="${param.menuType}" />
 	
 	<!-- 내용영역 -->
 		<div class="cont_wrap">

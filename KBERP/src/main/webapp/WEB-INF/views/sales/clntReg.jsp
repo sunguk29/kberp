@@ -42,7 +42,7 @@ td:nth-child(2), td:nth-child(4){
 td:nth-child(1), td:nth-child(3){
 	text-align: center;
 }
-.btn{ /* 내용 제목 영역 */
+.btn{
 	width : 90px;
 	height: 40px;
 }
@@ -324,6 +324,7 @@ td:nth-child(1), td:nth-child(3){
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	/* 목록버튼 클릭시 */
 	$("#listBtn").on("click", function() {
 		makePopup({
 			bg : true,
@@ -346,7 +347,7 @@ $(document).ready(function() {
 		});
 	});
 	
-// ************** 고객사 팝업 **************
+	/* 고객사아이콘 클릭시 */
 	$("#ccPop").on("click", function() {
 		var html = "";
         
@@ -415,10 +416,9 @@ $(document).ready(function() {
 				}
 			}
 		});
-	});
-// ************** 고객사 팝업 END **************	
+	});	
 
-// ************** 담당자 팝업 **************
+	/* 담당자아이콘 클릭시 */
 	$("#mngPop").on("click", function() {
 		
 		var html = "";
@@ -516,8 +516,8 @@ $(document).ready(function() {
 		});
 		
 	});
-// ************** 담당자 팝업 END **************
 
+	/* 파일업로드(+) 클릭시 */
 	$(".aff_btn").on("click", function() {
 		$("#att").click();
 	});
@@ -526,13 +526,21 @@ $(document).ready(function() {
 	
 	$("#addBtn").on("click", function() {
 		if(checkEmpty("#cName")) {
-			makeAlert("필수 항목 알림", "고객을 입력하세요");
+			makeAlert("필수 항목 알림", "고객을 입력하세요", function() {
+				$("#cName").focus();
+			});
 		} else if(checkEmpty("#ccName")) {
-			makeAlert("필수 항목 알림", "고객사를 입력하세요");
+			makeAlert("필수 항목 알림", "고객사를 입력하세요", function() {
+				$("#ccName").focus();
+			});
 		} else if(checkEmpty("#mbl")) {
-			makeAlert("필수 항목 알림", "휴대폰번호를 입력하세요");
+			makeAlert("필수 항목 알림", "휴대폰번호를 입력하세요", function() {
+				$("#mbl").focus();
+			});
 		} else if(checkEmpty("#mngEmp")) {
-			makeAlert("필수 항목 알림", "담당자를 입력하세요");
+			makeAlert("필수 항목 알림", "담당자를 입력하세요", function() {
+				$("#mngEmp").focus();
+			});
 		} else {
 			makePopup({
 				bg : true,
@@ -590,14 +598,6 @@ $(document).ready(function() {
 		}
 	});
 });
-
-function checkEmpty(sel) {
-	if($.trim($(sel).val()) == "") {
-		return true;
-	} else {
-		return false;
-	}
-}
 
 // *********************************************** 고객사 팝업 ***********************************************
 function drawCcList() {
@@ -795,7 +795,7 @@ function uploadName(e) {
 								<td><input type="button" class="btn" value="고객사 *" /></td>
 								<td>
 									<div class="imgPos">
-										<input type="text" class="txt imgName" id="ccName" name="ccName" />
+										<input type="text" class="txt imgName" id="ccName" name="ccName" readonly="readonly" />
 										<input type="hidden" id="ccNum" name="ccNum" />
 										<img class="btnImg_in" id="ccPop" alt="팝업" src="resources/images/sales/popup.png">
 									</div>
@@ -821,7 +821,7 @@ function uploadName(e) {
 								<td><input type="button" class="btn" value="담당자 *" /></td>
 								<td>
 									<div class="imgPos">
-										<input type="text" class="txt imgName" id="mngEmp" name="mngEmp" />
+										<input type="text" class="txt imgName" id="mngEmp" name="mngEmp" readonly="readonly" />
 										<input type="hidden"id="mngNum" name="mngNum" />
 										<img class="btnImg_in" id="mngPop" alt="팝업" src="resources/images/sales/usericon.png">
 									</div>

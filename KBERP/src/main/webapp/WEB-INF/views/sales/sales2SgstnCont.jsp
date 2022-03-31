@@ -378,10 +378,8 @@ textarea {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	console.log("hi");
+
 	console.log(${param.salesNum});
-	console.log(${data.SALES_NUM});
-	console.log("ㅇㅇ");
 	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {

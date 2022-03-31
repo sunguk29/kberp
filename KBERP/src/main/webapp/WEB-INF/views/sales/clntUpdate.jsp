@@ -337,7 +337,6 @@ $(document).ready(function() {
 				name : "나가기",
 				func:function() {
 					$("#listForm").submit();
-					console.log("One!");
 					closePopup();
 				}
 			}, {
@@ -533,19 +532,23 @@ $(document).ready(function() {
 	});
 // ************** 담당자 팝업 END **************
 
-	$(".aff_btn").on("click", function() {
-		$("#att").click();
-	});
-	
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#cName")) {
-			makeAlert("필수 항목 알림", "고객을 입력하세요");
+			makeAlert("필수 항목 알림", "고객을 입력하세요", function() {
+				$("#cName").focus();
+			});
 		} else if(checkEmpty("#ccName")) {
-			makeAlert("필수 항목 알림", "고객사를 입력하세요");
+			makeAlert("필수 항목 알림", "고객사를 입력하세요", function() {
+				$("#ccName").focus();
+			});
 		} else if(checkEmpty("#mbl")) {
-			makeAlert("필수 항목 알림", "휴대폰번호를 입력하세요");
+			makeAlert("필수 항목 알림", "휴대폰번호를 입력하세요", function() {
+				$("#mbl").focus();
+			});
 		} else if(checkEmpty("#mngEmp")) {
-			makeAlert("필수 항목 알림", "담당자를 입력하세요");
+			makeAlert("필수 항목 알림", "담당자를 입력하세요", function() {
+				$("#mngEmp").focus();
+			});
 		} else {
 			makePopup({
 				bg : true,
@@ -603,14 +606,6 @@ $(document).ready(function() {
 		}
 	});
 });
-
-function checkEmpty(sel) {
-	if($.trim($(sel).val()) == "") {
-		return true;
-	} else {
-		return false;
-	}
-}
 
 // *********************************************** 고객사 팝업 ***********************************************
 function drawCcList() {
@@ -762,8 +757,8 @@ function uploadName(e) {
 </script>
 </head>
 <body>
-<form action="clntList" id="listForm" method="post">
-	<input type="hidden" id="page" name="page" value="${page}" />
+<form action="clntCont" id="listForm" method="post">
+	<input type="hidden" id="page" name="page" value="${param.page}" />
 	<input type="hidden" name="cn" value="${param.cn}" />
 	<input type="hidden" name="searchType" value="${param.searchType}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
@@ -847,7 +842,6 @@ function uploadName(e) {
 							</tr>
 						</tbody>
 					</table>
-					<!-- 첨부파일 -->
 					<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
 					<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
 					<div class="rvn_txt"> 첨부파일
@@ -859,7 +853,9 @@ function uploadName(e) {
 					</div>
 					<div class="cntrct_box_in">
 						<span id="file_name">${fileName}</span>
+					<c:if test="${!empty data.ATT_FILE_NAME}">
 						<input type="button" id="fileDelete" value="삭제" />
+					</c:if>	
 						<input type="text" id="fileName" readonly="readonly" />
 					</div>
 					<input type="file" id="att" name="att" onchange="uploadName(this)" />

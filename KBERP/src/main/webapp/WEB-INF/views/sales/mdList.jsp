@@ -32,13 +32,8 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	
-
-	
-	
-	
 	//목록 조회
-	reloadList(); 
-	
+	reloadList();  
 	
 	//상단 박스
 	$("#sts_listA").on("click", function() {
@@ -62,8 +57,6 @@ $(document).ready(function() {
 
 	goDetailView();
 	
-	
-	//페이징 
 	
 	
 	//작성

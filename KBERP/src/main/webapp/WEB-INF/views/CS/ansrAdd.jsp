@@ -244,14 +244,13 @@ tr:nth-child(2) input, tr:nth-child(4) input {
 	width: 800px;
 	height: 40px;
 	margin-top: 10px;
-	margin-left: 10px;
 }
 
 .ansr_dtls_see_top .wrtng_title {
 	display: inline-block;
 	width: 750px;
 	height: 40px;
-	margin-left: 20px;
+	margin-left: 30px;
 	margin-top: 10px;
 }
 
@@ -267,7 +266,8 @@ tr:nth-child(2) input, tr:nth-child(4) input {
 .cnsl_middle {
 	width: 800px;
 	height: 350px;
-	margin-left: 20px;
+	margin-left: 30px;
+	margin-top: 10px;
 }
 
 .wrtng_cont {
@@ -281,12 +281,12 @@ tr:nth-child(2) input, tr:nth-child(4) input {
 	height: 50px;
 	display: inline-block;
 	position: relative;
-	margin-left: 20px;
+	margin-left: 30px;
+	margin-top: 25px;
 }
 
 .cnsl_bottom input[type="file"] {
 	width: 200px;
-	margin-top: 25px;
 	position: absolute;
 }
 
@@ -296,13 +296,12 @@ tr:nth-child(2) input, tr:nth-child(4) input {
 	background: none;
 	border: 1px solid #999999ff;
 	vertical-align: top;
-	margin-top: 25px;
 }
 
 .ansr_btn {
 	float: right;
-	margin-top: 20px;
-	margin-right: 37px;
+	margin-top: 25px;
+	margin-right: 30px;
 }
 
 .popup_cont {
@@ -333,6 +332,7 @@ $(document).ready(function() {
 		$(".open_ansr_cont").slideToggle(300);
 		  
 	});
+	
 	
 	$("#btn1Btn").on("click", function() {
 		makePopup({
@@ -414,6 +414,11 @@ $(document).ready(function() {
 					}]
 		}); // makePopup end
 	}); // btn2Btn end
+	
+	$("#cancelBtn").on("click", function() {
+		$("#backForm").submit();
+	});
+	
 }); // document ready end
 
 function checkEmpty(sel) {
@@ -434,7 +439,7 @@ function checkEmpty(sel) {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
-	<form action="inqry" id="actionForm" method="post">
+	<form action="inqry" id="backForm" method="post">
 		<input type="hidden" name="no" value="${param.no}" />
 		<input type="hidden" name="page" value="${param.page}" />
 		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
@@ -509,25 +514,52 @@ function checkEmpty(sel) {
 							<input type="hidden" id="top" name="top" value="${param.top}"/>
 							<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
 							<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
-							<div class="ansr_title">
-								<div class="wrtng_title">
-									<input type="text" placeholder="제목" id="ansr_title" name="ansr_title"/>
-								</div>
-							<div class="cnsl_middle">
-								<textarea class="ansr_cont" id="ansr_cont" name="ansr_cont" rows="15" cols="110" placeholder="내용을 입력하세요."></textarea>
-							</div>
-							<div class="cnsl_bottom">
-								<div class="file_atch">
-									<input type="file" name="ansr_file" />
-									<input type="text" id="ansr_att" name="ansr_att" readonly="readonly"/>
-									<input type="hidden" id="ansr_attFile" name="ansr_attFile"/>
-								</div>
-								<div class="ansr_btn">
-									<div class="cmn_btn_mr" id="btn1Btn">대응가이드</div>
-									<div class="cmn_btn_mr" id="btn2Btn">답변등록</div>
-								</div>
-							</div>
-							</div>
+							<c:choose>
+								<c:when test="${empty data.ANSR_TITLE}">
+									<div class="ansr_title">
+										<div class="wrtng_title">
+											<input type="text" placeholder="제목" id="ansr_title" name="ansr_title"/>
+										</div>
+									</div> <!-- ansr_title end-->
+									<div class="cnsl_middle">
+										<textarea class="ansr_cont" id="ansr_cont" name="ansr_cont" rows="15" cols="110" placeholder="내용을 입력하세요."></textarea>
+									</div>
+									<div class="cnsl_bottom">
+										<div class="file_atch">
+											<input type="file" name="ansr_file" />
+											<input type="text" id="ansr_att" name="ansr_att" readonly="readonly"/>
+											<input type="hidden" id="ansr_attFile" name="ansr_attFile"/>
+										</div>
+										<div class="ansr_btn">
+											<div class="cmn_btn_mr" id="btn1Btn">대응가이드</div>
+											<div class="cmn_btn_mr" id="btn2Btn">답변등록</div>
+											<div class="cmn_btn_mr" id="cancelBtn">취소</div>
+										</div>
+									</div>
+								</c:when>
+								<c:otherwise>
+									<div class="ansr_title">
+										<div class="wrtng_title">
+											<input type="text" placeholder="제목" id="ansr_title" name="ansr_title" value="${data.ANSR_TITLE}"/>
+										</div>
+									</div> <!-- ansr_title end-->
+									<div class="cnsl_middle">
+										<textarea class="ansr_cont" id="ansr_cont" name="ansr_cont" rows="15" cols="110" placeholder="내용을 입력하세요.">${data.ANSR_CONT}</textarea>
+									</div>
+									<div class="cnsl_bottom">
+										<div class="file_atch">
+											<input type="file" name="ansr_file" />
+											<input type="text" id="ansr_att" name="ansr_att" readonly="readonly"/>
+											<input type="hidden" id="ansr_attFile" name="ansr_attFile"/>
+										</div>
+										<div class="ansr_btn">
+											<div class="cmn_btn_mr" id="btn1Btn">대응가이드</div>
+											<div class="cmn_btn_mr" id="btn2Btn">수정완료</div>
+											<div class="cmn_btn_mr" id="cancelBtn">취소</div>
+										</div>
+									</div>
+								</c:otherwise>
+							</c:choose>
 						</form>
 					</div>
 				</div>

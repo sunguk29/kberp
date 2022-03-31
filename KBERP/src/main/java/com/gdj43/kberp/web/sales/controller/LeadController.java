@@ -207,7 +207,8 @@ public class LeadController {
 		try {
 			switch(gbn) {
 			case "insert" :
-				iCommonService.insertData("lead.getLeadAdd", params);
+				iCommonService.insertData("lead.getLeadAdd", params); // 리드 등록
+				iCommonService.insertData("lead.getLeadAttAdd", params); // 리드 등록 첨부파일
 				break;
 			case "update" :
 				
