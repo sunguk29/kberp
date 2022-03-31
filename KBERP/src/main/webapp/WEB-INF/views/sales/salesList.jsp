@@ -684,17 +684,52 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-	/* 검색 어제버튼 클릭시 */
+	/* 검색 어제버튼 클릭 */
 	$("#yesterday").on("click", function() {
 		var a = new Date();
 		a.setDate(a.getDate() - 1);
-		var yesterday = a.getFullYear() + "-" + lpad((a.getMonth() + 1), 2, 0) + "-" + a.getDate();
+		var yesterday = a.getFullYear() + "-" + lpad(a.getMonth() + 1, 2, 0) + "-" + lpad(a.getDate(), 2, 0);
 		$("#startDate").val(yesterday);
-		
 		var b = new Date();
-		var today = b.getFullYear() + "-" + lpad((b.getMonth() + 1), 2, 0) + "-" + b.getDate();
+		var today = b.getFullYear() + "-" + lpad((b.getMonth() + 1), 2, 0) + "-" + lpad(b.getDate(), 2, 0);
 		$("#endDate").val(today);
-			
+	});
+	/* 검색 오늘버튼 */
+	$("#today").on("click", function() {
+		var a = new Date();
+		var today = a.getFullYear() + "-" + lpad(a.getMonth() + 1, 2, 0) + "-" + lpad(a.getDate(), 2, 0);
+		$("#startDate").val(today);
+		$("#endDate").val(today);
+	});
+	/* 검색 일주일전 버튼 */
+	$("#aWeekAgo").on("click", function() {
+		var a = new Date();
+		a.setDate(a.getDate() - 7);
+		var aWeekAgo = a.getFullYear() + "-" + lpad(a.getMonth() + 1, 2, 0) + "-" + lpad(a.getDate(), 2, 0);
+		$("#startDate").val(aWeekAgo);
+		var b = new Date();
+		var today = b.getFullYear() + "-" + lpad((b.getMonth() + 1), 2, 0) + "-" + lpad(b.getDate(), 2, 0);
+		$("#endDate").val(today);
+	});
+	/* 검색 1개월전 버튼 */
+	$("#oneMonthAgo").on("click", function() {
+		var a = new Date();
+		a.setMonth(a.getMonth() - 1);
+		var oneMonthAgo = a.getFullYear() + "-" + lpad(a.getMonth() + 1, 2, 0) + "-" + lpad(a.getDate(), 2, 0);
+		$("#startDate").val(oneMonthAgo);
+		var b = new Date();
+		var today = b.getFullYear() + "-" + lpad((b.getMonth() + 1), 2, 0) + "-" + lpad(b.getDate(), 2, 0);
+		$("#endDate").val(today);
+	});
+	/* 검색 3개월전 버튼 */
+	$("#threeMonthAgo").on("click", function() {
+		var a = new Date();
+		a.setMonth(a.getMonth() - 3);
+		var threeMonthAgo = a.getFullYear() + "-" + lpad(a.getMonth() + 1, 2, 0) + "-" + lpad(a.getDate(), 2, 0);
+		$("#startDate").val(threeMonthAgo);
+		var b = new Date();
+		var today = b.getFullYear() + "-" + lpad((b.getMonth() + 1), 2, 0) + "-" + lpad(b.getDate(), 2, 0);
+		$("#endDate").val(today);
 	});
 	
 });
