@@ -355,8 +355,8 @@ $(document).ready(function() {
 		makePopup({
 			bg : false,
 			bgClose : false,
-			title : "등록",
-			contents : "게시글을 등록하시겠습니까?",
+			title : "수정",
+			contents : "게시글을 수정하시겠습니까?",
 			draggable : true,
 			buttons : [{
 				name : "예",
@@ -369,28 +369,28 @@ $(document).ready(function() {
 						alert("내용을 입력하세요.");
 						$("#ansr_cont").focus();
 					} else {
-						var writeForm = $("#writeForm");
+						var updateForm = $("#updateForm");
 						
-						writeForm.ajaxForm({
+						updateForm.ajaxForm({
 							success : function(res) {
 								// 물리파일명 보관
 								if(res.fileName.length > 0) {
 									$("#ansr_attFile").val(res.fileName[0]);
 								}
 								
-								// 글 저장
-								var params =  $("#writeForm").serialize();
+								// 글 수정
+								var params =  $("#updateForm").serialize();
 						
 								$.ajax({
 									type : "post",
-									url : "inqryAction/insert",
+									url : "inqryActionAjax/update",
 									dataType : "json",
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
-											location.href = "inqryList";
+											$("#backForm").submit();
 										} else {
-											alert("작성중 문제가 발생하였습니다.");
+											alert("수정중 문제가 발생하였습니다.");
 										}
 									}, // success end
 									error : function(request, status, error) {
@@ -403,7 +403,7 @@ $(document).ready(function() {
 							} // error end
 						});// ajaxForm end
 						
-						writeForm.submit(); // ajaxForm 실행
+						updateForm.submit(); // ajaxForm 실행
 							closePopup();
 						} // else end
 				}
@@ -412,6 +412,11 @@ $(document).ready(function() {
 					}]
 		}); // makePopup end
 	}); // btn2Btn end
+	
+	$("#cancelBtn").on("click", function() {
+		$("#backForm").submit();
+	});
+	
 }); // document ready end
 
 function checkEmpty(sel) {
@@ -500,10 +505,10 @@ function checkEmpty(sel) {
 						<div class="see_ansr_header">답변글</div>
 					</div>
 					<div class="open_ansr_cont">
-						<form action="fileUploadAjax" id="writeForm" method="post"
+						<form action="fileUploadAjax" id="updateForm" method="post"
 							  enctype="multipart/form-data">
 							<input type="hidden" name="no" value="${param.no}" />
-							<input type="hidden" id="emp_name" name="emp_name" value="${data.EMP_NUM}" />
+							<input type="hidden" id="emp_num" name="emp_num" value="${sEmpNum}" />
 							<input type="hidden" id="top" name="top" value="${param.top}"/>
 							<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
 							<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
@@ -523,7 +528,7 @@ function checkEmpty(sel) {
 								<div class="ansr_btn">
 									<div class="cmn_btn_mr" id="btn1Btn">대응가이드</div>
 									<div class="cmn_btn_mr" id="btn2Btn">수정</div>
-									<div class="cmn_btn_mr">취소</div>
+									<div class="cmn_btn_mr" id="cancelBtn">취소</div>
 								</div>
 							</div>
 							</div>

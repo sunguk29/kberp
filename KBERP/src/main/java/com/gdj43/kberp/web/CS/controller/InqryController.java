@@ -96,7 +96,7 @@ public class InqryController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/inqryAction/{gbn}", method = RequestMethod.POST,
+	@RequestMapping(value = "/inqryActionAjax/{gbn}", method = RequestMethod.POST,
 					produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String inqryActionAjax(@RequestParam HashMap<String, String> params,

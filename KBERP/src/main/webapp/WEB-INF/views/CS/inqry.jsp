@@ -36,6 +36,7 @@
 	font-size: 10.5pt;
     margin-left: 30px;
     margin-bottom: 10px;
+    font-family: 맑은고딕;
 }
 
 .inqry_info th, .ansr_info th {
@@ -69,7 +70,7 @@ tbody td {
 }
 
 tbody td input {
-	width: 187px;
+	width: 160px;
 	height: 20px;
 	padding: 5px 10px;
 	border: none;
@@ -83,8 +84,9 @@ tbody td input:focus {
 }
 
 .inqry_info td select {
-	width: 210px;
+	width: 180px;
 	height: 30px;
+	text-indent: 5px;
 }
 
 tr:nth-child(4) input, tr:nth-child(6) input {
@@ -98,8 +100,8 @@ tr:nth-child(5) {
 }
 
 .wrtng_cont {
-	resize: none;
-	font-family: 맑은고딕;
+	height: 300px;
+	font-size: 10.5pt;
 	border: 1px solid #d5d5d5;
 	border-radius: 2px;
 	padding: 10px 10px;
@@ -114,6 +116,18 @@ tr:nth-child(5) {
 	width: 700px;
 	border: 1px solid #d5d5d5;
 	border-radius: 2px;
+}
+
+.ansr_info tr:nth-child(3) {
+    vertical-align: top;
+}
+
+.ansr_cont {
+	height: 300px;
+	font-size: 10.5pt;
+	border: 1px solid #d5d5d5;
+	border-radius: 2px;
+	padding: 10px 10px;
 }
 
 .cmn_btn_ml {
@@ -137,13 +151,58 @@ tr:nth-child(5) {
 	height: 20px;
 }
 
+.popup_cont {
+	text-align: center;
+	line-height: 100px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	$("#listBtn").on("click", function() {
+		$("#actionForm").attr("action", "inqryList");
+		$("#actionForm").submit();
+	});
+	
 	$("#ansr_rvs").on("click", function () {
 		$("#actionForm").attr("action", "ansrAdd");
 		$("#actionForm").submit();
 	});
+	
+	$("#deleteBtn").on("click", function() {
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "삭제",
+			contents : "게시글을 삭제하시겠습니까?",
+			draggable : true,
+			buttons : [{
+				name : "예",
+				func:function() {
+					var params =  $("#actionForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "inqryActionAjax/delete", 
+						dataType : "json", 
+						data : params, 
+						success : function(res) { 
+							if(res.res == "success") {
+								$("#actionForm").submit();
+							} else {
+								alert("삭제중 문제가 발생하였습니다.");
+							}
+						},
+						error : function(request, status, error) {
+							console.log(request.responseText); 			
+						}
+					});
+					closePopup();
+				} // func:function end
+			}, {
+				name : "아니오"
+			}]
+		}); // makePopup end
+	}); // deleteBtn end
 });
 </script>
 </head>
@@ -160,6 +219,7 @@ $(document).ready(function() {
 		<input type="hidden" name="page" value="${param.page}" />
 		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+		<input type="hidden" id="emp_name" name="emp_name" value="${data.EMP_NAME}" />
 		<input type="hidden" id="top" name="top" value="${param.top}"/>
 		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
 		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
@@ -231,7 +291,7 @@ $(document).ready(function() {
 								<span class="th_star">*</span>
 							</th>
 							<td>
-								<textarea class="wrtng_cont" name="wrtng_cont" rows="15" cols="110" readonly="readonly">${data.WRTNG_CONT}</textarea>
+								<div class="wrtng_cont">${data.WRTNG_CONT}</div>
 							</td>
 						</tr>
 						<tr>
@@ -300,7 +360,7 @@ $(document).ready(function() {
 									<span class="th_star">*</span>
 								</th>
 								<td>
-									<textarea class="wrtng_cont" name="wrtng_cont" rows="15" cols="110" readonly="readonly">${data.WRTNG_CONT}</textarea>
+									<div class="wrtng_cont">${data.WRTNG_CONT}</div>
 								</td>
 							</tr>
 							<tr>
@@ -318,7 +378,7 @@ $(document).ready(function() {
 								<th scope="row">상담자명
 								</th>
 								<td>
-									<input type="text" id="clnt_name" name="clnt_name" readonly="readonly" value="${data.EMP_NAME}">
+									<input type="text" id="emp_name" name="emp_name" readonly="readonly" value="${data.EMP_NAME}">
 								</td>
 							</tr>
 							<tr>
@@ -332,7 +392,7 @@ $(document).ready(function() {
 								<th scope="row">답변 내용
 								</th>
 								<td>
-									<textarea class="wrtng_cont" name="wrtng_cont" rows="15" cols="110" readonly="readonly">${data.ANSR_CONT}</textarea>
+									<div class="ansr_cont">${data.ANSR_CONT}</div>
 								</td>
 							</tr>
 							<tr>
@@ -346,6 +406,7 @@ $(document).ready(function() {
 				</c:otherwise>
 			</c:choose>
 				<div class="cnsl_bottom">
+					<div class="cmn_btn_ml" id="listBtn">목록</div>
 					<c:choose>
 						<c:when test="${empty data.ANSR_TITLE}">
 							<div class="cmn_btn_ml" id="ansr_rvs">답변등록</div>
@@ -354,7 +415,9 @@ $(document).ready(function() {
 							<div class="cmn_btn_ml" id="ansr_rvs">수정</div>
 						</c:otherwise>
 					</c:choose>
-					<div class="cmn_btn_ml">삭제</div>
+					<c:if test="${!empty data.ANSR_TITLE}">
+						<div class="cmn_btn_ml" id="deleteBtn">삭제</div>
+					</c:if>
 				</div>
 			</div> <!-- cnsl_top의 끝 -->
 			</div>
