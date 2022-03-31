@@ -254,7 +254,9 @@ select {
 	width: 305px;
 	font-size: 12px;
 }
-
+.attImage {
+	width : 12px;
+}
 /* 직원검색 */
 .findEmp_box {
 	background-color: white;
