@@ -573,6 +573,7 @@ function drawPaging(pb) {
 <body>
 <!-- 검색 데이터 유지용 -->
 <!-- 머지 테스트 -->
+<!-- 머지 테스트 투 -->
 <input type="hidden" id="oldSearchGbn" value="${param.searchGbn}" />
 <input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
 
