@@ -120,6 +120,9 @@ public class AssetController {
 		case "insertRntl":
 			ics.insertData("asset.assetRntlRgstrtn",params);
 			break;
+		case "insertTkt":
+			ics.insertData("asset.assetTktRgstrtn",params);
+			break;
 		case "update":
 			ics.updateData("asset.drblMdfy",params);
 			break;	
@@ -294,5 +297,14 @@ public class AssetController {
 		mav.setViewName("mng/assetTktDtlView");
 		
 		return mav;
+	}
+	
+	@RequestMapping(value="/assetTktRgstrtn")
+	public ModelAndView assetTktRgstrtn(ModelAndView mav) {
+		
+		mav.setViewName("mng/assetTktRgstrtn");
+		
+		return mav;
+		
 	}
 }

@@ -69,6 +69,7 @@ $(document).ready(function() {
 
 	$("tbody").on("click", "#click", function() {
 		$("#num").val($(this).attr("num"));
+		$("#tktnum").val($(this).attr("tktnum"));
 		
 		$("#searchGbn").val($("#oldSearchGbn").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
@@ -88,7 +89,7 @@ $(document).ready(function() {
 		$("#searchGbn").val($("#oldSearchGbn").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
 		
-		$("#actionForm").attr("action", "assetRntlRgstrtn");
+		$("#actionForm").attr("action", "assetTktRgstrtn");
 		$("#actionForm").submit();
 });
 });
@@ -119,7 +120,7 @@ function drawList(list) {
 	for(var data of list) {
 		html += "<tr>";
 		html += "<td>" + data.ASSET_NUM + "</td>";
-		html += "<td id=\"click\" num=\""+ data.ASSET_NUM +"\">" + data.ASSET_NAME + "</td>";
+		html += "<td id=\"click\" tktnum=\""+ data.TKT_NUM +"\" num=\""+ data.ASSET_NUM +"\">" + data.ASSET_NAME + "</td>";
 		if(data.QUNTY_DVSN_NUM == 0 )
 			html += "<td>" + data.QUNTY +"ea</td>";
 		else if(data.QUNTY_DVSN_NUM == 1)
@@ -187,6 +188,7 @@ function drawPaging(pb) {
 					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 					<input type="hidden" id="page" name="page" value="${page}"/>
 					<input type="hidden" id="num" name="num"/>
+					<input type="hidden" id="tktnum" name="tktnum"/>
 					
 					<select id="searchGbn" name="searchGbn">
 						<option value="0">자산명</option>

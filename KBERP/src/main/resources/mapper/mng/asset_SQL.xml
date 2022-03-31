@@ -170,7 +170,7 @@
 	</select>
 	
 	<select id="assetTktList" resultType="hashmap" parameterType="hashmap">
-		SELECT ASSET_NUM, A.ASSET_NAME,MNGR_NAME, QUNTY, QUNTY_DVSN_NUM,TKT_DATE
+		SELECT TKT_NUM, ASSET_NUM, A.ASSET_NAME,MNGR_NAME, QUNTY, QUNTY_DVSN_NUM,TKT_DATE
 		FROM ( SELECT TKT_NUM, AT.ASSET_NUM, A.ASSET_NAME, EMP_NAME AS MNGR_NAME, AT.QUNTY,
 			 AT.QUNTY_DVSN_NUM,TO_CHAR(TKT_DATE, 'YYYY-MM-DD')AS TKT_DATE,ROW_NUMBER() OVER(ORDER BY TKT_NUM DESC) AS RNUM
 			FROM ASSET A INNER JOIN ASSET_TKT AT
@@ -198,11 +198,16 @@
     		SELECT ASSET_NUM, QUNTY, QUNTY_DVSN_NUM, EMP_NAME AS USENAME, TO_CHAR(TKT_DATE, 'YYYY-MM-DD')AS TKT_DATE,RMRKS
     		FROM ASSET_TKT INNER JOIN EMP 
                     ON TKT_EMP_NUM = EMP_NUM
-                    WHERE ASSET_NUM=#{num}) A LEFT OUTER JOIN (                 
+                    WHERE ASSET_NUM=#{num}  AND TKT_NUM= #{tktnum}) A LEFT OUTER JOIN (                 
     		SELECT ASSET_NUM, ASSET_NAME,EMP_NAME AS MNGR_NAME
     		FROM ASSET INNER JOIN EMP
                 ON MNGR_NUM = EMP_NUM
                 WHERE ASSET_NUM=#{num}) B
                 ON 1=1
 	</select>
+	
+	<insert id="assetTktRgstrtn" parameterType="hashmap">
+		INSERT INTO ASSET_TKT(TKT_NUM, RGSTRTN_EMP_NUM, ASSET_NUM, TKT_EMP_NUM, RMRKS, TKT_DATE, QUNTY, QUNTY_DVSN_NUM)
+		VALUES(ASSET_TKT_SEQ.NEXTVAL, #{rgstrtnEmpNum}, #{assetNum}, #{empNum}, #{rmrks}, #{tktdt}, #{qunty}, #{quntynum})
+	</insert>
 </mapper>
