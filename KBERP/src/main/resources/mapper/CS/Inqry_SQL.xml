@@ -57,14 +57,19 @@
 	
 	<!-- 상세보기 -->
 	<select id="getInqry" resultType="hashmap" parameterType="hashmap">
-		SELECT I.INQRY_NUM, ICT.CTGRY_NAME, I.WRTNG_TITLE, I.WRTNG_CONT, ICL.CLNT_NAME, ICL.PHONE_NUM_1, I.ATT_FILE
+		SELECT I.INQRY_NUM, ICT.CTGRY_NAME, I.WRTNG_TITLE, I.WRTNG_CONT, ICL.CLNT_NAME, ICL.PHONE_NUM_1, I.ATT_FILE, 
+			   TO_CHAR(WRTNG_DATE, 'YYYY-MM-DD') AS WRTNG_DATE, E.EMP_NAME, I.ANSR_TITLE, I.ANSR_CONT, I.ANSR_ATT_FILE,
+			   TO_CHAR(ANSR_DATE, 'YYYY-MM-DD') AS ANSR_DATE
 		FROM INQRY I INNER JOIN INQRY_CTGRY ICT
 		                   ON I.CTGRY_NUM = ICT.CTGRY_NUM
 		             INNER JOIN INDVDL_CLNT ICL
 		                     ON I.CLNT_NUM = ICL.CLNT_NUM
+		             LEFT OUTER JOIN EMP E
+			                      ON I.EMP_NUM = E.EMP_NUM
 		WHERE I.INQRY_NUM = #{no}
 	</select>
 	
+	<!-- 답변등록 -->
 	<update id="ansrAdd" parameterType="hashmap">
 		UPDATE INQRY SET EMP_NUM = #{emp_name},
 		                 ANSR_TITLE = #{ansr_title},
@@ -74,6 +79,7 @@
 		WHERE INQRY_NUM = #{no}
 	</update>
 	
+	<!-- 답변수정 -->
 	<update id="ansrUpdate" parameterType="hashmap">
 		UPDATE INQRY SET EMP_NUM = #{emp_name},
 		                 ANSR_TITLE = #{ansr_title},
