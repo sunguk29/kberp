@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hr">
-<!--    인사발령 쿼리    -->
+	<!--    인사발령 쿼리    -->
 	<select id="getApntmList" resultType="hashmap" parameterType="hashmap">
 		SELECT AAA.APNTM_NUM, AAA.EMP_NAME, AAA.APNTM_DVSN_NUM, AAA.DEPT_NAME, AAA.RANK_NAME, AAA.START_DATE, AAA.APRVL_STS 
 		FROM(SELECT AA.APNTM_NUM, AA.EMP_NAME, AA.APNTM_DVSN_NUM, AA.DEPT_NAME, AA.RANK_NAME, AA.START_DATE, AA.APRVL_STS
@@ -85,38 +85,28 @@
 	
 	<!-- 조직도 쿼리 -->
 	 <select id="getOrgnztDeptList" resultType="hashmap" parameterType="hashmap">
-		 SELECT DEPT_NUM, DEPT_NAME, SUPER_DEPT_NUM, DEPT_LEVEL, DEL_CHECK
-	     FROM DEPT
-	     WHERE DEL_CHECK = '1'
-		<choose>
-			<when test="deptGbn == 0">
-		 		AND DEPT_LEVEL = '1'
-			</when>
-			<when test="deptGbn == 1">
-		 		AND DEPT_LEVEL = '2'
-			</when>
-		</choose>
+		SELECT DEPT_NUM, DEPT_NAME, SUPER_DEPT_NUM, DEPT_LEVEL
+	    FROM DEPT
+        WHERE DEL_CHECK = '1' 
+	    START WITH SUPER_DEPT_NUM IS NULL
+	    CONNECT BY PRIOR DEPT_NUM = SUPER_DEPT_NUM
 	 </select>
 	 
 	 <select id="getOrgnztEmpList" resultType="hashmap" parameterType="hashmap">
-		SELECT E.EMP_NAME, DD.DEPT_NUM, DD.DEPT_NAME, DD.SUPER_DEPT_NUM, DD.DEPT_LEVEL, DD.DEL_CHECK, DD.EMP_NUM, DD.START_DATE, DD.END_DATE
-		FROM( SELECT D.DEPT_NUM, D.DEPT_NAME, D.SUPER_DEPT_NUM, D.DEPT_LEVEL, D.DEL_CHECK, A.EMP_NUM, A.START_DATE, A.END_DATE
-		      FROM ( SELECT DEPT_NUM, DEPT_NAME, SUPER_DEPT_NUM, DEPT_LEVEL, DEL_CHECK
-		             FROM DEPT
-		             WHERE DEL_CHECK = '1')D RIGHT OUTER JOIN APNTM A 
-		                                                   ON D.DEPT_NUM = A.DEPT_NUM
-		      WHERE A.END_DATE IS NULL
-		      OR A.END_DATE > SYSDATE ) DD INNER JOIN EMP E
-                                                   ON DD.EMP_NUM = E.EMP_NUM
-         <choose>
-			<when test="empGbn == 1">
-		 		AND DEPT_NUM = '1'
-			</when>
-			<when test="empGbn == 2">
-		 		AND DEPT_NUM = '2'
-			</when>
-
-		</choose>
+		SELECT D.DEPT_NUM, D.DEPT_NAME, D.SUPER_DEPT_NUM, D.DEPT_LEVEL, A.EMP_NUM, A.RANK_NUM, E.EMP_NAME
+		FROM(SELECT DEPT_NUM, DEPT_NAME, SUPER_DEPT_NUM, DEPT_LEVEL, DEL_CHECK
+		       FROM DEPT
+		      START WITH SUPER_DEPT_NUM IS NULL
+		    CONNECT BY PRIOR DEPT_NUM = SUPER_DEPT_NUM)D FULL OUTER JOIN APNTM A
+		                                                              ON D.DEPT_NUM = A.DEPT_NUM
+		                                                      INNER JOIN EMP E
+		                                                      		  ON A.EMP_NUM = E.EMP_NUM
+ 		WHERE A.STS_NUM = '1' 
+		AND D.DEL_CHECK = '1'
+		AND A.START_DATE <![CDATA[<=]]> SYSDATE
+		AND A.END_DATE <![CDATA[>=]]> SYSDATE OR A.END_DATE IS NULL
+		AND A.EMP_NUM IS NOT NULL
+		ORDER BY A.RANK_NUM ASC
 	</select>
 
 </mapper>
