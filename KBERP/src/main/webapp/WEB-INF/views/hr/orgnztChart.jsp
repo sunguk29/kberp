@@ -104,6 +104,12 @@
     background-position: center;
     background-size: 13px; 
 }
+.depth_emp_icon {
+	display: inline-block;
+    vertical-align: top;
+    width: 30px;
+    height: 30px;
+}
 
 .depth_slc_icon_on {
 	display: inline-block;
@@ -223,9 +229,10 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	// 조직도 생성
 	reloadTree();
     
-	//슬림스크롤
+	// 슬림스크롤
 	$(".scroll_area").slimScroll({height: "460px"},{width: "275px"});
 	
 	// 조직도 토글
@@ -234,17 +241,17 @@ $(document).ready(function() {
 		var obj = $(this);
 		console.log(depth == "1");
 		if(depth == "1") {
-			$(".orgnzt_depth2_wrap").toggle("fast", function() {
+			$(".orgnzt_depth2_wrap").toggle("fast", function() { 
 				if($(".orgnzt_depth2_wrap").is(":visible")) {
 					$(".orgnzt_depth1").css({"color":"#2E83F2", "font-weight":"bold"});
 				} else {
 					$(".orgnzt_depth1").css({"color":"black", "font-weight":""});
 				}
-			}); // 토글 show/hide
+			}); 
 			
 		} else {
-			e.stopPropagation(); // 버블업 방지
-			$(this).children(".orgnzt_depth" + (depth * 1 + 1) + "_wrap").toggle("fast", function() {
+			e.stopPropagation(); // 버블링 방지
+			$(this).children(".orgnzt_depth" + (depth * 1 + 1) + "_wrap").toggle("fast", function() { 
 				if(obj.children(".orgnzt_depth" + (depth * 1 + 1) + "_wrap").is(":visible")) {
 					if(depth == "2") {
 						$(".orgnzt_area .orgnzt_depth3_area").css({"color":"black", "font-weight":""});
@@ -260,10 +267,8 @@ $(document).ready(function() {
 				} else {
 					$(".orgnzt_area .orgnzt_depth" + depth + "_area").css({"color":"black", "font-weight":""});
 				}
-			}); // 토글 show/hide
-			
+			}); 
 		}
-		
 		
 	});
 });
@@ -278,7 +283,6 @@ function reloadTree() {
     	   drawTree(res.dept);
     	   drawTree2(res.dept);
     	   drawTree3(res.emp);
-    	   
        },
        error : function(req) {
           console.log(req.responseText);
@@ -323,9 +327,6 @@ function drawTree2(dept) {
 			$("#" + data.SUPER_DEPT_NUM).append(html);
 		}
 	} 
-	
-	
-	console.log("2뎁스 끝")
 }
 
 // 사원 생성
@@ -334,7 +335,7 @@ function drawTree3(emp) {
 		var html = "";
 			html += "<div class=\"orgnzt_depth3\">                             ";
 			html += "	<div class=\"orgnzt_depth3_area\">                     ";
-			html += "		<div class=\"depth_slc_icon\"></div>               ";
+			html += "		<div class=\"depth_emp_icon\"></div>               ";
 			html += "		<div class=\"profile_icon\"></div>                 ";
 			html += "		<div class=\"depth_txt\">" + data.EMP_NAME + "</div>";
 			html += "	</div>                                                 ";
