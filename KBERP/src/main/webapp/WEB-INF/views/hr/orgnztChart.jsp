@@ -220,7 +220,9 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	
 	reloadTree();
+	
 	$(".orgnzt_area").on("click", ".orgnzt_depth1, .orgnzt_depth2, .orgnzt_depth3", function(e) {
 		var depth = $(this).attr("class").substring(12);
 		var obj = $(this);
@@ -267,8 +269,10 @@ function reloadTree() {
        url : "orgnztChartAjax",
        dataType : "json",
        success : function(res) {
-    	   drawTree(res.dept,res.emp);
+    	   drawTree(res.dept);
     	   drawTree2(res.dept);
+    	   drawTree3(res.emp);
+    	   
        },
        error : function(req) {
           console.log(req.responseText);
@@ -276,12 +280,12 @@ function reloadTree() {
     });
  } 
 
-// 조직도 html 그리기
+// 1뎁스 부서 생성
 function drawTree(dept){
-	var html = "";
 	
 	for(var data of dept) {                              
 		if(data.SUPER_DEPT_NUM == null) {
+			var html = "";
 			console.log("1뎁스(번호,레벨) : " + data.DEPT_NAME, data.DEPT_NUM, data.DEPT_LEVEL )
 			html += "<div class=\"orgnzt_depth2\" >          ";
 			html += "<div class=\"orgnzt_depth2_area\">      ";
@@ -289,53 +293,20 @@ function drawTree(dept){
 			html += "	<div class=\"folder_icon\"></div>    ";
 			html += "	<div class=\"depth_txt\">" + data.DEPT_NAME + "</div>";
 			html += "</div>                                  ";
-			html += "<div class=\"orgnzt_depth3_wrap\" id=\"" + data.DEPT_NUM + "\"></div>";
+			html += "<div class=\"orgnzt_depth3_wrap\" id=\"d" + data.DEPT_NUM + "\"></div>";
 			html += "</div>                                  ";
-			$("#depth2").html(html);
-/* 			for(var data2 of emp) {
-				if(data.DEPT_NUM == data2.DEPT_NUM) {
-					html += "<div class=\"orgnzt_depth3\">                             ";
-					html += "	<div class=\"orgnzt_depth3_area\">                     ";
-					html += "		<div class=\"depth_slc_icon\"></div>               ";
-					html += "		<div class=\"profile_icon\"></div>                 ";
-					html += "		<div class=\"depth_txt\">" + data2.EMP_NAME + "</div>";
-					html += "	</div>                                                 ";
-					html += "</div>                                                    ";
-					$("#" + data.DEPT_NUM).html(html);
-				}
-			} */
-		} /* else if(data.DEPT_LEVEL == 2) {
-			$("#" + data.SUPER_DEPT_NUM).html(html);
-			html += "<div class=\"orgnzt_depth3\">                             ";
-			html += "	<div class=\"orgnzt_depth3_area\">                     ";
-			html += "		<div class=\"depth_slc_icon\"></div>               ";
-			html += "		<div class=\"folder_icon\"></div>                 ";
-			html += "		<div class=\"depth_txt\">" + data.DEPT_NAME + "</div>";
-			html += "	</div>                                                 ";
-			html += "</div>                                                    ";
-		} */
+			$("#depth2").append(html);
+		} 
 	}
 	
-/* 	for(var data of dept){
-		if(data.SUPER_DEPT_NUM != null) {
-			console.log("2뎁스(부서명,번호,레벨) : " + data.DEPT_NAME, data.DEPT_LEVEL, data.DEPT_LEVEL )
-			html += "<div class=\"orgnzt_depth3\">                             ";
-			html += "	<div class=\"orgnzt_depth3_area\">                     ";
-			html += "		<div class=\"depth_slc_icon\"></div>               ";
-			html += "		<div class=\"folder_icon\"></div>                 ";
-			html += "		<div class=\"depth_txt\">" + data.DEPT_NAME + "</div>";
-			html += "	</div>                                                 ";
-			html += "</div>                                                    ";
-			$("#" + data.SUPER_DEPT_NUM).html(html);
-		}
-	} */
 	console.log("1뎁스 끝")
 }
 
+// 1뎁스 외 부서 생성
 function drawTree2(dept) {
-	var html = "";
 	for(var data of dept){
 		if(data.SUPER_DEPT_NUM != null) {
+			var html = "";
 			console.log("2뎁스(번호,레벨) : " + data.DEPT_NAME, data.DEPT_NUM, data.DEPT_LEVEL )
 			html += "<div class=\"orgnzt_depth3\">                             ";
 			html += "	<div class=\"orgnzt_depth3_area\">                     ";
@@ -343,11 +314,31 @@ function drawTree2(dept) {
 			html += "		<div class=\"folder_icon\"></div>                 ";
 			html += "		<div class=\"depth_txt\">" + data.DEPT_NAME + "</div>";
 			html += "	</div>                                                 ";
+			html += "<div class=\"orgnzt_depth4_wrap\" id=\"d" + data.DEPT_NUM + "\"></div>";
 			html += "</div>                                                    ";
-			$("#" + data.SUPER_DEPT_NUM).html(html);
+			$("#" + data.SUPER_DEPT_NUM).append(html);
 		}
 	} 
+	
+	
 	console.log("2뎁스 끝")
+}
+
+// 사원 생성
+function drawTree3(emp) {
+	for(var data of emp){
+		var html = "";
+			console.log( data.EMP_NAME, data.DEPT_NUM, data.DEPT_NAME  )
+			html += "<div class=\"orgnzt_depth3\">                             ";
+			html += "	<div class=\"orgnzt_depth3_area\">                     ";
+			html += "		<div class=\"depth_slc_icon\"></div>               ";
+			html += "		<div class=\"profile_icon\"></div>                 ";
+			html += "		<div class=\"depth_txt\">" + data.EMP_NAME + "</div>";
+			html += "	</div>                                                 ";
+			html += "</div>                                                    ";
+			$("#" + data.DEPT_NUM).append(html);
+			console.log("html " + data.DEPT_NUM, data.DEPT_NAME)
+	}
 }
 
 </script>
