@@ -3,19 +3,17 @@
 <mapper namespace="lead">
 <!-- ******************************* 리드 조회 리스트 ******************************* -->		
 	<select id="getLeadList" resultType="hashmap" parameterType="hashmap">
-		SELECT LL.LEAD_NUM, LL.CLNT_CMPNY_NAME, LL.CLNT_NAME, LL.EMP_NAME, LL.PRGRS_STS_NUM, LL.PSNUM, LL.LEAD_NAME, LL.RGSTRTN_DATE, LL.ATT_FILE_NAME
+		SELECT LL.LEAD_NUM, LL.CLNT_CMPNY_NAME, LL.CLNT_NAME, LL.EMP_NAME, LL.PRGRS_STS_NUM, LL.PSNUM, LL.LEAD_NAME, LL.RGSTRTN_DATE
 		FROM (  SELECT L.LEAD_NUM, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NAME, L.LEAD_NAME, L.PRGRS_STS_NUM,
 		               DECODE(L.PRGRS_STS_NUM, 1, '진행중', 2, '종료(영업기회 전환)', 3, '종료(영업기회 실패)') AS PSNUM, 
 		               TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE, 
-		               ROW_NUMBER() OVER(ORDER BY L.LEAD_NUM DESC) AS RNUM, LAF.ATT_FILE_NAME
+		               ROW_NUMBER() OVER(ORDER BY L.LEAD_NUM DESC) AS RNUM
 		        FROM LEAD L LEFT OUTER JOIN EMP E
 		                            ON L.MNGR_EMP_NUM = E.EMP_NUM
 		                    INNER JOIN ENTRPRS_CLNT EC
 		                            ON L.CLNT_NUM = EC.CLNT_NUM
 		                    INNER JOIN CLNT_CMPNY CC
 		                            ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
-		                    INNER JOIN LEAD_ATT_FILE LAF
-                                 ON L.LEAD_NUM = LAF.LEAD_NUM 
 		        AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{searchDate} AND #{searchDate2}
 				<choose>
 					<when test="psNum != 0" > <!-- 선택안함 : 0 이 아니면 해당 번호 목록으로 검색 -->
