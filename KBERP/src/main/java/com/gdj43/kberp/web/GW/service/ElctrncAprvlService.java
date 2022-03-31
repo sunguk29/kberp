@@ -1,15 +1,35 @@
 package com.gdj43.kberp.web.GW.service;
 
+
+
+import java.util.HashMap;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gdj43.kberp.web.GW.dao.ElctrncAprvlDao;
+
+import com.gdj43.kberp.web.GW.dao.IElctrncAprvlDao;
 
 @Service
-public class ElctrncAprvlService {
+public class ElctrncAprvlService implements IElctrncAprvlService{
 
 	@Autowired
-	public ElctrncAprvlDao elctrncAprvlDao;
+	public IElctrncAprvlDao ielctrncAprvlDao;
+
+	@Override
+	public List<HashMap<String, String>> getAprvlTmpltBox(HashMap<String, String> params) throws Throwable {
+		
+		return ielctrncAprvlDao.getAprvlTmpltBox(params);
+	}
+
+	@Override
+	public void draftTmpltBoxWrite(HashMap<String, String> params) throws Throwable {
+		ielctrncAprvlDao.draftTmpltBoxWrite(params);
+		
+	}
+	
+
 	
 }
 

@@ -78,21 +78,17 @@ $(document).ready(function() {
 		<div class="page_title_bar">
 			<div class="page_title_text">프로젝트 관리</div>
 			<!-- 검색영역 선택적 사항 -->
-			<div class="page_srch_area">
-				<select class="srch_sel">
-					<option>제목</option>
-					<option>내용</option>
-					<option>작성자</option>
-				</select>
-				<div class="srch_text_wrap">
-					<input type="text" />
-				</div>
-				<div class="cmn_btn_ml">검색</div>
-			</div>
+
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
+		<form action="#" id="actionForm" method="post">
+			<input type="hidden" id="top" name="top" value="${param.top}"/>
+			<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
+			<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
+			<input type="hidden" id="no" name="no">
+		</form>
 			<table class="board_table">
 				<colgroup>
 					<col width="100"/>
@@ -107,46 +103,14 @@ $(document).ready(function() {
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>00</td>
-						<td class="board_table_hover board_cont_left">공문</td>
-						<td>기안서</td>
+					<c:forEach var="data" items="${list}">
+					<tr no="${data.TMPLT_NUM}">
+						<td>${data.TMPLT_NUM}</td>
+						<td class="board_table_hover board_cont_left">${data.TMPLT_NAME}</td>
+						<td>${data.TMPLT_DVSN_NAME}</td>
 					</tr>
-					<tr>
-						<td>01</td>
-						<td class="board_table_hover board_cont_left">기안서</td>
-						<td>기안서</td>
-					</tr>
-					<tr>
-						<td>02</td>
-						<td class="board_table_hover board_cont_left">출장확인서</td>
-						<td>기안서</td>
-					</tr>
-					<tr>
-						<td>03</td>
-						<td class="board_table_hover board_cont_left">지출보고서</td>
-						<td>지출결의서</td>
-					</tr>
-					<tr>
-						<td>04</td>
-						<td class="board_table_hover board_cont_left">지출결의서</td>
-						<td>지출결의서</td>
-					</tr>
-					<tr>
-						<td>05</td>
-						<td class="board_table_hover board_cont_left">품의서</td>
-						<td>지출결의서</td>
-					</tr>
-					<tr>
-						<td>06</td>
-						<td class="board_table_hover board_cont_left">휴가신청서</td>
-						<td>근태관리</td>
-					</tr>
-					<tr>
-						<td>07</td>
-						<td class="board_table_hover board_cont_left">교육신청서</td>
-						<td>기안서</td>
-					</tr>
+				</c:forEach>
+				
 				</tbody>
 			</table>
 		
@@ -154,5 +118,15 @@ $(document).ready(function() {
 	</div>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
+	<script>
+		$(document).ready(function(){
+			$("tbody").on("click", "tr", function(){
+				$("#no").val($(this).attr("no"));
+				
+				$("#actionForm").attr("action","draftTmpltBoxWrite");
+				$("#actionForm").submit();
+			});
+		});
+	</script>
 </body>
 </html>
