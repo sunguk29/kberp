@@ -139,16 +139,16 @@ $(document).ready(function() {
 				<div class="date">${data.WRTNG_DATE}</div>
 				<span class="cate">
 					<select disabled="disabled" >
-				 	<option>입출금/예적금</option>
+				 	<option>인터넷뱅킹</option>
+					<option>스마트폰뱅킹</option>
+					<option>CD/ATM</option>
+					<option>공인인증서</option>
+					<option>인증/OTP/보안카드</option>
+					<option>예금/신탁</option>
+					<option>펀드</option>
 					<option>대출</option>
 					<option>외환</option>
-					<option>카드</option>
-					<option>ATM</option>
-					<option>제휴서비스</option>
-					<option>인증/보안</option>
-					<option>알림</option>
-					<option>앱이용</option>
-					<option>기타</option>
+					<option>로그인관련</option>
 					</select>
 				</span>
 			</div>

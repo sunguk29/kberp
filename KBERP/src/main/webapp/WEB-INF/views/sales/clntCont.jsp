@@ -382,7 +382,7 @@ $(document).ready(function() {
 </head>
 <body>
 <form action="#" id="actionForm" method="post">
-	<input type="hidden" id="page" name="page" value="${page}" />
+	<input type="hidden" id="page" name="page" value="${param.page}" />
 	<input type="hidden" name="cn" value="${param.cn}" />
 	<input type="hidden" name="searchType" value="${param.searchType}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
