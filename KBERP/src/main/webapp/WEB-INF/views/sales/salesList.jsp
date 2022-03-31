@@ -335,15 +335,6 @@ table {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	console.log("테스트2");
-	/* 머지 테스트!!!!!!!!!!!!!!!! */
-	/* 머지테스트!!!!!!!2222222222 */
-	/* 나도 머지테스트!!!!!!!3333 */
-	console.log("테스트");
-	console.log("테스트 2");
-	console.log("테스트테스트테스트테스트테스트테스트테스트");
-	console.log("파란색");
-	
 	
 	// 검색 후 구분란(searchGbn)에 검색어유지를 위해
 	if('${param.searchGbn}' != '') {
@@ -373,19 +364,8 @@ $(document).ready(function() {
 		}
 	});
 	
-	// stage 클릭
-	//$("#stage0").on("click", function() {
-		
-	//});
-	
-	// 목록에서 영업명 선택 시 상세보기로 이동
-	// 테스트
-	
-	
 	$(".salesWrap").on("click", ".salesOpportunityName", function() {
 		$("#salesNum").val($(this).attr("salesNum")); // 영업번호 가져오기
-		
-		console.log($(this).children("#test").val());
 		
 		if($(this).children("#test").val() == "영업기회") {
 			$("#actionForm").attr("action", "sales1SalesChncCont"); // 영업기회 상세보기로 이동.
@@ -421,6 +401,19 @@ $(document).ready(function() {
 	$("#addBtn").on("click", function() {
 		$("#actionForm").attr("action", "sales1SalesChncReg");
 		$("#actionForm").submit();
+	});
+	
+	/* 검색 어제버튼 클릭시 */
+	$("#yesterday").on("click", function() {
+		var a = new Date();
+		a.setDate(a.getDate() - 1);
+		var yesterday = a.getFullYear() + "-" + lpad((a.getMonth() + 1), 2, 0) + "-" + a.getDate();
+		$("#startDate").val(yesterday);
+		
+		var b = new Date();
+		var today = b.getFullYear() + "-" + lpad((b.getMonth() + 1), 2, 0) + "-" + b.getDate();
+		$("#endDate").val(today);
+			
 	});
 	
 });
@@ -583,14 +576,7 @@ function drawPaging(pb) {
 <input type="hidden" id="oldSearchGbn" value="${param.searchGbn}" />
 <input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
 
-	<form action="#" id="actionForm" method="post">
-		<input type="hidden" id="page" name="page" value="${page}" />
-		<input type="hidden" name="top" value="${param.top}" />
-		<input type="hidden" name="menuNum" value="${param.menuNum}" />
-		<input type="hidden" name="menuType" value="${param.menuType}" />
-		<input type="hidden" id="salesNum" name="salesNum" /> <!-- 상세보기 갈 때 필요 -->
-		
-	</form>
+	
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -598,7 +584,12 @@ function drawPaging(pb) {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
-
+<form action="#" id="actionForm" method="post">
+		<input type="hidden" id="page" name="page" value="${page}" />
+		<input type="hidden" name="top" value="${param.top}" />
+		<input type="hidden" name="menuNum" value="${param.menuNum}" />
+		<input type="hidden" name="menuType" value="${param.menuType}" />
+		<input type="hidden" id="salesNum" name="salesNum" /> <!-- 상세보기 갈 때 필요 -->
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
@@ -653,12 +644,12 @@ function drawPaging(pb) {
 									<span class="srch_name">진행 단계</span>
 								</td>
 								<td>
-									<select id="prgrsStage" name="prgrsStage">
+									<select name="prgrsStage1">
 										<option value="9">선택안함</option>
-										<option value="0">영업기회</option>
-										<option value="1">제안</option>
-										<option value="2">견적</option>
-										<option value="3">계약</option>
+										<option value="1">영업기회</option>
+										<option value="2">제안</option>
+										<option value="3">견적</option>
+										<option value="4">계약</option>
 									</select>
 								</td>
 
@@ -666,11 +657,11 @@ function drawPaging(pb) {
 									<span class="srch_name_noMgn">완료 여부</span>
 								</td>
 								<td colspan="2">
-									<select>
-										<option>선택안함</option>
-										<option>진행중</option>
-										<option>종료(성공)</option>
-										<option>종료(실패)</option>
+									<select name="prgrsStage2">
+										<option value="9">선택안함</option>
+										<option value="9">진행중</option>
+										<option value="5">종료(성공)</option>
+										<option value="6">종료(실패)</option>
 									</select>
 								</td>
 							</tr>
@@ -685,20 +676,20 @@ function drawPaging(pb) {
 									</select>
 								</td>
 								<td colspan="3">
-									<input type="button" value="어제" />
-									<input type="button" value="오늘" />
-									<input type="button" value="일주일 전" />
-									<input type="button" value="1개월 전" />
-									<input type="button" value="3개월 전" />
+									<input type="button" id="yesterday" value="어제" />
+									<input type="button" id="today" value="오늘" />
+									<input type="button" id="aWeekAgo" value="일주일 전" />
+									<input type="button" id="oneMonthAgo" value="1개월 전" />
+									<input type="button" id="threeMonthAgo" value="3개월 전" />
 								</td>
 							</tr>
 							<tr>
 								<td></td>
 								<td></td>
 								<td colspan="3">
-									<input type="date" />
+									<input type="date" id="startDate" name="startDate" />
 									~
-									<input type="date" />
+									<input type="date" id="endDate" name="endDate" />
 								</td>
 
 							</tr>
@@ -753,6 +744,7 @@ function drawPaging(pb) {
 		</div>
 		<!-- cont_area end -->
 	</div>
+</form>
 	<!-- cont_wrap end -->
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>

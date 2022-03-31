@@ -52,7 +52,7 @@ $(document).ready(function() {
 		$("#searchGbn").val($("#oldSearchGbn").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
 		
-		$("#actionForm").attr("action", "inqry");
+		$("#actionForm").attr("action", "faqdt");
 		$("#actionForm").submit();
 		
 	});
@@ -79,7 +79,7 @@ $(document).ready(function() {
 		$("#searchGbn").val($("#oldSearchGbn").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
 		
-		$("#actionForm").attr("action", "eventAdd");
+		$("#actionForm").attr("action", "faqAdd");
 		$("#actionForm").submit();
 	});	
 	
@@ -188,7 +188,7 @@ function drawPaging(pb) {
 			<table class="board_table">
 				<colgroup>
 					<col width="50"/>
-					<col width="140"/>
+					<col width="110"/>
 					<col width="450"/>
 					<col width="100"/>
 				</colgroup>

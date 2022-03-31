@@ -3,10 +3,13 @@
 <mapper namespace="common">
 	<select id="loginCheck" parameterType="hashmap" resultType="hashmap">
 		SELECT E.EMP_NUM, E.EMP_NAME, E.EMP_PCTR_FILE, E.ATHRTY_NUM, D.DEPT_NUM, D.DEPT_NAME, R.RANK_NAME
-		FROM EMP E INNER JOIN APNTM A
+		FROM EMP E INNER JOIN (SELECT EMP_NUM, DEPT_NUM, RANK_NUM, END_DATE,
+                                      ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY APNTM_NUM DESC) AS RNUM
+                               FROM APNTM
+                               WHERE STS_NUM = 1) A
 		                   ON E.EMP_NUM = A.EMP_NUM
-		                  AND A.END_DATE IS NULL
-		                  AND A.STS_NUM = 1
+                          AND A.RNUM = 1
+		                  AND (A.END_DATE IS NULL OR TO_CHAR(A.END_DATE, 'YYYYMMDD') >= TO_CHAR(SYSDATE, 'YYYYMMDD'))
 		           INNER JOIN DEPT D
 		                   ON A.DEPT_NUM = D.DEPT_NUM
 		           INNER JOIN RANK R

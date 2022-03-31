@@ -160,6 +160,9 @@ $(document).ready(function() {
 <form action="#" id="actionForm" method="post">
 	<input type="hidden" name="num" value="${param.num}"/>
 	<input type="hidden" name="page" value="${param.page}"/>
+	<input type="hidden" id="top" name="top" value="${param.top}" />
+	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 </form>
 <div class="cont_wrap">
 		<div class="page_title_bar">
@@ -191,7 +194,7 @@ $(document).ready(function() {
 						</div>
 						<div class="fclty_aprvl_mng_cont">
 							<div>사용 시간 :</div>
-							<div>${data.TIME_DVSN_NUM}</div>				
+							<div>${data.START_TIME} ~ ${data.END_TIME}</div>				
 						</div>
 	<input type="hidden" id="stsNum" name="stsNum" value="${data.STS_NUM}">	
 						

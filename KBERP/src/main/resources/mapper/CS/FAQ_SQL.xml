@@ -10,6 +10,17 @@
 	                    LEFT OUTER JOIN EMP E
 	                            ON F.EMP_NUM=E.EMP_NUM                    
 	    WHERE 1=1
+	    <if test="searchTxt != null and searchTxt != ''">
+					<choose>
+						<when test="searchGbn == 0">
+							AND F.WRTNG_TITLE LIKE '%' || #{searchTxt} || '%'
+						</when>
+						
+						<when test="searchGbn == 1">
+							AND TO_CHAR(WRTNG_DATE, 'YYYY-MM-DD') LIKE '%' || #{searchTxt} || '%'
+						</when>
+					</choose>
+				</if>
 	    )FQ
 	WHERE FQ.RNUM BETWEEN #{startCount} AND #{endCount}
 </select>
@@ -21,9 +32,13 @@
 </select>
 
 <select id="getfaqdt" resultType="hashmap" parameterType="hashmap">
-	SELECT FAQ_NUM, WRTNG_TITLE, TO_CHAR(WRTNG_DATE, 'YYYY-MM-DD') AS WRTNG_DATE, WRTNG_CONT
-	FROM FAQ
-	WHERE FAQ_NUM = #{no}
+	SELECT  F.FAQ_NUM, ICT.CTGRY_NAME, F.WRTNG_TITLE, F.WRTNG_CONT,
+			   TO_CHAR(WRTNG_DATE, 'YYYY-MM-DD HH24:MI:SS') AS WRTNG_DATE
+		FROM FAQ F INNER JOIN INQRY_CTGRY ICT
+		                   ON F.CTGRY_NUM = ICT.CTGRY_NUM
+		             LEFT OUTER JOIN EMP E
+			                      ON F.EMP_NUM = E.EMP_NUM
+		WHERE F.FAQ_NUM = #{no}
 </select>
 
 <insert id="getfaqAdd" parameterType="hashmap">

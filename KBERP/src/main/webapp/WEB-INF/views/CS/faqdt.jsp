@@ -127,7 +127,7 @@ $(document).ready(function() {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">상세보기</div>
+			<div class="page_title_text">FAQ</div>
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -138,7 +138,7 @@ $(document).ready(function() {
 			<div class="wrtr_info">
 				<div class="date">${data.WRTNG_DATE}</div>
 				<span class="cate">
-					<select disabled="disabled" >
+					<select disabled="disabled" id="ctgry_name" name="ctgry_name">
 				 	<option>인터넷뱅킹</option>
 					<option>스마트폰뱅킹</option>
 					<option>CD/ATM</option>
@@ -172,19 +172,12 @@ $(document).ready(function() {
 	</div>
 	
 	<form action="#" id="actionForm" method="post">
-	<input type="hidden" name="top" value="${param.top}">
-		<input type="hidden" name="menuNum" value="${param.menuNum}">
-		<input type="hidden" name="menuType" value="${param.menuType}">
-		<input type="hidden" id="no" name="no" value="${param.no} "/>
-	<input type="hidden" id="page" name="page" value="${param.page}"/>
-	</form>
+		<input type="hidden" name="no" value="${param.no}" />
+		<input type="hidden" name="page" value="${param.page}" />
+		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+</form>
 	
-	<form action="guideWrtng" id="backForm" method="post">
-         <input type="hidden" name="top" value="${param.top}">
-		<input type="hidden" name="menuNum" value="${param.menuNum}">
-		<input type="hidden" name="menuType" value="${param.menuType}">
-		<input type="hidden" id="no" name="no"/>
-    </form>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>
