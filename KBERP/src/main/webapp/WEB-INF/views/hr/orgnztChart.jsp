@@ -54,11 +54,11 @@
 }
 
 .orgnzt_area {
-    padding: 20px 20px 0 20px;
+    padding: 20px 0 20px 20px;
     display: inline-block;
     vertical-align: top;
-    width: 258px;
-    height: 506px;
+    width: 277px;
+    height: 455px;
     border: solid 1px gray;
     border-radius: 6px;
     user-select: none;
@@ -215,14 +215,20 @@
     vertical-align: top;
     width: 205px;
 }
-
+.scroll_area{
+	overflow-y: scroll; 
+}
 
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
 	
 	reloadTree();
+    
+	//슬림스크롤
+	$(".scroll_area").slimScroll({height: "460px"},{width: "275px"});
 	
+	// 조직도 토글
 	$(".orgnzt_area").on("click", ".orgnzt_depth1, .orgnzt_depth2, .orgnzt_depth3", function(e) {
 		var depth = $(this).attr("class").substring(12);
 		var obj = $(this);
@@ -286,7 +292,6 @@ function drawTree(dept){
 	for(var data of dept) {                              
 		if(data.SUPER_DEPT_NUM == null) {
 			var html = "";
-			console.log("1뎁스(번호,레벨) : " + data.DEPT_NAME, data.DEPT_NUM, data.DEPT_LEVEL )
 			html += "<div class=\"orgnzt_depth2\" >          ";
 			html += "<div class=\"orgnzt_depth2_area\">      ";
 			html += "	<div class=\"depth_slc_icon\"></div> ";
@@ -307,7 +312,6 @@ function drawTree2(dept) {
 	for(var data of dept){
 		if(data.SUPER_DEPT_NUM != null) {
 			var html = "";
-			console.log("2뎁스(번호,레벨) : " + data.DEPT_NAME, data.DEPT_NUM, data.DEPT_LEVEL )
 			html += "<div class=\"orgnzt_depth3\">                             ";
 			html += "	<div class=\"orgnzt_depth3_area\">                     ";
 			html += "		<div class=\"depth_slc_icon\"></div>               ";
@@ -328,7 +332,6 @@ function drawTree2(dept) {
 function drawTree3(emp) {
 	for(var data of emp){
 		var html = "";
-			console.log( data.EMP_NAME, data.DEPT_NUM, data.DEPT_NAME  )
 			html += "<div class=\"orgnzt_depth3\">                             ";
 			html += "	<div class=\"orgnzt_depth3_area\">                     ";
 			html += "		<div class=\"depth_slc_icon\"></div>               ";
@@ -337,7 +340,6 @@ function drawTree3(emp) {
 			html += "	</div>                                                 ";
 			html += "</div>                                                    ";
 			$("#" + data.DEPT_NUM).append(html);
-			console.log("html " + data.DEPT_NUM, data.DEPT_NAME)
 	}
 }
 
@@ -371,16 +373,18 @@ function drawTree3(emp) {
 					<input type="button" class="orgnzt_btn" value="조직삭제" />
 				</div>
 				<div class="orgnzt_area">
-					<div class="orgnzt_depth1_wrap">
-						<div class="orgnzt_depth1" >
-							<input type="hidden" class="item_selected" value="false" />
-							<div class="depth_slc_icon"></div>
-							<div class="kb_icon"></div>
-							<div class="depth_txt">카카오뱅크</div>
-						</div>
-						<div class="orgnzt_depth2_wrap" id="depth2">
-						</div>
-					</div>	
+					<div class="scroll_area">
+						<div class="orgnzt_depth1_wrap">
+							<div class="orgnzt_depth1" >
+								<input type="hidden" class="item_selected" value="false" />
+								<div class="depth_slc_icon"></div>
+								<div class="kb_icon"></div>
+								<div class="depth_txt">카카오뱅크</div>
+							</div>
+							<div class="orgnzt_depth2_wrap" id="depth2">
+							</div>
+						</div>	
+					</div>
 				</div>
 			</div>
 		</div>
