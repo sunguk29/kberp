@@ -2,11 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="FQ">
 <select id="getfaqList" resultType="hashmap" parameterType="hashmap">
-	SELECT F.FAQ_NUM, F.WRTNG_TITLE, F.WRTNG_DATE
-	FROM (SELECT FAQ_NUM, WRTNG_TITLE, TO_CHAR(WRTNG_DATE, 'YYYY-MM-DD') AS WRTNG_DATE,
-	        ROW_NUMBER() OVER(ORDER BY FAQ_NUM DESC) AS RNUM
-	     FROM FAQ)F
-	WHERE F.RNUM BETWEEN #{startCount} AND #{endCount}
+	SELECT FQ.FAQ_NUM, FQ.CTGRY_NAME, FQ.WRTNG_TITLE, FQ.WRTNG_DATE
+	FROM ( SELECT F.FAQ_NUM, ICT.CTGRY_NAME, F.WRTNG_TITLE, TO_CHAR(F.WRTNG_DATE, 'YYYY-MM-DD') AS WRTNG_DATE,
+	            ROW_NUMBER() OVER(ORDER BY F.FAQ_NUM DESC) AS RNUM
+	FROM FAQ F INNER JOIN INQRY_CTGRY ICT
+	                            ON F.CTGRY_NUM=ICT.CTGRY_NUM
+	                    LEFT OUTER JOIN EMP E
+	                            ON F.EMP_NUM=E.EMP_NUM                    
+	    WHERE 1=1
+	    )FQ
+	WHERE FQ.RNUM BETWEEN #{startCount} AND #{endCount}
 </select>
 
 <select id="getfaqCnt" resultType="Integer" parameterType="hashmap">
@@ -27,6 +32,12 @@
 </insert>
 
 <update id="faqUpdate" parameterType="hashmap">
-		
+	UPDATE FAQ SET EMP_NUM =#{emp_num},
+                 WRTNG_TITLE = #{wrtng_title},
+                 WRTNG_CONT = #{wrtng_cont},
+                 WRTNG_DATE = SYSDATE
+	WHERE FAQ_NUM = #{no}	
 </update>
+
+
 </mapper>
