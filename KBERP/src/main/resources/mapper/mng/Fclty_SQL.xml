@@ -54,7 +54,8 @@
 <select id="fcltyList" resultType="hashmap" parameterType="hashmap">
 	SELECT O.FCLTY_NUM, O.FCLTY_NAME, O.PLACE, O.EMP_NAME, O.ACPT_NUM_OF_PL
 	FROM( SELECT F.FCLTY_NUM, F.FCLTY_NAME, F.PLACE, E.EMP_NAME, F.ACPT_NUM_OF_PL,ROW_NUMBER() OVER(ORDER BY F.FCLTY_NUM) AS RSUM
-	      FROM FCLTY F INNER JOIN EMP E ON F.EMP_NUM = E.EMP_NUM
+	      FROM FCLTY F  INNER JOIN EMP E 
+	      				ON F.EMP_NUM = E.EMP_NUM
 	      WHERE DEL = 0 
 	<if test="searchTxt != null and searchTxt != ''">
 			<choose>
@@ -120,6 +121,51 @@
 					  PLACE, ACPT_NUM_OF_PL, RMRKS)
 	VALUES(FCLT_SEQ.NEXTVAL, #{empNum},#{mngEmpNum},#{fcltyName},
 		   #{attFile},#{place},#{acptNum},#{rmrks})
+</select>
+
+<select id="fcltyView" resultType="hashmap" parameterType="hashmap">
+	SELECT F.FCLTY_NUM, F.FCLTY_NAME ,F.PLACE, E.EMP_NAME, E2.EMP_NAME AS MNG_EMP
+		  ,F.ACPT_NUM_OF_PL, TO_CHAR(F.RGSTRTN_DATE,'YYYY-MM-DD')AS RGSTRTN_DATE, F.RMRKS,F.ATT_PCTR
+	FROM FCLTY F INNER JOIN EMP E 
+             ON F.EMP_NUM = E.EMP_NUM
+             INNER JOIN EMP E2
+             ON F.MNG_EMP_NUM = E2.EMP_NUM
+	WHERE FCLTY_NUM = #{no} AND DEL = 0
+</select>
+
+<select id="fcltyViewList" resultType="hashmap" parameterType="hashmap">
+	SELECT O.RSVTN_NUM, O.EMP_NAME,O.RSVTN_DATE, O.START_TIME, O.END_TIME, O.USE_USE, O.USE_NUM_OF_PL,O.STS_NUM
+	FROM    (SELECT FR.RSVTN_NUM, E.EMP_NAME, TO_CHAR(FR.RSVTN_DATE,'YYYY-MM-DD')AS RSVTN_DATE,RT.START_TIME, RT.END_TIME, FR.USE_USE, 
+                FR.USE_NUM_OF_PL, DECODE(FR.STS_NUM,0,'승인대기',1,'예약취소',2,'승인',3,'승인거절') AS STS_NUM,
+                ROW_NUMBER() OVER(ORDER BY FR.RSVTN_NUM) AS RSUM
+         	 FROM FCLTY_RSVTN FR INNER JOIN RSVTN_TIME_DVSN RT
+                             ON FR.TIME_DVSN_NUM = RT.TIME_DVSN_NUM
+                             INNER JOIN EMP E 
+                             ON FR.EMP_NUM = E.EMP_NUM
+        	 WHERE FR.FCLTY_NUM = #{no} 
+        	 	<if test="fSearchTxt != null and fSearchTxt != ''">
+					<choose>
+						<when test="fSearchGbn == 0">
+							AND E.EMP_NAME LIKE '%' || #{fSearchTxt} || '%' 
+						</when>
+					</choose>
+				</if>
+        	 ) O
+	WHERE O.RSUM BETWEEN #{startCount} AND #{endCount}
+</select>
+
+<select id="fcltyViewListCnt" resultType="Integer" parameterType="hashmap">
+	SELECT COUNT(*) AS CNT
+	FROM FCLTY_RSVTN FR INNER JOIN EMP E
+	                    ON FR.EMP_NUM = E.EMP_NUM
+	WHERE FCLTY_NUM = #{no}
+	<if test="fSearchTxt != null and fSearchTxt != ''">
+		<choose>
+			<when test="fSearchGbn == 0">
+					AND E.EMP_NAME LIKE '%' || #{fSearchTxt} || '%' 
+			</when>
+		</choose>
+	</if>
 </select>
 </mapper>
 

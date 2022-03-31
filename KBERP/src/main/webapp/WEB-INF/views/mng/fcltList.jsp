@@ -15,9 +15,7 @@
 	width: 900px;
 }
 /* 개인 작업 영역 */
-tbody tr{
-	cursor: pointer;	
-}
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -28,6 +26,16 @@ $(document).ready(function() {
 	}
 	
 	reloadList();
+	
+	$("tbody").on("click",".board_table_hover",function(){
+		$("#no").val($(this).attr("no"));
+		
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		$("#actionForm").attr("action","fcltView");
+		$("#actionForm").submit();
+	});
 	
 	$("#searchTxt").on("keypress", function(event){
 		if(event.keyCode == 13) {	
