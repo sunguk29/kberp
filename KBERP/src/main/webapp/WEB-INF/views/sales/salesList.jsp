@@ -341,6 +341,7 @@ $(document).ready(function() {
 	/* 나도 머지테스트!!!!!!!3333 */
 	console.log("테스트");
 	console.log("테스트 2");
+	console.log("테스트테스트테스트테스트테스트테스트테스트");
 	// 검색 후 구분란(searchGbn)에 검색어유지를 위해
 	if('${param.searchGbn}' != '') {
 		$("#searchGbn").val('${param.searchGbn}');
