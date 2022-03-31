@@ -46,7 +46,7 @@
 	VALUES(FAQ_SEQ.NEXTVAL, #{emp_num}, #{title}, #{cont}, #{wrtng_date}, #{ctgry_num})
 </insert>
 
-<update id="faqUpdate" parameterType="hashmap">
+<update id="getfaqUpdate" parameterType="hashmap">
 	UPDATE FAQ SET EMP_NUM =#{emp_num},
                  WRTNG_TITLE = #{wrtng_title},
                  WRTNG_CONT = #{wrtng_cont},
