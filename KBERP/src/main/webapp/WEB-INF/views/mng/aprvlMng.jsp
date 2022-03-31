@@ -115,7 +115,7 @@ function drawList(list) {
 		html += "<td id=\"click\" num=\""+ data.RSVTN_NUM + "\">" + data.FCLTY_NAME + "</td>";
 		html += "<td>" + data.EMP_NAME + "</td>";
 		html += "<td>" + data.RSVTN_DATE + "</td>";
-		html += "<td>" + data.TIME_DVSN_NUM + "</td>";
+		html += "<td>" + data.START_TIME + " ~ " + data.END_TIME + "</td>";
 		if(data.STS_NUM==0)
             html += "<td>승인대기</td>"; 
         else if(data.STS_NUM==1)
@@ -166,8 +166,11 @@ function drawPaging(pb) {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
-<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
-<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
+	<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
+	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
+	<input type="hidden" id="top" name="top" value="${param.top}" />
+	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">

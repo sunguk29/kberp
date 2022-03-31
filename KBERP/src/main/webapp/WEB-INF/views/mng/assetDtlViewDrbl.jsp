@@ -70,6 +70,9 @@ $(document).ready(function() {
 <form action="#" id="actionForm" method="post">
 	<input type="hidden" name="num" value="${param.num}"/>
 	<input type="hidden" name="page" value="${param.page}"/>
+	<input type="hidden" id="top" name="top" value="${param.top}" />
+	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 </form>
 <div class="cont_wrap">
 		<div class="page_title_bar">
@@ -116,7 +119,7 @@ $(document).ready(function() {
 					</tbody>
 				</table>
 						<div class="rmrks"><b>비고</b></div>
-						<input type="text" id="rmrks" name="rmrks" readonly="readonly" value="${data.RMRKS}" />
+						<input type="text" id="rmrks" readonly="readonly" value="${data.RMRKS}" />
 			<div class="board_bottom">
 				<input class="cmn_btn" type="button" id="mdfyBtn" value="수정">
 				<input class="cmn_btn" type="button" value="목록으로" id="listBtn"/>

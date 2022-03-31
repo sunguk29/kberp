@@ -428,17 +428,6 @@ textarea {
 .drop_btn:hover {
 	cursor: pointer;
 }
-/* 전환 */
-.next_bot {
-	margin-top: 20px;
-	width: 100%;
-	height: 30px;
-}
-
-.nb {
-	font-size: 14px;
-	float: right;
-}
 /* 영업관리 속성들 */
 .page_cont_title_text {
 	display: inline-block;
@@ -521,26 +510,6 @@ textarea {
 	margin-right: 5px;
 }
 
-/* 영업 종료 */
-.salesOver_btn {
-	display: inline-block;
-	vertical-align: top;
-	padding: 0px 10px;
-	min-width: 30px;
-	height: 30px;
-	line-height: 30px;
-	font-size: 10pt;
-	font-weight: bold;
-	text-align: center;
-	background-color: #d7d7d7;
-	border-radius: 2px;
-	color: #222222;
-	cursor: pointer;
-}
-
-.salesOver_btn:active {
-	background-color: #E1E1E1;
-}
 
 .hr_bot {
 	margin-bottom: 20px;
@@ -1194,7 +1163,6 @@ function uploadName(e) {
 						</div>
 						<hr class="hr_bot" color="white" width="925px">
 						<hr class="hr_bot" color="white" width="925px">
-						<div class="salesOver_btn nb">영업 종료하기</div>
 					</form>
 					<!-- 끝 -->
 				</div>

@@ -47,8 +47,8 @@
 		SELECT SS.SALES_NUM, SS.PRGRS_STS, SS.PRGRS_STS2, SS.LEAD_NAME, SS.CLNT_CMPNY_NAME, SS.CLNT_NAME, SS.EMP_NAME, SS.EXPCTN_LOAN_SCALE
 		FROM ( SELECT S.SALES_NUM, S.MNGR_EMP_NUM, E.EMP_NUM, LDI.EXPCTN_LOAN_SCALE, E.EMP_NAME, L.LEAD_NAME,
 		              EC.CLNT_NAME, CC.CLNT_CMPNY_NAME,
-		              DECODE(S.PRGRS_STS_NUM, 4, '종료(성공)', 5, '종료(실패)', '진행중') AS PRGRS_STS,
-		              DECODE(S.PRGRS_STS_NUM, 0, '영업기회', 1, '제안', 2, '견적', 3, '계약') AS PRGRS_STS2,
+		              DECODE(SUBSTR(S.PRGRS_STS_NUM, 2, 1), 5, '종료(성공)', 6, '종료(실패)', '진행중') AS PRGRS_STS,
+		              DECODE(SUBSTR(S.PRGRS_STS_NUM, 1, 1), 1, '영업기회', 2, '제안', 3, '견적', 4, '계약') AS PRGRS_STS2,
 		              ROW_NUMBER() OVER(ORDER BY S.SALES_NUM DESC) AS RNUM
 		       FROM SALES S INNER JOIN EMP E
 		                            ON S.MNGR_EMP_NUM = E.EMP_NUM
@@ -60,23 +60,51 @@
 		                            ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
 		                    LEFT OUTER JOIN LOAN_DTL_INFO LDI
 		                                 ON S.SALES_NUM = LDI.SALES_NUM
-		      WHERE 1 = 1
-		      <if test="prgrsStage != 9"><!-- 진행단계 -->
-		       	<choose>
-		       		<when test="prgrsStage == 0">
-		       			AND S.PRGRS_STS_NUM = '0'
-		       		</when>
-		       		<when test="prgrsStage == 1">
-		       			AND S.PRGRS_STS_NUM = '1'
-		       		</when>
-		       		<when test="prgrsStage == 2">
-		       			AND S.PRGRS_STS_NUM = '2'
-		       		</when>
-		       		<when test="prgrsStage == 3">
-		       			AND S.PRGRS_STS_NUM = '3'
-		       		</when>
-		       	</choose>
-		       </if>
+              WHERE 1 = 1
+				 <choose>
+				   	<when test="prgrsStage1 != 9">
+				   		AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
+				   	</when>
+				   	<when test="prgrsStage2 != 9">
+				   		AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
+				   	</when>
+				 </choose>
+				 <if test="prgrsStage1 != 9 and prgrsStage2 != 9">
+					 <choose>
+						<when test="prgrsStage1 == 1 and prgrsStage2 == 5">
+							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 1
+							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 5
+						</when>
+						<when test="prgrsStage1 == 1 and prgrsStage2 == 6">
+							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 1
+							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 6
+						</when>
+						<when test="prgrsStage == 2 and prgrsStage2 == 5">
+							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 2
+							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 5
+						</when>
+						<when test="prgrsStage == 2 and prgrsStage2 == 6">
+							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 2
+							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 6
+						</when>
+						<when test="prgrsStage == 3 and prgrsStage2 == 5">
+							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 3
+							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 5
+						</when>
+						<when test="prgrsStage == 3 and prgrsStage2 == 6">
+							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 3
+							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 6
+						</when>
+						<when test="prgrsStage == 4 and prgrsStage2 == 5">
+							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 4
+							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 5
+						</when>
+						<when test="prgrsStage == 4 and prgrsStage2 == 6">
+							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 4
+							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 6
+						</when>
+					</choose>
+				</if>
 		      ) SS
 		WHERE SS.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
@@ -274,8 +302,31 @@
 		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
+	<!-- 제안 대출 상세정보tab 수정 -->
+	<update id="sales2UpdateLoan" parameterType="hashmap">
+		UPDATE SGSTN_LOAN_DTL_INFO SET SGSTN_LOAN_CAUSE_NUM = #{sgstnloanCauseNum},
+		                               SGSTN_LOAN_SCALE = #{sgstnLoanScale},
+		                               SGSTN_LOAN_TYPE = #{sgstnloanType},
+		                               SGSTN_LOAN_TIME = #{sgstnloanTime},
+		                               SGSTN_RDMPTN_TIME = #{sgstnRdmptnTime}
+		WHERE SALES_NUM = #{salesNum}	
+	</update>
 	
+	<!-- 제안 고객사 상세정보tab 수정 -->
+	<update id="sales2UpdateClntCmpny" parameterType="hashmap">
+		UPDATE SGSTN_CLNT_CMPNY_DTL_INFO SET SGSTN_TOTAL_AMNT = #{sgstnTotalAmnt},
+		                                     SGSTN_DEBT_AMNT = #{sgstnDebtAmnt},
+		                                     SGSTN_AVG_RVN_AMNT = #{sgstnAvgRvnAmnt},
+		                                     SGSTN_EMP_COUNT = #{sgstnEmpCount}
+		WHERE SALES_NUM = #{salesNum}	
+	</update>
 	
+	<!-- 제안 상세정보tab 수정 -->
+	<update id="sales2UpdateDtl" parameterType="hashmap">
+		UPDATE SGSTN_DTL_INFO SET DTL_CONT = #{dtlCont},
+		                          RMRKS = #{rmrks}
+		WHERE SALES_NUM = #{salesNum}	
+	</update>
 	
 	<!-- 영업기회에서 제안으로 단계 변경 -->
 	<update id="sales1to2" parameterType="hashmap">

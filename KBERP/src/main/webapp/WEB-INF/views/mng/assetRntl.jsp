@@ -188,6 +188,7 @@ function drawPaging(pb) {
 					<input type="hidden" id="num" name="num"/>
 					<input type="hidden" id="unum" name="unum"/>
 					
+					
 					<select id="searchGbn" name="searchGbn">
 						<option value="0">자산명</option>
 						<option value="1">사용자명</option>

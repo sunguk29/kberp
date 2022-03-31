@@ -102,6 +102,9 @@ $(document).ready(function() {
 	<input type="hidden" name="num" value="${param.num}"/>
 	<input type="hidden" name="unum" value="${param.unum}"/>
 	<input type="hidden" name="page" value="${param.page}"/>
+	<input type="hidden" id="top" name="top" value="${param.top}" />
+	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 	
 </form>
 <form action="#" id="mdfyForm" method="post">

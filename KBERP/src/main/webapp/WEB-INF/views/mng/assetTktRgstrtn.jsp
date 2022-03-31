@@ -67,7 +67,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#cnclBtn").on("click", function(){
-		$("#actionForm").attr("action", "assetRntl");
+		$("#actionForm").attr("action", "assetTkt");
 		$("#actionForm").submit();
 	});
 	
@@ -75,12 +75,15 @@ $(document).ready(function() {
 		if(checkEmpty("#assetNum")) {
 			alert("자산코드를 입력하세요.");
 			$("#assetNum").focus();
+		}  else if(checkEmpty("#qunty")) {
+			alert("수량을 선택하세요.");
+			$("#qunty").focus();
 		} else if(checkEmpty("#empNum")) {
 			alert("사용자를 선택하세요.");
 			$("#empNum").focus();
-		} else if(checkEmpty("#startDt")) {
-			alert("시작일 선택하세요.");
-			$("#startDt").focus();
+		} else if(checkEmpty("#tktdt")) {
+			alert("반출일을 선택하세요.");
+			$("#tktdt").focus();
 		} else if(checkEmpty("#rmrks")) {
 			alert("비고를 입력하세요.");
 			$("#rmrks").focus();
@@ -94,12 +97,12 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post", 
-						url : "assetAction/insertRntl", 
+						url : "assetAction/insertTkt", 
 						dataType : "json",
 						data : params, 
 						success : function(res) { 
 							if(res.res == "success") {
-								location.href ="assetRntl";
+								location.href ="assetTkt";
 							} else {
 								alert("작성중 문제가 발생하였습니다.");
 							}
@@ -139,7 +142,6 @@ function checkEmpty(sel) {
 	</c:import>
 <form action="#" id="actionForm" method="post">
 	<input type="hidden" name="num" value="${param.num}"/>
-	<input type="hidden" name="unum" value="${param.unum}"/>
 	<input type="hidden" name="page" value="${param.page}"/>
 	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
@@ -149,9 +151,10 @@ function checkEmpty(sel) {
 </form>
 <div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">자산대여 등록</div>
+			<div class="page_title_text">자산반출 등록</div>
 		</div>
 			<form action="#" id="rgstrtnForm" method="post" >
+			<input type="hidden" name="rgstrtnEmpNum" value="${sEmpNum}"/>
 				<div class="cont_area">
 				<table class="intrnl_cost_admnstrtn_new">
 					<tbody>
@@ -164,15 +167,20 @@ function checkEmpty(sel) {
 							<td>
 								<input style=width:80px; type="text" />
 							</td>
+							<td>수량</td>
+							<td>
+								<input style=width:50px; type="text" id="qunty" name="qunty" />
+								<input style=width:50px; type="text" id="quntynum" name="quntynum" />
+							</td>
+						</tr>
+						<tr class="sixth_row">
 							<td>사용자</td>
 							<td>
 								<input style=width:120px; type="text" id="empNum" name="empNum" />
 							</td>
-						</tr>
-						<tr class="sixth_row">
-							<td>사용시작일</td>
+							<td>반출일</td>
 							<td >
-								<input type="date" id="startDt" name="startDt" />
+								<input type="date" id="tktdt" name="tktdt" />
 							</td>
 					</tbody>
 				</table>

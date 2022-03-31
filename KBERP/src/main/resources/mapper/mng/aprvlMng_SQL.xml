@@ -20,13 +20,15 @@
 	</select>
 	 <select id="aprvlMngList" resultType="hashmap" parameterType="hashmap">
 		SELECT *
-		FROM (SELECT FR.RSVTN_NUM, FR.FCLTY_NUM, F.FCLTY_NAME, E.EMP_NAME, 
-				TO_CHAR(RSVTN_DATE, 'YYYY-MM-DD') AS RSVTN_DATE, FR.TIME_DVSN_NUM, STS_NUM,
+		FROM (SELECT FR.RSVTN_NUM, FR.FCLTY_NUM, F.FCLTY_NAME, E.EMP_NAME,START_TIME, END_TIME,
+				TO_CHAR(RSVTN_DATE, 'YYYY-MM-DD') AS RSVTN_DATE, STS_NUM,
 				 ROW_NUMBER() OVER(ORDER BY FR.RSVTN_NUM DESC) AS RNUM
 		FROM FCLTY_RSVTN FR INNER JOIN FCLTY F
 		                    ON FR.FCLTY_NUM = F.FCLTY_NUM
 		                    INNER JOIN EMP E
 		                    ON FR.EMP_NUM = E.EMP_NUM
+                            INNER JOIN RSVTN_TIME_DVSN RTD
+                            ON FR.TIME_DVSN_NUM = RTD.TIME_DVSN_NUM 
 		WHERE 1=1
 		<if test="searchTxt != null and searchTxt != ''"> 
 					<choose>
@@ -44,12 +46,14 @@
 	
 	<select id="aprvlMngDtlView" resultType="hashmap" parameterType="hashmap">
 		SELECT FR.RSVTN_NUM, FR.FCLTY_NUM, F.FCLTY_NAME, E.EMP_NAME, 
-				TO_CHAR(RSVTN_DATE, 'YYYY-MM-DD') AS RSVTN_DATE, FR.TIME_DVSN_NUM,USE_NUM_OF_PL, USE_USE,STS_NUM,
+				TO_CHAR(RSVTN_DATE, 'YYYY-MM-DD') AS RSVTN_DATE, START_TIME, END_TIME,USE_NUM_OF_PL, USE_USE,STS_NUM,
 				 ROW_NUMBER() OVER(ORDER BY FR.RSVTN_NUM DESC) AS RNUM
 		FROM FCLTY_RSVTN FR INNER JOIN FCLTY F
 		                    ON FR.FCLTY_NUM = F.FCLTY_NUM
 		                    INNER JOIN EMP E
 		                    ON FR.EMP_NUM = E.EMP_NUM
+                             INNER JOIN RSVTN_TIME_DVSN RTD
+                            ON FR.TIME_DVSN_NUM = RTD.TIME_DVSN_NUM 
 		WHERE RSVTN_NUM = #{num}
 	</select>
 	

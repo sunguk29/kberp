@@ -385,14 +385,78 @@ $(document).ready(function() {
 						
 								$.ajax({
 									type : "post",
-									url : "inqryAction/insert",
+									url : "inqryActionAjax/insert",
 									dataType : "json",
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
-											location.href = "inqryList";
+											$("#backForm").submit();
 										} else {
 											alert("작성중 문제가 발생하였습니다.");
+										}
+									}, // success end
+									error : function(request, status, error) {
+										console.log(request.responseText);
+									} // error end
+								}); // ajax end
+							}, // success end
+							error : function(req) {
+								console.log(req.responseText);
+							} // error end
+						});// ajaxForm end
+						
+						writeForm.submit(); // ajaxForm 실행
+							closePopup();
+						} // else end
+				} // func:function end
+					}, {
+						name : "아니오"
+					}]
+		}); // makePopup end
+	}); // btn2Btn end
+	
+	$("#btn3Btn").on("click", function() {
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "수정",
+			contents : "게시글을 수정하시겠습니까?",
+			draggable : true,
+			buttons : [{
+				name : "예",
+				func:function() {
+					$("#ansr_cont").val(CKEDITOR.instances['ansr_cont'].getData());
+					if(checkEmpty("#ansr_title")) {
+						alert("제목을 입력하세요.");
+						$("#ansr_title").focus();
+						closePopup();
+					} else if(checkEmpty("#ansr_cont")) {
+						alert("내용을 입력하세요.");
+						$("#ansr_cont").focus();
+						closePopup();
+					} else {
+						var writeForm = $("#writeForm");
+						
+						writeForm.ajaxForm({
+							success : function(res) {
+								// 물리파일명 보관
+								if(res.fileName.length > 0) {
+									$("#ansr_attFile").val(res.fileName[0]);
+								}
+								
+								// 글 수정
+								var params =  $("#writeForm").serialize();
+						
+								$.ajax({
+									type : "post",
+									url : "inqryActionAjax/update",
+									dataType : "json",
+									data : params,
+									success : function(res) {
+										if(res.res == "success") {
+											$("#backForm").submit();
+										} else {
+											alert("수정중 문제가 발생하였습니다.");
 										}
 									}, // success end
 									error : function(request, status, error) {
@@ -444,6 +508,7 @@ function checkEmpty(sel) {
 		<input type="hidden" name="page" value="${param.page}" />
 		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+		<input type="hidden" id="emp_name" name="emp_name" value="${data.EMP_NAME}" />
 		<input type="hidden" id="top" name="top" value="${param.top}"/>
 		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
 		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
@@ -510,7 +575,8 @@ function checkEmpty(sel) {
 						<form action="fileUploadAjax" id="writeForm" method="post"
 							  enctype="multipart/form-data">
 							<input type="hidden" name="no" value="${param.no}" />
-							<input type="hidden" id="emp_name" name="emp_name" value="${data.EMP_NUM}" />
+							<input type="hidden" id="emp_num" name="emp_num" value="${sEmpNum}" />
+							<input type="hidden" id="emp_name" name="emp_name" value="${data.EMP_NAME}" />
 							<input type="hidden" id="top" name="top" value="${param.top}"/>
 							<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
 							<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
@@ -554,7 +620,7 @@ function checkEmpty(sel) {
 										</div>
 										<div class="ansr_btn">
 											<div class="cmn_btn_mr" id="btn1Btn">대응가이드</div>
-											<div class="cmn_btn_mr" id="btn2Btn">수정완료</div>
+											<div class="cmn_btn_mr" id="btn3Btn">수정완료</div>
 											<div class="cmn_btn_mr" id="cancelBtn">취소</div>
 										</div>
 									</div>
