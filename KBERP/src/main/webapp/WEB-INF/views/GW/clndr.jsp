@@ -175,8 +175,8 @@
 
 }
 
-.schdl_ctgry>label:hover, #new_schdl:hover,
-.schdl_type>label:hover, .fc-content {
+.schdl_ctgry label:hover, #new_schdl:hover,
+.schdl_type label:hover, .fc-content {
 	
 	cursor: pointer;
 }
@@ -323,9 +323,10 @@
 	text-overflow:ellipsis;
 	overflow: hidden;
 	width: 120px;
-}
-#devel_schdl,#bsns_trip_schdl,#user_dsgnt_schdl{
 	color: white;
+}
+#edctn_schdl{
+	color: black;
 }
 </style>
 <!-- Fullcalendar css -->
@@ -633,7 +634,22 @@ $(document).ready(function() {
 		$('input[name=clndrDate]').attr('value',Cdate);
 		reloadList();
 	});
-	
+	$(".ctgry_box").change(function(){
+		if ($('.ctgry_box:checked').length >= 1) {
+			$(".h_ctgry").attr('value',"-1");
+			reloadList();
+		} else{
+			$("#h_user_dsgnt").attr('value',"0");
+			$("#h_bsns").attr('value',"1");
+			$("#h_leave").attr('value',"2");
+			$("#h_edctn").attr('value',"3");
+			$("#h_mtng").attr('value',"4");
+			$("#h_get_tgthr").attr('value',"5");
+			$("#h_bsns_trip").attr('value',"6");
+			$("#h_devel").attr('value',"7");
+			reloadList();
+		}
+	});
 	/* 상세일정 */
 	function drawList(dtl) {
 		var schdl_type_name = "";
@@ -1255,34 +1271,41 @@ $(document).ready(function() {
 				<input type="hidden" id="clndrDvsn" value="month">
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->			
-			 <form action="#" id="dateForm" method="post">
-				<input type="hidden" name="clndrDate" value="">
-			 </form>
 			<input type="button" value="일정 등록" id="new_schdl">
 	<div id="side_bar">
 		<div class="schdl_type">
 			<h5 class="side_bar_title">일정</h5>
-			<input type="checkbox" class="type_box" id="solo" checked="checked"><label for="solo" class="type_label" >개인 일정</label><br>
-			<input type="checkbox" class="type_box" id="team"><label for="team" class="type_label">팀 일정</label><br>
-			<input type="checkbox" class="type_box" id="all"><label for="all" class="type_label">전사 일정</label>
+			<input type="radio" name="type" class="type_box" id="solo" checked="checked"><label for="solo" class="type_label" >개인 일정</label><br>
+			<input type="radio" name="type" class="type_box" id="team"><label for="team" class="type_label">팀 일정</label><br>
+			<input type="radio" name="type" class="type_box" id="all"><label for="all" class="type_label">전사 일정</label>
 			
 		</div>
 		<div class="schdl_ctgry">
 			<h5 class="side_bar_title">범주</h5>
-			<input type="checkbox" class="ctgry_box" id="bsns"><label for="bsns" class="type_label">업무</label><div id="bsns_color"></div><br>
-			<input type="checkbox" class="ctgry_box" id="leave"><label for="leave" class="type_label">휴가</label><div id="leave_color"></div><br>
-			<input type="checkbox" class="ctgry_box" id="edctn"><label for="edctn" class="type_label">교육</label><div id="edctn_color"></div><br>
-			<input type="checkbox" class="ctgry_box" id="mtng"><label for="mtng" class="type_label">회의</label><div id="mtng_color"></div><br>
-			<input type="checkbox" class="ctgry_box" id="get_tgthr"><label for="get_tgthr" class="type_label">회식</label><div id="get_tgthr_color"></div><br>
-			<input type="checkbox" class="ctgry_box" id="bsns_trip"><label for="bsns_trip" class="type_label">출장</label><div id="bsns_trip_color"></div><br>
-			<input type="checkbox" class="ctgry_box" id="devel"><label for="devel" class="type_label">개발</label><div id="devel_color"></div><br>
-			<input type="checkbox" class="ctgry_box" id="user_dsgnt"><label for="user_dsgnt" class="type_label">사용자 지정</label><div id="user_dsgnt_color"></div>
-			
+			 <form action="#" id="dateForm" method="post">
+				<input type="hidden" name="clndrDate" value="">
+				<input type="checkbox" class="ctgry_box" id="bsns" name="bsns" value="1"><label for="bsns" class="type_label">업무</label><div id="bsns_color"></div><br>
+				<input type="checkbox" class="ctgry_box" id="leave" name="leave" value="2"><label for="leave" class="type_label">휴가</label><div id="leave_color"></div><br>
+				<input type="checkbox" class="ctgry_box" id="edctn" name="edctn" value="3"><label for="edctn" class="type_label">교육</label><div id="edctn_color"></div><br>
+				<input type="checkbox" class="ctgry_box" id="mtng" name="mtng" value="4"><label for="mtng" class="type_label">회의</label><div id="mtng_color"></div><br>
+				<input type="checkbox" class="ctgry_box" id="get_tgthr" name="get_tgthr" value="5"><label for="get_tgthr" class="type_label">회식</label><div id="get_tgthr_color"></div><br>
+				<input type="checkbox" class="ctgry_box" id="bsns_trip" name="bsns_trip" value="6"><label for="bsns_trip" class="type_label">출장</label><div id="bsns_trip_color"></div><br>
+				<input type="checkbox" class="ctgry_box" id="devel" name="devel" value="7"><label for="devel" class="type_label">개발</label><div id="devel_color"></div><br>
+				<input type="checkbox" class="ctgry_box" id="user_dsgnt" name="user_dsgnt" value="0"><label for="user_dsgnt" class="type_label">사용자 지정</label><div id="user_dsgnt_color"></div>
+				<input type="hidden" class="h_ctgry" id="h_user_dsgnt" name="user_dsgnt" value="0"> 
+				<input type="hidden" class="h_ctgry" id="h_bsns" name="bsns" value="1"> 
+				<input type="hidden" class="h_ctgry" id="h_leave" name="leave" value="2"> 
+				<input type="hidden" class="h_ctgry" id="h_edctn" name="edctn" value="3"> 
+				<input type="hidden" class="h_ctgry" id="h_mtng" name="mtng" value="4"> 
+				<input type="hidden" class="h_ctgry" id="h_get_tgthr" name="get_tgthr" value="5"> 
+				<input type="hidden" class="h_ctgry" id="h_bsns_trip" name="bsns_trip" value="6"> 
+				<input type="hidden" class="h_ctgry" id="h_devel" name="devel" value="7"> 
+			 </form>
 			
 		</div>
 		
 		<div class="today">		
-			<h5 class="side_bar_title">오늘 할 일</h5>
+			<h5 class="side_bar_title">오늘 일정</h5>
 			<div class="today_schdl">
 			</div>
 		</div>
