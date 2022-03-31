@@ -254,7 +254,9 @@ select {
 	width: 305px;
 	font-size: 12px;
 }
-
+.attImage {
+	width : 12px;
+}
 /* 직원검색 */
 .findEmp_box {
 	background-color: white;
@@ -509,7 +511,11 @@ function drawList(list) {
 		html += "</tr>";
 		html += "<tr>";
 		html += "<td>" + data.EMP_NAME + "</td>";
-		html += "<td class=\"leadName\" leadNum=\"" + data.LEAD_NUM + "\">" + data.LEAD_NAME + "</td>";
+		html += "<td class=\"leadName\" leadNum=\"" + data.LEAD_NUM + "\">" + data.LEAD_NAME + " ";
+		if(data.ATT_FILE_NAME != null) {
+			html += "<img class=\"attImage\" alt=\"파일아이콘\" src=\"resources/images/sales/attFile.png\" />";
+		}
+		html += "</td>";
 		html += "<td><span class=\"sales_psbl_btn\"> 50 % </span></td>";
 		html += "</tr>";
 		html += "<tr>";
