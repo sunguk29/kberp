@@ -61,73 +61,30 @@
 		                    LEFT OUTER JOIN LOAN_DTL_INFO LDI
 		                                 ON S.SALES_NUM = LDI.SALES_NUM
               WHERE 1 = 1
-				 <choose>
-				   	<when test="mngNum != null and mngNum != ''">
-				   		AND E.EMP_NUM = #{mngNum}
-				   	</when>
-				   	<when test="prgrsStage1 != 9">
-				   		AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
-				   	</when>
-				   	<when test="prgrsStage2 != 9">
-				   		AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
-				   	</when>
-				   	<when test="startDate != null and startDate != '' or endDate != null and endDate != ''">
-				   		AND S.START_DATE BETWEEN #{startDate} AND #{endDate}
-				   	</when>
-				 </choose>
-				 <if test="prgrsStage1 != 9 and prgrsStage2 != 9">
-					 <choose>
-						<when test="prgrsStage1 == 1 and prgrsStage2 == 7">
-							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 1
-							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 7
-						</when>
-						<when test="prgrsStage1 == 1 and prgrsStage2 == 5">
-							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 1
-							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 5
-						</when>
-						<when test="prgrsStage1 == 1 and prgrsStage2 == 6">
-							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 1
-							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 6
-						</when>
-						<when test="prgrsStage == 2 and prgrsStage2 == 7">
-							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 2
-							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 7
-						</when>
-						<when test="prgrsStage == 2 and prgrsStage2 == 5">
-							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 2
-							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 5
-						</when>
-						<when test="prgrsStage == 2 and prgrsStage2 == 6">
-							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 2
-							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 6
-						</when>
-						<when test="prgrsStage == 3 and prgrsStage2 == 7">
-							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 3
-							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 7
-						</when>
-						<when test="prgrsStage == 3 and prgrsStage2 == 5">
-							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 3
-							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 5
-						</when>
-						<when test="prgrsStage == 3 and prgrsStage2 == 6">
-							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 3
-							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 6
-						</when>
-						<when test="prgrsStage == 4 and prgrsStage2 == 7">
-							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 4
-							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 7
-						</when>
-						<when test="prgrsStage == 4 and prgrsStage2 == 5">
-							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 4
-							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 5
-						</when>
-						<when test="prgrsStage == 4 and prgrsStage2 == 6">
-							AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 4
-							AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = 6
-						</when>
-					</choose>
-				</if>
-		      ) SS
+		<choose>
+			<when test="mngNum != null and mngNum != ''">
+				AND E.EMP_NUM = #{mngNum}
+			</when>
+			<when test="prgrsStage1 != 9">
+				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
+			</when>
+			<when test="prgrsStage2 != 9">
+				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
+			</when>
+			<when test="startDate != null and startDate != '' or endDate != null and endDate != ''">
+				AND S.START_DATE BETWEEN #{startDate} AND #{endDate}
+			</when>
+			<when test="prgrsStage1 != 9 and prgrsStage2 != 9">
+				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
+				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
+			</when>
+			<when test="prgrsStage1 != 9 and prgrsStage2 != 9 and startDate != null and startDate != '' or endDate != null and endDate != ''">
+				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
+				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
+				AND S.START_DATE BETWEEN #{startDate} AND #{endDate}
+			</when>
+		</choose>
+		) SS
 		WHERE SS.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
