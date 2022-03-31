@@ -517,6 +517,7 @@ thead {
 /* 개인 작업 영역 */
 
 </style>
+
 <script type="text/javascript">
 $(document).ready(function() {
    // 조회 필터 기본 세팅

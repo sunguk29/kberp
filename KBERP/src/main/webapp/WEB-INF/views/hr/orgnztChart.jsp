@@ -293,7 +293,7 @@ function drawTree(dept){
 			html += "	<div class=\"folder_icon\"></div>    ";
 			html += "	<div class=\"depth_txt\">" + data.DEPT_NAME + "</div>";
 			html += "</div>                                  ";
-			html += "<div class=\"orgnzt_depth3_wrap\" id=\"d" + data.DEPT_NUM + "\"></div>";
+			html += "<div class=\"orgnzt_depth3_wrap\" id=\"" + data.DEPT_NUM + "\"></div>";
 			html += "</div>                                  ";
 			$("#depth2").append(html);
 		} 
@@ -314,7 +314,7 @@ function drawTree2(dept) {
 			html += "		<div class=\"folder_icon\"></div>                 ";
 			html += "		<div class=\"depth_txt\">" + data.DEPT_NAME + "</div>";
 			html += "	</div>                                                 ";
-			html += "<div class=\"orgnzt_depth4_wrap\" id=\"d" + data.DEPT_NUM + "\"></div>";
+			html += "<div class=\"orgnzt_depth4_wrap\" id=\"" + data.DEPT_NUM + "\"></div>";
 			html += "</div>                                                    ";
 			$("#" + data.SUPER_DEPT_NUM).append(html);
 		}
@@ -379,130 +379,6 @@ function drawTree3(emp) {
 							<div class="depth_txt">카카오뱅크</div>
 						</div>
 						<div class="orgnzt_depth2_wrap" id="depth2">
-							<div class="orgnzt_depth2" >
-								<div class="orgnzt_depth2_area">
-								<input type="hidden" class="dept_num" value="false" />
-									<div class="depth_slc_icon"></div>
-									<div class="folder_icon"></div>
-									<div class="depth_txt">영업부</div>
-								</div>
-								<div class="orgnzt_depth3_wrap" >
-									<div class="orgnzt_depth3">
-									<input type="hidden" class="item_selected" value="false" />
-										<div class="orgnzt_depth3_area">
-											<div class="depth_slc_icon"></div>
-											<div class="folder_icon"></div>
-											<div class="depth_txt">영업1팀</div>
-										</div>
-										<div class="orgnzt_depth4_wrap" >
-											<div class="orgnzt_depth4" >
-											<input type="hidden" class="item_selected" value="false" />
-												<div class="orgnzt_depth4_area">
-													<div class="depth_slc_icon"></div>
-													<div class="profile_icon"></div>
-													<div class="depth_txt">유은지</div>
-												</div>
-											</div>
-											<div class="orgnzt_depth4">
-											<input type="hidden" class="item_selected" value="false" />
-												<div class="orgnzt_depth4_area">
-													<div class="depth_slc_icon"></div>
-													<div class="profile_icon"></div>
-													<div class="depth_txt">유은지</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="orgnzt_depth3">
-											<input type="hidden" class="item_selected" value="false" />
-										<div class="orgnzt_depth3_area">
-											<div class="depth_slc_icon"></div>
-											<div class="folder_icon"></div>
-											<div class="depth_txt">영업2팀</div>
-										</div>
-										<div class="orgnzt_depth4_wrap" >
-											<div class="orgnzt_depth4" >
-											<input type="hidden" class="item_selected" value="false" />
-												<div class="orgnzt_depth4_area">
-													<div class="depth_slc_icon"></div>
-													<div class="profile_icon"></div>
-													<div class="depth_txt">유은지</div>
-												</div>
-											</div>
-											<div class="orgnzt_depth4">
-											<input type="hidden" class="item_selected" value="false" />
-												<div class="orgnzt_depth4_area">
-													<div class="depth_slc_icon"></div>
-													<div class="profile_icon"></div>
-													<div class="depth_txt">유은지</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="orgnzt_depth2" >
-								<input type="hidden" class="item_selected" value="false" />
-								<div class="orgnzt_depth2_area">
-									<div class="depth_slc_icon"></div>
-									<div class="folder_icon"></div>
-									<div class="depth_txt">인사팀</div>
-								</div>
-								<div class="orgnzt_depth3_wrap" >
-									<div class="orgnzt_depth3">
-									<input type="hidden" class="item_selected" value="false" />
-										<div class="orgnzt_depth3_area">
-											<div class="depth_slc_icon"></div>
-											<div class="folder_icon"></div>
-											<div class="depth_txt">인사1팀</div>
-										</div>
-										<div class="orgnzt_depth4_wrap" >
-											<div class="orgnzt_depth4">
-											<input type="hidden" class="item_selected" value="false" />
-												<div class="orgnzt_depth4_area">
-													<div class="depth_slc_icon"></div>
-													<div class="profile_icon"></div>
-													<div class="depth_txt">유은지</div>
-												</div>
-											</div>
-											<div class="orgnzt_depth4">
-											<input type="hidden" class="item_selected" value="false" />
-												<div class="orgnzt_depth4_area">
-													<div class="depth_slc_icon"></div>
-													<div class="profile_icon"></div>
-													<div class="depth_txt">유은지</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="orgnzt_depth3">
-									<input type="hidden" class="item_selected" value="false" />
-										<div class="orgnzt_depth3_area">
-											<div class="depth_slc_icon"></div>
-											<div class="folder_icon"></div>
-											<div class="depth_txt">영업2팀</div>
-										</div>
-										<div class="orgnzt_depth4_wrap" >
-											<div class="orgnzt_depth4" >
-											<input type="hidden" class="item_selected" value="false" />
-												<div class="orgnzt_depth4_area">
-													<div class="depth_slc_icon"></div>
-													<div class="profile_icon"></div>
-													<div class="depth_txt">유은지</div>
-												</div>
-											</div>
-											<div class="orgnzt_depth4">
-											<input type="hidden" class="item_selected" value="false" />
-												<div class="orgnzt_depth4_area">
-													<div class="depth_slc_icon"></div>
-													<div class="profile_icon"></div>
-													<div class="depth_txt">유은지</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
 						</div>
 					</div>	
 				</div>
