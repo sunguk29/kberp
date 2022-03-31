@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="lead">
+<!-- ******************************* 리드 조회 리스트 ******************************* -->		
 	<select id="getLeadList" resultType="hashmap" parameterType="hashmap">
 		SELECT LL.LEAD_NUM, LL.CLNT_CMPNY_NAME, LL.CLNT_NAME, LL.EMP_NAME, LL.PRGRS_STS_NUM, LL.PSNUM, LL.LEAD_NAME, LL.RGSTRTN_DATE
 		FROM (  SELECT L.LEAD_NUM, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NAME, L.LEAD_NAME, L.PRGRS_STS_NUM,
@@ -274,12 +275,17 @@
 			</when>
 		</choose>		
 	</select>
-<!-- 리드 등록 -->
+<!-- ******************************* 리드 등록 ******************************* -->		
 	<insert id="getLeadAdd" parameterType="hashmap">
 		INSERT INTO LEAD(LEAD_NUM, LEAD_NAME, CLNT_NUM, RCGNTN_PATH_NUM, RGSTRTN_EMP_NUM, MNGR_EMP_NUM)
 		VALUES(LEAD_SEQ.NEXTVAL, #{leadName}, #{clntNum}, #{rp}, #{mngNum}, #{mngNum}) 
 	</insert>
-<!-- 리드 상세 -->
+<!-- ******************************* 리드 등록 첨부파일 ******************************* -->
+ 	<insert id="getLeadAttAdd" parameterType="hashmap">
+		INSERT INTO LEAD_ATT_FILE(ATT_FILE_NUM, LEAD_NUM, ATT_FILE_NAME)
+		VALUES(LEAD_ATT_FILE_SEQ.NEXTVAL, LEAD_SEQ.CURRVAL, #{attFile})
+	</insert>		
+<!-- ******************************* 리드 상세 ******************************* -->		
 	<select id="getLeadCont" resultType="hashmap" parameterType="hashmap">	
 		SELECT LD.LEAD_NAME, EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, CC.GRADE_NUM, LD.RCGNTN_PATH_NUM, E.EMP_NAME
 		FROM LEAD LD INNER JOIN ENTRPRS_CLNT EC
