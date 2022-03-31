@@ -647,12 +647,7 @@ $(document).ready(function() {
 					<hr class="hr_bot" color="#4B94F2" width="925px">
 					<!-- *************** 제안 부분 시작 **************** -->
 					
-											<div class="bot_title">
-							<h3>
-								제안
-								<div class="drop_btn"></div>
-							</h3>
-						</div>
+						<div class="bot_title"><h3>제안<div class="drop_btn"></div></h3></div>
 						<div class="page_cont_title_text">대출 상세정보</div>
 						<hr class="hr_width">
 						<table class="detailList">
@@ -807,7 +802,7 @@ $(document).ready(function() {
 							</tbody>
 						</table>
 						<!-- 첨부자료  -->
-						<input type=file id="att" name="att">
+						<input type=file id="att" name="att" />
 						<input type="hidden" id="attFile" name="attFile" />
 						<div class="spc">
 							<div class="adc_txt">

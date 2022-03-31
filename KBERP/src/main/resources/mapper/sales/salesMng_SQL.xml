@@ -274,8 +274,31 @@
 		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
+	<!-- 제안 대출 상세정보tab 수정 -->
+	<update id="sales2UpdateLoan" parameterType="hashmap">
+		UPDATE SGSTN_LOAN_DTL_INFO SET SGSTN_LOAN_CAUSE_NUM = #{sgstnloanCauseNum},
+		                               SGSTN_LOAN_SCALE = #{sgstnLoanScale},
+		                               SGSTN_LOAN_TYPE = #{sgstnloanType},
+		                               SGSTN_LOAN_TIME = #{sgstnloanTime},
+		                               SGSTN_RDMPTN_TIME = #{sgstnRdmptnTime}
+		WHERE SALES_NUM = #{salesNum}	
+	</update>
 	
+	<!-- 제안 고객사 상세정보tab 수정 -->
+	<update id="sales2UpdateClntCmpny" parameterType="hashmap">
+		UPDATE SGSTN_CLNT_CMPNY_DTL_INFO SET SGSTN_TOTAL_AMNT = #{sgstnTotalAmnt},
+		                                     SGSTN_DEBT_AMNT = #{sgstnDebtAmnt},
+		                                     SGSTN_AVG_RVN_AMNT = #{sgstnAvgRvnAmnt},
+		                                     SGSTN_EMP_COUNT = #{sgstnEmpCount}
+		WHERE SALES_NUM = #{salesNum}	
+	</update>
 	
+	<!-- 제안 상세정보tab 수정 -->
+	<update id="sales2UpdateDtl" parameterType="hashmap">
+		UPDATE SGSTN_DTL_INFO SET DTL_CONT = #{dtlCont},
+		                          RMRKS = #{rmrks}
+		WHERE SALES_NUM = #{salesNum}	
+	</update>
 	
 	<!-- 영업기회에서 제안으로 단계 변경 -->
 	<update id="sales1to2" parameterType="hashmap">

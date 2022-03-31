@@ -348,7 +348,6 @@ hr { /* 구분선 */
 	vertical-align: middle;
 }
 
-
 .btnImg_in {
 	display: inline-block;
 	vertical-align: middle;
@@ -523,8 +522,7 @@ function uploadName(e) {
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">영업관리 - 제안 등록</div>
-				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
-				<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
+			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" /> <img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -533,8 +531,8 @@ function uploadName(e) {
 			<div class="body">
 				<div class="bodyWrap">
 					<!-- 시작 -->
-				
-					
+
+
 					<div class="bot_title">
 						<h3>
 							영업기회
@@ -545,82 +543,82 @@ function uploadName(e) {
 					<div class="bodyWrap">
 						<!-- 시작 -->
 
-							<hr class="hr_width">
-							<table>
-								<colgroup>
-									<col width="200" />
-									<col width="250" />
-									<col width="200" />
-									<col width="250" />
-								</colgroup>
-								<tbody>
-									<tr>
-										<td>
-											<input type="button" class="btn" value="영업명*" />
-										</td>
-										<td colspan="3">
-											<input type="text" class="txt" readonly="readonly" value="${lead.LEAD_NAME}" />
-										</td>
-									</tr>
-									<tr height="40">
-										<td>
-											<input type="button" class="btn" value="고객사" />
-										</td>
-										<td colspan="3">
-											<input type="text" class="txt" readonly="readonly" value="${lead.CLNT_CMPNY_NAME}" />
-										</td>
-									</tr>
-									<tr height="40">
-										<td>
-											<input type="button" class="btn" value="고객" />
-										</td>
-										<td colspan="3">
-											<input type="text" class="txt" readonly="readonly" value="${lead.CLNT_NAME}" />
-										</td>
-									</tr>
-									<tr height="40">
-										<td>
-											<input type="button" class="btn" value="고객사 등급" />
-										</td>
-										<td colspan="3">
-											<input type="text" class="txt" readonly="readonly" value="${lead.GRADE_NAME}" />
-										</td>
-									</tr>
-									<tr height="40">
-										<td>
-											<input type="button" class="btn" value="영업시작일*" />
-										</td>
-										<td colspan="3">
-											<input type="date" class="txt" readonly="readonly" value="${lead.START_DATE}" />
-										</td>
-									<tr height="40">
-										<td>
-											<input type="button" class="btn" value="담당자 *" readonly="readonly" />
-										</td>
-										<td colspan="3" value="${lead.MNGR_EMP_NUM}">
-											<input type="text" class="txt2" id="mngrName" name="mngrName" value="${lead.EMP_NAME}" readonly="readonly"/>
-											<img class="btnImg_in" id="userIcon" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
-										</td>
-									</tr>
-								</tbody>
-							</table>
-							<div class="page_cont_title_text">대출 상세정보</div>
-							<hr class="hr_width">
-							<table>
-								<colgroup>
-									<col width="200" />
-									<col width="250" />
-									<col width="200" />
-									<col width="250" />
-								</colgroup>
-								<tbody>
-									<tr>
-										<td>
-											<input type="button" class="btn" value="대출 원인*" />
-										</td>
-										<td colspan="3">
-											<select class="txt" id="loanCauseNum" name="loanCauseNum" value="${loan.LOAN_CAUSE_NUM}" disabled="disabled">
-												<optgroup>
+						<hr class="hr_width">
+						<table>
+							<colgroup>
+								<col width="200" />
+								<col width="250" />
+								<col width="200" />
+								<col width="250" />
+							</colgroup>
+							<tbody>
+								<tr>
+									<td>
+										<input type="button" class="btn" value="영업명*" />
+									</td>
+									<td colspan="3">
+										<input type="text" class="txt" readonly="readonly" value="${lead.LEAD_NAME}" />
+									</td>
+								</tr>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="고객사" />
+									</td>
+									<td colspan="3">
+										<input type="text" class="txt" readonly="readonly" value="${lead.CLNT_CMPNY_NAME}" />
+									</td>
+								</tr>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="고객" />
+									</td>
+									<td colspan="3">
+										<input type="text" class="txt" readonly="readonly" value="${lead.CLNT_NAME}" />
+									</td>
+								</tr>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="고객사 등급" />
+									</td>
+									<td colspan="3">
+										<input type="text" class="txt" readonly="readonly" value="${lead.GRADE_NAME}" />
+									</td>
+								</tr>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="영업시작일*" />
+									</td>
+									<td colspan="3">
+										<input type="date" class="txt" readonly="readonly" value="${lead.START_DATE}" />
+									</td>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="담당자 *" readonly="readonly" />
+									</td>
+									<td colspan="3" value="${lead.MNGR_EMP_NUM}">
+										<input type="text" class="txt2" id="mngrName" name="mngrName" value="${lead.EMP_NAME}" readonly="readonly" />
+										<img class="btnImg_in" id="userIcon" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="page_cont_title_text">대출 상세정보</div>
+						<hr class="hr_width">
+						<table>
+							<colgroup>
+								<col width="200" />
+								<col width="250" />
+								<col width="200" />
+								<col width="250" />
+							</colgroup>
+							<tbody>
+								<tr>
+									<td>
+										<input type="button" class="btn" value="대출 원인*" />
+									</td>
+									<td colspan="3">
+										<select class="txt" id="loanCauseNum" name="loanCauseNum" value="${loan.LOAN_CAUSE_NUM}" disabled="disabled">
+											<optgroup>
 												<c:choose>
 													<c:when test="${loan.LOAN_CAUSE_NUM eq 0}">
 														<option value="0" selected="selected">사업확장</option>
@@ -629,155 +627,156 @@ function uploadName(e) {
 														<option value="3">기타</option>
 													</c:when>
 													<c:when test="${loan.LOAN_CAUSE_NUM eq 1}">
-														<option value="0" >사업확장</option>
+														<option value="0">사업확장</option>
 														<option value="1" selected="selected">제품개발</option>
 														<option value="2">토지매매</option>
 														<option value="3">기타</option>
 													</c:when>
 													<c:when test="${loan.LOAN_CAUSE_NUM eq 2}">
-														<option value="0" >사업확장</option>
+														<option value="0">사업확장</option>
 														<option value="1">제품개발</option>
 														<option value="2" selected="selected">토지매매</option>
 														<option value="3">기타</option>
 													</c:when>
 													<c:when test="${loan.LOAN_CAUSE_NUM eq 3}">
-														<option value="0" >사업확장</option>
+														<option value="0">사업확장</option>
 														<option value="1">제품개발</option>
 														<option value="2">토지매매</option>
 														<option value="3" selected="selected">기타</option>
 													</c:when>
 												</c:choose>
 											</optgroup>
-											</select>
-										</td>
-									</tr>
-									<tr height="40">
-										<td>
-											<input type="button" class="btn" value="예상 대출 규모" />
-										</td>
-										<td colspan="3">
-											<input type="text" class="txt" id="expctnLoanScale" name="expctnLoanScale" value="${loan.EXPCTN_LOAN_SCALE}" readonly="readonly" />
-										</td>
-									</tr>
-									<tr height="40">
-										<td>
-											<input type="button" class="btn" value="대출 희망 유형*" />
-										</td>
-										<td colspan="3">
-											<select class="txt" id="loanHopeType" name="loanHopeType" value="${loan.LOAN_HOPE_TYPE}" disabled="disabled">
-												<optgroup>
-													<c:choose>
-														<c:when test="${loan.LOAN_HOPE_TYPE eq 0}">
-															<option value="0" selected="selected">장기대출</option>
-															<option value="1">단기대출</option>
-														</c:when>
-														<c:when test="${loan.LOAN_HOPE_TYPE eq 1}">
-															<option value="0">장기대출</option>
-															<option value="1" selected="selected">단기대출</option>
-														</c:when>
-													</c:choose>
-												</optgroup>
-											</select>
-										</td>
-									</tr>
-									<tr height="40">
-										<td>
-											<input type="button" class="btn" value="대출 희망 시기*" />
-										</td>
-										<td colspan="3">
-											<select class="txt" id="loanHopeTime" name="loanHopeTime" value="${loan.LOAN_HOPE_TIME}" disabled="disabled">
-												<optgroup>
-													<c:choose>
-														<c:when test="${loan.LOAN_HOPE_TIME eq 0}">
-															<option value="0" selected="selected">근시일 내</option>
-															<option value="1">3개월 이후</option>
-															<option value="2">6개월 이후</option>
-															<option value="3">1년 이후</option>
-														</c:when>
-														<c:when test="${loan.LOAN_HOPE_TIME eq 1}">
-															<option value="0">근시일 내</option>
-															<option value="1" selected="selected">3개월 이후</option>
-															<option value="2">6개월 이후</option>
-															<option value="3">1년 이후</option>
-														</c:when>
-														<c:when test="${loan.LOAN_HOPE_TIME eq 2}">
-															<option value="0">근시일 내</option>
-															<option value="1">3개월 이후</option>
-															<option value="2" selected="selected">6개월 이후</option>
-															<option value="3">1년 이후</option>
-														</c:when>
-														<c:when test="${loan.LOAN_HOPE_TIME eq 3}">
-															<option value="0">근시일 내</option>
-															<option value="1">3개월 이후</option>
-															<option value="2">6개월 이후</option>
-															<option value="3" selected="selected">1년 이후</option>
-														</c:when>
-													</c:choose>
-												</optgroup>											
-											</select>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-							<div class="page_cont_title_text">예정 사업 상세정보</div>
-							<hr class="hr_width">
-							<table>
-								<colgroup>
-									<col width="200" />
-									<col width="250" />
-									<col width="200" />
-									<col width="250" />
-								</colgroup>
-								<tbody>
-									<tr height="40">
-										<td>
-											<input type="button" class="btn" value="예정 사업명" />
-										</td>
-										<td colspan="3">
-											<input type="text" class="txt" id="expctdBsnsName" name="expctdBsnsName" value="${bsns.EXPCTD_BSNS_NAME}"  readonly="readonly"/>
-										</td>
-									</tr>
-									<tr height="40">
-										<td>
-											<input type="button" class="btn" value="예정 사업 형태" />
-										</td>
-										<td colspan="3">
-											<input type="text" class="txt" id="expctdBsnsType" name="expctdBsnsType" value="${bsns.EXPCTD_BSNS_TYPE}"  readonly="readonly"/>
-										</td>
-									</tr>
-									<tr height="40">
-										<td>
-											<input type="button" class="btn" value="비고" />
-										</td>
-										<td colspan="3">
-											<input type="text" class="rmks" id="rmks" name="rmks" value="${bsns.RMKS}"  readonly="readonly"/>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-							<br /> <br />
-							<!-- 첨부자료  -->
-							<div class="spc">
-								<div class="adc_txt">
-									첨부자료 (0) <img class="plus_btn" src="resources/images/sales/plus.png" border='0' />
-								</div>
-								<div class="cntrct_box_in"></div>
-								<input type=file id="att" name="att" />
-								<input type="hidden" id="attFile" name="attFile" />
+										</select>
+									</td>
+								</tr>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="예상 대출 규모" />
+									</td>
+									<td colspan="3">
+										<input type="text" class="txt" id="expctnLoanScale" name="expctnLoanScale" value="${loan.EXPCTN_LOAN_SCALE}" readonly="readonly" />
+									</td>
+								</tr>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="대출 희망 유형*" />
+									</td>
+									<td colspan="3">
+										<select class="txt" id="loanHopeType" name="loanHopeType" value="${loan.LOAN_HOPE_TYPE}" disabled="disabled">
+											<optgroup>
+												<c:choose>
+													<c:when test="${loan.LOAN_HOPE_TYPE eq 0}">
+														<option value="0" selected="selected">장기대출</option>
+														<option value="1">단기대출</option>
+													</c:when>
+													<c:when test="${loan.LOAN_HOPE_TYPE eq 1}">
+														<option value="0">장기대출</option>
+														<option value="1" selected="selected">단기대출</option>
+													</c:when>
+												</c:choose>
+											</optgroup>
+										</select>
+									</td>
+								</tr>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="대출 희망 시기*" />
+									</td>
+									<td colspan="3">
+										<select class="txt" id="loanHopeTime" name="loanHopeTime" value="${loan.LOAN_HOPE_TIME}" disabled="disabled">
+											<optgroup>
+												<c:choose>
+													<c:when test="${loan.LOAN_HOPE_TIME eq 0}">
+														<option value="0" selected="selected">근시일 내</option>
+														<option value="1">3개월 이후</option>
+														<option value="2">6개월 이후</option>
+														<option value="3">1년 이후</option>
+													</c:when>
+													<c:when test="${loan.LOAN_HOPE_TIME eq 1}">
+														<option value="0">근시일 내</option>
+														<option value="1" selected="selected">3개월 이후</option>
+														<option value="2">6개월 이후</option>
+														<option value="3">1년 이후</option>
+													</c:when>
+													<c:when test="${loan.LOAN_HOPE_TIME eq 2}">
+														<option value="0">근시일 내</option>
+														<option value="1">3개월 이후</option>
+														<option value="2" selected="selected">6개월 이후</option>
+														<option value="3">1년 이후</option>
+													</c:when>
+													<c:when test="${loan.LOAN_HOPE_TIME eq 3}">
+														<option value="0">근시일 내</option>
+														<option value="1">3개월 이후</option>
+														<option value="2">6개월 이후</option>
+														<option value="3" selected="selected">1년 이후</option>
+													</c:when>
+												</c:choose>
+											</optgroup>
+										</select>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="page_cont_title_text">예정 사업 상세정보</div>
+						<hr class="hr_width">
+						<table>
+							<colgroup>
+								<col width="200" />
+								<col width="250" />
+								<col width="200" />
+								<col width="250" />
+							</colgroup>
+							<tbody>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="예정 사업명" />
+									</td>
+									<td colspan="3">
+										<input type="text" class="txt" id="expctdBsnsName" name="expctdBsnsName" value="${bsns.EXPCTD_BSNS_NAME}" readonly="readonly" />
+									</td>
+								</tr>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="예정 사업 형태" />
+									</td>
+									<td colspan="3">
+										<input type="text" class="txt" id="expctdBsnsType" name="expctdBsnsType" value="${bsns.EXPCTD_BSNS_TYPE}" readonly="readonly" />
+									</td>
+								</tr>
+								<tr height="40">
+									<td>
+										<input type="button" class="btn" value="비고" />
+									</td>
+									<td colspan="3">
+										<input type="text" class="rmks" id="rmks" name="rmks" value="${bsns.RMKS}" readonly="readonly" />
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<br /> <br />
+						<!-- 첨부자료  -->
+						<div class="spc">
+							<div class="adc_txt">
+								첨부자료 (0) <img class="plus_btn" src="resources/images/sales/plus.png" border='0' />
 							</div>
+							<div class="cntrct_box_in"></div>
+							<input type=file id="att" name="att" />
+							<input type="hidden" id="attFile" name="attFile" />
+						</div>
 						<!-- 끝 -->
 					</div>
 
 					<hr class="hr_bot" color="#4B94F2" width="925px">
-	<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
-					<!-- ******************* 제안 시작 ******************* -->
-					
+					<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
+						<!-- ******************* 제안 시작 ******************* -->
+
 						<input type="hidden" id="page" name="page" value="${page}" />
 						<input type="hidden" name="top" value="${param.top}" />
 						<input type="hidden" name="menuNum" value="${param.menuNum}" />
 						<input type="hidden" name="menuType" value="${param.menuType}" />
-						<input type="hidden" id="salesNum" name="salesNum" value="${param.salesNum}" /><!-- 넘어올 영업번호... 리드에서 가져옴 -->
-						
+						<input type="hidden" id="salesNum" name="salesNum" value="${param.salesNum}" />
+						<!-- 넘어올 영업번호... 리드에서 가져옴 -->
+
 						<div class="bot_title">
 							<h3>
 								제안
@@ -801,12 +800,12 @@ function uploadName(e) {
 									<td colspan="3">
 										<select class="txt" id="sgstnloanCauseNum" name="sgstnloanCauseNum" required>
 											<optgroup>
-													<option value="9">선택하세요</option>
-													<option value="0">사업확장</option>
-													<option value="1">제품개발</option>
-													<option value="2">토지매매</option>
-													<option value="3">기타</option>
-												</optgroup>
+												<option value="9">선택하세요</option>
+												<option value="0">사업확장</option>
+												<option value="1">제품개발</option>
+												<option value="2">토지매매</option>
+												<option value="3">기타</option>
+											</optgroup>
 										</select>
 									</td>
 								</tr>
@@ -928,8 +927,7 @@ function uploadName(e) {
 						<input type="hidden" id="attFile" name="attFile" />
 						<div class="spc">
 							<div class="adc_txt">
-								첨부자료
-								<img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
+								첨부자료 <img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
 							</div>
 							<div class="cntrct_box_in">
 								<input type="text" id="fileName" readonly="readonly" />

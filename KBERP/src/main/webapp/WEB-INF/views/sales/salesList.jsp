@@ -537,7 +537,7 @@ function drawList(list) {
 		} else {
 			html += "<div class=\"fs\">예상매출 : " + data.EXPCTN_LOAN_SCALE + "원</div>";
 		}
-		html += "<div class=\"pic\">" + data.EMP_NAME + "</div>";
+		html += "<div class=\"pic\">담당자 : " + data.EMP_NAME + "</div>";
 		html += "<br>";
 		html += "</div>";
 	}
