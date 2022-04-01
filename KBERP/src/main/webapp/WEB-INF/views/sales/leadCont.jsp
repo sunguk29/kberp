@@ -798,7 +798,7 @@ $(document).ready(function () {
 				});
 		});	
 	
-	console.log("적용됏나2222222222222222222222211111111");
+	console.log("적용됏나");
 	
 	/* 예정된 일정 수정 팝업 */
 	$(".sbx").on("click", ".sch_re", function() {
@@ -847,13 +847,30 @@ $(document).ready(function () {
 					html += "		</tr>";
 					html += "		<tr height=\"10\">                                                                                                          ";
 					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동분류 *\" readonly=\"readonly\"/></td>";
-					html += "			<td><select class=\"pop_txt_in\" id=\"ssactvtyclsfy\" name=\"ssactvtyclsfy\" value=\"" + data.ACTVTY_CLSFY_NUM + "\">";
+					html += "			<td><select class=\"pop_txt_in\" id=\"ssactvtyclsfy\" name=\"ssactvtyclsfy\" >";
 					html += "					<optgroup>";
 					html += "						<option value=\"9\">선택하세요</option>";
-					html += "						<option value=\"0\">전화</option>";
-					html += "						<option value=\"1\">메일</option>";
-					html += "						<option value=\"2\">방문</option>";
-					html += "						<option value=\"3\">기타</option>";
+					if(data.ACTVTY_CLSFY_NUM == 0) {
+						html += "						<option value=\"0\" selected=\"selected\">전화</option>";
+						html += "						<option value=\"1\">메일</option>";
+						html += "						<option value=\"2\">방문</option>";
+						html += "						<option value=\"3\">기타</option>";
+					} else if (data.ACTVTY_CLSFY_NUM == 1) {
+						html += "						<option value=\"0\">전화</option>";
+						html += "						<option value=\"1\" selected=\"selected\">메일</option>";
+						html += "						<option value=\"2\">방문</option>";
+						html += "						<option value=\"3\">기타</option>";
+					} else if (data.ACTVTY_CLSFY_NUM == 2) {
+						html += "						<option value=\"0\">전화</option>";
+						html += "						<option value=\"1\">메일</option>";
+						html += "						<option value=\"2\" selected=\"selected\">방문</option>";
+						html += "						<option value=\"3\">기타</option>";
+					} else if (data.ACTVTY_CLSFY_NUM == 3) {
+						html += "						<option value=\"0\">전화</option>";
+						html += "						<option value=\"1\">메일</option>";
+						html += "						<option value=\"2\">방문</option>";
+						html += "						<option value=\"3\" selected=\"selected\">기타</option>";
+					}
 					html += "					</optgroup>";
 					html += "			</select></td>";
 					html += "		</tr>";
@@ -896,17 +913,6 @@ $(document).ready(function () {
 					html += "</form>";
 					
 				});	
-				
-				$(".pop_cntrct_box_in").on("click", "#fileDelete", function() {
-					$("#popFileName").remove();
-					$(this).remove();
-
-					var html = "";
-					
-					html += "<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />"; 
-					
-					$("#uploadBtn").html(html);
-				});
 				
 		makePopup({
 			depth : 1,
