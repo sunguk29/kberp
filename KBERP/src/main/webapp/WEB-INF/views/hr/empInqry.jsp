@@ -341,12 +341,12 @@ $(document).ready(function() {
 				$(this).parent("tbody").find(".table_item .item_selected").val("false");
 				$(this).find(".item_selected").val("true");
 				
-				$("#emp_num").val($(this).attr("num"));
+				$("#empNum").val($(this).attr("num"));
 				$("#inqry_btn").attr("da", "false");
 				$("#del_btn").attr("da", "false");
 				btnSetting();
 				
-				console.log("selected : " + $("#emp_num").val());
+				console.log("selected : " + $("#empNum").val());
 		
 				$(this).parent("tbody").find(".table_item").children("td:nth-child(odd)").css("background-color", "#fafafa");
 				$(this).parent("tbody").find(".table_item").children("td:nth-child(even)").css("background-color", "#f6f6f6");
@@ -355,7 +355,7 @@ $(document).ready(function() {
 			} else {
 				$(this).find(".item_selected").val("false");
 				
-				$("#emp_num").val("-1");
+				$("#empNum").val("-1");
 				$("#inqry_btn").attr("da", "true");
 				$("#del_btn").attr("da", "true");
 				btnSetting();
@@ -400,13 +400,18 @@ $(document).ready(function() {
 	});
 	
 	$("#inqry_btn").on("click", function() {
-		if ($("#emp_num").val() != "-1") {
+		if ($("#empNum").val() != "-1") {
+			console.log($("#empNum").val());
+			
+			$("#i_menuNum").val("5");
+			
+ 			$("#inqryForm").attr("action", "prsnlCard");
 			$("#inqryForm").submit();
 		}
 	});
 	
 	$("#del_btn").click(function() {
-		if ($("#emp_num").val() != "-1") {
+		if ($("#empNum").val() != "-1") {
 			
 		}
 	});
@@ -570,9 +575,13 @@ function btnSetting() {
 			<input type="hidden" id="old_join_date" value="${param.join_date}" />
 			<input type="hidden" id="old_prd_start" value="${param.prd_start}" />
 			<input type="hidden" id="old_prd_end" value="${param.prd_end}" />
-			<form action="prsnlCard" id="inqryForm" method="post">
+			<form action="#" id="inqryForm" method="post">
+				<input type="hidden" id="i_top" name="top" value="${param.top}" />
+				<input type="hidden" id="i_menuNum" name="menuNum" value="${param.menuNum}" />
+				<input type="hidden" id="i_menuType" name="menuType" value="${param.menuType}" />
 				<input type="hidden" id="page" name="page" value="${page}" />
-				<input type="hidden" id="emp_num" name="emp_num" value="-1" />
+				<input type="hidden" id="empNum" name="empNum" value="-1" />
+				<input type="hidden" id="superEmpNum" name="superEmpNum" value="${sEmpNum}" />
 				<div class="srch_wrap">
 					<div class="page_srch_area">
 						<select class="srch_sel" name="srch_sel">

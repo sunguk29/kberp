@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,11 +44,16 @@ public class FcltyController {
 		return mav;
 	}
 	//시설물예약 ajax
-	@RequestMapping(value = "/fcltUseRqstAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@RequestMapping(value = "/fcltUseRqstAjax", method = RequestMethod.POST, 
+					produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String fcltUseRqstAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+	public String fcltUseRqstAjax(@RequestParam HashMap<String, String> params,
+								  HttpSession session) throws Throwable {
+		
+		params.put("sesEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
+		
 		ObjectMapper mapper = new ObjectMapper();
-
+				
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 
 		int cnt = iCommonService.getIntData("Fclty.fcltyListRqstCnt", params);
@@ -57,10 +64,10 @@ public class FcltyController {
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 
 		List<HashMap<String, String>> list = iCommonService.getDataList("Fclty.rsvtnFcltyList", params);
-
+	
 		modelMap.put("pb", pb);
 		modelMap.put("list", list);
-
+		
 		return mapper.writeValueAsString(modelMap);
 
 	}
@@ -195,6 +202,19 @@ public class FcltyController {
 
 		return mav;
 	}
+	//시설물수정
+	@RequestMapping(value = "/fcltUpdate")
+	public ModelAndView fcltUpdate(@RequestParam HashMap<String, String> params,
+			ModelAndView mav) throws Throwable{
+		
+		HashMap<String, String> data = iCommonService.getData("Fclty.fcltyView", params);
+		
+		mav.addObject("data",data);
+		
+		mav.setViewName("mng/fcltUpdate");
+		
+		return mav;
+	}
 	//시설물 action
 	@RequestMapping(value = "/fcltAction/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
@@ -209,6 +229,9 @@ public class FcltyController {
 			switch (gbn) {
 			case "insert":
 				iCommonService.insertData("Fclty.fcltyAdd", params);
+				break;
+			case "update":
+				iCommonService.updateData("Fclty.fcltyUpdate", params);
 				break;
 			case "delete":
 				iCommonService.deleteData("Fclty.fcltUseRqstCncl", params);

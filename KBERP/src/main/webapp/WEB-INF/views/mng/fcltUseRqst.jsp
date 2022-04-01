@@ -96,7 +96,6 @@ function drawList(list){
 	
 	for(var data of list){
 		html += "<tr>";
-		
 		html += "<td>" + data.RSVTN_NUM + "</td>";
 		html += "<td class=\"board_table_hover\" no=\"" + data.RSVTN_NUM + "\">" + data.FCLTY_NAME + "</td>";
 		html += "<td>" + data.RSVTN_DATE + "</td>";
@@ -190,8 +189,9 @@ function drawPaging(pb) {
 						<th>예약현황</th>
 					</tr>
 				</thead>
-				<tbody>	
+				<tbody>
 				</tbody>
+		
 			</table>
 			<div class="board_bottom">
 				<div class="pgn_area">

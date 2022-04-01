@@ -21,7 +21,7 @@ public class CommonProperties {
 	/**
 	 * 파일 업로드
 	 */
-	//파일 업로드 경로
+
 	public static final String FILE_UPLOAD_PATH = "C:\\MyWork\\workspace\\.metadata\\.plugins"
 												+ "\\org.eclipse.wst.server.core\\tmp0"
 												+ "\\wtpwebapps\\KBERP\\resources";

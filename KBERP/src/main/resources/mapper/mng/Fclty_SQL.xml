@@ -2,16 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Fclty">
 
+<!-- 시설물예약목록 -->
 <select id="rsvtnFcltyList" resultType="hashmap" parameterType="hashmap">
-	SELECT O.RSVTN_NUM, O.FCLTY_NAME, O.RSVTN_DATE, 
-       O.START_TIME, O.END_TIME,DECODE(O.STS_NUM,0,'승인대기',1,'취소된 예약',2,'승인',3,'승인거절') AS STS_NUM
+	SELECT  O.RSVTN_NUM, O.FCLTY_NAME, O.RSVTN_DATE,O.EMP_NUM,  
+       		O.START_TIME, O.END_TIME,DECODE(O.STS_NUM,0,'승인대기',1,'취소된 예약',2,'승인',3,'승인거절') AS STS_NUM
 	FROM        (SELECT R.RSVTN_NUM, F.FCLTY_NAME, TO_CHAR(R.RSVTN_DATE,'YYYY-MM-DD')AS RSVTN_DATE, 
-                  		RT.START_TIME, RT.END_TIME, R.STS_NUM,ROW_NUMBER() OVER(ORDER BY R.RSVTN_NUM) AS RSUM,R.USE_NUM_OF_PL
+                  		RT.START_TIME, RT.END_TIME, R.STS_NUM,ROW_NUMBER() OVER(ORDER BY R.RSVTN_NUM) AS RSUM,R.USE_NUM_OF_PL,R.EMP_NUM
             	 FROM FCLTY_RSVTN R  INNER JOIN FCLTY F 
                                 ON R.FCLTY_NUM = F.FCLTY_NUM
                                 INNER JOIN RSVTN_TIME_DVSN RT
                                 ON R.TIME_DVSN_NUM = RT.TIME_DVSN_NUM
-	             WHERE F.DEL = 0 AND STS_NUM != 1
+	             WHERE F.DEL = 0 AND STS_NUM != 1 AND R.EMP_NUM = #{sesEmpNum}
 	<if test="searchTxt != null and searchTxt != ''">
 			<choose>
 				<when test="searchGbn == 0">
@@ -21,8 +22,10 @@
 	</if>
 	) O 
 	WHERE O.RSUM BETWEEN #{startCount} AND #{endCount} 
+	ORDER BY O.RSVTN_NUM DESC
 </select>
 
+<!-- 시설물예약목록cnt -->
 <select id="fcltyListRqstCnt" resultType="Integer" parameterType="hashmap">
 	SELECT COUNT(*) AS CNT
 	FROM FCLTY_RSVTN  R INNER JOIN FCLTY F ON R.FCLTY_NUM = F.FCLTY_NUM 
@@ -36,6 +39,7 @@
 	</if>
 </select>
 
+<!-- 시설물예약 상세보기 -->
 <select id="fcltUseRqstView" resultType="hashmap" parameterType="hashmap">
 	SELECT F.FCLTY_NAME,F.PLACE, TO_CHAR(R.RSVTN_DATE,'YYYY-MM-DD')AS RSVTN_DATE, 
        	   RT.START_TIME, RT.END_TIME,R.USE_NUM_OF_PL,DECODE(R.STS_NUM,0,'승인대기',1,'취소된 예약',2,'승인',3,'승인거절') AS STS_NUM,R.USE_USE
@@ -46,11 +50,13 @@
 	WHERE F.DEL = 0 AND R.RSVTN_NUM = #{no}
 </select>
 
+<!-- 시설물예약취소 -->
 <select id="fcltUseRqstCncl" parameterType="hashmap">
 	UPDATE FCLTY_RSVTN SET STS_NUM = 1
 	WHERE RSVTN_NUM = #{no}
 </select>
 
+<!-- 시설물목록 -->
 <select id="fcltyList" resultType="hashmap" parameterType="hashmap">
 	SELECT O.FCLTY_NUM, O.FCLTY_NAME, O.PLACE, O.EMP_NAME, O.ACPT_NUM_OF_PL
 	FROM( SELECT F.FCLTY_NUM, F.FCLTY_NAME, F.PLACE, E.EMP_NAME, F.ACPT_NUM_OF_PL,ROW_NUMBER() OVER(ORDER BY F.FCLTY_NUM) AS RSUM
@@ -68,9 +74,11 @@
 			</choose>
 	</if>
 	     ) O 
-	WHERE O.RSUM BETWEEN #{startCount} AND #{endCount} 
+	WHERE O.RSUM BETWEEN #{startCount} AND #{endCount}
+	ORDER BY O.FCLTY_NUM DESC 
 </select>
 
+<!-- 시설물목록 cnt -->
 <select id="fcltyListCnt" resultType="Integer" parameterType="hashmap">
 	SELECT COUNT(*) AS CNT
 	FROM FCLTY
@@ -87,6 +95,7 @@
 	</if>
 </select>
 
+<!-- 시설물등록시 관리자리스트 -->
 <select id="getEmpList" resultType="hashmap" parameterType="hashmap">
 	SELECT O.EMP_NUM,O.EMP_NAME
 	FROM       ( SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM DESC) AS RNUM
@@ -100,8 +109,10 @@
 	             </if>
 	            )O
 	WHERE O.RNUM BETWEEN #{startCount} AND #{endCount}
+	
 </select>
 
+<!-- 시설물등록시 관리자리스트 cnt-->
 <select id="getEmpCnt" resultType="Integer" parameterType="hashmap">
 	SELECT COUNT(*)
 	FROM(   SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM DESC) AS RNUM
@@ -116,6 +127,7 @@
 		) 
 </select>
 
+<!-- 시설물등록 -->
 <select id="fcltyAdd" parameterType="hashmap">
 	INSERT INTO FCLTY(FCLTY_NUM, EMP_NUM, MNG_EMP_NUM, FCLTY_NAME, ATT_PCTR, 
 					  PLACE, ACPT_NUM_OF_PL, RMRKS)
@@ -123,6 +135,7 @@
 		   #{attFile},#{place},#{acptNum},#{rmrks})
 </select>
 
+<!-- 시설물상세보기 -->
 <select id="fcltyView" resultType="hashmap" parameterType="hashmap">
 	SELECT F.FCLTY_NUM, F.FCLTY_NAME ,F.PLACE, E.EMP_NAME, E2.EMP_NAME AS MNG_EMP
 		  ,F.ACPT_NUM_OF_PL, TO_CHAR(F.RGSTRTN_DATE,'YYYY-MM-DD')AS RGSTRTN_DATE, F.RMRKS,F.ATT_PCTR
@@ -133,6 +146,7 @@
 	WHERE FCLTY_NUM = #{no} AND DEL = 0
 </select>
 
+<!-- 시설물상세보기안에 해당 시설물예약목록 -->
 <select id="fcltyViewList" resultType="hashmap" parameterType="hashmap">
 	SELECT O.RSVTN_NUM, O.EMP_NAME,O.RSVTN_DATE, O.START_TIME, O.END_TIME, O.USE_USE, O.USE_NUM_OF_PL,O.STS_NUM
 	FROM    (SELECT FR.RSVTN_NUM, E.EMP_NAME, TO_CHAR(FR.RSVTN_DATE,'YYYY-MM-DD')AS RSVTN_DATE,RT.START_TIME, RT.END_TIME, FR.USE_USE, 
@@ -152,8 +166,10 @@
 				</if>
         	 ) O
 	WHERE O.RSUM BETWEEN #{startCount} AND #{endCount}
+	ORDER BY O.RSVTN_NUM DESC
 </select>
 
+<!-- 시설물상세보기안에 해당 시설물예약목록 cnt -->
 <select id="fcltyViewListCnt" resultType="Integer" parameterType="hashmap">
 	SELECT COUNT(*) AS CNT
 	FROM FCLTY_RSVTN FR INNER JOIN EMP E
@@ -166,6 +182,11 @@
 			</when>
 		</choose>
 	</if>
+</select>
+
+<!-- 시설물수정 -->
+<select id="fcltyUpdate" parameterType="hashmap">
+
 </select>
 </mapper>
 
