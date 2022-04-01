@@ -128,7 +128,7 @@ public class SchdlController {
 		List<HashMap<String, String>> salesList = iCommonService.getDataList("salesSchdl.getSalesList", params);
 		
 		
-		// 영업관리 목록 가져오기 위한 작업
+		// 영업관리 목록 가져오기 위한 일
 		modelMap.put("salesList", salesList);
 		modelMap.put("salesPb", pb);
 		
