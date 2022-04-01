@@ -41,10 +41,24 @@
 }
 
 .stage { /* 영업기회 이름  */
-	width: 134.5px;
-	margin: 0px 43px;
+	width: 135px;
+	margin: 0px 20px;
 	padding: 8px 5px;
 	background-color: #F2F2F2;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	font-size: 10pt;
+	text-align: center;
+	display: inline-block;
+	vertical-align: middle;
+}
+.stage_on { /* 영업기회 이름  */
+	width: 135px;
+	margin: 0px 20px;
+	padding: 8px 5px;
+	background-color: #F2B705;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 	border-top-left-radius: 5px;
@@ -62,12 +76,7 @@
 }
 
 .stage:active {
-	width: 134.5px;
-	margin: 0px 43px;
-	padding: 8px 5px;
 	background-color: #F2CB05;
-	cursor: pointer;
-	font-weight: bold;
 }
 
 .tLine {
@@ -155,7 +164,7 @@ select {
 }
 /*---------- 영업기회 박스 ------------  */
 .salesOpportunityName { /* 영업기회명 */
-	width: 725px;
+	width: 695px;
 	height: 25px;
 	line-height: 25px;
 	font-size: 10.5pt;
@@ -210,6 +219,7 @@ select {
 	border-top-right-radius: 5px;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
+	margin-left: 30px;
 }
 
 .cliimg { /* 고객사 이미지 */
@@ -219,7 +229,7 @@ select {
 	background-image: url("resources/images/sales/client.png");
 	background-size: 100%;
 	background-repeat: no-repeat;
-	margin: 13px 0px 13px 10px;
+	margin: 13px 0px 13px 35px;
 }
 
 .client { /* 고객사/고객  */
@@ -546,6 +556,15 @@ $(document).ready(function() {
 		}
 	});
 	
+	/* 담당자 검색칸에 엔터처리 */
+	$("#mngName").on("keypress", function(event) {
+		if(event.keyCode == 13) {
+			$("#searchBtn").click();
+			
+			return flase;
+		}
+	});
+	
 	$(".salesWrap").on("click", ".salesOpportunityName", function() {
 		$("#salesNum").val($(this).attr("salesNum")); // 영업번호 가져오기
 		
@@ -573,7 +592,7 @@ $(document).ready(function() {
 	});
 	
 	/* 담당자 팝업 */
-	$(".findEmp_box").on("click", function() {
+	$("#mngBtn").on("click", function() {
 		
 		var html = "";
 		
@@ -684,6 +703,32 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
+	/* 검색 상단 고객사분류버튼 클릭시 */
+	$(".stageM").on("click", ".stage", function() {
+		if($(this).attr("num") != "9") {
+			$(".stageM").children(".stage_on").attr("class", "stage");
+			$(this).removeClass();
+			$(this).addClass("stage_on");	
+		} else {
+			$(".stageM").children(".stage_on").attr("class", "stage");
+		}
+		
+		$("#page").val("1");
+		
+		$("#prgrsStage1").val($(this).attr("num"));
+		
+		if($("#searchTxt").val() != "" || $("#mngName").val() != "") { // 검색어 txt가 비어있지 않으면 초기화
+			var txt = document.getElementById("searchTxt");
+			var mngTxt = document.getElementById("mngName");
+			
+			txt.value = "";
+			mngTxt.value = "";
+		}
+		
+		reloadList();
+		
+	});
+	
 	/* 검색 어제버튼 클릭 */
 	$("#yesterday").on("click", function() {
 		var a = new Date();
@@ -732,6 +777,11 @@ $(document).ready(function() {
 		$("#endDate").val(today);
 	});
 	
+	/* 정렬버튼 클릭시 */
+	$("#sortBtn").on("click", function() {
+		reloadList();
+	});
+	
 });
 
 function reloadList() {
@@ -746,23 +796,11 @@ function reloadList() {
 			drawList(res.list);
 			drawPaging(res.pb);
 			drawRsltCnt(res.RsltCnt);
-			drawCnt(res.stage0, res.stage1, res.stage2, res.stage3);
 		},
 		error : function(request, status, error) {
 			console.log(request.responseText);
 		}
 	});
-}
-
-function drawCnt(stage0, stage1, stage2, stage3) {
-	var html = "";
-	
-	html += "<div class=\"stage\" id=\"stage0\">영업기회 : " + stage0 + "건</div>";
-	html += "<div class=\"stage\" id=\"stage1\">제안 : " + stage1 + "건</div>";
-	html += "<div class=\"stage\" id=\"stage2\">견적 : " + stage2 + "건</div>";
-	html += "<div class=\"stage\" id=\"stage3\">계약 : " + stage3 + "건</div>";
-	
-	$(".stageM").html(html);
 }
 
 function drawRsltCnt(RsltCnt) {
@@ -847,6 +885,7 @@ function drawList(list) {
 			html += "<div class=\"fs\">예상매출 : " + data.EXPCTN_LOAN_SCALE + "원</div>";
 		}
 		html += "<div class=\"pic\">담당자 : " + data.EMP_NAME + "</div>";
+		html += "<div class=\"pic\">영업번호 : " + data.SALES_NUM + "</div>";
 		html += "<br>";
 		html += "</div>";
 	}
@@ -975,7 +1014,6 @@ function drawMngPaging(mngPb) {
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
 		<input type="hidden" id="salesNum" name="salesNum" /> <!-- 상세보기 갈 때 필요 -->
-		<input type="hidden" id="salesNum" name="salesNum" /> <!-- 상세보기 갈 때 필요 -->
 		
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
@@ -988,7 +1026,13 @@ function drawMngPaging(mngPb) {
 		<div class="cont_area">
 			<div class="body">
 				<div class="bodyWrap">
-					<div class="stageM"></div>
+					<div class="stageM">
+						<div class="stage" num="9" >전체 : ${allCnt}건</div>
+						<div class="stage" num="1" >영업기회 : ${stage0}건</div>
+						<div class="stage" num="2" >제안 : ${stage1}건</div>
+						<div class="stage" num="3" >견적 : ${stage2}건</div>
+						<div class="stage" num="4" >계약 : ${stage3}건</div>
+					</div>
 					<div class="tLine"></div>
 					<table class="srch_table">
 
@@ -1008,9 +1052,9 @@ function drawMngPaging(mngPb) {
 								</td>
 								<td colspan="2">
 									<div class="findEmp_box">
-										<input type="text" id="mngName" readonly="readonly" />
-										<input type="hidden" id="mngNum" name="mngNum" />
-										<img class="userIcon" src="resources/images/sales/usericon.png">
+										<input type="text" id="mngName" name="mngName" />
+										<input type="hidden" id="mngNum" />
+										<img class="userIcon" src="resources/images/sales/usericon.png" id="mngBtn">
 									</div>
 								</td>
 							</tr>
@@ -1019,7 +1063,7 @@ function drawMngPaging(mngPb) {
 									<span class="srch_name">진행 단계</span>
 								</td>
 								<td>
-									<select name="prgrsStage1">
+									<select id="prgrsStage1" name="prgrsStage1">
 										<option value="9">선택안함</option>
 										<option value="1">영업기회</option>
 										<option value="2">제안</option>
@@ -1074,7 +1118,6 @@ function drawMngPaging(mngPb) {
 								</td>
 								<td>
 									<select id="searchGbn" name="searchGbn">
-										<option value="9">선택안함</option>
 										<option value="0">고객사명</option>
 										<option value="1">영업명</option>
 										<option value="2">영업기회번호</option>
@@ -1092,15 +1135,16 @@ function drawMngPaging(mngPb) {
 									<span class="srch_name">정렬</span>
 								</td>
 								<td>
-									<select>
-										<option selected="selected">영업명</option>
-										<option>고객사명</option>
-										<option>예상매출</option>
-										<option>시작일</option>
+									<select name="listSort">
+										<option value="9">선택안함</option>
+										<option value="0">영업명</option>
+										<option value="1">고객사명</option>
+										<option value="2">예상매출</option>
+										<option value="3">시작일</option>
 									</select>
 								</td>
 								<td>
-									<img class="asc_btn cmn_btn" alt="등록버튼" src="resources/images/sales/asc.png" />
+									<img class="asc_btn cmn_btn" alt="정렬버튼" src="resources/images/sales/asc.png" id="sortBtn" />
 								</td>
 								<td colspan="3"></td>
 							</tr>

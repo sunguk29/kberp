@@ -364,6 +364,12 @@ textarea {
 .mng_txt{
 	width: 680px; 
 }
+
+[href] {
+	color: black;
+	text-decoration: none;
+}
+
 /* 끝 */
 </style>
 <script type="text/javascript">

@@ -117,17 +117,7 @@ tr:nth-child(9) td:nth-child(3){
 	background-color: #F2F2F2;
 	
 }
-.plus_btn {
-   display:inline-block;
-   vertical-align: middle;
-   width: 18px;
-   height: 18px;
-   background-image: url("resources/images/sales/plus.png");
-   background-size: 18px 18px;
-   float: right;
-   margin-right: 5px;
-   margin-top: 5.5px;
-}
+
 .drop_btn {
 	display:inline-block;
 	vertical-align: middle;
@@ -147,7 +137,7 @@ tr:nth-child(9) td:nth-child(3){
 	float: right;
 	margin-top: 7.5px;
 }
-.plus_btn:hover, .drop_btn:hover, .up_btn:hover {
+.drop_btn:hover, .up_btn:hover {
 	cursor: pointer;
 }
 .rmks{
@@ -807,7 +797,6 @@ $(document).ready(function() {
 						<div class="spc">
 							<div class="adc_txt">
 								첨부자료
-								<img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
 							</div>
 							<div class="cntrct_box_in">
 							

@@ -38,7 +38,6 @@
 .see_cnsl {
 	display: inline-block;
 	width: 800px;
-	height: 415px;
 }
 
 .open_cnsl_head {
@@ -509,6 +508,7 @@ function checkEmpty(sel) {
 		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 		<input type="hidden" id="emp_name" name="emp_name" value="${data.EMP_NAME}" />
+		<input type="hidden" id="ctgry_name" name="ctgry_name" value="${data.CTGRY_NAME}" />
 		<input type="hidden" id="top" name="top" value="${param.top}"/>
 		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
 		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
@@ -577,6 +577,7 @@ function checkEmpty(sel) {
 							<input type="hidden" name="no" value="${param.no}" />
 							<input type="hidden" id="emp_num" name="emp_num" value="${sEmpNum}" />
 							<input type="hidden" id="emp_name" name="emp_name" value="${data.EMP_NAME}" />
+							<input type="hidden" id="ctgry_name" name="ctgry_name" value="${data.CTGRY_NAME}" />
 							<input type="hidden" id="top" name="top" value="${param.top}"/>
 							<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
 							<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
