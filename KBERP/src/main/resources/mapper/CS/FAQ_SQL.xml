@@ -41,12 +41,12 @@
 		WHERE F.FAQ_NUM = #{no}
 </select>
 
-<insert id="getfaqAdd" parameterType="hashmap">
-	INSERT INTO FAQ(FAQ_NUM, EMP_NUM, WRTNG_TITLE, WRTNG_CONT, WRTNG_DATE,CTGRY_NUM)
-	VALUES(FAQ_SEQ.NEXTVAL, #{emp_num}, #{title}, #{cont}, #{wrtng_date}, #{ctgry_num})
+<insert id="faqAdd" parameterType="hashmap">
+	INSERT INTO FAQ(FAQ_NUM, EMP_NUM, WRTNG_TITLE, WRTNG_CONT, CTGRY_NUM)
+	VALUES(FAQ_SEQ.NEXTVAL, #{emp_num}, #{title}, #{cont}, #{ctgry_num})
 </insert>
 
-<update id="getfaqUpdate" parameterType="hashmap">
+<update id="faqUpdate" parameterType="hashmap">
 	UPDATE FAQ SET EMP_NUM =#{emp_num},
                  WRTNG_TITLE = #{wrtng_title},
                  WRTNG_CONT = #{wrtng_cont},

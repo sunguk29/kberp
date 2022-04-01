@@ -2,7 +2,6 @@
 function reloadList() {
 	var params = $("#actionForm").serialize(); // name=val&name2=val2
 	var callback = ajaxComm("mdListAjax", params, "");
-	
 	callback.done(function(res){
 		console.log(res);
 		drawList(res.list);												//리스트 
@@ -20,7 +19,6 @@ function reloadList() {
 	callback.fail(function(request, status, error) {
 		console.log(request.requestText);
 	});
-	
 	
 /*	$.ajax({
 		type : "post",
@@ -44,7 +42,8 @@ function reloadList() {
 		error : function(request, status, error) {
 			console.log(request.requestText);
 		}
-	});*/
+	}); */
+	
 }
 /* gradeNum을 문자로 바꿔주는 함수 */
 function GradeFormatter(gradeNum){
@@ -87,7 +86,7 @@ function drawList(list){
 	$("#appand_path").html(html); //해당 id값을 가지는 태그에 html을 뿌린다.
 }
 
-
+/* 페이징 그리는 함수*/
 function drawPaging(pb) {
 	var html = "";
 	
@@ -117,7 +116,34 @@ function drawPaging(pb) {
 	
 	$("#pgn_area").html(html);
 }
+/* old_data 의 값을 검색 데이터가 있으면 검색된 데이터로, 검색 데이터가 없으면 기본값으로 하는 함수  */
+function keepSrchData() {
+	if($("#old_md_grade").val() != ''){
+		$("#md_grade").val('${param.md_grade}');
+	}else {
+		$("#old_md_grade").val("-1");
+	}
+	if($("#old_srch_gbn").val() != ''){
+		$("#srch_gbn").val('${param.srch_gbn}');
+	}else {
+		$("#old_srch_gbn").val("-1");
+	}
+	if($("#old_sort_gbn").val() != ''){
+		$("#sort_gbn").val('${param.sort_gbn}');
+	}else {
+		$("#old_sort_gbn").val("0");
+	}
+}
 
+/* 엔터키 눌렀을 때 폼 자동 실행되지 않고 지정으로 실행되도록 하는 함수 */
+function noAutoEnter() {
+	$("#srch_txt").on("keypress", function(event){		   
+		if(event.keyCode ==13) {
+			$("#srch_btn").click();							
+			return false;								
+		}
+	});
+}
 
 /* 판매상태 - 전체 체크시 나머지 체크 없애는 함수  */
 function checkboxFunc1() {
@@ -190,25 +216,43 @@ function changeCheckBoxSts() {
 
 /* 상세보기 뷰로 이동*/
 function goDetailView() {
-		$("tbody").on("click", ".md_name", function() {
+	$("tbody").on("click", ".md_name", function() {
 		$("#no").val($(this).attr("no"));
 		
-		/* 검색데이터 유지하기 위한 함수 */
-		oldSrchDataSave ();
+		replaceToOldSrchData();				/* 검색 데이터들을 저장해놓은 old_ 값으로 값 바꿔주는 함수*/
 		
 		$("#actionForm").attr("action", "mdCont");
 		$("#actionForm").submit();
 	});
 }
 
+/* 등록 뷰로 이동 */
+function goRegView() {
+	$("#cmn_btn_ml").on("click", function(){	
+		replaceToOldSrchData(); 			/* 검색 데이터들을 저장해놓은 old_ 값으로 값 바꿔주는 함수*/
+	
+		$("#actionForm").attr("action", "mdReg");
+		$("#actionForm").submit();	
+	});
+}
+
+/*클릭하면 해당 페이지로 이동*/
 function pagingProcess() {
 	$("#pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
-		oldSrchDataSave (); 
+		replaceToOldSrchData(); 			/* 검색 데이터들을 저장해놓은 old_ 값으로 값 바꿔주는 함수*/
 		reloadList();		
 	});
 }
 
+/* 클릭하면 검색 */
+function goSrch() {
+	$("#srch_btn").on("click", function() {
+		$("#page").val("1");	//검색하면 1페이지가 되도록
+		oldSrchDataSave(); 		//검색 데이터 유지 하기 위해 old_ 에 값을 저장해놓는 함수
+		reloadList();			//목록조회
+	});
+}
 
 
 

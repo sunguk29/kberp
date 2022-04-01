@@ -481,6 +481,8 @@ textarea {
 	border-radius: 7px;
 	margin-bottom: 18px;
 	margin-left: 45px;
+    padding: 0 15px;
+    font-size: 10pt;
 }
 
 .btnImg_in {
@@ -555,10 +557,16 @@ $(document).ready(function() {
 		});
 	});
 
+	
+	// 첨부파일
 	$(".att_btn").on("click", function() {
 		$("#att").click();
 	});
 	
+	$("#fileDelete").on("click", function() {
+		$("#file_name").remove();
+		s(this).remove();
+	});
 	
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
@@ -1060,16 +1068,22 @@ function uploadName(e) {
 						</table>
 						<br />
 						<!-- 첨부자료  -->
-						<input type=file id="att" name="att" />
-						<input type="hidden" id="attFile" name="attFile" />
+						<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+						<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
 						<div class="spc">
 							<div class="adc_txt">
 								첨부자료
 								<img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
 							</div>
 							<div class="cntrct_box_in">
-								<input type="text" id="fileName" readonly="readonly" />
+							<span id="file_name">${fileName}</span>
+								<c:if test="${!empty data.ATT_FILE_NAME}">
+									<input type="button" id="fileDelete" value="삭제" />
+								</c:if>
+									<input type="text" id="fileName" readonly="readonly" />
 							</div>
+						<input type=file id="att" name="att" />
+						<input type="hidden" id="attFile" name="attFile" />
 						</div>
 						<!-- 의견 -->
 						<div class="mgtop"></div>
