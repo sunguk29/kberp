@@ -50,6 +50,22 @@ public class CallCntrController {
 			return mapper.writeValueAsString(modelMap); 
 		}
 	
+	// 고객정보 단건
+	@RequestMapping(value = "/callCenterClntAjax", method = RequestMethod.POST, 
+			produces = "text/json;charset=UTF-8")
+		@ResponseBody
+		public String callCenterClntAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+			ObjectMapper mapper = new ObjectMapper();
+			
+			Map<String, Object> modelMap = new HashMap<String, Object>();
+			
+			HashMap<String, String> data = iCommonService.getData("CC.getCallCenterC", params);
+			
+			modelMap.put("data", data);
+			
+			return mapper.writeValueAsString(modelMap); 
+		}
+	
 	// 콜센터 상담이력
 	@RequestMapping(value = "/callCenterCnslListAjax", method = RequestMethod.POST, 
 			produces = "text/json;charset=UTF-8")
@@ -65,6 +81,8 @@ public class CallCntrController {
 			
 			return mapper.writeValueAsString(modelMap); 
 		}
+	
+	
 	
 	// 콜센터 고객정보, 상담노트 저장
 	@RequestMapping(value="/callCenterAction/{gbn}", method = RequestMethod.POST,
@@ -106,5 +124,6 @@ public class CallCntrController {
 		
 		return mav;
 	}
+	
 	
 }

@@ -647,6 +647,7 @@ $(document).ready(function() {
 		var html = "";
 		
 		html += "<form action=\"#\" id=\"actionForm\" method=\"post\">"
+		html += "<input type=\"hidden\" id=\"clnt_num\" name=\"clnt_num\"/>"
 		html += "<div class=\"srch_slct\">";
 		html += "<div class=\"name_box\">선택</div>";
 		html += "<select id=\"clnt_slct\" name=\"clnt_slct\">";
@@ -683,9 +684,8 @@ $(document).ready(function() {
 			height: 400,
 			title : "고객 검색 결과",
 			contents : html,
-			contentsEvent : function reloadList() {
+			contentsEvent : function () {
 				var params = $("#actionForm").serialize();
-				console.log(params);
 				$.ajax({
 					type : "post",
 					url : "callCenterPopListAjax",
@@ -699,6 +699,34 @@ $(document).ready(function() {
 						console.log(request.responseText);
 
 					}
+				});
+				
+				$("#clntPop").on("click", "tr" , function() {
+					$("#saveForm #clnt_num").val($(this).attr("no"));
+					$("#noteSaveForm #clnt_num").val($(this).attr("no"));
+					
+					var params = $("#saveForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "callCenterClntAjax",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							console.log(res);
+							$("#clnt_name").val(res.data.CLNT_NAME);
+							$("#clnt_grade").val(res.data.CLNT_GRADE);
+							$("#phon_num_1").val(res.data.PHONE_NUM_1);
+							$("#phon_num_2").val(res.data.PHONE_NUM_2);
+							$("#adrs").val(res.data.ADRS);
+							$("#dtl_adrs").val(res.data.DTL_ADRS);
+						},
+						error : function(request, status, error) {
+							console.log(request.responseText);
+				
+						}
+					});
+					closePopup();
 				});
 			},
 			draggable : true,
@@ -728,13 +756,7 @@ $(document).ready(function() {
 		$("#clntPop").html(html);
 	}
 	
-	$("#clntPop").on("click", "tr" , function() {
-		$("#no").val($(this).attr("no"));
-		
-		$("#saveForm").attr("action");
-		$("#saveForm").submit();
-		
-	});
+	
 	
 	$(".cmn_btn_mr").on("click", function() {
 		
@@ -854,40 +876,7 @@ $(document).ready(function() {
 	});
 	
 	
-	function reloadCnslList() {
-		var params = $("#cnslForm").serialize();
-		
-		$.ajax({
-			type : "post",
-			url : "callCenterCnslListAjax",
-			dataType : "json",
-			data : params,
-			success : function(res) {
-				console.log(res);
-				drawCnslList(res.list);
-			},
-			error : function(request, status, error) {
-				console.log(request.responseText);
-
-			}
-		});
-	}
 	
-	function drawCnslList(list) {
-		var html = "";
-		
-		for(var data of list) {
-			html += "<tr no=\"" + data.I.CLNT_NUM + "\">";
-			html += "<td>"+ data.I.CLNT_NAME + "</td>"
-			html += "<td>"+ data.I.PHONE_NUM_1 + "</td>"
-			html += "<td>"+ data.E.EMP_NAME + "</td>"
-			html += "<td>"+ data.N.CNSL_TYPE_NUM + "</td>"
-			html += "<td>"+ data.WRITE_DATE + "</td>"
-			html += "<td>"+ data.N.CNSL_RSLT_NUM + "</td>"
-			html += "</tr>";
-		}
-		$("#cnslList").html(html);
-	}
 	
 });
 
@@ -927,7 +916,7 @@ function checkEmpty(sel) {
 					<div class="clnt_info_cont">
 						<input type="hidden" id="oldsearchTxt" value="${param.searchTxt}"/>
 					<form action="#" id="saveForm" method="post">
-					<input type="hidden" id="no" name="no"/>
+					<input type="hidden" id="clnt_num" name="clnt_num"/>
 						<div class="clnt_info_Header">
 							<div class="clnt_info">고객정보</div>
 							<div class="srch_text_wrap clnt_srch">
@@ -937,25 +926,25 @@ function checkEmpty(sel) {
 						</div>
 		    			<div class="clnt_info_cont_row1">	  
 			    			<div class="clnt_name">고객명</div>
-			    				<input type="text" class="info_txt" id="clnt_name" name="clnt_name">
+			    				<input type="text" class="info_txt" id="clnt_name" name="clnt_name" value="">
 			    			<div class="clnt_grade">고객등급</div>
-			    				<input type="number" class="info_txt" id="clnt_grade" name="clnt_grade">
+			    				<input type="number" class="info_txt" id="clnt_grade" name="clnt_grade" value="">
 			    		</div>
 			    		<div class="clnt_info_cont_row2">	  
 			    			<div class="ltl_cnsl_day">최근상담일</div>
-			    				<input type="date" class="info_txt" id="ltl_cnsl" name="ltl_cnsl">
+			    				<input type="date" class="info_txt" id="ltl_cnsl" name="ltl_cnsl" value="">
 			    			<div class="phone_num_1">전화번호 1</div>
-			    				<input type="tel" class="info_txt" id="phon_num_1" name="phon_num_1">
+			    				<input type="tel" class="info_txt" id="phon_num_1" name="phon_num_1" value="">
 			    		</div>	
 		    			<div class="clnt_info_cont_row3">	  
 			    			<div class="phone_num_2">전화번호 2</div>
-			    				<input type="tel" class="info_txt" id="phon_num_2" name="phon_num_2">
+			    				<input type="tel" class="info_txt" id="phon_num_2" name="phon_num_2" value="">
 			    		</div>
 			    		<div class="clnt_info_cont_row4">	  
 			    			<div class="adrs">주소</div>
-			    				<input class="adrs_input" type="text" id="adrs" name="adrs">
+			    				<input class="adrs_input" type="text" id="adrs" name="adrs" value="">
 			    				<br/>
-			    				<input class="adrs_input_dtls" type="text" id="dtl_adrs" name="dtl_adrs">
+			    				<input class="adrs_input_dtls" type="text" id="dtl_adrs" name="dtl_adrs" value="">
 			    		</div>	
 		    			<div class="cmn_btn_mr" id="saveBtn">저장</div>
 		    		</form>
@@ -973,7 +962,7 @@ function checkEmpty(sel) {
 						</div>
 						<div class="mid_row1">
 							<input type="hidden" id="emp_num" name="emp_num" value="${sEmpNum}"/>
-							<input type="hidden" id="clnt_num" name="clnt_num" value="${data.CLNT_NUM}"/>
+							<input type="hidden" id="clnt_num" name="clnt_num"/>
 							<div class="cnsl_type">상담유형</div>
 							<select id="cnsl_type_num" name="cnsl_type_num">
 								<option value="">대분류</option>

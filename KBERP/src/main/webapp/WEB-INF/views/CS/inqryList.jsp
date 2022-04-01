@@ -61,8 +61,8 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
-	$("tbody").on("click", "tr", function() {
-		$("#no").val($(this).attr("no"));
+	$("tbody").on("click", "#go_inqry", function() {
+		$("#no").val($(this).parent().attr("no"));
 		
 		$("#searchGbn").val($("#oldSearchGbn").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
@@ -110,7 +110,7 @@ function drawList(list) {
 		html += "<tr no=\"" + data.INQRY_NUM + "\">";
 		html += "<td>" + data.INQRY_NUM + "</td>";
 		html += "<td>" + data.CTGRY_NAME + "</td>";
-		html += "<td>";
+		html += "<td id=\"go_inqry\">";
 		html += data.WRTNG_TITLE;
 		if(data.ATT_FILE != null) {
 			html += "<img src=\"resources/images/CS/attFile.png\" />";
