@@ -225,6 +225,43 @@
 	overflow-y: scroll; 
 }
 
+
+.super_orgnzt_area {
+	line-height: 55px;
+    text-align: center;
+} 
+
+.super_orgnzt_text {
+	display: inline-block;
+	width: 60px;
+}
+
+.super_orgnzt_area > select {
+	display: inline-block;
+    width: 161px;
+    height: 26px;
+    text-align: center;
+    margin-left: 10px;
+}
+
+
+.add_orgnzt_area {
+	line-height: 35px;
+    text-align: center;
+}
+
+.add_orgnzt_text {
+	display: inline-block;
+   	width: 60px;
+}
+
+.popup_cont input[type="text"] {
+	display: inline-block;
+    width: 153px;
+    height: 20px;
+    text-align: center;
+    margin-left: 10px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -235,8 +272,19 @@ $(document).ready(function() {
 	// 슬림스크롤
 	$(".scroll_area").slimScroll({height: "460px"},{width: "275px"});
 	
+	// 조직추가
+	$("#orgnzt_add_btn").on("click", function() {
+		pop();
+
+	});
 	// 조직도 토글
 	$(".orgnzt_area").on("click", ".orgnzt_depth1, .orgnzt_depth2, .orgnzt_depth3", function(e) {
+		$("#sdeptNum").val($(this).attr("sdeptNum"));
+		$("#deptName").val($(this).attr("deptName"));
+		$("#deptLevel").val($(this).attr("deptLevel"));
+		console.log(this)
+		console.log($("#sdeptNum").val())
+		console.log($("#deptName").val())
 		var depth = $(this).attr("class").substring(12);
 		var obj = $(this);
 		console.log(depth == "1");
@@ -273,6 +321,60 @@ $(document).ready(function() {
 	});
 });
 
+// 팝업 생성
+function pop() {
+	
+	var html = "";
+	html += "	<div class=\"super_orgnzt_area\">                           ";
+	html += "		<div class=\"super_orgnzt_text\">상위조직</div>         ";
+	console.log("sdeptNum : " + $(sdeptNum).val())
+	if($(sdeptNum).val() == null || $(sdeptNum).val() == ''){
+	html += "		<input type=\"text\" readonly=\"readonly\" value=\"카카오뱅크\" />";
+	} else {
+	html += "		<input type=\"text\" readonly=\"readonly\" value = \"" + $(deptName).val() + "\" />";
+	}
+	html += "   </div>                                                      ";
+	html += "	<div class=\"add_orgnzt_area\">                             ";
+	html += "		<div class=\"add_orgnzt_text\">조직명</div>             ";
+	html += "		<input type=\"text\" id=\"deptName\" name=\"deptName\"/>";
+	html += "	</div>                                                      ";
+	console.log("deptName : " + $(deptName).val())
+
+	
+    $.ajax({
+       type : "post",
+       url : "orgnztChartActionAjax/insert",
+       dataType : "json",
+       success : function(res) {
+    			makePopup({
+    				bg : false,
+    				bgClose : false,
+    				title : "조직추가",
+    				contents : html, 
+    				draggable : true,
+    				buttons : [{
+    					name : "등록",
+    					func:function() {
+    							if (checkEmpty("#deptName")) {
+    								alert("부서명을 입력하세요.");
+    								$("#deptName").focus();
+    							} else {
+    								var params = $("#insertForm").serialize();
+    						console.log("등록!");
+    						closePopup();
+    						}
+    					}
+    				}, {
+    					name : "취소"
+    				}]
+    			});
+       },
+       error : function(req) {
+          console.log(req.responseText);
+       }
+    });
+ } 
+
 // 조직도 리로드
 function reloadTree() {
     $.ajax({
@@ -296,7 +398,7 @@ function drawTree(dept){
 	for(var data of dept) {                              
 		if(data.SUPER_DEPT_NUM == null) {
 			var html = "";
-			html += "<div class=\"orgnzt_depth2\" >          ";
+			html += "<div class=\"orgnzt_depth2\" deptLevel=\"" + (data.DEPT_LEVEL * 1 + 1) + "\"  sdeptNum=\"" + data.DEPT_NUM + "\" deptName=\"" + data.DEPT_NAME + "\"> ";
 			html += "<div class=\"orgnzt_depth2_area\">      ";
 			html += "	<div class=\"depth_slc_icon\"></div> ";
 			html += "	<div class=\"folder_icon\"></div>    ";
@@ -308,7 +410,6 @@ function drawTree(dept){
 		} 
 	}
 	
-	console.log("1뎁스 끝")
 }
 
 // 1뎁스 외 부서 생성
@@ -316,8 +417,8 @@ function drawTree2(dept) {
 	for(var data of dept){
 		if(data.SUPER_DEPT_NUM != null) {
 			var html = "";
-			html += "<div class=\"orgnzt_depth3\">                             ";
-			html += "	<div class=\"orgnzt_depth3_area\">                     ";
+			html += "<div class=\"orgnzt_depth3\" deptLevel=\"" + (data.DEPT_LEVEL * 1 + 1) + "\" sdeptNum=\"" + data.DEPT_NUM + "\"  deptName=\"" + data.DEPT_NAME + "\" >   ";
+			html += "	<div class=\"orgnzt_depth3_area \">                      ";
 			html += "		<div class=\"depth_slc_icon\"></div>               ";
 			html += "		<div class=\"folder_icon\"></div>                 ";
 			html += "		<div class=\"depth_txt\">" + data.DEPT_NAME + "</div>";
@@ -333,7 +434,7 @@ function drawTree2(dept) {
 function drawTree3(emp) {
 	for(var data of emp){
 		var html = "";
-			html += "<div class=\"orgnzt_depth3\">                             ";
+			html += "<div class=\"orgnzt_depth3\" deptLevel=\"" + (data.DEPT_LEVEL * 1 + 1) +  "\" sdeptNum=\"" + data.DEPT_NUM + "\" deptName=\"" + data.DEPT_NAME + "\">  ";
 			html += "	<div class=\"orgnzt_depth3_area\">                     ";
 			html += "		<div class=\"depth_emp_icon\"></div>               ";
 			html += "		<div class=\"profile_icon\"></div>                 ";
@@ -347,9 +448,10 @@ function drawTree3(emp) {
 </script>
 </head>
 <body>
-	<form>
-		<input type="hidden" id="deptGbn" name="deptGbn" />
-		<input type="hidden" id="empGbn" name="deptGbn" />
+	<form action="#" id="insertForm">
+		<input type="hidden" id="sdeptNum" name="sdeptNum" value="${sdeptNum}" /> 
+		<input type="hidden" id="deptName" name="deptName" value="${deptName}" /> 
+		<input type="hidden" id="deptLevel" name="deptLevel" value="${deptLevel}" /> 
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -368,16 +470,15 @@ function drawTree3(emp) {
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="cont_left">
 				<div class="orgnzt_btn_area">
-					<input type="button" class="orgnzt_btn" value="사원편집" />
-					<input type="button" class="orgnzt_btn" value="조직추가" />
-					<input type="button" class="orgnzt_btn" value="조직수정" />
-					<input type="button" class="orgnzt_btn" value="조직삭제" />
+					<input type="button" class="orgnzt_btn" id="emp_edit_btn" value="사원편집" />
+					<input type="button" class="orgnzt_btn" id="orgnzt_add_btn" value="조직추가" />
+					<input type="button" class="orgnzt_btn" id="orgnzt_mdfy_btn" value="조직수정" />
+				    <input type="button" class="orgnzt_btn" id="orgnzt_del_btn" value="조직삭제" />
 				</div>
 				<div class="orgnzt_area">
 					<div class="scroll_area">
 						<div class="orgnzt_depth1_wrap">
-							<div class="orgnzt_depth1" >
-								<input type="hidden" class="item_selected" value="false" />
+							<div class="orgnzt_depth1" sdeptNum="0" deptName="카카오뱅크" deptLevel="1">
 								<div class="depth_slc_icon"></div>
 								<div class="kb_icon"></div>
 								<div class="depth_txt">카카오뱅크</div>

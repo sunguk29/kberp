@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -77,10 +78,11 @@ public class HrController {
 	// 조직도
     @RequestMapping(value = "/orgnztChart")
     public ModelAndView orgnzt(@RequestParam HashMap<String,String> params, 
-                         ModelAndView mav) {
-      mav.setViewName("hr/orgnztChart");
+    							ModelAndView mav) throws Throwable {
+    	
+    	mav.setViewName("hr/orgnztChart");
       
-      return mav;
+    	return mav;
     }
     
 	// 조직도 ajax
@@ -98,6 +100,36 @@ public class HrController {
 		
 		return mapper.writeValueAsString(modelMap); 
     }
+	 
+	// 조직도 action ajax
+	@RequestMapping(value = "/orgnztChartActionAjax/{gbn}", method = RequestMethod.POST,
+             produces = "text/json;charset=UTF-8")
+	 @ResponseBody
+	 public String orgnztChartActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+	    ObjectMapper mapper = new ObjectMapper();
+	    
+	    Map<String, Object> modelMap = new HashMap<String, Object>();
+	    
+	    try {
+	       switch(gbn) {
+	       case "insert" :
+	    	   iCommonService.insertData("hr.addDept", params);
+	          break;
+	       case "update" :
+	    	   iCommonService.updateData("hr.updateDept", params);
+	          break;
+	       case "delete" :
+	    	   iCommonService.updateData("hr.deleteDept", params);
+	          break;
+	       }
+	       modelMap.put("res", "success");
+	    } catch (Throwable e) {
+	       e.printStackTrace();
+	       modelMap.put("res", "failed");
+    }
+    
+    return mapper.writeValueAsString(modelMap);
+ }
 	
 }
 
