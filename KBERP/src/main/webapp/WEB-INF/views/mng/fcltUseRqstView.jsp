@@ -79,10 +79,6 @@ $(document).ready(function() {
 		$("#actionForm").attr("action","fcltUseRqst");
 		$("#actionForm").submit();
 	});
-	$("#mdfyBtn").on("click",function(){
-		$("#actionForm").attr("action","fcltUseRqstUpdate");
-		$("#actionForm").submit();
-	});
 	$("#btn2Btn").on("click", function() {
 		makePopup({
 			bg : true,
