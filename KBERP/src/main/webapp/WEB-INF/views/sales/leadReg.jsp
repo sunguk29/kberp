@@ -1156,6 +1156,9 @@ function ecAddPopup() {
 								data : params,
 								success : function(res) {
 									if(res.res == "success") {
+										$("#ecSearchTxt").val("");
+										$("#ecPopupForm #page").val("1");
+										$("#ecBtn").click(); 
 										closePopup(4);
 										closePopup(2);
 									} else {

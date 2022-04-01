@@ -465,13 +465,16 @@ $(document).ready(function() {
 		
 		$("#psNum").val($(this).attr("num"));
 		
-/* 		if($("#searchTxt").val() != "" || $("mngEmp").val != "") { // 담당자, 검색어 txt가 비어있지 않으면 초기화
+		$("#startDate").val('${startDate}');
+		
+ 		if($("#searchTxt").val() != "" || $("mngEmp").val != "") { // 담당자, 검색어 txt가 비어있지 않으면 초기화
 			var txt = document.getElementById("searchTxt");
 			var mngrTxt = document.getElementById("mngEmp");
 			
 			txt.value = "";
 			mngrTxt.value = "";
-		} */
+			
+		} 
 		reloadList();		
 	});
 	
