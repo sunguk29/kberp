@@ -100,7 +100,7 @@ select {
 	font-weight: bold;
 }
 .list_table th, .list_table td  {
-	height: 20px;
+	height: auto;
 }
 
 .list_table thead tr:nth-child(1) {
@@ -163,7 +163,7 @@ select {
 }
 .cont_table {
 	width: 927px;
-	height: 288px;
+	height: 445px;
 }
 </style>
 <script type="text/javascript">
