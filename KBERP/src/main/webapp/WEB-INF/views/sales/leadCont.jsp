@@ -60,9 +60,6 @@ tr:nth-child(11) > td:nth-child(1){
 td:nth-child(1), td:nth-child(3){
 	text-align: center;
 }
-.popup_table tr:nth-child(8) td:nth-child(2) {
-    border: none;
-}
 .btn{
 	width : 90px;
 	height: 40px;
@@ -712,7 +709,7 @@ $(document).ready(function () {
 		html += "		</tr>";
 		html += "		<tr height=\"10\">                                                                                                          ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동내용 *\" readonly=\"readonly\"/></td>";
-		html += "			<td><textarea class=\"ta_box\" id=\"ssactvtycont\" name=\"ssactvtycont\"></textarea></td>";
+		html += "			<td style=\"border-bottom: none\"><textarea class=\"ta_box\" id=\"ssactvtycont\" name=\"ssactvtycont\"></textarea></td>";
 		html += "		</tr>";
 		html += "	</tbody>";
 		html += "</table>";				
@@ -801,6 +798,8 @@ $(document).ready(function () {
 				});
 		});	
 	
+	console.log("적용됏나2222222222222222222222211111111");
+	
 	/* 예정된 일정 수정 팝업 */
 	$(".sbx").on("click", ".sch_re", function() {
 		var snum = $(this).children("#schdlListNumber").val();
@@ -817,7 +816,7 @@ $(document).ready(function () {
 			data : params,
 			success : function(lsData) {	
 				var html = "";
-					
+				
 				$.each(lsData, function(index, data) {
 					
 					html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
@@ -862,17 +861,52 @@ $(document).ready(function () {
 					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"날짜 *\" readonly=\"readonly\"/></td>";
 					html += "			<td><input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"sdt\" name=\"sdt\" value=\"" + data.START_DATE_HR + "\"/>";
 					html += "				<div class=\"wave\">" + " ~ "  + "</div>";
-					html += "			<input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\" value=\"" + data.END_DATE_HR + "\"/></td>";
+					if(data.END_DATE_HR == null) {
+						html += "			<input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\" /></td>";
+					} else {
+						html += "			<input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\" value=\"" + data.END_DATE_HR + "\"/></td>";
+					}
 					html += "		</tr>";
 					html += "		<tr height=\"10\">                                                                                                          ";
 					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동내용 *\" readonly=\"readonly\"/></td>";
-					html += "			<td><textarea class=\"ta_box\" id=\"ssactvtycont\" name=\"ssactvtycont\">" + data.ACTVTY_CONT + "</textarea></td>";
+					html += "			<td style=\"border-bottom: none\"><textarea class=\"ta_box\" id=\"ssactvtycont\" name=\"ssactvtycont\">" + data.ACTVTY_CONT + "</textarea></td>";
 					html += "		</tr>";
 					html += "	</tbody>";
 					html += "</table>";
+					if(data.ATT_FILE_NAME != null) {
+						var fileLength = data.ATT_FILE_NAME.length;
+						var fileName = data.ATT_FILE_NAME.substring(20, fileLength);
+					}
+					html += "<div class=\"pop_rvn_txt\"> 첨부파일";
+					html += "<span id=\"uploadBtn\">";
+					if(data.ATT_FILE_NAME == null) {
+						html += "	<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
+					}
+					html += "</span>";
+					html += "</div>";
+					html += "<div class=\"pop_cntrct_box_in\">";
+					if(data.ATT_FILE_NAME != null) {
+					html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
+						html += "	<input type=\"button\" id=\"fileDelete\" value=\"삭제\" />";
+					}
+					html += "	<input type=\"text\" id=\"popFileName\" readonly=\"readonly\" />                 ";
+					html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />   ";
+					html += "	<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />           ";
+					html += "</div>                                                                     ";
 					html += "</form>";
 					
 				});	
+				
+				$(".pop_cntrct_box_in").on("click", "#fileDelete", function() {
+					$("#popFileName").remove();
+					$(this).remove();
+
+					var html = "";
+					
+					html += "<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />"; 
+					
+					$("#uploadBtn").html(html);
+				});
 				
 		makePopup({
 			depth : 1,
