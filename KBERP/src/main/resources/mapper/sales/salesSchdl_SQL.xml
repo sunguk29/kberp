@@ -345,8 +345,10 @@
 	</select>
 	<!-- 리드 예정된 영업 일정 목록 띄우기 -->
 	<select id="getSCList" parameterType="hashmap" resultType="hashmap">
-		SELECT SUBSTR(START_DATE_HR, 6, 5) || ' ' || SUBSTR(START_DATE_HR, 12, 16) AS START_DATE_HR, DECODE(END_DATE_HR, NULL, '미정', SUBSTR(END_DATE_HR, 6, 5) || ' ' || SUBSTR(END_DATE_HR, 12, 16)) AS END_DATE_HR, SCHDL_NAME
-		FROM SALES_SCHDL
+		SELECT SUBSTR(START_DATE_HR, 6, 5) || ' ' || SUBSTR(START_DATE_HR, 12, 16) AS START_DATE_HR, DECODE(END_DATE_HR, NULL, '미정', SUBSTR(END_DATE_HR, 6, 5) || ' ' || SUBSTR(END_DATE_HR, 12, 16)) AS END_DATE_HR,
+       		   SCHDL_NAME, E.EMP_NAME
+		FROM SALES_SCHDL SS INNER JOIN EMP E
+                                    ON SS.EMP_NUM = E.EMP_NUM
 		WHERE DEL_CHECK IS NULL
 		AND LEAD_NUM = #{leadNum}
 	</select>
