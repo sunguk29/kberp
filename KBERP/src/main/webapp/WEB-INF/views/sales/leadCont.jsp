@@ -60,6 +60,9 @@ tr:nth-child(11) > td:nth-child(1){
 td:nth-child(1), td:nth-child(3){
 	text-align: center;
 }
+.popup_table tr:nth-child(8) td:nth-child(2) {
+    border: none;
+}
 .btn{
 	width : 90px;
 	height: 40px;
@@ -336,7 +339,7 @@ textarea {
 	table-layout: fixed;
 }
 .pop_cntrct_box_in {
-    width: 520px;
+    width: 538px;
     height: 50px;
     border: 1px solid #d7d7d7;
     border-radius: 7px;
@@ -344,7 +347,7 @@ textarea {
 }
 .pop_rvn_txt {
     height: 25px;
-    width: 520px;
+    width: 538px;
     padding: 0 15px;
     font-size: 14px;
     color: black;
@@ -418,6 +421,23 @@ textarea {
 }
 .imgP{
 	position: relative;
+}
+.ta_box {
+    width: 450px;
+    height: 52px;
+    font-size: 10.5pt;
+    white-space: pre-wrap;
+    resize: none;
+    font-family: "맑은 고딕";
+    display: inline-block;
+    vertical-align: top;
+    outline: none;
+    border-color: #d7d7d7;
+}
+.wave {
+	display: inline-block;
+	padding-left: 20px;
+	padding-right: 20px;
 }
 </style>
 <script type="text/javascript">
@@ -530,20 +550,14 @@ $(document).ready(function () {
 		html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
 		html += "<input type=\"hidden\" name=\"sEmpNum\" value=\"${sEmpNum}\" />";					
 		html += "<table class=\"popup_table\">";
-		html += "<colgroup>";
-	    html += "<col width=\"auto\" />";
-	    html += "<col width=\"auto\" />";
-      	html += "<col width=\"10\" />";
-      	html += "<col width=\"auto\" />";
-      	html += "</colgroup>";
 		html += "	<tbody>";
 		html += "		<tr height=\"10\">                                                                                                          ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"일정명 *\" readonly=\"readonly\"/></td>";
-		html += "			<td colspan=\"3\"><input type=\"text\" class=\"pop_txt\" id=\"ssname\" name=\"ssname\"/></td>";
+		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ssname\" name=\"ssname\"/></td>";
 		html += "		</tr>";
 		html += "		<tr height=\"10\">                                                                                                          ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"영업\" /></td>";
-		html += "			<td colspan=\"3\">";
+		html += "			<td>";
 		html += "				<div class=\"imgP\">";
 		html += "					<input type=\"text\" class=\"pop_txt imgName\" id=\"sName\" name=\"sName\" />";
 		html += "					<input type=\"hidden\" id=\"sNum\" name=\"sNum\"/>";
@@ -553,7 +567,7 @@ $(document).ready(function () {
 		html += "		</tr>";
 		html += "		<tr height=\"10\">                                                                                                          ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"리드\" readonly=\"readonly\"/></td>";
-		html += "			<td colspan=\"3\">";
+		html += "			<td>";
 		html += "				<div class=\"imgP\">";
 		html += "					<input type=\"text\" class=\"pop_txt imgName\" id=\"lName\" name=\"lName\" />";
 		html += "					<input type=\"hidden\" id=\"lNum\" name=\"lNum\"/>";
@@ -563,15 +577,15 @@ $(document).ready(function () {
 		html += "		</tr>";
 		html += "		<tr height=\"10\">                                                                                                          ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객명\" readonly=\"readonly\"/></td>";
-		html += "			<td colspan=\"3\"><input type=\"text\" class=\"pop_txt\" id=\"clName\" name=\"clName\"/></td>";
+		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"clName\" name=\"clName\"/></td>";
 		html += "		</tr>";
 		html += "		<tr height=\"10\">                                                                                                          ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객사\" readonly=\"readonly\"/></td>";
-		html += "			<td colspan=\"3\"><input type=\"text\" class=\"pop_txt\" id=\"ccName\" name=\"ccName\" /></td>";
+		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ccName\" name=\"ccName\" /></td>";
 		html += "		</tr>";
 		html += "		<tr height=\"10\">                                                                                                          ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동분류 *\" readonly=\"readonly\"/></td>";
-		html += "			<td colspan=\"3\"><select class=\"pop_txt_in\" id=\"ssactvtyclsfy\" name=\"ssactvtyclsfy\">";
+		html += "			<td><select class=\"pop_txt_in\" id=\"ssactvtyclsfy\" name=\"ssactvtyclsfy\">";
 		html += "					<optgroup>";
 		html += "						<option value=\"9\">선택하세요</option>";
 		html += "						<option value=\"0\">전화</option>";
@@ -583,15 +597,13 @@ $(document).ready(function () {
 		html += "		</tr>";
 		html += "		<tr height=\"10\">                                                                                                          ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"날짜 *\" readonly=\"readonly\"/></td>";
-		html += "			<td><input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"sdt\" name=\"sdt\"/></td>";
-		html += "			<td>";
+		html += "			<td><input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"sdt\" name=\"sdt\"/>";
 		html += "				<div class=\"wave\">" + " ~ "  + "</div>";
-		html += "			</td>";
-		html += "			<td><input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\"/></td>";
+		html += "			<input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\"/></td>";
 		html += "		</tr>";
 		html += "		<tr height=\"10\">                                                                                                          ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동내용 *\" readonly=\"readonly\"/></td>";
-		html += "			<td colspan=\"3\"><textarea class=\"ta_box\" id=\"ssactvtycont\" name=\"ssactvtycont\"></textarea></td>";
+		html += "			<td><textarea class=\"ta_box\" id=\"ssactvtycont\" name=\"ssactvtycont\"></textarea></td>";
 		html += "		</tr>";
 		html += "	</tbody>";
 		html += "</table>";				
@@ -963,7 +975,7 @@ $(document).ready(function () {
 						/* 영업 관리 팝업 끝 */
 			},
 			width : 600,
-			height : 500,
+			height : 600,
 			buttons : [{
 				name : "등록",
 				func : function() {
