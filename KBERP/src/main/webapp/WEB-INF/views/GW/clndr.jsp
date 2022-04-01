@@ -991,7 +991,6 @@ function drawToDayList(schdl){
 	var clndrYear = now.getFullYear();	// 연도
 	var clndrMonth =now.getMonth()+1;	// 월
 	var clndrDate =now.getDate();	// 일
-	var dataCnt = 0;
 	
 	if(clndrMonth >= 10){		
 		if(clndrDate >= 10){
@@ -1008,6 +1007,7 @@ function drawToDayList(schdl){
 		}
 	}
 		var html = "";
+		var dataCnt = 0;
 		for(var data of schdl){
 			if(date == data.startDate){
 				dataCnt ++;
@@ -1021,7 +1021,6 @@ function drawToDayList(schdl){
 				
 			}
 			
-				dataCnt = todayCnt;
 		}
 		$(".today_schdl").html(html);
 			
