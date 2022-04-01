@@ -131,9 +131,7 @@ public class SalesMngController {
 				iCommonService.insertData("salesMng.sales1AddSales", params); // 영업기회 등록
 				iCommonService.insertData("salesMng.sales1AddLoan", params); // 영업기회 대출상세정보tab
 				iCommonService.insertData("salesMng.sales1AddBsns", params); // 영업기회 예정사업 상세정보tab
-				if (params.get("attFile") != null) {
-					iCommonService.insertData("salesMng.sales1AddBsnsAtt", params); // 영업기회 예정사업 첨부파일tab
-				}
+				iCommonService.insertData("salesMng.sales1AddBsnsAtt", params); // 영업기회 예정사업 첨부파일tab
 				break;
 			case "update":
 				iCommonService.updateData("salesMng.sales1UpdateSales", params);
@@ -220,9 +218,7 @@ public class SalesMngController {
 				iCommonService.insertData("salesMng.sales2AddLoan", params); // 제안 대출상세정보tab
 				iCommonService.insertData("salesMng.sales2AddClntCmpny", params); // 제안 고객사 상세정보tab
 				iCommonService.insertData("salesMng.sales2AddDtlInfo", params); // 제안 상세정보tab
-				if (params.get("attFile") != null) {
-					iCommonService.insertData("salesMng.sales2AddDtlInfoAtt", params); // 제안 상세정보 첨부파일tab
-				}
+				iCommonService.insertData("salesMng.sales2AddDtlInfoAtt", params); // 제안 상세정보 첨부파일tab
 				iCommonService.updateData("salesMng.sales1to2", params); // 진행 단계 전환
 				break;
 			case "update" :

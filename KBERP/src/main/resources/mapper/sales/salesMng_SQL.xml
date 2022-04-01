@@ -175,7 +175,7 @@
 	<!-- 예정사업 첨부파일tab -->
 	<insert id="sales1AddBsnsAtt" parameterType="hashmap">
 		INSERT INTO EXPCTD_BSNS_ATT_FILE ( ATT_FILE_NUM, SALES_NUM, ATT_FILE_NAME )
-		VALUES ( EXPCTD_BSNS_ATT_FILE_SEQ.NEXTVAL, #{ss}, #{attFile} )
+		VALUES ( EXPCTD_BSNS_ATT_FILE_SEQ.NEXTVAL, SALES_SEQ.CURRVAL, #{attFile} )
 	</insert>
 	
 	
@@ -230,7 +230,7 @@
 	
 	<!-- 영업기회 수정 : 예정사업 첨부파일tab -->
 	<update id="sales1UpdateBsnsAtt" parameterType="hashmap">
-		UPDATE SALES SET MNGR_EMP_NUM = #{empNum}
+		UPDATE EXPCTD_BSNS_ATT_FILE SET ATT_FILE_NAME = #{attFile}
 		WHERE SALES_NUM = #{salesNum}
 	</update>
 	
@@ -260,7 +260,7 @@
 	<!-- 제안 상세정보 첨부파일tab -->
 	<insert  id="sales2AddDtlInfoAtt" parameterType="hashmap">
 		INSERT INTO SGSTN_ATT_FILE ( ATT_FILE_NUM, SALES_NUM, ATT_FILE_NAME )
-		VALUES ( SGSTN_ATT_FILE_SEQ.NEXTVAL, #{salesNum}, #{attFile} )
+		VALUES ( SGSTN_ATT_FILE_SEQ.NEXTVAL, SALES_SEQ.CURRVAL, #{attFile} )
 	</insert>
 	
 		<!-- 제안 상세보기 -->

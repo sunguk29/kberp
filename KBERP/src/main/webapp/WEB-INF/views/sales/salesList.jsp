@@ -155,7 +155,7 @@ select {
 }
 /*---------- 영업기회 박스 ------------  */
 .salesOpportunityName { /* 영업기회명 */
-	width: 725px;
+	width: 695px;
 	height: 25px;
 	line-height: 25px;
 	font-size: 10.5pt;
@@ -210,6 +210,7 @@ select {
 	border-top-right-radius: 5px;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
+	margin-left: 30px;
 }
 
 .cliimg { /* 고객사 이미지 */
@@ -219,7 +220,7 @@ select {
 	background-image: url("resources/images/sales/client.png");
 	background-size: 100%;
 	background-repeat: no-repeat;
-	margin: 13px 0px 13px 10px;
+	margin: 13px 0px 13px 35px;
 }
 
 .client { /* 고객사/고객  */
@@ -847,6 +848,7 @@ function drawList(list) {
 			html += "<div class=\"fs\">예상매출 : " + data.EXPCTN_LOAN_SCALE + "원</div>";
 		}
 		html += "<div class=\"pic\">담당자 : " + data.EMP_NAME + "</div>";
+		html += "<div class=\"pic\">영업번호 : " + data.SALES_NUM + "</div>";
 		html += "<br>";
 		html += "</div>";
 	}
@@ -974,7 +976,6 @@ function drawMngPaging(mngPb) {
 		<input type="hidden" name="top" value="${param.top}" />
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
-		<input type="hidden" id="salesNum" name="salesNum" /> <!-- 상세보기 갈 때 필요 -->
 		<input type="hidden" id="salesNum" name="salesNum" /> <!-- 상세보기 갈 때 필요 -->
 		
 	<!-- 내용영역 -->
