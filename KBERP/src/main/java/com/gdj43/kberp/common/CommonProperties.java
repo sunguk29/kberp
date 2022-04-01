@@ -22,11 +22,7 @@ public class CommonProperties {
 	 * 파일 업로드
 	 */
 	//파일 업로드 경로
-<<<<<<< HEAD
-	public static final String FILE_UPLOAD_PATH = "F:\\MyWork\\workspace\\.metadata\\.plugins"
-=======
 	public static final String FILE_UPLOAD_PATH = "C:\\MyWork\\workspace\\.metadata\\.plugins"
->>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 												+ "\\org.eclipse.wst.server.core\\tmp0"
 												+ "\\wtpwebapps\\KBERP\\resources";
 	
