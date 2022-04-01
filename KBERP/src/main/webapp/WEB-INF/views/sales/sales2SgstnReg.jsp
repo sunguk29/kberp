@@ -766,7 +766,7 @@ function uploadName(e) {
 						<input type="hidden" name="top" value="${param.top}" />
 						<input type="hidden" name="menuNum" value="${param.menuNum}" />
 						<input type="hidden" name="menuType" value="${param.menuType}" />
-						<input type="hidden" id="salesNum" name="salesNum" value="${param.salesNum}" />
+						<input type="hidden" id="salesNum" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
 
 						<div class="bot_title">
 							<h3>
