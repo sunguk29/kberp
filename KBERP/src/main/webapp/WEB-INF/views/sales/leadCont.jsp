@@ -333,15 +333,8 @@ textarea {
 	border-collapse: collapse;
 	display: table-cell;
 	margin: 0px;
+	table-layout: fixed;
 }
-
-.popup_table td:nth-child(1){
-	width : 80px;
-}
-.popup_table td:nth-child(n+1){
-	width : 80px;
-}
-
 .pop_cntrct_box_in {
     width: 520px;
     height: 50px;
@@ -394,6 +387,37 @@ textarea {
 	border-radius: 3px;
 	line-height: 33px;
 	border: none;
+}
+.pop_txt_in{
+	height: 30px;
+	width: 420px;
+	padding: 0 5px;
+	padding-right: 25px;
+	font-size: 10.5px;
+	color: black;
+	vertical-align: middle;
+	box-sizing: border-box;
+	outline: none;
+	border-radius: 3px;
+	line-height: 33px;
+	border: none;
+}
+.pop_dt_txt{
+	height: 30px;
+	width: 195px;
+	padding: 0 5px;
+	padding-right: 25px;
+	font-size: 10.5px;
+	color: black;
+	vertical-align: middle;
+	box-sizing: border-box;
+	outline: none;
+	border-radius: 3px;
+	line-height: 33px;
+	border: none;
+}
+.imgP{
+	position: relative;
 }
 </style>
 <script type="text/javascript">
@@ -507,21 +531,19 @@ $(document).ready(function () {
 		html += "<input type=\"hidden\" name=\"sEmpNum\" value=\"${sEmpNum}\" />";					
 		html += "<table class=\"popup_table\">";
 		html += "<colgroup>";
-		html += "<col width=\"80\" />";
-		html += "<col width=\"80\" />";
-		html += "<col width=\"80\" />";
-		html += "<col width=\"80\" />";
-		html += "<col width=\"80\" />";
-		html += "<col width=\"80\" />";
-		html += "</colgroup>";
+	    html += "<col width=\"auto\" />";
+	    html += "<col width=\"auto\" />";
+      	html += "<col width=\"10\" />";
+      	html += "<col width=\"auto\" />";
+      	html += "</colgroup>";
 		html += "	<tbody>";
 		html += "		<tr height=\"10\">                                                                                                          ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"일정명 *\" readonly=\"readonly\"/></td>";
-		html += "			<td colspan=\"5\"><input type=\"text\" class=\"pop_txt\" id=\"ssname\" name=\"ssname\"/></td>";
+		html += "			<td colspan=\"3\"><input type=\"text\" class=\"pop_txt\" id=\"ssname\" name=\"ssname\"/></td>";
 		html += "		</tr>";
 		html += "		<tr height=\"10\">                                                                                                          ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"영업\" /></td>";
-		html += "			<td colspan=\"5\">";
+		html += "			<td colspan=\"3\">";
 		html += "				<div class=\"imgP\">";
 		html += "					<input type=\"text\" class=\"pop_txt imgName\" id=\"sName\" name=\"sName\" />";
 		html += "					<input type=\"hidden\" id=\"sNum\" name=\"sNum\"/>";
@@ -531,7 +553,7 @@ $(document).ready(function () {
 		html += "		</tr>";
 		html += "		<tr height=\"10\">                                                                                                          ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"리드\" readonly=\"readonly\"/></td>";
-		html += "			<td colspan=\"5\">";
+		html += "			<td colspan=\"3\">";
 		html += "				<div class=\"imgP\">";
 		html += "					<input type=\"text\" class=\"pop_txt imgName\" id=\"lName\" name=\"lName\" />";
 		html += "					<input type=\"hidden\" id=\"lNum\" name=\"lNum\"/>";
@@ -541,15 +563,15 @@ $(document).ready(function () {
 		html += "		</tr>";
 		html += "		<tr height=\"10\">                                                                                                          ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객명\" readonly=\"readonly\"/></td>";
-		html += "			<td colspan=\"5\"><input type=\"text\" class=\"pop_txt\" id=\"clName\" name=\"clName\"/></td>";
+		html += "			<td colspan=\"3\"><input type=\"text\" class=\"pop_txt\" id=\"clName\" name=\"clName\"/></td>";
 		html += "		</tr>";
 		html += "		<tr height=\"10\">                                                                                                          ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객사\" readonly=\"readonly\"/></td>";
-		html += "			<td colspan=\"5\"><input type=\"text\" class=\"pop_txt\" id=\"ccName\" name=\"ccName\" /></td>";
+		html += "			<td colspan=\"3\"><input type=\"text\" class=\"pop_txt\" id=\"ccName\" name=\"ccName\" /></td>";
 		html += "		</tr>";
 		html += "		<tr height=\"10\">                                                                                                          ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동분류 *\" readonly=\"readonly\"/></td>";
-		html += "			<td colspan=\"5\"><select class=\"pop_txt_in\" id=\"ssactvtyclsfy\" name=\"ssactvtyclsfy\">";
+		html += "			<td colspan=\"3\"><select class=\"pop_txt_in\" id=\"ssactvtyclsfy\" name=\"ssactvtyclsfy\">";
 		html += "					<optgroup>";
 		html += "						<option value=\"9\">선택하세요</option>";
 		html += "						<option value=\"0\">전화</option>";
@@ -561,15 +583,15 @@ $(document).ready(function () {
 		html += "		</tr>";
 		html += "		<tr height=\"10\">                                                                                                          ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"날짜 *\" readonly=\"readonly\"/></td>";
-		html += "			<td colspan=\"2\"><input type=\"datetime-local\" class=\"pop_txt\" id=\"sdt\" name=\"sdt\"/></td>";
+		html += "			<td><input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"sdt\" name=\"sdt\"/></td>";
 		html += "			<td>";
 		html += "				<div class=\"wave\">" + " ~ "  + "</div>";
 		html += "			</td>";
-		html += "			<td colspan=\"2\"><input type=\"datetime-local\" class=\"pop_txt\" id=\"edt\" name=\"edt\"/></td>";
+		html += "			<td><input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\"/></td>";
 		html += "		</tr>";
 		html += "		<tr height=\"10\">                                                                                                          ";
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동내용 *\" readonly=\"readonly\"/></td>";
-		html += "			<td colspan=\"5\"><textarea class=\"ta_box\" id=\"ssactvtycont\" name=\"ssactvtycont\"></textarea></td>";
+		html += "			<td colspan=\"3\"><textarea class=\"ta_box\" id=\"ssactvtycont\" name=\"ssactvtycont\"></textarea></td>";
 		html += "		</tr>";
 		html += "	</tbody>";
 		html += "</table>";				
