@@ -26,9 +26,9 @@ function goMdList() {
 
 
 
-// 저장 버튼 클릭시, 필수항목 체크 후 mdActionAjax/insert 실행 
-// 성공시 mdList로 이동
-function insertMdData(){
+// 저장 버튼(#saveBtn) 클릭시, 필수항목 체크 후 mdActionAjax/update 로 이동 
+// update 성공시 mdReg로 이동하는 함수
+function updateMdData(){
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#md_name")){
 			alert("상품명을 입력하세요.");
@@ -88,15 +88,10 @@ function insertMdData(){
 				name : "확인",
 				func : function() {
 					var params = $("#writeForm").serialize();
-					var callback=ajaxComm("mdActionAjax/insert", params,"");
-					callback.done(function(res){
-						alert("등ㄹ어옴");
-						if(res.res == "success"){
-							$("#actionForm").attr("action", "mdList");
-							$("#actionForm").submit();
-						}else{
-								alert("작성중 문제가 발생하였습니다.");						
-						}
+					var callback = ajaxComm("mdActionAjax/update", params,"");
+					callback.done(function(obj){
+						$("#actionForm").attr("action", "mdList");
+						$("#actionForm").submit();
 					});
 					callback.fail(function(request,status,error) {
 						console.log(request.requestText);

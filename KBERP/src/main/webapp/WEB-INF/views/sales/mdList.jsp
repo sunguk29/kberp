@@ -32,8 +32,16 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	/* old_ 의 값, 검색 데이터가 있으면 검색된 데이터로, 검색 데이터가 없으면 기본값으로 하는 함수  */
+	keepSrchData();
+
+	
 	//목록 조회
 	reloadList();  
+	
+	//엔터키 눌렀을 때 폼 자동 실행되지 않고 지정으로 실행되도록 하는 함수
+	noAutoEnter();
+	
 	
 	//상단 박스
 	$("#sts_listA").on("click", function() {
@@ -53,19 +61,19 @@ $(document).ready(function() {
 	//검색 테이블
 	changeCheckBoxSts(); /* 판매상태 체크박스 체크 처리 함수 */
 	
-	dateChoiceFunc(); /* 검색-기간 [오늘] [어제].. 버튼 클릭시 해당 날짜를 출력하는 함수 */
+	dateChoiceFunc(); 	/* 검색-기간 [오늘] [어제].. 버튼 클릭시 해당 날짜를 출력하는 함수 */
 
+	goSrch(); 			/* 검색 */
+	
+	
+	//상세보기
 	goDetailView();
 	
-	
+	//페이징
+	pagingProcess()
 	
 	//작성
-	$("#cmn_btn_ml").on("click", function(){	
-		oldSrchDataSave (); 
-	
-		$("#actionForm").attr("action", "mdReg");
-		$("#actionForm").submit();	
-	});
+	goRegView();
 	
 }); //documentReady end
 
@@ -209,7 +217,7 @@ $(document).ready(function() {
 									<input type="text" class="srch_msg" name="srch_txt" id="srch_txt" placeholder="검색 조건을 선택한 후 입력해주세요." />			<!-- 보낼값6 -->
 								</td>
 								<td>
-									<span class="cmn_btn">검색</span>
+									<span class="cmn_btn" id="srch_btn">검색</span>
 								</td>
 								<td colspan="3"></td>
 							</tr>
