@@ -412,16 +412,16 @@ $(document).ready(function() {
 	    	  //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
 
 	    	 //alert('Current view: ' + view.name);
-	    	 
 	    	  var html = "";
 	  		
 	  		html += "<form action=\"#\" id=\"addForm\" method=\"post\">";
 	  		html += "<input type=\"hidden\" id=\"emp_num\" name=\"emp_num\" value=\"${sEmpNum}\">";
+	  		html += "<input type=\"hidden\" id=\"dept_num\" name=\"dept_num\" value=\"${sDeptNum}\">";
 	  		html += "<div class=\"popup_style\">";
 	  		html += "<span>일정 종류</span><span class=\"star\"> *</span>";
 	  		html += "<select class=\"slct_type\" id=\"schdl_type\" name=\"schdl_type\">";
 	  		html += "<option value=\"0\">개인</option>";
-	  		html += "<option value=\"1\">팀</option>";
+	  		html += "<option value=\"1\">부서</option>";
 	  		html += "<option value=\"2\">전사</option>";
 	  		html += "</select>";
 	  		html += "</div>";
@@ -634,6 +634,9 @@ $(document).ready(function() {
 		$('input[name=clndrDate]').attr('value',Cdate);
 		reloadList();
 	});
+	$(".schdl_type").change(function(){
+		reloadList();
+	});
 	$(".ctgry_box").change(function(){
 		if ($('.ctgry_box:checked').length >= 1) {
 			$(".h_ctgry").attr('value',"-1");
@@ -667,7 +670,7 @@ $(document).ready(function() {
 					schdl_type_name = "개인"					
 					break;
 				case "1":
-					schdl_type_name = "팀"					
+					schdl_type_name = "부서"					
 					break;
 				case "2":
 					schdl_type_name = "전사"					
@@ -805,12 +808,12 @@ function schdlUpdate(data){
 	var html = "";
 	
 	html += "<form action=\"#\" id=\"updateForm\" method=\"post\">";
-	html += "<input type=\"hidden\" id=\"emp_num\" name=\"emp_num\" value=\"" + data.id + "\" >";
+	html += "<input type=\"hidden\" id=\"schdl_num\" name=\"schdl_num\" value=\"" + data.id + "\" >";
 	html += "<div class=\"popup_style\">";
 	html += "<span>일정 종류</span><span class=\"star\"> *</span>";
 	html += "<select class=\"slct_type\" id=\"schdl_type\" name=\"schdl_type\">";
 	html += "<option value=\"0\">개인</option>";
-	html += "<option value=\"1\">팀</option>";
+	html += "<option value=\"1\">부서</option>";
 	html += "<option value=\"2\">전사</option>";
 	html += "</select>";
 	html += "</div>";
@@ -1016,12 +1019,12 @@ function drawToDayList(schdl){
 	}
 /* 일정 불러오기 */
 function reloadList() {
-	var params = $("#dateForm").serialize();	
+	var params = $("#dateForm, #typeForm, #ctgryForm, #userForm").serialize();
 	$.ajax({
 		type: "post", 
 		url : "clndrAjax", 
 		dataType : "json",
-		data : params, 
+		data : params,
 		success : function(schdl) { 
 			console.log(schdl);
 			drawToDayList(schdl.list);
@@ -1109,11 +1112,12 @@ $(document).ready(function() {
 		
 		html += "<form action=\"#\" id=\"addForm\" method=\"post\">";
 		html += "<input type=\"hidden\" id=\"emp_num\" name=\"emp_num\" value=\"${sEmpNum}\">";
+		html += "<input type=\"hidden\" id=\"dept_num\" name=\"dept_num\" value=\"${sDeptNum}\">";
 		html += "<div class=\"popup_style\">";
 		html += "<span>일정 종류</span><span class=\"star\"> *</span>";
 		html += "<select class=\"slct_type\" id=\"schdl_type\" name=\"schdl_type\">";
 		html += "<option value=\"0\">개인</option>";
-		html += "<option value=\"1\">팀</option>";
+		html += "<option value=\"1\">부서</option>";
 		html += "<option value=\"2\">전사</option>";
 		html += "</select>";
 		html += "</div>";
@@ -1272,17 +1276,27 @@ $(document).ready(function() {
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->			
 			<input type="button" value="일정 등록" id="new_schdl">
+			<form action="#" id="userForm" method="post">
+				<input type="hidden" name="emp_num" value="${sEmpNum}">
+				<input type="hidden" name="dept_num" value="${sDeptNum}">
+			</form>
+			<form action="#" id="dateForm" method="post">
+				<input type="hidden" name="clndrDate" value="">
+			</form>
+			
 	<div id="side_bar">
 		<div class="schdl_type">
 			<h5 class="side_bar_title">일정</h5>
-			<input type="radio" name="type" class="type_box" id="solo" checked="checked"><label for="solo" class="type_label" >개인 일정</label><br>
-			<input type="radio" name="type" class="type_box" id="team"><label for="team" class="type_label">팀 일정</label><br>
-			<input type="radio" name="type" class="type_box" id="all"><label for="all" class="type_label">전사 일정</label>
+			 <form action="#" id="typeForm" method="post">
+				<input type="radio" name="type" class="type_box" id="solo" checked="checked" value="0"><label for="solo" class="type_label" >개인 일정</label><br>
+				<input type="radio" name="type" class="type_box" id="team" value="1"><label for="team" class="type_label">부서 일정</label><br>
+				<input type="radio" name="type" class="type_box" id="all" value="2"><label for="all" class="type_label">전사 일정</label>
+			 </form>
 			
 		</div>
 		<div class="schdl_ctgry">
 			<h5 class="side_bar_title">범주</h5>
-			 <form action="#" id="dateForm" method="post">
+			 <form action="#" id="ctgryForm" method="post">
 				<input type="hidden" name="clndrDate" value="">
 				<input type="checkbox" class="ctgry_box" id="bsns" name="bsns" value="1"><label for="bsns" class="type_label">업무</label><div id="bsns_color"></div><br>
 				<input type="checkbox" class="ctgry_box" id="leave" name="leave" value="2"><label for="leave" class="type_label">휴가</label><div id="leave_color"></div><br>

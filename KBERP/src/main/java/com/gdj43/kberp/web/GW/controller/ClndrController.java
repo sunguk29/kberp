@@ -44,6 +44,7 @@ public class ClndrController {
 	List<HashMap<String, String>> list = iClndrService.getSchdl(params);
 	list = Utils.toCamelListMapKey(list); //키를 카멜식으로 
 	modelMap.put("list", list);
+	
 	return mapper.writeValueAsString(modelMap);
 	}
 	
