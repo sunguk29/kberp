@@ -4,7 +4,7 @@
 
 <!-- 고객정보 팝업 -->
 <select id="getCallCenterClnt" parameterType="hashmap" resultType="hashmap">
-SELECT CLNT_NUM, CLNT_NAME, CLNT_GRADE, PHONE_NUM_1
+SELECT CLNT_NUM, CLNT_NAME, CLNT_GRADE, PHONE_NUM_1, PHONE_NUM_2, ADRS, DTL_ADRS
 FROM INDVDL_CLNT
 WHERE 1=1
 <if test="searchTxt != null and searchTxt != ''"> <!-- 검색어가 있다면 --> 
@@ -63,6 +63,13 @@ VALUES (INDVDL_CLNT_SEQ.NEXTVAL, #{clnt_name}, #{clnt_grade}, #{phon_num_1}, #{p
 INSERT INTO CNSL_NOTE(CNSL_NUM, CLNT_NUM, EMP_NUM, CNSL_TYPE_NUM, CONT, CNSL_RSLT_NUM)
 VALUES (CNSL_NOTE_SEQ.NEXTVAL, #{clnt_num}, #{emp_num}, #{cnsl_type_num}, #{cont}, #{cnsl_rslt_num})
 </insert>
+
+<!-- 고객정보 단건 -->
+<select id="getCallCenterC" parameterType="hashmap" resultType="hashmap">
+SELECT CLNT_NUM, CLNT_NAME, CLNT_GRADE, PHONE_NUM_1, PHONE_NUM_2, ADRS, DTL_ADRS
+FROM INDVDL_CLNT
+WHERE CLNT_NUM = #{clnt_num}
+</select>
 
 
 </mapper>
