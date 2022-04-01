@@ -35,11 +35,16 @@ public class LeadController {
 	
 	@RequestMapping(value = "/leadList")
 	public ModelAndView leadList(@RequestParam HashMap<String, String> params,
-								 ModelAndView mav) {
+								 ModelAndView mav) throws Throwable {
 		
 		if(params.get("page") == null || params.get("page") == "") {
 			params.put("page", "1");
 		}
+		
+		int listCnt = iCommonService.getIntData("lead.getListCnt", params);
+		int ongoingCnt = iCommonService.getIntData("lead.getOngoingCnt", params);
+		int rcgntnCnt = iCommonService.getIntData("lead.getRcgntnCnt", params);
+		int failCnt = iCommonService.getIntData("lead.getFailCnt", params);
 		
 		Date dt = new Date();
 		
@@ -57,9 +62,14 @@ public class LeadController {
 			params.put("searchDate", searchDate); 
 			params.put("searchDate2", searchDate2); // 넘어오는게 없으면 현재날짜뽑아온거를 추가.
 		}
-
 		
+
 		mav.addObject("page", params.get("page"));
+		
+		mav.addObject("listCnt", listCnt);
+		mav.addObject("ongoingCnt", ongoingCnt);
+		mav.addObject("rcgntnCnt", rcgntnCnt);
+		mav.addObject("failCnt", failCnt);
 		mav.addObject("searchDate", params.get("searchDate"));
 		mav.addObject("searchDate2", params.get("searchDate2"));
 		
@@ -79,18 +89,8 @@ public class LeadController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		// 총 게시글 수
+		
 		int cnt = iCommonService.getIntData("lead.getLeadCnt", params);
-		
-		int listCnt = iCommonService.getIntData("lead.getListCnt", params);
-		int ongoingCnt = iCommonService.getIntData("lead.getOngoingCnt", params);
-		int rcgntnCnt = iCommonService.getIntData("lead.getRcgntnCnt", params);
-		int failCnt = iCommonService.getIntData("lead.getFailCnt", params);
-		
-		modelMap.put("cnt", cnt);
-		modelMap.put("listCnt", listCnt);
-		modelMap.put("ongoingCnt", ongoingCnt);
-		modelMap.put("rcgntnCnt", rcgntnCnt);
-		modelMap.put("failCnt", failCnt);		
 		
 		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
 				
@@ -99,6 +99,7 @@ public class LeadController {
 		
 		List<HashMap<String, String>> list = iCommonService.getDataList("lead.getLeadList", params);
 		
+		modelMap.put("cnt", cnt);
 		modelMap.put("list", list);
 		modelMap.put("pb", pb);
 		
@@ -116,15 +117,16 @@ public class LeadController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();		
 		
 		// 총 게시글 수
-		int mngrCnt = iCommonService.getIntData("lead.getMngrCnt", params);
+		int cnt = iCommonService.getIntData("lead.getMngrCnt", params);
 		
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), mngrCnt, 5, 5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
 		List<HashMap<String, String>> mngrList = iCommonService.getDataList("lead.getMngrList", params);
 		
+		modelMap.put("cnt", cnt);
 		modelMap.put("list", mngrList);
 		modelMap.put("pb", pb);
 		
