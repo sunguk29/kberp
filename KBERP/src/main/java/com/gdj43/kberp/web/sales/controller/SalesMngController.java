@@ -38,6 +38,19 @@ public class SalesMngController {
 			params.put("page", "1");
 		}
 		
+		int allCnt = iCommonService.getIntData("salesMng.salesListCnt", params);
+		
+		int stage0 = iCommonService.getIntData("salesMng.salesStage0", params);
+		int stage1 = iCommonService.getIntData("salesMng.salesStage1", params);
+		int stage2 = iCommonService.getIntData("salesMng.salesStage2", params);
+		int stage3 = iCommonService.getIntData("salesMng.salesStage3", params);
+		
+		mav.addObject("allCnt", allCnt);
+		mav.addObject("stage0", stage0);
+		mav.addObject("stage1", stage1);
+		mav.addObject("stage2", stage2);
+		mav.addObject("stage3", stage3);
+		
 		mav.addObject("page", params.get("page"));
 		
 		mav.setViewName("sales/salesList");
@@ -58,20 +71,9 @@ public class SalesMngController {
 		// 총 게시글 수
 		int listCnt = iCommonService.getIntData("salesMng.salesListCnt", params);
 		
-		int RsltCnt = iCommonService.getIntData("salesMng.salesListCnt", params);
-		
-		int stage0 = iCommonService.getIntData("salesMng.salesStage0", params);
-		int stage1 = iCommonService.getIntData("salesMng.salesStage1", params);
-		int stage2 = iCommonService.getIntData("salesMng.salesStage2", params);
-		int stage3 = iCommonService.getIntData("salesMng.salesStage3", params);
+		int RsltCnt = iCommonService.getIntData("salesMng.salesSearchListCnt", params);
 		
 		modelMap.put("RsltCnt", RsltCnt);
-		
-		modelMap.put("stage0", stage0);
-		modelMap.put("stage1", stage1);
-		modelMap.put("stage2", stage2);
-		modelMap.put("stage3", stage3);
-		
 		
 		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), listCnt, 10, 5);
 		

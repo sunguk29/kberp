@@ -9,13 +9,64 @@
 		WHERE 1 = 1
 	</select>
 	
+	<!-- 검색 게시글 수 -->
+	<select id="salesSearchListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SALES S INNER JOIN EMP E
+		                     ON S.MNGR_EMP_NUM = E.EMP_NUM
+		             INNER JOIN LEAD L
+		                     ON S.LEAD_NUM = L.LEAD_NUM
+		             INNER JOIN ENTRPRS_CLNT EC
+		                     ON EC.CLNT_NUM = L.CLNT_NUM
+		             INNER JOIN CLNT_CMPNY CC
+		                     ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
+		             LEFT OUTER JOIN LOAN_DTL_INFO LDI
+		                          ON S.SALES_NUM = LDI.SALES_NUM
+		WHERE 1 = 1
+		<choose>
+			<when test="mngNum != null and mngNum != ''">
+				AND E.EMP_NUM = #{mngNum}
+			</when>
+			<when test="prgrsStage1 != 9">
+				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
+			</when>
+			<when test="prgrsStage2 != 9">
+				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
+			</when>
+			<when test="startDate != null and startDate != '' or endDate != null and endDate != ''">
+				AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
+			</when>
+			<when test="prgrsStage1 != 9 and prgrsStage2 != 9">
+				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
+				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
+			</when>
+			<when test="prgrsStage1 != 9 and prgrsStage2 != 9 and startDate != null and startDate != '' or endDate != null and endDate != ''">
+				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
+				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
+				AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
+			</when>
+		</choose>
+		<if test="searchTxt != null and searchTxt != ''">
+			<choose>
+				<when test="searchGbn == 0">
+					AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="searchGbn == 1">
+					AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="searchGbn == 2">
+					AND S.SALES_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+			</choose>
+		</if>
+	</select>
 	
 	<!-- stage0 : 영업기회 단계 -->
 	<select id="salesStage0" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM SALES
 		WHERE 1 = 1
-		AND PRGRS_STS_NUM = '0'
+		AND PRGRS_STS_NUM = '17'
 	</select>
 	
 	<!-- stage1 : 영업기회 단계 -->
@@ -23,7 +74,7 @@
 		SELECT COUNT(*) AS CNT
 		FROM SALES
 		WHERE 1 = 1
-		AND PRGRS_STS_NUM = '1'
+		AND PRGRS_STS_NUM = '27'
 	</select>
 	
 	<!-- stage2 : 영업기회 단계 -->
@@ -31,7 +82,7 @@
 		SELECT COUNT(*) AS CNT
 		FROM SALES
 		WHERE 1 = 1
-		AND PRGRS_STS_NUM = '2'
+		AND PRGRS_STS_NUM = '37'
 	</select>
 	
 	<!-- stage3 : 영업기회 단계 -->
@@ -39,7 +90,7 @@
 		SELECT COUNT(*) AS CNT
 		FROM SALES
 		WHERE 1 = 1
-		AND PRGRS_STS_NUM = '3'
+		AND PRGRS_STS_NUM = '47'
 	</select>
 	
 	<!-- 영업관리 리스트 -->
@@ -62,8 +113,8 @@
 		                                 ON S.SALES_NUM = LDI.SALES_NUM
               WHERE 1 = 1
 		<choose>
-			<when test="mngNum != null and mngNum != ''">
-				AND E.EMP_NUM = #{mngNum}
+			<when test="mngName != null and mngName != ''">
+				AND E.EMP_NAME = #{mngName}
 			</when>
 			<when test="prgrsStage1 != 9">
 				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
@@ -72,7 +123,7 @@
 				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
 			</when>
 			<when test="startDate != null and startDate != '' or endDate != null and endDate != ''">
-				AND S.START_DATE BETWEEN #{startDate} AND #{endDate}
+				AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
 			</when>
 			<when test="prgrsStage1 != 9 and prgrsStage2 != 9">
 				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
@@ -81,9 +132,38 @@
 			<when test="prgrsStage1 != 9 and prgrsStage2 != 9 and startDate != null and startDate != '' or endDate != null and endDate != ''">
 				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
 				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
-				AND S.START_DATE BETWEEN #{startDate} AND #{endDate}
+				AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
 			</when>
 		</choose>
+		<if test="searchTxt != null and searchTxt != ''">
+			<choose>
+				<when test="searchGbn == 0">
+					AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="searchGbn == 1">
+					AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="searchGbn == 2">
+					AND S.SALES_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+			</choose>
+		</if>
+		<if test="listSort != '9'">
+			<choose>
+				<when test="listSort == 0">
+					ORDER BY L.LEAD_NAME ASC
+				</when>
+				<when test="listSort == 1">
+					ORDER BY CC.CLNT_CMPNY_NAME ASC
+				</when>
+				<when test="listSort == 2">
+					ORDER BY LDI.EXPCTN_LOAN_SCALE ASC
+				</when>
+				<when test="listSort == 3">
+					ORDER BY TO_CHAR(S.START_DATE, 'YYYY-MM-DD') ASC
+				</when>
+			</choose>
+		</if> 
 		) SS
 		WHERE SS.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
