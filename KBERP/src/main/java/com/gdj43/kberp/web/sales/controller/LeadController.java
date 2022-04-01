@@ -54,13 +54,13 @@ public class LeadController {
 		cal.setTime(dt);
 		cal.add(Calendar.DATE, -60);
 		
-		String searchDate = sdf.format(cal.getTime());
-		String searchDate2 = sdf.format(dt);
+		String startDate = sdf.format(cal.getTime());
+		String endDate = sdf.format(dt);
 
 		
-		if(params.get("searchDate") == null || params.get("searchDate") == "") {
-			params.put("searchDate", searchDate); 
-			params.put("searchDate2", searchDate2); // 넘어오는게 없으면 현재날짜뽑아온거를 추가.
+		if(params.get("startDate") == null || params.get("startDate") == "") {
+			params.put("startDate", startDate); 
+			params.put("endDate", endDate); // 넘어오는게 없으면 현재날짜뽑아온거를 추가.
 		}
 		
 
@@ -70,8 +70,8 @@ public class LeadController {
 		mav.addObject("ongoingCnt", ongoingCnt);
 		mav.addObject("rcgntnCnt", rcgntnCnt);
 		mav.addObject("failCnt", failCnt);
-		mav.addObject("searchDate", params.get("searchDate"));
-		mav.addObject("searchDate2", params.get("searchDate2"));
+		mav.addObject("startDate", params.get("startDate"));
+		mav.addObject("endDate", params.get("endDate"));
 		
 		mav.setViewName("sales/leadList");
 		

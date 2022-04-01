@@ -14,6 +14,7 @@
 		                            ON L.CLNT_NUM = EC.CLNT_NUM
 		                    INNER JOIN CLNT_CMPNY CC
 		                            ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
+		        AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
 				<choose>
 					<when test="psNum != 0" > <!-- 선택안함 : 0 이 아니면 해당 번호 목록으로 검색 -->
 						AND L.PRGRS_STS_NUM = #{psNum}
@@ -70,6 +71,7 @@
 		                    ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
 		WHERE 1 = 1
 		AND L.DEL_CHECK IS NULL
+		AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
 			<choose>
 				<when test="psNum != 0"> 
 					AND PRGRS_STS_NUM = #{psNum}

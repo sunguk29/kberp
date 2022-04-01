@@ -1156,7 +1156,6 @@ function ecAddPopup() {
 								data : params,
 								success : function(res) {
 									if(res.res == "success") {
-										location.reload();
 										closePopup(4);
 										closePopup(2);
 									} else {
