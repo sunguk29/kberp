@@ -499,9 +499,9 @@ function drawTree3(emp) {
 <body>
 		<input type="hidden" id="dname" /> 
 	<form action="#" id="insertForm">
-		<input type="button" id="sdeptNum" name="sdeptNum" value="${sdeptNum}" /> 
-		<input type="button" id="deptName" name="deptName" /> 
-		<input type="button" id="deptLevel" name="deptLevel" value="${deptLevel}" /> 
+		<input type="hidden" id="sdeptNum" name="sdeptNum" value="${sdeptNum}" /> 
+		<input type="hidden" id="deptName" name="deptName" /> 
+		<input type="hidden" id="deptLevel" name="deptLevel" value="${deptLevel}" /> 
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
