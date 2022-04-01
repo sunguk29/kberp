@@ -179,17 +179,6 @@ select {
 	cursor: pointer;
 }
 
-.opt { /* 영업기회 버튼 */
-	display: inline-block;
-	width: 25px;
-	height: 25px;
-	background-image: url("resources/images/sales/option.png");
-	background-size: 100%;
-	background-repeat: no-repeat;
-	margin: 10px 5px;
-	cursor: pointer;
-}
-
 .salesOpportunity { /* 영업기회박스 */
 	width: 925px;
 	height: 140px;
@@ -822,7 +811,6 @@ function drawList(list) {
 		html += "<div class=\"salesOpportunity\">";
 		html += "<div class=\"sledding\">" + data.PRGRS_STS + "</div>";
 		html += "<div class=\"salesOpportunityName\" salesNum = \"" + data.SALES_NUM + "\">" + data.LEAD_NAME + "<input type=\"hidden\" id=\"test\" value=\"" + data.PRGRS_STS2 + "\" /></div>";
-		html += "<div class=\"opt\"></div>";
 		html += "<table cellspacing=\"0\">";
 		html += "<colgroup>";
 		html += "<col width=\"120\">";

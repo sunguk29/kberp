@@ -193,7 +193,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "fcltAction/insert",
+						url : "fcltAction/update",
 						dataType : "json",
 						data : params,
 						success : function(res){ 

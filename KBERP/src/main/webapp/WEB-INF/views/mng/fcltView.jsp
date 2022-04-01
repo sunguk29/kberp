@@ -50,14 +50,16 @@
 	display:inline-block;
 }
 #file_preview img{
-	width: 150px;
-	height: 150px;
-	margin-left: 250px;
+	min-height: 350px;
+	min-width : 350px;
+	max-width:400px;
+	max-height: 350px;
 }
 #fclty_input_area{
 	display: inline-block;
-	margin-top: 20px;
-	margin-left: 20px;
+	margin-top: 70px;
+	margin-left: 50px;
+	line-height: 25px;
 }
 #atchmn_row{
 	display: inline-block;
@@ -122,7 +124,22 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
+	$("#listBtn").on("click",function(){
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		$("#backForm").submit();
+	});
 	
+	$("#mdfyBtn").on("click",function(){
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		$("#actionForm").attr("action","fcltUpdate");
+		$("#actionForm").submit();
+		
+		$("#backForm").submit();
+	});
 }); 
 
 function reloadList() { //목록 조회용 + 페이징 조회용
@@ -241,27 +258,31 @@ function drawPaging(pb) {
 						</div>
 						
 					</div>
-					<div class="page_srch_area">
-						<form action="#" id="actionForm" method="post">
-							<input type="hidden" id="gbn" name="gbn"/>
-							<input type="hidden" id="top" name="top" value="${param.top}" />
-							<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
-							<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
-							<input type="hidden" id="page" name="page" value="1" />
-							<input type="hidden" id="no" name="no" value="${param.no}" />
-							<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
-							<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
-							<input type="hidden" id="fOldSearchGbn" value="${param.fSearchGbn}"/>
-							<input type="hidden" id="fOldSearchTxt" value="${param.fSearchTxt}"/>
-									<select class="srch_sel" name="fSearchGbn">
-										<option value="0">신청자명</option>
-									</select>
-									<div class="srch_text_wrap">
-										<input type="text" id="fSearchTxt" name="fSearchTxt"/>
-									</div>
-									<div class="cmn_btn_ml" id="searchBtn">검색</div>
-						</form>
-					</div>
+					
+<form action="fcltList" id="backForm" method="post">
+	<input type="hidden" id="top" name="top" value="${param.top}" />
+	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+	<input type="hidden" name="page" value="${param.page}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+</form>
+					
+					
+<div class="page_srch_area">
+	<form action="#" id="actionForm" method="post">
+		<input type="hidden" id="page" name="page" value="1" />
+		<input type="hidden" id="no" name="no" value="${param.no}" />
+		<input type="hidden" id="fOldSearchGbn" value="${param.fSearchGbn}"/>
+		<input type="hidden" id="fOldSearchTxt" value="${param.fSearchTxt}"/>
+		<select class="srch_sel" name="fSearchGbn">
+			<option value="0">신청자명</option>
+		</select>
+		<div class="srch_text_wrap">
+			<input type="text" id="fSearchTxt" name="fSearchTxt"/>
+		</div>
+		<div class="cmn_btn_ml" id="searchBtn">검색</div>
+	</form>
+</div>
 				<table class="board_table">
 				<colgroup>
 					<col width="100"/>
@@ -290,9 +311,9 @@ function drawPaging(pb) {
 				<div class="pgn_area">
 				</div>
 				
-				<div class="cmn_btn_ml">목록으로</div>
-				<div class="cmn_btn_ml">수정</div>
-				<div class="cmn_btn_ml">삭제</div>
+				<div class="cmn_btn_ml" id="listBtn">목록으로</div>
+				<div class="cmn_btn_ml" id="mdfyBtn">수정</div>
+				<div class="cmn_btn_ml" id="delBtn">삭제</div>
 			</div>
 				</div>
 	</div>

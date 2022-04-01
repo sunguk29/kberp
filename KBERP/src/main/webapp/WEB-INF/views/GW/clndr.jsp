@@ -991,24 +991,33 @@ function drawToDayList(schdl){
 	var clndrYear = now.getFullYear();	// 연도
 	var clndrMonth =now.getMonth()+1;	// 월
 	var clndrDate =now.getDate();	// 일
-	if(clndrMonth >= 10){
-		var date = clndrYear+"-" + clndrMonth+"-" + clndrDate
+	
+	if(clndrMonth >= 10){		
+		if(clndrDate >= 10){
+			var date = clndrYear + "-" + clndrMonth+"-" + clndrDate
+		}else{
+			var date = clndrYear + "-" + clndrMonth + "-" + "0" + clndrDate 
+		}
 	}else{
-		var date = clndrYear+"-"+"0" + clndrMonth+"-" + clndrDate
+		clndrMonth = "0" + (now.getMonth()+1);
+		if(clndrDate >= 10){
+			var date = clndrYear + "-" + clndrMonth+"-" + clndrDate
+		}else{
+			var date = clndrYear + "-" + clndrMonth + "-" + "0" + clndrDate 
+		}
 	}
 		var html = "";
+		var dataCnt = 0;
 		for(var data of schdl){
-			var sidebar = document.getElementById("side_bar").offsetHeight + 34 +"px";
 			if(date == data.startDate){
-				$("#side_bar").css('height', (sidebar));
+				dataCnt ++;
+				$("#side_bar").css('height', document.getElementById('side_bar').style.height = 450 + (dataCnt*35));
 				html += "<input type=\"hidden\" id=\"today_schdl_num\" name=\"today_schdl_num\" value=\"" + data.id + "\" >";
 				if(data.startTime == "00:00"){
 					html +=	"<div class=\"today_schdl\" id=\"" + data.schdlCtgryName +"\">" + "종일 - "  + data.title + "</div>";
 				}else{
 					html +=	"<div class=\"today_schdl\" id=\"" + data.schdlCtgryName +"\">" + data.startTime + " - " + data.title + "</div>";
 				}
-				
-			}else{
 				
 			}
 			
@@ -1026,7 +1035,6 @@ function reloadList() {
 		dataType : "json",
 		data : params,
 		success : function(schdl) { 
-			console.log(schdl);
 			drawToDayList(schdl.list);
 			var oldEvents = $("#fullCalendarArea").fullCalendar("getEventSources");
 			//기존 이벤트 제거
