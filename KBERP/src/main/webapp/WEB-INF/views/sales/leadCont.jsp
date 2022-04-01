@@ -803,6 +803,10 @@ $(document).ready(function () {
 	
 	/* 예정된 일정 수정 팝업 */
 	$(".sbx").on("click", ".sch_re", function() {
+		var snum = $(this).children("#schdlListNumber").val();
+		var lnum = $(this).children("#leadListNumber").val();
+		document.getElementById("schdlNumber").value = snum;
+		document.getElementById("leadNumber").value = lnum;
 		
 		var params = $("#lsForm").serialize();
 		
@@ -811,73 +815,65 @@ $(document).ready(function () {
 			url : "leadSchdlAjax",
 			dataType : "json",
 			data : params,
-			success : function(lsData) {
-		var html = "";
-		
-		html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
-		html += "<input type=\"hidden\" name=\"sEmpNum\" value=\"${sEmpNum}\" />";
-		html += "<input type=\"hidden\" name=\"sNum\" value=\"\"/>";
-		html += "<table class=\"popup_table\">";
-		html += "	<tbody>";
-		html += "		<tr height=\"10\">                                                                                                          ";
-		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"일정명 *\" readonly=\"readonly\"/></td>";
-		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ssname\" name=\"ssname\" value=\"${lsData.SCHDL_NAME}\"/></td>";
-		html += "		</tr>";
-		html += "		<tr height=\"10\">                                                                                                          ";
-		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"리드\" readonly=\"readonly\"/></td>";
-		html += "			<td>";
-		html += "				<div class=\"imgP\">";
-		html += "					<input type=\"text\" class=\"pop_txt imgName\" id=\"lName\" name=\"lName\" value=\"${lsData.LEAD_NAME}\" />";
-		html += "					<input type=\"hidden\" id=\"lNum\" name=\"lNum\" value=\"${param.leadNum}\"/>";
-		html += "				</div>";
-		html += "			</td>";
-		html += "		</tr>";
-		html += "		<tr height=\"10\">                                                                                                          ";
-		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객명\" readonly=\"readonly\"/></td>";
-		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"clName\" name=\"clName\" value=\"${lsData.CLNT_NAME}\"/></td>";
-		html += "		</tr>";
-		html += "		<tr height=\"10\">                                                                                                          ";
-		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객사\" readonly=\"readonly\"/></td>";
-		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ccName\" name=\"ccName\"  value=\"${lsData.CLNT_CMPNY_NAME}\"/></td>";
-		html += "		</tr>";
-		html += "		<tr height=\"10\">                                                                                                          ";
-		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동분류 *\" readonly=\"readonly\"/></td>";
-		html += "			<td><select class=\"pop_txt_in\" id=\"ssactvtyclsfy\" name=\"ssactvtyclsfy\" value=\"${lsData.ACTVTY_CLSFY_NUM}\">";
-		html += "					<optgroup>";
-		html += "						<option value=\"9\">선택하세요</option>";
-		html += "						<option value=\"0\">전화</option>";
-		html += "						<option value=\"1\">메일</option>";
-		html += "						<option value=\"2\">방문</option>";
-		html += "						<option value=\"3\">기타</option>";
-		html += "					</optgroup>";
-		html += "			</select></td>";
-		html += "		</tr>";
-		html += "		<tr height=\"10\">                                                                                                          ";
-		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"날짜 *\" readonly=\"readonly\"/></td>";
-		html += "			<td><input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"sdt\" name=\"sdt\" value=\"${lsData.START_DATE_HR}\"/>";
-		html += "				<div class=\"wave\">" + " ~ "  + "</div>";
-		html += "			<input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\" value=\"${lsData.END_DATE_HR}\"/></td>";
-		html += "		</tr>";
-		html += "		<tr height=\"10\">                                                                                                          ";
-		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동내용 *\" readonly=\"readonly\"/></td>";
-		html += "			<td><textarea class=\"ta_box\" id=\"ssactvtycont\" name=\"ssactvtycont\">${lsData.ACTVTY_CONT}</textarea></td>";
-		html += "		</tr>";
-		html += "	</tbody>";
-		html += "</table>";				
-		html += "<div class=\"pop_rvn_txt\"> 첨부파일  ";
-		html += "	<img class=\"plus_btn aff_btn\"  src=\"resources/images/sales/plus.png\"/>"; 
-		html += "</div>";
-		html += "<div class=\"pop_cntrct_box_in\">";
-		html += "	<input type=\"text\" id=\"popFileName\" name=\"fileName\" readonly=\"readonly\">";
-		html += "</div>";
-		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\"/>";
-		html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />";	
-		html += "</form>";
-			},
-			error : function(request) {
-				console.log(request.responseTxt);
-			}
-		});
+			success : function(lsData) {	
+				var html = "";
+					
+				$.each(lsData, function(index, data) {
+					
+					html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
+					html += "<input type=\"hidden\" name=\"sEmpNum\" value=\"${sEmpNum}\" />";
+					html += "<input type=\"hidden\" name=\"sNum\" value=\"\"/>";
+					html += "<table class=\"popup_table\">";
+					html += "	<tbody>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"일정명 *\" readonly=\"readonly\"/></td>";
+					html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ssname\" name=\"ssname\" value=\"" + data.SCHDL_NAME + "\"/></td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"리드\" readonly=\"readonly\"/></td>";
+					html += "			<td>";
+					html += "				<div class=\"imgP\">";
+					html += "					<input type=\"text\" class=\"pop_txt imgName\" id=\"lName\" name=\"lName\" value=\"" + data.LEAD_NAME + "\" />";
+					html += "					<input type=\"hidden\" id=\"lNum\" name=\"lNum\" value=\"${param.leadNum}\"/>";
+					html += "				</div>";
+					html += "			</td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객명\" readonly=\"readonly\"/></td>";
+					html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"clName\" name=\"clName\" value=\"" + data.LEAD_CLNT_NAME + "\"/></td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객사\" readonly=\"readonly\"/></td>";
+					html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ccName\" name=\"ccName\"  value=\"" + data.LEAD_CLNT_CMPNY_NAME + "\"/></td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동분류 *\" readonly=\"readonly\"/></td>";
+					html += "			<td><select class=\"pop_txt_in\" id=\"ssactvtyclsfy\" name=\"ssactvtyclsfy\" value=\"" + data.ACTVTY_CLSFY_NUM + "\">";
+					html += "					<optgroup>";
+					html += "						<option value=\"9\">선택하세요</option>";
+					html += "						<option value=\"0\">전화</option>";
+					html += "						<option value=\"1\">메일</option>";
+					html += "						<option value=\"2\">방문</option>";
+					html += "						<option value=\"3\">기타</option>";
+					html += "					</optgroup>";
+					html += "			</select></td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"날짜 *\" readonly=\"readonly\"/></td>";
+					html += "			<td><input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"sdt\" name=\"sdt\" value=\"" + data.START_DATE_HR + "\"/>";
+					html += "				<div class=\"wave\">" + " ~ "  + "</div>";
+					html += "			<input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\" value=\"" + data.END_DATE_HR + "\"/></td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동내용 *\" readonly=\"readonly\"/></td>";
+					html += "			<td><textarea class=\"ta_box\" id=\"ssactvtycont\" name=\"ssactvtycont\">" + data.ACTVTY_CONT + "</textarea></td>";
+					html += "		</tr>";
+					html += "	</tbody>";
+					html += "</table>";
+					html += "</form>";
+					
+				});	
+				
 		makePopup({
 			depth : 1,
 			bg : false,
@@ -890,7 +886,7 @@ $(document).ready(function () {
 				});
 			},
 			width : 600,
-			height : 600,
+			height : 520,
 			buttons : [{
 				name : "수정",
 				func : function() {
@@ -951,9 +947,20 @@ $(document).ready(function () {
 					}]// button 함수 end
 										
 				});
+		
+			},
+			error : function(request) {
+				console.log(request.responseTxt);
+			}
+		});
+		
 	}); 
 	
-	console.log("??");
+	
+	console.log("123");
+	
+	
+	
 });  //Jquery 
 
 /* 의견 영역 */
@@ -1036,11 +1043,12 @@ function drawScList(list) {
 	for(var data of list){
 		html += "<div class=\"OpinionBox\">";
 		html += "<div class=\"schdl_box_in\">";
-		html += "<input type=\"hidden\" name=\"schdlNum\" value=\"" + data.SCHDL_NUM + "\" />;
-		html += "<input type=\"hidden\" name=\"leadNum\" value=\"" + ${param.leadNum} + "\" />;
+		html += "";
+		html += "";
 		html +=	"<div class=\"name\">일정명   :" + data.SCHDL_NAME + "</div>";
 		html +=	"<div class=\"txtOp\">기간   " + data.START_DATE_HR +  " ~ " + data.END_DATE_HR + "</div>";
-		html +=	"<div class=\"txtOp sche\">담당자   :" + data.EMP_NAME + "</div><input type=\"button\" class=\"sch_re\" value=\"수정\"><span> | </span><input type=\"button\" class=\"sch_del\" value=\"삭제\">";
+		html +=	"<div class=\"txtOp sche\">담당자   :" + data.EMP_NAME + "</div><span class=\"sch_re\" >수정<input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"leadListNumber\" value=\"" + ${param.leadNum} + "\" /></span><span> | </span><span class=\"sch_del\">삭제</span>";
+		html += "</div>";
 		html += "</div>";
 	}
 	
@@ -1057,6 +1065,10 @@ function uploadName(e) {
 </script>
 </head>
 <body>
+<form action="#" id="lsForm" method="post">
+	<input type="hidden" id="schdlNumber" name="schdlNum"  />
+	<input type="hidden" id="leadNumber" name="leadNum"  />
+</form>
 <form action="#" id="actionForm" method="post">
 	<input type="hidden" name="page" value="${param.page}" />	
 	<input type="hidden" name="leadNum" value="${param.leadNum}" />	
@@ -1219,9 +1231,7 @@ function uploadName(e) {
 						<div class="schdl_title"></div>
 						<hr color="#F2B705" width="925px">
 					</form>
-					<form action="#" id="lsForm" method="post">";
-						<div class="sbx"></div>
-					</form>
+					<div class="sbx"></div>
 					<!-- 끝 -->
 				</div>
 			</div>	
