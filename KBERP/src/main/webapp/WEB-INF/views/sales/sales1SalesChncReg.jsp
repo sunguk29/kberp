@@ -483,7 +483,7 @@ $(document).ready(function() {
 			$("#mngrName").focus();
 		} else if($("#loanCauseNum").val() == 9) {
 			alert("대출원인을 선택하세요.");
-			$("#loanCause").focus();
+			$("#loanCauseNum").focus();
 		} else if($("#loanHopeType").val() == 9) {
 			alert("대출 희망 유형을 입력하세요.");
 			$("#loanHopeType").focus();
