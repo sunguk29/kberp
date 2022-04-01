@@ -186,9 +186,8 @@ public class LeadController {
 		
 // 리드 등록
 	@RequestMapping(value = "/leadReg")
-	public ModelAndView leadReg(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+	public ModelAndView leadReg(ModelAndView mav) {
 		
-
 		mav.setViewName("sales/leadReg");
 		
 		return mav;
