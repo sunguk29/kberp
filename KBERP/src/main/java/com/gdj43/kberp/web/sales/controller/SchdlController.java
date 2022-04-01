@@ -216,5 +216,69 @@ public class SchdlController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
+	/* 리드 의견 Ajax */
+	@RequestMapping(value = "/llopBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String llopBotListAjax(@RequestParam HashMap<String, String> params) throws Throwable{
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		int opListCnt = iCommonService.getIntData("salesSchdl.opListCnt", params);
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("salesSchdl.getOpList", params);
+		
+		modelMap.put("list", list);
+		modelMap.put("opListCnt", opListCnt);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
+	/* 리드 상세보기 Action */
+	@RequestMapping(value = "/llBotActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String llBotActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable{
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			switch(gbn) {
+			case "insert":
+				iCommonService.insertData("salesSchdl.opContAdd", params);
+				break;
+			case "update":
+				iCommonService.updateData("salesSchdl.opContUpdate", params);
+				break;
+			}
+			modelMap.put("res", "success");
+		} catch (Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "failed");
+		}
+		
+		return mapper.writeValueAsString(modelMap);
+		
+	}
+	
+	
+	/* 리드 상세보기 예정된 일정 Ajax */
+	@RequestMapping(value = "/shdlBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String shdlBotListAjax(@RequestParam HashMap<String, String> params) throws Throwable{
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		int scListCnt = iCommonService.getIntData("salesSchdl.scListCnt", params);
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("salesSchdl.getSCList", params);
+		
+		modelMap.put("list", list);
+		modelMap.put("scListCnt", scListCnt);
+		
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 	
 }
