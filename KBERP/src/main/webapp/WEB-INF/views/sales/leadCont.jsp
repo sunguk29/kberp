@@ -332,6 +332,19 @@ textarea {
 	background-size: 18px 18px;
 	float: right;
 }
+.up_btn_bot {
+	position: absolute;
+	top: 7px;
+	left: 909px;
+	width: 18px;
+	height: 18px;
+	background-image: url("resources/images/sales/up_arrow.png");
+	background-size: 18px 18px;
+	float: right;
+}
+.drop_btn_bot:hover, .up_btn_bot:hover {
+	cursor: pointer;
+}
 .popup_table {
 	border-collapse: collapse;
 	display: table-cell;
@@ -648,8 +661,9 @@ $(document).ready(function () {
 	// 상세보기 하단 예정된 일정 실행
 	reloadSCList();
 	
-	/* 예정된 일정 팝업 */
+	/* 예정된 일정 등록 팝업 */
 	$(".schdl_title").on("click", ".plus_btn_bot", function() {
+
 		var html = "";
 		
 		html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
@@ -711,7 +725,7 @@ $(document).ready(function () {
 		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\"/>";
 		html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />";	
 		html += "</form>";
-		
+
 		makePopup({
 			depth : 1,
 			bg : false,
@@ -786,7 +800,161 @@ $(document).ready(function () {
 										
 				});
 		});	
-	});  //Jquery 
+	
+	/* 예정된 일정 수정 팝업 */
+	$(".sbx").on("click", ".sch_re", function() {
+		
+		var params = $("#lsForm").serialize();
+		
+		$.ajax({
+			type  : "post",
+			url : "leadSchdlAjax",
+			dataType : "json",
+			data : params,
+			success : function(lsData) {
+		var html = "";
+		
+		html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
+		html += "<input type=\"hidden\" name=\"sEmpNum\" value=\"${sEmpNum}\" />";
+		html += "<input type=\"hidden\" name=\"sNum\" value=\"\"/>";
+		html += "<table class=\"popup_table\">";
+		html += "	<tbody>";
+		html += "		<tr height=\"10\">                                                                                                          ";
+		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"일정명 *\" readonly=\"readonly\"/></td>";
+		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ssname\" name=\"ssname\" value=\"${lsData.SCHDL_NAME}\"/></td>";
+		html += "		</tr>";
+		html += "		<tr height=\"10\">                                                                                                          ";
+		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"리드\" readonly=\"readonly\"/></td>";
+		html += "			<td>";
+		html += "				<div class=\"imgP\">";
+		html += "					<input type=\"text\" class=\"pop_txt imgName\" id=\"lName\" name=\"lName\" value=\"${lsData.LEAD_NAME}\" />";
+		html += "					<input type=\"hidden\" id=\"lNum\" name=\"lNum\" value=\"${param.leadNum}\"/>";
+		html += "				</div>";
+		html += "			</td>";
+		html += "		</tr>";
+		html += "		<tr height=\"10\">                                                                                                          ";
+		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객명\" readonly=\"readonly\"/></td>";
+		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"clName\" name=\"clName\" value=\"${lsData.CLNT_NAME}\"/></td>";
+		html += "		</tr>";
+		html += "		<tr height=\"10\">                                                                                                          ";
+		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객사\" readonly=\"readonly\"/></td>";
+		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ccName\" name=\"ccName\"  value=\"${lsData.CLNT_CMPNY_NAME}\"/></td>";
+		html += "		</tr>";
+		html += "		<tr height=\"10\">                                                                                                          ";
+		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동분류 *\" readonly=\"readonly\"/></td>";
+		html += "			<td><select class=\"pop_txt_in\" id=\"ssactvtyclsfy\" name=\"ssactvtyclsfy\" value=\"${lsData.ACTVTY_CLSFY_NUM}\">";
+		html += "					<optgroup>";
+		html += "						<option value=\"9\">선택하세요</option>";
+		html += "						<option value=\"0\">전화</option>";
+		html += "						<option value=\"1\">메일</option>";
+		html += "						<option value=\"2\">방문</option>";
+		html += "						<option value=\"3\">기타</option>";
+		html += "					</optgroup>";
+		html += "			</select></td>";
+		html += "		</tr>";
+		html += "		<tr height=\"10\">                                                                                                          ";
+		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"날짜 *\" readonly=\"readonly\"/></td>";
+		html += "			<td><input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"sdt\" name=\"sdt\" value=\"${lsData.START_DATE_HR}\"/>";
+		html += "				<div class=\"wave\">" + " ~ "  + "</div>";
+		html += "			<input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\" value=\"${lsData.END_DATE_HR}\"/></td>";
+		html += "		</tr>";
+		html += "		<tr height=\"10\">                                                                                                          ";
+		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동내용 *\" readonly=\"readonly\"/></td>";
+		html += "			<td><textarea class=\"ta_box\" id=\"ssactvtycont\" name=\"ssactvtycont\">${lsData.ACTVTY_CONT}</textarea></td>";
+		html += "		</tr>";
+		html += "	</tbody>";
+		html += "</table>";				
+		html += "<div class=\"pop_rvn_txt\"> 첨부파일  ";
+		html += "	<img class=\"plus_btn aff_btn\"  src=\"resources/images/sales/plus.png\"/>"; 
+		html += "</div>";
+		html += "<div class=\"pop_cntrct_box_in\">";
+		html += "	<input type=\"text\" id=\"popFileName\" name=\"fileName\" readonly=\"readonly\">";
+		html += "</div>";
+		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\"/>";
+		html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />";	
+		html += "</form>";
+			},
+			error : function(request) {
+				console.log(request.responseTxt);
+			}
+		});
+		makePopup({
+			depth : 1,
+			bg : false,
+			bgClose : false,
+			title : "예정된 일정 수정",
+			contents : html,
+			contentsEvent : function() {
+				$(".aff_btn").on("click", function() {
+					$("#att").click();
+				});
+			},
+			width : 600,
+			height : 600,
+			buttons : [{
+				name : "수정",
+				func : function() {
+						if(checkEmpty("#ssname")){
+							makeAlert("필수입력", "일정명을 입력하세요");
+							$("#ssname").focus();
+						} else if($("#ssactvtyclsfy").val() == 9){
+							makeAlert("필수입력", "활동분류를 입력하세요");
+							$("#ssactvtyclsfy").focus();
+						} else if(checkEmpty("#sdt")){
+							makeAlert("필수입력", "시작일을 입력하세요");
+							$("#sdt").focus();
+						} else if(checkEmpty("#ssactvtycont")){
+							makeAlert("필수입력", "활동내용을 입력하세요");
+							$("#ssactvtycont").focus();
+						} else {					
+								
+								console.log(${sEmpNum});
+								var RegForm = $("#RegForm");
+										
+								RegForm.ajaxForm({
+								success: function(res) {
+										if(res.fileName.length > 0) {
+											$("#schdlAttFile").val(res.fileName[0]);
+										}
+										
+										var params = $("#RegForm").serialize();
+												
+										$.ajax({
+										type  : "post",
+										url : "salesSchdlAction/update",
+										dataType : "json",
+										data : params,
+										success : function(res) {
+											if(res.res == "success"){
+												reloadSCList();								
+											} else {
+													alert("수정중 문제가 발생하였습니다.");
+													}
+											},
+											error : function(request, status, error) {
+												console.log(request.responseTxt);
+											}
+										});
+									},
+								error : function(req) {
+										console.log(req.responseTxt);
+								}
+							});
+								
+							RegForm.submit();
+							closePopup(1);
+							reloadSCList();
+							} //if else문 end
+						}
+					}, {
+						name : "취소"
+					}]// button 함수 end
+										
+				});
+	}); 
+	
+	console.log("??");
+});  //Jquery 
 
 /* 의견 영역 */
 function reloadOpList() {
@@ -867,18 +1035,25 @@ function drawScList(list) {
 	
 	for(var data of list){
 		html += "<div class=\"OpinionBox\">";
-		html += "<div class=\"schdl_box_in\"><span class=\"boldname\">일정명   " + data.SCHDL_NAME + "</span><br/>기간   " + data.START_DATE_HR +  " ~ " + data.END_DATE_HR + "<br/>담당자   " + data.EMP_NAME + "</div>";
+		html += "<div class=\"schdl_box_in\">";
+		html += "<input type=\"hidden\" name=\"schdlNum\" value=\"" + data.SCHDL_NUM + "\" />;
+		html += "<input type=\"hidden\" name=\"leadNum\" value=\"" + ${param.leadNum} + "\" />;
+		html +=	"<div class=\"name\">일정명   :" + data.SCHDL_NAME + "</div>";
+		html +=	"<div class=\"txtOp\">기간   " + data.START_DATE_HR +  " ~ " + data.END_DATE_HR + "</div>";
+		html +=	"<div class=\"txtOp sche\">담당자   :" + data.EMP_NAME + "</div><input type=\"button\" class=\"sch_re\" value=\"수정\"><span> | </span><input type=\"button\" class=\"sch_del\" value=\"삭제\">";
 		html += "</div>";
 	}
 	
 	$(".sbx").html(html);
 }
+
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
 	$("#fileName").val(filename);
 	$("#popFileName").val(filename);
 }
+
 </script>
 </head>
 <body>
@@ -1043,6 +1218,8 @@ function uploadName(e) {
 						<div class="mgtop"></div>
 						<div class="schdl_title"></div>
 						<hr color="#F2B705" width="925px">
+					</form>
+					<form action="#" id="lsForm" method="post">";
 						<div class="sbx"></div>
 					</form>
 					<!-- 끝 -->

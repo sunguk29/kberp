@@ -190,6 +190,7 @@ function drawPaging(pb) {
 					<col width="50"/>
 					<col width="110"/>
 					<col width="450"/>
+					
 					<col width="100"/>
 				</colgroup>
 				<thead>
@@ -197,6 +198,7 @@ function drawPaging(pb) {
 						<th>No</th>
 						<th>카테고리</th>
 						<th>제목</th>
+						
 						<th>작성일</th>
 					</tr>
 				</thead>

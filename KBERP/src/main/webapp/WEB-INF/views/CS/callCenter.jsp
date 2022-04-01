@@ -703,7 +703,7 @@ $(document).ready(function() {
 				
 				$("#clntPop").on("click", "tr" , function() {
 					$("#saveForm #clnt_num").val($(this).attr("no"));
-					$("#noteSaveForm #clnt_num").val($(this).attr("no"));
+					$("#cnslForm #clnt_num").val($(this).attr("no"));
 					
 					var params = $("#saveForm").serialize();
 					
@@ -726,6 +726,24 @@ $(document).ready(function() {
 				
 						}
 					});
+					
+					var params = $("#cnslForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "callCenterCnslListAjax",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							console.log(res);
+							
+						},
+						error : function(request, status, error) {
+							console.log(request.responseText);
+
+						}
+					});
+					
 					closePopup();
 				});
 			},
@@ -994,6 +1012,7 @@ function checkEmpty(sel) {
 			<div class="call_area">
 				<div class="bottom_1">
 				<form action="#" id="cnslForm" method="post">
+				<input type="hidden" id="clnt_num" name="clnt_num"/>
 					<div class="cnsl_rcrd_header">
 						<div class="cnsl_rcrd">상담이력</div>
 					</div>

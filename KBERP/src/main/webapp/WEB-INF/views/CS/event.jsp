@@ -335,43 +335,54 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
+	
+	$("#listBtn").on("click", function() {
+		$("#actionForm").attr("action", "prgrsEvent");
+		$("#actionForm").submit();
 	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
+	
+	$("#updateBtn").on("click", function () {
+		$("#actionForm").attr("action", "eventUpdate");
+		$("#actionForm").submit();
 	});
-	$("#btn2Btn").on("click", function() {
+	
+	$("#deleteBtn").on("click", function() {
 		makePopup({
 			bg : false,
 			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
+			title : "삭제",
+			contents : "게시글을 삭제하시겠습니까?",
+			draggable : true,
 			buttons : [{
-				name : "하나",
+				name : "예",
 				func:function() {
-					console.log("One!");
+					var params =  $("#actionForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "eventAction/delete", 
+						dataType : "json", 
+						data : params, 
+						success : function(res) { 
+							if(res.res == "success") {
+								$("#actionForm").submit();
+							} else {
+								alert("삭제중 문제가 발생하였습니다.");
+							}
+						},
+						error : function(request, status, error) {
+							console.log(request.responseText); 			
+						}
+					});
 					closePopup();
-				}
+				} // func:function end
 			}, {
-				name : "둘닫기"
+				name : "아니오"
 			}]
-		});
-	});
+		}); // makePopup end
+	}); // deleteBtn end
+	
+	
 });
 </script>
 </head>
@@ -383,6 +394,15 @@ $(document).ready(function() {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
+	<form action="#" id="actionForm" method="post">
+		<input type="hidden" name="no" value="${param.no}" />
+		<input type="hidden" name="page" value="${param.page}" />
+		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+		<input type="hidden" id="top" name="top" value="${param.top}"/>
+		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
+		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
+	</form>
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
@@ -404,9 +424,12 @@ $(document).ready(function() {
 			${data.EVENT_CONT}
 			</div>
 			<div class="content_footer">
-				<div class="list"><input type="submit" value="목록" class="btn"></div>
-				<div class="correct"><input type="submit" value="수정" class="btn"></div>
-				<div class="delete"><input type="submit" value="삭제" class="btn"></div>
+				<div class="cmn_btn_ml" id="listBtn">목록</div>
+				<!-- <div class="list"><input type="submit" value="목록" class="btn"></div> -->
+				<div class="cmn_btn_ml" id="updateBtn">수정</div>
+				<div class="cmn_btn_ml" id="deleteBtn">삭제</div>
+				<!-- <div class="correct"><input type="submit" value="수정" class="btn"></div> -->
+				<!-- <div class="delete"><input type="submit" value="삭제" class="btn"></div> -->
 			</div>
 			<div class="wrap_comment">
 				<div id="comment_header">

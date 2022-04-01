@@ -230,6 +230,24 @@ public class LeadController {
 		return mapper.writeValueAsString(modelMap); 
 	}
 	
+	@RequestMapping(value ="/leadSchdlAjax", method = RequestMethod.POST,
+			produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String leadSchdlAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+
+		HashMap<String, String> lsData = iCommonService.getData("salesSchdl.leadSchdlCont", params);
+		
+		modelMap.put("lsData", lsData);
+		
+		return mapper.writeValueAsString(modelMap); 
+	}
+	
+	
+	
 	
 	@RequestMapping(value = "/leadCont")
 	public ModelAndView leadCont(@RequestParam HashMap<String, String> params, 

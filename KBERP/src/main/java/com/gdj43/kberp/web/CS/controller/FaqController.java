@@ -78,13 +78,12 @@ public class FaqController {
 	  
 	  mav.setViewName("CS/faqdt");
 	  
-	  return mav; 
+	  return mav;
 	  }
 	 
 	  @RequestMapping(value = "/faqAdd")
 	  public ModelAndView faqAdd(@RequestParam HashMap<String, String> params, 
 			  						ModelAndView mav) throws Throwable {
-	  
 	  mav.setViewName("CS/faqAdd");
 	  
 	  return mav; 
@@ -94,7 +93,7 @@ public class FaqController {
 	  @RequestMapping(value = "/faqdtAction/{gbn}", method = RequestMethod.POST,
 	  produces = "text/json;charset=UTF-8")
 	  
-	  @ResponseBody public String faqdtAction(@RequestParam HashMap<String, String>
+	  @ResponseBody public String faqdtActionAjax(@RequestParam HashMap<String, String>
 	  params,
 	  
 	  @PathVariable String gbn) throws Throwable { ObjectMapper mapper = new
