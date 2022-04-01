@@ -22,43 +22,29 @@
 <!-- common_sales javaScript파일 -->
 <script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 
+<!-- mdCont javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/md/mdCont.js?version=${version}"></script>
+
 <script type="text/javascript">
 $(document).ready(function() {
+	
+	//DB에서 저장되어있는 데이터 가져와서 넣어주기
+	$('#md_type').val(${data.MD_TYPE_NUM}).prop("selected", true);
+	$('#md_grade').val(${data.MD_GRADE_NUM}).prop("selected", true);
+	$('#sales_sts').val(${data.SALES_STS_NUM}).prop("selected", true);
+	$('#intrst_pymnt_mthd').val(${data.INTRST_PYMNT_MTHD_NUM}).prop("selected", true);
+	$('#prncpl_pymnt_mthd').val(${data.PRNCPL_PYMNT_MTHD_NUM}).prop("selected", true);
+	$('#mid_prdmptn_psbl_check').val(${data.MID_RDMPTN_PSBL_CHECK}).prop("selected", true);
+	$('#loan_prd').val(${data.LOAN_PRD}).prop("selected", true);
+	
 	//목록으로 버튼 클릭시, mdList로 이동
-	$("#listBtn").on("click", function(){
-		$("#actionForm").attr("action", "mdList");
-		$("#actionForm").submit();
-	});
+	goMdList();
 	
 	//수정 버튼 클릭시, mdUpdate로 이동
-	$("#updateBtn").on("click", function(){
-		$("#actionForm").attr("action", "mdUpdate");
-		$("#actionForm").submit();
-	});
+	updateMdData();
 	
 	//삭제 버튼 클릭시, mdActionAjax/delete를 통해 성공시 mdList
-	$("#deleteBtn").on("click", function(){
-		if(confirm("삭제하시겠습니까?")){
-			var params = $("#actionForm").serialize();
-			
-			$.ajax({
-				type: "post", 								// 전송 형태
-				url : "mdActionAjax/delete", 				//통신 주소
-				dataType : "json", 							//받을 데이터 형태
-				data : params,								//보낼 데이터. 보낼 것이 없으면 안씀.
-				success : function (res) {					//성공시 실행 함수. 인자는 받아온 데이터
-					if(res.res == "success"){
-						location.href = "mdList";
-					}else{
-						alert("삭제중 문제가 발생하였습니다.");						
-					}
-				},
-				error : function (request, status, error) {	//문제 발생 시 실행 함수
-					console.log(request.requestText);		//결과 텍스트
-				}
-			});
-		}
-	});
+	deleteMdData();
 	
 });
 </script>
@@ -66,6 +52,9 @@ $(document).ready(function() {
 <body>
 <!--============== action Form ==================-->
 <form action="#" id="actionForm" method="post">
+	<input type="hidden" name="no" value="${param.no}" />
+	<input type="hidden" name="page" value="${param.page}" />
+	
 	<!-- 메뉴 데이터 유지용 -->
 	<input type="hidden" name="top" 		   value="${params.top}"> 		<!-- top정보 -->
 	<input type="hidden" name="menuNum" 	   value="${params.menuNum}"> 	<!-- 메뉴정보 -->
@@ -117,116 +106,136 @@ $(document).ready(function() {
 						</colgroup>
 						<tbody>
 							<tr>
-								<td><input type="button" class="btn" value="상품명 *" readonly="readonly"/></td>
-								<td colspan="3"><input type="text" class="txt" readonly="readonly" disabled="disabled" /></td>
+								<td>
+									<input type="button" class="btn" value="상품명 *" readonly="readonly"/>
+								</td>
+								<td colspan="3">
+									<input type="text" class="txt" readonly="readonly" disabled="disabled" value="${data.MD_NAME}"/>	 <!-- 받을 값 1 -->
+								</td> 
 							</tr>
 							<tr height="40">							
-								<td padding="none"><input type="button" class="btn" value="상품 유형 *" /></td>
-								<td>
-									<select class="txt" disabled="disabled">
-										<optgroup>
-											<option>선택 하세요</option>
-											<option>개인 사업</option>
-											<option>법인 사업</option>
-											<option>공공 사업</option>
-										</optgroup>
+								<td padding="none">
+									<input type="button" class="btn" value="상품 유형 *" />
+								</td>
+								<td> 
+									<select class="txt" disabled="disabled" id="md_type" >										<!-- 받을 값 2 -->
+										<option value="-1">선택 하세요</option>
+										<option value="0">개인 사업</option>
+										<option value="1">법인 사업</option>
+										<option value="2">공공 사업</option>
 									</select>
 								</td>	
-								<td><input type="button" class="btn" value="상품 등급 *" /></td>
 								<td>
-									<select class="txt" disabled="disabled">
-										<optgroup>
-											<option>선택 하세요</option>
-											<option>S</option>
-											<option>A</option>
-											<option>B</option>
-											<option>C</option>
-											<option>D</option>
-										</optgroup>
+									<input type="button" class="btn" value="상품 등급 *" />
+								</td>
+								<td>
+									<select class="txt" disabled="disabled" id="md_grade">										<!-- 받을 값 3 -->
+										<option value="-1">선택 하세요</option>
+										<option value="0">S</option>
+										<option value="1">A</option>
+										<option value="2">B</option>
+										<option value="3">C</option>
+										<option value="4">D</option>
 									</select>
 								</td>							
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="판매 상태 *" /></td>
 								<td>
-									<select class="txt" disabled="disabled">
-										<optgroup>
-											<option>선택 하세요</option>
-											<option>판매중</option>
-											<option>판매중단</option>
-											<option>출시예정</option>
-										</optgroup>
+									<input type="button" class="btn" value="판매 상태 *" />
+								</td>
+								<td>
+									<select class="txt" disabled="disabled" id="sales_sts">											<!-- 받을 값 4 -->
+										<option value="-1">선택 하세요</option>
+										<option value="0">판매중</option>
+										<option value="1">판매중단</option>
+										<option value="2">출시예정</option>
 									</select>
 								</td>
-								<td><input type="button" class="btn" value="한도 금액 *" /></td>
-								<td><input type="text" class="txt" readonly="readonly" disabled="disabled" /></td>
+								<td>
+									<input type="button" class="btn" value="한도 금액 *" />
+								</td>
+								<td>
+									<input type="text" class="txt" readonly="readonly" disabled="disabled" id="limit_amnt" value="${data.LIMIT_AMNT}"/>		<!-- 받을 값 5 -->
+								</td>			
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="판매 기간 *" /></td>
-									<td><input type="date" class="txt" readonly="readonly" disabled="disabled" /></td>
+								<td>
+									<input type="button" class="btn" value="판매 기간 *" />
+								</td>
+									<td>
+										<input type="date" class="txt" readonly="readonly" disabled="disabled" id="sales_start_date" value="${data.SALES_START_DATE}"/>
+									</td>		<!-- 받을 값 6 -->
 									<td>
 										<div class="date_sign">
 											<span class="txt">~</span>
 										</div>
 									</td>
-									<td colspan="2"><input type="date" class="txt" readonly="readonly" disabled="disabled" /></td>
+									<td colspan="2">
+										<input type="date" class="txt" readonly="readonly" disabled="disabled" id="sales_end_date" value="${data.SALES_END_DATE}"/>
+									</td>	<!-- 받을 값 7 -->
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="이자율 *" /></td>
-								<td><input type="text" class="txt" readonly="readonly" disabled="disabled" /></td>
-								<td><input type="button" class="btn" value="이자 납부 방식 *" /></td>
 								<td>
-									<select class="txt" disabled="disabled">
-										<optgroup>
-											<option>선택 하세요</option>
-											<option>원금 균등</option>
-											<option>원리금 균등</option>
-											<option>만기 일시상환</option>
-										</optgroup>
+									<input type="button" class="btn" value="이자율 *" />
+								</td>
+								<td>
+									<input type="text" class="txt" readonly="readonly" disabled="disabled" id="intrst_rate" value="${data.INTRST_RATE}" /> <!-- 받을 값 8 -->
+								</td>				
+								<td>
+									<input type="button" class="btn" value="이자 납부 방식 *" />
+								</td>
+								<td>
+									<select class="txt" disabled="disabled" id="intrst_pymnt_mthd">										<!-- 받을 값 9 -->
+										<option value="-1">선택 하세요</option>
+										<option value="0">원금 균등</option>
+										<option value="1">원리금 균등</option>
+										<option value="2">만기 일시상환</option>
 									</select>
 								</td>
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="원금 납부 방식 *" /></td>
 								<td>
-									<select class="txt" disabled="disabled">
-										<optgroup>
-											<option>선택 하세요</option>
-											<option>원금 균등</option>
-											<option>원리금 균등</option>
-											<option>만기 일시상환</option>
-										</optgroup>
+									<input type="button" class="btn" value="원금 납부 방식 *" />
+								</td>
+								<td>
+									<select class="txt" disabled="disabled" id="prncpl_pymnt_mthd">									<!-- 받을 값 10 -->
+										<option value="-1">선택 하세요</option>
+										<option value="0">원금 균등</option>
+										<option value="1">원리금 균등</option>
+										<option value="2">만기 일시상환</option>
 									</select>
 								</td>
-								<td><input type="button" class="btn" value="중도상환 가능 여부 *" /></td>
 								<td>
-									<select class="txt" disabled="disabled">
-										<optgroup>
-											<option>선택 하세요</option>
-											<option>가능</option>
-											<option>불가능</option>
-										</optgroup>
-									</select>
+									<input type="button" class="btn" value="중도상환 가능 여부 *" />
 								</td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="대출 기간 *" /></td>
 								<td>
-									<select class="txt" disabled="disabled">
-										<optgroup>
-											<option>선택 하세요</option>
-											<option>6개월</option>
-											<option>1년</option>
-											<option>3년</option>
-											<option>5년</option>
-										</optgroup>
+									<select class="txt" disabled="disabled" id="mid_prdmptn_psbl_check">		<!-- 받을 값 11 -->
+										<option value="-1">선택 하세요</option>
+										<option value="0">가능</option>
+										<option value="1">불가능</option>
 									</select>
 								</td>
 							</tr>
 							<tr height="40">
-								<td rowspan="2"><input type="button" class="btn" value="상품 설명 " readonly="readonly"/></td>
+								<td>
+									<input type="button" class="btn" value="대출 기간 *" />
+								</td>
+								<td>
+									<select class="txt" disabled="disabled" id="loan_prd">		<!-- 받을 값 12 -->
+										<option value="-1">선택 하세요</option>
+										<option value="0">6개월</option>
+										<option value="1">1년</option>
+										<option value="2">3년</option>
+										<option value="3">5년</option>
+									</select>
+								</td>
+							</tr>
+							<tr height="40">
+								<td rowspan="2">
+									<input type="button" class="btn" value="상품 설명 " readonly="readonly"/>
+								</td>
 								<td colspan="3">
-									<textarea rows="100" cols="50" class="txt_area" readonly="readonly" disabled="disabled"></textarea>
+									<textarea rows="100" cols="50" class="txt_area" readonly="readonly" disabled="disabled" >${data.MD_DSCRPTN}</textarea> <!-- 받을 값 13 -->
 								</td>
 							</tr>
 						</tbody>

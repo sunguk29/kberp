@@ -11,7 +11,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>상품 등록</title>
+<title>상품 수정</title>
 
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
@@ -25,26 +25,36 @@
 <!-- md javaScript파일 -->
 <script type="text/javascript" src="resources/script/sales/md/md.js?version=${version}"></script>
 
-<!-- mdReg javaScript파일 -->
-<script type="text/javascript" src="resources/script/sales/md/mdReg.js?version=${version}"></script>
+<!-- mdUpdate javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/md/mdUpdate.js?version=${version}"></script>
 
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	$('#md_type').val(${data.MD_TYPE_NUM}).prop("selected", true);
+	$('#md_grade').val(${data.MD_GRADE_NUM}).prop("selected", true);
+	$('#sales_sts').val(${data.SALES_STS_NUM}).prop("selected", true);
+	$('#intrst_pymnt_mthd').val(${data.INTRST_PYMNT_MTHD_NUM}).prop("selected", true);
+	$('#prncpl_pymnt_mthd').val(${data.PRNCPL_PYMNT_MTHD_NUM}).prop("selected", true);
+	$('#mid_prdmptn_psbl_check').val(${data.MID_RDMPTN_PSBL_CHECK}).prop("selected", true);
+	$('#loan_prd').val(${data.LOAN_PRD}).prop("selected", true);
+	
 	//목록으로 버튼(#listBtn) 클릭시, mdList(#actionForm)로 이동 하는 함수
 	goMdList();
 	
-	// 저장 버튼(#saveBtn) 클릭시, 필수항목 체크 후 mdActionAjax/insert 로 이동 
-	// insert 성공시 mdList로 이동하는 함수
-	insertMdData();
+	// 저장 버튼(#saveBtn) 클릭시, 필수항목 체크 후 mdActionAjax/update 로 이동 
+	// update 성공시 mdReg로 이동하는 함수
+	updateMdData();
 
 });
 </script>
 </head>
 <body>
 <!--============== back Form ==================-->
-<form action="mdList" id="actionForm" method="post">
+<form action="mdCont" id="actionForm" method="post">
 	<!-- 메뉴 데이터 유지용 -->
+	<input type="hidden" name="no" 			   value="${param.no}" />
+	<input type="hidden" name="page" 		   value="${param.page}" />
 	<input type="hidden" name="top" 		   value="${params.top}"> 		<!-- top정보 -->
 	<input type="hidden" name="menuNum" 	   value="${params.menuNum}"> 	<!-- 메뉴정보 -->
 	<input type="hidden" name="menuType" 	   value="${params.menuType}"> 	<!-- 메뉴정보 -->
@@ -73,7 +83,7 @@ $(document).ready(function() {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">상품 등록</div>
+			<div class="page_title_text">상품 수정</div>
 				<div class="imgPos"> 					
 				<img class="btnImg" alt="저장버튼" src="resources/images/sales/save.png"  id="saveBtn"/>
 				<img class="btnImg" alt="목록버튼" src="resources/images/sales/list.png"  id="listBtn" />
@@ -83,6 +93,7 @@ $(document).ready(function() {
 		<!-- 해당 내용에 작업을 진행하시오. -->	
 		<!--============= write Form ==============-->
 		<form action="#" id="writeForm" method="post">
+			<input type="hidden" name="no" value="${param.no}" />
 			<div class="cont_area">
 				<div class="body">
 					<div class="bodyWrap">
@@ -96,12 +107,12 @@ $(document).ready(function() {
 							<tbody>
 								<tr>
 									<td><input type="button" class="btn" value="상품명 *" readonly="readonly"/></td> 
-									<td colspan="3"><input type="text" class="txt" name="md_name" id="md_name"/></td>					<!-- MD_NAME 으로 / 보낼값 1 -->
+									<td colspan="3"><input type="text" class="txt" name="md_name" id="md_name" value="${data.MD_NAME}"/></td>					<!-- MD_NAME에서 받아서 다시 보낼값 1 -->
 								</tr>
 								<tr height="40">							
 									<td padding="none"><input type="button" class="btn" value="상품 유형 *" /></td>	
 									<td>
-										<select class="txt" name="md_type" id="md_type">													<!-- MD_TYPE_NUM으로 / 보낼값 2 -->
+										<select class="txt" name="md_type" id="md_type">													<!-- MD_TYPE_NUM에서 받아서 다시 보낼값 2 -->
 											<optgroup>
 												<option value="-1" selected>선택 하세요</option>
 												<option value="0">개인 사업</option>
@@ -112,7 +123,7 @@ $(document).ready(function() {
 									</td>	
 									<td><input type="button" class="btn" value="상품 등급 *" /></td>
 									<td>
-										<select class="txt" name="md_grade" id="md_grade">												<!-- MD_GRADE_NUM으로 / 보낼값 3 -->
+										<select class="txt" name="md_grade" id="md_grade">												<!-- MD_GRADE_NUM에서 받아서 다시 보낼값 3 -->
 											<option value="-1" selected>선택 하세요</option>
 											<option value="0">S 등급</option>
 											<option value="1">A 등급</option>
@@ -126,7 +137,7 @@ $(document).ready(function() {
 								<tr height="40">
 									<td><input type="button" class="btn" value="판매 상태 *" /></td>				
 									<td>
-										<select class="txt" name="sales_sts" id="sales_sts">												<!-- SALES_STS_NUM으로 / 보낼값 4 -->
+										<select class="txt" name="sales_sts" id="sales_sts">												<!-- SALES_STS_NUM에서 받아서 다시 보낼값 4 -->
 											<option value="-1" selected>선택 하세요</option>
 											<option value="0">판매중</option>
 											<option value="1">판매중단</option>
@@ -134,24 +145,24 @@ $(document).ready(function() {
 										</select>
 									</td>
 									<td><input type="button" class="btn" value="한도 금액 *" /></td>
-									<td><input type="text" class="txt" name="limit_amnt" id="limit_amnt"/></td>								<!-- LIMIT_AMNT 으로 / 보낼값 5  -->
+									<td><input type="text" class="txt" name="limit_amnt" id="limit_amnt" value="${data.LIMIT_AMNT}"/></td>								<!-- LIMIT_AMNT 에서 받아서 다시 보낼값 5  -->
 								</tr>
 								<tr height="40">
 									<td><input type="button" class="btn" value="판매 기간 *" /></td>
-										<td><input type="date" class="txt" name="sales_start_date" id="sales_start_date"/></td> 					<!-- SALES_START_DATE 으로 / 보낼값 6  -->
+										<td><input type="date" class="txt" name="sales_start_date" id="sales_start_date" value="${data.SALES_START_DATE}"/></td> 					<!-- SALES_START_DATE 에서 받아서 다시 보낼값 6  -->
 										<td>
 											<div class="date_sign">
 												<span class="txt">~</span>
 											</div>
 										</td>
-										<td colspan="2"><input type="date" class="txt" name="sales_end_date" id="sales_end_date"/></td>			<!-- SALES_END_DATE 으로 / 보낼값 7  -->
+										<td colspan="2"><input type="date" class="txt" name="sales_end_date" id="sales_end_date" value="${data.SALES_END_DATE}"/></td>			<!-- SALES_END_DATE 에서 받아서 다시 보낼값 7  -->
 								</tr>
 								<tr height="40">
 									<td><input type="button" class="btn" value="이자율 *"  /></td>
-									<td><input type="text" class="txt" name="intrst_rate" id="intrst_rate"/></td> 				 			<!-- INTRST_RATE 으로 / 보낼값 8  -->
+									<td><input type="text" class="txt" name="intrst_rate" id="intrst_rate" value="${data.INTRST_RATE}"/></td> 				 			<!-- INTRST_RATE 에서 받아서 다시 보낼값 8  -->
 									<td><input type="button" class="btn" value="이자 납부 방식 *" /></td>
 									<td>
-										<select class="txt" name="intrst_pymnt_mthd" id="intrst_pymnt_mthd"> 										<!-- INTRST_PYMNT_MTHD_NUM 으로 / 보낼값 9  -->
+										<select class="txt" name="intrst_pymnt_mthd" id="intrst_pymnt_mthd"> 										<!-- INTRST_PYMNT_MTHD_NUM 에서 받아서 다시 보낼값 9  -->
 											<option value="-1">선택 하세요</option>
 											<option value="0">원금 균등</option>
 											<option value="1">원리금 균등</option>
@@ -162,7 +173,7 @@ $(document).ready(function() {
 								<tr height="40">
 									<td><input type="button" class="btn" value="원금 납부 방식 *" /></td>
 									<td>
-										<select class="txt" name="prncpl_pymnt_mthd" id="prncpl_pymnt_mthd"> 										<!-- PRNCPL_PYMNT_MTHD_NUM 으로 / 보낼값 10  -->
+										<select class="txt" name="prncpl_pymnt_mthd" id="prncpl_pymnt_mthd"> 										<!-- PRNCPL_PYMNT_MTHD_NUM 에서 받아서 다시 보낼값 10  -->
 											<option value="-1">선택 하세요</option>
 											<option value="0">원금 균등</option>
 											<option value="1">원리금 균등</option>
@@ -171,7 +182,7 @@ $(document).ready(function() {
 									</td>
 									<td><input type="button" class="btn" value="중도상환 가능 여부 *" /></td>
 									<td>
-										<select class="txt" name="mid_prdmptn_psbl_check" id="mid_prdmptn_psbl_check"> 									<!-- MID_RDMPTN_PSBL_CHECK 으로 / 보낼값 11  -->
+										<select class="txt" name="mid_prdmptn_psbl_check" id="mid_prdmptn_psbl_check"> 									<!-- MID_RDMPTN_PSBL_CHECK 에서 받아서 다시 보낼값 11  -->
 											<option value="-1">선택 하세요</option>
 											<option value="0">가능</option>
 											<option value="1">불가능</option>
@@ -181,7 +192,7 @@ $(document).ready(function() {
 								<tr height="40">
 									<td><input type="button" class="btn" value="대출 기간 *" /></td>
 									<td>
-										<select class="txt" name="loan_prd" id="loan_prd"> 												<!-- LOAN_PRD 으로 / 보낼값 12  -->
+										<select class="txt" name="loan_prd" id="loan_prd"> 												<!-- LOAN_PRD 에서 받아서 다시 보낼값 12  -->
 											<option value="-1">선택 하세요</option>
 											<option value="0">6개월</option>
 											<option value="1">1년</option>
@@ -193,7 +204,7 @@ $(document).ready(function() {
 								<tr height="40">
 									<td rowspan="2"><input type="button" class="btn" value="상품 설명 " readonly="readonly"/></td> 
 									<td colspan="3">
-										<textarea rows="100" cols="50" class="txt_area" name="md_dscrptn" id="md_dscrptn"></textarea> 		<!-- MD_DSCRPTN 으로 / 보낼값 13  -->
+										<textarea rows="100" cols="50" class="txt_area" name="md_dscrptn" id="md_dscrptn" >${data.MD_DSCRPTN}</textarea> 		<!-- MD_DSCRPTN 에서 받아서 다시 보낼값 13  -->
 									</td>
 								</tr>
 							</tbody>
