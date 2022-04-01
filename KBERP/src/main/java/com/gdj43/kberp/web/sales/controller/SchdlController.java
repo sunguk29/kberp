@@ -124,7 +124,7 @@ public class SchdlController {
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
 		
-		// 영업관리 목록 리스트로 가져오기
+		// 영업관리 목록 리스트로 가져옴
 		List<HashMap<String, String>> salesList = iCommonService.getDataList("salesSchdl.getSalesList", params);
 		
 		
