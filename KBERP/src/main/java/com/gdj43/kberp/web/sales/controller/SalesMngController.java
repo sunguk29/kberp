@@ -139,9 +139,7 @@ public class SalesMngController {
 				iCommonService.updateData("salesMng.sales1UpdateSales", params);
 				iCommonService.updateData("salesMng.sales1UpdateLoan", params);
 				iCommonService.updateData("salesMng.sales1UpdateBsns", params);
-				if (params.get("attFile") != null) {
-					iCommonService.updateData("salesMng.sales1UpdateBsnsAtt", params);
-				}
+				iCommonService.updateData("salesMng.sales1UpdateBsnsAtt", params);
 				break;
 			case "failure":
 				iCommonService.updateData("salesMng.sales1Failure", params);
@@ -272,8 +270,24 @@ public class SalesMngController {
 		return mav;
 	}
 	
-	
-	
+	// sales3QtnReg : 제안 등록
+	@RequestMapping(value = "/sales3QtnReg")
+	public ModelAndView sales3QtnReg(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		
+		//조회
+		HashMap<String, String> sales1DataLead = iCommonService.getData("salesMng.getSales2BringLead", params);
+		HashMap<String, String> sales1DataLoan = iCommonService.getData("salesMng.getSales2BringLoan", params);
+		HashMap<String, String> sales1DataBsns = iCommonService.getData("salesMng.getSales2BringBsns", params);
+		
+		mav.addObject("lead", sales1DataLead);
+		mav.addObject("loan", sales1DataLoan);
+		mav.addObject("bsns", sales1DataBsns);
+		
+		mav.setViewName("sales/sales3QtnReg");
+		
+		return mav;
+	}
 	
 	
 	

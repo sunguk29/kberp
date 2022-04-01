@@ -357,6 +357,289 @@ hr { /* 구분선 */
 	margin-right: 5px;
 }
 
+/* ******** 견적 ******** */
+.qtn_txt {
+	height: 33px;
+	width: 885px;
+	padding: 0 5px;
+	font-size: 14px;
+	color: black;
+	vertical-align: middle;
+	box-sizing: border-box;
+	outline: none;
+	border-radius: 3px;
+	line-height: 33px;
+	border: 1px solid #000;
+	background-color: #F2F2F2;
+	text-align: center;
+	font-weight: bold;
+	margin-left: 40px;
+}
+
+.qtn_title_name, .title_name {
+	font-size: 15px;
+	font-weight: bold;
+	border-bottom: 3px solid #2E83F2;
+	padding-bottom: 10px;
+	margin-bottom: 30px;
+	margin-left: 40px;
+	width: 900px;
+}
+.title_name {
+	margin-top: 30px;
+}
+.qtn_box_in {
+	width: 885px;
+	height: 150px;
+	border: 1px solid #000;
+	border-radius: 7px;
+	margin-bottom: 18px;
+	margin-left: 40px;
+}
+.past_ngtn {
+	margin-left: 40px;
+	font-size: 11pt;
+	font-weight: bold;
+	color: black;
+	text-align: center;
+}
+.cc_box_in {
+	display: inline-block;
+	vertical-align: top;
+	width: 480px;
+	height: 70px;
+	padding-left: 20px;
+	white-space: pre;
+	font-size: 14px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	line-height: 20px;
+}
+.cc_box_in:hover {
+	cursor: pointer;
+	color: #2E83F2;
+}
+.cc_box_right {
+	display: inline-block;
+	vertical-align: top;
+	width: 365px;
+	height: 70px;
+	padding-right: 20px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.right_box {
+	width: 200px;
+	height: 50px;
+	margin: 10px auto;
+	font-size: 14px;
+	text-align: right;
+}
+.hands{
+	display: inline-block;
+	vertical-align: middle;
+	width: 48px;
+	height: 48px;
+	background-image: url("../../images/sales/hands.png");
+	background-size: 48px 48px;
+	margin-right: 10px;
+}
+.boldname{
+	font-weight: bold;
+}
+
+/* 의견, 히스토리 */
+.mgtop {
+	margin-top: 50px;
+}
+
+hr { /* 구분선 */
+	margin-bottom: 10px;
+}
+.bot_title { 
+	font-size: 11pt;
+}
+.bx { /* 스크롤때문에 div 박스 추가 */
+	width: 860px;
+	height: 305px;
+	margin-left: 47.5px;
+	overflow-y: auto;
+}
+.OpinionBox {
+	width: 830px;
+	height: 70px;
+	font-size: 10pt;
+	border: 1px solid gray;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+	margin-bottom: 5px;
+	background-color: #F2F2F2;
+}
+.name {
+	margin-top: 3px;
+	font-weight: bold;
+	padding-top: 5px;
+	padding-left: 20px;
+}
+.txtOp, .dt, .del {
+	padding-left: 20px;
+}
+.dt {
+	padding-right: 590px;
+}
+.dt, .del {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 9pt;
+	color: gray;
+}
+.del:hover, .dtl:hover, .apply:hover {
+	cursor: pointer;
+	color: #F2CB05;
+}
+.opBox {
+	width: 860px;
+	height: 56px;
+	margin: 15px 0px 5px 47.5px;
+}
+textarea {
+	width: 757px;
+	height: 52px;
+	font-size: 10.5pt;
+	white-space: pre-wrap;
+	resize: none;
+	font-family: "맑은 고딕";
+	display: inline-block;
+	vertical-align: top;
+	outline: none;
+}
+.subm {
+	margin-left: 14px;
+	width: 35px;
+	height: 56px;
+	line-height: 56px;
+}
+
+/* 상품 드롭다운 수정 영역 */
+.mdhr {
+   margin-bottom: 10px;
+   float: right;
+} 
+.drop_btn2 {
+	display:inline-block;
+	vertical-align: middle;
+	width: 15px;
+	height: 15px;
+	background-image: url("../../images/sales/downarrow.png");
+	background-size: 15px 15px;
+	float: right;
+	margin-top: 15px;
+	margin-right: 5px;
+}
+/* 지난 견적서 */
+pre{
+	font-family: "맑은 고딕";
+	margin-top: 3px;
+}
+.qtnBox {
+	width: 830px;
+	height: 60px;
+	font-size: 10pt;
+	border: 1px solid gray;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+	margin: 5px;
+	background-color: #F2F2F2;
+}
+.qtnBox:hover {
+	cursor: pointer;
+	outline: 2px solid #F2B705;
+}
+.plus_btn_top {
+	display:inline-block;
+	vertical-align: middle;
+	width: 18px;
+	height: 18px;
+	background-image: url("../../images/sales/plus.png");
+	background-size: 18px 18px;
+	float: right;
+	margin-right: 10px;
+	margin-top: 7.5px;
+}
+.plus_btn_top:hover {
+	cursor: pointer;
+}
+/* 견적 상품  */
+.mdBox {
+	width: 800px;
+	height: 30px;
+	margin-left: 20px;
+	line-height: 30px;
+	border: 1px solid #D7D7D7;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+	margin-bottom: 5px;
+	background-color: #F2F2F2;
+}
+.md_bx { /* 스크롤때문에 div 박스 추가 */
+	width: 835x;
+	height: 75px;
+	margin-left: 70px;
+	overflow-y: auto;
+}
+.md_txt{
+	font-size: 14px;
+	font-weight: bold;
+}
+.md_hr{
+	margin-left: 80px;
+}
+.md_title { 
+	font-size: 14pt;
+	height : 14px;
+	line-height: 14px;
+	margin-left: 850px;
+	vertical-align: middle;
+}
+.md_plus_btn {
+	display:inline-block;
+	vertical-align: middle;
+	width: 14px;
+	height: 14px;
+	background-image: url("../../images/sales/plus.png");
+	background-size: 14px 14px;
+	margin-left: 5px;
+}
+.txtOp_btn{
+	margin-left: 600px;
+}
+.md_nm, .md_intrst, .md_grd, .md_prd{
+	width: 50px;
+	height: 30px;
+	margin: 0px 15px;
+	font-size: 12pt;
+}
+.md_nm{
+	font-weight: bold;
+}
+.md_btn{
+	margin-left : 200px;
+}
+.dtl, .apply, .gb{
+	display: inline-block;
+	vertical-align: top;
+	font-size: 11pt;
+	color: gray;
+	margin : 0px 5px; 
+}
+/* ******** 견적 끝 ******** */
 #att {
 	display: none;
 }
@@ -759,7 +1042,7 @@ function uploadName(e) {
 					</div>
 
 					<hr class="hr_bot" color="#4B94F2" width="925px">
-					<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
+					
 						<!-- ******************* 제안 시작 ******************* -->
 
 						<div class="bot_title">
@@ -918,8 +1201,178 @@ function uploadName(e) {
 								<input type="text" id="fileName" readonly="readonly" />
 							</div>
 						</div>
-					</form>
-					<!-- 끝 -->
+						
+						<hr class="hr_bot" color="#4B94F2" width="925px">
+						
+						<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
+						<!-- ******************* 견적 시작 ******************* -->
+					<div class="bot_title"><h3>견적<div class="drop_btn"></div></h3></div>
+					 <hr class="hr_bot" color="white" width="925px"> 
+					<div class="hr_bot"></div>
+					<div class="md_title">
+						<span class="md_txt">상품(5)<img class="md_plus_btn" src="../../images/sales/plus.png" border='0' onclick="document.all.file1.click();" ></span>
+					</div>
+					<div class="md_hr">
+						<hr color="#D7D7D7" width="830px" />
+					</div>
+					<div class="md_bx">
+							<div class="mdBox">
+								<span class="md_nm">A상품</span>
+								<span class="md_intrst">이자율: 1%</span>
+								<span class="md_grd">상품등급: A</span>
+								<span class="md_prd">대출기간: 1년</span>		
+								<span class="md_btn">
+									<span class="dtl" id="dtl">상세보기</span>
+									<span class="gb">|</span>
+									<span class="apply" id="apply">적용</span>
+								</span>
+								</div>
+					</div>
+					<table>
+						<colgroup>
+							<col width="200" />
+							<col width="250" />
+							<col width="200" />
+							<col width="250" />
+						</colgroup>
+						<tbody>
+							<tr height="40">
+								<td><input type="button" class="btn" value="견적명*" readonly="readonly" /></td>
+								<td colspan="3"><input type="text" class="txt"  /></td>		
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="상품유형" readonly="readonly" /></td>
+								<td colspan="3">
+									<select class="txt">
+									 	<optgroup>
+									 		<option>선택 하세요</option>
+									 		<option selected="selected">개인사업</option>
+									 		<option>법인사업</option>
+									 		<option>공공사업</option>
+									 	</optgroup>
+									</select>
+								</td>
+							</tr>
+							<tr height="40">
+									<td><input type="button" class="btn" value="견적일*" readonly="readonly" /></td>
+									<td colspan="3"><input type="date" class="txt" /></td>
+							</tr>
+							<tr height="40">
+									<td><input type="button" class="btn" value="공급가액*" readonly="readonly" /></td>
+									<td colspan="3"><input type="text" class="txt" /></td>		
+							</tr> 
+							<tr height="40">
+									<td><input type="button" class="btn" value="세액*" readonly="readonly" /></td>
+									<td colspan="3"><input type="text" class="txt" /></td>
+							</tr>
+							<tr height="40">
+									<td><input type="button" class="btn" value="합계액*" readonly="readonly" /></td>
+									<td colspan="3"><input type="text" class="txt" /></td>
+							</tr>
+							<tr height="40">
+									<td><input type="button" class="btn" value="중도상환가능여부" readonly="readonly" /></td>
+									<td>
+										<select class="txt">
+											<optgroup>
+												<option>선택 하세요</option>
+												<option>가능</option>
+												<option>불가능</option>
+											</optgroup>
+										</select>
+									</td>
+									<td><input type="button" class="btn" value="부가세*" readonly="readonly" /></td>
+									<td>
+										<select class="txt">
+										 	<optgroup>
+										 		<option>선택 하세요</option>
+										 		<option>포함</option>
+										 		<option>미포함</option>
+										 		<option>면세</option>
+										 	</optgroup>
+										</select>
+									</td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="이자납부방식" readonly="readonly" /></td>
+								<td>
+									<select class="txt">
+										<optgroup>
+											<option>선택 하세요</option>
+											<option>원금 균등 상환</option>
+											<option>원리금 균등 상환</option>
+											<option>만기 일시 상환</option>
+										</optgroup>
+									</select>
+								</td>
+								<td><input type="button" class="btn" value="원금상환방식" readonly="readonly" /></td>
+								<td colspan="2">
+									<select class="txt">
+										<optgroup>
+											<option>선택 하세요</option>
+											<option>원금 균등 상환</option>
+											<option>원리금 균등 상환</option>
+											<option>만기 일시 상환</option>
+										</optgroup>
+									</select>
+								</td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="이자율(%)" readonly="readonly" /></td>
+								<td><input type="text" class="txt" /></td>
+								<td><input type="button" class="btn" value="납부일" readonly="readonly" /></td>
+								<td colspan="2"><input type="text" class="txt" value="매달    일" /></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
+								<td><input type="text" class="txt" /></td>
+								<td><input type="button" class="btn" value="월 이자액" readonly="readonly" /></td>
+								<td colspan="2"><input type="text" class="txt" /></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="비고" readonly="readonly"/></td>
+								<td colspan="3"><input type="text" class="rmks" /></td>
+							</tr>							
+						</tbody>
+					</table>
+					
+					<!-- 첨부자료 -->
+					<div class="rvn_txt"> 첨부자료 (0)
+						<input type=file name='file1' style='display: none;'/> 
+						<img class="plus_btn" src="../../images/sales/plus.png" border='0' onclick="document.all.file1.click();" > 
+					</div>
+					<div class="cntrct_box_in"></div>
+					<!-- 지난 견적서 -->
+					<div class="mgtop"></div>
+					<div class="bot_title"><h3>지난 견적서<div class="drop_btn"></div></h3></div>
+					<hr color="#F2B705" width="925px">
+					<div class="bx">
+						<div class="qtnBox">
+							<div class="name">21E314 견적서2 (21/12/27 17:01:00)</div>
+							<div class="txtOp"><pre>법인사업    중소기업 소액 대출      3%          1200000만원</pre></div>
+						</div>
+						<div class="qtnBox">
+							<div class="name">21E314 견적서2 (21/12/27 17:01:00)</div>
+							<div class="txtOp"><pre>법인사업    중소기업 소액 대출      3%          1200000만원</pre></div>
+						</div>
+						<div class="qtnBox">
+							<div class="name">21E314 견적서2 (21/12/27 17:01:00)</div>
+							<div class="txtOp"><pre>법인사업    중소기업 소액 대출      3%          1200000만원</pre></div>
+						</div>
+						<div class="qtnBox">
+							<div class="name">21E314 견적서2 (21/12/27 17:01:00)</div>
+							<div class="txtOp"><pre>법인사업    중소기업 소액 대출      3%          1200000만원</pre></div>
+						</div>
+						<div class="qtnBox">
+							<div class="name">21E314 견적서2 (21/12/27 17:01:00)</div>
+							<div class="txtOp"><pre>법인사업    중소기업 소액 대출      3%          1200000만원</pre></div>
+						</div>
+						<div class="qtnBox">
+							<div class="name">21E314 견적서2 (21/12/27 17:01:00)</div>
+							<div class="txtOp"><pre>법인사업    중소기업 소액 대출      3%          1200000만원</pre></div>
+						</div>
+					</div>
+						</form>
+					<!-- ********* 견적 끝 ********* -->
 				</div>
 			</div>
 		</div>

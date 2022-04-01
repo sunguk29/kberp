@@ -314,6 +314,8 @@ textarea {
     border-radius: 7px;
     margin-bottom: 18px;
     margin-left: 45px;
+    font-size: 10pt;
+    padding: 0 15px;
 }
 .btnImg_in{
 	display: inline-block;

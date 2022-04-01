@@ -304,6 +304,7 @@ textarea {
     border-radius: 7px;
     margin-bottom: 18px;
     margin-left: 45px;
+    padding: 0 15px;
 }
 .btnImg_in{
 	display: inline-block;
@@ -387,7 +388,7 @@ $(document).ready(function() {
 	
 	// 다음 단계로 전환하기 버튼 : 견적 등록 페이지
 	$("#nextStageBtn").on("click", function() {
-		$("#actionForm").attr("action", "sales3QntReg");
+		$("#actionForm").attr("action", "sales3QtnReg");
 		$("#actionForm").submit();
 	});
 	
