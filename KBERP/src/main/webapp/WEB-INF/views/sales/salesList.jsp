@@ -523,6 +523,7 @@ table {
 	font-size: 11pt;
 	width: 118px;
 	cursor: default;
+	padding-bottom: 0px;
 }
 </style>
 <script type="text/javascript">
@@ -606,9 +607,9 @@ $(document).ready(function() {
 		html += "<div class=\"ptm_mid\">";
 		html += "<div class=\"ptm_mid_top\">";
 		html += "<select class=\"sel_size\" name=\"deptS\">";
-		html += "<option value=\"6\">영업1팀</option>";
-		html += "<option value=\"7\">영업2팀</option>";
-		html += "<option value=\"8\">영업3팀</option>";
+		html += "<option value=\"6\">영업부</option>";
+		html += "<option value=\"7\">영업1팀</option>";
+		html += "<option value=\"8\">영업2팀</option>";
 		html += "</select>";
 		html += "</div>";
 		html += "<div class=\"ptm_mid_bot\">";

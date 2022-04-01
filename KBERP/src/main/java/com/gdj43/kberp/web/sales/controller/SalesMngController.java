@@ -144,7 +144,6 @@ public class SalesMngController {
 				}
 				break;
 			case "failure":
-				// sales1Failure : 영업기회 실패 (PRGRS_STS 5번으로.)
 				iCommonService.updateData("salesMng.sales1Failure", params);
 				break;
 			}
