@@ -73,48 +73,10 @@
 
 </style>
 <script type="text/javascript">
-
-/* $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	}); //btn1Btn end
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]//btn2Btn buttons
-		}); //makePopup
-	});//btn2Btn end */
+	
 	$(document).ready(function() {
 		$("#listBtn").on("click", function() {
-			$("#actionForm").attr("action", "faqList");
+			$("#actionForm").attr("action", "faq");
 			$("#actionForm").submit();
 		});
 		
@@ -171,16 +133,7 @@
 				<div class="date">${data.WRTNG_DATE}</div>
 				<span class="cate">
 					<select disabled="disabled" id="ctgry_name" name="ctgry_name">
-				 	<option>인터넷뱅킹</option>
-					<option>스마트폰뱅킹</option>
-					<option>CD/ATM</option>
-					<option>공인인증서</option>
-					<option>인증/OTP/보안카드</option>
-					<option>예금/신탁</option>
-					<option>펀드</option>
-					<option>대출</option>
-					<option>외환</option>
-					<option>로그인관련</option>
+				 		<option>${data.CTGRY_NAME}</option>
 					</select>
 				</span>
 			</div>

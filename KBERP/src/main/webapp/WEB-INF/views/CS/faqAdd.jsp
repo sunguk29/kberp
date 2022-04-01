@@ -39,7 +39,7 @@
 } 
 .top .wrt_title {
 	margin-right:210px;
-	width: 220px;
+	width: 150px;
 	height: 40px;
 }
 /* .wrt_wrter {
@@ -54,7 +54,7 @@
 	height: 40px;
 }
 
-.wrt_con {
+.cont {
 	resize: none;
 }
 .bottom {
@@ -67,69 +67,97 @@
 }
 
 .cmn_btn {
-	margin-left:200px;	
+	margin-left:210px;
 }
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	CKEDITOR.replace("content",{
+	CKEDITOR.replace("cont", {
 		//옵션
-		resize_enabled:false, //크기 변경
-		language: "ko",       //언어
-		enterMode : 2,        //엔터<br/>처리
-		width: "700",		  //가로
-		height: "300"  	      //세로
+		resize_enabled : false, //크기변경
+		language : "ko", //언어
+		enterMode: 2, //엔터<br/>처리
+		width: "788", //가로
+		height : "300" //세로
 	});
-	
-	$("#cancelBtn").on("click", function(){
+	$("#cancelBtn").on("click", function() {
+		/* makePopup({
+			bg : false,
+			bgClose : false,
+			title : "취소",
+			contents : "게시글 작성이 취소되었습니다.",
+			draggable : true,
+			buttons : {
+				name : "예",
+				func:function() {
+					closePopup();
+					}
+				 }
+				}); //makepopup end */
 		$("#backForm").submit();
-	});
+		
+	}); //cancelBtn end
+	
 	$("#addBtn").on("click", function() {
 		makePopup({
 			bg : false,
 			bgClose : false,
 			title : "등록",
-			contents : "등록하시겠습니까?",
+			contents : "게시글을 등록하시겠습니까?",
+			draggable : true,
 			buttons : [{
-				name : "등록",
+				name : "예",
 				func:function() {
-					$("#cont").val(CKEDITOR.instances['cont'].getData());
-					if(checkEmpty("#title")) {
-						alert("제목을 입력하세요.");
-						$("#title").focus();
-					} else if(checkEmpty("#cont")) {
-						alert("내용을 입력하세요.");
-						$("#cont").focus();
+		$("#cont").val(CKEDITOR.instances['cont'].getData());
+				if(checkEmpty("#title")) {
+					alert("제목을 입력하세요.");
+					$("#title").focus();
+				} else if(checkEmpty("#cont")) {
+					alert("내용을 입력하세요.");
+					$("#cont").focus();
+				} 
+				else {
+					var writeForm = $("#writeForm");
 					
-					else{
-						var params= $("#addForm").serialize();
+					writeForm.ajaxForm({
+				   		success : function(res) {
+						// 글 저장
+						var params= $("#writeForm").serialize();
 						
 						$.ajax({
-							type: "post", // 전송형태
-							url : "faqdtActionAjax/insert" , //통신 주소
-							dataType : "json", //받을 데이터 형태
-							data : params, //보낼 데이터. 보낼 것이 없으면 안씀
-							success : function(res){ // 성공 시 실행 함수. 인자는 받아온 데이터
-								if(res.res=="success"){
-									$("#backForm").submit();
-								}else{
-									alert("작성중 문제가 발생하였습니다");
+							type : "post", 
+							url : "faqdtAction/insert", 
+							dataType : "json",
+							data : params, 
+							success : function(res) { 
+								if(res.res == "success") {
+									location.href = "faq";
+								} else {
+									alert("작성중 문제가 발생하였습니다.");
 								}
 							},
-							error: function(request, status, error){ // 문제 발생 시 실행 함수
-								console.log(request.responseText); //결과텍스트. 스프링 실행 결과
+							error : function(request, status, error) { 
+								console.log(request.responseText);
 							}
 						}); // ajax end
+				   		},//success end
 						error : function(req) {
 							console.log(req.responseText);
 						} // error end
 					}); // ajaxForm end
 					
 					writeForm.submit(); //ajaxForm 실행
+					closePopup();
 				} // else end
-			}); // addBtn click end
+				}//func: end
+			}, {
+				name : "아니오"
+			}]//buttons end
+		}); //makepopup end
+	}); // add click end
 	
-});
+	
+}); // document ready end
 function checkEmpty(sel){
 	if($.trim($(sel).val())==""){
 		return true;
@@ -147,12 +175,13 @@ function checkEmpty(sel){
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
-	<form action="faqList" id="backForm" method="post">
+	<form action="faq" id="backForm" method="post">
 	<input type="hidden" name="no" value="${param.no}" />
 	<input type="hidden" name="page" value="${param.page}" />
 	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 	</form>
+	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
@@ -161,37 +190,41 @@ function checkEmpty(sel){
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 					<!-- 여기부터 쓰면 됨 -->
+	<form action="faq" id="writeForm" method="post">
+	<input type="hidden" id="emp_num" name="emp_num" value="${sEmpNum}" />
+	
 					<div class="top">
 						<div class="cate">
-							<select>
-						 	<option>인터넷뱅킹</option>
-							<option>스마트폰뱅킹</option>
-							<option>CD/ATM</option>
-							<option>공인인증서</option>
-							<option>인증/OTP/보안카드</option>
-							<option>예금/신탁</option>
-							<option>펀드</option>
-							<option>대출</option>
-							<option>외환</option>
-							<option>로그인관련</option>
+							<select id="ctgry_num" name="ctgry_num">
+						 	<option value="1">인터넷뱅킹</option>
+							<option value="2">스마트폰뱅킹</option>
+							<option value="3">CD/ATM</option>
+							<option value="4">공인인증서</option>
+							<option value="5">인증/OTP/보안카드</option>
+							<option value="6">예금/신탁</option>
+							<option value="7">펀드</option>
+							<option value="8">대출</option>
+							<option value="9">외환</option>
+							<option value="10">로그인관련</option>
 							</select>
 						</div>
 							<div class="wrt_title">
-								<input type="text" placeholder="제목(질문글)">
+								<input type="text" placeholder="제목(질문글)" id="title" name="title">
 							</div>
 							<!-- <div class="wrt_wrter">
 								<input type="text" placeholder="작성자">
 							</div> -->
 					</div>
 					<div class="middle">
-						<textarea class="wrt_con" rows="20" cols="98" placeholder="내용(답변글)"></textarea>
+						<textarea id="cont" name="cont" rows="30" cols="114" placeholder="내용(답변글)" id="cont" name="cont"></textarea>
 					</div>
+	</form>		
 					<div class="bottom">
-					<div class="cmn_btn">취소</div>
-					<div class="cmn_btn">등록</div>
+					<div class="cmn_btn" id="cancelBtn" >취소</div>
+					<div class="cmn_btn" id="addBtn" >등록</div>
 					</div>
 				</div>
-			</div>		
+			</div>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>
