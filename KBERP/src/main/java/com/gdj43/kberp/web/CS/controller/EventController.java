@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -98,4 +99,44 @@ public class EventController {
 			return mav;
 		}
 	
+		
+		@RequestMapping(value = "/eventAction/{gbn}", method = RequestMethod.POST,
+				produces = "text/json;charset=UTF-8")
+		@ResponseBody
+		public String eventActionAjax(@RequestParam HashMap<String, String> params,
+								  @PathVariable String gbn) throws Throwable {
+			ObjectMapper mapper = new ObjectMapper();
+			
+			Map<String, Object> modelMap = new HashMap<String, Object>();
+			try {
+				switch(gbn) {
+				case "insert":
+					iCommonService.insertData("ev.EventAdd", params);
+					break;
+				case "update":
+					iCommonService.updateData("ev.EventUpdate", params);
+					break;
+				case "delete":
+					iCommonService.updateData("ev.EventDelete", params);
+					break;
+			}
+				modelMap.put("res", "success");
+		} catch (Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "failed");
+		}
+			return mapper.writeValueAsString(modelMap);
+		}
+		
+		@RequestMapping(value = "/eventUpdate")
+		public ModelAndView eventUpdate(@RequestParam HashMap<String, String> params,
+										ModelAndView mav) throws Throwable {
+			HashMap<String, String> data = iCommonService.getData("ev.getEvent", params);
+			
+			mav.addObject("data", data);
+			
+			mav.setViewName("CS/eventUpdate");
+			
+			return mav;
+		}
 }
