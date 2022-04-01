@@ -203,7 +203,9 @@ $(document).ready(function() {
 			}]
 		}); // makePopup end
 	}); // deleteBtn end
-});
+	
+	
+}); // document ready end
 </script>
 </head>
 <body>
@@ -220,6 +222,7 @@ $(document).ready(function() {
 		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 		<input type="hidden" id="emp_name" name="emp_name" value="${data.EMP_NAME}" />
+		<input type="hidden" id="ctgry_name" name="ctgry_name" value="${data.CTGRY_NAME}" />
 		<input type="hidden" id="top" name="top" value="${param.top}"/>
 		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
 		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
@@ -265,16 +268,7 @@ $(document).ready(function() {
 							</th>
 							<td>
 								<select disabled="disabled" id="ctgry_name" name="ctgry_name">
-									<option>인터넷뱅킹</option>
-									<option>스마트폰뱅킹</option>
-									<option>CD/ATM</option>
-									<option>공인인증서</option>
-									<option>인증/OTP/보안카드</option>
-									<option>예금/신탁</option>
-									<option>펀드</option>
-									<option>대출</option>
-									<option>외환</option>
-									<option>로그인관련</option>
+									<option>${data.CTGRY_NAME}</option>
 								</select>
 							</td>
 						</tr>
@@ -334,16 +328,7 @@ $(document).ready(function() {
 								</th>
 								<td>
 									<select disabled="disabled" id="ctgry_name" name="ctgry_name">
-										<option>인터넷뱅킹</option>
-										<option>스마트폰뱅킹</option>
-										<option>CD/ATM</option>
-										<option>공인인증서</option>
-										<option>인증/OTP/보안카드</option>
-										<option>예금/신탁</option>
-										<option>펀드</option>
-										<option>대출</option>
-										<option>외환</option>
-										<option>로그인관련</option>
+										<option>${data.CTGRY_NAME}</option>
 									</select>
 								</td>
 							</tr>
