@@ -37,11 +37,22 @@ public class PrsnlController {
 	@RequestMapping(value = "/prsnlCard")
 	public ModelAndView prsnlCard(@RequestParam HashMap<String, String> params, HttpSession session, ModelAndView mav) throws Throwable {
 		try {
-			// 로그인 확인, 로그인 된 사용자 정보 취득
-			if(session.getAttribute("sEmpNum") != null) {
-				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
+			if (params.get("superEmpNum") == null) {
+				// 로그인 확인, 로그인 된 사용자 정보 취득
+				if(session.getAttribute("sEmpNum") != null) {
+					params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
+					mav.addObject("is_admnstr", "0");
+				} else {
+					mav.setViewName("redirect:login");
+				}
+			} else if (params.get("superEmpNum").equals("-1") || params.get("superEmpNum").equals("")) {
+				System.out.println("혹시 모를 예외처리");
+				new Exception();
 			} else {
-				mav.setViewName("redirect:login");
+				System.out.println(params.get("empNum"));
+				params.put("sEmpNum", params.get("empNum"));
+				mav.addObject("is_admnstr", "1");
+				System.out.println(params.get("superEmpNum") + " 관리자 모드로 조회합니다.");
 			}
 			
 			params.put("menuNum", "5"); // 메뉴 번호 params에 추가
@@ -52,6 +63,7 @@ public class PrsnlController {
 				mav.addObject("menuAthrty", menuAthrty);
 				
 				HashMap<String, String> basicInfoData = iCommonService.getData("prsnl.getBasicInfo", params);
+				
 				mav.addObject("basicInfoData", basicInfoData);
 				mav.setViewName("hr/prsnlCard");
 			} else { // 권한 없을 때
@@ -85,10 +97,22 @@ public class PrsnlController {
 		
 		// 탭 내부 데이터 DB에서 가져오기
 		try {
-			if(params.get("sEmpNum") == null) {
-				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
-			} else {
+			System.out.println("**test : " + params.get("admnstrNum"));
+			if (params.get("admnstrNum").equals("-1")) {
+				System.out.println("check 1");
+				if (params.get("sEmpNum") == null) {
+					System.out.println("check 1-1");
+					params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
+				} else {
+					new Exception();
+				}
+			} 
+			else if (params.get("admnstrNum") == null){
+				System.out.println("check 2");
 				new Exception();
+			} else {
+				System.out.println("check 3");
+				params.put("sEmpNum", String.valueOf(params.get("admnstrNum")));
 			}
 			
 			HashMap<String, String> tabData = new HashMap<>();
@@ -99,7 +123,6 @@ public class PrsnlController {
 				break;
 			case "work_info_btn" :
 				tabData = iCommonService.getData("prsnl.getWorkInfo", params);
-				tabDataList = iCommonService.getDataList("prsnl.getApntmList", params);
 				break;
 			case "slry_info_btn" :
 				tabData = iCommonService.getData("prsnl.getSlryInfo", params);
@@ -128,7 +151,7 @@ public class PrsnlController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	@RequestMapping(value = "/prsnlCardAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@RequestMapping(value = "/prsnlCardActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String prsnlCardAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
 		ObjectMapper mapper = new ObjectMapper();
@@ -190,7 +213,7 @@ public class PrsnlController {
 	@RequestMapping(value = "/empInqry")
 	public ModelAndView empInqry(@RequestParam HashMap<String, String> params, HttpSession session, ModelAndView mav) throws Throwable {
 		try {
-			if(session.getAttribute("sEmpNum") != null) {
+			if (session.getAttribute("sEmpNum") != null) {
 				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
 			} else {
 				mav.setViewName("redirect:login");

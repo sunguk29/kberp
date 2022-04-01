@@ -29,28 +29,31 @@
 	</select>
 	<!-- 인사기록카드 - 재직정보 가져오기 -->
 	<select id="getWorkInfo" parameterType="hashmap" resultType="hashmap">
-		SELECT EMP_NUM, HIRE_TYPE, PRBTN_CHECK
-		FROM EMP
-		WHERE EMP_NUM = #{sEmpNum}
-	</select>
-	<!-- 인사기록카드 - 재직정보 : 발령기록 가져오기 -->
-	<select id="getApntmList" parameterType="hashmap" resultType="hashmap">
-		SELECT SQ.APNTM_DVSN_NUM, TO_CHAR(SQ.START_DATE, 'YYYY-MM-DD') AS START_DATE, TO_CHAR(SQ.END_DATE, 'YYYY-MM-DD') AS END_DATE,
-		       CASE WHEN SQ.NEWEST = '1' AND SQ.OLDEST = '1'
-		            THEN '0'
-		            WHEN SQ.NEWEST = '1' AND SQ.OLDEST != '1'
-		            THEN '1'
-		            WHEN SQ.NEWEST != '1' AND SQ.OLDEST = '1'
-		            THEN '-1'
-		       END AS DATE_TYPE
-		FROM (  SELECT E.EMP_NUM, E.HIRE_TYPE, E.PRBTN_CHECK, A.APNTM_DVSN_NUM, A.START_DATE, A.END_DATE,
-		               ROW_NUMBER() OVER(ORDER BY START_DATE DESC) AS NEWEST,
-		               ROW_NUMBER() OVER(ORDER BY START_DATE ASC) AS OLDEST
-		        FROM EMP E INNER JOIN APNTM A
-		                           ON E.EMP_NUM = A.EMP_NUM
-		        WHERE E.EMP_NUM = #{sEmpNum}
-		              AND A.STS_NUM = '1' ) SQ
-		WHERE SQ.NEWEST = '1' OR SQ.OLDEST = '1'
+		SELECT EMP.EMP_NUM, EMP.HIRE_TYPE, EMP.PRBTN_CHECK,
+		       DECODE(A2.END_DATE, NULL, 1, 0) AS WORK_TYPE,
+		       DECODE(A1.START_DATE, NULL, ' ', TO_CHAR(A1.START_DATE, 'YYYY-MM-DD')) AS JOIN_DATE,
+		       DECODE(A2.END_DATE, NULL, ' ', TO_CHAR(A2.END_DATE, 'YYYY-MM-DD')) AS RSGNT_DATE
+		FROM EMP INNER JOIN (   SELECT SQ.START_DATE, SQ.END_DATE, SQ.EMP_NUM
+		                        FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
+		                                       ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE ASC) AS OLDEST
+		                                FROM APNTM
+		                                WHERE STS_NUM = '1' ) SQ
+		                        WHERE SQ.OLDEST = '1'
+		                        ) A1
+		                 ON EMP.EMP_NUM = A1.EMP_NUM
+		         INNER JOIN (   SELECT SQ.START_DATE, SQ.EMP_NUM, SQ.RANK_NUM, SQ.DEPT_NUM,
+		                               CASE WHEN SQ.END_DATE > SYSDATE
+		                                    THEN NULL
+		                                    ELSE SQ.END_DATE
+		                               END AS END_DATE
+		                        FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
+		                                       ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE DESC) AS NEWEST
+		                                FROM APNTM
+		                                WHERE STS_NUM = '1' ) SQ
+		                        WHERE SQ.NEWEST = '1'
+		                            ) A2
+		                 ON EMP.EMP_NUM = A2.EMP_NUM
+		WHERE EMP.EMP_NUM = #{sEmpNum}
 	</select>
 	<!-- 인사기록카드 - 급여정보 가져오기 -->
 	<select id="getSlryInfo" parameterType="hashmap" resultType="hashmap">
