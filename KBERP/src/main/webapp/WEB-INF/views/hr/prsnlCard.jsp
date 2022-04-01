@@ -389,6 +389,38 @@ td:nth-child(even) {
 	cursor: pointer;
 }
 
+
+.admnstr_btn {
+	display: inline-block;
+	vertical-align: bottom;
+	width: 80px;
+	height: 28px;
+	border: 1px solid #00000022;
+	border-radius: 4px;
+	font-size: 9pt;
+	font-weight: 900;
+	text-align: center;
+	line-height: 26px;
+	-ms-user-select: none; 
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+#a_list_btn {
+	background-color: #4B94F2;
+	color: #fff;
+	float: right;
+	margin-left: 2px;
+}
+
+#a_edit_btn {
+	background-color: #F2CB05;
+	color: #222;
+	float: right;
+}
+
 /* 팝업 창 */
 #human_info_edit_popup {
 	/* 숨김용 */
@@ -675,17 +707,7 @@ function tabContChange(tId, data, dataList) {
 		html += "		<div class=\"cont_name\">재직구분</div>                                                                    ";
 		html += "		<br/>                                                                                                      ";
 		html += "		<input type=\"text\" class=\"cont_text\" id=\"rsdnt_rgstn_num\" readonly=\"readonly\" value=\"";
-		var rsdnt_rgstn_flag = false;
-		for (var dl of dataList) {
-			if (dl.DATE_TYPE == '1' || dl.DATE_TYPE == '0') {
-				if (dl.END_DATE != null) {
-					rsdnt_rgstn_flag = false;
-				} else {
-					rsdnt_rgstn_flag = true;
-				}
-			}
-		}
-		if (rsdnt_rgstn_flag) {
+		if (data.WORK_TYPE == 1) {
 			html += '재직';
 		} else {
 			html += '퇴사';
@@ -696,30 +718,14 @@ function tabContChange(tId, data, dataList) {
 		html += "		<div class=\"cont_name\">입사일</div>                                                                      ";
 		html += "		<br/>                                                                                                      ";
 		html += "		<input type=\"text\" class=\"cont_text\" id=\"join_date\" readonly=\"readonly\" value=\"";
-		var join_date = "-";
-		for (var dl of dataList) {
-			if (dl.DATE_TYPE == '-1' || dl.DATE_TYPE == '0') {
-				if (dl.START_DATE != null) {
-					join_date = dl.START_DATE;
-				}
-			}
-		}
-		html += join_date;
+		html += data.JOIN_DATE;
 		html += "\" />   ";
 		html += "	</div>                                                                                                         ";
 		html += "	<div class=\"cont_element\" id=\"lt2_l3_e3\">                                                                  ";
 		html += "		<div class=\"cont_name\">퇴사일</div>                                                                      ";
 		html += "		<br/>                                                                                                      ";
 		html += "		<input type=\"text\" class=\"cont_text\" id=\"rsgnt_date\" readonly=\"readonly\" value=\"";
-		var rsgnt_date = "-";
-		for (var dl of dataList) {
-			if (dl.DATE_TYPE == '1' || dl.DATE_TYPE == '0') {
-				if (dl.END_DATE != null) {
-					rsgnt_date = dl.START_DATE;
-				}
-			}
-		}
-		html += rsgnt_date;
+		html += data.RSGNT_DATE;
 		html += "\" />                   ";
 		html += "	</div>                                                                                                         ";
 		html += "</div>                                                                                                            ";
@@ -1175,7 +1181,7 @@ function createAddPopup(pId) {
 					
 					$.ajax({
 						type : "post",
-						url : "prsnlCardAjax/insert",
+						url : "prsnlCardActionAjax/insert",
 						dataType : "json",
 						data : params,
 						success : function(res) {
@@ -1304,7 +1310,7 @@ function createDelPopup(pId) {
 				
 				$.ajax({
 					type : "post",
-					url : "prsnlCardAjax/delete",
+					url : "prsnlCardActionAjax/delete",
 					dataType : "json",
 					data : params,
 					success : function(res) {
@@ -1378,14 +1384,23 @@ $(document).ready(function() {
 		console.log("파일 없음");
 	}
 	
+	$("#isAdmnstr").val(${is_admnstr});
+	console.log("체크 : " + $("#isAdmnstr").val());
+	
 	$("#human_info_btn").css("background-color", "#4B94F2");
 	$("#human_info_btn").css("color", "#FFF");
 	$("#edctn_level_btn").css("background-color", "#4B94F2");
 	$("#edctn_level_btn").css("color", "#FFF");
 	
+	if ($("#isAdmnstr").val() == "1") {
+		$("#topTabAdmnstr").val($("#nEmpNum").val());
+	}
 	var params = $("#topTabForm").serialize();
 	reloadTab(params);
 	
+	if ($("#isAdmnstr").val() == "1") {
+		$("#bottomTabAdmnstr").val($("#nEmpNum").val());
+	}
 	var params = $("#bottomTabForm").serialize();
 	reloadTab(params);
 	
@@ -1427,11 +1442,21 @@ $(document).ready(function() {
 			if ($(this).parent("div").attr("id") == "left_top_tab") {
 				$("#selectedTopTab").val($(this).attr("id"));
 				console.log($(this).attr("id"));
+				console.log($(".isAdmnstr").val());
+				if ($("#isAdmnstr").val() == "1") {
+					$("#topTabAdmnstr").val($("#nEmpNum").val());
+				}
+				console.log($("#topTabAdmnstr").val());
 				var params = $("#topTabForm").serialize();
 			}
 			else if ($(this).parent("div").attr("id") == "bottom_tab") {
 				$("#selectedBottomTab").val($(this).attr("id"));
 				console.log($(this).attr("id"));
+				console.log($(".isAdmnstr").val());
+				if ($("#isAdmnstr").val() == "1") {
+					$("#bottomTabAdmnstr").val($("#nEmpNum").val());
+				}
+				console.log($("#bottomTabAdmnstr").val());
 				var params = $("#bottomTabForm").serialize();
 				$("#selItemNum").val("-1");
 				if ($("#btm_del_btn").attr("da") == "false") {
@@ -1543,17 +1568,33 @@ $(document).ready(function() {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">인사기록카드</div>
+			<c:choose>
+				<c:when test="${is_admnstr eq '1'}">
+					<div class="page_title_text">인사기록카드(관리자)</div>
+				</c:when>
+				<c:otherwise>
+					<div class="page_title_text">인사기록카드</div>
+				</c:otherwise>
+			</c:choose>
+			<c:choose>
+				<c:when test="${is_admnstr eq '1'}">
+					<div class="admnstr_btn" id="a_list_btn" da="false">목록</div>
+					<div class="admnstr_btn" id="a_edit_btn" da="false">수정</div>
+				</c:when>
+			</c:choose>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
+			<input type="hidden" id="isAdmnstr" name="isAdmnstr" value="-1" />
 			<input type="hidden" id="nEmpNum" name="nEmpNum" value="${basicInfoData.EMP_NUM}" />
 			<form action="#" id="topTabForm" method="post">
 				<input type="hidden" id="selectedTopTab" name="selectedTopTab" value="human_info_btn"/>
+				<input type="hidden" id="topTabAdmnstr" name="admnstrNum" value="-1"/>
 			</form>
 			<form action="#" id="bottomTabForm" method="post">
 				<input type="hidden" id="selectedBottomTab" name="selectedBottomTab" value="edctn_level_btn"/>
+				<input type="hidden" id="bottomTabAdmnstr" name="admnstrNum" value="-1"/>
 			</form>
 			<form action="#" id="deleteForm" method="post">
 				<input type="hidden" id="selItemNum" name="selItemNum" value="-1" />
