@@ -36,8 +36,8 @@ FROM(SELECT  CLNT_NUM, CLNT_NAME, CLNT_GRADE, PHONE_NUM_1
                 ON I.CLNT_NUM = N.CLNT_NUM
         INNER JOIN EMP E
                 ON N.EMP_NUM = E.EMP_NUM
-WHERE 1 = 1                
-ORDER BY I.CLNT_NUM DESC
+WHERE I.CLNT_NUM = #{clnt_num}
+ORDER BY WRITE_DATE DESC
 </select>
 
 <!-- [이력]상담노트 -->
@@ -49,7 +49,7 @@ SELECT CLNT_NUM, CNSL_TYPE_NUM, CONT,
             WHEN CNSL_RSLT_NUM = 3 THEN '이관'
        END CNSL_RSLT_NUM
 FROM CNSL_NOTE
-WHERE 1=1
+WHERE CLNT_NUM = #{clnt_num}
 </select>
 
 <!-- 고객정보 저장 -->
