@@ -903,7 +903,7 @@ $(document).ready(function () {
 					html += "</div>";
 					html += "<div class=\"pop_cntrct_box_in\">";
 					if(data.ATT_FILE_NAME != null) {
-					html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
+						html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
 						html += "	<input type=\"button\" id=\"fileDelete\" value=\"삭제\" />";
 					}
 					html += "	<input type=\"text\" id=\"popFileName\" readonly=\"readonly\" />                 ";
