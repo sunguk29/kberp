@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP - 고객센터 > 이벤트 > 진행중 이벤트 등록 페이지</title>
+<title>카카오뱅크 ERP - 고객센터 > 이벤트 > 진행중 이벤트 수정 페이지</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <link rel="stylesheet" type="text/css" href="resources/css/CS/content.css" />
@@ -121,12 +121,12 @@ $(document).ready(function() {
 		$("#backForm").submit();
 	});
 	
-	$("#writeBtn").on("click", function() {
+	$("#updateBtn").on("click", function() {
 		makePopup({
 			bg : false,
 			bgClose : false,
-			title : "등록",
-			contents : "게시글을 등록하시겠습니까?",
+			title : "수정",
+			contents : "게시글을 수정하시겠습니까?",
 			draggable : true,
 			buttons : [{
 				name : "예",
@@ -139,26 +139,26 @@ $(document).ready(function() {
 						alert("내용을 입력하세요.");
 						$("#cont").focus();
 					} else {
-						var writeForm = $("#writeForm");
+						var updateForm = $("#updateForm");
 						
-						writeForm.ajaxForm({
+						updateForm.ajaxForm({
 							success : function(res) {
 								// 물리파일명 보관
 								if(res.fileName.length > 0) {
 									$("#event_attFile").val(res.fileName[0]);
 								}
 								
-								// 글 저장
-								var params =  $("#writeForm").serialize();
+								// 글 수정
+								var params =  $("#updateForm").serialize();
 						
 								$.ajax({
 									type : "post",
-									url : "eventAction/insert",
+									url : "eventAction/update",
 									dataType : "json",
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
-											location.href = "prgrsEvent";
+											$("#backForm").submit();
 										} else {
 											alert("작성중 문제가 발생하였습니다.");
 										}
@@ -173,7 +173,7 @@ $(document).ready(function() {
 							} // error end
 						});// ajaxForm end
 						
-						writeForm.submit(); // ajaxForm 실행
+						updateForm.submit(); // ajaxForm 실행
 							closePopup();
 						} // else end
 				}
@@ -217,16 +217,16 @@ function checkEmpty(sel) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">진행중 이벤트 등록</div>
+			<div class="page_title_text">진행중 이벤트 수정</div>
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="container">
-				<form action="fileUploadAjax" id="writeForm" method="post"
+				<form action="fileUploadAjax" id="updateForm" method="post"
 							  enctype="multipart/form-data">
-				<input type="hidden" name="no" value="${param.no}" />
+							<input type="hidden" name="no" value="${param.no}" />
 							<input type="hidden" id="emp_num" name="emp_num" value="${sEmpNum}" />
 							<!--<input type="hidden" id="emp_name" name="emp_name" value="${data.EMP_NAME}" />-->
 							<input type="hidden" id="top" name="top" value="${param.top}"/>
@@ -235,9 +235,9 @@ function checkEmpty(sel) {
 				<p id="emp_line">작성자</p>
 				<input type="text" id="emp_name" value="${sEmpName}">
 				<p id="subject_line">제목</p>
-				<input type="text" name="title" id="title" placeholder="제목을 입력하세요">
+				<input type="text" name="title" id="title" value="${data.EVENT_TITLE}">
 				<p id="content_line">글내용</p>
-				<textarea name="cont" id="cont" placeholder="내용을 입력하세요" ></textarea>
+				<textarea name="cont" id="cont">${data.EVENT_CONT}</textarea>
 				<div class="add_file">
 						<input type="file" name="event_file" />
 						<input type="text" id="event_att" name="event_att" readonly="readonly"/>
@@ -245,7 +245,7 @@ function checkEmpty(sel) {
 				</div>
 				<!--<div><input type="file" value="첨부파일" id="btn_file"></div>-->
 				<div class="eventAdd_btn">
-					<div class="cmn_btn_mr" id="writeBtn">등록</div>
+					<div class="cmn_btn_mr" id="updateBtn">수정</div>
 					<div class="cmn_btn_mr" id="cancelBtn">취소</div>
 				</div>
 				</form>
