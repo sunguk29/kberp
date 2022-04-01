@@ -1453,6 +1453,10 @@ function uploadName(e) {
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="searchDate" value="${param.searchDate}" />
 	<input type="hidden" name="searchDate2" value="${param.searchDate2}" />
+	<input type="hidden" name="srchType" value="${param.srchType}" />
+	<input type="hidden" name="psNum" value="${param.psNum}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+	<input type="hidden" name="listSort" value="${param.listSort}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">

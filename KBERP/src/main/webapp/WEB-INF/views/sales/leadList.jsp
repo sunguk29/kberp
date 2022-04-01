@@ -184,20 +184,25 @@
 	border-radius: 5px;
 	border: none;
 }
-
+.sts_list_on {
+	display: inline-block;
+	vertical-align: middle;
+	width: 150px;
+	margin: 0 30px;
+	padding: 8px 5px;
+	font-size: 10pt;
+	text-align: center;
+	background-color: #F2B705;
+	border-radius: 5px;
+	border: none;
+}
 .sts_list:hover {
 	font-weight: bold;
 	cursor: pointer;
 	background-color: #F2B705;
 }
-
 .sts_list:active {
-   width: 150px;
-   margin: 0 30px;
-   padding: 8px 5px;
    background-color: #F2CB05;
-   cursor: pointer;
-   font-weight: bold;
 }
 .tLine{
 	background-color: #4B94F2;
@@ -385,9 +390,15 @@ $(document).ready(function() {
 		$("#oldPsNum").val("0");
 		$("#oldSrchType").val("0");
 	}
-
+	
+	if('${param.listSort}' != '') {
+		$("#listSort").val('${param.listSort}');
+	} else {
+		$("#oldListSort").val("0");
+	}
 	reloadList();
 	
+	// 검색버튼
 	$("#searchBtn").on("click", function() {
 		$("#page").val("1");
 		
@@ -395,10 +406,22 @@ $(document).ready(function() {
 		$("#oldSrchType").val($("#srchType").val());
 		$("#oldSearchTxt").val($("#searchTxt").val());
 		$("#oldMngEmp").val($("#mngEmp").val());
+		$("#oldListSort").val($("#listSort").val());
 		
 		reloadList();
 	});
-	
+	// 정렬버튼
+	$("#soltBtn").on("click", function() {
+		$("#page").val("1");
+		
+		$("#oldPsNum").val($("#psNum").val());
+		$("#oldSrchType").val($("#srchType").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
+		$("#oldMngEmp").val($("#mngEmp").val());
+		$("#oldListSort").val($("#listSort").val());
+		
+		reloadList();
+	});
 	//리드 상세보기
 	$(".list_table").on("click", ".leadName", function() {
 		$("#leadNum").val($(this).attr("leadNum"));
@@ -407,6 +430,7 @@ $(document).ready(function() {
 		$("#srchType").val($("#oldSrchType").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
 		$("#mngEmp").val($("#oldMngEmp").val());
+		$("#listSort").val($("#oldListSort").val());
 		
 		$("#actionForm").attr("action", "leadCont");
 		$("#actionForm").submit();
@@ -421,12 +445,21 @@ $(document).ready(function() {
  		$("#srchType").val($("#oldSrchType").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
 		$("#mngEmp").val($("#oldMngEmp").val()); 
+		$("#listSort").val($("#oldListSort").val());
+		
 		console.log(oldPsNum);
 		
 		reloadList();
 	});
 	
 	$(".sts").on("click", ".sts_list", function() {
+		if($(this).attr("num") != "0") {
+			$(".sts").children(".sts_list_on").attr("class", "sts_list");
+			$(this).removeClass();
+			$(this).addClass("sts_list_on");	
+		} else {
+			$(".sts").children(".sts_list_on").attr("class", "sts_list");
+		}
 		
 		$("#page").val("1");
 		
@@ -461,9 +494,8 @@ function reloadList() {
 		dataType : "json",
 		data : params,
 		success : function(res) {
-			drawList(res.list);
 			drawTotal(res.cnt);
-			drawCnt(res.listCnt, res.ongoingCnt, res.rcgntnCnt, res.failCnt);
+			drawList(res.list);
 			drawPaging(res.pb, ".pgn_area");
 			console.log(res.list);
 		},
@@ -664,18 +696,6 @@ function mngrDrawList(list) {
 	
 }
 /****************** 담당자 조회 팝업 끝 *********************/
-/* ========================== 진행상태 건수 표시 ========================== */
-function drawCnt(listCnt, ongoingCnt,rcgntnCnt, failCnt) {
-	var html = "";
-	
-	html += "<input type=\"button\" class=\"sts_list\" num=\"0\" value=\"전체 : "+ listCnt + "건\">";
-	html += "<input type=\"button\" class=\"sts_list\" num=\"1\" value=\"진행중 : "+ ongoingCnt + "건\">";
-	html += "<input type=\"button\" class=\"sts_list\" num=\"2\" value=\"영업기회 전환 : "+ rcgntnCnt + "건\">";
-	html += "<input type=\"button\" class=\"sts_list\" num=\"3\" value=\"실패 : "+ failCnt + "건\">";
-
-	$(".sts").html(html);
-}
-
 function drawTotal(cnt) {
 	var html = "";
 	
@@ -721,6 +741,7 @@ function drawPaging(pb, sel) {
 <input type="hidden" id="oldSrchType" value="${param.srchType}" />
 <input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
 <input type="hidden" id="oldMngEmp" value="${param.mngEmp}" />
+<input type="hidden" id="oldListSort" value="${param.listSort}" />
 <!-- 데이터유지 끝 -->
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -748,7 +769,12 @@ function drawPaging(pb, sel) {
 					<!-- 검색영역 -->
 					<div class="bodyWrap">
 						<!-- sts : 상품현황 -->
-						<div class="sts"></div>
+						<div class="sts">
+							<div class="sts_list" num="0">전체 : ${listCnt}건</div>
+							<div class="sts_list" num="1">진행중 : ${ongoingCnt}건</div>
+							<div class="sts_list" num="2">영업기회 전환 : ${rcgntnCnt}건</div>
+							<div class="sts_list" num="3">실패 : ${failCnt}건</div>
+						</div>
 						<div class="tLine"></div>
 						<!-- class="sts" end -->
 
@@ -860,7 +886,7 @@ function drawPaging(pb, sel) {
 										<span class="srch_name">정렬</span>
 									</td>
 									<td>
-										<select>
+										<select id="listSort" name="listSort">
 											<option value="0">선택안함</option>
 											<option value="1">등록일</option>
 											<option value="2">리드명</option>
@@ -868,7 +894,7 @@ function drawPaging(pb, sel) {
 										</select>
 									</td>
 									<td>
-										<img class="asc_btn cmn_btn" alt="등록버튼" src="resources/images/sales/asc.png" />
+										<img class="asc_btn cmn_btn" id="soltBtn" alt="정렬버튼" src="resources/images/sales/asc.png" />
 									</td>
 									<td colspan="7"></td>
 								</tr>

@@ -14,7 +14,6 @@
 		                            ON L.CLNT_NUM = EC.CLNT_NUM
 		                    INNER JOIN CLNT_CMPNY CC
 		                            ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
-		        AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{searchDate} AND #{searchDate2}
 				<choose>
 					<when test="psNum != 0" > <!-- 선택안함 : 0 이 아니면 해당 번호 목록으로 검색 -->
 						AND L.PRGRS_STS_NUM = #{psNum}
@@ -48,6 +47,17 @@
 					</choose>
 				</if> ) LL
 		WHERE LL.RNUM BETWEEN #{startCount} AND #{endCount}
+		<choose>
+			<when test="listSort == 1">
+				ORDER BY LL.RGSTRTN_DATE DESC
+			</when>
+			<when test="listSort == 2">
+				ORDER BY LL.LEAD_NAME ASC
+			</when>
+			<when test="listSort == 3">
+				ORDER BY LL.CLNT_CMPNY_NAME ASC
+			</when>
+		</choose>
 	</select>
 	
 	<select id="getLeadCnt" resultType="Integer" parameterType="hashmap">
@@ -59,7 +69,7 @@
 		            INNER JOIN CLNT_CMPNY CC
 		                    ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
 		WHERE 1 = 1
-		AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{searchDate} AND #{searchDate2}
+		AND L.DEL_CHECK IS NULL
 			<choose>
 				<when test="psNum != 0"> 
 					AND PRGRS_STS_NUM = #{psNum}
@@ -71,75 +81,55 @@
 				</when>
 			</choose>
 			<if test="searchTxt != null and searchTxt != ''">
-					<choose>
-						<when test="srchType == 0">
-							AND (L.LEAD_NAME LIKE '%' || #{searchTxt} || '%' OR 
-                                 CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%' OR
-                                 EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%' OR 
-                                 L.LEAD_NUM LIKE '%' || #{searchTxt} || '%')
-						</when>
-						<when test="srchType == 1">
-							AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
-						</when>
-						<when test="srchType == 2">
-							AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
-						</when>
-						<when test="srchType == 3">
-							AND EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
-						</when>
-						<when test="srchType == 4">
-							AND L.LEAD_NUM LIKE '%' || #{searchTxt} || '%'
-						</when>			
-					</choose>
+				<choose>
+					<when test="srchType == 0">
+						AND (L.LEAD_NAME LIKE '%' || #{searchTxt} || '%' OR 
+                             CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%' OR
+                             EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%' OR 
+                             L.LEAD_NUM LIKE '%' || #{searchTxt} || '%')
+					</when>
+					<when test="srchType == 1">
+						AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
+					</when>
+					<when test="srchType == 2">
+						AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+					</when>
+					<when test="srchType == 3">
+						AND EC.CLNT_NAME LIKE '%' || #{searchTxt} || '%'
+					</when>
+					<when test="srchType == 4">
+						AND L.LEAD_NUM LIKE '%' || #{searchTxt} || '%'
+					</when>			
+				</choose>
 			</if>
 	</select>
 	
 	<select id="getListCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
-		FROM LEAD L LEFT OUTER JOIN EMP E
-		                   		 ON L.MNGR_EMP_NUM = E.EMP_NUM
-		            INNER JOIN ENTRPRS_CLNT EC
-		                    ON L.CLNT_NUM = EC.CLNT_NUM
-		            INNER JOIN CLNT_CMPNY CC
-		                    ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM 
+		FROM LEAD 
 		WHERE 1 = 1
-		AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{searchDate} AND #{searchDate2}
+		AND DEL_CHECK IS NULL
 	</select>
 	
 	<select id="getOngoingCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
-		FROM LEAD L LEFT OUTER JOIN EMP E
-		                         ON L.MNGR_EMP_NUM = E.EMP_NUM
-		            INNER JOIN ENTRPRS_CLNT EC
-		                    ON L.CLNT_NUM = EC.CLNT_NUM
-		            INNER JOIN CLNT_CMPNY CC
-		                    ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
-		WHERE L.PRGRS_STS_NUM = 1
-		AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{searchDate} AND #{searchDate2}
+		FROM LEAD 
+		WHERE DEL_CHECK IS NULL
+		AND PRGRS_STS_NUM = 1
 	</select>
 	
 	<select id="getRcgntnCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
-		FROM LEAD L LEFT OUTER JOIN EMP E
-		                         ON L.MNGR_EMP_NUM = E.EMP_NUM
-		            INNER JOIN ENTRPRS_CLNT EC
-		                    ON L.CLNT_NUM = EC.CLNT_NUM
-		            INNER JOIN CLNT_CMPNY CC
-		                    ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
-		WHERE L.PRGRS_STS_NUM = 2
-		AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{searchDate} AND #{searchDate2}
+		FROM LEAD 
+		WHERE DEL_CHECK IS NULL
+		AND PRGRS_STS_NUM = 2
 	</select>
 	
 	<select id="getFailCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
-		FROM LEAD L LEFT OUTER JOIN EMP E
-		                         ON L.MNGR_EMP_NUM = E.EMP_NUM
-		            INNER JOIN ENTRPRS_CLNT EC
-		                    ON L.CLNT_NUM = EC.CLNT_NUM
-		            INNER JOIN CLNT_CMPNY CC
-		                    ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
-		WHERE L.PRGRS_STS_NUM = 3
-		AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{searchDate} AND #{searchDate2}
+		FROM LEAD 
+		WHERE DEL_CHECK IS NULL
+		AND PRGRS_STS_NUM = 2
 	</select>
 	
 <!-- ******************************* 담당자 조회 팝업 리스트 ******************************* -->	
