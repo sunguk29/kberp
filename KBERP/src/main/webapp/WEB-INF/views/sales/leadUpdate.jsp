@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오 ERP - 리드등록</title>
+<title>카카오 ERP - 리드수정</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -696,25 +696,25 @@ $(document).ready(function() {
 							buttons : {
 								name : "확인",
 								func:function() {
-									var writeForm = $("#writeForm");
+									var updateForm = $("#updateForm");
 									
-									writeForm.ajaxForm({
+									updateForm.ajaxForm({
 										success : function(res) {
 											// 물리파일명 보관
 											if(res.fileName.length > 0) {
 												$("#attFile").val(res.fileName[0]);										
 											}
 											// 글 저장
-											var params = $("#writeForm").serialize();
+											var params = $("#updateForm").serialize();
 									
 											$.ajax({
 												type : "post", 
-												url : "leadAction/insert", 
+												url : "leadAction/update", 
 												dataType : "json", 
 												data : params, 
 												success : function(res) { 
 													if(res.res == "success") {
-														location.href = "leadList";
+														$("#listForm").submit();
 													} else {
 														alert("작성중 문제가 발생하였습니다.");
 													}
@@ -728,7 +728,7 @@ $(document).ready(function() {
 											console.log(req.responseText);
 										}
 									});	
-									writeForm.submit(); // ajaxForm 실행							
+									updateForm.submit(); // ajaxForm 실행							
 								} // 확인 func end
 							} // buttons1 end
 						}) // popup end
@@ -950,6 +950,10 @@ $(document).ready(function() {
 			}
 		});
 	});
+	
+	$("#ccGrade").val(${data.GRADE_NUM}).prop("selected", this.selected);
+	$("#rp").val(${data.RCGNTN_PATH_NUM}).prop("selected", this.selected);
+	$("#psNum").val(${data.PRGRS_STS_NUM}).prop("selected", this.selected);
 });
 /* ******************************************* 고객 추가 팝업 ******************************************* */
 function ecAddPopup() {
@@ -1443,7 +1447,8 @@ function uploadName(e) {
 </script>
 </head>
 <body>
-<form action="leadList" id="listForm" method="post">
+<form action="leadCont" id="listForm" method="post">
+	<input type="hidden" name="leadNum" value="${param.leadNum}" />	
 	<input type="hidden" name="page" value="${param.page}" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
@@ -1462,7 +1467,7 @@ function uploadName(e) {
 	</c:import>
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">리드 등록</div>
+			<div class="page_title_text">리드 수정</div>
 			<!-- 검색영역 선택적 사항 -->
 			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
 			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="writeBtn"/>
@@ -1471,7 +1476,8 @@ function uploadName(e) {
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
-		<form action="fileUploadAjax" id="writeForm" method="post" enctype="multipart/form-data">
+		<form action="fileUploadAjax" id="updateForm" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="leadNum" value="${param.leadNum}" />	
 			<input type="hidden" name="page" value="${param.page}" />
 			<input type="hidden" name="top" value="${param.top}" />
 			<input type="hidden" name="menuNum" value="${param.menuNum}" />
@@ -1487,20 +1493,20 @@ function uploadName(e) {
 							<tbody>
 								<tr>
 									<td><input type="button" class="btn" value="리드명 *" readonly="readonly"/></td>
-									<td><input type="text" class="txt" id="leadName" name="leadName" /></td>
+									<td><input type="text" class="txt" id="leadName" name="leadName" value="${data.LEAD_NAME}" /></td>
 								</tr>
 								<tr>
 									<td><input type="button" class="btn" value="고객명 *" readonly="readonly"/></td>
 									<td>
-										<input type="text" class="txt" id="clntName" name="clntName" />
-										<input type="hidden" id="clntNum" name="clntNum" />
+										<input type="text" class="txt" id="clntName" name="clntName" value="${data.CLNT_NAME}"/>
+										<input type="hidden" id="clntNum" name="clntNum" value="${data.CLNT_NUM}"/>
 										<img class="btnImg_in" id="clntIcon" alt="팝업" src="resources/images/sales/popup.png" />
 									</td>
 								</tr>
 								<tr>
 									<td><input type="button" class="btn" value="고객사 *" readonly="readonly"/></td>
 									<td>
-										<input type="text" class="txt" id="ccName" name="ccName" />
+										<input type="text" class="txt" id="ccName" name="ccName" value="${data.CLNT_CMPNY_NAME}" />
 										<input type="hidden" id="ccNum" name="ccNum" />
 										<img class="btnImg_in" id="ccIcon" alt="팝업" src="resources/images/sales/popup.png" />
 									</td>
@@ -1536,11 +1542,22 @@ function uploadName(e) {
 								<tr>
 									<td><input type="button" class="btn" value="담당자 *" readonly="readonly"/></td>
 									<td>
-										<input type="text" class="txt" id="mngEmp" name="mngEmp" />
-										<input type="hidden" id="mngNum" name="mngNum" />
+										<input type="text" class="txt" id="mngEmp" name="mngEmp" value="${data.EMP_NAME}" />
+										<input type="hidden" id="mngNum" name="mngNum" value="${data.MNGR_EMP_NUM}" />
 										<img class="btnImg_in" id="userIcon" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
 									</td>
-								</tr>										
+								</tr>
+								<tr>
+									<td><input type="button" class="btn" value="진행상태 *" readonly="readonly"/></td>
+									<td>
+										<select class="txt_in" id="psNum" name="psNum">
+											<option value="0">선택안함</option>
+											<option value="1">진행중</option>
+											<option value="2">종료(영업기회 전환)</option>
+											<option value="3">종료(영업기회 실패)</option>
+										</select>
+									</td>
+								</tr>					
 							</tbody>
 						</table>
 						<!-- 첨부자료 -->

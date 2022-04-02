@@ -212,10 +212,10 @@ public class LeadController {
 				iCommonService.insertData("lead.getLeadAttAdd", params); // 리드 등록 첨부파일
 				break;
 			case "ecInsert" :
-				iCommonService.insertData("lead.getClntAdd", params); 		
+				iCommonService.insertData("lead.getClntAdd", params); // 리드 등록에서 고객추가		
 				break;	
 			case "update" :
-				
+				iCommonService.updateData("lead.getLeadUpdate", params); // 리드 수정
 				break;
 			case "delete" :
 				
@@ -258,6 +258,19 @@ public class LeadController {
 		mav.addObject("data", data);
 		
 		mav.setViewName("sales/leadCont");
+		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/leadUpdate")
+	public ModelAndView leadUpdate(@RequestParam HashMap<String, String> params, 
+								 ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("lead.getLeadCont", params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("sales/leadUpdate");
 		
 		return mav;
 	}

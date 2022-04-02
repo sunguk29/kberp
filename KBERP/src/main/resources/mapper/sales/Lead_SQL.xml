@@ -131,7 +131,7 @@
 		SELECT COUNT(*) AS CNT
 		FROM LEAD 
 		WHERE DEL_CHECK IS NULL
-		AND PRGRS_STS_NUM = 2
+		AND PRGRS_STS_NUM = 3
 	</select>
 	
 <!-- ******************************* 담당자 조회 팝업 리스트 ******************************* -->	
@@ -284,7 +284,8 @@
 	</insert> 		
 <!-- ******************************* 리드 상세 ******************************* -->		
 	<select id="getLeadCont" resultType="hashmap" parameterType="hashmap">	
-		SELECT LD.LEAD_NAME, EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, CC.GRADE_NUM, LD.RCGNTN_PATH_NUM, E.EMP_NAME
+		SELECT LD.LEAD_NUM, LD.LEAD_NAME, EC.CLNT_NUM, EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, CC.GRADE_NUM, LD.RCGNTN_PATH_NUM, E.EMP_NAME, LD.PRGRS_STS_NUM,
+			   LD.MNGR_EMP_NUM
 		FROM LEAD LD INNER JOIN ENTRPRS_CLNT EC
 		                     ON LD.CLNT_NUM = EC.CLNT_NUM
 		             INNER JOIN CLNT_CMPNY CC
@@ -293,4 +294,13 @@
 		                     ON LD.MNGR_EMP_NUM = E.EMP_NUM
 		WHERE LD.LEAD_NUM = #{leadNum}             
 	</select>
+<!-- ******************************* 리드 수정 ******************************* -->		
+	<update id="getLeadUpdate" parameterType="hashmap">
+		UPDATE LEAD SET LEAD_NAME = #{leadName},
+                MNGR_EMP_NUM = #{mngNum},
+                CLNT_NUM = #{clntNum},
+                RCGNTN_PATH_NUM =   #{rp},
+                PRGRS_STS_NUM =  #{psNum}
+		WHERE LEAD_NUM = #{leadNum}
+	</update>
 </mapper>
