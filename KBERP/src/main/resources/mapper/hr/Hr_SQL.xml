@@ -113,5 +113,17 @@
 		INSERT INTO DEPT (DEPT_NUM, DEPT_NAME, SUPER_DEPT_NUM, DEPT_LEVEL)
 		VALUES( DEPT_SEQ.NEXTVAL, #{deptName}, #{sdeptNum}, #{deptLevel})
 	</insert>
+	
+	<update id="deleteDept" parameterType="hashmap">
+		UPDATE DEPT SET DEL_CHECK = '0'
+		WHERE DEPT_NUM = #{sdeptNum}
+	</update>
+	
+	<update id="updateDept" parameterType="hashmap">
+		UPDATE DEPT SET DEPT_NAME = #{deptName}, SUPER_DEPT_NUM = #{superDeptNum} 
+		WHERE DEPT_NUM = #{sdeptNum};
+	</update>
+	
+	
 
 </mapper>
