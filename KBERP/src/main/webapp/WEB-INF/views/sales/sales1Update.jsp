@@ -481,7 +481,6 @@ textarea {
 	border-radius: 7px;
 	margin-bottom: 18px;
 	margin-left: 45px;
-    padding: 0 15px;
     font-size: 10pt;
 }
 
@@ -565,7 +564,17 @@ $(document).ready(function() {
 	
 	$("#fileDelete").on("click", function() {
 		$("#file_name").remove();
-		s(this).remove();
+		$(this).remove();
+		
+		var html = "";
+		
+		html += "<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
+		
+		$("#uploadBtn").html(html);
+	});
+	
+	$(".adc_txt").on("click", ".aff_btn", function() {
+		$("#att").click();
 	});
 	
 	// 저장 버튼
@@ -1071,9 +1080,12 @@ function uploadName(e) {
 						<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
 						<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
 						<div class="spc">
-							<div class="adc_txt">
-								첨부자료
-								<img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
+							<div class="adc_txt"> 첨부자료
+								<span id="uploadBtn">
+									<c:if test="${empty data.ATT_FILE_NAME}">
+										<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" />
+									</c:if>
+								</span>
 							</div>
 							<div class="cntrct_box_in">
 							<span id="file_name">${fileName}</span>
@@ -1082,11 +1094,11 @@ function uploadName(e) {
 								</c:if>
 									<input type="text" id="fileName" readonly="readonly" />
 							</div>
-						<input type=file id="att" name="att" />
+						<input type=file id="att" name="att" onchange="uploadName(this)" />
 						<input type="hidden" id="attFile" name="attFile" />
 						</div>
 						<!-- 의견 -->
-						<div class="mgtop"></div>
+<!-- 						<div class="mgtop"></div>
 						<div class="bot_title">
 							<h3>의견(7)</h3>
 						</div>
@@ -1139,7 +1151,7 @@ function uploadName(e) {
 							<textarea></textarea>
 							<div class="cmn_btn subm">등록</div>
 						</div>
-						<!-- 히스토리 -->
+						히스토리
 						<div class="mgtop"></div>
 						<div class="bot_title">
 							<h3>
@@ -1176,7 +1188,7 @@ function uploadName(e) {
 							</div>
 						</div>
 						<hr class="hr_bot" color="white" width="925px">
-						<hr class="hr_bot" color="white" width="925px">
+						<hr class="hr_bot" color="white" width="925px"> -->
 					</form>
 					<!-- 끝 -->
 				</div>

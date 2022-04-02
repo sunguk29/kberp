@@ -603,7 +603,6 @@ textarea {
 [href] {
 	color: black;
 	text-decoration: none;
-	
 }
 #fileName, #popFileName {
 	border: hidden;

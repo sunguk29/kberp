@@ -276,6 +276,7 @@ hr { /* 구분선 */
 	border-radius: 7px;
 	margin-bottom: 18px;
 	margin-left: 45px;
+	font-size: 10pt
 }
 
 .txt_area {
@@ -364,6 +365,10 @@ hr { /* 구분선 */
 #fileName {
 	border: hidden;
 	outline: none;
+}
+[href] {
+	color: black;
+	text-decoration: none;
 }
 </style>
 <script type="text/javascript">
@@ -482,8 +487,6 @@ $(document).ready(function() {
 		}
 	});
 	
-	
-
 }); // JS end
 
 function uploadName(e) {
@@ -747,13 +750,15 @@ function uploadName(e) {
 						</table>
 						<br /> <br />
 						<!-- 첨부자료  -->
+						<c:set var="fileLength" value="${fn:length(bsns.ATT_FILE_NAME)}"></c:set>
+						<c:set var="fileName" value="${fn:substring(bsns.ATT_FILE_NAME, 20, fileLength)}"></c:set>
 						<div class="spc">
 							<div class="adc_txt">
-								첨부자료 (0) <img class="plus_btn" src="resources/images/sales/plus.png" border='0' />
+								첨부파일
 							</div>
-							<div class="cntrct_box_in"></div>
-							<input type=file id="att" name="att" />
-							<input type="hidden" id="attFile" name="attFile" />
+							<div class="cntrct_box_in">
+								<a href="resources/upload/${bsns.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
+							</div>
 						</div>
 						<!-- 끝 -->
 					</div>
