@@ -317,7 +317,6 @@ $(document).ready(function() {
 		html += "		<div class=\"add_orgnzt_text\">부서명</div>             ";
 		html += "		<input type=\"text\" id=\"deptInput\" />";
 		html += "	</div>                                                      ";
-		console.log("deptName : " + $(deptName).val())
 		
 		makePopup({
 			bg : false,
@@ -358,10 +357,83 @@ $(document).ready(function() {
 		});
 	});
 	
+	// 조직수정
+	$("#orgnzt_mdfy_btn").on("click", function() {
+		if($(sdeptNum).val() == null || $(sdeptNum).val() == ''){
+			 makeAlert("알림", "수정할 부서를 선택하세요."); 
+		} else {
+			$.ajax({
+			       type : "post",
+			       url : "orgnztChartAjax",
+			       dataType : "json",
+			       success : function(res) {
+						var html = "";
+						
+						html += "	<div class=\"super_orgnzt_area\">                           ";
+						html += "		<div class=\"super_orgnzt_text\">상위부서</div>         ";
+						html += "		<select id=\"superDeptNumInput\">                                           ";
+					    html += "		     <option >카카오뱅크</option> ";
+								    	    for(var data of res.dept ) {                         
+					    html += "		     <option value=" + data.DEPT_NUM + ">" + data.DEPT_NAME + "</option> ";
+								    	    }
+						html += "		</select>                                           ";
+						html += "   </div>                                                      ";
+						html += "	<div class=\"add_orgnzt_area\">                             ";
+						html += "		<div class=\"add_orgnzt_text\">부서명</div>             ";
+						html += "		<input type=\"text\" id=\"deptInput\" value=" +$(dname).val() + " />";
+						html += "	</div>                                                      ";
+						
+						makePopup({
+							bg : false,
+							bgClose : false,
+							title : "삭제",
+							contents : html, 
+							draggable : true,
+							buttons : [{
+								name : "확인",
+								func:function() {
+									if (checkEmpty("#deptInput")) {
+										alert("부서명을 입력하세요.");
+										$("#deptInput").focus();
+									} else {
+									$("#deptName").val($("#deptInput").val());
+									$("#superDeptNum").val($("#superDeptNumInput").val());
+									var params = $("#actionForm").serialize();
+									$.ajax({
+									       type : "post",
+									       url : "orgnztChartActionAjax/update",
+									       data : params,
+									       dataType : "json",
+									       success : function(res) {
+											   closePopup();
+											   makeAlert("알림", "부서가 수정되었습니다.");
+											   /* window.opener.location.reload();
+											   window.close(); 알럿창 닫기 새로고침 해야함 */
+									       }, 
+									       error : function(req) {
+									          console.log(req.responseText);
+									       }
+									    });
+									}
+									console.log("삭제!");
+								}
+							}, {
+								name : "취소"
+							}]
+						});
+			       },
+			       error : function(req) {
+			          console.log(req.responseText);
+			       }
+			    });
+		}
+		
+	});
+	
 	// 조직삭제
 	$("#orgnzt_del_btn").on("click", function() {
 		if($(sdeptNum).val() == null || $(sdeptNum).val() == ''){
-			 makeAlert("알림", "삭제할 부서를 선택하세요."); 
+			 makeAlert("알림", "삭제하실 부서를 선택하세요."); 
 		} else {
 			var html = "";
 			
@@ -387,7 +459,7 @@ $(document).ready(function() {
 						       dataType : "json",
 						       success : function(res) {
 								   closePopup();
-								   makeAlert("알림", "부서를 삭제했습니다.");
+								   makeAlert("알림", "부서가 삭제되었습니다.");
 								   /* window.opener.location.reload();
 								   window.close(); 알럿창 닫기 새로고침 해야함 */
 						       }, 
@@ -399,11 +471,12 @@ $(document).ready(function() {
 					}
 				}, {
 					name : "취소"
-			}]
-		});
-	}
+				}]
+			});
+		}
 		
-});
+	});
+	
 	// 조직도 토글
 	$(".orgnzt_area").on("click", ".orgnzt_depth1, .orgnzt_depth2, .orgnzt_depth3", function(e) {
 		$("#sdeptNum").val($(this).attr("sdeptNum"));
@@ -529,6 +602,7 @@ function drawTree3(emp) {
 		<input type="hidden" id="sdeptNum" name="sdeptNum" value="${sdeptNum}" /> 
 		<input type="hidden" id="deptName" name="deptName" /> 
 		<input type="hidden" id="deptLevel" name="deptLevel" value="${deptLevel}" /> 
+		<input type="hidden" id="superDeptNum" name="superDeptNum"  /> 
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
