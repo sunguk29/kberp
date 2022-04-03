@@ -324,6 +324,11 @@
 		VALUES ( #{salesNum}, #{sgstnloanCauseNum}, #{sgstnLoanScale}, #{sgstnloanType}, #{sgstnloanTime} || '-01', #{sgstnRdmptnTime}  || '-01' )
 	</insert>
 	
+	<!-- 제안 대출 상세정보tab 견적으로 가져오기 -->
+	<select id="getSales3BringLoan" resultType="hashmap" parameterType="hashmap">
+	
+	</select>
+	
 	<!-- 제안 고객사 상세정보tab -->
 	<insert  id="sales2AddClntCmpny" parameterType="hashmap">
 		INSERT INTO SGSTN_CLNT_CMPNY_DTL_INFO ( SALES_NUM, SGSTN_TOTAL_AMNT, SGSTN_DEBT_AMNT,
@@ -331,17 +336,34 @@
 		VALUES ( #{salesNum}, #{sgstnTotalAmnt}, #{sgstnDebtAmnt}, #{sgstnAvgRvnAmnt}, #{sgstnEmpCount} )
 	</insert>
 	
+	<!-- 제안 고객사 상세정보tab 견적으로 가져오기 -->
+	<select id="getSales3BringClntCmpny" resultType="hashmap" parameterType="hashmap">
+	
+	</select>
+	
+	
 	<!-- 제안 상세정보tab -->
 	<insert  id="sales2AddDtlInfo" parameterType="hashmap">
 		INSERT INTO SGSTN_DTL_INFO ( SALES_NUM, DTL_CONT, RMRKS, PRCD_DATE )
 		VALUES ( #{salesNum}, #{dtlCont}, #{rmrks}, SYSDATE )
 	</insert>
 	
+	<!-- 제안 상세정보tab 견적으로 가져오기 -->
+	<select id="getSales3BringDtlInfo" resultType="hashmap" parameterType="hashmap">
+	
+	</select>
+	
 	<!-- 제안 상세정보 첨부파일tab -->
 	<insert  id="sales2AddDtlInfoAtt" parameterType="hashmap">
 		INSERT INTO SGSTN_ATT_FILE ( ATT_FILE_NUM, SALES_NUM, ATT_FILE_NAME )
 		VALUES ( SGSTN_ATT_FILE_SEQ.NEXTVAL, #{salesNum}, #{attFile} )
 	</insert>
+	
+	<!-- 제안 상세정보 첨부파일tab 견적으로 가져오기 -->
+	<select id="getSales3BringDtlInfoAtt" resultType="hashmap" parameterType="hashmap">
+	
+	</select>
+	
 	
 		<!-- 제안 상세보기 -->
 	<select id="getSales2" resultType="hashmap" parameterType="hashmap">

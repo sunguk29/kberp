@@ -270,19 +270,31 @@ public class SalesMngController {
 		return mav;
 	}
 	
-	// sales3QtnReg : 제안 등록
+	// sales3QtnReg : 견적 등록
 	@RequestMapping(value = "/sales3QtnReg")
 	public ModelAndView sales3QtnReg(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
 		
-		//조회
+		// 영업기회 조회
 		HashMap<String, String> sales1DataLead = iCommonService.getData("salesMng.getSales2BringLead", params);
 		HashMap<String, String> sales1DataLoan = iCommonService.getData("salesMng.getSales2BringLoan", params);
 		HashMap<String, String> sales1DataBsns = iCommonService.getData("salesMng.getSales2BringBsns", params);
+
+		// 제안 조회
+		//HashMap<String, String> sales2DataLoan = iCommonService.getData("salesMng.getSales3BringLoan", params);
+	    //HashMap<String, String> sales2DataClntCmpny = iCommonService.getData("salesMng.getSales3BringClntCmpny", params);
+		//HashMap<String, String> sales2DataDtlInfo = iCommonService.getData("salesMng.getSales3BringDtlInfo", params);
+		//HashMap<String, String> sales2DataDtlInfoAtt = iCommonService.getData("salesMng.getSales3BringDtlInfoAtt", params); 이거 오류남...
 		
 		mav.addObject("lead", sales1DataLead);
 		mav.addObject("loan", sales1DataLoan);
 		mav.addObject("bsns", sales1DataBsns);
+
+		
+		//mav.addObject("loan2", sales2DataLoan);
+		//mav.addObject("cc2", sales2DataClntCmpny);
+		//mav.addObject("dtl2", sales2DataDtlInfo);
+		
 		
 		mav.setViewName("sales/sales3QtnReg");
 		

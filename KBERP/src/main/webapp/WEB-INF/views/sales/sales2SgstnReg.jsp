@@ -535,6 +535,7 @@ function uploadName(e) {
 					<div class="bodyWrap">
 						<!-- 시작 -->
 
+						<div class="page_cont_title_text">기본정보</div>
 						<hr class="hr_width">
 						<table>
 							<colgroup>

@@ -441,7 +441,7 @@ hr { /* 구분선 */
 	vertical-align: middle;
 	width: 48px;
 	height: 48px;
-	background-image: url("../../images/sales/hands.png");
+	background-image: url("resources/images/sales/hands.png");
 	background-size: 48px 48px;
 	margin-right: 10px;
 }
@@ -533,7 +533,7 @@ textarea {
 	vertical-align: middle;
 	width: 15px;
 	height: 15px;
-	background-image: url("../../images/sales/downarrow.png");
+	background-image: url("resources/images/sales/downarrow.png");
 	background-size: 15px 15px;
 	float: right;
 	margin-top: 15px;
@@ -565,7 +565,7 @@ pre{
 	vertical-align: middle;
 	width: 18px;
 	height: 18px;
-	background-image: url("../../images/sales/plus.png");
+	background-image: url("resources/images/sales/plus.png");
 	background-size: 18px 18px;
 	float: right;
 	margin-right: 10px;
@@ -577,7 +577,7 @@ pre{
 /* 견적 상품  */
 .mdBox {
 	width: 800px;
-	height: 30px;
+	height: 35px;
 	margin-left: 20px;
 	line-height: 30px;
 	border: 1px solid #D7D7D7;
@@ -603,7 +603,7 @@ pre{
 }
 .md_title { 
 	font-size: 14pt;
-	height : 14px;
+	height : 24px;
 	line-height: 14px;
 	margin-left: 850px;
 	vertical-align: middle;
@@ -613,7 +613,7 @@ pre{
 	vertical-align: middle;
 	width: 14px;
 	height: 14px;
-	background-image: url("../../images/sales/plus.png");
+	background-image: url("resources/images/sales/plus.png");
 	background-size: 14px 14px;
 	margin-left: 5px;
 }
@@ -622,7 +622,7 @@ pre{
 }
 .md_nm, .md_intrst, .md_grd, .md_prd{
 	width: 50px;
-	height: 30px;
+	height: 35px;
 	margin: 0px 15px;
 	font-size: 12pt;
 }
@@ -818,6 +818,7 @@ function uploadName(e) {
 					<div class="bodyWrap">
 						<!-- 시작 -->
 
+						<div class="page_cont_title_text">기본정보</div>
 						<hr class="hr_width">
 						<table>
 							<colgroup>
@@ -1210,7 +1211,7 @@ function uploadName(e) {
 					 <hr class="hr_bot" color="white" width="925px"> 
 					<div class="hr_bot"></div>
 					<div class="md_title">
-						<span class="md_txt">상품(5)<img class="md_plus_btn" src="../../images/sales/plus.png" border='0' onclick="document.all.file1.click();" ></span>
+						<span class="md_txt">상품(5)<img class="md_plus_btn" src="resources/images/sales/plus.png" border='0' onclick="document.all.file1.click();" ></span>
 					</div>
 					<div class="md_hr">
 						<hr color="#D7D7D7" width="830px" />
@@ -1338,7 +1339,7 @@ function uploadName(e) {
 					<!-- 첨부자료 -->
 					<div class="rvn_txt"> 첨부자료 (0)
 						<input type=file name='file1' style='display: none;'/> 
-						<img class="plus_btn" src="../../images/sales/plus.png" border='0' onclick="document.all.file1.click();" > 
+						<img class="plus_btn" src="resources/images/sales/plus.png" border='0' onclick="document.all.file1.click();" > 
 					</div>
 					<div class="cntrct_box_in"></div>
 					<!-- 지난 견적서 -->
