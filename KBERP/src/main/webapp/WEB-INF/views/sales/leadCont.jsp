@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오 ERP - 리드 상세보기</title>
+<title>카카오 ERP - 리드관리</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -41,7 +41,13 @@
 	top: calc(50% - 200px); /* 높이 반  */
 	left: calc(50% - 300px); /* 너비 반 */
 }
-
+.popup_cont2 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+	font-weight: 600;
+	text-align: center;
+	line-height: 80px;
+}
 
 
 /* 개인 작업 영역 */
@@ -568,6 +574,71 @@ $(document).ready(function () {
 		
 		$("#actionForm").attr("action", "leadUpdate");
 		$("#actionForm").submit();
+	});
+	
+	$("#deleteBtn").on("click", function() {
+		var html = "";
+		
+		html += "<div class=\"popup_cont2\">삭제하시겠습니까?</div>";
+		
+		makePopup({
+			depth : 1,
+			bg : false,
+			bgClose : false,
+			title : "알림",
+			width : 400,
+			height : 200,
+			contents : html,
+			contentsEvent : function() {					
+			},
+			buttons : [{
+				name : "삭제",
+				func:function() {
+					var html = "";
+					
+					html += "<div class=\"popup_cont2\">삭제되었습니다.</div>";
+					
+					makePopup({
+						depth : 2,
+						bg : true,
+						bgClose : false,
+						title : "삭제 완료",
+						contents : html,
+						width : 400,
+						height : 180,
+						buttons : {
+							name : "확인",
+							func:function() {
+								// 삭제
+								var params = $("#actionForm").serialize();
+								
+								$.ajax({
+									type : "post", 
+									url : "leadAction/delete", 
+									dataType : "json", 
+									data : params, 
+									success : function(res) { 
+										if(res.res == "success") {
+											$("#actionForm").attr("action", "leadList");
+											$("#actionForm").submit();
+										} else {
+											alert("삭제중 문제가 발생하였습니다.");
+										}
+									},
+									error : function(request, status, error) {
+										console.log(request.responseText);
+									}
+								}); //ajax end	
+							}					
+						} // buttons1 end
+					}) // 삭제 완료 popup end
+				console.log("One!");
+				closePopup();
+				} // 저장 func end
+			}, {
+				name : "취소"
+			}] 
+		}); // makePopup end	
 	});
 	/* 고객사 등급 선택되게 */
 	$("#ccGrade").val(${data.GRADE_NUM}).prop("selected", this.selected);
