@@ -246,9 +246,11 @@
 	
 	<!-- 예정사업 상세정보tab 제안 단계로 가져오기 -->
 	<select id="getSales2BringBsns" parameterType="hashmap" resultType="hashmap">
-		SELECT S.SALES_NUM, EXPCTD_BSNS_NAME, EXPCTD_BSNS_TYPE, RMKS
+		SELECT S.SALES_NUM, EXPCTD_BSNS_NAME, EXPCTD_BSNS_TYPE, RMKS, EBAF.ATT_FILE_NAME
 		FROM SALES S LEFT OUTER JOIN EXPCTD_BSNS_INFO EBI
 		                          ON S.SALES_NUM = EBI.SALES_NUM
+		                  INNER JOIN EXPCTD_BSNS_ATT_FILE EBAF
+		                          ON S.SALES_NUM = EBAF.SALES_NUM  
 		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
@@ -427,11 +429,44 @@
 		WHERE SALES_NUM = #{salesNum}
 	</update>
 	
+	<!-- 영업기회 의견목록 -->
+	<select id="getOpList" parameterType="hashmap" resultType="hashmap">
+		SELECT S.SALES_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, SOC.CONT, TO_CHAR(SOC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
+		       SOC.CMNT_NUM
+		FROM SALES S INNER JOIN SALES_OPRTNTY_CMNT SOC
+		                     ON S.SALES_NUM = SOC.SALES_NUM
+		                 INNER JOIN EMP E
+		                         ON SOC.EMP_NUM = E.EMP_NUM
+		                 INNER JOIN APNTM A
+		                         ON E.EMP_NUM = A.EMP_NUM
+		                 INNER JOIN DEPT D
+		                         ON A.DEPT_NUM = D.DEPT_NUM
+		                 INNER JOIN RANK R
+		                         ON A.RANK_NUM = R.RANK_NUM
+		WHERE SOC.DEL_CHECK IS NULL
+		AND S.SALES_NUM = #{salesNum}
+		ORDER BY SOC.CMNT_NUM DESC
+	</select>
 	
+	<!-- 영업기회 의견개수 -->
+	<select id="opListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SALES_OPRTNTY_CMNT
+		WHERE DEL_CHECK IS NULL
+		AND SALES_NUM = #{salesNum}
+	</select>
 	
+	<!-- 영업기회 의견등록 -->
+	<insert id="opContAdd" parameterType="hashmap">
+		INSERT INTO SALES_OPRTNTY_CMNT(CMNT_NUM, SALES_NUM, EMP_NUM, CONT)
+		VALUES(SALES_OPRTNTY_CMNT_SEQ.NEXTVAL, #{salesNum}, #{sEmpNum}, #{tacont})
+	</insert>
 	
-	
-	
+	<!-- 영업기회 의견삭제 -->
+	<update id="opContUpdate" parameterType="hashmap">
+		UPDATE SALES_OPRTNTY_CMNT SET DEL_CHECK = SYSDATE
+		WHERE CMNT_NUM = #{cmntNum}
+	</update>
 	
 </mapper>
 

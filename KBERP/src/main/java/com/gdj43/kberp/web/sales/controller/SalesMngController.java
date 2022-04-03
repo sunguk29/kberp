@@ -270,42 +270,74 @@ public class SalesMngController {
 		return mav;
 	}
 	
-	// sales3QtnReg : 견적 등록
-	@RequestMapping(value = "/sales3QtnReg")
-	public ModelAndView sales3QtnReg(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+	/*
+	 * // sales3QtnReg : 제안 등록
+	 * 
+	 * @RequestMapping(value = "/sales3QtnReg") public ModelAndView
+	 * sales3QtnReg(@RequestParam HashMap<String, String> params, ModelAndView mav)
+	 * throws Throwable {
+	 * 
+	 * 
+	 * //조회 HashMap<String, String> sales1DataLead =
+	 * iCommonService.getData("salesMng.getSales2BringLead", params);
+	 * HashMap<String, String> sales1DataLoan =
+	 * iCommonService.getData("salesMng.getSales2BringLoan", params);
+	 * HashMap<String, String> sales1DataBsns =
+	 * iCommonService.getData("salesMng.getSales2BringBsns", params);
+	 * 
+	 * mav.addObject("lead", sales1DataLead); mav.addObject("loan", sales1DataLoan);
+	 * mav.addObject("bsns", sales1DataBsns);
+	 * 
+	 * mav.setViewName("sales/sales3QtnReg");
+	 * 
+	 * return mav; }
+	 */
+	
+	
+	@RequestMapping(value = "/salesOpBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String salesOpBotListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
 		
+		ObjectMapper mapper = new ObjectMapper();
 		
-		// 영업기회 조회
-		HashMap<String, String> sales1DataLead = iCommonService.getData("salesMng.getSales2BringLead", params);
-		HashMap<String, String> sales1DataLoan = iCommonService.getData("salesMng.getSales2BringLoan", params);
-		HashMap<String, String> sales1DataBsns = iCommonService.getData("salesMng.getSales2BringBsns", params);
-
-		// 제안 조회
-		//HashMap<String, String> sales2DataLoan = iCommonService.getData("salesMng.getSales3BringLoan", params);
-	    //HashMap<String, String> sales2DataClntCmpny = iCommonService.getData("salesMng.getSales3BringClntCmpny", params);
-		//HashMap<String, String> sales2DataDtlInfo = iCommonService.getData("salesMng.getSales3BringDtlInfo", params);
-		//HashMap<String, String> sales2DataDtlInfoAtt = iCommonService.getData("salesMng.getSales3BringDtlInfoAtt", params); 이거 오류남...
+		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		mav.addObject("lead", sales1DataLead);
-		mav.addObject("loan", sales1DataLoan);
-		mav.addObject("bsns", sales1DataBsns);
-
+		int opListCnt = iCommonService.getIntData("salesMng.opListCnt", params);
 		
-		//mav.addObject("loan2", sales2DataLoan);
-		//mav.addObject("cc2", sales2DataClntCmpny);
-		//mav.addObject("dtl2", sales2DataDtlInfo);
+		List<HashMap<String, String>> list = iCommonService.getDataList("salesMng.getOpList", params);
 		
+		modelMap.put("list", list);
+		modelMap.put("opListCnt", opListCnt);
 		
-		mav.setViewName("sales/sales3QtnReg");
-		
-		return mav;
+		return mapper.writeValueAsString(modelMap);
 	}
 	
-	
-	
-	
-	
-	
+	@RequestMapping(value = "/salesBotActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String salesBotActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			switch(gbn) {
+			case "insert" :
+				iCommonService.insertData("salesMng.opContAdd", params);
+				break;
+			case "update" :
+				iCommonService.updateData("salesMng.opContUpdate", params);
+				break;
+			}
+			modelMap.put("res", "success");
+		} catch (Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "faild");
+		}
+		
+		return mapper.writeValueAsString(modelMap);
+		
+	}
 	
 	
 	

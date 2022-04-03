@@ -564,6 +564,11 @@ $(document).ready(function () {
 		$("#actionForm").submit();
 	});
 	
+	$("#updateBtn").on("click", function() {
+		
+		$("#actionForm").attr("action", "leadUpdate");
+		$("#actionForm").submit();
+	});
 	/* 고객사 등급 선택되게 */
 	$("#ccGrade").val(${data.GRADE_NUM}).prop("selected", this.selected);
 	
@@ -1134,8 +1139,8 @@ function uploadName(e) {
 			<div class="page_title_text">리드 상세보기</div>
 			<!-- 검색영역 선택적 사항 -->
 			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />			
-			<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" />
-			<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" />
+			<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
+			<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" id="deleteBtn" />
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">

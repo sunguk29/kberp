@@ -10,6 +10,9 @@
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
+
+$blue: #2E83F2;
+$black: #222222;
 /* 가로 사이즈 조정용 */
 .cont_wrap {
 	width: 900px;
@@ -262,6 +265,29 @@
     text-align: center;
     margin-left: 10px;
 }
+
+.orgnzt_del_popup{
+	display: inline-block;
+	height: 100%;
+	width: 100%;
+	text-align: center;
+	line-height: 100px;
+}
+
+.del_dept{
+	display: inline-block;
+	/*text-align: center;*/
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.del_txt{
+	display: inline-block;
+	/*text-align: center;*/
+}
+
+
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -276,44 +302,48 @@ $(document).ready(function() {
 	$("#orgnzt_add_btn").on("click", function() {
 		var html = "";
 		html += "	<div class=\"super_orgnzt_area\">                           ";
-		html += "		<div class=\"super_orgnzt_text\">상위조직</div>         ";
+		html += "		<div class=\"super_orgnzt_text\">상위부서</div>         ";
 		console.log("sdeptNum : " + $(sdeptNum).val())
+		// sdeptNum : 마지막 선택 부서 == 상위조직 부서 
+		// 미선택 시 카카오뱅크를 상위조직으로 함
 		if($(sdeptNum).val() == null || $(sdeptNum).val() == ''){
-		html += "		<input type=\"text\" readonly=\"readonly\" value=\"카카오뱅크\" />";
+			$("#deptLevel").val($("#default").attr("deptLevel"));
+			html += "		<input type=\"text\" readonly=\"readonly\" value=\"카카오뱅크\" />";
 		} else {
-		html += "		<input type=\"text\" readonly=\"readonly\" value = \"" + $(dname).val() + "\" />";
+			html += "		<input type=\"text\" readonly=\"readonly\" value = \"" + $(dname).val() + "\" />";
 		}
 		html += "   </div>                                                      ";
 		html += "	<div class=\"add_orgnzt_area\">                             ";
-		html += "		<div class=\"add_orgnzt_text\">조직명</div>             ";
+		html += "		<div class=\"add_orgnzt_text\">부서명</div>             ";
 		html += "		<input type=\"text\" id=\"deptInput\" />";
 		html += "	</div>                                                      ";
-		console.log("deptName : " + $(deptName).val())
 		
 		makePopup({
 			bg : false,
 			bgClose : false,
-			title : "조직추가",
+			title : "등록",
 			contents : html, 
 			draggable : true,
 			buttons : [{
-				name : "등록",
+				name : "확인",
 				func:function() {
 						if (checkEmpty("#deptInput")) {
 							alert("부서명을 입력하세요.");
-							$("#deptName").focus();
+							$("#deptInput").focus();
 						} else {
 							$("#deptName").val($("#deptInput").val());
-							var params = $("#insertForm").serialize();
+							var params = $("#actionForm").serialize();
 							$.ajax({
 							       type : "post",
 							       url : "orgnztChartActionAjax/insert",
 							       data : params,
 							       dataType : "json",
 							       success : function(res) {
-									closePopup();
-									makeAlert("부서가 추가되었습니다");
-							       },
+									   closePopup();
+									   makeAlert("알림", "부서가 추가되었습니다");
+									   /* window.opener.location.reload();
+									   window.close(); 알럿창 닫고 새로고침 어떻게 하는지? */
+							       }, 
 							       error : function(req) {
 							          console.log(req.responseText);
 							       }
@@ -325,9 +355,128 @@ $(document).ready(function() {
 				name : "취소"
 			}]
 		});
-		
-
 	});
+	
+	// 조직수정
+	$("#orgnzt_mdfy_btn").on("click", function() {
+		if($(sdeptNum).val() == null || $(sdeptNum).val() == ''){
+			 makeAlert("알림", "수정할 부서를 선택하세요."); 
+		} else {
+			$.ajax({
+			       type : "post",
+			       url : "orgnztChartAjax",
+			       dataType : "json",
+			       success : function(res) {
+						var html = "";
+						
+						html += "	<div class=\"super_orgnzt_area\">                           ";
+						html += "		<div class=\"super_orgnzt_text\">상위부서</div>         ";
+						html += "		<select id=\"superDeptNumInput\">                                           ";
+					    html += "		     <option >카카오뱅크</option> ";
+								    	    for(var data of res.dept ) {                         
+					    html += "		     <option value=" + data.DEPT_NUM + ">" + data.DEPT_NAME + "</option> ";
+								    	    }
+						html += "		</select>                                           ";
+						html += "   </div>                                                      ";
+						html += "	<div class=\"add_orgnzt_area\">                             ";
+						html += "		<div class=\"add_orgnzt_text\">부서명</div>             ";
+						html += "		<input type=\"text\" id=\"deptInput\" value=" +$(dname).val() + " />";
+						html += "	</div>                                                      ";
+						
+						makePopup({
+							bg : false,
+							bgClose : false,
+							title : "삭제",
+							contents : html, 
+							draggable : true,
+							buttons : [{
+								name : "확인",
+								func:function() {
+									if (checkEmpty("#deptInput")) {
+										alert("부서명을 입력하세요.");
+										$("#deptInput").focus();
+									} else {
+									$("#deptName").val($("#deptInput").val());
+									$("#superDeptNum").val($("#superDeptNumInput").val());
+									var params = $("#actionForm").serialize();
+									$.ajax({
+									       type : "post",
+									       url : "orgnztChartActionAjax/update",
+									       data : params,
+									       dataType : "json",
+									       success : function(res) {
+											   closePopup();
+											   makeAlert("알림", "부서가 수정되었습니다.");
+											   /* window.opener.location.reload();
+											   window.close(); 알럿창 닫기 새로고침 해야함 */
+									       }, 
+									       error : function(req) {
+									          console.log(req.responseText);
+									       }
+									    });
+									}
+									console.log("삭제!");
+								}
+							}, {
+								name : "취소"
+							}]
+						});
+			       },
+			       error : function(req) {
+			          console.log(req.responseText);
+			       }
+			    });
+		}
+		
+	});
+	
+	// 조직삭제
+	$("#orgnzt_del_btn").on("click", function() {
+		if($(sdeptNum).val() == null || $(sdeptNum).val() == ''){
+			 makeAlert("알림", "삭제하실 부서를 선택하세요."); 
+		} else {
+			var html = "";
+			
+			html += "<div class=\"orgnzt_del_popup\">  ";
+			html += "	<div class=\"del_dept\"> [ " +$(dname).val() + " ]</div> ";
+			html += "	<div class=\"del_txt\">부서를 삭제하시겠습니까?<\/div>";
+			html += "</div>  ";
+			
+			makePopup({
+				bg : false,
+				bgClose : false,
+				title : "삭제",
+				contents : html, 
+				draggable : true,
+				buttons : [{
+					name : "확인",
+					func:function() {
+						var params = $("#actionForm").serialize();
+						$.ajax({
+						       type : "post",
+						       url : "orgnztChartActionAjax/delete",
+						       data : params,
+						       dataType : "json",
+						       success : function(res) {
+								   closePopup();
+								   makeAlert("알림", "부서가 삭제되었습니다.");
+								   /* window.opener.location.reload();
+								   window.close(); 알럿창 닫기 새로고침 해야함 */
+						       }, 
+						       error : function(req) {
+						          console.log(req.responseText);
+						       }
+						    });
+						console.log("삭제!");
+					}
+				}, {
+					name : "취소"
+				}]
+			});
+		}
+		
+	});
+	
 	// 조직도 토글
 	$(".orgnzt_area").on("click", ".orgnzt_depth1, .orgnzt_depth2, .orgnzt_depth3", function(e) {
 		$("#sdeptNum").val($(this).attr("sdeptNum"));
@@ -370,59 +519,10 @@ $(document).ready(function() {
 	});
 });
 
-/* // 팝업 생성
-function pop() {
-	
-	var html = "";
-	html += "	<div class=\"super_orgnzt_area\">                           ";
-	html += "		<div class=\"super_orgnzt_text\">상위조직</div>         ";
-	console.log("sdeptNum : " + $(sdeptNum).val())
-	if($(sdeptNum).val() == null || $(sdeptNum).val() == ''){
-	html += "		<input type=\"text\" readonly=\"readonly\" value=\"카카오뱅크\" />";
-	} else {
-	html += "		<input type=\"text\" readonly=\"readonly\" value = \"" + $(deptName).val() + "\" />";
-	}
-	html += "   </div>                                                      ";
-	html += "	<div class=\"add_orgnzt_area\">                             ";
-	html += "		<div class=\"add_orgnzt_text\">조직명</div>             ";
-	html += "		<input type=\"text\" id=\"deptName\" name=\"deptName\"/>";
-	html += "	</div>                                                      ";
-	console.log("deptName : " + $(deptName).val())
-
-	
-    $.ajax({
-       type : "post",
-       url : "orgnztChartActionAjax/insert",
-       dataType : "json",
-       success : function(res) {
-    			makePopup({
-    				bg : false,
-    				bgClose : false,
-    				title : "조직추가",
-    				contents : html, 
-    				draggable : true,
-    				buttons : [{
-    					name : "등록",
-    					func:function() {
-    							if (checkEmpty("#deptName")) {
-    								alert("부서명을 입력하세요.");
-    								$("#deptName").focus();
-    							} else {
-    								var params = $("#insertForm").serialize();
-    						console.log("등록!");
-    						closePopup();
-    						}
-    					}
-    				}, {
-    					name : "취소"
-    				}]
-    			});
-       },
-       error : function(req) {
-          console.log(req.responseText);
-       }
-    });
- }  */
+//팝업 부모창 리프레시 (작동 안됨)
+function parentRefresh() {
+	opener.location.reload();
+}
 
 // 조직도 리로드
 function reloadTree() {
@@ -498,10 +598,11 @@ function drawTree3(emp) {
 </head>
 <body>
 		<input type="hidden" id="dname" /> 
-	<form action="#" id="insertForm">
+	<form action="#" id="actionForm">
 		<input type="hidden" id="sdeptNum" name="sdeptNum" value="${sdeptNum}" /> 
 		<input type="hidden" id="deptName" name="deptName" /> 
 		<input type="hidden" id="deptLevel" name="deptLevel" value="${deptLevel}" /> 
+		<input type="hidden" id="superDeptNum" name="superDeptNum"  /> 
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -528,7 +629,7 @@ function drawTree3(emp) {
 				<div class="orgnzt_area">
 					<div class="scroll_area">
 						<div class="orgnzt_depth1_wrap">
-							<div class="orgnzt_depth1" dname="카카오뱅크" deptLevel="1">
+							<div class="orgnzt_depth1" id="default" dname="카카오뱅크"  deptLevel="1">
 								<div class="depth_slc_icon"></div>
 								<div class="kb_icon"></div>
 								<div class="depth_txt">카카오뱅크</div>
