@@ -55,6 +55,9 @@
                  WRTNG_DATE = SYSDATE
 	WHERE FAQ_NUM = #{no}	
 </update>
-
+<delete id="faqDelete" parameterType="hashmap">
+		DELETE FROM FAQ
+		WHERE FAQ_NUM = #{no}
+</delete>
 
 </mapper>

@@ -81,19 +81,19 @@ $(document).ready(function() {
 		height : "300" //세로
 	});
 	$("#cancelBtn").on("click", function() {
-		/* makePopup({
+		 makePopup({
 			bg : false,
 			bgClose : false,
 			title : "취소",
 			contents : "게시글 작성이 취소되었습니다.",
 			draggable : true,
 			buttons : {
-				name : "예",
+				name : "확인",
 				func:function() {
 					closePopup();
 					}
 				 }
-				}); //makepopup end */
+				}); //makepopup end
 		$("#backForm").submit();
 		
 	}); //cancelBtn end
