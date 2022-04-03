@@ -271,7 +271,7 @@ public class SalesMngController {
 	}
 	
 	/*
-	 * // sales3QtnReg : 제안 등록
+	 * // sales3QtnReg : 견적 등록
 	 * 
 	 * @RequestMapping(value = "/sales3QtnReg") public ModelAndView
 	 * sales3QtnReg(@RequestParam HashMap<String, String> params, ModelAndView mav)

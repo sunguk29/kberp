@@ -361,11 +361,6 @@
 		VALUES ( SGSTN_ATT_FILE_SEQ.NEXTVAL, #{salesNum}, #{attFile} )
 	</insert>
 	
-	<!-- 제안 상세정보 첨부파일tab 견적으로 가져오기 -->
-	<select id="getSales3BringDtlInfoAtt" resultType="hashmap" parameterType="hashmap">
-	
-	</select>
-	
 	
 		<!-- 제안 상세보기 -->
 	<select id="getSales2" resultType="hashmap" parameterType="hashmap">
