@@ -120,7 +120,7 @@
 	</update>
 	
 	<update id="updateDept" parameterType="hashmap">
-		UPDATE DEPT SET DEPT_NAME = #{deptName}, SUPER_DEPT_NUM = #{superDeptNum} 
+		UPDATE DEPT SET DEPT_NAME = #{deptName}, SUPER_DEPT_NUM = #{mdfysuperDeptNum}, DEPT_LEVEL = #{mdfyDeptLevel}
 		WHERE DEPT_NUM = #{sdeptNum};
 	</update>
 	

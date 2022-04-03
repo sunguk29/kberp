@@ -371,16 +371,56 @@ $(document).ready(function() {
 						
 						html += "	<div class=\"super_orgnzt_area\">                           ";
 						html += "		<div class=\"super_orgnzt_text\">상위부서</div>         ";
-						html += "		<select id=\"superDeptNumInput\">                                           ";
-					    html += "		     <option >카카오뱅크</option> ";
-								    	    for(var data of res.dept ) {                         
-					    html += "		     <option value=" + data.DEPT_NUM + ">" + data.DEPT_NAME + "</option> ";
-								    	    }
+						html += "		<select id=\"superDeptSelect\">                                           ";
+				/* 				    	    for(var data of res.dept ) { 
+								    	    	console.log(data)
+								    	    	console.log("조직수정 for문 데이터(선택부서번호) : " +  $("#sdeptNum").val())
+								    	    	if($("#superDeptNum").val() == "" || $("#superDeptNum").val()  == null) {
+								    	    		console.log("if문 1 : 선택부서 null check" ,true)
+				    	html += "		            <option odeptNum=\"\" odeptLevel=\"\">카카오뱅크</option> ";
+					    html += "		   			<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
+								    	    		console.log("if문 3 : 나머지 부서 출력" ,true)
+								    	    	} else if(data.DEPT_NUM == $("#superDeptNum").val()){
+								    	    		console.log("if문 2 : data.부서번호 == 선택부서 상위부서번호 " ,true)
+								    	    		console.log("선택부서 상위부서번호 " + $("#superDeptNum").val())
+					    html += "		   			<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
+				    	html += "		            <option odeptNum=\"\" odeptLevel=\"\">카카오뱅크</option> ";
+								    	    	} else {
+								    	    	}
+								    	    } */
+								    	    
+								    	    if($("#superDeptNum").val() == "" || $("#superDeptNum").val()  == null || $("#superDeptNum").val()  == "undefined") {
+								    	    	 console.log("상위부서 null임")
+								    	    	 console.log($("#superDeptNum").val())
+								    	    	 console.log($("#superDeptNum").val())
+				    	html += "		            <option odeptNum=\"\" odeptLevel=\"\">카카오뱅크</option> ";
+				    								for(var data of res.dept ) { 
+				    									if(data.DEPT_NUM != $("#sdeptNum").val()) {
+					    html += "		   					<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
+				    									}
+			    									}
+								    	     } else {
+								    	    	 console.log("상위부서 null 아님")
+								    	    	 for(var data of res.dept ) { 
+								    	    		 if(data.DEPT_NUM == $("#superDeptNum").val()) {
+					    html += "		   					<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
+								    	    		 }
+								    	    	 }
+								    	    	 for(var data of res.dept ) { 
+								    	    		 if(data.DEPT_NUM != $("#superDeptNum").val()) {
+					    html += "		   					<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
+								    	    		 }
+								    	    	 }
+								    	    	 
+								    	     }
+								   
+								    	    
+								    	
 						html += "		</select>                                           ";
 						html += "   </div>                                                      ";
 						html += "	<div class=\"add_orgnzt_area\">                             ";
 						html += "		<div class=\"add_orgnzt_text\">부서명</div>             ";
-						html += "		<input type=\"text\" id=\"deptInput\" value=" +$(dname).val() + " />";
+						html += "		<input type=\"text\" id=\"deptInput\" value=\"" +$(dname).val() + "\" />";
 						html += "	</div>                                                      ";
 						
 						makePopup({
@@ -397,7 +437,10 @@ $(document).ready(function() {
 										$("#deptInput").focus();
 									} else {
 									$("#deptName").val($("#deptInput").val());
-									$("#superDeptNum").val($("#superDeptNumInput").val());
+									$("#mdfySuperDeptNum").val($("#superDeptSelect option:selected").attr("odeptNum"));
+									$("#mdfyDeptLevel").val($("#superDeptSelect option:selected").attr("odeptLevel"));
+									console.log("부서명input : " + $("#deptName").val())
+									console.log("부서레벨 : " + $("#mdfyDeptLevel").val())
 									var params = $("#actionForm").serialize();
 									$.ajax({
 									       type : "post",
@@ -415,7 +458,7 @@ $(document).ready(function() {
 									       }
 									    });
 									}
-									console.log("삭제!");
+									console.log("수정!");
 								}
 							}, {
 								name : "취소"
@@ -482,6 +525,7 @@ $(document).ready(function() {
 		$("#sdeptNum").val($(this).attr("sdeptNum"));
 		$("#dname").val($(this).attr("dname"));
 		$("#deptLevel").val($(this).attr("deptLevel"));
+		$("#superDeptNum").val($(this).attr("superDeptNum"));
 		console.log(this)
 		var depth = $(this).attr("class").substring(12);
 		var obj = $(this);
@@ -547,7 +591,8 @@ function drawTree(dept){
 	for(var data of dept) {                              
 		if(data.SUPER_DEPT_NUM == null) {
 			var html = "";
-			html += "<div class=\"orgnzt_depth2\" deptLevel=\"" + (data.DEPT_LEVEL * 1 + 1) + "\"  sdeptNum=\"" + data.DEPT_NUM + "\" dname=\"" + data.DEPT_NAME + "\"> ";
+			html += "<div class=\"orgnzt_depth2\" deptLevel=\"" 
+			+ (data.DEPT_LEVEL * 1 + 1) + "\"  sdeptNum=\"" + data.DEPT_NUM + "\" dname=\"" + data.DEPT_NAME + "\" superDeptNum=\"" + data.SUPER_DEPT_NUM +  "\"> ";
 			html += "<div class=\"orgnzt_depth2_area\">      ";
 			html += "	<div class=\"depth_slc_icon\"></div> ";
 			html += "	<div class=\"folder_icon\"></div>    ";
@@ -558,7 +603,6 @@ function drawTree(dept){
 			$("#depth2").append(html);
 		} 
 	}
-	
 }
 
 // 1뎁스 외 부서 생성
@@ -566,7 +610,8 @@ function drawTree2(dept) {
 	for(var data of dept){
 		if(data.SUPER_DEPT_NUM != null) {
 			var html = "";
-			html += "<div class=\"orgnzt_depth3\" deptLevel=\"" + (data.DEPT_LEVEL * 1 + 1) + "\" sdeptNum=\"" + data.DEPT_NUM + "\"  dname=\"" + data.DEPT_NAME + "\" >   ";
+			html += "<div class=\"orgnzt_depth3\" deptLevel=\"" 
+			+ (data.DEPT_LEVEL * 1 + 1) + "\" sdeptNum=\"" + data.DEPT_NUM + "\"  dname=\"" + data.DEPT_NAME + "\" superDeptNum=\"" + data.SUPER_DEPT_NUM +  "\" >   ";
 			html += "	<div class=\"orgnzt_depth3_area \">                      ";
 			html += "		<div class=\"depth_slc_icon\"></div>               ";
 			html += "		<div class=\"folder_icon\"></div>                 ";
@@ -583,7 +628,8 @@ function drawTree2(dept) {
 function drawTree3(emp) {
 	for(var data of emp){
 		var html = "";
-			html += "<div class=\"orgnzt_depth3\" deptLevel=\"" + (data.DEPT_LEVEL * 1 + 1) +  "\" sdeptNum=\"" + data.DEPT_NUM + "\" dname=\"" + data.DEPT_NAME + "\">  ";
+			html += "<div class=\"orgnzt_depth3\" deptLevel=\"" 
+			+ (data.DEPT_LEVEL * 1 + 1) +  "\" sdeptNum=\"" + data.DEPT_NUM + "\" dname=\"" + data.DEPT_NAME + "\" superDeptNum=\"" + data.SUPER_DEPT_NUM + "\">  ";
 			html += "	<div class=\"orgnzt_depth3_area\">                     ";
 			html += "		<div class=\"depth_emp_icon\"></div>               ";
 			html += "		<div class=\"profile_icon\"></div>                 ";
@@ -602,6 +648,8 @@ function drawTree3(emp) {
 		<input type="hidden" id="sdeptNum" name="sdeptNum" value="${sdeptNum}" /> 
 		<input type="hidden" id="deptName" name="deptName" /> 
 		<input type="hidden" id="deptLevel" name="deptLevel" value="${deptLevel}" /> 
+		<input type="hidden" id="mdfySuperDeptNum" name="mdfySuperDeptNum"  /> 
+		<input type="hidden" id="mdfyDeptLevel" name="mdfyDeptLevel"  /> 
 		<input type="hidden" id="superDeptNum" name="superDeptNum"  /> 
 	</form>
 	<!-- top & left -->
@@ -629,7 +677,7 @@ function drawTree3(emp) {
 				<div class="orgnzt_area">
 					<div class="scroll_area">
 						<div class="orgnzt_depth1_wrap">
-							<div class="orgnzt_depth1" id="default" dname="카카오뱅크"  deptLevel="1">
+							<div class="orgnzt_depth1" id="default" dname="카카오뱅크"  deptLevel="1" superDeptNum="" >
 								<div class="depth_slc_icon"></div>
 								<div class="kb_icon"></div>
 								<div class="depth_txt">카카오뱅크</div>
