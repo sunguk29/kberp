@@ -15,10 +15,14 @@
 	width: 900px;
 }
 /* 개인 작업 영역 */
+.cont_wrap {
+	width: 900px;
+}
+/* 개인 작업 영역 */
 .buttons_bottom {
     margin-top: 10px;
-}
 
+}
 .button_list {
     float: left;
 }
@@ -26,10 +30,12 @@
 .button_up {
     float: right;
     margin-left: 20px;
+    
 }
 
 .button_del{
     float: right;
+    
 }
 
 .page_title_bar {
@@ -49,6 +55,13 @@
     padding: 10px 0px;
     border-top: 3px solid gray;
 }
+
+.writer {
+	float:right;
+	font-size: 16px;
+	font-weight: bold;
+	color: #909090;
+}
 .wrtr_info {
 	margin-bottom:10px;
 	
@@ -61,7 +74,6 @@
     text-indent: 10px;
 }
 
-
 .cont{
 
 	width: 940px;
@@ -73,7 +85,45 @@
 
 </style>
 <script type="text/javascript">
-	
+
+/* $(document).ready(function() {
+	$("#alertBtn").on("click", function() {
+		makeAlert("하이", "내용임");
+	});
+	$("#btn1Btn").on("click", function() {
+		makePopup({
+			depth : 1,
+			bg : true,
+			width : 400,
+			height : 300,
+			title : "버튼하나팝업",
+			contents : "내용임",
+			buttons : {
+				name : "하나",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}
+		});
+	}); //btn1Btn end
+	$("#btn2Btn").on("click", function() {
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "버튼두개팝업",
+			contents : "내용임",
+			buttons : [{
+				name : "하나",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "둘닫기"
+			}]//btn2Btn buttons
+		}); //makePopup
+	});//btn2Btn end */
 	$(document).ready(function() {
 		$("#listBtn").on("click", function() {
 			$("#actionForm").attr("action", "faq");
@@ -96,7 +146,7 @@
 					data : params, 
 					success : function(res) { 
 						if(res.res == "success") {
-							location.href = "faqList";
+							location.href = "faq";
 						} else {
 							alert("삭제중 문제가 발생하였습니다.");
 						}
@@ -129,11 +179,21 @@
 			<!-- 여기부터 쓰면 됨 -->
 		<div class="title-area">
 			<div class="title">${data.WRTNG_TITLE}</div>
+			<div class="writer">${data.EMP_NAME}</div>
 			<div class="wrtr_info">
 				<div class="date">${data.WRTNG_DATE}</div>
 				<span class="cate">
 					<select disabled="disabled" id="ctgry_name" name="ctgry_name">
-				 		<option>${data.CTGRY_NAME}</option>
+				 	<option>인터넷뱅킹</option>
+					<option>스마트폰뱅킹</option>
+					<option>CD/ATM</option>
+					<option>공인인증서</option>
+					<option>인증/OTP/보안카드</option>
+					<option>예금/신탁</option>
+					<option>펀드</option>
+					<option>대출</option>
+					<option>외환</option>
+					<option>로그인관련</option>
 					</select>
 				</span>
 			</div>

@@ -2,14 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="FQ">
 <select id="getfaqList" resultType="hashmap" parameterType="hashmap">
-	SELECT FQ.FAQ_NUM, FQ.CTGRY_NAME, FQ.WRTNG_TITLE, FQ.WRTNG_DATE
-	FROM ( SELECT F.FAQ_NUM, ICT.CTGRY_NAME, F.WRTNG_TITLE, TO_CHAR(F.WRTNG_DATE, 'YYYY-MM-DD') AS WRTNG_DATE,
+	SELECT FQ.FAQ_NUM, FQ.CTGRY_NAME, FQ.WRTNG_TITLE, FQ.EMP_NAME, FQ.WRTNG_DATE
+	FROM ( SELECT F.FAQ_NUM, ICT.CTGRY_NAME, E.EMP_NAME, F.WRTNG_TITLE,
+	            TO_CHAR(F.WRTNG_DATE, 'YYYY-MM-DD') AS WRTNG_DATE,
 	            ROW_NUMBER() OVER(ORDER BY F.FAQ_NUM DESC) AS RNUM
 	FROM FAQ F INNER JOIN INQRY_CTGRY ICT
 	                            ON F.CTGRY_NUM=ICT.CTGRY_NUM
 	                    LEFT OUTER JOIN EMP E
-	                            ON F.EMP_NUM=E.EMP_NUM                    
-	    WHERE 1=1
+	                            ON F.EMP_NUM=E.EMP_NUM               
+    WHERE 1=1
 	    <if test="searchTxt != null and searchTxt != ''">
 					<choose>
 						<when test="searchGbn == 0">
@@ -17,7 +18,7 @@
 						</when>
 						
 						<when test="searchGbn == 1">
-							AND TO_CHAR(WRTNG_DATE, 'YYYY-MM-DD') LIKE '%' || #{searchTxt} || '%'
+							AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
 						</when>
 					</choose>
 				</if>
@@ -32,10 +33,11 @@
 </select>
 
 <select id="getfaqdt" resultType="hashmap" parameterType="hashmap">
-	SELECT  F.FAQ_NUM, ICT.CTGRY_NAME, F.WRTNG_TITLE, F.WRTNG_CONT,
+	SELECT  F.FAQ_NUM, ICT.CTGRY_NAME, F.WRTNG_TITLE, F.WRTNG_CONT, E.EMP_NAME,
 			   TO_CHAR(WRTNG_DATE, 'YYYY-MM-DD HH24:MI:SS') AS WRTNG_DATE
 		FROM FAQ F INNER JOIN INQRY_CTGRY ICT
 		                   ON F.CTGRY_NUM = ICT.CTGRY_NUM
+                          
 		             LEFT OUTER JOIN EMP E
 			                      ON F.EMP_NUM = E.EMP_NUM
 		WHERE F.FAQ_NUM = #{no}
