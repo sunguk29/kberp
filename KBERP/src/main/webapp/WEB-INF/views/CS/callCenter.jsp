@@ -755,21 +755,20 @@ $(document).ready(function() {
 					closePopup();
 				}
 			}]
-		});
-		
-		
-		
+		});	
 	});
+	
+	
 	
 	function drawList(list) {
 		var html = "";
 		
 		for(var data of list) {
 			html += "<tr no=\"" + data.CLNT_NUM +"\">";
-			html += "<td>" + data.CLNT_NAME + "</td>"
-			html += "<td>" + data.CLNT_GRADE + "</td>"
-			html += "<td>" + data.PHONE_NUM_1 + "</td>"
-			html += "</tr>"
+			html += "<td>" + data.CLNT_NAME + "</td>";
+			html += "<td>" + data.CLNT_GRADE + "</td>";
+			html += "<td>" + data.PHONE_NUM_1 + "</td>";
+			html += "</tr>";
 		}
 		$("#clntPop").html(html);
 	}
@@ -780,7 +779,7 @@ $(document).ready(function() {
 		
 		var html = "";
 		
-		html += "<div class=\"save_cont\">지금까지의 내용을 저장 하시겠습니까?</div>"
+		html += "<div class=\"save_cont\">지금까지의 내용을 저장 하시겠습니까?</div>";
 		
 		makePopup({
 			depth : 1,
@@ -837,7 +836,7 @@ $(document).ready(function() {
 		
 		var html = "";
 		
-		html += "<div class=\"save_cont\">지금까지의 내용을 저장 하시겠습니까?</div>"
+		html += "<div class=\"save_cont\">지금까지의 내용을 저장 하시겠습니까?</div>";
 		
 		makePopup({
 			depth : 1,
