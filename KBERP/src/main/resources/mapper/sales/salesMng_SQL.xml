@@ -430,7 +430,7 @@
 	</update>
 	
 	<!-- 영업기회 의견목록 -->
-	<select id="getOpList" parameterType="hashmap" resultType="hashmap">
+	<select id="getSalesOpList" parameterType="hashmap" resultType="hashmap">
 		SELECT S.SALES_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, SOC.CONT, TO_CHAR(SOC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
 		       SOC.CMNT_NUM
 		FROM SALES S INNER JOIN SALES_OPRTNTY_CMNT SOC
@@ -449,7 +449,7 @@
 	</select>
 	
 	<!-- 영업기회 의견개수 -->
-	<select id="opListCnt" parameterType="hashmap" resultType="Integer">
+	<select id="salesOpListCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM SALES_OPRTNTY_CMNT
 		WHERE DEL_CHECK IS NULL
@@ -457,16 +457,58 @@
 	</select>
 	
 	<!-- 영업기회 의견등록 -->
-	<insert id="opContAdd" parameterType="hashmap">
+	<insert id="salesOpContAdd" parameterType="hashmap">
 		INSERT INTO SALES_OPRTNTY_CMNT(CMNT_NUM, SALES_NUM, EMP_NUM, CONT)
 		VALUES(SALES_OPRTNTY_CMNT_SEQ.NEXTVAL, #{salesNum}, #{sEmpNum}, #{tacont})
 	</insert>
 	
 	<!-- 영업기회 의견삭제 -->
-	<update id="opContUpdate" parameterType="hashmap">
+	<update id="salesOpContUpdate" parameterType="hashmap">
 		UPDATE SALES_OPRTNTY_CMNT SET DEL_CHECK = SYSDATE
 		WHERE CMNT_NUM = #{cmntNum}
 	</update>
+	
+	<!-- 제안 의견목록 -->
+	<select id="getSgstnOpList" parameterType="hashmap" resultType="hashmap">
+		SELECT S.SALES_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, SC.CONT, TO_CHAR(SC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
+		       SC.CMNT_NUM
+		FROM SALES S INNER JOIN SGSTN_CMNT SC
+		                     ON S.SALES_NUM = SC.SALES_NUM
+		                 INNER JOIN EMP E
+		                         ON SC.EMP_NUM = E.EMP_NUM
+		                 INNER JOIN APNTM A
+		                         ON E.EMP_NUM = A.EMP_NUM
+		                 INNER JOIN DEPT D
+		                         ON A.DEPT_NUM = D.DEPT_NUM
+		                 INNER JOIN RANK R
+		                         ON A.RANK_NUM = R.RANK_NUM
+		WHERE SC.DEL_CHECK IS NULL
+		AND S.SALES_NUM = #{salesNum}
+		ORDER BY SC.CMNT_NUM DESC
+	</select>
+	
+	<!-- 제안 의견개수 -->
+	<select id="sgstnOpListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SGSTN_CMNT
+		WHERE DEL_CHECK IS NULL
+		AND SALES_NUM = #{salesNum}
+	</select>
+	
+	<!-- 제안 의견등록 -->
+	<insert id="sgstnOpContAdd" parameterType="hashmap">
+		INSERT INTO SGSTN_CMNT(CMNT_NUM, SALES_NUM, EMP_NUM, CONT)
+		VALUES(SGSTN_CMNT_SEQ.NEXTVAL, #{salesNum}, #{sEmpNum}, #{tacont})
+	</insert>
+	
+	<!-- 제안 의견삭제 -->
+	<update id="sgstnOpContUpdate" parameterType="hashmap">
+		UPDATE SGSTN_CMNT SET DEL_CHECK = SYSDATE
+		WHERE CMNT_NUM = #{cmntNum}
+	</update>
+	
+	
+	
 	
 </mapper>
 
