@@ -293,7 +293,7 @@ public class SalesMngController {
 	 * return mav; }
 	 */
 	
-	
+	//영업기회 의견 목록 리스트
 	@RequestMapping(value = "/salesOpBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String salesOpBotListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
@@ -312,6 +312,7 @@ public class SalesMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
+	//영업기회 의견 등록,삭제 비동기
 	@RequestMapping(value = "/salesBotActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String salesBotActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
@@ -323,10 +324,10 @@ public class SalesMngController {
 		try {
 			switch(gbn) {
 			case "insert" :
-				iCommonService.insertData("salesMng.opContAdd", params);
+				iCommonService.insertData("salesMng.salesOpContAdd", params);
 				break;
 			case "update" :
-				iCommonService.updateData("salesMng.opContUpdate", params);
+				iCommonService.updateData("salesMng.salesOpContUpdate", params);
 				break;
 			}
 			modelMap.put("res", "success");
@@ -339,7 +340,52 @@ public class SalesMngController {
 		
 	}
 	
+	//제안 의견 목록 리스트
+	@RequestMapping(value = "/sgstnOpBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String sgstnOpBotListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		int opListCnt = iCommonService.getIntData("salesMng.sgstnOpListCnt", params);
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("salesMng.getSgstnOpList", params);
+		
+		modelMap.put("list", list);
+		modelMap.put("opListCnt", opListCnt);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 	
+	//제안 의견 등록,삭제 비동기
+	@RequestMapping(value = "/sgstnBotActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String sgstnBotActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			switch(gbn) {
+			case "insert" :
+				iCommonService.insertData("salesMng.sgstnOpContAdd", params);
+				break;
+			case "update" :
+				iCommonService.updateData("salesMng.sgstnOpContUpdate", params);
+				break;
+			}
+			modelMap.put("res", "success");
+		} catch (Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "faild");
+		}
+		
+		return mapper.writeValueAsString(modelMap);
+		
+	}
 	
 }
 

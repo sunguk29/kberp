@@ -119,8 +119,8 @@
 		WHERE DEPT_NUM = #{sdeptNum}
 	</update>
 	
-	<update id="updateDept" parameterType="hashmap">
-		UPDATE DEPT SET DEPT_NAME = #{deptName}, SUPER_DEPT_NUM = #{superDeptNum} 
+	<update id="updateDept" parameterType="hashmap"><!-- 쿼리 오류  -->
+		UPDATE DEPT SET DEPT_NAME = #{deptName}, SUPER_DEPT_NUM = #{mdfySuperDeptNum}, DEPT_LEVEL = #{mdfyDeptLevel}
 		WHERE DEPT_NUM = #{sdeptNum};
 	</update>
 	

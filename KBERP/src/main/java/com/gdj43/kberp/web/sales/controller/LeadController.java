@@ -218,7 +218,7 @@ public class LeadController {
 				iCommonService.updateData("lead.getLeadUpdate", params); // 리드 수정
 				break;
 			case "delete" :
-				
+				iCommonService.updateData("lead.getLeadDelete", params); // 리드 삭제
 				break;
 			}
 			modelMap.put("res", "success");

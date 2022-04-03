@@ -690,7 +690,7 @@ $(document).ready(function() {
 		
 		$.ajax({
 			type : "post",
-			url : "ccBotActionAjax/insert",
+			url : "opBotActionAjax/insert",
 			dataType : "json",
 			data : params,
 			success : function(res) {
@@ -729,7 +729,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "ccBotActionAjax/update",
+						url : "opBotActionAjax/update",
 						dataType : "json",
 						data : params,
 						success : function(res) {
