@@ -372,50 +372,31 @@ $(document).ready(function() {
 						html += "	<div class=\"super_orgnzt_area\">                           ";
 						html += "		<div class=\"super_orgnzt_text\">상위부서</div>         ";
 						html += "		<select id=\"superDeptSelect\">                                           ";
-				/* 				    	    for(var data of res.dept ) { 
-								    	    	console.log(data)
-								    	    	console.log("조직수정 for문 데이터(선택부서번호) : " +  $("#sdeptNum").val())
-								    	    	if($("#superDeptNum").val() == "" || $("#superDeptNum").val()  == null) {
-								    	    		console.log("if문 1 : 선택부서 null check" ,true)
-				    	html += "		            <option odeptNum=\"\" odeptLevel=\"\">카카오뱅크</option> ";
-					    html += "		   			<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
-								    	    		console.log("if문 3 : 나머지 부서 출력" ,true)
-								    	    	} else if(data.DEPT_NUM == $("#superDeptNum").val()){
-								    	    		console.log("if문 2 : data.부서번호 == 선택부서 상위부서번호 " ,true)
-								    	    		console.log("선택부서 상위부서번호 " + $("#superDeptNum").val())
-					    html += "		   			<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
-				    	html += "		            <option odeptNum=\"\" odeptLevel=\"\">카카오뱅크</option> ";
-								    	    	} else {
-								    	    	}
-								    	    } */
-								    	    
-								    	    if($("#superDeptNum").val() == "" || $("#superDeptNum").val()  == null || $("#superDeptNum").val()  == "undefined") {
-								    	    	 console.log("상위부서 null임")
-								    	    	 console.log($("#superDeptNum").val())
-								    	    	 console.log($("#superDeptNum").val())
-				    	html += "		            <option odeptNum=\"\" odeptLevel=\"\">카카오뱅크</option> ";
-				    								for(var data of res.dept ) { 
-				    									if(data.DEPT_NUM != $("#sdeptNum").val()) {
-					    html += "		   					<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
-				    									}
-			    									}
-								    	     } else {
-								    	    	 console.log("상위부서 null 아님")
-								    	    	 for(var data of res.dept ) { 
-								    	    		 if(data.DEPT_NUM == $("#superDeptNum").val()) {
-					    html += "		   					<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
-								    	    		 }
-								    	    	 }
-								    	    	 for(var data of res.dept ) { 
-								    	    		 if(data.DEPT_NUM != $("#superDeptNum").val()) {
-					    html += "		   					<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
-								    	    		 }
-								    	    	 }
+    	   			  	//선택 부서의 상위부서 없을 경우 카카오뱅크를 첫번째 옵션으로 설정
+						if($("#superDeptNum").val() == "" || $("#superDeptNum").val()  == null || $("#superDeptNum").val()  == "undefined") {
+		    	    	 	 console.log("현재 - 상위부서 null 임, 상위부서번호 : " + $("#superDeptNum").val())
+				    	html += "	 <option odeptNum=\"\" odeptLevel=\"\">카카오뱅크</option> ";
+							for(var data of res.dept ) { 
+								if(data.DEPT_NUM != $("#sdeptNum").val()) {
+					   			    html += "<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
+								}
+							}
+    	   			  	//선택 부서의 상위부서 있을 경우 해당 상위부서를 첫번째 옵션, 카카오뱅크를 두번째 옵션으로 설정
+		    	    	} else {
+		    	    	 	 console.log("상위부서 null 아님, 상위부서번호 : " + $("#superDeptNum").val())
+		    	    		 for(var data of res.dept ) { 
+			    	    		 if(data.DEPT_NUM == $("#superDeptNum").val()) {
+					   			 html += "<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
+			    				 html += "<option odeptNum=\"\" odeptLevel=\"\">카카오뱅크</option> ";
+			    	    		 } 
+			    	    	 }
+			    	    	 for(var data of res.dept ) { 
+			    	    		 if(data.DEPT_NUM != $("#sdeptNum").val() && data.DEPT_NUM != $("#superDeptNum").val()) {
+   								 html += "<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
+			    	    		 }
+			    	    	 }
 								    	    	 
-								    	     }
-								   
-								    	    
-								    	
+			    	     }
 						html += "		</select>                                           ";
 						html += "   </div>                                                      ";
 						html += "	<div class=\"add_orgnzt_area\">                             ";
@@ -437,10 +418,15 @@ $(document).ready(function() {
 										$("#deptInput").focus();
 									} else {
 									$("#deptName").val($("#deptInput").val());
+									if($("#superDeptSelect option:selected").attr("odeptNum") == "undefined") {
+									$("#mdfySuperDeptNum").val("null");
+									} else {
 									$("#mdfySuperDeptNum").val($("#superDeptSelect option:selected").attr("odeptNum"));
+									}
 									$("#mdfyDeptLevel").val($("#superDeptSelect option:selected").attr("odeptLevel"));
-									console.log("부서명input : " + $("#deptName").val())
-									console.log("부서레벨 : " + $("#mdfyDeptLevel").val())
+									console.log("수정 - 상위부서번호 : " + $("#mdfySuperDeptNum").val())
+									console.log("수정 - : " + $("#deptName").val())
+									console.log("수정 - 부서레벨 : " + $("#mdfyDeptLevel").val())
 									var params = $("#actionForm").serialize();
 									$.ajax({
 									       type : "post",
@@ -648,9 +634,9 @@ function drawTree3(emp) {
 		<input type="hidden" id="sdeptNum" name="sdeptNum" value="${sdeptNum}" /> 
 		<input type="hidden" id="deptName" name="deptName" /> 
 		<input type="hidden" id="deptLevel" name="deptLevel" value="${deptLevel}" /> 
-		<input type="hidden" id="mdfySuperDeptNum" name="mdfySuperDeptNum"  /> 
-		<input type="hidden" id="mdfyDeptLevel" name="mdfyDeptLevel"  /> 
-		<input type="hidden" id="superDeptNum" name="superDeptNum"  /> 
+		<input type="hidden" id="mdfySuperDeptNum" name="mdfySuperDeptNum"  value="" /> 
+		<input type="hidden" id="mdfyDeptLevel" name="mdfyDeptLevel" /> 
+		<input type="hidden" id="superDeptNum" name="superDeptNum"   /> 
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
