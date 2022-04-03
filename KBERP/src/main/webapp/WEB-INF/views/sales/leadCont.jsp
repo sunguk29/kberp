@@ -14,6 +14,8 @@
 .cont_wrap {
 	width: 1013px;
 }
+
+/* 개인 작업 영역 */
 .body {
 	display: block;
 	background-color: white;
@@ -28,29 +30,6 @@
 	height: 100%;
 	margin: 40px auto;
 }
-.popup_bg {
-	/* 숨김용 */
-	display: none;
-}
-.popup {
-	/* 숨김용 */
-	display: none;
-	/* 크기변경용 */
-	width: 600px;
-	height: 400px;
-	top: calc(50% - 200px); /* 높이 반  */
-	left: calc(50% - 300px); /* 너비 반 */
-}
-.popup_cont2 {
-	/* 내용 변경용 */
-	font-size: 13pt;
-	font-weight: 600;
-	text-align: center;
-	line-height: 80px;
-}
-
-
-/* 개인 작업 영역 */
 table{
 	
 	border: 1px;
@@ -811,7 +790,7 @@ $(document).ready(function () {
 				});
 			},
 			width : 600,
-			height : 600,
+			height : 520,
 			buttons : [{
 				name : "등록",
 				func : function() {
@@ -1071,11 +1050,6 @@ $(document).ready(function () {
 		});
 		
 	}); 
-	
-	
-	console.log("123");
-	
-	
 	
 });  //Jquery 
 
