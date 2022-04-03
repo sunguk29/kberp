@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오 ERP - 리드등록</title>
+<title>카카오 ERP - 리드관리</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -675,6 +675,8 @@ $(document).ready(function() {
 				bg : false,
 				bgClose : false,
 				title : "알림",
+				width : 400,
+				height : 200,
 				contents : html,
 				contentsEvent : function() {					
 				},
@@ -714,7 +716,7 @@ $(document).ready(function() {
 												data : params, 
 												success : function(res) { 
 													if(res.res == "success") {
-														location.href = "leadList";
+														$("#listForm").submit();
 													} else {
 														alert("작성중 문제가 발생하였습니다.");
 													}

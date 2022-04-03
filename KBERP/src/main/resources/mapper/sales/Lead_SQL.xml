@@ -15,6 +15,7 @@
 		                    INNER JOIN CLNT_CMPNY CC
 		                            ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
 		        AND TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
+		        AND L.DEL_CHECK IS NULL
 				<choose>
 					<when test="psNum != 0" > <!-- 선택안함 : 0 이 아니면 해당 번호 목록으로 검색 -->
 						AND L.PRGRS_STS_NUM = #{psNum}
@@ -303,4 +304,9 @@
                 PRGRS_STS_NUM =  #{psNum}
 		WHERE LEAD_NUM = #{leadNum}
 	</update>
+<!-- ******************************* 리드 삭제 ******************************* -->		
+	<update id="getLeadDelete" parameterType="hashmap">
+		UPDATE LEAD SET DEL_CHECK = SYSDATE
+		WHERE LEAD_NUM = #{leadNum}
+	</update>	
 </mapper>
