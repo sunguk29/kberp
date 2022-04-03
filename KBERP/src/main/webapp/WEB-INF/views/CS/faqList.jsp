@@ -189,7 +189,7 @@ function drawPaging(pb) {
 			<table class="board_table">
 				<colgroup>
 					<col width="50"/>
-					<col width="110"/>
+					<col width="115"/>
 					<col width="450"/>
 					<col width="100"/>
 					<col width="100"/>

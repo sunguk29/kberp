@@ -109,7 +109,7 @@ public class FaqController {
 			  		iCommonService.getData("FQ.faqUpdate", params);
 			  		break; 
 			  	case "delete":
-			  		iCommonService.getData("FQ.faqDel", params);
+			  		iCommonService.getData("FQ.faqDelete", params);
 			  		break;
 			  	} 
 			  modelMap.put("res", "success");
@@ -130,7 +130,7 @@ public class FaqController {
 	  public ModelAndView faqUpdate(@RequestParam HashMap<String, String> params,
 			  						 ModelAndView mav) throws Throwable {
 		  
-		HashMap<String, String> data = iCommonService.getData("FQ.getfaqUpdate", params);
+		HashMap<String, String> data = iCommonService.getData("FQ.faqUpdate", params);
 	  
 	  mav.addObject("data", data);
 	  
