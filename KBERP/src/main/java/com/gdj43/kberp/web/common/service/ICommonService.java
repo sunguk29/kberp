@@ -32,5 +32,5 @@ public interface ICommonService {
 	public int deleteData(String sql) throws Throwable;
 	
 	public int deleteData(String sql, HashMap<String, String> params) throws Throwable;
-	
+
 }
