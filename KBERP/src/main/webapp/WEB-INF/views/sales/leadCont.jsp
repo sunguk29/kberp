@@ -625,6 +625,9 @@ $(document).ready(function () {
 	/* 인지경로 선택 되게 */
 	$("#rp").val(${data.RCGNTN_PATH_NUM}).prop("selected", this.selected);
 	
+	/* 진행상태 선택 되게 */
+	$("#psNum").val(${data.PRGRS_STS_NUM}).prop("selected", this.selected);
+	
 	
 	/* 리드 상세보기 실행될 시 비동기로 의견 목록 그리기 위해 선언  */
 	reloadOpList();
@@ -1323,9 +1326,14 @@ function uploadName(e) {
 								</td>
 							</tr>
 							<tr>
-								<td><input type="button" class="btn" value="진행상태 *" readonly="readonly"/></td>
+								<td><input type="button" class="btn" value="진행상태 *" readonly="readonly" /></td>
 								<td>
-									<input type="text" class="txt" value="${data.PSNUM}" readonly="readonly"  />
+									<select class="txt_in" id="psNum" name="psNum" disabled="disabled">
+										<option value="0">선택안함</option>
+										<option value="1">진행중</option>
+										<option value="2">종료(영업기회 전환)</option>
+										<option value="3">종료(영업기회 실패)</option>
+									</select>
 								</td>
 							</tr>
 							
