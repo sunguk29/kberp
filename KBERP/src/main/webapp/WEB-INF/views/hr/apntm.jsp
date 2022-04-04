@@ -658,6 +658,19 @@ $(document).ready(function() {
 	   // 사원조회 팝업
 		$("#prfl_srch_btn").on("click", function() {
 			
+/* 		$.ajax({
+			      type : "post",
+			      url : "apntmListAjax",
+			      data : params,
+			      dataType : "json",
+			      success : function(res) {
+			         drawList(res.list);
+			      },
+			      error : function(req) {
+			         console.log(req.responseText);
+			      }
+			   });  */
+			
 			var html = "";
 			                                                     
 			html += "<div class=\"popup_emp_srch_area\">         ";
