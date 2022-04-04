@@ -124,7 +124,18 @@ $(document).ready(function() {
 						<div class="rmrks"><b>비고</b></div>
 						<input type="text" id="rmrks" name="rmrks" readonly="readonly" value="${data.RMRKS}" />
 			<div class="board_bottom">
+				<c:if test="${sAthrtyNum==0}">
 				<input class="cmn_btn" type="button" id="mdfyBtn" value="수정">
+				</c:if>
+				<c:if test="${sAthrtyNum==1}">
+				<input class="cmn_btn" type="button" id="mdfyBtn" value="수정">
+				</c:if>
+				<c:if test="${sAthrtyNum==6}">
+				<input class="cmn_btn" type="button" id="mdfyBtn" value="수정">
+				</c:if>
+				<c:if test="${sAthrtyNum==7}">
+				<input class="cmn_btn" type="button" id="mdfyBtn" value="수정">
+				</c:if>
 				<input class="cmn_btn" type="button" value="목록으로" id="listBtn"/>
 			</div>
 		</div>

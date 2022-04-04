@@ -13,7 +13,13 @@
 #assetName{
 	width:130px;
 }
-
+.mngrName{
+	width:130px;
+	margin-top:5px;
+}
+#mngrtd{
+	margin-left:60px;
+}
 #qunty{
 	width:50px;
 }
@@ -29,7 +35,6 @@
 .sixth_row td:nth-child(1), .rmrks{
 	margin-left: 20px;
 }
-
 .rmrks{
 	margin-top:50px;
 }
@@ -57,7 +62,7 @@
 
 
 #rmrks{
-	margin-left: 20px;
+	margin-left: 10px;
 	width: 870px;
 	height: 150px;
 	margin-bottom: 10px;
@@ -70,6 +75,112 @@ $(document).ready(function() {
 		$("#actionForm").attr("action", "assetList");
 		$("#actionForm").submit();
 	});
+	
+$("#srchEmp").on("click", function() {
+		
+		var html = "";
+		
+		html += "<div class=\"popup_cont\">";
+		html += "<div class=\"name_srch_wrap\">";
+		html += "<table class=\"name_srch_table\">";
+		html += "<tbody>";
+		html += "<tr>";
+		html += "<td>사원명</td>";
+		html += "<td><input type=\"text\" id=\"empSrchTxt\"></td>";
+		html += "<td><div class=\"cmn_btn\" id=\"empSrchBtn\">검색</div></td>";
+		html += "</tr>";
+		html += "</tbody>";
+		html += "</table>";
+		html += "</div>";
+		html += "<div>";
+		html += "<div>";
+		html += "<div>";
+		html += "<table class=\"board_table\">";
+		html += "<colgroup>";
+		html += "<col width=\"130\">";
+		html += "<col width=\"130\">";
+		html += "</colgroup>";
+		html += "<thead>";
+		html += "<tr>";
+		html += "<th>사원 코드</th>";
+		html += "<th>사원명</th>";
+		html += "</tr>";
+		html += "</thead>";
+		html += "<tbody id=\"empListTbody\">";
+		html += "</tbody>";
+		html += "</table>";
+		html += "<div class=\"board_bottom\">";
+		html += "<div class=\"pgn_area\" id=\"pgn_area\">";
+		html += "</div>";
+		html += "</div>";
+		html += "</div>";
+		html += "</div>";
+		html += "</div>";
+		html += "</div>";
+		
+		makePopup({
+			depth : 1,
+			bg : true,
+			width : 400,
+			height : 500,
+			title : "사원검색",
+			contents : html,
+			contentsEvent : function() {
+				$("#sendSrchTxt").val("");
+				
+				reloadList();
+				
+				$("#pgn_area").on("click", "div", function() {
+					$("#page").val($(this).attr("page"));
+					reloadList();
+				});
+				
+				$("#empSrchBtn").on("click", function() {
+					$("#sendSrchTxt").val($("#empSrchTxt").val());
+					reloadList();
+				});
+				
+				$("#empSrchTxt").on("keypress", function(event) {
+					if(event.keyCode == 13) {
+						
+						$("#empSrchBtn").click();
+						
+						return false;
+					}
+				});
+				$("#empListTbody").on("click", "#empName", function() {
+					console.log("click!");
+					$("#mngrName").val($(this).attr("mngrName"));
+					$("#mngrNum").val($(this).attr("mngrNum"));
+					closePopup(1);
+				});
+			},
+			buttons : {
+				name : "닫기",
+				func:function() {
+					closePopup(1);
+				}
+			}
+		});
+	});
+	
+	function reloadList() {
+		var params = $("#empSrchForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "empSrchAjax", 
+			dataType : "json",
+			data : params, 
+			success : function(res) {
+				drawList(res.list);
+				drawPaging(res.pb);
+			},
+			error : function(request, status, error) {
+				console.log(request.responseText);
+			}
+		});
+	}
 	
 	$("#rgstrtnBtn").on("click", function() {
 		if(checkEmpty("#assetName")) {
@@ -127,6 +238,49 @@ function checkEmpty(sel) {
 		return false;
 	}
 }
+function drawPaging(pb) {
+	var html = "";
+	
+	html += "<div class=\"page_btn page_first\" page=\"1\">first</div>";
+	
+	if($("#page").val() == "1") {
+		html += "<div class=\"page_btn page_prev\" page=1>prev</div>";
+	} else {
+		html += "<div class=\"page_btn page_prev\" page=\"" + ($("#page").val() * 1 - 1) + "\">prev</div>";		
+	}
+	
+	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
+		if($("#page").val() == i) {
+			html += "<div class=\"page_btn_on\" page=\"" + i + "\">" + i + "</div>";
+		} else {
+			html += "<div class=\"page_btn\" page=\"" + i + "\">" + i + "</div>";
+		}
+	}
+	
+	if($("#page").val() == pb.maxPcount) {
+		html += "<div class=\"page_btn page_next\" page=\"" + pb.maxPcount + "\">next</div>";		
+	} else {
+		html += "<div class=\"page_btn page_next\" page=\"" + ($("#page").val() * 1 + 1) + "\">next</div>";				
+	}
+	
+	html += "<div class=\"page_btn page_last\" page=\"" + pb.maxPcount + "\">last</div>";
+	
+	$("#pgn_area").html(html);
+	
+}
+
+function drawList(list) {
+	var html = "";
+	
+	for(data of list) {
+		html += "<tr>";
+		html += "<td>" + data.EMP_NUM + "</td>";
+		html += "<td class=\"board_table_hover\" id=\"empName\" mngrNum=\"" + data.EMP_NUM + "\" mngrName=\"" + data.EMP_NAME + "\">" + data.EMP_NAME + "</td>";
+		html += "</tr>";
+	}
+	
+	$("#empListTbody").html(html);
+}
 
 </script>
 </head>
@@ -153,8 +307,14 @@ function checkEmpty(sel) {
 		</div>
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
+			
+			<form action="#" id="empSrchForm" method="post">
+			<input type="hidden" id="sendSrchTxt" name="sendSrchTxt">
+			<input type="hidden" id="page" name="page" value="1">
+			</form>
 			<form action="#" id="rgstrtnForm" method="post" >
 			<input type="hidden" name="writer" value="${sEmpNum}" />
+			<input type="hidden" name="mngrNum" id="mngrNum"/>
 				<table class="intrnl_cost_admnstrtn_new">
 					<tbody>
 						<tr class="sixth_row">
@@ -184,13 +344,10 @@ function checkEmpty(sel) {
 							<td>
 							<input type="date" id="acqrmntDt" name="acqrmntDt" />	
 							</td>
-							<td>담당자</td>
+							<td id="mngrtd">담당자</td>
 							<td>
-								<select id="mngrNum" name="mngrNum">
-									<option value="2022000006">강부장</option>
-									<option value="1">set</option>
-									<option value="2">box</option>
-								</select>	
+							<input type="text" class="mngrName" id="mngrName"  readonly="readonly">			
+							<div class="cmn_btn" id="srchEmp">검색</div>
 							</td>
 						</tr>
 					</tbody>

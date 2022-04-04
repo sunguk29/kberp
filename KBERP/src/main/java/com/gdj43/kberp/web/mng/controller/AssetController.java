@@ -307,4 +307,28 @@ public class AssetController {
 		return mav;
 		
 	}
+	
+	@RequestMapping(value = "/empSrchAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String empSrchAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		// 총 게시글 수
+		int cnt = ics.getIntData("asset.getEmpCnt", params);
+		
+		// 페이징 계산
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
+		
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		List<HashMap<String, String>> list = ics.getDataList("asset.getEmpList", params);
+		
+		modelMap.put("list", list); 
+		modelMap.put("pb", pb);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 }
