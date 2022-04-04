@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP Sample</title>
+<title>카카오뱅크 ERP - 급여명세서조회(관리자)</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -73,9 +73,54 @@ $(document).ready(function() {
 	
 	reloadList();
 	
+	$("#srchMonth").on("change", function() {
+		$("#mon").val($("#srchMonth").val());
+		$("#searchTxt").val(null);
+		$("#txt").val(null);
+		reloadList();
+	});
+	
+	$("#pgn_area").on("click", "div", function() {
+		$("#page").val("1");
+		$("#mon").val($("#srchMonth").val());
+		reloadList();
+	});
+	
+	$("#txt").on("keypress", function(event) {
+		if(event.keyCode == 13) {
+			
+			$("#srchBtn").click();
+			
+			return false;
+		}
+	});
+	
+	$("#srchBtn").on("click", function() {
+		$("#page").val("1");
+		$("#searchTxt").val($("#txt").val());
+		reloadList();
+	});
+	
+	$("#aprvlBtn").on("click", function() {
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "결재",
+			contents : "결재를 요청하시겠습니까?",
+			buttons : [{
+				name : "요청",
+				func:function() {
+					console.log("One!");
+					closePopup();
+				}
+			}, {
+				name : "취소"
+			}]
+		});
+	});
+	
 	
 });
-
 
 function reloadList() {
 	var params = $("#actionForm").serialize();
@@ -101,13 +146,13 @@ function drawList(list) {
 	
 	for(data of list) {
 		html += "<tr>";
-		html += "<td>" + data.부서 + "</td>";
-		html += "<td>" + data.직급 + "</td>";
-		html += "<td class=\"board_table_hover\">" + data.사원명 + "</td>";
-		html += "<td>" + data.급여 + "</td>";
-		html += "<td>" + data.수당합계액 + "</td>";
-		html += "<td>" + data.공제합계액 + "</td>";
-		html += "<td>" + data.실지급액 + "</td>";
+		html += "<td>" + data.DEPT_NAME + "</td>";
+		html += "<td>" + data.RANK_NAME + "</td>";
+		html += "<td class=\"board_table_hover\">" + data.EMP_NAME + "</td>";
+		html += "<td>" + data.SLRY + "원</td>";
+		html += "<td>" + data.BNFT + "원</td>";
+		html += "<td>" + data.WH + "원</td>";
+		html += "<td>" + data.RESULT + "원</td>";
 	}
 	
 	$("tbody").html(html);
@@ -151,6 +196,7 @@ function drawPaging(pb) {
 	<form action="#" id="actionForm" method="post">
 		<input type="hidden" id="mon" name="mon" value="${mon}">
 		<input type="hidden" id="page" name="page" value="${page}">
+		<input type="hidden" id="searchTxt" name="searchTxt">
 		
 		<input type="hidden" name="top" value="${param.top}">
 		<input type="hidden" name="menuNum" value="${param.menuNum}">
@@ -169,12 +215,12 @@ function drawPaging(pb) {
 		<div class="page_title_bar">
 			<div class="page_title_text">급여명세서조회(관리자)</div>
 			<div class="page_srch_area">
-				<input type="month" class="srch_month" value="${mon}">
+				<input type="month" class="srch_month" id="srchMonth" value="${mon}">
 
 				<div class="srch_text_wrap">
-					<input type="text" placeholder="사원명" />
+					<input type="text" id="txt" placeholder="사원명" />
 				</div>
-				<div class="cmn_btn_ml">검색</div>
+				<div class="cmn_btn_ml" id="srchBtn">검색</div>
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -205,7 +251,7 @@ function drawPaging(pb) {
 		<div class="board_bottom">
 			<div class="pgn_area" id="pgn_area">
 			</div>
-			<div class="cmn_btn_ml">결재</div>
+			<div class="cmn_btn_ml" id="aprvlBtn">결재</div>
 		</div>
 	</div>
 	<!-- bottom -->
