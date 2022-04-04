@@ -204,7 +204,7 @@
 	<select id="getSales2BringLead" parameterType="hashmap" resultType="hashmap">
 		SELECT S.SALES_NUM, L.LEAD_NUM, L.LEAD_NAME, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NUM, E.EMP_NAME, S.MNGR_EMP_NUM,
 		       TO_CHAR(S.START_DATE, 'YYYY-MM-DD') AS START_DATE,
-		       DECODE(CCG.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME
+		       DECODE(CCG.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME, CC.CLNT_CMPNY_NUM
 		FROM SALES S INNER JOIN EMP E
 		                     ON E.EMP_NUM = S.MNGR_EMP_NUM
 		             INNER JOIN LEAD L
@@ -525,16 +525,24 @@
 	
 	<!-- 상품 팝업 리스트 -->
 	<select id="popupMdList" parameterType="hashmap" resultType="hashmap">
-		SELECT M.MD_NUM, M.MD_NAME, M.LIMIT_AMNT, M.INTRST_RATE, M.SALES_STS
+		SELECT M.MD_NUM, M.MD_NAME, M.LIMIT_AMNT, M.INTRST_RATE, M.SALES_STS, M.MD_GRADE
 		FROM ( SELECT MD_NUM, MD_NAME, LIMIT_AMNT, INTRST_RATE,
 		       DECODE(SALES_STS_NUM, 0, '판매가능', 1, '판매중단', 2, '출시예정') AS SALES_STS,
-		              ROW_NUMBER() OVER(ORDER BY MD_NUM DESC) AS RNUM
+		              ROW_NUMBER() OVER(ORDER BY MD_NUM DESC) AS RNUM,
+		              DECODE(MD_GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D', 5, 'E') AS MD_GRADE
 		       FROM MD
 		       WHERE DEL_CHECK IS NULL ) M
 		WHERE M.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
-	
+	<!-- 견적(등록) 상품 리스트 -->
+	<select id="mdList" parameterType="hashmap" resultType="hashmap">
+		SELECT CC.CLNT_CMPNY_NAME, MD.MD_NAME, MD.INTRST_RATE, DECODE(MD_GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D', 5, 'E') AS MD_GRADE, 
+		       MD.LOAN_PRD, MD.LIMIT_AMNT, MD.MD_NUM
+		FROM CLNT_CMPNY CC INNER JOIN MD MD
+		                           ON CC.GRADE_NUM = MD.MD_GRADE_NUM
+		WHERE CC.CLNT_CMPNY_NUM = #{ccn}
+	</select>
 	
 	
 	

@@ -19,7 +19,12 @@ public class RprtController {
 	
 	
 	
-	
+	//고객 보고서
+	@RequestMapping(value = "/clntChart")
+	public ModelAndView clntList(ModelAndView mav) {
+		mav.setViewName("sales/rprt/clntChart");
+		return mav;
+	}
 	
 	
 	
@@ -31,5 +36,8 @@ public class RprtController {
 		
 		return mav;
 	}
+	
+	
+	
 	
 }
