@@ -124,7 +124,6 @@ tr:nth-last-child(1) {
 	line-height: 33px;
 	border: none;
 }
-
 .detailList tr td:nth-child(1) {
 	text-align: center;
 }
@@ -844,6 +843,7 @@ pre{
 }
 .mdCont_table {
 	display: table-cell;
+	text-align: center;
 }
 .mdCont_table tr:nth-child(8) td:nth-child(2) {
     border: none;
@@ -1031,18 +1031,20 @@ $(document).ready(function() {
 	reloadMdList();
 	
 	$(".md_bx").on("click", ".mdBox .dtl", function() {
+		var no = $(this).children("#mdNo").val();
+		document.getElementById("no").value = no;
 		
 		var params = $("#mdNumForm").serialize();
 		
 		$.ajax({
-			type = "post",
-			url = "popupMdContAjax",
+			type : "post",
+			url : "popupMdContAjax",
 			dataType : "json",
 			data : params,
-			success : function(data) {
+			success : function(mdData) {
                 var html = "";
-				
-				$.each(data, function(index, data) {
+                
+				$.each(mdData, function(index, data) {
 			
 					html += "<table class=\"mdCont_table\">                                                                                                                                              ";
 					html += "	<tbody>                                                                                                                                                                  ";
@@ -1051,7 +1053,7 @@ $(document).ready(function() {
 					html += "				<input type=\"button\" class=\"btn\" value=\"상품명 *\" readonly=\"readonly\"/>                                                                              ";
 					html += "			</td>                                                                                                                                                            ";
 					html += "			<td colspan=\"3\">                                                                                                                                               ";
-					html += "				<input type=\"text\" class=\"txt\" readonly=\"readonly\" disabled=\"disabled\" value=\"${data.MD_NAME}\"/>	                                                 ";
+					html += "				<input type=\"text\" class=\"txt\" readonly=\"readonly\" disabled=\"disabled\" value=\"" + data.MD_NAME + "\"/>	                                                 ";
 					html += "			</td>                                                                                                                                                            ";
 					html += "		</tr>                                                                                                                                                                ";
 					html += "		<tr height=\"40\">							                                                                                                                         ";
@@ -1181,6 +1183,7 @@ $(document).ready(function() {
 					html += "		</tr>                                                                                                                                                                ";
 					html += "	</tbody>                                                                                                                                                                 ";
 					html += "</table>                                                                                                                                                                    ";
+					
 				});
 				
 				makePopup({
@@ -1203,8 +1206,6 @@ $(document).ready(function() {
 				console.log(req.responseText);
 			}
 		});
-		
-		
 		
 	});
 	
@@ -1317,9 +1318,7 @@ function qtnMdList(list) {
 		html += "	<div class=\"md_grd\">한도금액: " + data.LIMIT_AMNT + "</div>";
 		html += "	<div class=\"md_prd\">대출기간: " + data.LOAN_PRD + "년</div>	";	
 		html += "	<span class=\"md_btn\">";
-		html += "<form action=\"#\" id=\"mdNumForm\" method=\"post\" ";
-		html += "		<span class=\"dtl\" id=\"dtl\">상세보기<input type=\"hidden\" name=\"no\" value=\"" + data.MD_NUM + "\" /></span>";
-		html += "</fomr>";
+		html += "		<span class=\"dtl\" id=\"dtl\">상세보기<input type=\"hidden\" id=\"mdNo\" name=\"mdNo\" value=\"" + data.MD_NUM + "\" /></span>";
 		html += "		<span class=\"gb\">|</span>";
 		html += "		<span class=\"apply\" id=\"apply\">적용</span>";
 		html += "	</span>";
@@ -1339,6 +1338,9 @@ function uploadName(e) {
 </script>
 </head>
 <body>
+<form action="#" id="mdNumForm" method="post" >
+	<input type="hidden" id="no" name="no" /> <!-- 상품 번호 -->
+</form>
 <form action="#" id="mdListForm" method="post">
  <input type="hidden" name="ccn"  value="${lead.CLNT_CMPNY_NUM}" /> <!-- 고객사 등급 번호 -->
  <input type="hidden" id="getMdNum" name="getMdNum" /> <!-- 상품 번호 -->
