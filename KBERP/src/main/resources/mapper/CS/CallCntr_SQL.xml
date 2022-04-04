@@ -24,7 +24,7 @@ WHERE 1=1
 
 <!-- 상담이력 -->
 <select id="getCallCenterCnsl" parameterType="hashmap" resultType="hashmap">
-SELECT I.CLNT_NAME, I.PHONE_NUM_1, TO_CHAR(N.WRITE_DATE, 'YYYY-MM-DD') AS WRITE_DATE, E.EMP_NAME , N.CNSL_TYPE_NUM, 
+SELECT I.CLNT_NUM, I.CLNT_NAME, I.PHONE_NUM_1, TO_CHAR(N.WRITE_DATE, 'YYYY-MM-DD') AS WRITE_DATE, E.EMP_NAME , N.CNSL_TYPE_NUM, 
        CASE WHEN N.CNSL_RSLT_NUM = 0 THEN '완료'
             WHEN N.CNSL_RSLT_NUM = 1 THEN '미처리'
             WHEN N.CNSL_RSLT_NUM = 2 THEN '예약'
@@ -60,8 +60,8 @@ VALUES (INDVDL_CLNT_SEQ.NEXTVAL, #{clnt_name}, #{clnt_grade}, #{phon_num_1}, #{p
 
 <!-- 상담노트 저장 -->
 <insert id="noteSave" parameterType="hashmap">
-INSERT INTO CNSL_NOTE(CNSL_NUM, CLNT_NUM, EMP_NUM, CNSL_TYPE_NUM, CONT, CNSL_RSLT_NUM)
-VALUES (CNSL_NOTE_SEQ.NEXTVAL, #{clnt_num}, #{emp_num}, #{cnsl_type_num}, #{cont}, #{cnsl_rslt_num})
+INSERT INTO CNSL_NOTE(CNSL_NUM, CLNT_NUM, EMP_NUM, CNSL_TYPE_NUM, CONT, CNSL_RSLT_NUM, TO_CHAR(WRITE_DATE, 'YYYY-MM-DD') AS WRITE_DATE)
+VALUES (CNSL_NOTE_SEQ.NEXTVAL, #{clnt_num}, #{emp_num}, #{cnsl_type_num}, #{cont}, #{cnsl_rslt_num}, #{write_date})
 </insert>
 
 <!-- 고객정보 단건 -->

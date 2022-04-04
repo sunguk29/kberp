@@ -736,7 +736,7 @@ $(document).ready(function() {
 						data : params,
 						success : function(res) {
 							console.log(res);
-							
+							drawCnslList(res.list);
 						},
 						error : function(request, status, error) {
 							console.log(request.responseText);
@@ -758,7 +758,21 @@ $(document).ready(function() {
 		});	
 	});
 	
-	
+	function drawCnslList(list) {
+		var html = "";
+		
+		for(var data of list) {
+			html += "<tr no=\"" + data.I.CLNT_NUM +"\">";
+			html += "<td>" + data.I.CLNT_NAME + "</td>";
+			html += "<td>" + data.I.PHONE_NUM_1 + "</td>";
+			html += "<td>" + data.E.EMP_NAME + "</td>";
+			html += "<td>" + data.N.CNSL_TYPE_NUM + "</td>";
+			html += "<td>" + data.WRITE_DATE + "</td>";
+			html += "<td>" + data.CNSL_RSLT_NUM + "</td>";
+			html += "</tr>";
+		}
+		$("#cnslList").html(html);
+	}
 	
 	function drawList(list) {
 		var html = "";
@@ -848,9 +862,9 @@ $(document).ready(function() {
 			buttons :  [{
 				name : "확인",
 				func:function() {
-					if(checkEmpty("#big_sel")) {
+					if(checkEmpty("#cnsl_type_num")) {
 						alert("대분류를 입력하세요.");
-						$("#big_sel").focus();
+						$("#cnsl_type_num").focus();
 					} else if(checkEmpty("#small_sel")) {
 						alert("소분류를 입력하세요.");
 						$("#small_sel").focus();
@@ -860,6 +874,9 @@ $(document).ready(function() {
 					} else if(checkEmpty("#cnsl_rslt")) {
 						alert("상담결과를 입력하세요.");
 						$("#cnsl_rslt").focus();
+					} else if(checkEmpty("#write_date")) {
+						alert("상담일을 입력하세요.");
+						$("#write_date").focus();
 					} else {
 						// 저장
 						var params = $("#noteSaveForm").serialize();
@@ -931,7 +948,6 @@ function checkEmpty(sel) {
 			<!-- 고객정보 파트 -->
 				<div class="top">
 					<div class="clnt_info_cont">
-						<input type="hidden" id="oldsearchTxt" value="${param.searchTxt}"/>
 					<form action="#" id="saveForm" method="post">
 					<input type="hidden" id="clnt_num" name="clnt_num"/>
 						<div class="clnt_info_Header">
@@ -943,25 +959,25 @@ function checkEmpty(sel) {
 						</div>
 		    			<div class="clnt_info_cont_row1">	  
 			    			<div class="clnt_name">고객명</div>
-			    				<input type="text" class="info_txt" id="clnt_name" name="clnt_name" value="">
+			    				<input type="text" class="info_txt" id="clnt_name" name="clnt_name">
 			    			<div class="clnt_grade">고객등급</div>
-			    				<input type="number" class="info_txt" id="clnt_grade" name="clnt_grade" value="">
+			    				<input type="number" class="info_txt" id="clnt_grade" name="clnt_grade">
 			    		</div>
 			    		<div class="clnt_info_cont_row2">	  
-			    			<div class="ltl_cnsl_day">최근상담일</div>
-			    				<input type="date" class="info_txt" id="ltl_cnsl" name="ltl_cnsl" value="">
+			    			<div class="ltl_cnsl_day">상담일</div>
+			    				<input type="date" class="info_txt" id="write_date" name="write_date">
 			    			<div class="phone_num_1">전화번호 1</div>
-			    				<input type="tel" class="info_txt" id="phon_num_1" name="phon_num_1" value="">
+			    				<input type="tel" class="info_txt" id="phon_num_1" name="phon_num_1">
 			    		</div>	
 		    			<div class="clnt_info_cont_row3">	  
 			    			<div class="phone_num_2">전화번호 2</div>
-			    				<input type="tel" class="info_txt" id="phon_num_2" name="phon_num_2" value="">
+			    				<input type="tel" class="info_txt" id="phon_num_2" name="phon_num_2">
 			    		</div>
 			    		<div class="clnt_info_cont_row4">	  
 			    			<div class="adrs">주소</div>
-			    				<input class="adrs_input" type="text" id="adrs" name="adrs" value="">
+			    				<input class="adrs_input" type="text" id="adrs" name="adrs">
 			    				<br/>
-			    				<input class="adrs_input_dtls" type="text" id="dtl_adrs" name="dtl_adrs" value="">
+			    				<input class="adrs_input_dtls" type="text" id="dtl_adrs" name="dtl_adrs">
 			    		</div>	
 		    			<div class="cmn_btn_mr" id="saveBtn">저장</div>
 		    		</form>
@@ -1059,7 +1075,7 @@ function checkEmpty(sel) {
 						</div>
 						<div class="rcrd_cnsl_note_row3">
 							<div class="cnsl_note_rslt">상담결과</div>
-							<input type="text"  value=""  readonly="readonly" id="rcrd_cnsl_rslt_txt" />
+							<input type="text"  readonly="readonly" id="rcrd_cnsl_rslt_txt" />
 						</div>
 					</div>	
 				</div>
