@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -250,15 +251,15 @@ $(document).ready(function() {
 							</c:otherwise>
 						</c:choose>
 						<td>단가</td>
-						<td>${data.UNIT_PRICE}원</td>
+						<td><fmt:formatNumber value="${data.UNIT_PRICE}" pattern="###,###,###,###"/>원</td>
 					</tr>
 					<tr>
 						<td>공급가액</td>
-						<td colspan="5">${data.SPLY_PRICE}원</td>
+						<td colspan="5"><fmt:formatNumber value="${data.SPLY_PRICE}" pattern="###,###,###,###"/>원</td>
 					</tr>
 					<tr>
 						<td>부가세</td>
-						<td colspan="5">${data.SRTX}원</td>
+						<td colspan="5"><fmt:formatNumber value="${data.SRTX}" pattern="###,###,###,###"/>원</td>
 					</tr>
 					<tr>
 						<td>사업자번호</td>
@@ -266,7 +267,7 @@ $(document).ready(function() {
 					</tr>
 					<tr>
 						<td>합계</td>
-						<td colspan="5"><b>${data.AMNT}원</b></td>
+						<td colspan="5"><b><fmt:formatNumber value="${data.AMNT}" pattern="###,###,###,###"/>원</b></td>
 					</tr>
 					<tr>
 						<td>비고</td>
@@ -283,9 +284,11 @@ $(document).ready(function() {
 						<td>첨부파일</td>
 						<td colspan="5">
 							<c:choose>
-								<c:when test="${data.ATT_FILE != null}">
+								<c:when test="${!empty data.ATT_FILE}">
+									<c:set var="fileLength" value="${fn:length(data.ATT_FILE)}"></c:set>
+									<c:set var="fileName" value="${fn:substring(data.ATT_FILE, 20, fileLength)}"></c:set>
 									<div class="atchd_file"></div>
-									<div class="file_name">${data.ATT_FILE}</div>
+									<a href="resources/upload/${data.ATT_FILE}" class="file_name" download="${fileName}">${fileName}</a>
 								</c:when>
 								<c:otherwise>
 									-

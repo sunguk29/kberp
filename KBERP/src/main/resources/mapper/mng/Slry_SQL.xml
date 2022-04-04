@@ -24,9 +24,9 @@
 	</select>
 	
 	<select id="getSlryMngList" resultType="hashmap" parameterType="hashmap">
-		SELECT D.DEPT_NAME, R.RANK_NAME, E.EMP_NAME, E.EMP_NUM, S.SLRY, NVL(SUM(B.AMNT), 0) AS BNFT,
-		       (S.SLRY * 0.045) + (S.SLRY * 0.0343) + (S.SLRY * 0.0343 * 0.1152) + (S.SLRY * 0.008) + (S.SLRY * 0.04) + (S.SLRY * 0.04 * 0.1) AS WH,
-		       (S.SLRY + NVL(SUM(B.AMNT), 0) - ((S.SLRY * 0.045) + (S.SLRY * 0.0343) + (S.SLRY * 0.0343 * 0.1152) + (S.SLRY * 0.008) + (S.SLRY * 0.04) + (S.SLRY * 0.04 * 0.1))) AS RESULT
+		SELECT D.DEPT_NAME, R.RANK_NAME, E.EMP_NAME, E.EMP_NUM, TO_CHAR(S.SLRY, '999,999,999,999') AS SLRY, NVL(TO_CHAR(SUM(B.AMNT), '999,999,999,999'), 0) AS BNFT,
+		       TO_CHAR((S.SLRY * 0.045) + (S.SLRY * 0.0343) + (S.SLRY * 0.0343 * 0.1152) + (S.SLRY * 0.008) + (S.SLRY * 0.04) + (S.SLRY * 0.04 * 0.1), '999,999,999,999') AS WH,
+		       TO_CHAR((S.SLRY + NVL(SUM(B.AMNT), 0) - ((S.SLRY * 0.045) + (S.SLRY * 0.0343) + (S.SLRY * 0.0343 * 0.1152) + (S.SLRY * 0.008) + (S.SLRY * 0.04) + (S.SLRY * 0.04 * 0.1))), '999,999,999,999') AS RESULT
 		FROM EMP E INNER JOIN APNTM A
 		                   ON E.EMP_NUM = A.EMP_NUM
 		           INNER JOIN RANK R
@@ -42,7 +42,7 @@
 		<if test="searchTxt != null and searchTxt != ''">
 			AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
 		</if>
-		GROUP BY D.DEPT_NAME, R.RANK_NAME, E.EMP_NAME, S.SLRY, S.STNDR_YEAR_MONTH
+		GROUP BY D.DEPT_NAME, R.RANK_NAME, E.EMP_NAME, E.EMP_NUM, S.SLRY, S.STNDR_YEAR_MONTH
 	</select>
 	
 </mapper>
