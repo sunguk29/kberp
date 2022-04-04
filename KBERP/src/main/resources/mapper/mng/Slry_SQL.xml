@@ -24,7 +24,7 @@
 	</select>
 	
 	<select id="getSlryMngList" resultType="hashmap" parameterType="hashmap">
-		SELECT D.DEPT_NAME, R.RANK_NAME, E.EMP_NAME, S.SLRY, NVL(SUM(B.AMNT), 0) AS BNFT,
+		SELECT D.DEPT_NAME, R.RANK_NAME, E.EMP_NAME, E.EMP_NUM, S.SLRY, NVL(SUM(B.AMNT), 0) AS BNFT,
 		       (S.SLRY * 0.045) + (S.SLRY * 0.0343) + (S.SLRY * 0.0343 * 0.1152) + (S.SLRY * 0.008) + (S.SLRY * 0.04) + (S.SLRY * 0.04 * 0.1) AS WH,
 		       (S.SLRY + NVL(SUM(B.AMNT), 0) - ((S.SLRY * 0.045) + (S.SLRY * 0.0343) + (S.SLRY * 0.0343 * 0.1152) + (S.SLRY * 0.008) + (S.SLRY * 0.04) + (S.SLRY * 0.04 * 0.1))) AS RESULT
 		FROM EMP E INNER JOIN APNTM A

@@ -119,6 +119,10 @@ $(document).ready(function() {
 		});
 	});
 	
+	$("tbody").on("click", "#empName", function() {
+		makeAlert("급여명세서 상세보기로 이동시켜야 함", "급여명세서 상세보기로 이동시켜야 함");
+	});
+	
 	
 });
 
@@ -148,7 +152,7 @@ function drawList(list) {
 		html += "<tr>";
 		html += "<td>" + data.DEPT_NAME + "</td>";
 		html += "<td>" + data.RANK_NAME + "</td>";
-		html += "<td class=\"board_table_hover\">" + data.EMP_NAME + "</td>";
+		html += "<td class=\"board_table_hover\" id=\"empName\" empNum=\"" + data.EMP_NUM + "\">" + data.EMP_NAME + "</td>";
 		html += "<td>" + data.SLRY + "원</td>";
 		html += "<td>" + data.BNFT + "원</td>";
 		html += "<td>" + data.WH + "원</td>";
