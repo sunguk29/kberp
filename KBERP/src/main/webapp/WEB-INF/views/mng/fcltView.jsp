@@ -20,24 +20,7 @@
 	width: 900px;
 	font-size: 10.5pt;
 }
-.popup_bg {
-	/* 숨김용 */
-	 display: none;
-}
-.popup {
-	/* 숨김용 */
-	display: none;
-	/* 크기변경용 */
-	width: 600px;
-	height: 400px;
-	top: calc(50% - 200px); /* 높이 반  */
-	left: calc(50% - 300px); /* 너비 반 */
-}
 
-.popup_cont {
-	/* 내용 변경용 */
-	font-size: 10.5pt;
-}
 /* 개인 작업 영역 */
 .page_srch_area{
 	margin-left : 400px; 
@@ -130,16 +113,51 @@ $(document).ready(function() {
 		
 		$("#backForm").submit();
 	});
-	
-	$("#mdfyBtn").on("click",function(){
+
+	$("#updateBtn").on("click",function(){
 		$("#searchGbn").val($("#oldSearchGbn").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
 		
 		$("#actionForm").attr("action","fcltUpdate");
 		$("#actionForm").submit();
-		
-		$("#backForm").submit();
 	});
+	
+	$("#btn2Btn").on("click", function() {
+		makePopup({
+			width : 400,
+			height : 200,
+			bg : true,
+			bgClose : true,
+			title : "시설물 삭제",
+			contents : "시설물을 삭제하시겠습니까?",
+			buttons : [{
+				name : "시설물 삭제",
+				func:function() {
+					var params = $("#actionForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "fcltAction/delete",
+						dataType : "json",
+						data : params,
+						success : function(res){ 
+							if(res.res == "success"){
+								$("#backForm").submit();
+							}else{
+								alert("삭제 중 문제가 발생했습니다.");
+							}
+						},
+						error : function(request, status, error){
+							console.log(request.responseText);
+						}
+					});	
+				}
+			}, {
+				name : "닫기"
+			}]
+		});
+	});
+	
 }); 
 
 function reloadList() { //목록 조회용 + 페이징 조회용
@@ -225,7 +243,7 @@ function drawPaging(pb) {
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 				<div id="file_preview">
-					 <img src="resources/upload/${data.ATT_PCTR}">
+					 <img src="resources/${data.ATT_PCTR}">
 				</div>
 					<div id="fclty_input_area">
 						<div class="fclty_input_row">
@@ -270,6 +288,9 @@ function drawPaging(pb) {
 					
 <div class="page_srch_area">
 	<form action="#" id="actionForm" method="post">
+		<input type="hidden" id="top" name="top" value="${param.top}" />
+		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 		<input type="hidden" id="page" name="page" value="1" />
 		<input type="hidden" id="no" name="no" value="${param.no}" />
 		<input type="hidden" id="fOldSearchGbn" value="${param.fSearchGbn}"/>
@@ -312,8 +333,10 @@ function drawPaging(pb) {
 				</div>
 				
 				<div class="cmn_btn_ml" id="listBtn">목록으로</div>
-				<div class="cmn_btn_ml" id="mdfyBtn">수정</div>
-				<div class="cmn_btn_ml" id="delBtn">삭제</div>
+				<c:if test="${sDeptNum eq 5}">
+					<div class="cmn_btn_ml" id="updateBtn">수정</div>
+					<div class="cmn_btn_ml" id="btn2Btn">삭제</div>
+				</c:if>
 			</div>
 				</div>
 	</div>
