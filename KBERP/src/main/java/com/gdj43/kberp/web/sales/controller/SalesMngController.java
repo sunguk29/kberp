@@ -339,9 +339,9 @@ public class SalesMngController {
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		int opListCnt = iCommonService.getIntData("salesMng.opListCnt", params);
+		int opListCnt = iCommonService.getIntData("salesMng.salesOpListCnt", params);
 		
-		List<HashMap<String, String>> list = iCommonService.getDataList("salesMng.getOpList", params);
+		List<HashMap<String, String>> list = iCommonService.getDataList("salesMng.getSalesOpList", params);
 		
 		modelMap.put("list", list);
 		modelMap.put("opListCnt", opListCnt);

@@ -55,8 +55,8 @@ $(document).ready(function() {
 			reloadList(); 	
 		});
 	 //상세보기
- 	$("tbody").on("click", "tr" , function(){
-		$("#no").val($(this).attr("no"));
+ 	$("tbody").on("click", "td:nth-child(2)" , function(){
+		$("#no").val($(this).parent().attr("no"));
 		$("#actionForm").attr("action","guides");
 		$("#actionForm").submit();
 		});

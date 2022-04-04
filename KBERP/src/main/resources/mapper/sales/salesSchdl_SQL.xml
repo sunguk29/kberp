@@ -323,13 +323,15 @@
 	<!-- 리드 상세 -->
 	<select id="getLeadCont" resultType="hashmap" parameterType="hashmap">	
 		SELECT LD.LEAD_NAME, EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, CC.GRADE_NUM, LD.RCGNTN_PATH_NUM, E.EMP_NAME,
-        	   DECODE(PRGRS_STS_NUM, 1, '진행중', 2, '종료(영업기회 전환)', 3, '종료(영업기회 실패)') AS PSNUM
+        	   L.PRGRS_STS_NUM
 		FROM LEAD LD INNER JOIN ENTRPRS_CLNT EC
 		                     ON LD.CLNT_NUM = EC.CLNT_NUM
 		             INNER JOIN CLNT_CMPNY CC
 		                     ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
 		             INNER JOIN EMP E
 		                     ON LD.MNGR_EMP_NUM = E.EMP_NUM
+		             INNER JOIN LEAD L 
+		             		 ON L.LEAD_NUM = LD.LEAD_NUM
 		WHERE LD.LEAD_NUM = #{leadNum}           
 	</select>
 	<!-- 리드 의견 개수 -->

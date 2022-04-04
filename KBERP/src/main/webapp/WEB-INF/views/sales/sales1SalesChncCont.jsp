@@ -610,7 +610,7 @@ function drawOpList(list) {
 						<input type="text" name="prgrsStsNum" value="${data.PRGRS_STS_NUM}" />
 						<input type="text" id="salesNum" name="salesNum" value="${data.SALES_NUM}" />
 				
-					<div class="bot_title"><h3>영업기회<div class="drop_btn"></div></h3></div>
+					<div class="bot_title"><h3>영업기회</h3></div>
 					<hr class="hr_bot" color="white" width="925px">
 					<div class="page_cont_title_text">기본정보</div>
 					<hr class="hr_width">
@@ -784,8 +784,8 @@ function drawOpList(list) {
 						<div class="cmn_btn subm">등록</div>
 					</div>
 				</form>
-<!-- 					<!-- 히스토리
-					<div class="mgtop"></div>
+ 					<!-- 히스토리 -->
+<!-- 					<div class="mgtop"></div>
 					<div class="bot_title"><h3>히스토리(5)<div class="drop_btn"></div></h3></div>
 					<hr color="#F2B705" width="925px">
 					<div class="bx">
@@ -814,7 +814,7 @@ function drawOpList(list) {
 								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
 								<div class="txtOp">담당자:000</div>
 							</div>
-					</div> --> 
+					</div>  -->
 					<hr class="hr_bot" color="white" width="925px">
 					<hr class="hr_bot" color="white" width="925px">
 					<div class="salesOver_btn nb">영업 종료하기</div>

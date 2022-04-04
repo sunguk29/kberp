@@ -335,7 +335,7 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
+		
 	$("#listBtn").on("click", function() {
 		$("#actionForm").attr("action", "prgrsEvent");
 		$("#actionForm").submit();
@@ -381,6 +381,8 @@ $(document).ready(function() {
 			}]
 		}); // makePopup end
 	}); // deleteBtn end
+	
+	
 	
 	
 });
@@ -433,23 +435,24 @@ $(document).ready(function() {
 			</div>
 			<div class="wrap_comment">
 				<div id="comment_header">
-					댓글 20개
+					댓글 개
 				</div>
 					
 				<div id="comment_header2">
 					<div><input type="button" id="more_Btn" value="댓글 더 보기" ></div>
 				</div>
 				
+				<c:forEach items="${comments}" var="comments">
 				<div id="comment_content">
 					<div id="commnet_writer">
-					랫서판다 <span id="com_writer_date">2022-01-01 17:10</span>
-					<!-- <div><input type="submit" value="수정" id="com_correct"></div> -->
+					 ${comments.WRITER_NAME}<span id="com_writer_date">${comments.CMNT_DATE}</span>
 					<div><input type="submit" value="삭제" id="com_cancle"></div>
 					</div>
 					<div id="comment_cont">
-					<div>너굴맨 오류가 생겨요</div>
+					<div>${comments.CMNT_CONT}</div>
 					</div>
 				</div>
+				</c:forEach>
 				
 				<div id="comment_write">
 					<div id="co_writer">

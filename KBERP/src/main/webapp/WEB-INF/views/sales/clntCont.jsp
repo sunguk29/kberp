@@ -325,6 +325,8 @@ td:nth-child(1), td:nth-child(3){
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	console.log('${param.searchTxt}');
+	
 	$("#listBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntList");
 		$("#actionForm").submit();

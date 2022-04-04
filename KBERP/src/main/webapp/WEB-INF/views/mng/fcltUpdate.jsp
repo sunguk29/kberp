@@ -16,6 +16,9 @@
 	font-size: 10.5pt;
 }
 /* 개인 작업 영역 */
+input:focus {
+	outline-color: #F2CB05;
+}
 #file_preview{
 	vertical-align:top;
 	display:inline-block;
@@ -40,6 +43,7 @@
 }
 .fclty_input{
 	display: inline-block;
+	height: 23px;
 }
 .cmn_btn_ml{
 	margin-top: 5px;
@@ -62,6 +66,15 @@
 #files{
 	display: none;
 }
+input:focus {
+	outline-color: #F2CB05;
+}
+#fileUpload{
+	width: 305px;
+}
+.name_srch_table{
+	margin-left: 35px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -79,8 +92,8 @@ $(document).ready(function() {
 	var html = "";
 	
 	html += "<div class=\"popup_cont\">";
-	html += "<div class=\"acnt_name_srch_wrap\">";
-	html += "<table class=\"acnt_name_srch_table\">";
+	html += "<div class=\"name_srch_wrap\">";
+	html += "<table class=\"name_srch_table\">";
 	html += "<tbody>";
 	html += "<tr>";
 	html += "<td>사원명</td>";
@@ -175,13 +188,12 @@ $(document).ready(function() {
 		}else if(checkEmpty("#fcltyCnt")){
 			alert("수용인원을 입력하세요");
 			$("#fcltyCnt").focus();
-		}else if(checkEmpty("#files")){
+		}else if(checkEmpty("#attFile")){
 			alert("시설물 사진을 첨부하세요");
-			$("#fcltyEmp").focus();
 		}else{
-			var writeForm = $("#writeForm");
+			var updateForm = $("#updateForm");
 			
-			writeForm.ajaxForm({
+					updateForm.ajaxForm({
 				success : function(res){
 					console.log(res);
 					// 물리파일명 보관
@@ -189,7 +201,7 @@ $(document).ready(function() {
 						$("#attFile").val(res.fileName[0]);						
 					}
 					// 글 저장
-					var params = $("#writeForm").serialize();
+					var params = $("#updateForm").serialize();
 					
 					$.ajax({
 						type : "post",
@@ -198,7 +210,7 @@ $(document).ready(function() {
 						data : params,
 						success : function(res){ 
 							if(res.res == "success"){
-								$("#actionForm").attr("action","fcltList");
+								$("#actionForm").attr("action","fcltView");
 								$("#actionForm").submit();
 							}else{
 								alert("작성 중 문제가 발생했습니다.");
@@ -214,7 +226,7 @@ $(document).ready(function() {
 					console.log(request.responseText);
 				} // error end
 			}); //ajaxform end
-			writeForm.submit(); //ajaxForm 실행
+			updateForm.submit(); //ajaxForm 실행
 		}
 	});
 });
@@ -331,12 +343,13 @@ function drawPaging(pb) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">시설물 등록</div>
+			<div class="page_title_text">시설물 수정</div>
 			
 <form action="#" id="actionForm" method="post">
 	<input type="hidden" id="top" name="top" value="${param.top}" />
 	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+	<input type="hidden" id="no" name="no" value="${param.no}" />
 	<input type="hidden" name="page" value="${param.page}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 </form>
@@ -348,15 +361,18 @@ function drawPaging(pb) {
 </form>
 		<div class="cont_area">
 		
-<form action="fileUploadAjax" id="writeForm" method="post" enctype="multipart/form-data">
+<form action="fileUploadAjax" id="updateForm" method="post" enctype="multipart/form-data">
 		<input type="hidden" id="top" name="top" value="${param.top}" />
 		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 		<input type="hidden" name="mngEmpNum" value="${sEmpNum}">
-		<input type="hidden" name="empNum" id="numEmp"/>
+		<input type="hidden" id="no" name="no" value="${param.no}" />
+		<input type="hidden" name="empNum" id="numEmp" value="${data.EMP_NUM}"/>
 			<!-- 여기부터 쓰면 됨 -->
 				<div id="file_preview">
-					<div id="previews"></div>
+					<div id="previews">
+						<img src="resources/${data.ATT_PCTR}">
+					</div>
 						<div>
 						  <span class="warning"></span>
 						</div>
@@ -366,33 +382,33 @@ function drawPaging(pb) {
 					
 					<div class="fclty_input_row">	
 						<div class="fclty_input_text">시설물 명 : </div>
-						<input type="text" class="fclty_input" id="fcltyName" name="fcltyName">
+						<input type="text" class="fclty_input" id="fcltyName" name="fcltyName" value="${data.FCLTY_NAME}">
 					</div>
 					<div class="fclty_input_row">	
 						<div class="fclty_input_text">위치 : </div>
-						<input type="text" class="fclty_input" id="fcltyPlace" name="place" >
+						<input type="text" class="fclty_input" id="fcltyPlace" name="place" value="${data.PLACE}">
 					</div>
 					<div class="fclty_input_row">
 						<div class="fclty_input_text">관리자 : </div>
-						<input type="text" class="fclty_input" id="fcltyEmp"  readonly="readonly">			
+						<input type="text" class="fclty_input" id="fcltyEmp"  readonly="readonly" value="${data.MNG_EMP}" >			
 						<div class="cmn_btn" id="srchEmp">관리자 검색</div>
 					</div>
 					<div class="fclty_input_row">
 						<div class="fclty_input_text">수용인원 : </div>
-						<input type="text" class="fclty_input" id="fcltyCnt" name="acptNum">
+						<input type="text" class="fclty_input" id="fcltyCnt" name="acptNum" value="${data.ACPT_NUM_OF_PL}">
 					</div>
 					<div class="fclty_input_row">
 						<div class="fclty_input_text">비고 : </div>
-						<input type="text" class="fclty_input" id="rmrks" name="rmrks">
+						<input type="text" class="fclty_input" id="rmrks" name="rmrks" value="${data.RMRKS}">
 					</div>
 					<div class="button_row">
-						<div class="cmn_btn_ml" id="addBtn">등록</div>
+						<div class="cmn_btn_ml" id="addBtn">수정</div>
 						<div class="cmn_btn_ml" id="listBtn">목록으로</div>
 					</div>
 				</div>
 				<div id="atchmn_row">
-					<input type="file" id="files" name="att"/>
-					<input type="hidden" id="attFile" name="attFile">
+					<input type="file" id="files" name="att" />
+					<input type="hidden" id="attFile" name="attFile" value="${data.ATT_PCTR}"/>
 					<div class="cmn_btn_ml" id="fileUpload" >첨부파일</div>
 				</div>	
 </form>

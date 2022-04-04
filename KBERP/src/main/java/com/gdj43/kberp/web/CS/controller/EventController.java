@@ -63,6 +63,7 @@ public class EventController {
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
 		List<HashMap<String, String>> list = iCommonService.getDataList("ev.getEventList", params);
+
 		
 		modelMap.put("list", list);
 		modelMap.put("pb", pb);
@@ -77,8 +78,11 @@ public class EventController {
 							  ModelAndView mav) throws Throwable {
 		
 		HashMap<String, String> data = iCommonService.getData("ev.getEvent", params);
-		
+		List<HashMap<String, String>> comments = iCommonService.getDataList("ev.getEventCmnt", params);
+
 		mav.addObject("data", data);
+		mav.addObject("comments", comments);
+		mav.addObject("cmt_count", comments.size()); // 댓글 개수 불러오기 
 		
 		mav.setViewName("CS/event");
 		
