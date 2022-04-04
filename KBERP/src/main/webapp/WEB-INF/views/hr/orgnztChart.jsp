@@ -375,7 +375,7 @@ $(document).ready(function() {
     	   			  	//선택 부서의 상위부서 없을 경우 카카오뱅크를 첫번째 옵션으로 설정
 						if($("#superDeptNum").val() == "" || $("#superDeptNum").val()  == null || $("#superDeptNum").val()  == "undefined") {
 		    	    	 	 console.log("현재 - 상위부서 null 임, 상위부서번호 : " + $("#superDeptNum").val())
-				    	html += "	 <option odeptNum=\"\" odeptLevel=\"\">카카오뱅크</option> ";
+				    	html += "	 <option odeptNum=\"\" odeptLevel=\"1\">카카오뱅크</option> ";
 							for(var data of res.dept ) { 
 								if(data.DEPT_NUM != $("#sdeptNum").val()) {
 					   			    html += "<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
@@ -383,11 +383,11 @@ $(document).ready(function() {
 							}
     	   			  	//선택 부서의 상위부서 있을 경우 해당 상위부서를 첫번째 옵션, 카카오뱅크를 두번째 옵션으로 설정
 		    	    	} else {
-		    	    	 	 console.log("상위부서 null 아님, 상위부서번호 : " + $("#superDeptNum").val())
+		    	    	 	 console.log("현재 - 상위부서 null 아님, 상위부서번호 : " + $("#superDeptNum").val())
 		    	    		 for(var data of res.dept ) { 
 			    	    		 if(data.DEPT_NUM == $("#superDeptNum").val()) {
 					   			 html += "<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
-			    				 html += "<option odeptNum=\"\" odeptLevel=\"\">카카오뱅크</option> ";
+			    				 html += "<option odeptNum=\"\" odeptLevel=\"1\">카카오뱅크</option> ";
 			    	    		 } 
 			    	    	 }
 			    	    	 for(var data of res.dept ) { 
@@ -418,14 +418,15 @@ $(document).ready(function() {
 										$("#deptInput").focus();
 									} else {
 									$("#deptName").val($("#deptInput").val());
-									if($("#superDeptSelect option:selected").attr("odeptNum") == "undefined") {
-									$("#mdfySuperDeptNum").val("null");
+									if($("#superDeptSelect option:selected").attr("odeptNum") == "undefined" || $("#superDeptSelect option:selected").attr("odeptNum") == "" ) {
+									$("#mdfySuperDeptNum").val(null);
+									$("#mdfyDeptLevel").val("1");
 									} else {
 									$("#mdfySuperDeptNum").val($("#superDeptSelect option:selected").attr("odeptNum"));
 									}
 									$("#mdfyDeptLevel").val($("#superDeptSelect option:selected").attr("odeptLevel"));
 									console.log("수정 - 상위부서번호 : " + $("#mdfySuperDeptNum").val())
-									console.log("수정 - : " + $("#deptName").val())
+									console.log("수정 - 부서명 : " + $("#deptName").val())
 									console.log("수정 - 부서레벨 : " + $("#mdfyDeptLevel").val())
 									var params = $("#actionForm").serialize();
 									$.ajax({

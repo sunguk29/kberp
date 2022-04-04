@@ -141,7 +141,7 @@ public class FcltyController {
 		
 		 int cnt = iCommonService.getIntData("Fclty.fcltyListCnt",params);
 		 
-		 PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt,5,10);
+		 PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt,5,5);
 		
 		 params.put("startCount", Integer.toString(pb.getStartCount()));
 		 params.put("endCount", Integer.toString(pb.getEndCount()));
@@ -157,7 +157,8 @@ public class FcltyController {
 	}
 	//시설물상세보기 시설물데이터
 	@RequestMapping(value = "/fcltView")
-	public ModelAndView fcltView(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+	public ModelAndView fcltView(@RequestParam HashMap<String, String> params, 
+								 ModelAndView mav) throws Throwable {
 		
 		HashMap<String, String> data = iCommonService.getData("Fclty.fcltyView", params);
 		
@@ -178,7 +179,7 @@ public class FcltyController {
 		
 		 int cnt = iCommonService.getIntData("Fclty.fcltyViewListCnt",params);
 		 
-		 PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt,1,10);
+		 PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt,5,5);
 		
 		 params.put("startCount", Integer.toString(pb.getStartCount()));
 		 params.put("endCount", Integer.toString(pb.getEndCount()));
@@ -234,7 +235,7 @@ public class FcltyController {
 				iCommonService.updateData("Fclty.fcltyUpdate", params);
 				break;
 			case "delete":
-				iCommonService.deleteData("Fclty.fcltUseRqstCncl", params);
+				iCommonService.deleteData("Fclty.fcltDelete", params);
 				break;
 			}
 			modelMap.put("res", "success");

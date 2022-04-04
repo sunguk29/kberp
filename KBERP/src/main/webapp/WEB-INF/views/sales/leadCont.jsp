@@ -625,6 +625,9 @@ $(document).ready(function () {
 	/* 인지경로 선택 되게 */
 	$("#rp").val(${data.RCGNTN_PATH_NUM}).prop("selected", this.selected);
 	
+	/* 진행상태 선택 되게 */
+	$("#psNum").val(${data.PRGRS_STS_NUM}).prop("selected", this.selected);
+	
 	
 	/* 리드 상세보기 실행될 시 비동기로 의견 목록 그리기 위해 선언  */
 	reloadOpList();
@@ -853,7 +856,6 @@ $(document).ready(function () {
 				});
 		});	
 	
-	console.log("적용됏나");
 	
 	/* 예정된 일정 수정 팝업 */
 	$(".sbx").on("click", ".sch_re", function() {
@@ -861,6 +863,7 @@ $(document).ready(function () {
 		var lnum = $(this).children("#leadListNumber").val();
 		document.getElementById("schdlNumber").value = snum;
 		document.getElementById("leadNumber").value = lnum;
+		
 		
 		var params = $("#lsForm").serialize();
 		
@@ -964,6 +967,7 @@ $(document).ready(function () {
 					html += "	<input type=\"text\" id=\"popFileName\" readonly=\"readonly\" />                 ";
 					html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />   ";
 					html += "	<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />           ";
+					html += "	<input type=\"hidden\" id=\"schdlnum\" name=\"schdlnum\" />           ";
 					html += "</div>                                                                     ";
 					html += "</form>";
 					
@@ -976,9 +980,29 @@ $(document).ready(function () {
 			title : "예정된 일정 수정",
 			contents : html,
 			contentsEvent : function() {
-				$(".aff_btn").on("click", function() {
+				
+				$("#fileDelete").on("click", function() {
+					$("#file_name").remove();
+					$(this).remove();
+					
+					var html = "";
+					
+					html += "<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
+					
+					$("#uploadBtn").html(html);
+				});
+				
+				function uploadName(e) {
+					var files = e.files;
+					var filename = files[0].name;
+					$("#fileName").val(filename);
+				}
+				
+				$(".pop_rvn_txt").on("click", ".aff_btn", function() {
 					$("#att").click();
 				});
+				
+				document.getElementById("schdlnum").value = snum;
 			},
 			width : 600,
 			height : 520,
@@ -1050,6 +1074,56 @@ $(document).ready(function () {
 		});
 		
 	}); 
+	
+	/* 예정된 일정 삭제 */
+	$(".sbx").on("click", ".sch_del", function() {
+		var snum = $(this).children("#schdlListNumber").val();
+		console.log(snum);
+		document.getElementById("schdldeletenum").value = snum;
+		
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "삭제",
+			contents : "삭제하시겠습니까?",
+			contentsEvent : function() {
+				$("#popup").draggable();
+				
+			},
+			draggable : true,
+			width : 400,
+			height: 180,
+			buttons : [{
+				name : "확인",
+				func:function(){
+					
+							
+							var params = $("#botSchdlActionForm").serialize();
+							
+							$.ajax({
+								type  : "post",
+								url : "salesSchdlAction/delete",
+								dataType : "json",
+								data : params,
+								success : function(res) {
+									if(res.res == "success"){
+										closePopup();
+										reloadSCList();
+									} else {
+										alert("삭제중 문제가 발생하였습니다.");
+									}
+								},
+								error : function(request, status, error) {
+									console.log(request.responseTxt);
+								}
+							});
+						}
+					}, {
+						name : "취소"
+						
+					}]
+			});
+	});
 	
 });  //Jquery 
 
@@ -1137,7 +1211,7 @@ function drawScList(list) {
 		html += "";
 		html +=	"<div class=\"name\">일정명   :" + data.SCHDL_NAME + "</div>";
 		html +=	"<div class=\"txtOp\">기간   " + data.START_DATE_HR +  " ~ " + data.END_DATE_HR + "</div>";
-		html +=	"<div class=\"txtOp sche\">담당자   :" + data.EMP_NAME + "</div><span class=\"sch_re\" >수정<input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"leadListNumber\" value=\"" + ${param.leadNum} + "\" /></span><span> | </span><span class=\"sch_del\">삭제</span>";
+		html +=	"<div class=\"txtOp sche\">담당자   :" + data.EMP_NAME + "</div><span class=\"sch_re\" >수정<input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"leadListNumber\" value=\"" + ${param.leadNum} + "\" /></span><span> | </span><span class=\"sch_del\" >삭제<input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"leadListNumber\" value=\"" + ${param.leadNum} + "\" /></span>";
 		html += "</div>";
 		html += "</div>";
 	}
@@ -1252,9 +1326,14 @@ function uploadName(e) {
 								</td>
 							</tr>
 							<tr>
-								<td><input type="button" class="btn" value="진행상태 *" readonly="readonly"/></td>
+								<td><input type="button" class="btn" value="진행상태 *" readonly="readonly" /></td>
 								<td>
-									<input type="text" class="txt" value="${data.PSNUM}" readonly="readonly"  />
+									<select class="txt_in" id="psNum" name="psNum" disabled="disabled">
+										<option value="0">선택안함</option>
+										<option value="1">진행중</option>
+										<option value="2">종료(영업기회 전환)</option>
+										<option value="3">종료(영업기회 실패)</option>
+									</select>
 								</td>
 							</tr>
 							
@@ -1317,6 +1396,7 @@ function uploadName(e) {
 					<!-- 예정된 일정 -->
 					<form action="#" id="botSchdlActionForm" method="post">
 						<input type="hidden" name="leadNum" value="${param.leadNum}" />
+						<input type="hidden" name="schdlnum" id="schdldeletenum" />
 						<div class="mgtop"></div>
 						<div class="schdl_title"></div>
 						<hr color="#F2B705" width="925px">

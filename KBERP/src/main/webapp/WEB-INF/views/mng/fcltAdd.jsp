@@ -16,6 +16,9 @@
 	font-size: 10.5pt;
 }
 /* 개인 작업 영역 */
+input:focus {
+	outline-color: #F2CB05;
+}
 #file_preview{
 	vertical-align:top;
 	display:inline-block;
@@ -40,6 +43,7 @@
 }
 .fclty_input{
 	display: inline-block;
+	height: 23px;
 }
 .cmn_btn_ml{
 	margin-top: 5px;
@@ -62,6 +66,12 @@
 #files{
 	display: none;
 }
+#fileUpload{
+	width: 305px;
+}
+.name_srch_table{
+	margin-left: 35px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -79,8 +89,8 @@ $(document).ready(function() {
 	var html = "";
 	
 	html += "<div class=\"popup_cont\">";
-	html += "<div class=\"acnt_name_srch_wrap\">";
-	html += "<table class=\"acnt_name_srch_table\">";
+	html += "<div class=\"name_srch_wrap\">";
+	html += "<table class=\"name_srch_table\">";
 	html += "<tbody>";
 	html += "<tr>";
 	html += "<td>사원명</td>";
