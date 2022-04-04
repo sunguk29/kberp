@@ -308,9 +308,9 @@ public class AssetController {
 		
 	}
 	
-	@RequestMapping(value = "/empSrchAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@RequestMapping(value = "/empASrchAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String empSrchAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+	public String empASrchAjax(@RequestParam HashMap<String, String> params) throws Throwable {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();

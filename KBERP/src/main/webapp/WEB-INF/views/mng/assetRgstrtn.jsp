@@ -169,7 +169,7 @@ $("#srchEmp").on("click", function() {
 		
 		$.ajax({
 			type : "post",
-			url : "empSrchAjax", 
+			url : "empASrchAjax", 
 			dataType : "json",
 			data : params, 
 			success : function(res) {
