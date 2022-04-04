@@ -115,6 +115,7 @@ select {
 	width: 100%;
 	font-size: 9pt;
 	text-align: left;
+	table-layout: fixed;
 }
 
 .list_table thead th {
@@ -122,6 +123,9 @@ select {
 }
 .list_table th, .list_table td  {
 	height: auto;
+	overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .list_table thead tr:nth-child(1) {
@@ -172,7 +176,7 @@ select {
 }
 .cont_table {
 	width: 927px;
-	height: 643px;
+	height: 244px;
 }
 .actionForm {
 	width: 100%;

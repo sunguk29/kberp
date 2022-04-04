@@ -370,6 +370,10 @@ hr { /* 구분선 */
 	color: black;
 	text-decoration: none;
 }
+.salesCont {
+	width: 927px;
+	height: 1138px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -487,6 +491,18 @@ $(document).ready(function() {
 		}
 	});
 	
+	$("#sales_btn").on("click", "#salesContBtn_h", function() {
+		$(".salesCont").hide();
+		html = "<div class=\"up_btn\" id=\"salesContBtn_s\"></div>";
+		$("#sales_btn").html(html);
+	});
+	
+	$("#sales_btn").on("click", "#salesContBtn_s", function() {
+		$(".salesCont").show();
+		html = "<div class=\"drop_btn\" id=\"salesContBtn_h\"></div>";
+		$("#sales_btn").html(html);
+	});
+	
 }); // JS end
 
 function uploadName(e) {
@@ -529,10 +545,7 @@ function uploadName(e) {
 
 
 					<div class="bot_title">
-						<h3>
-							영업기회
-							<div class="drop_btn"></div>
-						</h3>
+						<h3>영업기회<span id="sales_btn"><div class="drop_btn" id="salesContBtn_h"></div></span></h3>
 					</div>
 					<!-- 영업기회 -->
 					<div class="bodyWrap">
@@ -777,7 +790,6 @@ function uploadName(e) {
 						<div class="bot_title">
 							<h3>
 								제안
-								<div class="drop_btn"></div>
 							</h3>
 						</div>
 						<div class="page_cont_title_text">대출 상세정보</div>

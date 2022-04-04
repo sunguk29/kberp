@@ -34,13 +34,6 @@
 }
 
 /* 개인 작업 영역 */
-.cont_body {
-	display: block;
-	width: 1013px;
-	height: 1013px;
-	margin: auto;
-}
-
 table {
 	border: 1px;
 	width: 927px;
@@ -806,8 +799,6 @@ function uploadName(e) {
 			<div class="body">
 				<div class="bodyWrap">
 					<!-- 시작 -->
-
-
 					<div class="bot_title">
 						<h3>
 							영업기회

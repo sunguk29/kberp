@@ -604,7 +604,6 @@ function uploadName(e) {
 						<div class="bot_title">
 							<h3>
 								영업기회
-								<div class="drop_btn"></div>
 							</h3>
 						</div>
 						<hr class="hr_bot" color="white" width="925px">

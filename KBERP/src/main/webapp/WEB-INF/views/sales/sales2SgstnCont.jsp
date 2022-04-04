@@ -304,7 +304,6 @@ textarea {
     border-radius: 7px;
     margin-bottom: 18px;
     margin-left: 45px;
-    padding: 0 15px;
 }
 .btnImg_in{
 	display: inline-block;
@@ -376,6 +375,10 @@ textarea {
 	height: 305px;
 	margin-left: 47.5px;
 	overflow-y: auto;
+}
+.salesCont {
+	width: 927px;
+	height: 1138px;
 }
 /* 끝 */
 </style>
@@ -521,6 +524,19 @@ $(document).ready(function() {
 		});
 		
 	});
+	
+	$("#sales_btn").on("click", "#salesContBtn_h", function() {
+		$(".salesCont").hide();
+		html = "<div class=\"up_btn\" id=\"salesContBtn_s\"></div>";
+		$("#sales_btn").html(html);
+	});
+	
+	$("#sales_btn").on("click", "#salesContBtn_s", function() {
+		$(".salesCont").show();
+		html = "<div class=\"drop_btn\" id=\"salesContBtn_h\"></div>";
+		$("#sales_btn").html(html);
+	});
+	
 });
 
 /* 의견 목록 Ajax */
@@ -610,8 +626,10 @@ function drawOpList(list) {
 						<input type="text" name="prgrsStsNum" value="${data.PRGRS_STS_NUM}" />
 						<input type="text" id="salesNum" name="salesNum" value="${data.SALES_NUM}" />
 				
-					<div class="bot_title"><h3>영업기회<div class="drop_btn"></div></h3></div>
-					<hr class="hr_bot" color="white" width="925px">
+					<div class="bot_title">
+						<h3>영업기회<span id="sales_btn"><div class="drop_btn" id="salesContBtn_h"></div></span></h3>
+					</div>
+				<div class="salesCont">
 					<div class="page_cont_title_text">기본정보</div>
 					<hr class="hr_width">
 					<table>
@@ -762,14 +780,14 @@ function drawOpList(list) {
 						</div>
 						<div class="cntrct_box_in"></div> 
 					</div>
-					
+				</div>
 					
 					<!-- *************** 영업기회 끝 **************** -->
 					
 					<hr class="hr_bot" color="#4B94F2" width="925px">
 					<!-- *************** 제안 부분 시작 **************** -->
 					
-						<div class="bot_title"><h3>제안<div class="drop_btn"></div></h3></div>
+						<div class="bot_title"><h3>제안</h3></div>
 						<div class="page_cont_title_text">대출 상세정보</div>
 						<hr class="hr_width">
 						<table class="detailList">
@@ -953,7 +971,7 @@ function drawOpList(list) {
 					</div>
 				</form>
 					<!-- 히스토리 -->
-					<div class="mgtop"></div>
+<!-- 					<div class="mgtop"></div>
 					<div class="bot_title"><h3>히스토리(5)<div class="drop_btn"></div></h3></div>
 					<hr color="#F2B705" width="925px">
 					<div class="bx">
@@ -982,7 +1000,7 @@ function drawOpList(list) {
 								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
 								<div class="txtOp">담당자:000</div>
 							</div>
-					</div>
+					</div> -->
 					<hr class="hr_bot" color="white" width="925px">
 					<hr class="hr_bot" color="white" width="925px">
 					<div class="salesOver_btn nb">영업 종료하기</div>

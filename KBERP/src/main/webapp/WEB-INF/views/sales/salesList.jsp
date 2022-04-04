@@ -259,63 +259,39 @@ table {
 	font-size: 10pt;
 	text-align: center;
 	border: none;
-	padding-left: 70px;
+	margin-left: 110px;
 }
 
 .colNum1 {
 	width: 200px;
-	background-color: #F2CB05;
+	background-color: #fff;
 	border: none;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
-	cursor: pointer;
 }
 
-.colNum1 { /* 단계별 파이프라인 그라데이션 */
+/* .colNum1 {
 	background: linear-gradient(90deg, #FFE65A, #FFE150);
-}
+} */
 
-
-.colNum1:active {
+/* .colNum1:active {
 	font-weight: bold;
 	color: #4B94F2;
 	cursor: pointer;
-}
+}  */
 
-.colNum1:hover {
+/* .colNum1:hover {
 	font-weight: bold;
 	cursor: pointer;
-}
+} */
+
 
 .stick1, .stick2, .stick3, .stick4, .stick5, .stick6 { /* 막대기 color */
 	width: 38px;
 	border: none;
-}
-
-.stick1 {
-	background-color: #FFE150;
-}
-
-.stick2 {
-	background-color: #FFDC46;
-}
-
-.stick3 {
-	background-color: #FFD232;
-}
-
-.stick4 {
-	background-color: #FFC81E;
-}
-
-.stick5 {
-	background-color: #FFC314;
-}
-
-.stick6 {
-	background-color: #F2B705;
+	background-color: #fff;
 }
 
 .a {
@@ -324,7 +300,10 @@ table {
 	background-color: #F2F2F2;
 }
 .boldSts {
-	color: #2E83F2;
+	background-color: #fff;
+}
+.boldSts_on {
+	background-color: #FFE150;
 }
 /* 팝업 */
 .popup_title_mid {
@@ -831,33 +810,63 @@ function drawList(list) {
 
 		html += "<tr height=\"10\">";
 		if(data.PRGRS_STS2 == "영업기회") {
-			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\"><b>영업기회</b></td>";
-		} else {
-			html += "<td class=\"colNum1\" rowspan=\"3\">영업기회</td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\"><b>영업기회</b></td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\">제안</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\">견적</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\">계약</td>";
 		}
-		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "제안") {
-			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\"><b>제안</b></td>";
-		} else {
-			html += "<td class=\"colNum1\" rowspan=\"3\">제안</td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\">영업기회</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\"><b>제안</b></td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\">견적</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\">계약</td>";
 		}
-		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "견적") {
-			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\"><b>견적</b></td>";
-		} else {
-			html += "<td class=\"colNum1\" rowspan=\"3\">견적</td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\">영업기회</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\">제안</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\"><b>견적</b></td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\">계약</td>";
 		}
-		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "계약") {
-			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\"><b>계약</b></td>";
-		} else {
-			html += "<td class=\"colNum1\" rowspan=\"3\">계약</td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\">영업기회</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\">제안</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\">견적</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\"><b>계약</b></td>";
 		}
 		html += "</tr>";
 		html += "<tr height=\"10\">";
-		html += "<td class=\"stick1\"></td>";
-		html += "<td class=\"stick2\"></td>";
-		html += "<td class=\"stick3\"></td>";
+		if(data.PRGRS_STS2 == "영업기회") {
+			html += "<td class=\"stick1\"></td>";
+			html += "<td class=\"stick2\"></td>";
+			html += "<td class=\"stick3\"></td>";
+		}
+		if(data.PRGRS_STS2 == "제안") {
+			html += "<td class=\"stick1\" style=\"background-color:#FFE150;\"></td>";
+			html += "<td class=\"stick2\"></td>";
+			html += "<td class=\"stick3\"></td>";
+		}
+		if(data.PRGRS_STS2 == "견적") {
+			html += "<td class=\"stick1\" style=\"background-color:#FFE150;\"></td>";
+			html += "<td class=\"stick2\" style=\"background-color:#FFE150;></td>";
+			html += "<td class=\"stick3\"></td>";
+		}
+		if(data.PRGRS_STS2 == "계약") {
+			html += "<td class=\"stick1\" style=\"background-color:#FFE150;\"></td>";
+			html += "<td class=\"stick2\" style=\"background-color:#FFE150;></td>";
+			html += "<td class=\"stick3\" style=\"background-color:#FFE150;></td>";
+		}
 		html += "</tr>";
 		html += "<tr height=\"10\">";
 		html += "<td class=\"a\"></td>";
