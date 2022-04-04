@@ -246,7 +246,7 @@
 	
 	<!-- 예정사업 상세정보tab 제안 단계로 가져오기 -->
 	<select id="getSales2BringBsns" parameterType="hashmap" resultType="hashmap">
-		SELECT S.SALES_NUM, EXPCTD_BSNS_NAME, EXPCTD_BSNS_TYPE, RMKS, EBAF.ATT_FILE_NAME
+		SELECT S.SALES_NUM, EBI.EXPCTD_BSNS_NAME, EBI.EXPCTD_BSNS_TYPE, EBI.RMKS, EBAF.ATT_FILE_NAME
 		FROM SALES S LEFT OUTER JOIN EXPCTD_BSNS_INFO EBI
 		                          ON S.SALES_NUM = EBI.SALES_NUM
 		                  INNER JOIN EXPCTD_BSNS_ATT_FILE EBAF
@@ -328,7 +328,12 @@
 	
 	<!-- 제안 대출 상세정보tab 견적으로 가져오기 -->
 	<select id="getSales3BringLoan" resultType="hashmap" parameterType="hashmap">
-	
+		SELECT S.SALES_NUM, SLDI.SGSTN_LOAN_CAUSE_NUM, SLDI.SGSTN_LOAN_SCALE, SLDI.SGSTN_LOAN_TYPE,
+       		   TO_CHAR(SLDI.SGSTN_LOAN_TIME, 'YYYY-MM') AS SGSTN_LOAN_TIME,
+       		   TO_CHAR(SLDI.SGSTN_RDMPTN_TIME, 'YYYY-MM') AS SGSTN_RDMPTN_TIME
+		FROM SALES S INNER JOIN SGSTN_LOAN_DTL_INFO SLDI
+		                          ON S.SALES_NUM = SLDI.SALES_NUM
+		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
 	<!-- 제안 고객사 상세정보tab -->
@@ -340,7 +345,11 @@
 	
 	<!-- 제안 고객사 상세정보tab 견적으로 가져오기 -->
 	<select id="getSales3BringClntCmpny" resultType="hashmap" parameterType="hashmap">
-	
+		SELECT S.SALES_NUM, SCCDI.SGSTN_TOTAL_AMNT, SCCDI.SGSTN_DEBT_AMNT,
+		       SCCDI.SGSTN_AVG_RVN_AMNT, SCCDI.SGSTN_EMP_COUNT
+		FROM SALES S LEFT OUTER JOIN SGSTN_CLNT_CMPNY_DTL_INFO SCCDI
+		                          ON S.SALES_NUM = SCCDI.SALES_NUM
+		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
 	
@@ -350,9 +359,12 @@
 		VALUES ( #{salesNum}, #{dtlCont}, #{rmrks}, SYSDATE )
 	</insert>
 	
-	<!-- 제안 상세정보tab 견적으로 가져오기 -->
+	<!-- 제안 상세정보tab 견적으로 가져오기. 첨부파일 제외함 -->
 	<select id="getSales3BringDtlInfo" resultType="hashmap" parameterType="hashmap">
-	
+		SELECT S.SALES_NUM, SDI.DTL_CONT, SDI.RMRKS
+		FROM SALES S LEFT OUTER JOIN SGSTN_DTL_INFO SDI
+		                          ON S.SALES_NUM = SDI.SALES_NUM
+		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
 	<!-- 제안 상세정보 첨부파일tab -->
@@ -501,6 +513,30 @@
 		UPDATE SGSTN_CMNT SET DEL_CHECK = SYSDATE
 		WHERE CMNT_NUM = #{cmntNum}
 	</update>
+	
+	
+	<!-- 상품 팝업 개수 -->
+	<select id="popupMdListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM MD
+		WHERE 1 = 1
+		AND DEL_CHECK IS NULL
+	</select>
+	
+	<!-- 상품 팝업 리스트 -->
+	<select id="popupMdList" parameterType="hashmap" resultType="hashmap">
+		SELECT M.MD_NUM, M.MD_NAME, M.LIMIT_AMNT, M.INTRST_RATE, M.SALES_STS
+		FROM ( SELECT MD_NUM, MD_NAME, LIMIT_AMNT, INTRST_RATE,
+		       DECODE(SALES_STS_NUM, 0, '판매가능', 1, '판매중단', 2, '출시예정') AS SALES_STS,
+		              ROW_NUMBER() OVER(ORDER BY MD_NUM DESC) AS RNUM
+		       FROM MD
+		       WHERE DEL_CHECK IS NULL ) M
+		WHERE M.RNUM BETWEEN #{startCount} AND #{endCount}
+	</select>
+	
+	
+	
+	
 	
 	
 	

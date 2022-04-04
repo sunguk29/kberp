@@ -920,7 +920,7 @@ function uploadName(e) {
 							</tbody>
 						</table>
 						<!-- 첨부자료  -->
-						<input type=file id="att" name="att">
+						<input type=file id="att" name="att" onchange="uploadName(this)">
 						<input type="hidden" id="attFile" name="attFile" />
 						<div class="spc">
 							<div class="adc_txt">

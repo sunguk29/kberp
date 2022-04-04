@@ -270,29 +270,66 @@ public class SalesMngController {
 		return mav;
 	}
 	
-	/*
-	 * // sales3QtnReg : 견적 등록
-	 * 
-	 * @RequestMapping(value = "/sales3QtnReg") public ModelAndView
-	 * sales3QtnReg(@RequestParam HashMap<String, String> params, ModelAndView mav)
-	 * throws Throwable {
-	 * 
-	 * 
-	 * //조회 HashMap<String, String> sales1DataLead =
-	 * iCommonService.getData("salesMng.getSales2BringLead", params);
-	 * HashMap<String, String> sales1DataLoan =
-	 * iCommonService.getData("salesMng.getSales2BringLoan", params);
-	 * HashMap<String, String> sales1DataBsns =
-	 * iCommonService.getData("salesMng.getSales2BringBsns", params);
-	 * 
-	 * mav.addObject("lead", sales1DataLead); mav.addObject("loan", sales1DataLoan);
-	 * mav.addObject("bsns", sales1DataBsns);
-	 * 
-	 * mav.setViewName("sales/sales3QtnReg");
-	 * 
-	 * return mav; }
-	 */
+
+	 // sales3QtnReg : 견적 등록
+	 
+	 @RequestMapping(value = "/sales3QtnReg")
+	 public ModelAndView sales3QtnReg(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+	 
+	 
+		 //조회
+		HashMap<String, String> sales1DataLead = iCommonService.getData("salesMng.getSales2BringLead", params);
+		HashMap<String, String> sales1DataLoan = iCommonService.getData("salesMng.getSales2BringLoan", params);
+		HashMap<String, String> sales1DataBsns = iCommonService.getData("salesMng.getSales2BringBsns", params);
+		
+		HashMap<String, String> sales2DataLoan = iCommonService.getData("salesMng.getSales3BringLoan", params);
+		HashMap<String, String> sales2DataClntCmpny = iCommonService.getData("salesMng.getSales3BringClntCmpny", params);
+		HashMap<String, String> sales2DataDtlInfo = iCommonService.getData("salesMng.getSales3BringDtlInfo", params);
+		
+		
+		mav.addObject("lead", sales1DataLead);
+		mav.addObject("loan", sales1DataLoan);
+		mav.addObject("bsns", sales1DataBsns);
+		 
+		mav.addObject("loanS", sales2DataLoan);
+		mav.addObject("ccS", sales2DataClntCmpny);
+		mav.addObject("dtlS", sales2DataDtlInfo);
+		// 제안 첨부파일은X
+		 
+		 
+		mav.setViewName("sales/sales3QtnReg");
+		 
+		return mav;
+	 }
+
 	
+	 // (팝업) 상품 목록 비동기
+	 @RequestMapping(value = "/popupMdListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	 @ResponseBody
+	 public String popupMdListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		 
+		 ObjectMapper mapper = new ObjectMapper();
+		 
+		 Map<String, Object> modelMap = new HashMap<String, Object>();
+		 
+		 int listCnt = iCommonService.getIntData("salesMng.popupMdListCnt", params);
+		 
+		 PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), listCnt, 5, 5);
+		 
+		 params.put("startCount", Integer.toString(pb.getStartCount()));
+		 params.put("endCount", Integer.toString(pb.getEndCount()));
+			
+		 List<HashMap<String, String>> list = iCommonService.getDataList("salesMng.popupMdList", params);
+		
+		 modelMap.put("list", list);
+		 modelMap.put("pb", pb);
+		 
+		 return mapper.writeValueAsString(modelMap);
+	 }
+	 
+	 
+	 
+	 
 	//영업기회 의견 목록 리스트
 	@RequestMapping(value = "/salesOpBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
