@@ -7,7 +7,7 @@
 	SELECT  O.RSVTN_NUM, O.FCLTY_NAME, O.RSVTN_DATE,O.EMP_NUM,  
        		O.START_TIME, O.END_TIME,DECODE(O.STS_NUM,0,'승인대기',1,'취소된 예약',2,'승인',3,'승인거절') AS STS_NUM
 	FROM        (SELECT R.RSVTN_NUM, F.FCLTY_NAME, TO_CHAR(R.RSVTN_DATE,'YYYY-MM-DD')AS RSVTN_DATE, 
-                  		RT.START_TIME, RT.END_TIME, R.STS_NUM,ROW_NUMBER() OVER(ORDER BY R.RSVTN_NUM) AS RSUM,R.USE_NUM_OF_PL,R.EMP_NUM
+                  		RT.START_TIME, RT.END_TIME, R.STS_NUM,ROW_NUMBER() OVER(ORDER BY R.RSVTN_NUM DESC) AS RSUM,R.USE_NUM_OF_PL,R.EMP_NUM
             	 FROM FCLTY_RSVTN R  INNER JOIN FCLTY F 
                                 ON R.FCLTY_NUM = F.FCLTY_NUM
                                 INNER JOIN RSVTN_TIME_DVSN RT
@@ -22,7 +22,7 @@
 	</if>
 	) O 
 	WHERE O.RSUM BETWEEN #{startCount} AND #{endCount} 
-	ORDER BY O.RSVTN_NUM DESC
+
 </select>
 
 <!-- 시설물예약목록cnt -->
@@ -59,7 +59,7 @@
 <!-- 시설물목록 -->
 <select id="fcltyList" resultType="hashmap" parameterType="hashmap">
 	SELECT O.FCLTY_NUM, O.FCLTY_NAME, O.PLACE, O.EMP_NAME, O.ACPT_NUM_OF_PL
-	FROM( SELECT F.FCLTY_NUM, F.FCLTY_NAME, F.PLACE, E.EMP_NAME, F.ACPT_NUM_OF_PL,ROW_NUMBER() OVER(ORDER BY F.FCLTY_NUM) AS RSUM
+	FROM( SELECT F.FCLTY_NUM, F.FCLTY_NAME, F.PLACE, E.EMP_NAME, F.ACPT_NUM_OF_PL,ROW_NUMBER() OVER(ORDER BY F.FCLTY_NUM DESC) AS RSUM
 	      FROM FCLTY F  INNER JOIN EMP E 
 	      				ON F.EMP_NUM = E.EMP_NUM
 	      WHERE DEL = 0 
@@ -75,7 +75,6 @@
 	</if>
 	     ) O 
 	WHERE O.RSUM BETWEEN #{startCount} AND #{endCount}
-	ORDER BY O.FCLTY_NUM DESC 
 </select>
 
 <!-- 시설물목록 cnt -->
@@ -131,13 +130,13 @@
 <select id="fcltyAdd" parameterType="hashmap">
 	INSERT INTO FCLTY(FCLTY_NUM, EMP_NUM, MNG_EMP_NUM, FCLTY_NAME, ATT_PCTR, 
 					  PLACE, ACPT_NUM_OF_PL, RMRKS)
-	VALUES(FCLT_SEQ.NEXTVAL, #{empNum},#{mngEmpNum},#{fcltyName},
+	VALUES(FCLT_SEQ.NEXTVAL, #{mngEmpNum},#{empNum},#{fcltyName},
 		   #{attFile},#{place},#{acptNum},#{rmrks})
 </select>
 
 <!-- 시설물상세보기 -->
 <select id="fcltyView" resultType="hashmap" parameterType="hashmap">
-	SELECT F.FCLTY_NUM, F.FCLTY_NAME ,F.PLACE, E.EMP_NAME, E2.EMP_NAME AS MNG_EMP
+	SELECT F.FCLTY_NUM, F.FCLTY_NAME ,F.PLACE, E.EMP_NAME, E2.EMP_NAME AS MNG_EMP,F.EMP_NUM
 		  ,F.ACPT_NUM_OF_PL, TO_CHAR(F.RGSTRTN_DATE,'YYYY-MM-DD')AS RGSTRTN_DATE, F.RMRKS,F.ATT_PCTR
 	FROM FCLTY F INNER JOIN EMP E 
              ON F.EMP_NUM = E.EMP_NUM
@@ -151,7 +150,7 @@
 	SELECT O.RSVTN_NUM, O.EMP_NAME,O.RSVTN_DATE, O.START_TIME, O.END_TIME, O.USE_USE, O.USE_NUM_OF_PL,O.STS_NUM
 	FROM    (SELECT FR.RSVTN_NUM, E.EMP_NAME, TO_CHAR(FR.RSVTN_DATE,'YYYY-MM-DD')AS RSVTN_DATE,RT.START_TIME, RT.END_TIME, FR.USE_USE, 
                 FR.USE_NUM_OF_PL, DECODE(FR.STS_NUM,0,'승인대기',1,'예약취소',2,'승인',3,'승인거절') AS STS_NUM,
-                ROW_NUMBER() OVER(ORDER BY FR.RSVTN_NUM) AS RSUM
+                ROW_NUMBER() OVER(ORDER BY FR.RSVTN_NUM DESC) AS RSUM
          	 FROM FCLTY_RSVTN FR INNER JOIN RSVTN_TIME_DVSN RT
                              ON FR.TIME_DVSN_NUM = RT.TIME_DVSN_NUM
                              INNER JOIN EMP E 
@@ -166,7 +165,6 @@
 				</if>
         	 ) O
 	WHERE O.RSUM BETWEEN #{startCount} AND #{endCount}
-	ORDER BY O.RSVTN_NUM DESC
 </select>
 
 <!-- 시설물상세보기안에 해당 시설물예약목록 cnt -->
@@ -186,7 +184,16 @@
 
 <!-- 시설물수정 -->
 <select id="fcltyUpdate" parameterType="hashmap">
+	UPDATE  FCLTY SET FCLTY_NAME = #{fcltyName}, PLACE = #{place}, 
+        	MNG_EMP_NUM = #{empNum}, ACPT_NUM_OF_PL = #{acptNum}, 
+        	ATT_PCTR = #{attFile}, RMRKS = #{rmrks}
+	WHERE FCLTY_NUM = #{no}
+</select>
 
+<!-- 시설물 삭제 -->
+<select id="fcltDelete" parameterType="hashmap">
+	UPDATE FCLTY SET DEL = 1
+	WHERE FCLTY_NUM = #{no}
 </select>
 </mapper>
 

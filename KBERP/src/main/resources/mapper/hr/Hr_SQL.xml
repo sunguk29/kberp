@@ -121,7 +121,7 @@
 	
 	<update id="updateDept" parameterType="hashmap"><!-- 쿼리 오류  -->
 		UPDATE DEPT SET DEPT_NAME = #{deptName}, SUPER_DEPT_NUM = #{mdfySuperDeptNum}, DEPT_LEVEL = #{mdfyDeptLevel}
-		WHERE DEPT_NUM = #{sdeptNum};
+		WHERE DEPT_NUM = #{sdeptNum}
 	</update>
 	
 	

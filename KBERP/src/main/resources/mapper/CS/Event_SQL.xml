@@ -39,8 +39,17 @@
 		WHERE EVENT.EVENT_NUM = #{no}
 	</delete>
 	
+	<select id="getEventCmntList" resultType="hashmap" parameterType="hashmap">
+		SELECT CMNT_NUM, CLNT_NUM, EVENT_NUM, EMP_NUM, CMNT_CONT, DEL_CHECK
+		FROM EVENT_CMNT
+		WHERE EVENT_NUM = #{no}
+	</select>
 	
-	
-	
+	<select id="getEventCmnt" resultType="hashmap" parameterType="hashmap">
+		SELECT CMNT_NUM, CLNT_NUM, EVENT_NUM, EMP.EMP_NUM, CMNT_CONT, DEL_CHECK, EMP.EMP_NAME AS WRITER_NAME
+		FROM EVENT_CMNT, EMP
+		WHERE EVENT_CMNT.EMP_NUM = EMP.EMP_NUM
+		AND EVENT_NUM = #{no}
+	</select>
 	
 </mapper>

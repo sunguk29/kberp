@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>지출결의서관리 목록</title>
+<title>카카오뱅크 ERP - 지출결의서관리 목록</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">

@@ -72,8 +72,8 @@ public class SlryMngController {
 		
 		List<HashMap<String, String>> list = iCommonService.getDataList("SlryMng.getSlryMngList", params);
 		
-		modelMap.put("list", list); 
-		modelMap.put("pb", pb); 
+		modelMap.put("list", list);
+		modelMap.put("pb", pb);
 		
 		return mapper.writeValueAsString(modelMap);
 	}
