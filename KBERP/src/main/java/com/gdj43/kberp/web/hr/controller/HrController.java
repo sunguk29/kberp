@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 import com.gdj43.kberp.web.hr.service.IHrService;
 
@@ -27,6 +28,8 @@ public class HrController {
 	public IHrService iHrService;
 	@Autowired
 	public ICommonService iCommonService;
+	@Autowired
+	public IPagingService iPagingService;
 	
 	// 인사발령
     @RequestMapping(value = "/apntm")

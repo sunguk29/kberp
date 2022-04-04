@@ -513,7 +513,91 @@ thead {
     height: 480px;
     width: 520px;
 }
+.popup_srch_input input {
+    width: 97%;
+    height: 24px;
+    padding-left: 11px;
+    vertical-align: middle;
+    border: none;
+    
+}
 
+.popup_emp_srch_area {
+	display: inline-block;
+    vertical-align: top;
+    width: 567px;
+    height: 31px;
+    text-align: center;
+    margin: 0 5px;
+
+}
+.popup_srch_box {
+	display: inline-block;
+}
+.emp_srch_select {
+	border: solid 1px #b7b7b7;
+    border-radius: 3px;
+    min-width: 100px;
+    height: 29px;
+	
+}
+
+.popup_srch_input {
+	display: inline-block;
+    vertical-align: top;
+    width: 366px;
+    height: 28px;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: center;
+    border: 1px solid #d7d7d7;
+    line-height: 26px;
+}
+
+.popup_srch_input input {
+	width: 93%;
+    height: 23px;
+    padding-left: 11px;
+    vertical-align: middle;
+    border: none;
+}
+
+.empinqry_area{
+	margin: 12px;
+    display: inline-block;
+    vertical-align: top;
+    height: 250px;
+   /* width: 545px;*/
+   /* border: solid 1px #d7d7d7;*/
+   /* overflow: hidden; */
+}
+
+.empinqry_list{
+	display: inline-table;
+    border-collapse: collapse;
+    width: 553px;
+    margin-bottom: 15px;
+}
+
+.empinqry_list thead tr {
+	background-color: #f1f1f1;
+	border-bottom: 1px solid #d7d7d7;
+	height: 30px;
+	font-size: 10pt;
+	position: sticky;
+	top: 0;
+}
+
+.empinqry_list tbody tr {
+	border-bottom: 1px solid #d7d7d7;
+	height: 26px;
+	text-align: center;
+	color: #7b7b7b;
+	font-size: 9.5pt;
+}
+.empinqry_list tbody tr:hover {
+	background-color: rgb(200,218,248);
+}
 /* 개인 작업 영역 */
 
 </style>
@@ -570,12 +654,72 @@ $(document).ready(function() {
    // 발령 추가
    $("#apntm_add_btn").on("click", function() {
       drawNewApntm();
-   });
 
-   // 사원조회
-   $("#prfl_srch_btn").on("click", function() {
-      drawNewApntm();
-   });
+	   // 사원조회 팝업
+		$("#prfl_srch_btn").on("click", function() {
+			
+			var html = "";
+			                                                     
+			html += "<div class=\"popup_emp_srch_area\">         ";
+			html += "<select class=\"emp_srch_select\">          ";
+			html += "	<option value=\"0\" selected>전체</option>";
+			html += "	<option value=\"1\">부서명</option>      ";
+			html += "	<option value=\"2\">사원명</option>      ";
+			html += "	<option value=\"3\">직급명</option>      ";
+			html += "</select>                                   ";
+			html += "<div class=\"popup_srch_input\">	                 ";
+			html += "	<input type=\"text\" />                  ";
+			html += "</div>                                      ";
+			html += "<div class=\"cmn_btn\">검색</div>           ";
+			html += "</div>                                      ";
+			html += "<div class=\"empinqry_area\">        ";
+            html += " <table class=\"empinqry_list\">   ";
+            html += "   <colgroup>                      ";
+            html += "      <col width=\"130\"/>         ";
+            html += "      <col width=\"100\"/>         ";
+            html += "      <col width=\"100\"/>         ";
+            html += "      <col width=\"100\"/>         ";
+            html += "   </colgroup>                     ";
+            html += "   <thead>                         ";
+            html += "      <tr>                         ";
+            html += "         <th>사원번호</th>         ";
+            html += "         <th>사원명</th>           ";
+            html += "         <th>부서</th>             ";
+            html += "         <th>직급</th>             ";
+            html += "      </tr>                        ";
+            html += "   </thead>                        ";
+            html += "   <tbody id=\"empinqry_tbody\">   ";
+            html += "   	<tr>                        ";
+            html += "   		<td>test</td>	        ";
+            html += "   		<td>test</td>	        ";
+            html += "   		<td>test</td>	        ";
+            html += "   		<td>test</td>	        ";
+            html += "   	</tr>                       ";
+            html += "   </tbody>                        ";
+            html += "  </table>                         ";
+            html += "</div>                             ";
+			
+			makePopup({
+				bg : false,
+				bgClose : false,
+			 	width: 600,
+			 	height: 400,
+				title : "사원조회",
+				contents : html,
+				draggable : true,
+				buttons : [{
+					name : "확인",
+					func:function() {
+						console.log("사원조회!");
+						closePopup();
+					}
+				}, {
+					name : "취소"
+				}]
+			});
+		   $(".empinqry_area").slimScroll({height: "255px"},{width: "450px"});
+		});
+  	});
 });
 
 // 발령 리스트 리로드
@@ -648,7 +792,10 @@ function drawList(list) {
    }
    $("tbody").html(html);
 }   
-
+// 팝업 사원조회 리스트 생성 
+function drawPopupEmpInqry(inqry) {
+	v
+}
 // 발령 상세정보 생성
 function drawCont(cont){
    var html = "";
