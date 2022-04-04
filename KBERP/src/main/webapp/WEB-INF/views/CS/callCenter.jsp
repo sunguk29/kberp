@@ -948,7 +948,6 @@ function checkEmpty(sel) {
 			<!-- 고객정보 파트 -->
 				<div class="top">
 					<div class="clnt_info_cont">
-						<input type="hidden" id="oldsearchTxt" value="${param.searchTxt}"/>
 					<form action="#" id="saveForm" method="post">
 					<input type="hidden" id="clnt_num" name="clnt_num"/>
 						<div class="clnt_info_Header">
