@@ -25,11 +25,12 @@
 
 </select>
 
-<!-- 시설물예약목록cnt -->
+<!-- 시설물예약목록 CNT -->
 <select id="fcltyListRqstCnt" resultType="Integer" parameterType="hashmap">
 	SELECT COUNT(*) AS CNT
-	FROM FCLTY_RSVTN  R INNER JOIN FCLTY F ON R.FCLTY_NUM = F.FCLTY_NUM 
-	WHERE F.DEL = 0 	
+	FROM FCLTY_RSVTN  R INNER JOIN FCLTY F 
+						ON R.FCLTY_NUM = F.FCLTY_NUM
+	WHERE F.DEL = 0 AND R.EMP_NUM = #{sesEmpNum}	
 	<if test="searchTxt != null and searchTxt != ''">
 			<choose>
 				<when test="searchGbn == 0">
@@ -38,6 +39,44 @@
 			</choose>
 	</if>
 </select>
+
+<!-- 예약가능한 시설물 목록 -->
+<select id="fcltUseRqstCalList" resultType="hashmap" parameterType="hashmap">
+	SELECT O.FCLTY_NAME, O.PLACE
+	FROM (SELECT FCLTY_NAME, PLACE, ROW_NUMBER() OVER(ORDER BY FCLTY_NUM DESC) AS RSUM
+	 	  FROM FCLTY
+		  WHERE DEL = 0 
+		<if test="searchTxt != null and searchTxt != ''">
+				<choose>
+					<when test="searchGbn == 0">
+						AND FCLTY_NAME LIKE '%' || #{searchTxt} || '%' 
+					</when>
+					<when test="searchGbn == 1">
+						AND PLACE LIKE '%' || #{searchTxt} || '%' 
+					</when>
+				</choose>
+		</if>
+		) O
+	WHERE O.RSUM #{startCount} AND #{endCount} 
+</select>
+
+<!-- 예약가능한 시설물 목록 CNT -->
+<select id="fcltUseRqstCalListCnt" resultType="Integer" parameterType="hashmap">
+	SELECT COUNT(*) AS CNT
+	FROM FCLTY
+	WHERE DEL = 0 AND
+	<if test="searchTxt != null and searchTxt != ''">
+				<choose>
+					<when test="searchGbn == 0">
+						AND FCLTY_NAME LIKE '%' || #{searchTxt} || '%' 
+					</when>
+					<when test="searchGbn == 1">
+						AND PLACE LIKE '%' || #{searchTxt} || '%' 
+					</when>
+				</choose>
+		</if>
+</select>
+
 
 <!-- 시설물예약 상세보기 -->
 <select id="fcltUseRqstView" resultType="hashmap" parameterType="hashmap">
