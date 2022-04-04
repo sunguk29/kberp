@@ -114,16 +114,22 @@ public class CallCntrController {
 			}
 	
 	// [이력] 상담노트
-	@RequestMapping(value = "/rcrdCnslNote")
-	public ModelAndView rcrdCnslNote(@RequestParam HashMap<String, String> params,
-							ModelAndView mav) throws Throwable {
+	@RequestMapping(value = "/rcrdCnslNoteAjax", method = RequestMethod.POST, 
+			produces = "text/json;charset=UTF-8")
+		@ResponseBody
+		public String rcrdCnslNoteAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+			ObjectMapper mapper = new ObjectMapper();
+			
+			Map<String, Object> modelMap = new HashMap<String, Object>();
+			
+			HashMap<String, String> data = iCommonService.getData("CC.getRcrdCnslNote", params);
+			
+			modelMap.put("data", data);
+			
+			return mapper.writeValueAsString(modelMap); 
+		}
 		
-		HashMap<String, String> data = iCommonService.getData("CC.getRcrdCnslNote", params);
-		
-		mav.addObject("data", data);
-		
-		return mav;
 	}
 	
 	
-}
+
