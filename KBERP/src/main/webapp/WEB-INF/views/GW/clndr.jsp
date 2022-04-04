@@ -743,6 +743,9 @@ $(document).ready(function() {
   				buttons : [{
   					name : "수정",
   					func:function() {
+  						if(${sEmpNum} != data.emp_num){
+  							alert("본인의 일정만 수정할 수 있습니다.");
+  						} else{
   						schdlUpdate(data);
   						if(data.aldy_dvsn == "1"){
   							$('input[name=schdl_start_time]').attr('style', "display:none;");
@@ -750,25 +753,30 @@ $(document).ready(function() {
   							$('input[name=schdl_end_time]').attr('style', "display:none;");
   							$('#schdl_end_time').attr('disabled',true);
   						 }
+  						}
   					}
   				}, {
   					name : "삭제",
   					func:function(){
-  						makePopup({
-  							bg : true,
-  							bgClose : false,
-  							title : "삭제",
-  							contents : "삭제하시겠습니까?",
-  							draggable : true,
-  							buttons : [{
-  								name : "삭제",
-  								func:function() {
-			  						schdlDelete(data);
-  								}
-  							}, {
-  								name : "취소"
-  							}]
-  						});
+  						if(${sEmpNum} != data.emp_num){
+  							alert("본인의 일정만 삭제할 수 있습니다.");
+  						} else{
+	  						makePopup({
+	  							bg : true,
+	  							bgClose : false,
+	  							title : "삭제",
+	  							contents : "삭제하시겠습니까?",
+	  							draggable : true,
+	  							buttons : [{
+	  								name : "삭제",
+	  								func:function() {
+				  						schdlDelete(data);
+	  								}
+	  							}, {
+	  								name : "취소"
+	  							}]
+	  						});
+  						}
   					}
   					
   				},{
