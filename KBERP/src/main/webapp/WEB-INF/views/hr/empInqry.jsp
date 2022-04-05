@@ -309,6 +309,57 @@ td:nth-child(even) {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	if ("${param.srch_sel}" != "") {
+		$("#srch_sel").val("${param.srch_sel}");
+	} else {
+		$("#old_srch_sel").val("0");
+	}
+	
+	if ("${param.work_clsftn}" != "") {
+		switch ("${param.work_clsftn}") {
+		case "-1" :
+			$("#work_clsftn_entr").prop("checked", true);
+			break;
+		case "0" :
+			$("#work_clsftn_work").prop("checked", true);
+			break;
+		case "1" :
+			$("#work_clsftn_rsgnt").prop("checked", true);
+			break;
+		}
+	}
+
+	if ("${param.emplynt_type}" != "") {
+		switch ("${param.emplynt_type}") {
+		case "-1" :
+			$("#emplynt_type_entr").prop("checked", true);
+			break;
+		case "0" :
+			$("#emplynt_type_rgl_wrk").prop("checked", true);
+			break;
+		case "1" :
+			$("#emplynt_type_cntr_wrk").prop("checked", true);
+			break;
+		}
+	}
+
+	if ("${param.join_date}" != "") {
+		switch ("${param.join_date}") {
+		case "-1" :
+			$("#join_date_entr").prop("checked", true);
+			break;
+		case "0" :
+			$("#join_date_prd_dsgnt").prop("checked", true);
+			if ("${param.prd_start}" != "") {
+				$("#prd_start").val("${param.prd_start}");
+			}
+			if ("${param.prd_end}" != "") {
+				$("#prd_end").val("${param.prd_end}");
+			}
+			break;
+		}
+	}
+	
 	reloadList();
 	btnSetting();
 		
@@ -341,12 +392,12 @@ $(document).ready(function() {
 				$(this).parent("tbody").find(".table_item .item_selected").val("false");
 				$(this).find(".item_selected").val("true");
 				
-				$("#emp_num").val($(this).attr("num"));
+				$("#empNum").val($(this).attr("num"));
 				$("#inqry_btn").attr("da", "false");
 				$("#del_btn").attr("da", "false");
 				btnSetting();
 				
-				console.log("selected : " + $("#emp_num").val());
+				console.log("selected : " + $("#empNum").val());
 		
 				$(this).parent("tbody").find(".table_item").children("td:nth-child(odd)").css("background-color", "#fafafa");
 				$(this).parent("tbody").find(".table_item").children("td:nth-child(even)").css("background-color", "#f6f6f6");
@@ -355,7 +406,7 @@ $(document).ready(function() {
 			} else {
 				$(this).find(".item_selected").val("false");
 				
-				$("#emp_num").val("-1");
+				$("#empNum").val("-1");
 				$("#inqry_btn").attr("da", "true");
 				$("#del_btn").attr("da", "true");
 				btnSetting();
@@ -400,13 +451,18 @@ $(document).ready(function() {
 	});
 	
 	$("#inqry_btn").on("click", function() {
-		if ($("#emp_num").val() != "-1") {
+		if ($("#empNum").val() != "-1") {
+			console.log($("#empNum").val());
+			
+			$("#i_menuNum").val("5");
+			
+ 			$("#inqryForm").attr("action", "prsnlCard");
 			$("#inqryForm").submit();
 		}
 	});
 	
 	$("#del_btn").click(function() {
-		if ($("#emp_num").val() != "-1") {
+		if ($("#empNum").val() != "-1") {
 			
 		}
 	});
@@ -461,7 +517,11 @@ function drawList(list) {
 			html += "	<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
 			html += "	<td><div class=\"td_cont\">" + data.EMP_NUM + "</div></td> ";
 			html += "	<td><div class=\"td_cont\">" + data.EMP_NAME + "</div></td> ";
-			html += "	<td><div class=\"td_cont\">" + data.DEPT_NAME + "</div></td> ";
+			html += "	<td><div class=\"td_cont\">" 
+			if (data.DEPT_NAME != null) {
+				html += data.DEPT_NAME;
+			}
+			html += "</div></td> ";
 			html += "	<td><div class=\"td_cont\">" + data.RANK_NAME + "</div></td> ";
 			html += "	<td><div class=\"td_cont\">" + data.MBL_NUM + "</div></td> ";
 			html += "	<td><div class=\"td_cont\">" + data.JOIN_DATE + "</div></td> ";
@@ -570,9 +630,13 @@ function btnSetting() {
 			<input type="hidden" id="old_join_date" value="${param.join_date}" />
 			<input type="hidden" id="old_prd_start" value="${param.prd_start}" />
 			<input type="hidden" id="old_prd_end" value="${param.prd_end}" />
-			<form action="prsnlCard" id="inqryForm" method="post">
+			<form action="#" id="inqryForm" method="post">
+				<input type="hidden" id="i_top" name="top" value="${param.top}" />
+				<input type="hidden" id="i_menuNum" name="menuNum" value="${param.menuNum}" />
+				<input type="hidden" id="i_menuType" name="menuType" value="${param.menuType}" />
 				<input type="hidden" id="page" name="page" value="${page}" />
-				<input type="hidden" id="emp_num" name="emp_num" value="-1" />
+				<input type="hidden" id="empNum" name="empNum" value="-1" />
+				<input type="hidden" id="superEmpNum" name="superEmpNum" value="${sEmpNum}" />
 				<div class="srch_wrap">
 					<div class="page_srch_area">
 						<select class="srch_sel" name="srch_sel">
@@ -582,7 +646,7 @@ function btnSetting() {
 							<option value="2">부서명</option>
 						</select>
 						<div class="srch_text_wrap">
-							<input type="text" id="srch_txt" name="srch_txt" />
+							<input type="text" id="srch_txt" name="srch_txt" value="${param.srch_txt}" />
 						</div>
 						<div class="cmn_btn_ml">검색</div>
 					</div>

@@ -4,7 +4,7 @@
 	<!--    인사발령 쿼리    -->
 	<select id="getApntmList" resultType="hashmap" parameterType="hashmap">
 		SELECT AAA.APNTM_NUM, AAA.EMP_NAME, AAA.APNTM_DVSN_NUM, AAA.DEPT_NAME, AAA.RANK_NAME, AAA.START_DATE, AAA.APRVL_STS 
-		FROM(SELECT AA.APNTM_NUM, AA.EMP_NAME, AA.APNTM_DVSN_NUM, AA.DEPT_NAME, AA.RANK_NAME, AA.START_DATE, AA.APRVL_STS
+		FROM( SELECT AA.APNTM_NUM, AA.EMP_NAME, AA.APNTM_DVSN_NUM, AA.DEPT_NAME, AA.RANK_NAME, AA.START_DATE, AA.APRVL_STS
 				FROM( SELECT A.APNTM_NUM, E.EMP_NAME, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, A.START_DATE, AP.APRVL_STS
 						FROM ( SELECT APNTM_NUM, APNTM_DVSN_NUM, EMP_NUM, DEPT_NUM, RANK_NUM, 
 						              TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE , APRVL_NUM
@@ -108,5 +108,83 @@
 		AND A.EMP_NUM IS NOT NULL
 		ORDER BY A.RANK_NUM ASC
 	</select>
+	
+	<insert id="addDept" parameterType="hashmap">
+		INSERT INTO DEPT (DEPT_NUM, DEPT_NAME, SUPER_DEPT_NUM, DEPT_LEVEL)
+		VALUES( DEPT_SEQ.NEXTVAL, #{deptName}, #{sdeptNum}, #{deptLevel})
+	</insert>
+	
+	<update id="deleteDept" parameterType="hashmap">
+		UPDATE DEPT SET DEL_CHECK = '0'
+		WHERE DEPT_NUM = #{sdeptNum}
+	</update>
+	
+	<update id="updateDept" parameterType="hashmap">
+		UPDATE DEPT SET DEPT_NAME = #{deptName}, SUPER_DEPT_NUM = #{mdfySuperDeptNum}, DEPT_LEVEL = #{mdfyDeptLevel}
+		WHERE DEPT_NUM = #{sdeptNum}
+	</update>
+	
+	<select id="getInqryList" resultType="hashmap" parameterType="hashmap">
+		SELECT A.EMP_NUM, E.EMP_NAME, A.RANK_NUM, R.RANK_NAME, A.DEPT_NUM, D.DEPT_NAME
+		FROM (  SELECT EMP_NUM, RANK_NUM, DEPT_NUM, START_DATE, END_DATE, STS_NUM
+		        FROM APNTM 
+		        WHERE STS_NUM = '1'
+		        AND END_DATE IS NULL )A INNER JOIN EMP E
+	                                        ON A.EMP_NUM = E.EMP_NUM
+	                                INNER JOIN RANK R 
+	                                        ON A.RANK_NUM = R.RANK_NUM
+	                                INNER JOIN DEPT D 
+	                                        ON A.DEPT_NUM = D.DEPT_NUM
+     	 <if test="inqryTxt != null and inqryTxt != ''"> <!--  텍스트 조회 필터링 	-->
+			<choose>
+				<when test="inqryGbn == 0">
+			 		WHERE E.EMP_NAME LIKE '%' || #{inqryTxt} || '%' 
+					OR D.DEPT_NAME LIKE '%' || #{inqryTxt} || '%'
+					OR R.RANK_NAME LIKE '%' || #{inqryTxt} || '%'
+				</when>
+				<when test="inqryGbn == 1">
+					WHERE D.DEPT_NAME LIKE '%' || #{inqryTxt} || '%' 
+				</when>
+				<when test="inqryGbn == 2">
+					WHERE E.EMP_NAME LIKE '%' || #{inqryTxt} || '%' 
+				</when>
+				<when test="inqryGbn == 3">
+					WHERE R.RANK_NAME LIKE '%' || #{inqryTxt} || '%' 
+				</when>
+			</choose>
+		</if> 
+		ORDER BY DEPT_NAME, RANK_NUM, EMP_NAME, EMP_NUM       
+	</select>
+	
+	<select id="getInqryEmp" resultType="hashmap" parameterType="hashmap">
+		SELECT E.EMP_NUM, E.EMP_NAME, A.RANK_NUM, R.RANK_NAME, A.DEPT_NUM, D.DEPT_NAME
+		FROM (  SELECT EMP_NUM, RANK_NUM, DEPT_NUM, START_DATE, END_DATE, STS_NUM
+		        FROM APNTM 
+		        WHERE STS_NUM = '1'
+		        AND END_DATE IS NULL )A INNER JOIN EMP E
+	                                            ON A.EMP_NUM = E.EMP_NUM
+	                                    INNER JOIN RANK R 
+	                                            ON A.RANK_NUM = R.RANK_NUM
+	                                    INNER JOIN DEPT D 
+	                                            ON A.DEPT_NUM = D.DEPT_NUM
+		WHERE E.EMP_NUM = #{inqryNo}
+	</select>
+	<select id="getDeptList" resultType="hashmap" >
+		SELECT D.DEPT_NUM, D.DEPT_NAME, D.SUPER_DEPT_NUM, D.DEPT_LEVEL,D.LEAF
+		FROM( SELECT DEPT_NUM, DEPT_NAME, SUPER_DEPT_NUM, DEPT_LEVEL, CONNECT_BY_ISLEAF AS LEAF
+			  FROM DEPT
+		      START WITH SUPER_DEPT_NUM IS NULL
+		      CONNECT BY PRIOR DEPT_NUM = SUPER_DEPT_NUM) D
+		WHERE D.LEAF = '1'
+	</select>
+	<select id="getRankList" resultType="hashmap" >
+		SELECT RANK_NAME, RANK_NUM
+		FROM RANK
+		ORDER BY SORT_NUM DESC
+	</select>
+	
+	
+	
+	
 
 </mapper>

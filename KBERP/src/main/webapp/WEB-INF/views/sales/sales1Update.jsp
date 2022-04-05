@@ -481,6 +481,7 @@ textarea {
 	border-radius: 7px;
 	margin-bottom: 18px;
 	margin-left: 45px;
+    font-size: 10pt;
 }
 
 .btnImg_in {
@@ -555,10 +556,26 @@ $(document).ready(function() {
 		});
 	});
 
+	
+	// 첨부파일
 	$(".att_btn").on("click", function() {
 		$("#att").click();
 	});
 	
+	$("#fileDelete").on("click", function() {
+		$("#file_name").remove();
+		$(this).remove();
+		
+		var html = "";
+		
+		html += "<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
+		
+		$("#uploadBtn").html(html);
+	});
+	
+	$(".adc_txt").on("click", ".aff_btn", function() {
+		$("#att").click();
+	});
 	
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
@@ -841,7 +858,6 @@ function uploadName(e) {
 						<div class="bot_title">
 							<h3>
 								영업기회
-								<div class="drop_btn"></div>
 							</h3>
 						</div>
 						<hr class="hr_bot" color="white" width="925px">
@@ -1045,7 +1061,27 @@ function uploadName(e) {
 										<input type="button" class="btn" value="예정 사업 형태" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" id="expctdBsnsType" name="expctdBsnsType" value="${data.EXPCTD_BSNS_TYPE}" />
+										<select class="txt" id="expctdBsnsType" name="expctdBsnsType" value="${data.EXPCTD_BSNS_TYPE}">
+											<optgroup>
+												<c:choose>
+													<c:when test="${data.EXPCTD_BSNS_TYPE eq 0}">
+														<option value="0" selected="selected">민수 사업</option>
+														<option value="1">관공 사업</option>
+														<option value="2">기타</option>
+													</c:when>
+													<c:when test="${data.EXPCTD_BSNS_TYPE eq 1}">
+														<option value="0">민수 사업</option>
+														<option value="1" selected="selected">관공 사업</option>
+														<option value="2">기타</option>
+													</c:when>
+													<c:when test="${data.EXPCTD_BSNS_TYPE eq 2}">
+														<option value="0">민수 사업</option>
+														<option value="1">관공 사업</option>
+														<option value="2" selected="selected">기타</option>
+													</c:when>
+												</c:choose>
+											</optgroup>
+										</select>
 									</td>
 								</tr>
 								<tr height="40">
@@ -1060,19 +1096,28 @@ function uploadName(e) {
 						</table>
 						<br />
 						<!-- 첨부자료  -->
-						<input type=file id="att" name="att" />
-						<input type="hidden" id="attFile" name="attFile" />
+						<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+						<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
 						<div class="spc">
-							<div class="adc_txt">
-								첨부자료
-								<img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
+							<div class="adc_txt"> 첨부자료
+								<span id="uploadBtn">
+									<c:if test="${empty data.ATT_FILE_NAME}">
+										<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" />
+									</c:if>
+								</span>
 							</div>
 							<div class="cntrct_box_in">
-								<input type="text" id="fileName" readonly="readonly" />
+							<span id="file_name">${fileName}</span>
+								<c:if test="${!empty data.ATT_FILE_NAME}">
+									<input type="button" id="fileDelete" value="삭제" />
+								</c:if>
+									<input type="text" id="fileName" readonly="readonly" />
 							</div>
+						<input type=file id="att" name="att" onchange="uploadName(this)" />
+						<input type="hidden" id="attFile" name="attFile" />
 						</div>
 						<!-- 의견 -->
-						<div class="mgtop"></div>
+<!-- 						<div class="mgtop"></div>
 						<div class="bot_title">
 							<h3>의견(7)</h3>
 						</div>
@@ -1125,7 +1170,7 @@ function uploadName(e) {
 							<textarea></textarea>
 							<div class="cmn_btn subm">등록</div>
 						</div>
-						<!-- 히스토리 -->
+						히스토리
 						<div class="mgtop"></div>
 						<div class="bot_title">
 							<h3>
@@ -1162,7 +1207,7 @@ function uploadName(e) {
 							</div>
 						</div>
 						<hr class="hr_bot" color="white" width="925px">
-						<hr class="hr_bot" color="white" width="925px">
+						<hr class="hr_bot" color="white" width="925px"> -->
 					</form>
 					<!-- 끝 -->
 				</div>

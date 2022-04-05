@@ -53,12 +53,16 @@ p {
 	margin-bottom: 5px;
 }
 
-#subject{
+#title{
 	
 	width:800px;
 	height:35px;
 	font-size: 20px;
 	
+}
+
+#emp_num {
+	font-size: 20px;
 }
 
 #content_line{
@@ -87,7 +91,7 @@ p {
 	margin-right: 37px;
 }
 
-#content{
+#cont{
 
 	width:850px;
 	height: 500px;
@@ -95,11 +99,16 @@ p {
 	
 }
 
+#emp_line {
+	margin-top: 5px;
+	margin-bottom: 5px;
+
+}
 </style>
 <script type="text/javascript">
 
 $(document).ready(function() {
-	CKEDITOR.replace("content", {
+	CKEDITOR.replace("cont", {
 		// 옵션
 		resize_enabled : false, // 크기변경
 		language : "ko", // 언어
@@ -107,7 +116,83 @@ $(document).ready(function() {
 		width : "800", // 가로
 		height : "250" // 세로
 	});
-});
+	
+	$("#cancelBtn").on("click", function() {
+		$("#backForm").submit();
+	});
+	
+	$("#writeBtn").on("click", function() {
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "등록",
+			contents : "게시글을 등록하시겠습니까?",
+			draggable : true,
+			buttons : [{
+				name : "예",
+				func:function() {
+					$("#cont").val(CKEDITOR.instances['cont'].getData());
+					if(checkEmpty("#title")) {
+						alert("제목을 입력하세요.");
+						$("#title").focus();
+					}   else if (checkEmpty("#cont")) {
+						alert("내용을 입력하세요.");
+						$("#cont").focus();
+					} else {
+						var writeForm = $("#writeForm");
+						
+						writeForm.ajaxForm({
+							success : function(res) {
+								// 물리파일명 보관
+								if(res.fileName.length > 0) {
+									$("#event_attFile").val(res.fileName[0]);
+								}
+								
+								// 글 저장
+								var params =  $("#writeForm").serialize();
+						
+								$.ajax({
+									type : "post",
+									url : "eventAction/insert",
+									dataType : "json",
+									data : params,
+									success : function(res) {
+										if(res.res == "success") {
+											location.href = "prgrsEvent";
+										} else {
+											alert("작성중 문제가 발생하였습니다.");
+										}
+									}, // success end
+									error : function(request, status, error) {
+										console.log(request.responseText);
+									} // error end
+								}); // ajax end
+							}, // success end
+							error : function(req) {
+								console.log(req.responseText);
+							} // error end
+						});// ajaxForm end
+						
+						writeForm.submit(); // ajaxForm 실행
+							closePopup();
+						} // else end
+				}
+					}, {
+						name : "아니오"
+					}]
+		}); // makePopup end
+	}); // btn2Btn end
+}); // document ready end
+
+function checkEmpty(sel) {
+	if($.trim($(sel).val()) == "") {
+		return true;
+	} else {
+		return false;
+	}
+
+}
+	
 </script>
 </head>
 <body>
@@ -119,7 +204,7 @@ $(document).ready(function() {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
-	<form action="#" id="actionForm" method="post">
+	<form action="event" id="backForm" method="post">
 		<input type="hidden" name="no" value="${param.no}" />
 		<input type="hidden" name="page" value="${param.page}" />
 		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
@@ -139,15 +224,31 @@ $(document).ready(function() {
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="container">
+				<form action="fileUploadAjax" id="writeForm" method="post"
+							  enctype="multipart/form-data">
+				<input type="hidden" name="no" value="${param.no}" />
+							<input type="hidden" id="emp_num" name="emp_num" value="${sEmpNum}" />
+							<!--<input type="hidden" id="emp_name" name="emp_name" value="${data.EMP_NAME}" />-->
+							<input type="hidden" id="top" name="top" value="${param.top}"/>
+							<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
+							<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
+				<p id="emp_line">작성자</p>
+				<input type="text" id="emp_name" value="${sEmpName}">
 				<p id="subject_line">제목</p>
-				<input type="text" name="subject" id="subject" placeholder="제목을 입력하세요">
+				<input type="text" name="title" id="title" placeholder="제목을 입력하세요">
 				<p id="content_line">글내용</p>
-				<textarea name="content" id="content" placeholder="내용을 입력하세요" ></textarea>
-				<div><input type="file" value="첨부파일" id="btn_file"></div>
-				<div class="eventAdd_btn">
-					<div class="cmn_btn_mr">등록</div>
-					<div class="cmn_btn_mr">취소</div>
+				<textarea name="cont" id="cont" placeholder="내용을 입력하세요" ></textarea>
+				<div class="add_file">
+						<input type="file" name="event_file" />
+						<input type="text" id="event_att" name="event_att" readonly="readonly"/>
+						<input type="hidden" id="event_attFile" name="event_attFile"/>
 				</div>
+				<!--<div><input type="file" value="첨부파일" id="btn_file"></div>-->
+				<div class="eventAdd_btn">
+					<div class="cmn_btn_mr" id="writeBtn">등록</div>
+					<div class="cmn_btn_mr" id="cancelBtn">취소</div>
+				</div>
+				</form>
 			</div>
 		</div>
 	</div>

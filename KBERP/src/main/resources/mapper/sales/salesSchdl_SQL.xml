@@ -75,7 +75,37 @@
                                                                                                 ON CL.CLNT_NUM = L.CLNT_NUM
                                                                                    LEFT OUTER JOIN CLNT_CMPNY CC
                                                                                                 ON CC.CLNT_CMPNY_NUM = CL.CLNT_CMPNY_NUM
-		WHERE A.SCHDL_NUM = #{schdlnum}   
+		WHERE A.SCHDL_NUM = #{schdlnum}
+	</select>
+	
+	<!-- 예정된 일정 상세보기  -->
+	<select id="leadSchdlCont" parameterType="hashmap" resultType="hashmap">
+		SELECT A.SCHDL_NUM, A.SCHDL_NAME, A.SALES_NUM, A.LEAD_NUM, L.LEAD_NAME AS SALES_NAME, A.LEAD_NAME AS LEAD_NAME, CC.CLNT_CMPNY_NAME AS SALES_CLNT_CMPNY_NAME, A.CLNT_CMPNY_NAME AS LEAD_CLNT_CMPNY_NAME, 
+			   A.CLNT_NAME AS LEAD_CLNT_NAME, CL.CLNT_NAME AS SALES_CLNT_NAME, A.ACTVTY_CLSFY_NUM, A.START_DATE_HR, A.END_DATE_HR, A.ACTVTY_CONT, A.ATT_FILE_NAME
+		FROM ( SELECT  SS.START_DATE_HR, SS.END_DATE_HR, SS.SCHDL_NUM, SS.ACTVTY_CLSFY_NUM,CC.CLNT_CMPNY_NAME,L.LEAD_NAME, L.LEAD_NUM,
+					   S.SALES_NUM, SS.SCHDL_NAME, CL.CLNT_NAME, SS.ACTVTY_CONT, AT.ATT_FILE_NAME
+       		   FROM SALES_SCHDL SS LEFT OUTER JOIN LEAD L
+              		                           ON SS.LEAD_NUM = L.LEAD_NUM
+                     		       LEFT OUTER JOIN SALES S
+                            	   	            ON SS.SALES_NUM = S.SALES_NUM
+                           		   LEFT OUTER JOIN ENTRPRS_CLNT CL
+                                  	    	    ON L.CLNT_NUM = CL.CLNT_NUM
+                           		   LEFT OUTER JOIN CLNT_CMPNY CC
+                                     	        ON CL.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
+                                	   	INNER JOIN EMP E
+                                       	    	ON E.EMP_NUM = SS.EMP_NUM
+                                        INNER JOIN SALES_SCHDL_ATT_FILE AT
+                                                ON SS.SCHDL_NUM = AT.SCHDL_NUM) A LEFT OUTER JOIN SALES S 
+                                                                                               ON A.SALES_NUM = S.SALES_NUM
+                                                                                   LEFT OUTER JOIN LEAD L 
+                                                                                                ON S.LEAD_NUM = L.LEAD_NUM
+                                                                                   LEFT OUTER JOIN ENTRPRS_CLNT CL
+                                                                                                ON CL.CLNT_NUM = L.CLNT_NUM
+                                                                                   LEFT OUTER JOIN CLNT_CMPNY CC
+                                                                                                ON CC.CLNT_CMPNY_NUM = CL.CLNT_CMPNY_NUM
+		WHERE 1 = 1
+		AND A.SCHDL_NUM = #{schdlNum}
+		AND A.LEAD_NUM = #{leadNum}
 	</select>
 	<!-- 영업 일정 전체데이터 수정(첨부파일 제외) -->
 	<update id="salesSchdlUpdate" parameterType="hashmap">
@@ -292,15 +322,19 @@
 	</select>
 	<!-- 리드 상세 -->
 	<select id="getLeadCont" resultType="hashmap" parameterType="hashmap">	
-		SELECT LD.LEAD_NAME, EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, CC.GRADE_NUM, LD.RCGNTN_PATH_NUM, E.EMP_NAME,
-        	   DECODE(PRGRS_STS_NUM, 1, '진행중', 2, '종료(영업기회 전환)', 3, '종료(영업기회 실패)') AS PSNUM 
+		SELECT LD.LEAD_NAME, LD.MNGR_EMP_NUM, EC.CLNT_NUM, EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, CC.GRADE_NUM, LD.RCGNTN_PATH_NUM, E.EMP_NAME,
+        	   L.PRGRS_STS_NUM, LAF.ATT_FILE_NAME
 		FROM LEAD LD INNER JOIN ENTRPRS_CLNT EC
 		                     ON LD.CLNT_NUM = EC.CLNT_NUM
 		             INNER JOIN CLNT_CMPNY CC
 		                     ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
 		             INNER JOIN EMP E
 		                     ON LD.MNGR_EMP_NUM = E.EMP_NUM
-		WHERE LD.LEAD_NUM = #{leadNum}            
+		             INNER JOIN LEAD L 
+		             		 ON L.LEAD_NUM = LD.LEAD_NUM
+		        LEFT OUTER JOIN LEAD_ATT_FILE LAF
+		             		 ON LD.LEAD_NUM = LAF.LEAD_NUM
+		WHERE LD.LEAD_NUM = #{leadNum}           
 	</select>
 	<!-- 리드 의견 개수 -->
 	<select id="opListCnt" parameterType="hashmap" resultType="Integer">
@@ -345,8 +379,10 @@
 	</select>
 	<!-- 리드 예정된 영업 일정 목록 띄우기 -->
 	<select id="getSCList" parameterType="hashmap" resultType="hashmap">
-		SELECT SUBSTR(START_DATE_HR, 6, 5) || ' ' || SUBSTR(START_DATE_HR, 12, 16) AS START_DATE_HR, DECODE(END_DATE_HR, NULL, '미정', SUBSTR(END_DATE_HR, 6, 5) || ' ' || SUBSTR(END_DATE_HR, 12, 16)) AS END_DATE_HR
-		FROM SALES_SCHDL
+		SELECT SUBSTR(START_DATE_HR, 6, 5) || ' ' || SUBSTR(START_DATE_HR, 12, 16) AS START_DATE_HR, DECODE(END_DATE_HR, NULL, '미정', SUBSTR(END_DATE_HR, 6, 5) || ' ' || SUBSTR(END_DATE_HR, 12, 16)) AS END_DATE_HR,
+       		   SCHDL_NAME, E.EMP_NAME, SS.SCHDL_NUM
+		FROM SALES_SCHDL SS INNER JOIN EMP E
+                                    ON SS.EMP_NUM = E.EMP_NUM
 		WHERE DEL_CHECK IS NULL
 		AND LEAD_NUM = #{leadNum}
 	</select>

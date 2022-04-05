@@ -112,6 +112,7 @@ function drawList(list) {
 		html += "<td>" + data.FAQ_NUM + "</td>";
 		html += "<td>" + data.CTGRY_NAME + "</td>";
 		html += "<td>" + data.WRTNG_TITLE + "</td>";
+		html += "<td>" + data.EMP_NAME+ "</td>";
 		html += "<td>" + data.WRTNG_DATE + "</td>";
 		html += "</tr>";
 	}
@@ -173,7 +174,7 @@ function drawPaging(pb) {
 					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
 						<select class="srch_sel" id="searchGbn" name="searchGbn">
 							<option value="0">제목</option>
-							<option value="1">작성일</option>
+							<option value="1">작성자</option>
 						</select>
 						<div class="srch_text_wrap">
 							<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
@@ -188,8 +189,9 @@ function drawPaging(pb) {
 			<table class="board_table">
 				<colgroup>
 					<col width="50"/>
-					<col width="110"/>
+					<col width="115"/>
 					<col width="450"/>
+					<col width="100"/>
 					<col width="100"/>
 				</colgroup>
 				<thead>
@@ -197,6 +199,7 @@ function drawPaging(pb) {
 						<th>No</th>
 						<th>카테고리</th>
 						<th>제목</th>
+						<th>작성자</th>
 						<th>작성일</th>
 					</tr>
 				</thead>

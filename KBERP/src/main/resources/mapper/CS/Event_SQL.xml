@@ -23,9 +23,33 @@
 	
 	<!-- 점심이후 수정 -->
 	<insert id="EventAdd" parameterType="hashmap">
-		INSERT INTO EVENT(EVENT_NUM, EMP_NUM, EVENT_TITLE, EVENT_CONT, WRITE_DATE, EVENT_HITS)
-		VALUES(EVENT_SEQ.NEXTVAL, #{emp}, , #{title}, #{cont}, #{date}, #{hits})
+		INSERT INTO EVENT(EVENT.EVENT_NUM, EVENT.EMP_NUM, EVENT.EVENT_TITLE, EVENT.EVENT_CONT)
+		VALUES(EVENT_SEQ.NEXTVAL, #{emp_num}, #{title}, #{cont})
 	</insert>
 	
+	<update id="EventUpdate" parameterType="hashmap">
+		UPDATE EVENT SET EMP_NUM = #{emp_num},
+	                 EVENT_TITLE = #{title},
+	                 EVENT_CONT= #{cont}
+		WHERE EVENT_NUM = #{no}
+	</update>
+	
+	<delete id="EventDelete" parameterType="hashmap">
+		DELETE FROM EVENT
+		WHERE EVENT.EVENT_NUM = #{no}
+	</delete>
+	
+	<select id="getEventCmntList" resultType="hashmap" parameterType="hashmap">
+		SELECT CMNT_NUM, CLNT_NUM, EVENT_NUM, EMP_NUM, CMNT_CONT, DEL_CHECK
+		FROM EVENT_CMNT
+		WHERE EVENT_NUM = #{no}
+	</select>
+	
+	<select id="getEventCmnt" resultType="hashmap" parameterType="hashmap">
+		SELECT CMNT_NUM, CLNT_NUM, EVENT_NUM, EMP.EMP_NUM, CMNT_CONT, DEL_CHECK, EMP.EMP_NAME AS WRITER_NAME
+		FROM EVENT_CMNT, EMP
+		WHERE EVENT_CMNT.EMP_NUM = EMP.EMP_NUM
+		AND EVENT_NUM = #{no}
+	</select>
 	
 </mapper>

@@ -22,6 +22,10 @@
 	margin-left: 20px;
 }
 
+#qunty{
+	width: 50px;
+}
+
 .rmrks{
 	margin-top:50px;
 }

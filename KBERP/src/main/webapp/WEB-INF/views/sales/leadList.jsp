@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오 ERP - 리드목록</title>
+<title>카카오 ERP - 리드관리</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -184,20 +184,25 @@
 	border-radius: 5px;
 	border: none;
 }
-
+.sts_list_on {
+	display: inline-block;
+	vertical-align: middle;
+	width: 150px;
+	margin: 0 30px;
+	padding: 8px 5px;
+	font-size: 10pt;
+	text-align: center;
+	background-color: #F2B705;
+	border-radius: 5px;
+	border: none;
+}
 .sts_list:hover {
 	font-weight: bold;
 	cursor: pointer;
 	background-color: #F2B705;
 }
-
 .sts_list:active {
-   width: 150px;
-   margin: 0 30px;
-   padding: 8px 5px;
    background-color: #F2CB05;
-   cursor: pointer;
-   font-weight: bold;
 }
 .tLine{
 	background-color: #4B94F2;
@@ -385,9 +390,15 @@ $(document).ready(function() {
 		$("#oldPsNum").val("0");
 		$("#oldSrchType").val("0");
 	}
-
+	
+	if('${param.listSort}' != '') {
+		$("#listSort").val('${param.listSort}');
+	} else {
+		$("#oldListSort").val("0");
+	}
 	reloadList();
 	
+	// 검색버튼
 	$("#searchBtn").on("click", function() {
 		$("#page").val("1");
 		
@@ -395,10 +406,22 @@ $(document).ready(function() {
 		$("#oldSrchType").val($("#srchType").val());
 		$("#oldSearchTxt").val($("#searchTxt").val());
 		$("#oldMngEmp").val($("#mngEmp").val());
+		$("#oldListSort").val($("#listSort").val());
 		
 		reloadList();
 	});
-	
+	// 정렬버튼
+	$("#soltBtn").on("click", function() {
+		$("#page").val("1");
+		
+		$("#oldPsNum").val($("#psNum").val());
+		$("#oldSrchType").val($("#srchType").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
+		$("#oldMngEmp").val($("#mngEmp").val());
+		$("#oldListSort").val($("#listSort").val());
+		
+		reloadList();
+	});
 	//리드 상세보기
 	$(".list_table").on("click", ".leadName", function() {
 		$("#leadNum").val($(this).attr("leadNum"));
@@ -407,6 +430,7 @@ $(document).ready(function() {
 		$("#srchType").val($("#oldSrchType").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
 		$("#mngEmp").val($("#oldMngEmp").val());
+		$("#listSort").val($("#oldListSort").val());
 		
 		$("#actionForm").attr("action", "leadCont");
 		$("#actionForm").submit();
@@ -421,28 +445,86 @@ $(document).ready(function() {
  		$("#srchType").val($("#oldSrchType").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
 		$("#mngEmp").val($("#oldMngEmp").val()); 
+		$("#listSort").val($("#oldListSort").val());
+		
 		console.log(oldPsNum);
 		
 		reloadList();
 	});
 	
 	$(".sts").on("click", ".sts_list", function() {
+		if($(this).attr("num") != "0") {
+			$(".sts").children(".sts_list_on").attr("class", "sts_list");
+			$(this).removeClass();
+			$(this).addClass("sts_list_on");	
+		} else {
+			$(".sts").children(".sts_list_on").attr("class", "sts_list");
+		}
 		
 		$("#page").val("1");
 		
 		$("#psNum").val($(this).attr("num"));
 		
-/* 		if($("#searchTxt").val() != "" || $("mngEmp").val != "") { // 담당자, 검색어 txt가 비어있지 않으면 초기화
+		$("#startDate").val('${startDate}');
+		
+ 		if($("#searchTxt").val() != "" || $("mngEmp").val != "") { // 담당자, 검색어 txt가 비어있지 않으면 초기화
 			var txt = document.getElementById("searchTxt");
 			var mngrTxt = document.getElementById("mngEmp");
 			
 			txt.value = "";
 			mngrTxt.value = "";
-		} */
+			
+		} 
 		reloadList();		
 	});
 	
-
+	/* 검색 어제버튼 클릭 */
+	$("#yesterday").on("click", function() {
+		var a = new Date();
+		a.setDate(a.getDate() - 1);
+		var yesterday = a.getFullYear() + "-" + lpad(a.getMonth() + 1, 2, 0) + "-" + lpad(a.getDate(), 2, 0);
+		$("#startDate").val(yesterday);
+		var b = new Date();
+		var today = b.getFullYear() + "-" + lpad((b.getMonth() + 1), 2, 0) + "-" + lpad(b.getDate(), 2, 0);
+		$("#endDate").val(today);
+	});
+	/* 검색 오늘버튼 */
+	$("#today").on("click", function() {
+		var a = new Date();
+		var today = a.getFullYear() + "-" + lpad(a.getMonth() + 1, 2, 0) + "-" + lpad(a.getDate(), 2, 0);
+		$("#startDate").val(today);
+		$("#endDate").val(today);
+	});
+	/* 검색 일주일전 버튼 */
+	$("#aWeekAgo").on("click", function() {
+		var a = new Date();
+		a.setDate(a.getDate() - 7);
+		var aWeekAgo = a.getFullYear() + "-" + lpad(a.getMonth() + 1, 2, 0) + "-" + lpad(a.getDate(), 2, 0);
+		$("#startDate").val(aWeekAgo);
+		var b = new Date();
+		var today = b.getFullYear() + "-" + lpad((b.getMonth() + 1), 2, 0) + "-" + lpad(b.getDate(), 2, 0);
+		$("#endDate").val(today);
+	});
+	/* 검색 1개월전 버튼 */
+	$("#oneMonthAgo").on("click", function() {
+		var a = new Date();
+		a.setMonth(a.getMonth() - 1);
+		var oneMonthAgo = a.getFullYear() + "-" + lpad(a.getMonth() + 1, 2, 0) + "-" + lpad(a.getDate(), 2, 0);
+		$("#startDate").val(oneMonthAgo);
+		var b = new Date();
+		var today = b.getFullYear() + "-" + lpad((b.getMonth() + 1), 2, 0) + "-" + lpad(b.getDate(), 2, 0);
+		$("#endDate").val(today);
+	});
+	/* 검색 3개월전 버튼 */
+	$("#threeMonthAgo").on("click", function() {
+		var a = new Date();
+		a.setMonth(a.getMonth() - 3);
+		var threeMonthAgo = a.getFullYear() + "-" + lpad(a.getMonth() + 1, 2, 0) + "-" + lpad(a.getDate(), 2, 0);
+		$("#startDate").val(threeMonthAgo);
+		var b = new Date();
+		var today = b.getFullYear() + "-" + lpad((b.getMonth() + 1), 2, 0) + "-" + lpad(b.getDate(), 2, 0);
+		$("#endDate").val(today);
+	});
 	
 	// 리드등록
 	$("#writeBtn").on("click", function() {
@@ -461,9 +543,8 @@ function reloadList() {
 		dataType : "json",
 		data : params,
 		success : function(res) {
-			drawList(res.list);
 			drawTotal(res.cnt);
-			drawCnt(res.listCnt, res.ongoingCnt, res.rcgntnCnt, res.failCnt);
+			drawList(res.list);
 			drawPaging(res.pb, ".pgn_area");
 			console.log(res.list);
 		},
@@ -664,18 +745,6 @@ function mngrDrawList(list) {
 	
 }
 /****************** 담당자 조회 팝업 끝 *********************/
-/* ========================== 진행상태 건수 표시 ========================== */
-function drawCnt(listCnt, ongoingCnt,rcgntnCnt, failCnt) {
-	var html = "";
-	
-	html += "<input type=\"button\" class=\"sts_list\" num=\"0\" value=\"전체 : "+ listCnt + "건\">";
-	html += "<input type=\"button\" class=\"sts_list\" num=\"1\" value=\"진행중 : "+ ongoingCnt + "건\">";
-	html += "<input type=\"button\" class=\"sts_list\" num=\"2\" value=\"영업기회 전환 : "+ rcgntnCnt + "건\">";
-	html += "<input type=\"button\" class=\"sts_list\" num=\"3\" value=\"실패 : "+ failCnt + "건\">";
-
-	$(".sts").html(html);
-}
-
 function drawTotal(cnt) {
 	var html = "";
 	
@@ -721,6 +790,7 @@ function drawPaging(pb, sel) {
 <input type="hidden" id="oldSrchType" value="${param.srchType}" />
 <input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
 <input type="hidden" id="oldMngEmp" value="${param.mngEmp}" />
+<input type="hidden" id="oldListSort" value="${param.listSort}" />
 <!-- 데이터유지 끝 -->
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -748,7 +818,12 @@ function drawPaging(pb, sel) {
 					<!-- 검색영역 -->
 					<div class="bodyWrap">
 						<!-- sts : 상품현황 -->
-						<div class="sts"></div>
+						<div class="sts">
+							<div class="sts_list" num="0">전체 : ${listCnt}건</div>
+							<div class="sts_list" num="1">진행중 : ${ongoingCnt}건</div>
+							<div class="sts_list" num="2">영업기회 전환 : ${rcgntnCnt}건</div>
+							<div class="sts_list" num="3">실패 : ${failCnt}건</div>
+						</div>
 						<div class="tLine"></div>
 						<!-- class="sts" end -->
 
@@ -817,21 +892,21 @@ function drawPaging(pb, sel) {
 											<option>리드등록일</option>
 										</select>
 									</td>
-									<td colspan="8" class="sDate">
-										<input type="button" value="어제" />
-										<input type="button" value="오늘" />
-										<input type="button" value="일주일 전" />
-										<input type="button" value="1개월 전" />
-										<input type="button" value="3개월 전" />
+									<td colspan="8">
+										<input type="button" id="yesterday" value="어제" />
+										<input type="button" id="today" value="오늘" />
+										<input type="button" id="aWeekAgo" value="일주일 전" />
+										<input type="button" id="oneMonthAgo" value="1개월 전" />
+										<input type="button" id="threeMonthAgo" value="3개월 전" />
 									</td>
 								</tr>
 								<tr>
 									<td></td>
 									<td></td>
 									<td colspan="8">
-										<input type="date" id="searchDate" name="searchDate" value="${searchDate}" style="font-family : 맑은 고딕;" />
+										<input type="date" id="startDate" name="startDate" value="${startDate}" style="font-family : 맑은 고딕;" />
 										~
-										<input type="date" id="searchDate2" name="searchDate2" value="${searchDate2}" style="font-family : 맑은 고딕;" />
+										<input type="date" id="endDate" name="endDate" value="${endDate}" style="font-family : 맑은 고딕;" />
 									</td>
 								</tr>
 								<tr>
@@ -860,7 +935,7 @@ function drawPaging(pb, sel) {
 										<span class="srch_name">정렬</span>
 									</td>
 									<td>
-										<select>
+										<select id="listSort" name="listSort">
 											<option value="0">선택안함</option>
 											<option value="1">등록일</option>
 											<option value="2">리드명</option>
@@ -868,7 +943,7 @@ function drawPaging(pb, sel) {
 										</select>
 									</td>
 									<td>
-										<img class="asc_btn cmn_btn" alt="등록버튼" src="resources/images/sales/asc.png" />
+										<img class="asc_btn cmn_btn" id="soltBtn" alt="정렬버튼" src="resources/images/sales/asc.png" />
 									</td>
 									<td colspan="7"></td>
 								</tr>

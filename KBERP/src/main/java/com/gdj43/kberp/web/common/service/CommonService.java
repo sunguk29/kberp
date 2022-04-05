@@ -82,4 +82,6 @@ public class CommonService implements ICommonService {
 	public int deleteData(String sql, HashMap<String, String> params) throws Throwable {
 		return iCommonDao.deleteData(sql, params);
 	}
+
+
 }

@@ -71,6 +71,11 @@
 		FROM CLNT_CMPNY
 		WHERE 1 = 1
 		AND DEL_CHECK IS NULL
+		<choose>
+			<when test="clntCmpnyClsfyNum != 9" > <!-- 선택안함 : 0 이 아니면 해당 번호 목록으로 검색 -->
+				AND CLNT_CMPNY_CLSFY_NUM = #{clntCmpnyClsfyNum}
+			</when>
+		</choose> 
 		<if test="searchTxt != null and searchTxt != ''">
 			<choose>
 				<when test="clntCmpnyClsfyNum == 9 and searchType == 0">

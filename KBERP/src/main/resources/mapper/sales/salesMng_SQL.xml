@@ -9,13 +9,64 @@
 		WHERE 1 = 1
 	</select>
 	
+	<!-- 검색 게시글 수 -->
+	<select id="salesSearchListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SALES S INNER JOIN EMP E
+		                     ON S.MNGR_EMP_NUM = E.EMP_NUM
+		             INNER JOIN LEAD L
+		                     ON S.LEAD_NUM = L.LEAD_NUM
+		             INNER JOIN ENTRPRS_CLNT EC
+		                     ON EC.CLNT_NUM = L.CLNT_NUM
+		             INNER JOIN CLNT_CMPNY CC
+		                     ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
+		             LEFT OUTER JOIN LOAN_DTL_INFO LDI
+		                          ON S.SALES_NUM = LDI.SALES_NUM
+		WHERE 1 = 1
+		<choose>
+			<when test="mngNum != null and mngNum != ''">
+				AND E.EMP_NUM = #{mngNum}
+			</when>
+			<when test="prgrsStage1 != 9">
+				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
+			</when>
+			<when test="prgrsStage2 != 9">
+				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
+			</when>
+			<when test="startDate != null and startDate != '' or endDate != null and endDate != ''">
+				AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
+			</when>
+			<when test="prgrsStage1 != 9 and prgrsStage2 != 9">
+				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
+				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
+			</when>
+			<when test="prgrsStage1 != 9 and prgrsStage2 != 9 and startDate != null and startDate != '' or endDate != null and endDate != ''">
+				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
+				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
+				AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
+			</when>
+		</choose>
+		<if test="searchTxt != null and searchTxt != ''">
+			<choose>
+				<when test="searchGbn == 0">
+					AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="searchGbn == 1">
+					AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="searchGbn == 2">
+					AND S.SALES_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+			</choose>
+		</if>
+	</select>
 	
 	<!-- stage0 : 영업기회 단계 -->
 	<select id="salesStage0" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM SALES
 		WHERE 1 = 1
-		AND PRGRS_STS_NUM = '0'
+		AND SUBSTR(PRGRS_STS_NUM, 1, 1) = '1'
 	</select>
 	
 	<!-- stage1 : 영업기회 단계 -->
@@ -23,7 +74,7 @@
 		SELECT COUNT(*) AS CNT
 		FROM SALES
 		WHERE 1 = 1
-		AND PRGRS_STS_NUM = '1'
+		AND SUBSTR(PRGRS_STS_NUM, 1, 1) = '2'
 	</select>
 	
 	<!-- stage2 : 영업기회 단계 -->
@@ -31,7 +82,7 @@
 		SELECT COUNT(*) AS CNT
 		FROM SALES
 		WHERE 1 = 1
-		AND PRGRS_STS_NUM = '2'
+		AND SUBSTR(PRGRS_STS_NUM, 1, 1) = '3'
 	</select>
 	
 	<!-- stage3 : 영업기회 단계 -->
@@ -39,7 +90,7 @@
 		SELECT COUNT(*) AS CNT
 		FROM SALES
 		WHERE 1 = 1
-		AND PRGRS_STS_NUM = '3'
+		AND SUBSTR(PRGRS_STS_NUM, 1, 1) = '4'
 	</select>
 	
 	<!-- 영업관리 리스트 -->
@@ -62,8 +113,8 @@
 		                                 ON S.SALES_NUM = LDI.SALES_NUM
               WHERE 1 = 1
 		<choose>
-			<when test="mngNum != null and mngNum != ''">
-				AND E.EMP_NUM = #{mngNum}
+			<when test="mngName != null and mngName != ''">
+				AND E.EMP_NAME = #{mngName}
 			</when>
 			<when test="prgrsStage1 != 9">
 				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
@@ -72,7 +123,7 @@
 				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
 			</when>
 			<when test="startDate != null and startDate != '' or endDate != null and endDate != ''">
-				AND S.START_DATE BETWEEN #{startDate} AND #{endDate}
+				AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
 			</when>
 			<when test="prgrsStage1 != 9 and prgrsStage2 != 9">
 				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
@@ -81,9 +132,38 @@
 			<when test="prgrsStage1 != 9 and prgrsStage2 != 9 and startDate != null and startDate != '' or endDate != null and endDate != ''">
 				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
 				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
-				AND S.START_DATE BETWEEN #{startDate} AND #{endDate}
+				AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
 			</when>
 		</choose>
+		<if test="searchTxt != null and searchTxt != ''">
+			<choose>
+				<when test="searchGbn == 0">
+					AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="searchGbn == 1">
+					AND L.LEAD_NAME LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="searchGbn == 2">
+					AND S.SALES_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+			</choose>
+		</if>
+		<if test="listSort != '9'">
+			<choose>
+				<when test="listSort == 0">
+					ORDER BY L.LEAD_NAME ASC
+				</when>
+				<when test="listSort == 1">
+					ORDER BY CC.CLNT_CMPNY_NAME ASC
+				</when>
+				<when test="listSort == 2">
+					ORDER BY LDI.EXPCTN_LOAN_SCALE ASC
+				</when>
+				<when test="listSort == 3">
+					ORDER BY TO_CHAR(S.START_DATE, 'YYYY-MM-DD') ASC
+				</when>
+			</choose>
+		</if> 
 		) SS
 		WHERE SS.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
@@ -124,7 +204,7 @@
 	<select id="getSales2BringLead" parameterType="hashmap" resultType="hashmap">
 		SELECT S.SALES_NUM, L.LEAD_NUM, L.LEAD_NAME, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NUM, E.EMP_NAME, S.MNGR_EMP_NUM,
 		       TO_CHAR(S.START_DATE, 'YYYY-MM-DD') AS START_DATE,
-		       DECODE(CCG.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME
+		       DECODE(CCG.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME, CC.CLNT_CMPNY_NUM
 		FROM SALES S INNER JOIN EMP E
 		                     ON E.EMP_NUM = S.MNGR_EMP_NUM
 		             INNER JOIN LEAD L
@@ -166,16 +246,18 @@
 	
 	<!-- 예정사업 상세정보tab 제안 단계로 가져오기 -->
 	<select id="getSales2BringBsns" parameterType="hashmap" resultType="hashmap">
-		SELECT S.SALES_NUM, EXPCTD_BSNS_NAME, EXPCTD_BSNS_TYPE, RMKS
+		SELECT S.SALES_NUM, EBI.EXPCTD_BSNS_NAME, EBI.EXPCTD_BSNS_TYPE, EBI.RMKS, EBAF.ATT_FILE_NAME
 		FROM SALES S LEFT OUTER JOIN EXPCTD_BSNS_INFO EBI
 		                          ON S.SALES_NUM = EBI.SALES_NUM
+		                  INNER JOIN EXPCTD_BSNS_ATT_FILE EBAF
+		                          ON S.SALES_NUM = EBAF.SALES_NUM  
 		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
 	<!-- 예정사업 첨부파일tab -->
 	<insert id="sales1AddBsnsAtt" parameterType="hashmap">
 		INSERT INTO EXPCTD_BSNS_ATT_FILE ( ATT_FILE_NUM, SALES_NUM, ATT_FILE_NAME )
-		VALUES ( EXPCTD_BSNS_ATT_FILE_SEQ.NEXTVAL, #{ss}, #{attFile} )
+		VALUES ( EXPCTD_BSNS_ATT_FILE_SEQ.NEXTVAL, SALES_SEQ.CURRVAL, #{attFile} )
 	</insert>
 	
 	
@@ -230,7 +312,7 @@
 	
 	<!-- 영업기회 수정 : 예정사업 첨부파일tab -->
 	<update id="sales1UpdateBsnsAtt" parameterType="hashmap">
-		UPDATE SALES SET MNGR_EMP_NUM = #{empNum}
+		UPDATE EXPCTD_BSNS_ATT_FILE SET ATT_FILE_NAME = #{attFile}
 		WHERE SALES_NUM = #{salesNum}
 	</update>
 	
@@ -244,6 +326,16 @@
 		VALUES ( #{salesNum}, #{sgstnloanCauseNum}, #{sgstnLoanScale}, #{sgstnloanType}, #{sgstnloanTime} || '-01', #{sgstnRdmptnTime}  || '-01' )
 	</insert>
 	
+	<!-- 제안 대출 상세정보tab 견적으로 가져오기 -->
+	<select id="getSales3BringLoan" resultType="hashmap" parameterType="hashmap">
+		SELECT S.SALES_NUM, SLDI.SGSTN_LOAN_CAUSE_NUM, SLDI.SGSTN_LOAN_SCALE, SLDI.SGSTN_LOAN_TYPE,
+       		   TO_CHAR(SLDI.SGSTN_LOAN_TIME, 'YYYY-MM') AS SGSTN_LOAN_TIME,
+       		   TO_CHAR(SLDI.SGSTN_RDMPTN_TIME, 'YYYY-MM') AS SGSTN_RDMPTN_TIME
+		FROM SALES S INNER JOIN SGSTN_LOAN_DTL_INFO SLDI
+		                          ON S.SALES_NUM = SLDI.SALES_NUM
+		WHERE S.SALES_NUM = #{salesNum}
+	</select>
+	
 	<!-- 제안 고객사 상세정보tab -->
 	<insert  id="sales2AddClntCmpny" parameterType="hashmap">
 		INSERT INTO SGSTN_CLNT_CMPNY_DTL_INFO ( SALES_NUM, SGSTN_TOTAL_AMNT, SGSTN_DEBT_AMNT,
@@ -251,11 +343,29 @@
 		VALUES ( #{salesNum}, #{sgstnTotalAmnt}, #{sgstnDebtAmnt}, #{sgstnAvgRvnAmnt}, #{sgstnEmpCount} )
 	</insert>
 	
+	<!-- 제안 고객사 상세정보tab 견적으로 가져오기 -->
+	<select id="getSales3BringClntCmpny" resultType="hashmap" parameterType="hashmap">
+		SELECT S.SALES_NUM, SCCDI.SGSTN_TOTAL_AMNT, SCCDI.SGSTN_DEBT_AMNT,
+		       SCCDI.SGSTN_AVG_RVN_AMNT, SCCDI.SGSTN_EMP_COUNT
+		FROM SALES S LEFT OUTER JOIN SGSTN_CLNT_CMPNY_DTL_INFO SCCDI
+		                          ON S.SALES_NUM = SCCDI.SALES_NUM
+		WHERE S.SALES_NUM = #{salesNum}
+	</select>
+	
+	
 	<!-- 제안 상세정보tab -->
 	<insert  id="sales2AddDtlInfo" parameterType="hashmap">
 		INSERT INTO SGSTN_DTL_INFO ( SALES_NUM, DTL_CONT, RMRKS, PRCD_DATE )
 		VALUES ( #{salesNum}, #{dtlCont}, #{rmrks}, SYSDATE )
 	</insert>
+	
+	<!-- 제안 상세정보tab 견적으로 가져오기. 첨부파일 제외함 -->
+	<select id="getSales3BringDtlInfo" resultType="hashmap" parameterType="hashmap">
+		SELECT S.SALES_NUM, SDI.DTL_CONT, SDI.RMRKS
+		FROM SALES S LEFT OUTER JOIN SGSTN_DTL_INFO SDI
+		                          ON S.SALES_NUM = SDI.SALES_NUM
+		WHERE S.SALES_NUM = #{salesNum}
+	</select>
 	
 	<!-- 제안 상세정보 첨부파일tab -->
 	<insert  id="sales2AddDtlInfoAtt" parameterType="hashmap">
@@ -263,7 +373,8 @@
 		VALUES ( SGSTN_ATT_FILE_SEQ.NEXTVAL, #{salesNum}, #{attFile} )
 	</insert>
 	
-		<!-- 제안 상세보기 -->
+	
+	<!-- 제안 상세보기 -->
 	<select id="getSales2" resultType="hashmap" parameterType="hashmap">
 		SELECT S.SALES_NUM, SLDI.SGSTN_LOAN_CAUSE_NUM, SLDI.SGSTN_LOAN_SCALE,
 		       SLDI.SGSTN_LOAN_TYPE, TO_CHAR(SLDI.SGSTN_LOAN_TIME, 'YYYY-MM') AS SGSTN_LOAN_TIME, TO_CHAR(SLDI.SGSTN_RDMPTN_TIME, 'YYYY-MM') AS SGSTN_RDMPTN_TIME,
@@ -309,7 +420,13 @@
 	
 	<!-- 영업기회에서 제안으로 단계 변경 -->
 	<update id="sales1to2" parameterType="hashmap">
-		UPDATE SALES SET PRGRS_STS_NUM = '2'
+		UPDATE SALES SET PRGRS_STS_NUM = '27'
+		WHERE SALES_NUM = #{salesNum}
+	</update>
+	
+	<!-- 제안에서 견적으로 단계 변경 -->
+	<update id="sales2to3" parameterType="hashmap">
+		UPDATE SALES SET PRGRS_STS_NUM = '37'
 		WHERE SALES_NUM = #{salesNum}
 	</update>
 
@@ -325,11 +442,139 @@
 		WHERE SALES_NUM = #{salesNum}
 	</update>
 	
+	<!-- 영업기회 의견목록 -->
+	<select id="getSalesOpList" parameterType="hashmap" resultType="hashmap">
+		SELECT S.SALES_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, SOC.CONT, TO_CHAR(SOC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
+		       SOC.CMNT_NUM
+		FROM SALES S INNER JOIN SALES_OPRTNTY_CMNT SOC
+		                     ON S.SALES_NUM = SOC.SALES_NUM
+		                 INNER JOIN EMP E
+		                         ON SOC.EMP_NUM = E.EMP_NUM
+		                 INNER JOIN APNTM A
+		                         ON E.EMP_NUM = A.EMP_NUM
+		                 INNER JOIN DEPT D
+		                         ON A.DEPT_NUM = D.DEPT_NUM
+		                 INNER JOIN RANK R
+		                         ON A.RANK_NUM = R.RANK_NUM
+		WHERE SOC.DEL_CHECK IS NULL
+		AND S.SALES_NUM = #{salesNum}
+		ORDER BY SOC.CMNT_NUM DESC
+	</select>
+	
+	<!-- 영업기회 의견개수 -->
+	<select id="salesOpListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SALES_OPRTNTY_CMNT
+		WHERE DEL_CHECK IS NULL
+		AND SALES_NUM = #{salesNum}
+	</select>
+	
+	<!-- 영업기회 의견등록 -->
+	<insert id="salesOpContAdd" parameterType="hashmap">
+		INSERT INTO SALES_OPRTNTY_CMNT(CMNT_NUM, SALES_NUM, EMP_NUM, CONT)
+		VALUES(SALES_OPRTNTY_CMNT_SEQ.NEXTVAL, #{salesNum}, #{sEmpNum}, #{tacont})
+	</insert>
+	
+	<!-- 영업기회 의견삭제 -->
+	<update id="salesOpContUpdate" parameterType="hashmap">
+		UPDATE SALES_OPRTNTY_CMNT SET DEL_CHECK = SYSDATE
+		WHERE CMNT_NUM = #{cmntNum}
+	</update>
+	
+	<!-- 제안 의견목록 -->
+	<select id="getSgstnOpList" parameterType="hashmap" resultType="hashmap">
+		SELECT S.SALES_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, SC.CONT, TO_CHAR(SC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
+		       SC.CMNT_NUM
+		FROM SALES S INNER JOIN SGSTN_CMNT SC
+		                     ON S.SALES_NUM = SC.SALES_NUM
+		                 INNER JOIN EMP E
+		                         ON SC.EMP_NUM = E.EMP_NUM
+		                 INNER JOIN APNTM A
+		                         ON E.EMP_NUM = A.EMP_NUM
+		                 INNER JOIN DEPT D
+		                         ON A.DEPT_NUM = D.DEPT_NUM
+		                 INNER JOIN RANK R
+		                         ON A.RANK_NUM = R.RANK_NUM
+		WHERE SC.DEL_CHECK IS NULL
+		AND S.SALES_NUM = #{salesNum}
+		ORDER BY SC.CMNT_NUM DESC
+	</select>
+	
+	<!-- 제안 의견개수 -->
+	<select id="sgstnOpListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SGSTN_CMNT
+		WHERE DEL_CHECK IS NULL
+		AND SALES_NUM = #{salesNum}
+	</select>
+	
+	<!-- 제안 의견등록 -->
+	<insert id="sgstnOpContAdd" parameterType="hashmap">
+		INSERT INTO SGSTN_CMNT(CMNT_NUM, SALES_NUM, EMP_NUM, CONT)
+		VALUES(SGSTN_CMNT_SEQ.NEXTVAL, #{salesNum}, #{sEmpNum}, #{tacont})
+	</insert>
+	
+	<!-- 제안 의견삭제 -->
+	<update id="sgstnOpContUpdate" parameterType="hashmap">
+		UPDATE SGSTN_CMNT SET DEL_CHECK = SYSDATE
+		WHERE CMNT_NUM = #{cmntNum}
+	</update>
 	
 	
+	<!-- 상품 팝업 개수 -->
+	<select id="popupMdListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM MD
+		WHERE 1 = 1
+		AND DEL_CHECK IS NULL
+	</select>
+	
+	<!-- 상품 팝업 리스트 -->
+	<select id="popupMdList" parameterType="hashmap" resultType="hashmap">
+		SELECT M.MD_NUM, M.MD_NAME, M.LIMIT_AMNT, M.INTRST_RATE, M.SALES_STS, M.MD_GRADE
+		FROM ( SELECT MD_NUM, MD_NAME, LIMIT_AMNT, INTRST_RATE,
+		       DECODE(SALES_STS_NUM, 0, '판매가능', 1, '판매중단', 2, '출시예정') AS SALES_STS,
+		              ROW_NUMBER() OVER(ORDER BY MD_NUM DESC) AS RNUM,
+		              DECODE(MD_GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D', 5, 'E') AS MD_GRADE
+		       FROM MD
+		       WHERE DEL_CHECK IS NULL ) M
+		WHERE M.RNUM BETWEEN #{startCount} AND #{endCount}
+	</select>
+	
+	<!-- 견적(등록) 상품 리스트 -->
+	<select id="mdList" parameterType="hashmap" resultType="hashmap">
+		SELECT CC.CLNT_CMPNY_NAME, MD.MD_NAME, MD.INTRST_RATE, DECODE(MD_GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D', 5, 'E') AS MD_GRADE, 
+		       DECODE(MD.LOAN_PRD, 0, '6개월', 1, '1년', 2, '3년', 3, '5년') AS LOAN_PRD, MD.LIMIT_AMNT, MD.MD_NUM
+		FROM CLNT_CMPNY CC INNER JOIN MD MD
+		                           ON CC.GRADE_NUM = MD.MD_GRADE_NUM
+		WHERE CC.CLNT_CMPNY_NUM = #{ccn}
+	</select>
 	
 	
+	<!-- 견적 등록 -->
+	<insert id="sales3QtnAdd" parameterType="hashmap">
+		INSERT INTO QTN(QTN_NUM, SALES_NUM, MD_NUM, QTN_NAME, QTN_DATE, SPLY_PRICE, TAX_AMNT, SRTX, INTRST_RATE, PYMNT_DATE, RMKS, LOAN_AMNT)
+		VALUES(QTN_SEQ.NEXTVAL, #{salesNum}, #{mdNum}, #{qtnName}, #{qtnDate}, #{sqlyPrice}, #{taxAmnt}, #{srtx}, #{intrstRate}, #{pymntDate}, #{rmksCont}, #{LoanAmnt})
+	</insert>
 	
+	<!-- 견적 첨부파일 등록 -->
+	<insert  id="sales3QtnAttAdd" parameterType="hashmap">
+		INSERT INTO QTN_ATT_FILE ( ATT_FILE_NUM, QTN_NUM, ATT_FILE_NAME )
+		VALUES (QTN_ATT_FILE_SEQ.NEXTVAL, QTN_SEQ.CURRVAL, #{attFile} )
+	</insert>
+	
+	<!-- 견적 상세보기 -->
+	<select id="getSales3" resultType="hashmap" parameterType="hashmap">
+		SELECT S.SALES_NUM, Q.QTN_NUM, Q.QTN_NAME, TO_CHAR(Q.QTN_DATE, 'YYYY-MM-DD') AS QTN_DATE,
+		       Q.LOAN_AMNT, Q.SPLY_PRICE, Q.TAX_AMNT, (Q.SPLY_PRICE + Q.TAX_AMNT) AS TOTAL,
+		       Q.SRTX, Q.INTRST_RATE, Q.PYMNT_DATE, Q.RMKS,
+		       M.MD_TYPE_NUM, M.MID_RDMPTN_PSBL_CHECK, M.INTRST_PYMNT_MTHD_NUM, M.PRNCPL_PYMNT_MTHD_NUM, M.LOAN_PRD
+		FROM SALES S INNER JOIN QTN Q
+		                     ON S.SALES_NUM = Q.SALES_NUM
+		             INNER JOIN MD M
+		                     ON Q.MD_NUM = M.MD_NUM
+		WHERE S.SALES_NUM = #{salesNum}
+	</select>
 	
 </mapper>
 

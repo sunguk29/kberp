@@ -81,4 +81,6 @@ public class CommonDao implements ICommonDao {
 	public int deleteData(String sql, HashMap<String, String> params) throws Throwable {
 		return sqlSession.delete(sql, params);
 	}
+
+
 }

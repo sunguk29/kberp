@@ -10,6 +10,9 @@
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
+
+$blue: #2E83F2;
+$black: #222222;
 /* 가로 사이즈 조정용 */
 .cont_wrap {
 	width: 900px;
@@ -225,6 +228,66 @@
 	overflow-y: scroll; 
 }
 
+
+.super_orgnzt_area {
+	line-height: 55px;
+    text-align: center;
+} 
+
+.super_orgnzt_text {
+	display: inline-block;
+	width: 60px;
+}
+
+.super_orgnzt_area > select {
+	display: inline-block;
+    width: 161px;
+    height: 26px;
+    text-align: center;
+    margin-left: 10px;
+}
+
+
+.add_orgnzt_area {
+	line-height: 35px;
+    text-align: center;
+}
+
+.add_orgnzt_text {
+	display: inline-block;
+   	width: 60px;
+}
+
+.popup_cont input[type="text"] {
+	display: inline-block;
+    width: 153px;
+    height: 20px;
+    text-align: center;
+    margin-left: 10px;
+}
+
+.orgnzt_del_popup{
+	display: inline-block;
+	height: 100%;
+	width: 100%;
+	text-align: center;
+	line-height: 100px;
+}
+
+.del_dept{
+	display: inline-block;
+	/*text-align: center;*/
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.del_txt{
+	display: inline-block;
+	/*text-align: center;*/
+}
+
+
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -235,8 +298,223 @@ $(document).ready(function() {
 	// 슬림스크롤
 	$(".scroll_area").slimScroll({height: "460px"},{width: "275px"});
 	
+	// 조직추가
+	$("#orgnzt_add_btn").on("click", function() {
+		var html = "";
+		html += "	<div class=\"super_orgnzt_area\">                           ";
+		html += "		<div class=\"super_orgnzt_text\">상위부서</div>         ";
+		console.log("sdeptNum : " + $(sdeptNum).val())
+		// sdeptNum : 마지막 선택 부서 == 상위조직 부서 
+		// 미선택 시 카카오뱅크를 상위조직으로 함
+		if($(sdeptNum).val() == null || $(sdeptNum).val() == ''){
+			$("#deptLevel").val($("#default").attr("deptLevel"));
+			html += "		<input type=\"text\" readonly=\"readonly\" value=\"카카오뱅크\" />";
+		} else {
+			html += "		<input type=\"text\" readonly=\"readonly\" value = \"" + $(dname).val() + "\" />";
+		}
+		html += "   </div>                                                      ";
+		html += "	<div class=\"add_orgnzt_area\">                             ";
+		html += "		<div class=\"add_orgnzt_text\">부서명</div>             ";
+		html += "		<input type=\"text\" id=\"deptInput\" />";
+		html += "	</div>                                                      ";
+		
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "등록",
+			contents : html, 
+			draggable : true,
+			buttons : [{
+				name : "확인",
+				func:function() {
+						if (checkEmpty("#deptInput")) {
+							alert("부서명을 입력하세요.");
+							$("#deptInput").focus();
+						} else {
+							$("#deptName").val($("#deptInput").val());
+							var params = $("#actionForm").serialize();
+							$.ajax({
+							       type : "post",
+							       url : "orgnztChartActionAjax/insert",
+							       data : params,
+							       dataType : "json",
+							       success : function(res) {
+							    	   reloadTree(params);
+									   closePopup();
+									   makeAlert("알림", "부서가 추가되었습니다", function() {
+										   location.reload();
+									   });
+							       }, 
+							       error : function(req) {
+							          console.log(req.responseText);
+							       }
+							    });
+							console.log("등록!"); 
+						}
+				}
+			}, {
+				name : "취소"
+			}]
+		});
+	});
+	
+	// 조직수정
+	$("#orgnzt_mdfy_btn").on("click", function() {
+		if($(sdeptNum).val() == null || $(sdeptNum).val() == ''){
+			 makeAlert("알림", "수정할 부서를 선택하세요."); 
+		} else {
+			$.ajax({
+			       type : "post",
+			       url : "orgnztChartAjax",
+			       dataType : "json",
+			       success : function(res) {
+						var html = "";
+						
+						html += "	<div class=\"super_orgnzt_area\">                           ";
+						html += "		<div class=\"super_orgnzt_text\">상위부서</div>         ";
+						html += "		<select id=\"superDeptSelect\">                                           ";
+    	   			  	//선택 부서의 상위부서 없을 경우 카카오뱅크를 첫번째 옵션으로 설정
+						if($("#superDeptNum").val() == "" || $("#superDeptNum").val()  == null || $("#superDeptNum").val()  == "undefined") {
+		    	    	 	 console.log("현재 - 상위부서 null 임, 상위부서번호 : " + $("#superDeptNum").val())
+				    	html += "	 <option odeptNum=\"\" odeptLevel=\"1\">카카오뱅크</option> ";
+							for(var data of res.dept ) { 
+								if(data.DEPT_NUM != $("#sdeptNum").val()) {
+					   			    html += "<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
+								}
+							}
+    	   			  	//선택 부서의 상위부서 있을 경우 해당 상위부서를 첫번째 옵션, 카카오뱅크를 두번째 옵션으로 설정
+		    	    	} else {
+		    	    	 	 console.log("현재 - 상위부서 null 아님, 상위부서번호 : " + $("#superDeptNum").val())
+		    	    		 for(var data of res.dept ) { 
+			    	    		 if(data.DEPT_NUM == $("#superDeptNum").val()) {
+					   			 html += "<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
+			    				 html += "<option odeptNum=\"\" odeptLevel=\"1\">카카오뱅크</option> ";
+			    	    		 } 
+			    	    	 }
+			    	    	 for(var data of res.dept ) { 
+			    	    		 if(data.DEPT_NUM != $("#sdeptNum").val() && data.DEPT_NUM != $("#superDeptNum").val()) {
+   								 html += "<option odeptNum=\"" + data.DEPT_NUM + "\"odeptLevel=\"" + (data.DEPT_LEVEL * 1 + 1 ) + "\">" + data.DEPT_NAME + "</option> ";
+			    	    		 }
+			    	    	 }
+								    	    	 
+			    	     }
+						html += "		</select>                                           ";
+						html += "   </div>                                                      ";
+						html += "	<div class=\"add_orgnzt_area\">                             ";
+						html += "		<div class=\"add_orgnzt_text\">부서명</div>             ";
+						html += "		<input type=\"text\" id=\"deptInput\" value=\"" +$(dname).val() + "\" />";
+						html += "	</div>                                                      ";
+						
+						makePopup({
+							bg : false,
+							bgClose : false,
+							title : "삭제",
+							contents : html, 
+							draggable : true,
+							buttons : [{
+								name : "확인",
+								func:function() {
+									if (checkEmpty("#deptInput")) {
+										alert("부서명을 입력하세요.");
+										$("#deptInput").focus();
+									} else {
+									$("#deptName").val($("#deptInput").val());
+									if($("#superDeptSelect option:selected").attr("odeptNum") == "undefined" || $("#superDeptSelect option:selected").attr("odeptNum") == "" ) {
+									$("#mdfySuperDeptNum").val(null);
+									$("#mdfyDeptLevel").val("1");
+									} else {
+									$("#mdfySuperDeptNum").val($("#superDeptSelect option:selected").attr("odeptNum"));
+									}
+									$("#mdfyDeptLevel").val($("#superDeptSelect option:selected").attr("odeptLevel"));
+									console.log("수정 - 상위부서번호 : " + $("#mdfySuperDeptNum").val())
+									console.log("수정 - 부서명 : " + $("#deptName").val())
+									console.log("수정 - 부서레벨 : " + $("#mdfyDeptLevel").val())
+									var params = $("#actionForm").serialize();
+									$.ajax({
+									       type : "post",
+									       url : "orgnztChartActionAjax/update",
+									       data : params,
+									       dataType : "json",
+									       success : function(res) {
+											   closePopup();
+											   makeAlert("알림", "부서가 수정되었습니다.", function(){
+												   location.reload();
+											   });
+									       }, 
+									       error : function(req) {
+									          console.log(req.responseText);
+									       }
+									    });
+									}
+									console.log("수정!");
+								}
+							}, {
+								name : "취소"
+							}]
+						});
+			       },
+			       error : function(req) {
+			          console.log(req.responseText);
+			       }
+			    });
+		}
+		
+	});
+	
+	// 조직삭제
+	$("#orgnzt_del_btn").on("click", function() {
+		if($(sdeptNum).val() == null || $(sdeptNum).val() == ''){
+			 makeAlert("알림", "삭제하실 부서를 선택하세요."); 
+		} else {
+			var html = "";
+			
+			html += "<div class=\"orgnzt_del_popup\">  ";
+			html += "	<div class=\"del_dept\"> [ " +$(dname).val() + " ]</div> ";
+			html += "	<div class=\"del_txt\">부서를 삭제하시겠습니까?<\/div>";
+			html += "</div>  ";
+			
+			makePopup({
+				bg : false,
+				bgClose : false,
+				title : "삭제",
+				contents : html, 
+				draggable : true,
+				buttons : [{
+					name : "확인",
+					func:function() {
+						var params = $("#actionForm").serialize();
+						$.ajax({
+						       type : "post",
+						       url : "orgnztChartActionAjax/delete",
+						       data : params,
+						       dataType : "json",
+						       success : function(res) {
+								   closePopup();
+								   makeAlert("알림", "부서가 삭제되었습니다.", function(){
+									   location.reload();
+								   });
+						       }, 
+						       error : function(req) {
+						          console.log(req.responseText);
+						       }
+						    });
+						console.log("삭제!");
+					}
+				}, {
+					name : "취소"
+				}]
+			});
+		}
+		
+	});
+	
 	// 조직도 토글
 	$(".orgnzt_area").on("click", ".orgnzt_depth1, .orgnzt_depth2, .orgnzt_depth3", function(e) {
+		$("#sdeptNum").val($(this).attr("sdeptNum"));
+		$("#dname").val($(this).attr("dname"));
+		$("#deptLevel").val($(this).attr("deptLevel"));
+		$("#superDeptNum").val($(this).attr("superDeptNum"));
+		console.log(this)
 		var depth = $(this).attr("class").substring(12);
 		var obj = $(this);
 		console.log(depth == "1");
@@ -273,6 +551,7 @@ $(document).ready(function() {
 	});
 });
 
+
 // 조직도 리로드
 function reloadTree() {
     $.ajax({
@@ -296,7 +575,8 @@ function drawTree(dept){
 	for(var data of dept) {                              
 		if(data.SUPER_DEPT_NUM == null) {
 			var html = "";
-			html += "<div class=\"orgnzt_depth2\" >          ";
+			html += "<div class=\"orgnzt_depth2\" deptLevel=\"" 
+			+ (data.DEPT_LEVEL * 1 + 1) + "\"  sdeptNum=\"" + data.DEPT_NUM + "\" dname=\"" + data.DEPT_NAME + "\" superDeptNum=\"" + data.SUPER_DEPT_NUM +  "\"> ";
 			html += "<div class=\"orgnzt_depth2_area\">      ";
 			html += "	<div class=\"depth_slc_icon\"></div> ";
 			html += "	<div class=\"folder_icon\"></div>    ";
@@ -307,8 +587,6 @@ function drawTree(dept){
 			$("#depth2").append(html);
 		} 
 	}
-	
-	console.log("1뎁스 끝")
 }
 
 // 1뎁스 외 부서 생성
@@ -316,8 +594,9 @@ function drawTree2(dept) {
 	for(var data of dept){
 		if(data.SUPER_DEPT_NUM != null) {
 			var html = "";
-			html += "<div class=\"orgnzt_depth3\">                             ";
-			html += "	<div class=\"orgnzt_depth3_area\">                     ";
+			html += "<div class=\"orgnzt_depth3\" deptLevel=\"" 
+			+ (data.DEPT_LEVEL * 1 + 1) + "\" sdeptNum=\"" + data.DEPT_NUM + "\"  dname=\"" + data.DEPT_NAME + "\" superDeptNum=\"" + data.SUPER_DEPT_NUM +  "\" >   ";
+			html += "	<div class=\"orgnzt_depth3_area \">                      ";
 			html += "		<div class=\"depth_slc_icon\"></div>               ";
 			html += "		<div class=\"folder_icon\"></div>                 ";
 			html += "		<div class=\"depth_txt\">" + data.DEPT_NAME + "</div>";
@@ -333,7 +612,8 @@ function drawTree2(dept) {
 function drawTree3(emp) {
 	for(var data of emp){
 		var html = "";
-			html += "<div class=\"orgnzt_depth3\">                             ";
+			html += "<div class=\"orgnzt_depth3\" deptLevel=\"" 
+			+ (data.DEPT_LEVEL * 1 + 1) +  "\" sdeptNum=\"" + data.DEPT_NUM + "\" dname=\"" + data.DEPT_NAME + "\" superDeptNum=\"" + data.SUPER_DEPT_NUM + "\">  ";
 			html += "	<div class=\"orgnzt_depth3_area\">                     ";
 			html += "		<div class=\"depth_emp_icon\"></div>               ";
 			html += "		<div class=\"profile_icon\"></div>                 ";
@@ -347,9 +627,14 @@ function drawTree3(emp) {
 </script>
 </head>
 <body>
-	<form>
-		<input type="hidden" id="deptGbn" name="deptGbn" />
-		<input type="hidden" id="empGbn" name="deptGbn" />
+		<input type="hidden" id="dname" /> 
+	<form action="#" id="actionForm">
+		<input type="hidden" id="sdeptNum" name="sdeptNum" value="${sdeptNum}" /> 
+		<input type="hidden" id="deptName" name="deptName" /> 
+		<input type="hidden" id="deptLevel" name="deptLevel" value="${deptLevel}" /> 
+		<input type="hidden" id="mdfySuperDeptNum" name="mdfySuperDeptNum"  value="" /> 
+		<input type="hidden" id="mdfyDeptLevel" name="mdfyDeptLevel" /> 
+		<input type="hidden" id="superDeptNum" name="superDeptNum"   /> 
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -368,16 +653,15 @@ function drawTree3(emp) {
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="cont_left">
 				<div class="orgnzt_btn_area">
-					<input type="button" class="orgnzt_btn" value="사원편집" />
-					<input type="button" class="orgnzt_btn" value="조직추가" />
-					<input type="button" class="orgnzt_btn" value="조직수정" />
-					<input type="button" class="orgnzt_btn" value="조직삭제" />
+					<input type="button" class="orgnzt_btn" id="emp_edit_btn" value="사원편집" />
+					<input type="button" class="orgnzt_btn" id="orgnzt_add_btn" value="조직추가" />
+					<input type="button" class="orgnzt_btn" id="orgnzt_mdfy_btn" value="조직수정" />
+				    <input type="button" class="orgnzt_btn" id="orgnzt_del_btn" value="조직삭제" />
 				</div>
 				<div class="orgnzt_area">
 					<div class="scroll_area">
 						<div class="orgnzt_depth1_wrap">
-							<div class="orgnzt_depth1" >
-								<input type="hidden" class="item_selected" value="false" />
+							<div class="orgnzt_depth1" id="default" dname="카카오뱅크"  deptLevel="1" superDeptNum="" >
 								<div class="depth_slc_icon"></div>
 								<div class="kb_icon"></div>
 								<div class="depth_txt">카카오뱅크</div>

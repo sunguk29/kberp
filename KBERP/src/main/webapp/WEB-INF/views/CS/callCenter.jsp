@@ -86,11 +86,12 @@
 	color: #222222;
 	cursor: pointer;
 }
-
 .clnt_srch_table tbody tr:hover {
 	color: #4B94F2;
 	text-decoration: underline;
 }
+
+
 
 /* 저장 팝업 */
 .save_cont{
@@ -173,7 +174,7 @@
 	
 }
 
-.clnt_info_cont_row2 .ltl_cnsl_day,
+.clnt_info_cont_row2 .phone_num_2,
 .clnt_info_cont_row2 .phone_num_1 {
 	display: inline-block;
 	width: 70px;
@@ -187,18 +188,7 @@
 	margin-left: 10px;
 }
 
-.clnt_info_cont_row3 .phone_num_2 {
-	display: inline-block;
-	width: 70px;
-	height: 20px;
-	font-size: 10pt;
-	font-weight: bold;
-	text-align: center;
-	background-color: #eeeeee;
-	border: 1px solid #999999;
-	margin-top: 10px;
-	margin-left: 259px;
-}
+
 
 .info_txt {
 	width: 162px;
@@ -228,10 +218,10 @@
 	margin-left: 82px;
 }
 
-.cmn_btn_mr {
+#saveForm .cmn_btn_mr {
 	height: 25px;
 	line-height: 25px;
-	margin-top: 0px;
+	margin-top: 28px;
 	margin-right: 10px;
 	float: right;
 }
@@ -298,17 +288,32 @@
 	border: 1px solid #999999; 
 }
 
-[name="big_sel"] {
+#cnsl_type_num {
 	margin-left:10px;
 	width: 100px;
 	height: 20px;
 }
 
-[name='small_sel'] {
-	margin-left:5px;
-	width: 100px;
+.ltl_cnsl_day{
+	display: inline-block;
+	vertical-align: top;
+	width: 70px;
 	height: 20px;
+	font-size: 10pt;
+	font-weight: bold;
+	text-align: center;
+	background-color: #eeeeee;
+	border: 1px solid #999999;
+	margin-top: 5px;
+	margin-left: 10px;
+	line-height: 20px;
 }
+
+#write_date, #cnsl_rslt_num{
+	margin-left: 5px;
+}
+
+
 
 .mid_row2 {
 	display: inline-block;
@@ -448,19 +453,19 @@
 	vertical-align: top;
 	width: 510px;
 	height: 260px;
-	overflow: auto;
+	overflow-y: scroll;
 }
 
 .cnsl_rcrd_table{
 	display: inline-table;
 	border-collapse: collapse;
-	width: 100%;
+	width: 493px;
 	margin-bottom: 15px;
 }
 .cnsl_rcrd_table thead tr {
 	background-color: #F2F2F2;
 	height: 30px;
-	font-size: 10pt;
+	font-size: 9pt;
 	position: sticky;
 	top: 0px;
 }
@@ -469,7 +474,7 @@
 	height: 25px;
 	text-align: center;
 	color: #7b7b7b;
-	font-size: 9pt;
+	font-size: 8pt;
 }
 
 .cnsl_rcrd_table tbody tr {
@@ -478,6 +483,11 @@
 }
 
 .cnsl_rcrd_table tbody tr:hover {
+	color: #4B94F2;
+	text-decoration: underline;
+}
+
+.cnsl_rcrd_table tbody tr.on {
 	color: #4B94F2;
 	text-decoration: underline;
 }
@@ -592,6 +602,7 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	// 대응가이드 팝업
 	$("#guide_btn").on("click", function() {
 		var html = "";
 		
@@ -611,8 +622,9 @@ $(document).ready(function() {
 				}
 			}]
 		});
-	});
-
+	}); // 대응가이드 팝업 끝
+	
+	// 부서별 안내 팝업
 	$("#call_btn").on("click", function() {
 		var html = "";
 		
@@ -632,21 +644,24 @@ $(document).ready(function() {
 				}
 			}]
 		});
-	});
+	});// 부서별 안내 팝업 끝
 	
+	// 검색 엔터 이벤트
 	$("#searchTxt").on("keypress", function() {
 		if(event.keyCode == 13) {
 			$("#searchBtn").click();
 			
 			return false;
 		}
-	});
+	}); // 검색 엔터 이벤트 끝
 
+	// 고객정보 검색 클릭 이벤트 팝업
 	$("#searchBtn").on("click", function() {
 		
 		var html = "";
 		
 		html += "<form action=\"#\" id=\"actionForm\" method=\"post\">"
+		html += "<input type=\"hidden\" id=\"clnt_num\" name=\"clnt_num\"/>"
 		html += "<div class=\"srch_slct\">";
 		html += "<div class=\"name_box\">선택</div>";
 		html += "<select id=\"clnt_slct\" name=\"clnt_slct\">";
@@ -654,7 +669,7 @@ $(document).ready(function() {
 		html += "	<option value=\"1\">등급</option>";
 		html += "	<option value=\"2\">전화번호</option>";
 		html += "</select>";
-		html += "<input type=\"text\" name=\"searchTxt\" value=\"" + $("#searchTxt").val() + "\"/>"
+		html += "<input type=\"hidden\" name=\"searchTxt\" value=\"" + $("#searchTxt").val() + "\"/>"
 		html += "</div>";
 		html += "</form>";
 		html += "<div class=\"srch_cont\">";
@@ -683,9 +698,8 @@ $(document).ready(function() {
 			height: 400,
 			title : "고객 검색 결과",
 			contents : html,
-			contentsEvent : function reloadList() {
+			contentsEvent : function () {
 				var params = $("#actionForm").serialize();
-				console.log(params);
 				$.ajax({
 					type : "post",
 					url : "callCenterPopListAjax",
@@ -700,6 +714,55 @@ $(document).ready(function() {
 
 					}
 				});
+				
+				// 고객정보 팝업 tr 클릭
+				$("#clntPop").on("click", "tr" , function() {
+					$("#saveForm #clnt_num").val($(this).attr("no"));
+					$("#cnslForm #clnt_num").val($(this).attr("no"));
+					
+					var params = $("#saveForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "callCenterClntAjax",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							console.log(res);
+							$("#clnt_name").val(res.data.CLNT_NAME);
+							$("#clnt_grade").val(res.data.CLNT_GRADE);
+							$("#phon_num_1").val(res.data.PHONE_NUM_1);
+							$("#phon_num_2").val(res.data.PHONE_NUM_2);
+							$("#adrs").val(res.data.ADRS);
+							$("#dtl_adrs").val(res.data.DTL_ADRS);
+							$("#noteSaveForm #clnt_num").val(res.data.CLNT_NUM);
+						},
+						error : function(request, status, error) {
+							console.log(request.responseText);
+				
+						}
+					}); 
+					
+					var params = $("#cnslForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "callCenterCnslListAjax",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							console.log(res);
+							drawCnslList(res.list);
+							closePopup();
+						},
+						error : function(request, status, error) {
+							console.log(request.responseText);
+							closePopup();
+
+						}
+					});
+				}); // 고객정보 팝업 tr 클릭 끝
+				
 			},
 			draggable : true,
 			buttons : [{
@@ -709,38 +772,76 @@ $(document).ready(function() {
 					closePopup();
 				}
 			}]
-		});
+		});	
+	});// 고객검색 팝업 이벤트 끝
+	
+	// 상담이력 tr 클릭
+	$("#cnslList").on("click", "tr", function() {
+		$("#rcrdCnslForm #cnsl_num").val($(this).attr("no"));
 		
+		$("#cnslList tr").removeAttr("class");
+		$(this).attr("class", "on");
 		
+		var params = $("#rcrdCnslForm").serialize();
 		
-	});
+		$.ajax({
+			type : "post",
+			url : "rcrdCnslNoteAjax",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				console.log(res);
+				$("#rcrdCnslForm #cnsl_type").val(res.data.CNSL_TYPE_NUM);
+				$("#rcrdCnslForm #write_date").val(res.data.WRITE_DATE);
+				$("#rcrdCnslForm .cont_memo").val(res.data.CONT);
+				$("#rcrdCnslForm #rcrd_cnsl_rslt_txt").val(res.data.CNSL_RSLT_NUM);
+				
+			},
+			error : function(request, status, error) {
+				console.log(request.responseText);
+	
+			}
+		});	
+	}); // 상담이력 tr 클릭 끝
+	
+	
+	
+	function drawCnslList(list) {
+		var html = "";
+		
+		for(var data of list) {
+			html += "<tr no=\"" + data.CNSL_NUM +"\">";
+			html += "<td>" + data.CLNT_NAME + "</td>";
+			html += "<td>" + data.PHONE_NUM_1 + "</td>";
+			html += "<td>" + data.EMP_NAME + "</td>";
+			html += "<td>" + data.CNSL_TYPE_NUM + "</td>";
+			html += "<td>" + data.WRITE_DATE + "</td>";
+			html += "<td>" + data.CNSL_RSLT_NUM + "</td>";
+			html += "</tr>";
+		}
+		$("#cnslList").html(html);
+	}
 	
 	function drawList(list) {
 		var html = "";
 		
 		for(var data of list) {
 			html += "<tr no=\"" + data.CLNT_NUM +"\">";
-			html += "<td>" + data.CLNT_NAME + "</td>"
-			html += "<td>" + data.CLNT_GRADE + "</td>"
-			html += "<td>" + data.PHONE_NUM_1 + "</td>"
-			html += "</tr>"
+			html += "<td>" + data.CLNT_NAME + "</td>";
+			html += "<td>" + data.CLNT_GRADE + "</td>";
+			html += "<td>" + data.PHONE_NUM_1 + "</td>";
+			html += "</tr>";
 		}
 		$("#clntPop").html(html);
 	}
 	
-	$("#clntPop").on("click", "tr" , function() {
-		$("#no").val($(this).attr("no"));
-		
-		$("#saveForm").attr("action");
-		$("#saveForm").submit();
-		
-	});
 	
+	// 고객정보 저장 팝업
 	$(".cmn_btn_mr").on("click", function() {
 		
 		var html = "";
 		
-		html += "<div class=\"save_cont\">지금까지의 내용을 저장 하시겠습니까?</div>"
+		html += "<div class=\"save_cont\">지금까지의 내용을 저장 하시겠습니까?</div>";
 		
 		makePopup({
 			depth : 1,
@@ -772,9 +873,11 @@ $(document).ready(function() {
 							data : params,
 							success : function(res) {
 								if(res.res == "success") {
-									location.href = "callCenter";
+									location.reload();
+									closePopup();
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
+									closePopup();
 								}
 
 							},
@@ -784,20 +887,19 @@ $(document).ready(function() {
 							}
 						}); // ajax end
 					} // else end
-				saveForm.submit();
-					closePopup();
 				}
 			}, {
 				name : "취소"
 			}]
 		});
-	});
+	}); // 고객정보 저장 팝업 끝
 	
+	// 상담노트 저장 팝업
 	$(".note_cmn_btn_mr").on("click", function() {
 		
 		var html = "";
 		
-		html += "<div class=\"save_cont\">지금까지의 내용을 저장 하시겠습니까?</div>"
+		html += "<div class=\"save_cont\">지금까지의 내용을 저장 하시겠습니까?</div>";
 		
 		makePopup({
 			depth : 1,
@@ -809,18 +911,18 @@ $(document).ready(function() {
 			buttons :  [{
 				name : "확인",
 				func:function() {
-					if(checkEmpty("#big_sel")) {
-						alert("대분류를 입력하세요.");
-						$("#big_sel").focus();
-					} else if(checkEmpty("#small_sel")) {
-						alert("소분류를 입력하세요.");
-						$("#small_sel").focus();
+					if(checkEmpty("#cnsl_type_num")) {
+						alert("분류를 입력하세요.");
+						$("#cnsl_type_num").focus();
+					} else if(checkEmpty("#write_date")) {
+						alert("상담일을 입력하세요.");
+						$("#write_date").focus();
 					} else if(checkEmpty("#cont")) {
 						alert("상담내용을 입력하세요.");
 						$("#cont").focus();
-					} else if(checkEmpty("#cnsl_rslt")) {
+					} else if(checkEmpty("#cnsl_rslt_num")) {
 						alert("상담결과를 입력하세요.");
-						$("#cnsl_rslt").focus();
+						$("#cnsl_rslt_num").focus();
 					} else {
 						// 저장
 						var params = $("#noteSaveForm").serialize();
@@ -832,9 +934,11 @@ $(document).ready(function() {
 							data : params,
 							success : function(res) {
 								if(res.res == "success") {
-									location.href = "callCenter";
+									location.reload();
+									closePopup();
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
+									closePopup();
 								}
 
 							},
@@ -844,52 +948,15 @@ $(document).ready(function() {
 							}
 						}); // ajax end
 					} // else end
-					noteSaveForm.submit();
-					closePopup();
+					
 				}
 			}, {
 				name : "취소"
 			}]
 		});
-	});
+	}); // 상담노트 저장 팝업 끝
 	
-	
-	function reloadCnslList() {
-		var params = $("#cnslForm").serialize();
-		
-		$.ajax({
-			type : "post",
-			url : "callCenterCnslListAjax",
-			dataType : "json",
-			data : params,
-			success : function(res) {
-				console.log(res);
-				drawCnslList(res.list);
-			},
-			error : function(request, status, error) {
-				console.log(request.responseText);
-
-			}
-		});
-	}
-	
-	function drawCnslList(list) {
-		var html = "";
-		
-		for(var data of list) {
-			html += "<tr no=\"" + data.I.CLNT_NUM + "\">";
-			html += "<td>"+ data.I.CLNT_NAME + "</td>"
-			html += "<td>"+ data.I.PHONE_NUM_1 + "</td>"
-			html += "<td>"+ data.E.EMP_NAME + "</td>"
-			html += "<td>"+ data.N.CNSL_TYPE_NUM + "</td>"
-			html += "<td>"+ data.WRITE_DATE + "</td>"
-			html += "<td>"+ data.N.CNSL_RSLT_NUM + "</td>"
-			html += "</tr>";
-		}
-		$("#cnslList").html(html);
-	}
-	
-});
+}); // document 끝
 
 
 
@@ -925,9 +992,8 @@ function checkEmpty(sel) {
 			<!-- 고객정보 파트 -->
 				<div class="top">
 					<div class="clnt_info_cont">
-						<input type="hidden" id="oldsearchTxt" value="${param.searchTxt}"/>
 					<form action="#" id="saveForm" method="post">
-					<input type="hidden" id="no" name="no"/>
+					<input type="hidden" id="clnt_num" name="clnt_num"/>
 						<div class="clnt_info_Header">
 							<div class="clnt_info">고객정보</div>
 							<div class="srch_text_wrap clnt_srch">
@@ -941,16 +1007,12 @@ function checkEmpty(sel) {
 			    			<div class="clnt_grade">고객등급</div>
 			    				<input type="number" class="info_txt" id="clnt_grade" name="clnt_grade">
 			    		</div>
-			    		<div class="clnt_info_cont_row2">	  
-			    			<div class="ltl_cnsl_day">최근상담일</div>
-			    				<input type="date" class="info_txt" id="ltl_cnsl" name="ltl_cnsl">
+			    		<div class="clnt_info_cont_row2">
 			    			<div class="phone_num_1">전화번호 1</div>
 			    				<input type="tel" class="info_txt" id="phon_num_1" name="phon_num_1">
-			    		</div>	
-		    			<div class="clnt_info_cont_row3">	  
 			    			<div class="phone_num_2">전화번호 2</div>
 			    				<input type="tel" class="info_txt" id="phon_num_2" name="phon_num_2">
-			    		</div>
+			    		</div>	
 			    		<div class="clnt_info_cont_row4">	  
 			    			<div class="adrs">주소</div>
 			    				<input class="adrs_input" type="text" id="adrs" name="adrs">
@@ -973,14 +1035,16 @@ function checkEmpty(sel) {
 						</div>
 						<div class="mid_row1">
 							<input type="hidden" id="emp_num" name="emp_num" value="${sEmpNum}"/>
-							<input type="hidden" id="clnt_num" name="clnt_num" value="${data.CLNT_NUM}"/>
+							<input type="hidden" id="clnt_num" name="clnt_num" />
 							<div class="cnsl_type">상담유형</div>
-							<select id="cnsl_type_num" name="cnsl_type_num">
-								<option value="">대분류</option>
+							<select id=cnsl_type_num name="cnsl_type_num">
+								<option value="">분류</option>
+								<option value="0">민원</option>
+								<option value="1">상품</option>
+								<option value="2">기타</option>
 							</select>
-							<select id="small_sel" name="small_sel">
-								<option value="">소분류</option>
-							</select>
+							<div class="ltl_cnsl_day">상담일</div>
+			    				<input type="date" class="info_txt" id="write_date" name="write_date">
 						</div>
 						<div class="mid_row2">
 							<div class="cnsl_note_cont">상담내용</div>
@@ -988,7 +1052,7 @@ function checkEmpty(sel) {
 						</div>
 						<div class="mid_row3">
 							<div class="cnsl_note_rslt">상담결과</div>
-							<select id="cnsl_rslt" name=cnsl_rslt>
+							<select id="cnsl_rslt_num" name=cnsl_rslt_num>
 								<option value="0">완료</option>
 								<option value="1">미처리</option>
 								<option value="2">예약</option>
@@ -1005,6 +1069,7 @@ function checkEmpty(sel) {
 			<div class="call_area">
 				<div class="bottom_1">
 				<form action="#" id="cnslForm" method="post">
+				<input type="hidden" id="clnt_num" name="clnt_num"/>
 					<div class="cnsl_rcrd_header">
 						<div class="cnsl_rcrd">상담이력</div>
 					</div>
@@ -1037,14 +1102,18 @@ function checkEmpty(sel) {
 				
 				
 				<div class="bottom_2">
+				<form action="#" id="rcrdCnslForm" method="post">
+				<input type="hidden" id="clnt_num" name="clnt_num"/>
+				<input type="hidden" id="cnsl_num" name="cnsl_num"/>
 					<div class="mid_area">
 						<div class="rcrd_cnsl_note_top">
 							<div class="rcrd_cnsl_note">[이력]상담노트</div>
 						</div>
 						<div class="rcrd_cnsl_note_row1">	
 							<div class="cnsl_type">상담유형</div>
-							<input type="text"  value=""  size="10" readonly="readonly" id="cnsl_type" />
-							<input type="text"  value=""  size="10" readonly="readonly" id="cnsl_type" />
+							<input type="text" size="10" readonly="readonly" id="cnsl_type" />
+							<div class="ltl_cnsl_day">상담일</div>
+			    				<input type="text" class="info_txt" readonly="readonly" id="write_date" name="write_date">
 						</div>
 						<div class="rcrd_cnsl_note_row2">
 							<div class="cnsl_note_cont">상담내용</div>
@@ -1052,9 +1121,10 @@ function checkEmpty(sel) {
 						</div>
 						<div class="rcrd_cnsl_note_row3">
 							<div class="cnsl_note_rslt">상담결과</div>
-							<input type="text"  value=""  readonly="readonly" id="rcrd_cnsl_rslt_txt" />
+							<input type="text"  readonly="readonly" id="rcrd_cnsl_rslt_txt" />
 						</div>
-					</div>	
+					</div>
+				</form>	
 				</div>
 			</div>			
 		</div>

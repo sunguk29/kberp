@@ -1,8 +1,12 @@
 package com.gdj43.kberp.web.sales.controller;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -68,7 +72,6 @@ public class MdController {
 			int offSaleCnt = iCommonService.getIntData("md.getOffSaleCnt", params);
 			
 			PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), totalCnt);
-			
 			params.put("startCount", Integer.toString(pb.getStartCount()));
 			params.put("endCount", Integer.toString(pb.getEndCount()));
 			
@@ -94,15 +97,9 @@ public class MdController {
 	public ModelAndView mdCont(@RequestParam HashMap<String, String> params,
 							ModelAndView mav) throws Throwable {
 		
-		System.err.println("======== /mdCont ==========");
-		
-		/*
 		HashMap<String, String> data = iCommonService.getData("md.getMdContData", params);
 		
 		mav.addObject("data", data);
-		
-		*/
-		System.err.println("mdCont controller" + params);
 		mav.addObject("params", params);
 		mav.setViewName("sales/mdCont");
 		
@@ -114,21 +111,39 @@ public class MdController {
 	public ModelAndView mdReg(@RequestParam HashMap<String, String> params, 
 							   ModelAndView mav) {
 		
+		
 		System.err.println("mdReg controller" + params);
 		mav.addObject("params", params);
 		mav.setViewName("sales/mdReg");
 		return mav;
 	}
 	
+	//////수정
+	@RequestMapping(value="/mdUpdate")
+	public ModelAndView mdUpdate(@RequestParam HashMap<String, String> params,
+								 ModelAndView mav) throws Throwable {
+		HashMap<String, String> data = iCommonService.getData("md.getMdContData", params);
+		
+		mav.addObject("data", data);
+		mav.addObject("params", params);
+		mav.setViewName("sales/mdUpdate");
+		
+		return mav;
+	}
+	
 	//////작성 수정 삭제 Ajax
 	@RequestMapping(value = "/mdActionAjax/{gbn}", method = RequestMethod.POST,
-			produces = "text/json;charset=UTF-8")
+					produces = "text/json;charset=UTF-8")
 	@ResponseBody 
 	public String mdActionAjax(@RequestParam HashMap<String, String> params,
-							@PathVariable String gbn) throws Throwable {
+							   @PathVariable String gbn, HttpSession session) throws Throwable {
 	ObjectMapper mapper = new ObjectMapper();
 	
 	Map<String, Object> modelMap = new HashMap<String, Object>();
+	
+	//로그인된 사원 번호
+	BigDecimal sEmpNum = (BigDecimal)session.getAttribute("sEmpNum");
+	params.put("sEmpNum", sEmpNum.toString());
 	
 	try {
 		switch(gbn) {

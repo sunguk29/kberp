@@ -161,8 +161,8 @@ $(document).ready(function() {
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
-		<div class="inf_title">${data.EMP_NAME}</div>
-		<div class="inf_wrtr">${data.CMBN_TITLE}</div>
+		<div class="inf_title">${data.CMBN_TITLE}</div>
+		<div class="inf_wrtr">${data.EMP_NAME}</div>
 		<br/>
 		<textarea readonly="readonly" disabled="disabled">${data.CMBN_CONT}</textarea>
 		<div class="board_bottom">

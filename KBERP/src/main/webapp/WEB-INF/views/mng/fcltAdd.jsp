@@ -16,6 +16,9 @@
 	font-size: 10.5pt;
 }
 /* 개인 작업 영역 */
+input:focus {
+	outline-color: #F2CB05;
+}
 #file_preview{
 	vertical-align:top;
 	display:inline-block;
@@ -40,6 +43,7 @@
 }
 .fclty_input{
 	display: inline-block;
+	height: 23px;
 }
 .cmn_btn_ml{
 	margin-top: 5px;
@@ -62,6 +66,12 @@
 #files{
 	display: none;
 }
+#fileUpload{
+	width: 305px;
+}
+.name_srch_table{
+	margin-left: 35px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -79,8 +89,8 @@ $(document).ready(function() {
 	var html = "";
 	
 	html += "<div class=\"popup_cont\">";
-	html += "<div class=\"acnt_name_srch_wrap\">";
-	html += "<table class=\"acnt_name_srch_table\">";
+	html += "<div class=\"name_srch_wrap\">";
+	html += "<table class=\"name_srch_table\">";
 	html += "<tbody>";
 	html += "<tr>";
 	html += "<td>사원명</td>";
@@ -164,20 +174,19 @@ $(document).ready(function() {
 	
 	$("#addBtn").on("click",function(){
 		if(checkEmpty("#fcltyName")){
-			alert("시설물명을 입력하세요");
+			makeAlert("확인","시설물명을 입력하세요");
 			$("#fcltyName").focus();
 		}else if(checkEmpty("#fcltyPlace")){
-			alert("시설물 위치를 입력하세요");
+			makeAlert("확인","시설물 위치를 입력하세요");
 			$("#fcltyPlace").focus();
 		}else if(checkEmpty("#fcltyEmp")){
-			alert("관리자명을 입력하세요");
+			makeAlert("확인","관리자명을 입력하세요");
 			$("#fcltyEmp").focus();
 		}else if(checkEmpty("#fcltyCnt")){
-			alert("수용인원을 입력하세요");
+			makeAlert("확인","수용인원을 입력하세요");
 			$("#fcltyCnt").focus();
-		}else if(checkEmpty("#files")){
-			alert("시설물 사진을 첨부하세요");
-			$("#fcltyEmp").focus();
+		}else if(checkEmpty("#attFile")){
+			makeAlert("확인","시설물 사진을 첨부하세요");
 		}else{
 			var writeForm = $("#writeForm");
 			
@@ -332,12 +341,12 @@ function drawPaging(pb) {
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">시설물 등록</div>
+			
 <form action="#" id="actionForm" method="post">
 	<input type="hidden" id="top" name="top" value="${param.top}" />
 	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="page" value="${param.page}" />
-	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 </form>
 		</div>
@@ -347,7 +356,8 @@ function drawPaging(pb) {
 		<input type="hidden" id="page" name="page" value="1">
 </form>
 		<div class="cont_area">
-		<form action="fileUploadAjax" id="writeForm" method="post" enctype="multipart/form-data">
+		
+<form action="fileUploadAjax" id="writeForm" method="post" enctype="multipart/form-data">
 		<input type="hidden" id="top" name="top" value="${param.top}" />
 		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
@@ -394,7 +404,7 @@ function drawPaging(pb) {
 					<input type="hidden" id="attFile" name="attFile">
 					<div class="cmn_btn_ml" id="fileUpload" >첨부파일</div>
 				</div>	
-			</form>
+</form>
 		</div>
 	</div>
 	<!-- bottom -->

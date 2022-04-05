@@ -1,5 +1,5 @@
 
-//목록으로 버튼(#listBtn) 클릭시, mdList(#backForm)로 이동
+//목록으로 버튼(#listBtn) 클릭시, mdList(#actionForm)로 이동
 function goMdList() {
 	$("#listBtn").on("click", function () {
 		makePopup({
@@ -14,7 +14,7 @@ function goMdList() {
 			buttons  : [{
 				name : "확인",
 				func : function() {
-					$("#backForm").submit();
+					$("#actionForm").submit();
 					closePopup();
 							}
 						},{
@@ -88,23 +88,20 @@ function insertMdData(){
 				name : "확인",
 				func : function() {
 					var params = $("#writeForm").serialize();
-					$.ajax({
-						type: "post", 								// 전송 형태
-						url : "mdActionAjax/insert", 				//통신 주소
-						dataType : "json", 							//받을 데이터 형태
-						data : params,								//보낼 데이터. 보낼 것이 없으면 안씀.
-						success : function (res) {					//성공시 실행 함수. 인자는 받아온 데이터
-							if(res.res == "success"){
-								location.href = "mdList";
-							}else{
+					var callback=ajaxComm("mdActionAjax/insert", params,"");
+					callback.done(function(res){
+						alert("등ㄹ어옴");
+						if(res.res == "success"){
+							$("#actionForm").attr("action", "mdList");
+							$("#actionForm").submit();
+						}else{
 								alert("작성중 문제가 발생하였습니다.");						
-							}
-						},
-						error : function (request, status, error) {	//문제 발생 시 실행 함수
-							console.log(request.requestText);		//결과 텍스트
 						}
-					}); //ajax end
-					
+					});
+					callback.fail(function(request,status,error) {
+						console.log(request.requestText);
+					});
+			
 					closePopup();
 							}
 						},{

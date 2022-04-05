@@ -413,7 +413,6 @@ tr:nth-child(9) td:nth-child(3) {
 	width: 25px;
 	height: 25px;
 	float: right;
-	cursor: pointer;
 	margin-right: 5px;
 }
 
@@ -441,6 +440,12 @@ tr:nth-child(9) td:nth-child(3) {
 #att {
 	display: none;
 }
+
+#fileName {
+	border: hidden;
+	outline: none;
+}
+
 /* 끝 */
 </style>
 <script type="text/javascript">
@@ -478,13 +483,16 @@ $(document).ready(function() {
 			$("#mngrName").focus();
 		} else if($("#loanCauseNum").val() == 9) {
 			alert("대출원인을 선택하세요.");
-			$("#loanCause").focus();
+			$("#loanCauseNum").focus();
 		} else if($("#loanHopeType").val() == 9) {
 			alert("대출 희망 유형을 입력하세요.");
 			$("#loanHopeType").focus();
 		} else if($("#loanHopeTime").val() == 9) {
 			alert("대출 희망 시기를 입력하세요.");
 			$("#loanHopeTime").focus();
+		} else if($("#expctdBsnsType").val() == 9) {
+			alert("예정 사업 형태를 입력하세요.");
+			$("#expctdBsnsType").focus();
 		} else {
 			makePopup({
 				bg : true,
@@ -549,182 +557,9 @@ $(document).ready(function() {
 		$("#att").click();
 	});
 	
-	// 담당자 조회 버튼
-	$("#userIcon").on("click", function() {
- 		var html = "";
-		
-	 	html += "<div class=\"popup_title_mid\">"; 
-	 	html += 	"<form id=\"popupForm\">";
-	 	html += 		"<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
-		html += 		"<div class=\"ptm_left\">";
-		html += 			"<div class=\"ptm_left_top\">팀분류</div>";
-		html +=				"<div class=\"ptm_left_bot\">사원분류</div>";		
-		html += 		"</div>";
-		html += 		"<div class=\"ptm_mid\">";
-		html +=				"<div class=\"ptm_mid_top\">";
-		html +=					"<select class=\"sel_size\" id=\"deptS\" name=\"deptS\">"
-		html +=						"<option value=\"6\">영업부</option>";
-		html +=						"<option value=\"7\">영업1팀</option>";
-		html +=						"<option value=\"8\">영업2팀</option>";
-		html +=					"</select>";
-		html +=				"</div>";		
-		html +=				"<div class=\"ptm_mid_bot\">";
-		html +=					"<select class=\"sel_size\" id=\"empS\" name=\"empS\">";
-		html +=						"<option value=\"0\">사원번호</option>";
-		html +=						"<option value=\"1\">사원명</option>";
-		html +=					"</select>";
-		html +=				"</div>";	
-		html += 		"</div>";
-		html += 		"<div class=\"ptm_mid_right\">";
-		html +=				"<div class=\"ptm_mid_right_top\"></div>";
-		html +=				"<div class=\"ptm_mid_right_bot\">";
-		html +=					"<input type=\"text\" id=\"searchTxt\" name=\"searchTxt\" placeholder=\"검색어를 입력해주세요\" class=\"text_size\" />";
-		html +=				"</div>";
-		html += 		"</div>";
-		html += 		"<div class=\"ptm_right\">";
-		html +=				"<div class=\"ptm_right_top\"></div>";
-		html +=				"<div class=\"ptm_right_bot\">";
-		html +=					"<div class=\"cmn_btn\" id=\"mngrBtn\">검색</div>";
-		html +=				"</div>";
-		html +=			"</div>";
-		html += 	"</form>";
-		html += "</div>";
-		html += "<div class=\"popup_cont pc_back\">";
-		html +=		"<div class=\"popup_box\" id=\"mngrBox\"></div>";
-		html +=	"</div>";
-		html += 	"<div class=\"board_bottom2\">";
-		html +=			"<div class=\"pgn_area\" id=\"mngrpb\"></div>";
-		html +=		"</div>"; 
-		
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 600,
-			height : 500,
-			title : "담당자 조회",
-			contents : html,
-			contentsEvent : function() {
-				
-				mngrList();
-				
-				// 담당자 조회 값 가져오기
-				$(".popup_box").on("click", ".popup_box_in", function() {
-					var mngrNm = $(this).children("#mngrNm").val();
-					var mngrN = $(this).children("#mngrN").val();
-					
-					document.getElementById("mngrName").value = mngrNm;
-					document.getElementById("mngrNum").value = mngrN;
-					
-					closePopup();
-				});
-				
-				//페이징 
-				$("#mngrpb").on("click", "div", function() {
-					$("#page").val($(this).attr("page"));
-					
-					mngrList();
-				});
-				// 검색버튼
-				$("#mngrBtn").on("click", function () {
-					$("#page").val("1");
-					
-					mngrList();
-					
-				});
-				
-				$("#searchTxt").on("keypress", function(event) {
-					if(event.keyCode == 13 ) {
-						$("#page").val("1");
-						
-						mngrList();
-						return false;
-					}
-				});
-			},
-			
-			buttons : {
-				name : "닫기",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	
-
-	
-	
-	
 }); // JS end
 
-/* 담당자 조회 팝업 */
-function mngrList() {
-	var params = $("#popupForm").serialize();
-	
-	$.ajax({
-		type : "post",
-		url : "mngrListAjax",
-		dataType : "json",
-		data : params,
-		success : function(res) {
-			mngrDrawList(res.list);
-			drawPaging(res.pb, "#mngrpb");
-		},
-		error : function(req) {
-			console.log(req.responseText);
-		}
-	});	
-}
-function mngrDrawList(list) {
-	var html = "";
-		
-	for(var data of list) {
-		
-		html +=	"<div class=\"popup_box_in\">";
-		html += "<input type=\"hidden\" id=\"mngrNm\" value=\"" + data.EMP_NAME + "\" />";
-		html += "<input type=\"hidden\" id=\"mngrN\" value=\"" + data.EMP_NUM + "\" />";
-		html +=	"<div class=\"popup_cc_box_left\">";
-		html +=	"<span><img alt=\"담당자이미지\" class=\"company\" src=\"resources/images/sales/usericon.png\"></span>";
-		html +=	"</div>";
-		html +=	"<div class=\"popup_cc_box_right\">";
-		html +=	 data.EMP_NUM + "<span class=\"boldname\">" + data.EMP_NAME + " / " + data.RANK_NAME + "</span>";
-		html +=	"<span class=\"mg_wid\">" + data.DEPT_NAME + "</span>";
-		html +=	"</div>";
-		html +=	"</div>";	
-	}
-	
-	$("#mngrBox").html(html);
-	
-}
 
-function drawPaging(pb, sel) {
-	var html = "";
-	
-	html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
-	if($("#page").val() == "1") {
-		html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
-	} else {
-		html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
-	}
-	
-	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
-		if($("#page").val() == i) {
-			html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
-		} else {
-			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
-		}
-	}
-	
-	if($("#page").val() == pb.maxPcount) {
-		html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_next\">next</div>";
-	} else {
-		html += "<div page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</div>";
-	}
-	html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
-	
-	$(sel).html(html);
-}
 
 function uploadName(e) {
 	var files = e.files;
@@ -772,7 +607,6 @@ function uploadName(e) {
 						<div class="bot_title">
 							<h3>
 								영업기회
-								<div class="drop_btn"></div>
 							</h3>
 						</div>
 						<hr class="hr_bot" color="white" width="925px">
@@ -929,10 +763,17 @@ function uploadName(e) {
 								</tr>
 								<tr height="40">
 									<td>
-										<input type="button" class="btn" value="예정 사업 형태" />
+										<input type="button" class="btn" value="예정 사업 형태*" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" id="expctdBsnsType" name="expctdBsnsType" />
+										<select class="txt" id="expctdBsnsType" name="expctdBsnsType" required>
+											<optgroup>
+												<option value="9">선택하세요</option>
+												<option value="0">민수 사업</option>
+												<option value="1">관공 사업</option>
+												<option value="2">기타</option>
+											</optgroup>
+										</select>
 									</td>
 								</tr>
 								<tr height="40">

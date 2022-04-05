@@ -314,6 +314,7 @@ textarea {
     border-radius: 7px;
     margin-bottom: 18px;
     margin-left: 45px;
+    font-size: 10pt;
 }
 .btnImg_in{
 	display: inline-block;
@@ -363,6 +364,20 @@ textarea {
 }
 .mng_txt{
 	width: 680px; 
+}
+
+[href] {
+	color: black;
+	text-decoration: none;
+}
+.op_title { 
+	font-size: 11pt;
+}
+.opbx {
+	width: 860px;
+	height: 305px;
+	margin-left: 47.5px;
+	overflow-y: auto;
 }
 /* 끝 */
 </style>
@@ -432,8 +447,128 @@ $(document).ready(function() {
 			}]
 		});
 	});
+	
+	/* 의견 목록 */
+	reloadOpList();
+	
+	/* 의견 등록 버튼 클릭시 */
+	$(".subm").on("click", function() {
+		var params = $("#botOpActionForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "salesBotActionAjax/insert",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				if(res.res == "success") {
+					$("#tatacont").val("");
+					reloadOpList();
+				} else {
+					alert("등록중 문제가 발생하였습니다.");
+				}
+			},
+			error : function(request, status, error) {
+				console.log(request.responseText);
+			}
+		});
+	});
+	
+	
+	/* 의견 삭제 버튼 클릭시 */
+	$(".opbx").on("click", ".del", function() {
+		var cmntNum = $(this).children("#cmntNum").val();
+		document.getElementById("cmntNum").value = cmntNum;
+		
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "경고",
+			contents : "삭제하시겠습니까?",
+			contentsEvent : function() {
+				$("#popup1").draggable();
+			},
+			buttons : [{
+				name : "예",
+				func:function() {
+					console.log($("#cmntNum").val());
+					var params = $("#botOpActionForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "salesBotActionAjax/update",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							if(res.res == "success") {
+								reloadOpList();
+							} else {
+								alert("삭제중 문제가 발생하였습니다.");
+							}
+						},
+						error : function(request, status, error) {
+							console.log(request.responseText);
+						}
+					});
+					
+					closePopup();
+					
+				}
+			}, {
+				name : "아니오"
+			}]
+		});
+		
+	});
+	
 });
 
+/* 의견 목록 Ajax */
+function reloadOpList() {
+	var params = $("#botOpActionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "salesOpBotListAjax",
+		data : params,
+		dataType : "json",
+		success : function(res) {
+			drawOpCnt(res.opListCnt);
+			drawOpList(res.list);
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	});
+}
+
+/* 의견 목록 개수 html */
+function drawOpCnt(opListCnt) {
+	var html = "";
+	
+	html = "<h3>의견(" + opListCnt + ")</h3>";
+	
+	$(".op_title").html(html);
+}
+
+/* 의견 목록 html */
+function drawOpList(list) {
+	var html = "";
+	
+	for(var data of list) {
+		html += "<div class=\"OpinionBox\">";
+		html += "<div class=\"name\">" + data.EMP_NAME + "(" + data.DEPT_NAME + " / " + data.RANK_NAME + ")" + "</div>";
+		html += "<div class=\"txtOp\">" + data.CONT + "</div>";
+		html += "<div class=\"dt\">" + data.RGSTRTN_DATE + "</div>";
+		html += "<div class=\"del\">삭제";
+		html += "<input type=\"hidden\" id=\"cmntNum\" name=\"cmntNum\" value=\"" + data.CMNT_NUM + "\" />";
+		html += "</div>";
+		html += "</div>";
+	}
+	
+	$(".opbx").html(html);
+	
+}
 
 </script>
 </head>
@@ -475,7 +610,7 @@ $(document).ready(function() {
 						<input type="text" name="prgrsStsNum" value="${data.PRGRS_STS_NUM}" />
 						<input type="text" id="salesNum" name="salesNum" value="${data.SALES_NUM}" />
 				
-					<div class="bot_title"><h3>영업기회<div class="drop_btn"></div></h3></div>
+					<div class="bot_title"><h3>영업기회</h3></div>
 					<hr class="hr_bot" color="white" width="925px">
 					<div class="page_cont_title_text">기본정보</div>
 					<hr class="hr_width">
@@ -611,7 +746,23 @@ $(document).ready(function() {
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="예정 사업 형태" /></td>
-									<td colspan="3"><input type="text" class="txt" readonly="readonly" value="${data.EXPCTD_BSNS_TYPE}" /></td>
+									<td colspan="3">
+										<select class="txt" disabled="disabled">
+											<optgroup>
+												<c:choose>
+													<c:when test="${data.EXPCTD_BSNS_TYPE eq 0}">													
+														<option value="0" selected="selected">민수 사업</option>
+													</c:when>
+													<c:when test="${data.EXPCTD_BSNS_TYPE eq 1}">													
+														<option value="0" selected="selected">관공 사업</option>
+													</c:when>
+													<c:when test="${data.EXPCTD_BSNS_TYPE eq 2}">													
+														<option value="0" selected="selected">기타</option>
+													</c:when>
+												</c:choose>
+											</optgroup>
+										</select>
+									</td>
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="비고" /></td>
@@ -633,61 +784,24 @@ $(document).ready(function() {
 					</div>
 					<div class="next_bot">
 						<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
-					</div>					
+					</div>	
+				</form>				
+				<form action="#" id="botOpActionForm" method="post">
+					<input type="hidden" name="salesNum" value="${param.salesNum}" />
+					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
+					<input type="hidden" id="cmntNum" name="cmntNum" />
 					<!-- 의견 -->
 					<div class="mgtop"></div>
-					<div class="bot_title"><h3>의견(7)</h3></div>
+					<div class="op_title"></div>
 					<hr color="#F2B705" width="925px">
-										<div class="bx">
-						<div class="OpinionBox">
-							<div class="name">구예지(영업1팀 대리)</div>
-							<div class="txtOp">이 고객사와 계약 하려면 키위대리님에게 연락해서 물어보면 꿀팁 주십니다.</div>
-							<div class="dt">2022-01-10 PM 05:39 </div>
-							<div class="del">삭제</div>
-						</div>
-						<div class="OpinionBox">
-							<div class="name">구예지(영업1팀 대리)</div>
-							<div class="txtOp">이 고객은 상품권 같은 것 보다는 커피 한잔 사드리는것을 더 좋아하시더라구요..!</div>
-							<div class="dt">2022-01-10 PM 05:39 </div>
-							<div class="del">삭제</div>
-						</div>
-						<div class="OpinionBox">
-							<div class="name">김민재(영업1팀 주임)</div>
-							<div class="txtOp">이 고객사와 계약 하려면 키위대리님에게 연락해서 물어보면 꿀팁 주십니다.</div>
-							<div class="dt">2022-01-10 PM 05:39 </div>
-							<div class="del">삭제</div>
-						</div>
-						<div class="OpinionBox">
-							<div class="name">유은정(영업1팀 사원)</div>
-							<div class="txtOp">매출이 큰 회사는 아닌듯 합니다.</div>
-							<div class="dt">2022-01-10 PM 05:39 </div>
-							<div class="del">삭제</div>
-						</div>
-						<div class="OpinionBox">
-							<div class="name">유은정(영업1팀 사원)</div>
-							<div class="txtOp">하하하 </div>
-							<div class="dt">2022-01-10 PM 05:39 </div>
-							<div class="del">삭제</div>
-						</div>
-						<div class="OpinionBox">
-							<div class="name">유은정(영업1팀 사원)</div>
-							<div class="txtOp">하하하 </div>
-							<div class="dt">2022-01-10 PM 05:39 </div>
-							<div class="del">삭제</div>
-						</div>
-						<div class="OpinionBox">
-							<div class="name">유은정(영업1팀 사원)</div>
-							<div class="txtOp">하하하 </div>
-							<div class="dt">2022-01-10 PM 05:39 </div>
-							<div class="del">삭제</div>
-						</div>
-					</div>
+					<div class="opbx"></div>
 					<div class="opBox">
-						<textarea></textarea>
+						<textarea id="tatacont" name="tacont"></textarea>
 						<div class="cmn_btn subm">등록</div>
 					</div>
-					<!-- 히스토리 -->
-					<div class="mgtop"></div>
+				</form>
+ 					<!-- 히스토리 -->
+<!-- 					<div class="mgtop"></div>
 					<div class="bot_title"><h3>히스토리(5)<div class="drop_btn"></div></h3></div>
 					<hr color="#F2B705" width="925px">
 					<div class="bx">
@@ -716,11 +830,10 @@ $(document).ready(function() {
 								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
 								<div class="txtOp">담당자:000</div>
 							</div>
-					</div>
+					</div>  -->
 					<hr class="hr_bot" color="white" width="925px">
 					<hr class="hr_bot" color="white" width="925px">
 					<div class="salesOver_btn nb">영업 종료하기</div>
-					</form>
 					<!-- 끝 -->
 				</div>
 			</div>	

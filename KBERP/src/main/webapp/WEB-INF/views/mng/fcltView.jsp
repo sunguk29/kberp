@@ -20,24 +20,7 @@
 	width: 900px;
 	font-size: 10.5pt;
 }
-.popup_bg {
-	/* 숨김용 */
-	 display: none;
-}
-.popup {
-	/* 숨김용 */
-	display: none;
-	/* 크기변경용 */
-	width: 600px;
-	height: 400px;
-	top: calc(50% - 200px); /* 높이 반  */
-	left: calc(50% - 300px); /* 너비 반 */
-}
 
-.popup_cont {
-	/* 내용 변경용 */
-	font-size: 10.5pt;
-}
 /* 개인 작업 영역 */
 .page_srch_area{
 	margin-left : 400px; 
@@ -50,14 +33,16 @@
 	display:inline-block;
 }
 #file_preview img{
-	width: 150px;
-	height: 150px;
-	margin-left: 250px;
+	min-height: 350px;
+	min-width : 350px;
+	max-width:400px;
+	max-height: 350px;
 }
 #fclty_input_area{
 	display: inline-block;
-	margin-top: 20px;
-	margin-left: 20px;
+	margin-top: 70px;
+	margin-left: 50px;
+	line-height: 25px;
 }
 #atchmn_row{
 	display: inline-block;
@@ -122,6 +107,58 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
+	$("#listBtn").on("click",function(){
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		$("#backForm").attr("action","fcltList");
+		$("#backForm").submit();
+	});
+
+	$("#updateBtn").on("click",function(){
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		$("#actionForm").attr("action","fcltUpdate");
+		$("#actionForm").submit();
+	});
+	
+	$("#btn2Btn").on("click", function() {
+		makePopup({
+			width : 400,
+			height : 200,
+			bg : true,
+			bgClose : true,
+			title : "시설물 삭제",
+			contents : "시설물을 삭제하시겠습니까?",
+			buttons : [{
+				name : "시설물 삭제",
+				func:function() {
+					var params = $("#actionForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "fcltAction/delete",
+						dataType : "json",
+						data : params,
+						success : function(res){ 
+							if(res.res == "success"){
+								$("#backForm").attr("action","fcltList");
+								$("#backForm").submit();
+							}else{
+								alert("삭제 중 문제가 발생했습니다.");
+							}
+						},
+						error : function(request, status, error){
+							console.log(request.responseText);
+						}
+					});	
+				}
+			}, {
+				name : "닫기"
+			}]
+		});
+	});
 	
 }); 
 
@@ -208,7 +245,7 @@ function drawPaging(pb) {
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 				<div id="file_preview">
-					 <img src="resources/upload/${data.ATT_PCTR}">
+					 <img src="resources/${data.ATT_PCTR}">
 				</div>
 					<div id="fclty_input_area">
 						<div class="fclty_input_row">
@@ -241,27 +278,34 @@ function drawPaging(pb) {
 						</div>
 						
 					</div>
-					<div class="page_srch_area">
-						<form action="#" id="actionForm" method="post">
-							<input type="hidden" id="gbn" name="gbn"/>
-							<input type="hidden" id="top" name="top" value="${param.top}" />
-							<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
-							<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
-							<input type="hidden" id="page" name="page" value="1" />
-							<input type="hidden" id="no" name="no" value="${param.no}" />
-							<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
-							<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
-							<input type="hidden" id="fOldSearchGbn" value="${param.fSearchGbn}"/>
-							<input type="hidden" id="fOldSearchTxt" value="${param.fSearchTxt}"/>
-									<select class="srch_sel" name="fSearchGbn">
-										<option value="0">신청자명</option>
-									</select>
-									<div class="srch_text_wrap">
-										<input type="text" id="fSearchTxt" name="fSearchTxt"/>
-									</div>
-									<div class="cmn_btn_ml" id="searchBtn">검색</div>
-						</form>
-					</div>
+					
+<form action="fcltList" id="backForm" method="post">
+	<input type="hidden" id="top" name="top" value="${param.top}" />
+	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+	<input type="hidden" name="page" value="${param.page}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+</form>
+					
+					
+<div class="page_srch_area">
+	<form action="#" id="actionForm" method="post">
+		<input type="hidden" id="top" name="top" value="${param.top}" />
+		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+		<input type="hidden" id="page" name="page" value="1" />
+		<input type="hidden" id="no" name="no" value="${param.no}" />
+		<input type="hidden" id="fOldSearchGbn" value="${param.fSearchGbn}"/>
+		<input type="hidden" id="fOldSearchTxt" value="${param.fSearchTxt}"/>
+		<select class="srch_sel" name="fSearchGbn">
+			<option value="0">신청자명</option>
+		</select>
+		<div class="srch_text_wrap">
+			<input type="text" id="fSearchTxt" name="fSearchTxt"/>
+		</div>
+		<div class="cmn_btn_ml" id="searchBtn">검색</div>
+	</form>
+</div>
 				<table class="board_table">
 				<colgroup>
 					<col width="100"/>
@@ -290,9 +334,11 @@ function drawPaging(pb) {
 				<div class="pgn_area">
 				</div>
 				
-				<div class="cmn_btn_ml">목록으로</div>
-				<div class="cmn_btn_ml">수정</div>
-				<div class="cmn_btn_ml">삭제</div>
+				<div class="cmn_btn_ml" id="listBtn">목록으로</div>
+				<c:if test="${sDeptNum eq 5}">
+					<div class="cmn_btn_ml" id="updateBtn">수정</div>
+					<div class="cmn_btn_ml" id="btn2Btn">삭제</div>
+				</c:if>
 			</div>
 				</div>
 	</div>

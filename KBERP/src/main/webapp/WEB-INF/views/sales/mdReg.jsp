@@ -31,7 +31,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	//목록으로 버튼(#listBtn) 클릭시, mdList(#backForm)로 이동 하는 함수
+	//목록으로 버튼(#listBtn) 클릭시, mdList(#actionForm)로 이동 하는 함수
 	goMdList();
 	
 	// 저장 버튼(#saveBtn) 클릭시, 필수항목 체크 후 mdActionAjax/insert 로 이동 
@@ -43,7 +43,7 @@ $(document).ready(function() {
 </head>
 <body>
 <!--============== back Form ==================-->
-<form action="mdList" id="backForm" method="post">
+<form action="mdList" id="actionForm" method="post">
 	<!-- 메뉴 데이터 유지용 -->
 	<input type="hidden" name="top" 		   value="${params.top}"> 		<!-- top정보 -->
 	<input type="hidden" name="menuNum" 	   value="${params.menuNum}"> 	<!-- 메뉴정보 -->

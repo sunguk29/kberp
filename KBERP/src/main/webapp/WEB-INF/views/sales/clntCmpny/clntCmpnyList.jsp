@@ -115,13 +115,17 @@ select {
 	width: 100%;
 	font-size: 9pt;
 	text-align: left;
+	table-layout: fixed;
 }
 
 .list_table thead th {
 	font-weight: bold;
 }
 .list_table th, .list_table td  {
-	height: 20px;
+	height: auto;
+	overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .list_table thead tr:nth-child(1) {
@@ -148,13 +152,8 @@ select {
 	font-size: 10pt;
 	text-decoration: underline;
 }
-.deal{
-	height: 36px;
-}
 .deal_cnt{
-	position:relative;
-	top: -15px;
-	right: -5px;
+	padding-left: 15px;
 }
 .sales_psbl_btn {
 	display: inline-block;
@@ -177,7 +176,7 @@ select {
 }
 .cont_table {
 	width: 927px;
-	height: 420px;
+	height: 244px;
 }
 .actionForm {
 	width: 100%;
@@ -318,10 +317,10 @@ function drawList(list) {
 	var html = "";
 	
 	html += "<colgroup>";
-	html += "<col width=\"80\">";		
+ 	html += "<col width=\"80\">";		
 	html += "<col width=\"130\">";		
 	html += "<col width=\"250\">";		
-	html += "<col width=\"80\">";		
+	html += "<col width=\"80\">";
 	html += "</colgroup>";	
 	html += "<thead>";	
 	html += "<tr>";		
@@ -349,7 +348,6 @@ function drawList(list) {
 		html += "<td>CC" + data.CLNT_CMPNY_NUM + "</td>";
 		html += "<td>" + data.GRADE_NAME + "등급</td>";
 		html += "<td rowspan=\"3\">";
-		html += "<img class=\"deal\" alt=\"거래\" src=\"resources/images/sales/hands.png\" />";
 		html += "<span class=\"deal_cnt\">" + data.CNT + "건</span>";
 		html += "</td>";
 		html += "</tr>";

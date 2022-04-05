@@ -94,13 +94,17 @@ select {
 	width: 100%;
 	font-size: 9pt;
 	text-align: left;
+	table-layout: fixed;
 }
 
 .list_table thead th {
 	font-weight: bold;
 }
 .list_table th, .list_table td  {
-	height: 20px;
+	height: auto;
+	overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .list_table thead tr:nth-child(1) {
@@ -163,11 +167,13 @@ select {
 }
 .cont_table {
 	width: 927px;
-	height: 288px;
+	height: 250px;
 }
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	
+	console.log('${param.searchTxt}');
 	
 	if('${param.searchType}' != '') {
 		$("#searchType").val("${param.searchType}");
@@ -382,7 +388,7 @@ function drawPaging(pb) {
 								</select>
 							</td>
 							<td colspan="3">
-								<input type="text" class="srch_msg" placeholder="검색어를 입력해주세요." id="searchTxt" name="searchTxt" />
+								<input type="text" class="srch_msg" placeholder="검색어를 입력해주세요." id="searchTxt" name="searchTxt" value="${param.searchTxt}" />
 							</td>
 							<td colspan="5">
 								<span class="cmn_btn" id="searchBtn">검색</span>

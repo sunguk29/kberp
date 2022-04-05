@@ -41,10 +41,24 @@
 }
 
 .stage { /* 영업기회 이름  */
-	width: 134.5px;
-	margin: 0px 43px;
+	width: 135px;
+	margin: 0px 20px;
 	padding: 8px 5px;
 	background-color: #F2F2F2;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	font-size: 10pt;
+	text-align: center;
+	display: inline-block;
+	vertical-align: middle;
+}
+.stage_on { /* 영업기회 이름  */
+	width: 135px;
+	margin: 0px 20px;
+	padding: 8px 5px;
+	background-color: #F2B705;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 	border-top-left-radius: 5px;
@@ -62,12 +76,7 @@
 }
 
 .stage:active {
-	width: 134.5px;
-	margin: 0px 43px;
-	padding: 8px 5px;
 	background-color: #F2CB05;
-	cursor: pointer;
-	font-weight: bold;
 }
 
 .tLine {
@@ -155,7 +164,7 @@ select {
 }
 /*---------- 영업기회 박스 ------------  */
 .salesOpportunityName { /* 영업기회명 */
-	width: 725px;
+	width: 695px;
 	height: 25px;
 	line-height: 25px;
 	font-size: 10.5pt;
@@ -167,17 +176,6 @@ select {
 
 .salesOpportunityName:hover { /* 영업기회명-hover */
 	color: #2E83F2;
-	cursor: pointer;
-}
-
-.opt { /* 영업기회 버튼 */
-	display: inline-block;
-	width: 25px;
-	height: 25px;
-	background-image: url("resources/images/sales/option.png");
-	background-size: 100%;
-	background-repeat: no-repeat;
-	margin: 10px 5px;
 	cursor: pointer;
 }
 
@@ -210,6 +208,7 @@ select {
 	border-top-right-radius: 5px;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
+	margin-left: 30px;
 }
 
 .cliimg { /* 고객사 이미지 */
@@ -219,7 +218,7 @@ select {
 	background-image: url("resources/images/sales/client.png");
 	background-size: 100%;
 	background-repeat: no-repeat;
-	margin: 13px 0px 13px 10px;
+	margin: 13px 0px 13px 35px;
 }
 
 .client { /* 고객사/고객  */
@@ -260,63 +259,39 @@ table {
 	font-size: 10pt;
 	text-align: center;
 	border: none;
-	padding-left: 70px;
+	margin-left: 110px;
 }
 
 .colNum1 {
 	width: 200px;
-	background-color: #F2CB05;
+	background-color: #fff;
 	border: none;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
-	cursor: pointer;
 }
 
-.colNum1 { /* 단계별 파이프라인 그라데이션 */
+/* .colNum1 {
 	background: linear-gradient(90deg, #FFE65A, #FFE150);
-}
+} */
 
-
-.colNum1:active {
+/* .colNum1:active {
 	font-weight: bold;
 	color: #4B94F2;
 	cursor: pointer;
-}
+}  */
 
-.colNum1:hover {
+/* .colNum1:hover {
 	font-weight: bold;
 	cursor: pointer;
-}
+} */
+
 
 .stick1, .stick2, .stick3, .stick4, .stick5, .stick6 { /* 막대기 color */
 	width: 38px;
 	border: none;
-}
-
-.stick1 {
-	background-color: #FFE150;
-}
-
-.stick2 {
-	background-color: #FFDC46;
-}
-
-.stick3 {
-	background-color: #FFD232;
-}
-
-.stick4 {
-	background-color: #FFC81E;
-}
-
-.stick5 {
-	background-color: #FFC314;
-}
-
-.stick6 {
-	background-color: #F2B705;
+	background-color: #fff;
 }
 
 .a {
@@ -325,7 +300,10 @@ table {
 	background-color: #F2F2F2;
 }
 .boldSts {
-	color: #2E83F2;
+	background-color: #fff;
+}
+.boldSts_on {
+	background-color: #FFE150;
 }
 /* 팝업 */
 .popup_title_mid {
@@ -513,7 +491,98 @@ table {
 	font-size: 11pt;
 	width: 118px;
 	cursor: default;
+	padding-bottom: 0px;
 }
+
+/* ******** 견적 ******** */
+.qtn_txt {
+	height: 33px;
+	width: 885px;
+	padding: 0 5px;
+	font-size: 14px;
+	color: black;
+	vertical-align: middle;
+	box-sizing: border-box;
+	outline: none;
+	border-radius: 3px;
+	line-height: 33px;
+	border: 1px solid #000;
+	background-color: #F2F2F2;
+	text-align: center;
+	font-weight: bold;
+	margin-left: 40px;
+}
+
+.qtn_title_name, .title_name {
+	font-size: 15px;
+	font-weight: bold;
+	border-bottom: 3px solid #2E83F2;
+	padding-bottom: 10px;
+	margin-bottom: 30px;
+	margin-left: 40px;
+	width: 900px;
+}
+.title_name {
+	margin-top: 30px;
+}
+.qtn_box_in {
+	width: 885px;
+	height: 150px;
+	border: 1px solid #000;
+	border-radius: 7px;
+	margin-bottom: 18px;
+	margin-left: 40px;
+}
+.past_ngtn {
+	margin-left: 40px;
+	font-size: 11pt;
+	font-weight: bold;
+	color: black;
+	text-align: center;
+}
+.cc_box_in {
+	display: inline-block;
+	vertical-align: top;
+	width: 480px;
+	height: 70px;
+	padding-left: 20px;
+	white-space: pre;
+	font-size: 14px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	line-height: 20px;
+}
+.cc_box_in:hover {
+	cursor: pointer;
+	color: #2E83F2;
+}
+.cc_box_right {
+	display: inline-block;
+	vertical-align: top;
+	width: 365px;
+	height: 70px;
+	padding-right: 20px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.right_box {
+	width: 200px;
+	height: 50px;
+	margin: 10px auto;
+	font-size: 14px;
+	text-align: right;
+}
+.hands{
+	display: inline-block;
+	vertical-align: middle;
+	width: 48px;
+	height: 48px;
+	background-image: url("resources/images/sales/hands.png");
+	background-size: 48px 48px;
+	margin-right: 10px;
+}
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -546,6 +615,15 @@ $(document).ready(function() {
 		}
 	});
 	
+	/* 담당자 검색칸에 엔터처리 */
+	$("#mngName").on("keypress", function(event) {
+		if(event.keyCode == 13) {
+			$("#searchBtn").click();
+			
+			return flase;
+		}
+	});
+	
 	$(".salesWrap").on("click", ".salesOpportunityName", function() {
 		$("#salesNum").val($(this).attr("salesNum")); // 영업번호 가져오기
 		
@@ -556,7 +634,7 @@ $(document).ready(function() {
 			$("#actionForm").attr("action", "sales2SgstnCont"); // 제안 상세보기로 이동.
 			$("#actionForm").submit();
 		} else if($(this).children("#test").val() == "견적") {
-			$("#actionForm").attr("action", "sales3QntCont"); // 견적 상세보기로 이동.
+			$("#actionForm").attr("action", "sales3QtnCont"); // 견적 상세보기로 이동.
 			$("#actionForm").submit();
 		}  else if($(this).children("#test").val() == "계약") {
 			$("#actionForm").attr("action", "sales4CntrctCont"); // 계약 상세보기로 이동.
@@ -573,7 +651,7 @@ $(document).ready(function() {
 	});
 	
 	/* 담당자 팝업 */
-	$(".findEmp_box").on("click", function() {
+	$("#mngBtn").on("click", function() {
 		
 		var html = "";
 		
@@ -587,9 +665,9 @@ $(document).ready(function() {
 		html += "<div class=\"ptm_mid\">";
 		html += "<div class=\"ptm_mid_top\">";
 		html += "<select class=\"sel_size\" name=\"deptS\">";
-		html += "<option value=\"6\">영업1팀</option>";
-		html += "<option value=\"7\">영업2팀</option>";
-		html += "<option value=\"8\">영업3팀</option>";
+		html += "<option value=\"6\">영업부</option>";
+		html += "<option value=\"7\">영업1팀</option>";
+		html += "<option value=\"8\">영업2팀</option>";
 		html += "</select>";
 		html += "</div>";
 		html += "<div class=\"ptm_mid_bot\">";
@@ -684,6 +762,32 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
+	/* 검색 상단 단계 버튼 클릭시 */
+	$(".stageM").on("click", ".stage", function() {
+		if($(this).attr("num") != "9") {
+			$(".stageM").children(".stage_on").attr("class", "stage");
+			$(this).removeClass();
+			$(this).addClass("stage_on");	
+		} else {
+			$(".stageM").children(".stage_on").attr("class", "stage");
+		}
+		
+		$("#page").val("1");
+		
+		$("#prgrsStage1").val($(this).attr("num"));
+		
+		if($("#searchTxt").val() != "" || $("#mngName").val() != "") { // 검색어 txt가 비어있지 않으면 초기화
+			var txt = document.getElementById("searchTxt");
+			var mngTxt = document.getElementById("mngName");
+			
+			txt.value = "";
+			mngTxt.value = "";
+		}
+		
+		reloadList();
+		
+	});
+	
 	/* 검색 어제버튼 클릭 */
 	$("#yesterday").on("click", function() {
 		var a = new Date();
@@ -732,6 +836,11 @@ $(document).ready(function() {
 		$("#endDate").val(today);
 	});
 	
+	/* 정렬버튼 클릭시 */
+	$("#sortBtn").on("click", function() {
+		reloadList();
+	});
+	
 });
 
 function reloadList() {
@@ -746,23 +855,11 @@ function reloadList() {
 			drawList(res.list);
 			drawPaging(res.pb);
 			drawRsltCnt(res.RsltCnt);
-			drawCnt(res.stage0, res.stage1, res.stage2, res.stage3);
 		},
 		error : function(request, status, error) {
 			console.log(request.responseText);
 		}
 	});
-}
-
-function drawCnt(stage0, stage1, stage2, stage3) {
-	var html = "";
-	
-	html += "<div class=\"stage\" id=\"stage0\">영업기회 : " + stage0 + "건</div>";
-	html += "<div class=\"stage\" id=\"stage1\">제안 : " + stage1 + "건</div>";
-	html += "<div class=\"stage\" id=\"stage2\">견적 : " + stage2 + "건</div>";
-	html += "<div class=\"stage\" id=\"stage3\">계약 : " + stage3 + "건</div>";
-	
-	$(".stageM").html(html);
 }
 
 function drawRsltCnt(RsltCnt) {
@@ -783,7 +880,6 @@ function drawList(list) {
 		html += "<div class=\"salesOpportunity\">";
 		html += "<div class=\"sledding\">" + data.PRGRS_STS + "</div>";
 		html += "<div class=\"salesOpportunityName\" salesNum = \"" + data.SALES_NUM + "\">" + data.LEAD_NAME + "<input type=\"hidden\" id=\"test\" value=\"" + data.PRGRS_STS2 + "\" /></div>";
-		html += "<div class=\"opt\"></div>";
 		html += "<table cellspacing=\"0\">";
 		html += "<colgroup>";
 		html += "<col width=\"120\">";
@@ -804,33 +900,63 @@ function drawList(list) {
 
 		html += "<tr height=\"10\">";
 		if(data.PRGRS_STS2 == "영업기회") {
-			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\"><b>영업기회</b></td>";
-		} else {
-			html += "<td class=\"colNum1\" rowspan=\"3\">영업기회</td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\"><b>영업기회</b></td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\">제안</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\">견적</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\">계약</td>";
 		}
-		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "제안") {
-			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\"><b>제안</b></td>";
-		} else {
-			html += "<td class=\"colNum1\" rowspan=\"3\">제안</td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\">영업기회</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\"><b>제안</b></td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\">견적</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\">계약</td>";
 		}
-		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "견적") {
-			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\"><b>견적</b></td>";
-		} else {
-			html += "<td class=\"colNum1\" rowspan=\"3\">견적</td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\">영업기회</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\">제안</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\"><b>견적</b></td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\">계약</td>";
 		}
-		html += "<td class=\"a\"></td>";
 		if(data.PRGRS_STS2 == "계약") {
-			html += "<td class=\"colNum1 boldSts\" rowspan=\"3\"><b>계약</b></td>";
-		} else {
-			html += "<td class=\"colNum1\" rowspan=\"3\">계약</td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\">영업기회</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\">제안</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\">견적</td>";
+			html += "<td class=\"a\"></td>";
+			html += "<td class=\"colNum1 boldSts_on\" rowspan=\"3\"><b>계약</b></td>";
 		}
 		html += "</tr>";
 		html += "<tr height=\"10\">";
-		html += "<td class=\"stick1\"></td>";
-		html += "<td class=\"stick2\"></td>";
-		html += "<td class=\"stick3\"></td>";
+		if(data.PRGRS_STS2 == "영업기회") {
+			html += "<td class=\"stick1\"></td>";
+			html += "<td class=\"stick2\"></td>";
+			html += "<td class=\"stick3\"></td>";
+		}
+		if(data.PRGRS_STS2 == "제안") {
+			html += "<td class=\"stick1\" style=\"background-color:#FFE150;\"></td>";
+			html += "<td class=\"stick2\"></td>";
+			html += "<td class=\"stick3\"></td>";
+		}
+		if(data.PRGRS_STS2 == "견적") {
+			html += "<td class=\"stick1\" style=\"background-color:#FFE150;\"></td>";
+			html += "<td class=\"stick2\" style=\"background-color:#FFE150;\"></td>";
+			html += "<td class=\"stick3\"></td>";
+		}
+		if(data.PRGRS_STS2 == "계약") {
+			html += "<td class=\"stick1\" style=\"background-color:#FFE150;\"></td>";
+			html += "<td class=\"stick2\" style=\"background-color:#FFE150;\"></td>";
+			html += "<td class=\"stick3\" style=\"background-color:#FFE150;\"></td>";
+		}
 		html += "</tr>";
 		html += "<tr height=\"10\">";
 		html += "<td class=\"a\"></td>";
@@ -847,6 +973,7 @@ function drawList(list) {
 			html += "<div class=\"fs\">예상매출 : " + data.EXPCTN_LOAN_SCALE + "원</div>";
 		}
 		html += "<div class=\"pic\">담당자 : " + data.EMP_NAME + "</div>";
+		html += "<div class=\"pic\">영업번호 : " + data.SALES_NUM + "</div>";
 		html += "<br>";
 		html += "</div>";
 	}
@@ -975,7 +1102,6 @@ function drawMngPaging(mngPb) {
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
 		<input type="hidden" id="salesNum" name="salesNum" /> <!-- 상세보기 갈 때 필요 -->
-		<input type="hidden" id="salesNum" name="salesNum" /> <!-- 상세보기 갈 때 필요 -->
 		
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
@@ -988,7 +1114,13 @@ function drawMngPaging(mngPb) {
 		<div class="cont_area">
 			<div class="body">
 				<div class="bodyWrap">
-					<div class="stageM"></div>
+					<div class="stageM">
+						<div class="stage" num="9" >전체 : ${allCnt}건</div>
+						<div class="stage" num="1" >영업기회 : ${stage0}건</div>
+						<div class="stage" num="2" >제안 : ${stage1}건</div>
+						<div class="stage" num="3" >견적 : ${stage2}건</div>
+						<div class="stage" num="4" >계약 : ${stage3}건</div>
+					</div>
 					<div class="tLine"></div>
 					<table class="srch_table">
 
@@ -1008,9 +1140,9 @@ function drawMngPaging(mngPb) {
 								</td>
 								<td colspan="2">
 									<div class="findEmp_box">
-										<input type="text" id="mngName" readonly="readonly" />
-										<input type="hidden" id="mngNum" name="mngNum" />
-										<img class="userIcon" src="resources/images/sales/usericon.png">
+										<input type="text" id="mngName" name="mngName" />
+										<input type="hidden" id="mngNum" />
+										<img class="userIcon" src="resources/images/sales/usericon.png" id="mngBtn">
 									</div>
 								</td>
 							</tr>
@@ -1019,7 +1151,7 @@ function drawMngPaging(mngPb) {
 									<span class="srch_name">진행 단계</span>
 								</td>
 								<td>
-									<select name="prgrsStage1">
+									<select id="prgrsStage1" name="prgrsStage1">
 										<option value="9">선택안함</option>
 										<option value="1">영업기회</option>
 										<option value="2">제안</option>
@@ -1074,7 +1206,6 @@ function drawMngPaging(mngPb) {
 								</td>
 								<td>
 									<select id="searchGbn" name="searchGbn">
-										<option value="9">선택안함</option>
 										<option value="0">고객사명</option>
 										<option value="1">영업명</option>
 										<option value="2">영업기회번호</option>
@@ -1092,15 +1223,16 @@ function drawMngPaging(mngPb) {
 									<span class="srch_name">정렬</span>
 								</td>
 								<td>
-									<select>
-										<option selected="selected">영업명</option>
-										<option>고객사명</option>
-										<option>예상매출</option>
-										<option>시작일</option>
+									<select name="listSort">
+										<option value="9">선택안함</option>
+										<option value="0">영업명</option>
+										<option value="1">고객사명</option>
+										<option value="2">예상매출</option>
+										<option value="3">시작일</option>
 									</select>
 								</td>
 								<td>
-									<img class="asc_btn cmn_btn" alt="등록버튼" src="resources/images/sales/asc.png" />
+									<img class="asc_btn cmn_btn" alt="정렬버튼" src="resources/images/sales/asc.png" id="sortBtn" />
 								</td>
 								<td colspan="3"></td>
 							</tr>
