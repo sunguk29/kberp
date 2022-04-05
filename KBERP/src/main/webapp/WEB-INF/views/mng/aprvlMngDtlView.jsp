@@ -197,6 +197,7 @@ $(document).ready(function() {
 							<div>${data.START_TIME} ~ ${data.END_TIME}</div>				
 						</div>
 	<input type="hidden" id="stsNum" name="stsNum" value="${data.STS_NUM}">	
+	<input type="hidden" id="stsNum" name="stsNum" value="${data.PRCS_DATE}">	
 						
 					</div>
 						<div class="use"><b>사용 용도</b></div>
