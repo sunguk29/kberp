@@ -124,7 +124,7 @@
 		WHERE DEPT_NUM = #{sdeptNum}
 	</update>
 	
-	<select id="getInqryEmpList" resultType="hashmap" parameterType="hashmap">
+	<select id="getInqryList" resultType="hashmap" parameterType="hashmap">
 		SELECT A.EMP_NUM, E.EMP_NAME, A.RANK_NUM, R.RANK_NAME, A.DEPT_NUM, D.DEPT_NAME
 		FROM (  SELECT EMP_NUM, RANK_NUM, DEPT_NUM, START_DATE, END_DATE, STS_NUM
 		        FROM APNTM 

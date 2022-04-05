@@ -657,83 +657,97 @@ $(document).ready(function() {
 
 	   // 사원조회 팝업
 		$("#prfl_srch_btn").on("click", function() {
-			
-/* 		$.ajax({
-			      type : "post",
-			      url : "apntmListAjax",
-			      data : params,
-			      dataType : "json",
-			      success : function(res) {
-			         drawList(res.list);
-			      },
-			      error : function(req) {
-			         console.log(req.responseText);
-			      }
-			   });  */
-			
-			var html = "";
-			                                                     
-			html += "<div class=\"popup_emp_srch_area\">         ";
-			html += "<select class=\"emp_srch_select\">          ";
-			html += "	<option value=\"0\" selected>전체</option>";
-			html += "	<option value=\"1\">부서명</option>      ";
-			html += "	<option value=\"2\">사원명</option>      ";
-			html += "	<option value=\"3\">직급명</option>      ";
-			html += "</select>                                   ";
-			html += "<div class=\"popup_srch_input\">	                 ";
-			html += "	<input type=\"text\" />                  ";
-			html += "</div>                                      ";
-			html += "<div class=\"cmn_btn\">검색</div>           ";
-			html += "</div>                                      ";
-			html += "<div class=\"empinqry_area\">        ";
-            html += " <table class=\"empinqry_list\">   ";
-            html += "   <colgroup>                      ";
-            html += "      <col width=\"130\"/>         ";
-            html += "      <col width=\"100\"/>         ";
-            html += "      <col width=\"100\"/>         ";
-            html += "      <col width=\"100\"/>         ";
-            html += "   </colgroup>                     ";
-            html += "   <thead>                         ";
-            html += "      <tr>                         ";
-            html += "         <th>사원번호</th>         ";
-            html += "         <th>사원명</th>           ";
-            html += "         <th>부서</th>             ";
-            html += "         <th>직급</th>             ";
-            html += "      </tr>                        ";
-            html += "   </thead>                        ";
-            html += "   <tbody id=\"empinqry_tbody\">   ";
-            html += "   	<tr>                        ";
-            html += "   		<td>test</td>	        ";
-            html += "   		<td>test</td>	        ";
-            html += "   		<td>test</td>	        ";
-            html += "   		<td>test</td>	        ";
-            html += "   	</tr>                       ";
-            html += "   </tbody>                        ";
-            html += "  </table>                         ";
-            html += "</div>                             ";
-			
-			makePopup({
-				bg : false,
-				bgClose : false,
-			 	width: 600,
-			 	height: 400,
-				title : "사원조회",
-				contents : html,
-				draggable : true,
-				buttons : [{
-					name : "확인",
-					func:function() {
-						console.log("사원조회!");
-						closePopup();
-					}
-				}, {
-					name : "취소"
-				}]
-			});
-		   $(".empinqry_area").slimScroll({height: "255px"},{width: "450px"});
-		});
+		
+						var html = "";
+						html += "<form action=\"#\" id=\"inqryForm\" method=\"post\">"                                             
+						html += "<div class=\"popup_emp_srch_area\">         ";
+						html += "<select class=\"emp_srch_select\">          ";
+						html += "	<option value=\"0\" selected>전체</option>";
+						html += "	<option value=\"1\">부서명</option>      ";
+						html += "	<option value=\"2\">사원명</option>      ";
+						html += "	<option value=\"3\">직급명</option>      ";
+						html += "</select>                                   ";
+						html += "<div class=\"popup_srch_input\">	                 ";
+						html += "	<input type=\"text\" />                  ";
+						html += "</div>                                      ";
+						html += "<div class=\"cmn_btn\">검색</div>           ";
+						html += "</div>                                      ";
+						html += "</form>";														
+						html += "<div class=\"empinqry_area\">        ";
+			            html += " <table class=\"empinqry_list\">   ";
+			            html += "   <colgroup>                      ";
+			            html += "      <col width=\"130\"/>         ";
+			            html += "      <col width=\"100\"/>         ";
+			            html += "      <col width=\"100\"/>         ";
+			            html += "      <col width=\"100\"/>         ";
+			            html += "   </colgroup>                     ";
+			            html += "   <thead>                         ";
+			            html += "      <tr>                         ";
+			            html += "         <th>사원번호</th>         ";
+			            html += "         <th>사원명</th>           ";
+			            html += "         <th>부서</th>             ";
+			            html += "         <th>직급</th>             ";
+			            html += "      </tr>                        ";
+			            html += "   </thead>                        ";
+			            html += "   <tbody id=\"empinqry_tbody\">   ";
+			            html += "   </tbody>                        ";
+			            html += "  </table>                         ";
+			            html += "</div>                             ";
+						
+						makePopup({
+							bg : false,
+							bgClose : false,
+						 	width: 600,
+						 	height: 400,
+							title : "사원조회",
+							contents : html,
+							contentsEvent : function() {
+								var params = $("#inqryForm").serialize();	
+						 		$.ajax({
+								      type : "post",
+								      url : "apntmListAjax/inqry",
+								      dataType : "json",
+								      data : params,
+								      success : function(res) {
+								    	  console.log(res);
+								    	  drawInqryList(res.inqry);
+								      }, 
+								      error : function(req) {
+								         console.log(req.responseText);
+								      }
+							   }); 
+					      },
+							draggable : true,
+							buttons : [{
+								name : "확인",
+								func:function() {
+									console.log("사원조회!");
+									closePopup();
+								}
+							}, {
+								name : "취소"
+							}]
+						});
+			   		$(".empinqry_area").slimScroll({height: "255px"},{width: "450px"}); // 슬림스크롤
+		}); // 팝업클릭 끝
   	});
 });
+
+// 사원조회 리스트 그리기
+function drawInqryList(inqry) {
+	var html = "";
+	
+    for(var data of inqry) {
+        html += " <tr>                        ";
+        html += " 	<td>" + data.EMP_NUM + "</td> ";
+        html += " 	<td>" + data.EMP_NAME + "</td> ";
+        html += " 	<td>" + data.DEPT_NAME + "</td> ";
+        html += " 	<td>" + data.RANK_NAME + "</td> ";
+        html += " </tr>                       ";
+    }
+	$("#empinqry_tbody").html(html);
+}
+
 
 // 발령 리스트 리로드
 function reloadList() {
@@ -741,7 +755,7 @@ function reloadList() {
    
    $.ajax({
       type : "post",
-      url : "apntmListAjax",
+      url : "apntmListAjax/list",
       data : params,
       dataType : "json",
       success : function(res) {
@@ -760,7 +774,7 @@ function reloadCont() {
    
    $.ajax({
       type : "post",
-      url : "apntmListAjax",
+      url : "apntmListAjax/cont",
       data : params,
       dataType : "json",
       success : function(res) {
@@ -805,10 +819,6 @@ function drawList(list) {
    }
    $("tbody").html(html);
 }   
-// 팝업 사원조회 리스트 생성 
-function drawPopupEmpInqry(inqry) {
-	v
-}
 // 발령 상세정보 생성
 function drawCont(cont){
    var html = "";
@@ -1032,11 +1042,17 @@ function prfl_srch(){
 </script>
 </head>
 <body>
+<form id="inqryForm">
+	<input type="hidden" id="inqryGbn" name="inqryGbn"  />
+	<input type="hidden" id="inqryTxt" name="inqryTxt"  />
+</form>
+<input type="hidden" id="oldInqryGbn" value="${param.inqryGbn}" />
+<input type="hidden" id="oldInqryTxt" value="${param.inqryTxt}" />
 <input type="hidden" id="oldSearchGbn" value="${param.searchGbn}" />
 <input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
-<input type="hidden" id="oldSearchAprvl" value="${param.searchAprvl}" />
-<input type="hidden" id="oldSearchAprvl" value="${param.startPrd}" />
-<input type="hidden" id="oldSearchAprvl" value="${param.endPrd}" />
+<input type="hidden" id="searchAprvl" value="${param.searchAprvl}" />
+<input type="hidden" id="startPrd" value="${param.startPrd}" />
+<input type="hidden" id="endPrd" value="${param.endPrd}" />
    <!-- top & left -->
    <c:import url="/topLeft">
       <c:param name="top">${param.top}</c:param>
