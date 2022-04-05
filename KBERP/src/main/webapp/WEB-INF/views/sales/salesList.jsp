@@ -859,13 +859,13 @@ function drawList(list) {
 		}
 		if(data.PRGRS_STS2 == "견적") {
 			html += "<td class=\"stick1\" style=\"background-color:#FFE150;\"></td>";
-			html += "<td class=\"stick2\" style=\"background-color:#FFE150;></td>";
+			html += "<td class=\"stick2\" style=\"background-color:#FFE150;\"></td>";
 			html += "<td class=\"stick3\"></td>";
 		}
 		if(data.PRGRS_STS2 == "계약") {
 			html += "<td class=\"stick1\" style=\"background-color:#FFE150;\"></td>";
-			html += "<td class=\"stick2\" style=\"background-color:#FFE150;></td>";
-			html += "<td class=\"stick3\" style=\"background-color:#FFE150;></td>";
+			html += "<td class=\"stick2\" style=\"background-color:#FFE150;\"></td>";
+			html += "<td class=\"stick3\" style=\"background-color:#FFE150;\"></td>";
 		}
 		html += "</tr>";
 		html += "<tr height=\"10\">";
