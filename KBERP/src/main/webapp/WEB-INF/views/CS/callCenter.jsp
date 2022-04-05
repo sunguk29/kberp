@@ -86,11 +86,12 @@
 	color: #222222;
 	cursor: pointer;
 }
-
 .clnt_srch_table tbody tr:hover {
 	color: #4B94F2;
 	text-decoration: underline;
 }
+
+
 
 /* 저장 팝업 */
 .save_cont{
@@ -452,13 +453,13 @@
 	vertical-align: top;
 	width: 510px;
 	height: 260px;
-	overflow: auto;
+	overflow-y: scroll;
 }
 
 .cnsl_rcrd_table{
 	display: inline-table;
 	border-collapse: collapse;
-	width: 100%;
+	width: 493px;
 	margin-bottom: 15px;
 }
 .cnsl_rcrd_table thead tr {
@@ -482,6 +483,11 @@
 }
 
 .cnsl_rcrd_table tbody tr:hover {
+	color: #4B94F2;
+	text-decoration: underline;
+}
+
+.cnsl_rcrd_table tbody tr.on {
 	color: #4B94F2;
 	text-decoration: underline;
 }
@@ -663,7 +669,7 @@ $(document).ready(function() {
 		html += "	<option value=\"1\">등급</option>";
 		html += "	<option value=\"2\">전화번호</option>";
 		html += "</select>";
-		html += "<input type=\"text\" name=\"searchTxt\" value=\"" + $("#searchTxt").val() + "\"/>"
+		html += "<input type=\"hidden\" name=\"searchTxt\" value=\"" + $("#searchTxt").val() + "\"/>"
 		html += "</div>";
 		html += "</form>";
 		html += "<div class=\"srch_cont\">";
@@ -747,15 +753,16 @@ $(document).ready(function() {
 						success : function(res) {
 							console.log(res);
 							drawCnslList(res.list);
+							closePopup();
 						},
 						error : function(request, status, error) {
 							console.log(request.responseText);
+							closePopup();
 
 						}
 					});
-					
-					closePopup();
 				}); // 고객정보 팝업 tr 클릭 끝
+				
 			},
 			draggable : true,
 			buttons : [{
@@ -771,6 +778,9 @@ $(document).ready(function() {
 	// 상담이력 tr 클릭
 	$("#cnslList").on("click", "tr", function() {
 		$("#rcrdCnslForm #cnsl_num").val($(this).attr("no"));
+		
+		$("#cnslList tr").removeAttr("class");
+		$(this).attr("class", "on");
 		
 		var params = $("#rcrdCnslForm").serialize();
 		
@@ -791,10 +801,10 @@ $(document).ready(function() {
 				console.log(request.responseText);
 	
 			}
-		});
-		
-		
+		});	
 	}); // 상담이력 tr 클릭 끝
+	
+	
 	
 	function drawCnslList(list) {
 		var html = "";

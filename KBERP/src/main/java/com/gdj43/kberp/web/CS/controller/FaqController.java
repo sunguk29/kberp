@@ -130,7 +130,7 @@ public class FaqController {
 	  public ModelAndView faqUpdate(@RequestParam HashMap<String, String> params,
 			  						 ModelAndView mav) throws Throwable {
 		  
-		HashMap<String, String> data = iCommonService.getData("FQ.faqUpdate", params);
+		HashMap<String, String> data = iCommonService.getData("FQ.getfaqdt", params);
 	  
 	  mav.addObject("data", data);
 	  

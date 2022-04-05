@@ -370,12 +370,10 @@ td:nth-child(1) {
 .plus_btn, .btnImg:hover{
 	cursor: pointer;
 }
-#att {
-	display: none;
-}
-#fileName {
+#leadFileName {
 	border: hidden;
 	outline: none;
+	width: 500px;
 }
 .txt{
 	height: 33px;
@@ -528,6 +526,16 @@ hr { /* 구분선 */
 	margin-top: 7.5px;
 	margin-right: 20px;
 }
+.minus_btn {
+	width: 18px;
+	height: auto;
+	background-size: 18px 18px;
+	cursor: pointer;
+	padding-left: 5px;
+	margin-top: 2px;
+	display: inline-block;
+	vertical-align: top;
+}
 .up_btn {
 	display:inline-block;
 	vertical-align: middle;
@@ -605,6 +613,9 @@ hr { /* 구분선 */
 .plus_btn_bot:hover {
 	cursor: pointer;
 }
+#attFileName {
+	font-size: 10pt;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -643,9 +654,26 @@ $(document).ready(function() {
 		}
 	});	
 	
+	/* 고객사 등급 선택되게 */
+	$("#ccGrade").val(${data.GRADE_NUM}).prop("selected", this.selected);
+	
+	/* 인지경로 선택 되게 */
+	$("#rp").val(${data.RCGNTN_PATH_NUM}).prop("selected", this.selected);
+	
+	/* 진행상태 선택 되게 */
+	$("#psNum").val(${data.PRGRS_STS_NUM}).prop("selected", this.selected);
+	
 	// 첨부파일 +버튼
 	$(".plus_btn").on("click", function() {
 		$("#att").click();
+	});
+	
+	$(".minus_btn").on("click", function() {
+		$("#attFileName").remove();
+		$(this).remove();
+		$(".plus_btn").show();
+		
+		$("#attFile").val(""); // 기존파일 초기화
 	});
 	
 	// 저장버튼
@@ -716,7 +744,7 @@ $(document).ready(function() {
 													if(res.res == "success") {
 														$("#listForm").submit();
 													} else {
-														alert("작성중 문제가 발생하였습니다.");
+														alert("수정중 문제가 발생하였습니다.");
 													}
 												},
 												error : function(request, status, error) {
@@ -950,10 +978,6 @@ $(document).ready(function() {
 			}
 		});
 	});
-	
-	$("#ccGrade").val(${data.GRADE_NUM}).prop("selected", this.selected);
-	$("#rp").val(${data.RCGNTN_PATH_NUM}).prop("selected", this.selected);
-	$("#psNum").val(${data.PRGRS_STS_NUM}).prop("selected", this.selected);
 });
 /* ******************************************* 고객 추가 팝업 ******************************************* */
 function ecAddPopup() {
@@ -1441,8 +1465,8 @@ function checkEmpty(sel) {
 }	
 function uploadName(e) {
 	var files = e.files;
-	var filename = files[0].name;
-	$("#fileName").val(filename);
+	var leadfilename = files[0].name;
+	$("#leadFileName").val(leadfilename);
 }
 </script>
 </head>
@@ -1561,14 +1585,32 @@ function uploadName(e) {
 							</tbody>
 						</table>
 						<!-- 첨부자료 -->
-							<input type="file" id="att" name="att" onchange="uploadName(this)" /> 
-							<input type="hidden" id="attFile" name="attFile" />
-						<div class="rvn_txt"> 첨부파일
-							<img class="plus_btn" src="resources/images/sales/plus.png" border='0' > 
-						</div>
-						<div class="cntrct_box_in">
-							<input type="text" id="fileName" name="fileName" readonly="readonly" />
-						</div>
+						<c:choose>
+							<c:when test="${empty data.ATT_FILE_NAME}">
+								<input type="file" id="att" name="att" style="display: none;" onchange="uploadName(this)" /> 
+								<input type="hidden" id="attFile" name="attFile" />
+								<div class="rvn_txt"> 첨부파일 
+									<img class="plus_btn" src="resources/images/sales/plus.png" border='0' > 									
+								</div>
+								<div class="cntrct_box_in">
+									<input type="text" id="leadFileName" name="leadFileName" readonly="readonly" />
+								</div>								
+							</c:when>
+							<c:otherwise>
+								<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+								<c:set var="leadFileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
+								<div class="rvn_txt"> 첨부파일 
+									<img class="plus_btn" src="resources/images/sales/plus.png" border='0' style="display: none;"> 
+								</div>
+								<div class="cntrct_box_in">
+									<span id="attFileName">${leadFileName}</span>
+									<img class="minus_btn" src="resources/images/sales/minus5.png" border='0'"> 
+									<input type="file" id="att" name="att" style="display: none;" onchange="uploadName(this)" /> 
+									<input type="hidden" id="attFile" name="attFile" />
+									<input type="text" id="leadFileName" name="leadFileName" readonly="readonly" />
+								</div>				
+							</c:otherwise>
+						</c:choose>
 					</div> <!-- bodyWrap end -->
 				</div>	
 			</form>

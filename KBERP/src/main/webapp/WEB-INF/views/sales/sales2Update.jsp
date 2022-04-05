@@ -526,6 +526,10 @@ textarea {
 	border: hidden;
 	outline: none;
 }
+.salesCont {
+	width: 927px;
+	height: 1138px;
+}
 /* 끝 */
 </style>
 <script type="text/javascript">
@@ -741,6 +745,19 @@ $(document).ready(function() {
 		});
 	});
 	
+	$("#sales_btn").on("click", "#salesContBtn_h", function() {
+		$(".salesCont").hide();
+		html = "<div class=\"up_btn\" id=\"salesContBtn_s\"></div>";
+		$("#sales_btn").html(html);
+	});
+	
+	$("#sales_btn").on("click", "#salesContBtn_s", function() {
+		$(".salesCont").show();
+		html = "<div class=\"drop_btn\" id=\"salesContBtn_h\"></div>";
+		$("#sales_btn").html(html);
+	});
+	
+	
 });
 
 
@@ -867,11 +884,9 @@ function uploadName(e) {
 						<!-- 영업번호 -->
 
 						<div class="bot_title">
-							<h3>
-								영업기회
-								<div class="drop_btn"></div>
-							</h3>
+							<h3>영업기회<span id="sales_btn"><div class="drop_btn" id="salesContBtn_h"></div></span></h3>
 						</div>
+						<div class="salesCont">
 						<hr class="hr_bot" color="white" width="925px">
 						<div class="page_cont_title_text">기본정보</div>
 						<hr class="hr_width">
@@ -1073,7 +1088,27 @@ function uploadName(e) {
 										<input type="button" class="btn" value="예정 사업 형태" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" id="expctdBsnsType" name="expctdBsnsType" value="${data.EXPCTD_BSNS_TYPE}" readonly="readonly" />
+										<select class="txt" id="expctdBsnsType" name="expctdBsnsType" value="${data.EXPCTD_BSNS_TYPE}" disabled="disabled">
+											<optgroup>
+												<c:choose>
+													<c:when test="${data.EXPCTD_BSNS_TYPE eq 0}">
+														<option value="0" selected="selected">민수 사업</option>
+														<option value="1">관공 사업</option>
+														<option value="2">기타</option>
+													</c:when>
+													<c:when test="${data.EXPCTD_BSNS_TYPE eq 1}">
+														<option value="0">민수 사업</option>
+														<option value="1" selected="selected">관공 사업</option>
+														<option value="2">기타</option>
+													</c:when>
+													<c:when test="${data.EXPCTD_BSNS_TYPE eq 2}">
+														<option value="0">민수 사업</option>
+														<option value="1">관공 사업</option>
+														<option value="2" selected="selected">기타</option>
+													</c:when>
+												</c:choose>
+											</optgroup>
+										</select>
 									</td>
 								</tr>
 								<tr height="40">
@@ -1096,18 +1131,13 @@ function uploadName(e) {
 								<input type="text" id="fileName" readonly="readonly" />
 							</div>
 						</div>
-
+					</div>
 						<!-- ********** 영업기회 끝 ********** -->
 						<hr class="hr_bot" color="#4B94F2" width="925px">
-
-
 						<!-- *************** 제안 부분 시작 **************** -->
 
 						<div class="bot_title">
-							<h3>
-								제안
-								<div class="drop_btn"></div>
-							</h3>
+							<h3>제안</h3>
 						</div>
 						<div class="page_cont_title_text">대출 상세정보</div>
 						<hr class="hr_width">

@@ -217,6 +217,12 @@ $(document).ready(function() {
 		
 		var html = "";
 		
+		
+			html+= "	<form action = \"#\" id = \"addForm\" method = \"post\">";
+			html+= "	<input type =\"hidden\" id = \"al\" name = \"al\" value = \"${al}\"/>";
+			html+= "	<input type =\"hidden\" id = \"empNum\" name = \"empNum\" value = \"${empNum}\"/>";
+			html+= "	<input type =\"hidden\" id = \"title\" name = \"title\" value = \"${title}\"/>";
+			html+= "	<input type =\"hidden\" id = \"cont\" name = \"cont\" value = \"${cont}\"/>";
 			html+= "	<div>																																	";
 			html+= "	<div style= \"border:1px solid #000; width:50px; height: 25px;\" >조직도</div>															";
 			html+= "	</div>                                                                                                                                  ";
@@ -267,6 +273,7 @@ $(document).ready(function() {
 			html+= "	</table>                                                                                                                        		";
 			html+= "	</div>                                                                                                                              	";
 			html+= "	</div>		                                                                                                                            ";
+			html+= "		</form>";
 			
 		makePopup({
 			bg : false,
@@ -278,6 +285,42 @@ $(document).ready(function() {
 			buttons : [{
 				name : "저장",
 				func:function() {
+					/* 여기에 넣기 */
+					var addForm = $("#addForm");
+		
+					addForm.ajaxForm({
+						success : function(res) {
+						/* 	// 물리파일명 보관
+							if(res.fileName.length > 0) {
+								$("#attFile").val(res.fileName[0]);
+							} */
+							
+							// 글 수정
+							var params = $("#addForm").serialize();
+							
+							$.ajax({
+								type : "post",
+								url : "draftTmpltBoxWriteAjax/insert",
+								dataType : "json",
+								data : params,
+								success : function(res) {
+									if(res.res == "success") {
+										console.log("@@@@@@@잘갔니")
+										closePopup();
+									} else {
+										alert("등록중 문제가 발생하였습니다.");
+									}
+								},
+								error : function(request, status, error) {
+									console.log(request.responseText);
+								}
+							});
+						},
+						error : function(req) {
+							console.log(req.responseText);
+						}
+					}); // ajaxForm end
+					addForm.submit();
 					console.log("One!");
 					closePopup();
 				}
