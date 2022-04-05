@@ -1,5 +1,5 @@
 <!-- 
-	견적 등록 : sales3QtnReg
+	견적 상세보기 : sales3QtnCont
  -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>견적 등록</title>
+<title>견적 상세보기</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -295,7 +295,7 @@ hr { /* 구분선 */
 	background-color: #F2F2F2;
 	text-align: left;
 	font-weight: bold;
-	margin-left: 40px;
+	margin-left: 45px;
 	margin-bottom: 5px;
 }
 
@@ -891,6 +891,9 @@ $(document).ready(function() {
 		} else if(checkEmpty("#qtnDate")) {
 			alert("견적일을 입력하세요.");
 			$("#qtnDate").focus();
+		} else if(checkEmpty("#pymntDate")) {
+			alert("납부일을 입력하세요.");
+			$("#pymntDate").focus();
 		} else {
 			makePopup({
 				bg : false,
@@ -921,9 +924,8 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
-											
-											$("#listForm").attr("action", "salesList"); // 우선 목록으로...
-											$("#listForm").submit();
+											location.href = "salesList";
+											console.log("성공");
 										} else {
 											alert("등록중 문제가 발생하였습니다.");
 										}
@@ -1010,6 +1012,7 @@ $(document).ready(function() {
 				$(".popup_box_md").on("click", ".popup_box_in", function() {
 					var mdnum = $(this).children("#mdnum").val();
 					document.getElementById("getMdNum").value = mdnum;
+					document.getElementById("mdNum").value = mdnum;
 					
 					var params = $("#mdListForm").serialize();
 					
@@ -1263,6 +1266,7 @@ $(document).ready(function() {
 	$(".md_bx").on("click", ".mdBox .dtl", function() {
 		var no = $(this).children("#mdNo").val();
 		document.getElementById("no").value = no;
+		document.getElementById("mdNum").value = no;
 		
 		var params = $("#mdNumForm").serialize();
 		
@@ -1473,11 +1477,13 @@ $(document).ready(function() {
 						buttons : [{
 							name : "적용",
 							func:function() {
+								$("#mdType").val(data.MD_TYPE_NUM).prop("selected", this.selected);
 								$("#prdmptn_psbl_check").val(data.MID_RDMPTN_PSBL_CHECK).prop("selected", this.selected);
 								$("#intrst_pymnt").val(data.INTRST_PYMNT_MTHD_NUM).prop("selected", this.selected);
 								$("#prncpl_pymnt").val(data.PRNCPL_PYMNT_MTHD_NUM).prop("selected", this.selected);
 								$("#intrstRate").val(data.INTRST_RATE);
-								console.log("kk");
+								$("#loanPrd").val(data.LOAN_PRD);
+								console.log("kkkkk");
 								closePopup();
 							}
 						}, {
@@ -1603,7 +1609,7 @@ function qtnMdList(list) {
 		html += "	<div class=\"md_nm\">" + data.MD_NAME + "</div>";
 		html += "	<div class=\"md_intrst\">이자율: " + data.INTRST_RATE + "%</div>";
 		html += "	<div class=\"md_grd\">한도금액: " + data.LIMIT_AMNT + "</div>";
-		html += "	<div class=\"md_prd\">대출기간: " + data.LOAN_PRD + "년</div>	";	
+		html += "	<div class=\"md_prd\">대출기간: " + data.LOAN_PRD + "</div>	";	
 		html += "	<span class=\"md_btn\">";
 		html += "		<span class=\"dtl\" id=\"dtl\">상세보기<input type=\"hidden\" id=\"mdNo\" name=\"mdNo\" value=\"" + data.MD_NUM + "\" /></span>";
 		html += "	</span>";
@@ -1618,6 +1624,32 @@ function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
 	$("#fileName").val(filename);
+}
+
+
+function test(t) {
+	//대출금액
+	var price = $("#LoanAmnt").val();
+	
+	if(t.value != -1) {	
+		if(t.value == 0) { // 부가세 포함
+			//공급가액
+			$("#splyPrice").val(Math.trunc(price / 1.1)); 
+			//세액
+			$("#taxAmnt").val(Math.trunc(price - $("#splyPrice").val() * 1));
+			//합계
+			$("#sumAmnt").val(($("#splyPrice").val() * 1) + ($("#taxAmnt").val() * 1));
+		} else if(t.value == 1) { // 부가세 미포함
+			$("#splyPrice").val(price); 
+			$("#taxAmnt").val(Math.trunc($("#splyPrice").val() * 0.1));
+			$("#sumAmnt").val(($("#splyPrice").val() * 1) + ($("#taxAmnt").val() * 1));
+		} else if(t.value == 2) { // 부가세 면세
+			$("#splyPrice").val(price); 
+			$("#taxAmnt").val('0');
+			$("#sumAmnt").val(price);
+		}
+	} // if(t.value != -1) end
+	
 }
 
 </script>
@@ -1649,7 +1681,8 @@ function uploadName(e) {
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">영업관리 - 견적 등록</div>
-			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" /> <img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
+			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" /> 
+			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -1665,9 +1698,6 @@ function uploadName(e) {
 						</h3>
 					</div>
 					<!-- 영업기회 -->
-					<div class="bodyWrap">
-						<!-- 시작 -->
-
 						<div class="page_cont_title_text">기본정보</div>
 						<hr class="hr_width">
 						<table>
@@ -1912,7 +1942,6 @@ function uploadName(e) {
 							</div>
 						</div>
 						<!-- 끝 -->
-					</div>
 
 					<hr class="hr_bot" color="#4B94F2" width="925px">
 					
@@ -2107,7 +2136,9 @@ function uploadName(e) {
 						
 						<hr class="hr_bot" color="#4B94F2" width="925px">
 						
-						<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
+				<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
+					<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
+					<input type="hidden" id= "mdNum" name="mdNum" /> <!-- 영업기회에서 가져온 영업번호 -->
 <!-- ************************************************ 견적 시작 ************************************************ -->
 					<div class="bot_title"><h3>견적<div class="drop_btn"></div></h3></div>
 					 <hr class="hr_bot" color="white" width="925px"> 
@@ -2134,7 +2165,7 @@ function uploadName(e) {
 							<tr height="40">
 								<td><input type="button" class="btn" value="상품유형" readonly="readonly" /></td>
 								<td colspan="3">
-									<select class="txt">
+									<select class="txt" id="mdType" name="mdType">
 									 	<optgroup>
 									 		<option value="-1">선택 하세요</option>
 									 		<option value="0">개인사업</option>
@@ -2149,16 +2180,20 @@ function uploadName(e) {
 									<td colspan="3"><input type="date" class="txt" id="qtnDate" name="qtnDate" /></td>
 							</tr>
 							<tr height="40">
+									<td><input type="button" class="btn" value="대출금액*" readonly="readonly" /></td>
+									<td colspan="3"><input type="text" class="txt" id="LoanAmnt" name="LoanAmnt" /></td>		
+							</tr> 
+							<tr height="40">
 									<td><input type="button" class="btn" value="공급가액*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" id="splyPrice" name="sqlyPrice" /></td>		
+									<td colspan="3"><input type="text" class="txt" id="splyPrice" name="sqlyPrice" readonly="readonly" /></td>		
 							</tr> 
 							<tr height="40">
 									<td><input type="button" class="btn" value="세액*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" id="taxAmnt" name="taxAmnt" /></td>
+									<td colspan="3"><input type="text" class="txt" id="taxAmnt" name="taxAmnt" readonly="readonly" /></td>
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="합계액*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" /></td>
+									<td colspan="3"><input type="text" class="txt" id="sumAmnt" name="sumAmnt" readonly="readonly" /></td>
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="중도상환가능여부" readonly="readonly" /></td>
@@ -2173,7 +2208,7 @@ function uploadName(e) {
 									</td>
 									<td><input type="button" class="btn" value="부가세*" readonly="readonly" /></td>
 									<td>
-										<select class="txt" id="srtx" name="srtx">
+										<select class="txt" id="srtx" name="srtx" onchange="test(this);">
 										 	<optgroup>
 										 		<option value="-1">선택 하세요</option>
 										 		<option value="0">포함</option>
@@ -2211,27 +2246,50 @@ function uploadName(e) {
 								<td><input type="button" class="btn" value="이자율(%)" readonly="readonly" /></td>
 								<td><input type="text" class="txt" id="intrstRate" name="intrstRate" /></td>
 								<td><input type="button" class="btn" value="납부일" readonly="readonly" /></td>
-								<td colspan="2"><input type="text" class="txt" placeholder="매달    일" /></td>
+								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" placeholder="매달    일" /></td>
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
-								<td><input type="text" class="txt" /></td>
-								<td><input type="button" class="btn" value="월 이자액" readonly="readonly" /></td>
-								<td colspan="2"><input type="text" class="txt" /></td>
+								<td><input type="button" class="btn" value="대출기간" readonly="readonly" /></td>
+								<td>
+									<select class="txt" id="loanPrd" name="loanPrd">
+										<optgroup>
+											<option value="-1">선택 하세요</option>
+											<option value="0">6개월</option>  
+											<option value="1">1년</option>  
+											<option value="2">3년</option>  
+											<option value="3">5년</option>  
+										</optgroup>
+									</select>	
+								</td>
+								<td></td>
+								<td colspan="2" style="border:none;"></td>
 							</tr>
+							<!-- <tr height="40">
+								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
+								<td><input type="text" class="txt" id="monthPymntAmnt" name="monthPymntAmnt" readonly="readonly" /></td>
+								<td><input type="button" class="btn" value="월 이자액" readonly="readonly" /></td>
+								<td colspan="2"><input type="text" class="txt" id="monthIntrstAmnt" name="monthIntrstAmnt" readonly="readonly" /></td>
+							</tr> -->
 							<tr height="40">
 								<td><input type="button" class="btn" value="비고" readonly="readonly"/></td>
-								<td colspan="3"><input type="text" class="rmks" /></td>
+								<td colspan="3"><input type="text" class="rmks" name="rmksCont" /></td>
 							</tr>							
 						</tbody>
 					</table>
 					
 					<!-- 첨부자료 -->
-					<div class="rvn_txt"> 첨부자료 (0)
-						<input type=file name='file1' style='display: none;'/> 
-						<img class="plus_btn" src="resources/images/sales/plus.png" border='0' onclick="document.all.file1.click();" > 
+					<input type=file id="att" name="att" onchange="uploadName(this)" />
+					<input type="hidden" id="attFile" name="attFile" />
+					<div class="spc">
+						<div class="adc_txt">
+							첨부자료
+							<img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
+						</div>
+						<div class="cntrct_box_in">
+							<input type="text" id="fileName" readonly="readonly" />
+						</div>
 					</div>
-					<div class="cntrct_box_in"></div>
+				</form>	
 					<!-- 지난 견적서 -->
 					<div class="mgtop"></div>
 					<div class="bot_title"><h3>지난 견적서<div class="drop_btn"></div></h3></div>
@@ -2262,7 +2320,6 @@ function uploadName(e) {
 							<div class="txtOp"><pre>법인사업    중소기업 소액 대출      3%          1200000만원</pre></div>
 						</div>
 					</div>
-						</form>
 					<!-- ********* 견적 끝 ********* -->
 				</div>
 			</div>

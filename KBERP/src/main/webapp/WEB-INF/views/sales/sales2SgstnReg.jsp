@@ -543,14 +543,11 @@ function uploadName(e) {
 				<div class="bodyWrap">
 					<!-- 시작 -->
 
-
 					<div class="bot_title">
 						<h3>영업기회<span id="sales_btn"><div class="drop_btn" id="salesContBtn_h"></div></span></h3>
 					</div>
+					<div class="salesCont">
 					<!-- 영업기회 -->
-					<div class="bodyWrap">
-						<!-- 시작 -->
-
 						<div class="page_cont_title_text">기본정보</div>
 						<hr class="hr_width">
 						<table>
@@ -794,9 +791,8 @@ function uploadName(e) {
 								<a href="resources/upload/${bsns.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
 							</div>
 						</div>
-						<!-- 끝 -->
 					</div>
-
+						<!-- 끝 -->
 					<hr class="hr_bot" color="#4B94F2" width="925px">
 					<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
 						<!-- ******************* 제안 시작 ******************* -->
