@@ -764,7 +764,23 @@ function drawOpList(list) {
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="예정 사업 형태" /></td>
-									<td colspan="3"><input type="text" class="txt" readonly="readonly" value="${data.EXPCTD_BSNS_TYPE}" /></td>
+									<td colspan="3">
+										<select class="txt" disabled="disabled">
+											<optgroup>
+												<c:choose>
+													<c:when test="${data.EXPCTD_BSNS_TYPE eq 0}">													
+														<option value="0" selected="selected">민수 사업</option>
+													</c:when>
+													<c:when test="${data.EXPCTD_BSNS_TYPE eq 1}">													
+														<option value="0" selected="selected">관공 사업</option>
+													</c:when>
+													<c:when test="${data.EXPCTD_BSNS_TYPE eq 2}">													
+														<option value="0" selected="selected">기타</option>
+													</c:when>
+												</c:choose>
+											</optgroup>
+										</select>
+									</td>
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="비고" /></td>
