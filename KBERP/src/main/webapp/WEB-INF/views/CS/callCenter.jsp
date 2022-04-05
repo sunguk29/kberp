@@ -452,13 +452,13 @@
 	vertical-align: top;
 	width: 510px;
 	height: 260px;
-	overflow: auto;
+	overflow-y: scroll;
 }
 
 .cnsl_rcrd_table{
 	display: inline-table;
 	border-collapse: collapse;
-	width: 100%;
+	width: 493px;
 	margin-bottom: 15px;
 }
 .cnsl_rcrd_table thead tr {
@@ -747,15 +747,16 @@ $(document).ready(function() {
 						success : function(res) {
 							console.log(res);
 							drawCnslList(res.list);
+							closePopup();
 						},
 						error : function(request, status, error) {
 							console.log(request.responseText);
+							closePopup();
 
 						}
 					});
-					
-					closePopup();
 				}); // 고객정보 팝업 tr 클릭 끝
+				
 			},
 			draggable : true,
 			buttons : [{
@@ -791,10 +792,10 @@ $(document).ready(function() {
 				console.log(request.responseText);
 	
 			}
-		});
-		
-		
+		});	
 	}); // 상담이력 tr 클릭 끝
+	
+	
 	
 	function drawCnslList(list) {
 		var html = "";

@@ -84,6 +84,33 @@ public class FcltyController {
 
 		return mav;
 	}
+	
+	//예약가능한 시설물 목록
+	@RequestMapping(value = "/fcltUseRqstCalListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String fcltUseRqstCalAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+
+		
+		 int cnt = iCommonService.getIntData("Fclty.fcltUseRqstCalListCnt",params);
+		 
+		 PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt,5,5);
+		
+		 params.put("startCount", Integer.toString(pb.getStartCount()));
+		 params.put("endCount", Integer.toString(pb.getEndCount()));
+		  
+		 
+		List<HashMap<String, String>> list = iCommonService.getDataList("Fclty.fcltUseRqstCalList", params);
+
+		modelMap.put("pb", pb);
+		modelMap.put("list", list);
+
+		return mapper.writeValueAsString(modelMap);
+
+	}
+	
 	//시설물예약등록
 	@RequestMapping(value = "/fcltUseRqstWrite")
 	public ModelAndView fcltUseRqstWrite(@RequestParam HashMap<String, String> params, ModelAndView mav)
@@ -105,7 +132,9 @@ public class FcltyController {
 
 		try {
 			switch (gbn) {
-			// insert아직못함 ..
+			case "insert":
+				iCommonService.deleteData("Fclty.fcltUseRqstWrite", params);
+				break;
 			case "delete":
 				iCommonService.deleteData("Fclty.fcltUseRqstCncl", params);
 				break;

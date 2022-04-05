@@ -672,7 +672,7 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-	/* 검색 상단 고객사분류버튼 클릭시 */
+	/* 검색 상단 단계 버튼 클릭시 */
 	$(".stageM").on("click", ".stage", function() {
 		if($(this).attr("num") != "9") {
 			$(".stageM").children(".stage_on").attr("class", "stage");
