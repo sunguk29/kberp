@@ -194,6 +194,7 @@ function drawPaging(pb) {
 		
 			</table>
 			<div class="board_bottom">
+			
 				<div class="pgn_area">
 				</div>
 				<div class="cmn_btn_ml" id="rsvtn_btn">예약신청</div>

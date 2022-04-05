@@ -204,7 +204,7 @@
 	<select id="getSales2BringLead" parameterType="hashmap" resultType="hashmap">
 		SELECT S.SALES_NUM, L.LEAD_NUM, L.LEAD_NAME, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NUM, E.EMP_NAME, S.MNGR_EMP_NUM,
 		       TO_CHAR(S.START_DATE, 'YYYY-MM-DD') AS START_DATE,
-		       DECODE(CCG.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME
+		       DECODE(CCG.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME, CC.CLNT_CMPNY_NUM
 		FROM SALES S INNER JOIN EMP E
 		                     ON E.EMP_NUM = S.MNGR_EMP_NUM
 		             INNER JOIN LEAD L
@@ -246,7 +246,7 @@
 	
 	<!-- 예정사업 상세정보tab 제안 단계로 가져오기 -->
 	<select id="getSales2BringBsns" parameterType="hashmap" resultType="hashmap">
-		SELECT S.SALES_NUM, EXPCTD_BSNS_NAME, EXPCTD_BSNS_TYPE, RMKS, EBAF.ATT_FILE_NAME
+		SELECT S.SALES_NUM, EBI.EXPCTD_BSNS_NAME, EBI.EXPCTD_BSNS_TYPE, EBI.RMKS, EBAF.ATT_FILE_NAME
 		FROM SALES S LEFT OUTER JOIN EXPCTD_BSNS_INFO EBI
 		                          ON S.SALES_NUM = EBI.SALES_NUM
 		                  INNER JOIN EXPCTD_BSNS_ATT_FILE EBAF
@@ -328,7 +328,12 @@
 	
 	<!-- 제안 대출 상세정보tab 견적으로 가져오기 -->
 	<select id="getSales3BringLoan" resultType="hashmap" parameterType="hashmap">
-	
+		SELECT S.SALES_NUM, SLDI.SGSTN_LOAN_CAUSE_NUM, SLDI.SGSTN_LOAN_SCALE, SLDI.SGSTN_LOAN_TYPE,
+       		   TO_CHAR(SLDI.SGSTN_LOAN_TIME, 'YYYY-MM') AS SGSTN_LOAN_TIME,
+       		   TO_CHAR(SLDI.SGSTN_RDMPTN_TIME, 'YYYY-MM') AS SGSTN_RDMPTN_TIME
+		FROM SALES S INNER JOIN SGSTN_LOAN_DTL_INFO SLDI
+		                          ON S.SALES_NUM = SLDI.SALES_NUM
+		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
 	<!-- 제안 고객사 상세정보tab -->
@@ -340,7 +345,11 @@
 	
 	<!-- 제안 고객사 상세정보tab 견적으로 가져오기 -->
 	<select id="getSales3BringClntCmpny" resultType="hashmap" parameterType="hashmap">
-	
+		SELECT S.SALES_NUM, SCCDI.SGSTN_TOTAL_AMNT, SCCDI.SGSTN_DEBT_AMNT,
+		       SCCDI.SGSTN_AVG_RVN_AMNT, SCCDI.SGSTN_EMP_COUNT
+		FROM SALES S LEFT OUTER JOIN SGSTN_CLNT_CMPNY_DTL_INFO SCCDI
+		                          ON S.SALES_NUM = SCCDI.SALES_NUM
+		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
 	
@@ -350,9 +359,12 @@
 		VALUES ( #{salesNum}, #{dtlCont}, #{rmrks}, SYSDATE )
 	</insert>
 	
-	<!-- 제안 상세정보tab 견적으로 가져오기 -->
+	<!-- 제안 상세정보tab 견적으로 가져오기. 첨부파일 제외함 -->
 	<select id="getSales3BringDtlInfo" resultType="hashmap" parameterType="hashmap">
-	
+		SELECT S.SALES_NUM, SDI.DTL_CONT, SDI.RMRKS
+		FROM SALES S LEFT OUTER JOIN SGSTN_DTL_INFO SDI
+		                          ON S.SALES_NUM = SDI.SALES_NUM
+		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
 	<!-- 제안 상세정보 첨부파일tab -->
@@ -361,13 +373,8 @@
 		VALUES ( SGSTN_ATT_FILE_SEQ.NEXTVAL, #{salesNum}, #{attFile} )
 	</insert>
 	
-	<!-- 제안 상세정보 첨부파일tab 견적으로 가져오기 -->
-	<select id="getSales3BringDtlInfoAtt" resultType="hashmap" parameterType="hashmap">
 	
-	</select>
-	
-	
-		<!-- 제안 상세보기 -->
+	<!-- 제안 상세보기 -->
 	<select id="getSales2" resultType="hashmap" parameterType="hashmap">
 		SELECT S.SALES_NUM, SLDI.SGSTN_LOAN_CAUSE_NUM, SLDI.SGSTN_LOAN_SCALE,
 		       SLDI.SGSTN_LOAN_TYPE, TO_CHAR(SLDI.SGSTN_LOAN_TIME, 'YYYY-MM') AS SGSTN_LOAN_TIME, TO_CHAR(SLDI.SGSTN_RDMPTN_TIME, 'YYYY-MM') AS SGSTN_RDMPTN_TIME,
@@ -414,6 +421,12 @@
 	<!-- 영업기회에서 제안으로 단계 변경 -->
 	<update id="sales1to2" parameterType="hashmap">
 		UPDATE SALES SET PRGRS_STS_NUM = '27'
+		WHERE SALES_NUM = #{salesNum}
+	</update>
+	
+	<!-- 제안에서 견적으로 단계 변경 -->
+	<update id="sales2to3" parameterType="hashmap">
+		UPDATE SALES SET PRGRS_STS_NUM = '37'
 		WHERE SALES_NUM = #{salesNum}
 	</update>
 
@@ -508,7 +521,60 @@
 	</update>
 	
 	
+	<!-- 상품 팝업 개수 -->
+	<select id="popupMdListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM MD
+		WHERE 1 = 1
+		AND DEL_CHECK IS NULL
+	</select>
 	
+	<!-- 상품 팝업 리스트 -->
+	<select id="popupMdList" parameterType="hashmap" resultType="hashmap">
+		SELECT M.MD_NUM, M.MD_NAME, M.LIMIT_AMNT, M.INTRST_RATE, M.SALES_STS, M.MD_GRADE
+		FROM ( SELECT MD_NUM, MD_NAME, LIMIT_AMNT, INTRST_RATE,
+		       DECODE(SALES_STS_NUM, 0, '판매가능', 1, '판매중단', 2, '출시예정') AS SALES_STS,
+		              ROW_NUMBER() OVER(ORDER BY MD_NUM DESC) AS RNUM,
+		              DECODE(MD_GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D', 5, 'E') AS MD_GRADE
+		       FROM MD
+		       WHERE DEL_CHECK IS NULL ) M
+		WHERE M.RNUM BETWEEN #{startCount} AND #{endCount}
+	</select>
+	
+	<!-- 견적(등록) 상품 리스트 -->
+	<select id="mdList" parameterType="hashmap" resultType="hashmap">
+		SELECT CC.CLNT_CMPNY_NAME, MD.MD_NAME, MD.INTRST_RATE, DECODE(MD_GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D', 5, 'E') AS MD_GRADE, 
+		       DECODE(MD.LOAN_PRD, 0, '6개월', 1, '1년', 2, '3년', 3, '5년') AS LOAN_PRD, MD.LIMIT_AMNT, MD.MD_NUM
+		FROM CLNT_CMPNY CC INNER JOIN MD MD
+		                           ON CC.GRADE_NUM = MD.MD_GRADE_NUM
+		WHERE CC.CLNT_CMPNY_NUM = #{ccn}
+	</select>
+	
+	
+	<!-- 견적 등록 -->
+	<insert id="sales3QtnAdd" parameterType="hashmap">
+		INSERT INTO QTN(QTN_NUM, SALES_NUM, MD_NUM, QTN_NAME, QTN_DATE, SPLY_PRICE, TAX_AMNT, SRTX, INTRST_RATE, PYMNT_DATE, RMKS, LOAN_AMNT)
+		VALUES(QTN_SEQ.NEXTVAL, #{salesNum}, #{mdNum}, #{qtnName}, #{qtnDate}, #{sqlyPrice}, #{taxAmnt}, #{srtx}, #{intrstRate}, #{pymntDate}, #{rmksCont}, #{LoanAmnt})
+	</insert>
+	
+	<!-- 견적 첨부파일 등록 -->
+	<insert  id="sales3QtnAttAdd" parameterType="hashmap">
+		INSERT INTO QTN_ATT_FILE ( ATT_FILE_NUM, QTN_NUM, ATT_FILE_NAME )
+		VALUES (QTN_ATT_FILE_SEQ.NEXTVAL, QTN_SEQ.CURRVAL, #{attFile} )
+	</insert>
+	
+	<!-- 견적 상세보기 -->
+	<select id="getSales3" resultType="hashmap" parameterType="hashmap">
+		SELECT S.SALES_NUM, Q.QTN_NUM, Q.QTN_NAME, TO_CHAR(Q.QTN_DATE, 'YYYY-MM-DD') AS QTN_DATE,
+		       Q.LOAN_AMNT, Q.SPLY_PRICE, Q.TAX_AMNT, (Q.SPLY_PRICE + Q.TAX_AMNT) AS TOTAL,
+		       Q.SRTX, Q.INTRST_RATE, Q.PYMNT_DATE, Q.RMKS,
+		       M.MD_TYPE_NUM, M.MID_RDMPTN_PSBL_CHECK, M.INTRST_PYMNT_MTHD_NUM, M.PRNCPL_PYMNT_MTHD_NUM, M.LOAN_PRD
+		FROM SALES S INNER JOIN QTN Q
+		                     ON S.SALES_NUM = Q.SALES_NUM
+		             INNER JOIN MD M
+		                     ON Q.MD_NUM = M.MD_NUM
+		WHERE S.SALES_NUM = #{salesNum}
+	</select>
 	
 </mapper>
 

@@ -17,7 +17,7 @@
 	</select>
 	
 	<select id="getChitMngList" resultType="hashmap" parameterType="hashmap">
-		SELECT CHIT_NUM, AMNT, RMRKS
+		SELECT CHIT_NUM, TO_CHAR(AMNT, '999,999,999,999') AS AMNT, RMRKS
 		FROM (  SELECT CHIT_NUM, AMNT, RMRKS, ROW_NUMBER() OVER(ORDER BY CHIT_NUM DESC) AS RNUM
 				FROM (  SELECT CHIT_NUM, ACNT_NUM, AMNT, RMRKS, TO_CHAR(DATE_HR, 'YYYY-MM') AS MONTH
 				        FROM EXPNS_RSLTN ER INNER JOIN ACNT_CODE AC
@@ -33,7 +33,7 @@
 	</select>
 	
 	<select id="getChitMngData" resultType="hashmap" parameterType="hashmap">
-		SELECT SUM(AMNT) AS DEVIT_SUM
+		SELECT TO_CHAR(SUM(AMNT), '999,999,999,999') AS DEVIT_SUM
 		FROM (  SELECT CHIT_NUM, AMNT, TO_CHAR(DATE_HR, 'YYYY-MM') AS MONTH
 		        FROM EXPNS_RSLTN ER INNER JOIN ACNT_CODE AC
 		                                    ON ER.ACNT_NUM = AC.SUB_CTGR_ACNT_CODE

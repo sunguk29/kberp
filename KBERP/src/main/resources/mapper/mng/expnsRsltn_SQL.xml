@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="expnsRsltn">
+	<select id="getexpnsRsltnCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*)AS CNT
+ 		FROM(SELECT S.DATE_MON, S.CRP, S.IND, S.TOTAL
+		FROM (  SELECT TO_CHAR(DATE_HR, 'YYYY-MM') AS DATE_MON, EMP_NUM, SUM(DECODE(EXPNS_TYPE, '법인', AMNT)) AS CRP, 
+		     		   SUM(DECODE(EXPNS_TYPE, '개인', AMNT)) AS IND, SUM(AMNT) AS TOTAL,ROW_NUMBER()OVER( ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
+				FROM EXPNS_RSLTN
+				WHERE EMP_NUM = #{sesEmpNum}
+				GROUP BY TO_CHAR(DATE_HR, 'YYYY-MM'),EMP_NUM
+			 ) S
+             )
+            
+	</select>
+	<select id="getexpnsRsltnList" resultType="hashmap" parameterType="hashmap">
+		SELECT S.DATE_MON, S.CRP, S.IND, S.TOTAL
+		FROM (  SELECT TO_CHAR(DATE_HR, 'YYYY-MM') AS DATE_MON, EMP_NUM, SUM(DECODE(EXPNS_TYPE, '법인', AMNT)) AS CRP, 
+		     		   SUM(DECODE(EXPNS_TYPE, '개인', AMNT)) AS IND, SUM(AMNT) AS TOTAL,ROW_NUMBER()OVER( ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
+				FROM EXPNS_RSLTN 
+				WHERE EMP_NUM = #{sesEmpNum}
+				GROUP BY TO_CHAR(DATE_HR, 'YYYY-MM'),EMP_NUM
+			 ) S
+			 WHERE S.RNUM BETWEEN #{startCount} AND #{endCount}
+			 ORDER BY S.RNUM ASC
+             
+             
+	</select>
+
+</mapper>

@@ -49,10 +49,7 @@
 </insert>
 
 <update id="faqUpdate" parameterType="hashmap">
-	UPDATE FAQ SET EMP_NUM =#{emp_num},
-                 WRTNG_TITLE = #{wrtng_title},
-                 WRTNG_CONT = #{wrtng_cont},
-                 WRTNG_DATE = SYSDATE
+	UPDATE FAQ SET WRTNG_TITLE=#{title}, WRTNG_CONT=#{cont}
 	WHERE FAQ_NUM = #{no}	
 </update>
 <delete id="faqDelete" parameterType="hashmap">

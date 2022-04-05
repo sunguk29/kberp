@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gdj43.kberp.common.CommonProperties;
 import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.common.service.ICommonService;
@@ -49,7 +50,8 @@ public class PrsnlController {
 				System.out.println("혹시 모를 예외처리");
 				new Exception();
 			} else {
-				System.out.println(params.get("empNum"));
+				System.out.println("super : " + params.get("superEmpNum"));
+				System.out.println("empNum : " + params.get("empNum"));
 				params.put("sEmpNum", params.get("empNum"));
 				mav.addObject("is_admnstr", "1");
 				System.out.println(params.get("superEmpNum") + " 관리자 모드로 조회합니다.");
@@ -62,9 +64,9 @@ public class PrsnlController {
 			if (menuAthrty != 0) { // 읽기, 쓰기 권한이 있을 때
 				mav.addObject("menuAthrty", menuAthrty);
 				
-				HashMap<String, String> basicInfoData = iCommonService.getData("prsnl.getBasicInfo", params);
+				//HashMap<String, String> basicInfoData = iCommonService.getData("prsnl.getBasicInfo", params);
 				
-				mav.addObject("basicInfoData", basicInfoData);
+				//mav.addObject("basicInfoData", basicInfoData);
 				mav.setViewName("hr/prsnlCard");
 			} else { // 권한 없을 때
 				mav.setViewName("exception/PAGE_NOT_FOUND");
@@ -116,6 +118,7 @@ public class PrsnlController {
 			}
 			
 			HashMap<String, String> tabData = new HashMap<>();
+			List<HashMap<String, String>> bankList = new ArrayList<>();
 			List<HashMap<String, String>> tabDataList = new ArrayList<>();
 			switch (tabName) {
 			case "human_info_btn" :
@@ -126,6 +129,7 @@ public class PrsnlController {
 				break;
 			case "slry_info_btn" :
 				tabData = iCommonService.getData("prsnl.getSlryInfo", params);
+				bankList = iCommonService.getDataList("prsnl.getBankList");
 				break;
 			case "edctn_level_btn" :
 				tabDataList = iCommonService.getDataList("prsnl.getEdctnLevel", params);
@@ -141,8 +145,10 @@ public class PrsnlController {
 			/*
 			 * if (tabData == null) { new Exception(); }
 			 */
+			System.out.println("check 66");
 			modelMap.put("tabName", tabName);
 			modelMap.put("tabData", tabData);
+			modelMap.put("bankList", bankList);
 			modelMap.put("tabDataList", tabDataList);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -153,7 +159,7 @@ public class PrsnlController {
 	
 	@RequestMapping(value = "/prsnlCardActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String prsnlCardAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+	public String prsnlCardActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
@@ -178,7 +184,19 @@ public class PrsnlController {
 				}
 				break;
 			case "update" :
-				
+				switch (params.get("popup_id")) {
+				case "human_info_btn" :
+					check = iCommonService.updateData("prsnl.editHumanInfo", params);
+					break;
+					
+				case "slry_info_btn" :
+					check = iCommonService.updateData("prsnl.editSlryInfo", params);
+					break;
+					
+				case "admnstr_edit_popup" :
+					check = iCommonService.updateData("prsnl.editBasicInfo", params);
+					break;
+				}
 				break;
 			case "delete" :
 				switch (params.get("tabId")) {
@@ -206,10 +224,37 @@ public class PrsnlController {
 			e.printStackTrace();
 			modelMap.put("res", "failed");
 		}
-		System.out.println(mapper.writeValueAsString(modelMap));
+
 		return mapper.writeValueAsString(modelMap);
 	}
+	
+	@RequestMapping(value = "/prsnlCardSubAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String prsnlCardSubAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		// 구현 내용
+		try {
+			HashMap<String, String> data = new HashMap<>();
+			switch (gbn) {
+			case "reloadBasicInfo" :
+				data = iCommonService.getData("prsnl.getBasicInfo", params);
+				String filePath = CommonProperties.FILE_UPLOAD_PATH;
+				modelMap.put("filePath", filePath);
+				System.out.println("check 55");
+				break;
+			}
+			modelMap.put("data", data);
+			modelMap.put("res", "success");
+		} catch (Exception e) {
+			e.printStackTrace();
+			modelMap.put("res", "failed");
+		}
 
+		return mapper.writeValueAsString(modelMap);
+	}
+	
 	@RequestMapping(value = "/empInqry")
 	public ModelAndView empInqry(@RequestParam HashMap<String, String> params, HttpSession session, ModelAndView mav) throws Throwable {
 		try {

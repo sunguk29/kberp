@@ -113,7 +113,7 @@ public class CallCntrController {
 				return mapper.writeValueAsString(modelMap);
 			}
 	
-	// [이력] 상담노트
+	// [이력] 상담노트 단건
 	@RequestMapping(value = "/rcrdCnslNoteAjax", method = RequestMethod.POST, 
 			produces = "text/json;charset=UTF-8")
 		@ResponseBody

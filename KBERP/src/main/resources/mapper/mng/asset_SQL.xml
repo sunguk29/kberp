@@ -210,4 +210,36 @@
 		INSERT INTO ASSET_TKT(TKT_NUM, RGSTRTN_EMP_NUM, ASSET_NUM, TKT_EMP_NUM, RMRKS, TKT_DATE, QUNTY, QUNTY_DVSN_NUM)
 		VALUES(ASSET_TKT_SEQ.NEXTVAL, #{rgstrtnEmpNum}, #{assetNum}, #{empNum}, #{rmrks}, #{tktdt}, #{qunty}, #{quntynum})
 	</insert>
+	
+	<!-- 시설물등록시 관리자리스트 -->
+<select id="getEmpList" resultType="hashmap" parameterType="hashmap">
+	SELECT O.EMP_NUM,O.EMP_NAME
+	FROM       ( SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM DESC) AS RNUM
+        		FROM DEPT D INNER JOIN APNTM A
+                    		ON D.DEPT_NUM = A.DEPT_NUM
+                   			INNER JOIN EMP E
+                    		ON A.EMP_NUM = E.EMP_NUM
+        		WHERE D.DEPT_NUM = 5 
+	             <if test="sendSrchTxt != null and sendSrchTxt != ''">
+	             	AND E.EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
+	             </if>
+	            )O
+	WHERE O.RNUM BETWEEN #{startCount} AND #{endCount}
+	
+</select>
+
+<!-- 시설물등록시 관리자리스트 cnt-->
+<select id="getEmpCnt" resultType="Integer" parameterType="hashmap">
+	SELECT COUNT(*)
+	FROM(   SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM DESC) AS RNUM
+       		FROM DEPT D INNER JOIN APNTM A
+                    ON D.DEPT_NUM = A.DEPT_NUM
+                    INNER JOIN EMP E
+                    ON A.EMP_NUM = E.EMP_NUM
+       		WHERE D.DEPT_NUM = 5 
+		<if test="sendSrchTxt != null and sendSrchTxt != ''">
+			AND E.EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
+		</if>
+		) 
+</select>
 </mapper>

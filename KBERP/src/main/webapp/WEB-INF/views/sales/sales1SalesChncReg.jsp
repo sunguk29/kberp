@@ -490,6 +490,9 @@ $(document).ready(function() {
 		} else if($("#loanHopeTime").val() == 9) {
 			alert("대출 희망 시기를 입력하세요.");
 			$("#loanHopeTime").focus();
+		} else if($("#expctdBsnsType").val() == 9) {
+			alert("예정 사업 형태를 입력하세요.");
+			$("#expctdBsnsType").focus();
 		} else {
 			makePopup({
 				bg : true,
@@ -760,10 +763,17 @@ function uploadName(e) {
 								</tr>
 								<tr height="40">
 									<td>
-										<input type="button" class="btn" value="예정 사업 형태" />
+										<input type="button" class="btn" value="예정 사업 형태*" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" id="expctdBsnsType" name="expctdBsnsType" />
+										<select class="txt" id="expctdBsnsType" name="expctdBsnsType" required>
+											<optgroup>
+												<option value="9">선택하세요</option>
+												<option value="0">민수 사업</option>
+												<option value="1">관공 사업</option>
+												<option value="2">기타</option>
+											</optgroup>
+										</select>
 									</td>
 								</tr>
 								<tr height="40">

@@ -140,7 +140,7 @@ function drawList(list) {
 		html += "<td>" + data.EXPNS_DATE + "</td>";
 		html += "<td class=\"board_table_hover\" id=\"chitNum\" chitnum=\"" + data.CHIT_NUM + "\">" + data.CHIT_NUM + "</td>";
 		html += "<td>" + data.EXPNS_TYPE + "</td>";
-		html += "<td>" + data.AMNT + "</td>";
+		html += "<td>" + data.AMNT + "원</td>";
 		html += "<td>" + data.EXPNS + "</td>";
 		html += "<td>" + data.ACNT_NAME + "</td>";
 		html += "</tr>"

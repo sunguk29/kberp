@@ -21,7 +21,7 @@ import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 import com.gdj43.kberp.web.sales.service.ISchdlService;
-import com.gdj43.kberp.web.sales.service.SchdlService;
+
 
 @Controller
 public class RprtController {
@@ -36,7 +36,12 @@ public class RprtController {
 	
 	
 	
-	
+	//고객 보고서
+	@RequestMapping(value = "/clntChart")
+	public ModelAndView clntList(ModelAndView mav) {
+		mav.setViewName("sales/rprt/clntChart");
+		return mav;
+	}
 	
 	
 	/* 영업 차트 */

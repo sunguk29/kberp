@@ -543,14 +543,11 @@ function uploadName(e) {
 				<div class="bodyWrap">
 					<!-- 시작 -->
 
-
 					<div class="bot_title">
 						<h3>영업기회<span id="sales_btn"><div class="drop_btn" id="salesContBtn_h"></div></span></h3>
 					</div>
+					<div class="salesCont">
 					<!-- 영업기회 -->
-					<div class="bodyWrap">
-						<!-- 시작 -->
-
 						<div class="page_cont_title_text">기본정보</div>
 						<hr class="hr_width">
 						<table>
@@ -749,7 +746,27 @@ function uploadName(e) {
 										<input type="button" class="btn" value="예정 사업 형태" />
 									</td>
 									<td colspan="3">
-										<input type="text" class="txt" id="expctdBsnsType" name="expctdBsnsType" value="${bsns.EXPCTD_BSNS_TYPE}" readonly="readonly" />
+										<select class="txt" id="expctdBsnsType" name="expctdBsnsType" value="${bsns.EXPCTD_BSNS_TYPE}" disabled="disabled">
+											<optgroup>
+												<c:choose>
+													<c:when test="${bsns.EXPCTD_BSNS_TYPE eq 0}">
+														<option value="0" selected="selected">민수 사업</option>
+														<option value="1">관공 사업</option>
+														<option value="2">기타</option>
+													</c:when>
+													<c:when test="${bsns.EXPCTD_BSNS_TYPE eq 1}">
+														<option value="0">민수 사업</option>
+														<option value="1" selected="selected">관공 사업</option>
+														<option value="2">기타</option>
+													</c:when>
+													<c:when test="${bsns.EXPCTD_BSNS_TYPE eq 2}">
+														<option value="0">민수 사업</option>
+														<option value="1">관공 사업</option>
+														<option value="2" selected="selected">기타</option>
+													</c:when>
+												</c:choose>
+											</optgroup>
+										</select>
 									</td>
 								</tr>
 								<tr height="40">
@@ -774,9 +791,8 @@ function uploadName(e) {
 								<a href="resources/upload/${bsns.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
 							</div>
 						</div>
-						<!-- 끝 -->
 					</div>
-
+						<!-- 끝 -->
 					<hr class="hr_bot" color="#4B94F2" width="925px">
 					<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
 						<!-- ******************* 제안 시작 ******************* -->
@@ -932,7 +948,7 @@ function uploadName(e) {
 							</tbody>
 						</table>
 						<!-- 첨부자료  -->
-						<input type=file id="att" name="att">
+						<input type=file id="att" name="att" onchange="uploadName(this)">
 						<input type="hidden" id="attFile" name="attFile" />
 						<div class="spc">
 							<div class="adc_txt">

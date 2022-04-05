@@ -197,15 +197,24 @@ $(document).ready(function() {
 							<div>${data.START_TIME} ~ ${data.END_TIME}</div>				
 						</div>
 	<input type="hidden" id="stsNum" name="stsNum" value="${data.STS_NUM}">	
+	<input type="hidden" id="stsNum" name="stsNum" value="${data.PRCS_DATE}">	
 						
 					</div>
 						<div class="use"><b>사용 용도</b></div>
 						<input type="text" id="use_cont" readonly="readonly" value="${data.USE_USE}" />
 			<div class="board_bottom">
-				<input class="cmn_btn" type="button" id="aprvl_btn" value="승인">
-				<input class="cmn_btn" type="button" id="reject_btn" value="승인불가">
-				<input class="cmn_btn" type="button" value="취소" id="cnclBtn"/>
-			</div>
+			 <c:choose>
+
+      <c:when test="${sAthrtyNum==2}">
+          <input class="cmn_btn" type="button" value="목록으로" id="cnclBtn"/>
+      </c:when>
+      <c:otherwise>
+			<input class="cmn_btn" type="button" id="aprvl_btn" value="승인">
+			<input class="cmn_btn" type="button" id="reject_btn" value="승인불가">
+			<input class="cmn_btn" type="button" value="목록으로" id="cnclBtn"/>
+      </c:otherwise> 
+ </c:choose>
+				</div>
 		</div>
 	</div>
 
