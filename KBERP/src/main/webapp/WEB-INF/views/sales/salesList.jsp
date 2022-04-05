@@ -493,6 +493,96 @@ table {
 	cursor: default;
 	padding-bottom: 0px;
 }
+
+/* ******** 견적 ******** */
+.qtn_txt {
+	height: 33px;
+	width: 885px;
+	padding: 0 5px;
+	font-size: 14px;
+	color: black;
+	vertical-align: middle;
+	box-sizing: border-box;
+	outline: none;
+	border-radius: 3px;
+	line-height: 33px;
+	border: 1px solid #000;
+	background-color: #F2F2F2;
+	text-align: center;
+	font-weight: bold;
+	margin-left: 40px;
+}
+
+.qtn_title_name, .title_name {
+	font-size: 15px;
+	font-weight: bold;
+	border-bottom: 3px solid #2E83F2;
+	padding-bottom: 10px;
+	margin-bottom: 30px;
+	margin-left: 40px;
+	width: 900px;
+}
+.title_name {
+	margin-top: 30px;
+}
+.qtn_box_in {
+	width: 885px;
+	height: 150px;
+	border: 1px solid #000;
+	border-radius: 7px;
+	margin-bottom: 18px;
+	margin-left: 40px;
+}
+.past_ngtn {
+	margin-left: 40px;
+	font-size: 11pt;
+	font-weight: bold;
+	color: black;
+	text-align: center;
+}
+.cc_box_in {
+	display: inline-block;
+	vertical-align: top;
+	width: 480px;
+	height: 70px;
+	padding-left: 20px;
+	white-space: pre;
+	font-size: 14px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	line-height: 20px;
+}
+.cc_box_in:hover {
+	cursor: pointer;
+	color: #2E83F2;
+}
+.cc_box_right {
+	display: inline-block;
+	vertical-align: top;
+	width: 365px;
+	height: 70px;
+	padding-right: 20px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.right_box {
+	width: 200px;
+	height: 50px;
+	margin: 10px auto;
+	font-size: 14px;
+	text-align: right;
+}
+.hands{
+	display: inline-block;
+	vertical-align: middle;
+	width: 48px;
+	height: 48px;
+	background-image: url("resources/images/sales/hands.png");
+	background-size: 48px 48px;
+	margin-right: 10px;
+}
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -544,7 +634,7 @@ $(document).ready(function() {
 			$("#actionForm").attr("action", "sales2SgstnCont"); // 제안 상세보기로 이동.
 			$("#actionForm").submit();
 		} else if($(this).children("#test").val() == "견적") {
-			$("#actionForm").attr("action", "sales3QntCont"); // 견적 상세보기로 이동.
+			$("#actionForm").attr("action", "sales3QtnCont"); // 견적 상세보기로 이동.
 			$("#actionForm").submit();
 		}  else if($(this).children("#test").val() == "계약") {
 			$("#actionForm").attr("action", "sales4CntrctCont"); // 계약 상세보기로 이동.

@@ -553,8 +553,8 @@
 	
 	<!-- 견적 등록 -->
 	<insert id="sales3QtnAdd" parameterType="hashmap">
-		INSERT INTO QTN(QTN_NUM, SALES_NUM, MD_NUM, QTN_NAME, QTN_DATE, SPLY_PRICE, TAX_AMNT, SRTX, INTRST_RATE, PYMNT_DATE, RMKS)
-		VALUES(QTN_SEQ.NEXTVAL, #{salesNum}, #{mdNum}, #{qtnName}, #{qtnDate}, #{sqlyPrice}, #{taxAmnt}, #{srtx}, #{intrstRate}, #{pymntDate}, #{rmksCont})
+		INSERT INTO QTN(QTN_NUM, SALES_NUM, MD_NUM, QTN_NAME, QTN_DATE, SPLY_PRICE, TAX_AMNT, SRTX, INTRST_RATE, PYMNT_DATE, RMKS, LOAN_AMNT)
+		VALUES(QTN_SEQ.NEXTVAL, #{salesNum}, #{mdNum}, #{qtnName}, #{qtnDate}, #{sqlyPrice}, #{taxAmnt}, #{srtx}, #{intrstRate}, #{pymntDate}, #{rmksCont}, #{LoanAmnt})
 	</insert>
 	
 	<!-- 견적 첨부파일 등록 -->
@@ -565,10 +565,14 @@
 	
 	<!-- 견적 상세보기 -->
 	<select id="getSales3" resultType="hashmap" parameterType="hashmap">
-		SELECT S.SALES_NUM, Q.QTN_NUM, Q.QTN_NAME,Q.QTN_DATE, Q.SPLY_PRICE, Q.TAX_AMNT, (Q.SPLY_PRICE + Q.TAX_AMNT) AS TOTAL,
-		       DECODE(Q.SRTX, 0, '포함', 1, '미포함', 2, '면세'), Q.INTRST_RATE, Q.PYMNT_DATE, Q.RMKS
+		SELECT S.SALES_NUM, Q.QTN_NUM, Q.QTN_NAME, TO_CHAR(Q.QTN_DATE, 'YYYY-MM-DD') AS QTN_DATE,
+		       Q.LOAN_AMNT, Q.SPLY_PRICE, Q.TAX_AMNT, (Q.SPLY_PRICE + Q.TAX_AMNT) AS TOTAL,
+		       Q.SRTX, Q.INTRST_RATE, Q.PYMNT_DATE, Q.RMKS,
+		       M.MD_TYPE_NUM, M.MID_RDMPTN_PSBL_CHECK, M.INTRST_PYMNT_MTHD_NUM, M.PRNCPL_PYMNT_MTHD_NUM, M.LOAN_PRD
 		FROM SALES S INNER JOIN QTN Q
 		                     ON S.SALES_NUM = Q.SALES_NUM
+		             INNER JOIN MD M
+		                     ON Q.MD_NUM = M.MD_NUM
 		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	

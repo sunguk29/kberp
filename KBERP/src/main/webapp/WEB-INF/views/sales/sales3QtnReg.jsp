@@ -888,6 +888,9 @@ $(document).ready(function() {
 		if(checkEmpty("#qtnName")) {
 			alert("견적명을 선택하세요.");
 			$("#qtnName").focus();
+		} else if($("#mdType").val() == 9) {
+			alert("상품을 선택하세요.");
+			$("#mdType").focus();
 		} else if(checkEmpty("#qtnDate")) {
 			alert("견적일을 입력하세요.");
 			$("#qtnDate").focus();
@@ -2163,11 +2166,11 @@ function test(t) {
 								<td colspan="3"><input type="text" class="txt" id="qtnName" name="qtnName" /></td>		
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="상품유형" readonly="readonly" /></td>
+								<td><input type="button" class="btn" value="상품유형" /></td>
 								<td colspan="3">
 									<select class="txt" id="mdType" name="mdType">
 									 	<optgroup>
-									 		<option value="-1">선택 하세요</option>
+									 		<option value="9">선택 하세요</option>
 									 		<option value="0">개인사업</option>
 									 		<option value="1">법인사업</option>
 									 		<option value="2">공공사업</option>
@@ -2181,7 +2184,7 @@ function test(t) {
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="대출금액*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" id="LoanAmnt" name="LoanAmnt" /></td>		
+									<td colspan="3"><input type="text" class="txt" id="LoanAmnt" name="LoanAmnt" placeholder="대출금액 입력 후 부가세 란을 선택하세요." /></td>		
 							</tr> 
 							<tr height="40">
 									<td><input type="button" class="btn" value="공급가액*" readonly="readonly" /></td>

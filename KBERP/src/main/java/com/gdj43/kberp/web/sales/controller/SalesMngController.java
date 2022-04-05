@@ -482,7 +482,7 @@ public class SalesMngController {
 	}
 	
 	// sales3QtnCont : 제안 상세보기
-	@RequestMapping(value="/sales3QtnCont")
+	@RequestMapping(value = "/sales3QtnCont")
 	public ModelAndView sales3QtnCont(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
 		HashMap<String, String> data = iCommonService.getData("salesMng.getSales1", params);
@@ -492,8 +492,10 @@ public class SalesMngController {
 		mav.addObject("data", data);
 		mav.addObject("data2", data2);
 		mav.addObject("data3", data3);
+		mav.addObject("LoanAmnt", params.get("LoanAmnt"));
 		
-		mav.setViewName("sales/sales3QntCont");
+		
+		mav.setViewName("sales/sales3QtnCont");
 		
 		return mav;
 	}

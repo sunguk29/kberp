@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>제안 상세보기</title>
+<title>견적 상세보기</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -380,6 +380,17 @@ textarea {
 	width: 927px;
 	height: 1138px;
 }
+.plus_btn {
+	display: inline-block;
+	vertical-align: middle;
+	width: 18px;
+	height: 18px;
+	background-image: url("resources/images/sales/plus.png");
+	background-size: 18px 18px;
+	float: right;
+	margin-right: 5px;
+}
+
 /* 끝 */
 </style>
 <script type="text/javascript">
@@ -537,6 +548,11 @@ $(document).ready(function() {
 		$("#sales_btn").html(html);
 	});
 	
+	console.log('${param.LoanAmnt}');
+	console.log('${LoanAmnt}');
+	console.log(${LoanAmnt});
+	console.log('kkkㅇㅇddk');
+	
 });
 
 /* 의견 목록 Ajax */
@@ -607,7 +623,7 @@ function drawOpList(list) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">영업관리 - 제안 상세보기</div>
+			<div class="page_title_text">영업관리 - 견적 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
 				<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
 			<!-- 검색영역 선택적 사항 -->
@@ -971,19 +987,12 @@ function drawOpList(list) {
 						
 						
 <!-- *************************************** 견적 시작 *************************************** -->			
-
+	<hr class="hr_bot" color="#4B94F2" width="925px">
 	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
 					<input type="hidden" id= "mdNum" name="mdNum" /> <!-- 영업기회에서 가져온 영업번호 -->
 					<div class="bot_title"><h3>견적<div class="drop_btn"></div></h3></div>
 					 <hr class="hr_bot" color="white" width="925px"> 
 					<div class="hr_bot"></div>
-					<div class="md_title">
-						<span class="md_txt">상품<img class="md_plus_btn" id=mdPop src="resources/images/sales/plus.png" /></span>
-					</div>
-					<div class="md_hr">
-						<hr color="#D7D7D7" width="830px" />
-					</div>
-					<div class="md_bx"></div>
 					<table>
 						<colgroup>
 							<col width="200" />
@@ -999,55 +1008,74 @@ function drawOpList(list) {
 							<tr height="40">
 								<td><input type="button" class="btn" value="상품유형" readonly="readonly" /></td>
 								<td colspan="3">
-									<select class="txt" id="mdType" name="mdType">
+									<select class="txt" id="mdType" name="mdType" disabled="disabled">
 									 	<optgroup>
-									 		<option value="-1">선택 하세요</option>
-									 		<option value="0">개인사업</option>
-									 		<option value="1">법인사업</option>
-									 		<option value="2">공공사업</option>
+									 		<c:choose>
+									 			<c:when test="${data3.MD_TYPE_NUM eq 0}">
+											 		<option value="0" selected="selected">개인사업</option>
+									 			</c:when>
+									 			<c:when test="${data3.MD_TYPE_NUM eq 1}">
+											 		<option value="0" selected="selected">법인사업</option>
+									 			</c:when>
+									 			<c:when test="${data3.MD_TYPE_NUM eq 2}">
+											 		<option value="0" selected="selected">공공사업</option>
+									 			</c:when>
+									 		</c:choose>
 									 	</optgroup>
 									</select>
 								</td>
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="견적일*" readonly="readonly" /></td>
-									<td colspan="3"><input type="date" class="txt" id="qtnDate" name="qtnDate" /></td>
+									<td colspan="3"><input type="date" class="txt" id="qtnDate" name="qtnDate" value="${data3.QTN_DATE}" readonly="readonly" /></td>
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="대출금액*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" id="LoanAmnt" name="LoanAmnt" /></td>		
+									<td colspan="3"><input type="text" class="txt" id="LoanAmnt" name="LoanAmnt" value="${data3.LOAN_AMNT}" readonly="readonly" /></td>		
 							</tr> 
 							<tr height="40">
 									<td><input type="button" class="btn" value="공급가액*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" id="splyPrice" name="sqlyPrice" readonly="readonly" /></td>		
+									<td colspan="3"><input type="text" class="txt" id="splyPrice" name="sqlyPrice" value="${data3.SPLY_PRICE}" readonly="readonly" /></td>		
 							</tr> 
 							<tr height="40">
 									<td><input type="button" class="btn" value="세액*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" id="taxAmnt" name="taxAmnt" readonly="readonly" /></td>
+									<td colspan="3"><input type="text" class="txt" id="taxAmnt" name="taxAmnt" value="${data3.TAX_AMNT}" readonly="readonly" /></td>
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="합계액*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" id="sumAmnt" name="sumAmnt" readonly="readonly" /></td>
+									<td colspan="3"><input type="text" class="txt" id="sumAmnt" name="sumAmnt" value="${data3.TOTAL}" readonly="readonly" /></td>
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="중도상환가능여부" readonly="readonly" /></td>
 									<td>
-										<select class="txt" id="prdmptn_psbl_check" name="prdmptnPsbl">
+										<select class="txt" id="prdmptn_psbl_check" name="prdmptnPsbl"  disabled="disabled">
 											<optgroup>
-												<option value="-1">선택 하세요</option>
-												<option value="0">가능</option>
-												<option value="1">불가능</option>
+												<c:choose>
+													<c:when test="${data3.MID_RDMPTN_PSBL_CHECK eq 0}">
+														<option value="0" selected="selected">가능</option>
+													</c:when>
+													<c:when test="${data3.MID_RDMPTN_PSBL_CHECK eq 1}">
+														<option value="0" selected="selected">불가능</option>
+													</c:when>
+												</c:choose>
 											</optgroup>
 										</select>
 									</td>
 									<td><input type="button" class="btn" value="부가세*" readonly="readonly" /></td>
 									<td>
-										<select class="txt" id="srtx" name="srtx" onchange="test(this);">
+										<select class="txt" id="srtx" name="srtx" onchange="test(this);" disabled="disabled">
 										 	<optgroup>
-										 		<option value="-1">선택 하세요</option>
-										 		<option value="0">포함</option>
-										 		<option value="1">미포함</option>
-										 		<option value="2">면세</option>
+										 		<c:choose>
+										 			<c:when test="${data3.SRTX eq 0}">
+										 				<option value="0" selected="selected">미포함</option>
+										 			</c:when>
+										 			<c:when test="${data3.SRTX eq 1}">
+										 				<option value="0" selected="selected">포함</option>
+										 			</c:when>
+										 			<c:when test="${data3.SRTX eq 2}">
+										 				<option value="0" selected="selected">면세</option>
+										 			</c:when>
+										 		</c:choose>
 										 	</optgroup>
 										</select>
 									</td>
@@ -1055,43 +1083,66 @@ function drawOpList(list) {
 							<tr height="40">
 								<td><input type="button" class="btn" value="이자납부방식" readonly="readonly" /></td>
 								<td>
-									<select class="txt" id="intrst_pymnt" name="intrstPymnt">
+									<select class="txt" id="intrst_pymnt" name="intrstPymnt"disabled="disabled">
 										<optgroup>
-											<option value="-1">선택 하세요</option>
-											<option value="0">원금 균등 상환</option>
-											<option value="1">원리금 균등 상환</option>
-											<option value="2">만기 일시 상환</option>
+											<c:choose>
+												<c:when test="${data3.INTRST_PYMNT_MTHD_NUM eq 0}">
+													<option value="0" selected="selected">원금 균등 상환</option>
+												</c:when>
+												<c:when test="${data3.INTRST_PYMNT_MTHD_NUM eq 1}">
+													<option value="0" selected="selected">원리금 균등 상환</option>
+												</c:when>
+												<c:when test="${data3.INTRST_PYMNT_MTHD_NUM eq 2}">
+													<option value="0" selected="selected">만기 일시 상환</option>
+												</c:when>
+											</c:choose>
 										</optgroup>
 									</select>
 								</td>
 								<td><input type="button" class="btn" value="원금상환방식" readonly="readonly" /></td>
 								<td colspan="2">
-									<select class="txt" id="prncpl_pymnt" name="prncplPymnt">
+									<select class="txt" id="prncpl_pymnt" name="prncplPymnt" disabled="disabled">
 										<optgroup>
-											<option value="-1">선택 하세요</option>
-											<option value="0">원금 균등 상환</option>
-											<option value="1">원리금 균등 상환</option>
-											<option value="2">만기 일시 상환</option>
+											<c:choose>
+												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 0}">
+													<option value="0" selected="selected">원금 균등 상환</option>
+												</c:when>
+												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 1}">
+													<option value="0" selected="selected">원리금 균등 상환</option>
+												</c:when>
+												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 2}">
+													<option value="0" selected="selected">만기 일시 상환</option>
+												</c:when>
+											</c:choose>
 										</optgroup>
 									</select>
 								</td>
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="이자율(%)" readonly="readonly" /></td>
-								<td><input type="text" class="txt" id="intrstRate" name="intrstRate" /></td>
+								<td><input type="button" class="btn" value="이자율(%)" /></td>
+								<td><input type="text" class="txt" id="intrstRate" name="intrstRate" value="${data3.INTRST_RATE}" readonly="readonly" /></td>
 								<td><input type="button" class="btn" value="납부일" readonly="readonly" /></td>
-								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" placeholder="매달    일" /></td>
+								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" value="${data3.PYMNT_DATE}" readonly="readonly" placeholder="매달    일" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="대출기간" readonly="readonly" /></td>
 								<td>
-									<select class="txt" id="loanPrd" name="loanPrd">
+									<select class="txt" id="loanPrd" name="loanPrd" disabled="disabled">
 										<optgroup>
-											<option value="-1">선택 하세요</option>
-											<option value="0">6개월</option>  
-											<option value="1">1년</option>  
-											<option value="2">3년</option>  
-											<option value="3">5년</option>  
+											<c:choose>
+												<c:when test="${data3.LOAN_PRD eq 0}">
+													<option value="0" selected="selected">6개월</option>
+												</c:when>
+												<c:when test="${data3.LOAN_PRD eq 1}">
+													<option value="0" selected="selected">1년</option>
+												</c:when>
+												<c:when test="${data3.LOAN_PRD eq 2}">
+													<option value="0" selected="selected">3년</option>
+												</c:when>
+												<c:when test="${data3.LOAN_PRD eq 2}">
+													<option value="0" selected="selected">5년</option>
+												</c:when>
+											</c:choose>
 										</optgroup>
 									</select>	
 								</td>
@@ -1106,7 +1157,7 @@ function drawOpList(list) {
 							</tr> -->
 							<tr height="40">
 								<td><input type="button" class="btn" value="비고" readonly="readonly"/></td>
-								<td colspan="3"><input type="text" class="rmks" name="rmksCont" /></td>
+								<td colspan="3"><input type="text" class="rmks" name="rmksCont" value="${data3.RMKS}" readonly="readonly" /></td>
 							</tr>							
 						</tbody>
 					</table>
