@@ -1450,9 +1450,9 @@ function editFormAjaxFunction() {
 }
 
 function createAdmnstrEditPopup(data) {
-	var title = "";
+	var title = "기본정보 수정";
 	var html = "";
-	var size = [520, 300]; // [width, height]
+	var size = [520, 235]; // [width, height]
 	
 	html += "<form action=\"#\" id=\"editForm\" method=\"post\">";
 	html += "<input type=\"hidden\" class=\"popup_id\" name=\"popup_id\" value=\"admnstr_edit_popup\" />";
