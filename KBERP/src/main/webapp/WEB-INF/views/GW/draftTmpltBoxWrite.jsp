@@ -169,6 +169,17 @@ span {
 
 }
 
+.orgnzt_chart1 {
+	border-collapse: collapse;
+		
+}
+
+.orgnzt_chart1 th {
+	border-top: 1px solid #000;
+	border-bottom: 1px solid #000;
+	text-align: center;
+}
+
 .user_aprvl_line {
 	border-collapse: collapse;
 	margin-top: 50px;
@@ -228,7 +239,28 @@ $(document).ready(function() {
 			html+= "	</div>                                                                                                                                  ";
 			html+= "	<div style=\"display:inline-block; height: 400px; margin-top: 1opx;\">                                                                  ";
 			html+= "	<div class=\"orgnzt_chart\">                                                                                                        	";
-			html+= "	조직도                                                                                                                              		";
+			html+= "	<table class=\"orgnzt_chart1\">";
+			html+= "	<colgroup>                                                                                                                      		";
+			html+= "	<col width=\"75\">                                                                                                           		    ";
+			html+= "	<col width=\"75\">                                                                                                            			";
+			html+= "	<col width=\"75\">                                                                                                         		    ";
+			html+= "	<col width=\"75\">                                                                                                         		    ";
+			html+= "	</colgroup>                                                                                                                    		    ";
+			html+= "	<thead>";
+			html+= "	<tr>";
+			html+= "	<th>부서</th>";
+			html+= "	<th>직급</th>";
+			html+= "	<th>성명</th>";
+			html+= "	<th>확인</th>";
+			
+			
+			html+= "	</tr>";
+			html+= "	</thead>";
+			html+= "	<tbody class=\"og\">";
+		
+			html+= "	</tbody>";
+			
+			html+= "	</table>";   
 			html+= "	</div>                                                                                                                            	    ";
 			html+= "	<div style=\" border: 1px solid #000; width: 100px; display:inline-block; vertical-align: top; margin-top: 150px;\">              	    ";
 			html+= "	<span>결재방법</span><br/>                                                                                                      			";	
@@ -282,6 +314,21 @@ $(document).ready(function() {
 			height : 600,
 			title : "결재라인",
 			contents : html,
+			contentsEvent : function() {
+				// Ajax태우고
+				// list받아서 팝업 테이블에 내용 추가 id추가
+				$.ajax({
+					type : "post",
+					url : "addListChatAjax",
+					dataType : "json",
+					success : function(res) {
+						drawList(res.list);
+					},
+					error : function(req) {
+						console.log(req.responseText)	
+					}
+				});
+ 			},
 			buttons : [{
 				name : "저장",
 				func:function() {
@@ -398,7 +445,20 @@ $(document).ready(function() {
 		
 	})
 	
+function drawList(list) {
 	
+	var html = "";
+	
+		for(var data of list) {
+			html +=	"				<tr id = \"srchEmpNum\" no = \"" + data.EMP_NUM + "\">";  
+			html +=	"					<td id = \"srchDept\"> \"" + data.DEPT_NAME + "\"</td>";
+			html +=	"					<td id = \"srchRank\"> \"" + data.RANK_NAME + "\"</td>";
+			html +=	"					<td id = \"srchName\"> \"" + data.EMP_NAME + "\"</td>";
+			html +=	"					<td><input type =\"checkbox\" id = \"srch_check\"></td> ";
+			html +=	"				</tr>                                                       ";
+		}	
+	$("tbody.og").html(html);
+}	
 	
 	
 

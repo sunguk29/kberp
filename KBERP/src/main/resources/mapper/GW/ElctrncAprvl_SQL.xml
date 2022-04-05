@@ -27,7 +27,18 @@
 	FROM DUAL
 </select>
 
-
+<select id = "addListChat" parameterType = "hashmap" resultType="hashmap">
+SELECT *
+FROM (SELECT E.EMP_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME
+FROM  EMP E INNER JOIN APNTM A
+                        ON E.EMP_NUM = A.EMP_NUM
+            INNER JOIN DEPT D
+                        ON A.DEPT_NUM = D.DEPT_NUM
+            INNER JOIN RANK R
+                        ON A.RANK_NUM = R.RANK_NUM 
+     )
+WHERE 1 = 1
+</select>
 
 
 </mapper>
