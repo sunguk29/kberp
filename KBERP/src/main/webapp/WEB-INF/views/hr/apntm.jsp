@@ -655,10 +655,10 @@ $(document).ready(function() {
    // 발령 추가
    $("#apntm_add_btn").on("click", function() {
 	   reloadNewApntm();
-	   console.log("발령추가 클릭!")
+		console.log("발령추가 클릭!")
 
 	   // 사원조회 팝업
-		$("#prfl_srch_btn").on("click", function() {
+		$("body").on("click", "#prfl_srch_btn", function() {
 			console.log("돋보기 클릭!")
 						
 			var html = "";
