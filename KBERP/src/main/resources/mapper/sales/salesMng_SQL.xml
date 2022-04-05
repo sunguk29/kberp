@@ -374,7 +374,7 @@
 	</insert>
 	
 	
-		<!-- 제안 상세보기 -->
+	<!-- 제안 상세보기 -->
 	<select id="getSales2" resultType="hashmap" parameterType="hashmap">
 		SELECT S.SALES_NUM, SLDI.SGSTN_LOAN_CAUSE_NUM, SLDI.SGSTN_LOAN_SCALE,
 		       SLDI.SGSTN_LOAN_TYPE, TO_CHAR(SLDI.SGSTN_LOAN_TIME, 'YYYY-MM') AS SGSTN_LOAN_TIME, TO_CHAR(SLDI.SGSTN_RDMPTN_TIME, 'YYYY-MM') AS SGSTN_RDMPTN_TIME,
@@ -563,8 +563,13 @@
 		VALUES (QTN_ATT_FILE_SEQ.NEXTVAL, QTN_SEQ.CURRVAL, #{attFile} )
 	</insert>
 	
+	<!-- 견적 상세보기 -->
 	<select id="getSales3" resultType="hashmap" parameterType="hashmap">
-
+		SELECT S.SALES_NUM, Q.QTN_NUM, Q.QTN_NAME,Q.QTN_DATE, Q.SPLY_PRICE, Q.TAX_AMNT, (Q.SPLY_PRICE + Q.TAX_AMNT) AS TOTAL,
+		       DECODE(Q.SRTX, 0, '포함', 1, '미포함', 2, '면세'), Q.INTRST_RATE, Q.PYMNT_DATE, Q.RMKS
+		FROM SALES S INNER JOIN QTN Q
+		                     ON S.SALES_NUM = Q.SALES_NUM
+		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
 </mapper>

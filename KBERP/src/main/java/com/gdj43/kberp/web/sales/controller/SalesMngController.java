@@ -481,7 +481,7 @@ public class SalesMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	// sales3SgstnCont : 제안 상세보기
+	// sales3QtnCont : 제안 상세보기
 	@RequestMapping(value="/sales3QtnCont")
 	public ModelAndView sales3QtnCont(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
@@ -493,7 +493,7 @@ public class SalesMngController {
 		mav.addObject("data2", data2);
 		mav.addObject("data3", data3);
 		
-		mav.setViewName("sales/sales3QtnCont");
+		mav.setViewName("sales/sales3QntCont");
 		
 		return mav;
 	}

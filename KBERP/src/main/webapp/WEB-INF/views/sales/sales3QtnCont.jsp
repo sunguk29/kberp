@@ -1,5 +1,5 @@
 <!-- 
-	제안 상세보기 : sales2SgstnCont
+	견적 상세보기 : sales3QtnCont
  -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -968,6 +968,166 @@ function drawOpList(list) {
 							
 							</div>
 						</div>
+						
+						
+<!-- *************************************** 견적 시작 *************************************** -->			
+
+	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
+					<input type="hidden" id= "mdNum" name="mdNum" /> <!-- 영업기회에서 가져온 영업번호 -->
+					<div class="bot_title"><h3>견적<div class="drop_btn"></div></h3></div>
+					 <hr class="hr_bot" color="white" width="925px"> 
+					<div class="hr_bot"></div>
+					<div class="md_title">
+						<span class="md_txt">상품<img class="md_plus_btn" id=mdPop src="resources/images/sales/plus.png" /></span>
+					</div>
+					<div class="md_hr">
+						<hr color="#D7D7D7" width="830px" />
+					</div>
+					<div class="md_bx"></div>
+					<table>
+						<colgroup>
+							<col width="200" />
+							<col width="250" />
+							<col width="200" />
+							<col width="250" />
+						</colgroup>
+						<tbody>
+							<tr height="40">
+								<td><input type="button" class="btn" value="견적명*" readonly="readonly" /></td>
+								<td colspan="3"><input type="text" class="txt" id="qtnName" name="qtnName" value="${data3.QTN_NAME}" readonly="readonly" /></td>		
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="상품유형" readonly="readonly" /></td>
+								<td colspan="3">
+									<select class="txt" id="mdType" name="mdType">
+									 	<optgroup>
+									 		<option value="-1">선택 하세요</option>
+									 		<option value="0">개인사업</option>
+									 		<option value="1">법인사업</option>
+									 		<option value="2">공공사업</option>
+									 	</optgroup>
+									</select>
+								</td>
+							</tr>
+							<tr height="40">
+									<td><input type="button" class="btn" value="견적일*" readonly="readonly" /></td>
+									<td colspan="3"><input type="date" class="txt" id="qtnDate" name="qtnDate" /></td>
+							</tr>
+							<tr height="40">
+									<td><input type="button" class="btn" value="대출금액*" readonly="readonly" /></td>
+									<td colspan="3"><input type="text" class="txt" id="LoanAmnt" name="LoanAmnt" /></td>		
+							</tr> 
+							<tr height="40">
+									<td><input type="button" class="btn" value="공급가액*" readonly="readonly" /></td>
+									<td colspan="3"><input type="text" class="txt" id="splyPrice" name="sqlyPrice" readonly="readonly" /></td>		
+							</tr> 
+							<tr height="40">
+									<td><input type="button" class="btn" value="세액*" readonly="readonly" /></td>
+									<td colspan="3"><input type="text" class="txt" id="taxAmnt" name="taxAmnt" readonly="readonly" /></td>
+							</tr>
+							<tr height="40">
+									<td><input type="button" class="btn" value="합계액*" readonly="readonly" /></td>
+									<td colspan="3"><input type="text" class="txt" id="sumAmnt" name="sumAmnt" readonly="readonly" /></td>
+							</tr>
+							<tr height="40">
+									<td><input type="button" class="btn" value="중도상환가능여부" readonly="readonly" /></td>
+									<td>
+										<select class="txt" id="prdmptn_psbl_check" name="prdmptnPsbl">
+											<optgroup>
+												<option value="-1">선택 하세요</option>
+												<option value="0">가능</option>
+												<option value="1">불가능</option>
+											</optgroup>
+										</select>
+									</td>
+									<td><input type="button" class="btn" value="부가세*" readonly="readonly" /></td>
+									<td>
+										<select class="txt" id="srtx" name="srtx" onchange="test(this);">
+										 	<optgroup>
+										 		<option value="-1">선택 하세요</option>
+										 		<option value="0">포함</option>
+										 		<option value="1">미포함</option>
+										 		<option value="2">면세</option>
+										 	</optgroup>
+										</select>
+									</td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="이자납부방식" readonly="readonly" /></td>
+								<td>
+									<select class="txt" id="intrst_pymnt" name="intrstPymnt">
+										<optgroup>
+											<option value="-1">선택 하세요</option>
+											<option value="0">원금 균등 상환</option>
+											<option value="1">원리금 균등 상환</option>
+											<option value="2">만기 일시 상환</option>
+										</optgroup>
+									</select>
+								</td>
+								<td><input type="button" class="btn" value="원금상환방식" readonly="readonly" /></td>
+								<td colspan="2">
+									<select class="txt" id="prncpl_pymnt" name="prncplPymnt">
+										<optgroup>
+											<option value="-1">선택 하세요</option>
+											<option value="0">원금 균등 상환</option>
+											<option value="1">원리금 균등 상환</option>
+											<option value="2">만기 일시 상환</option>
+										</optgroup>
+									</select>
+								</td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="이자율(%)" readonly="readonly" /></td>
+								<td><input type="text" class="txt" id="intrstRate" name="intrstRate" /></td>
+								<td><input type="button" class="btn" value="납부일" readonly="readonly" /></td>
+								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" placeholder="매달    일" /></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="대출기간" readonly="readonly" /></td>
+								<td>
+									<select class="txt" id="loanPrd" name="loanPrd">
+										<optgroup>
+											<option value="-1">선택 하세요</option>
+											<option value="0">6개월</option>  
+											<option value="1">1년</option>  
+											<option value="2">3년</option>  
+											<option value="3">5년</option>  
+										</optgroup>
+									</select>	
+								</td>
+								<td></td>
+								<td colspan="2" style="border:none;"></td>
+							</tr>
+							<!-- <tr height="40">
+								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
+								<td><input type="text" class="txt" id="monthPymntAmnt" name="monthPymntAmnt" readonly="readonly" /></td>
+								<td><input type="button" class="btn" value="월 이자액" readonly="readonly" /></td>
+								<td colspan="2"><input type="text" class="txt" id="monthIntrstAmnt" name="monthIntrstAmnt" readonly="readonly" /></td>
+							</tr> -->
+							<tr height="40">
+								<td><input type="button" class="btn" value="비고" readonly="readonly"/></td>
+								<td colspan="3"><input type="text" class="rmks" name="rmksCont" /></td>
+							</tr>							
+						</tbody>
+					</table>
+					
+					<!-- 첨부자료 -->
+					<input type=file id="att" name="att" onchange="uploadName(this)" />
+					<input type="hidden" id="attFile" name="attFile" />
+					<div class="spc">
+						<div class="adc_txt">
+							첨부자료
+							<img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
+						</div>
+						<div class="cntrct_box_in">
+							<input type="text" id="fileName" readonly="readonly" />
+						</div>
+					</div>
+
+
+
+			
+<!-- *************************************** 견적 끝 *************************************** -->						
 					<div class="next_bot">
 						<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
 					</div>
