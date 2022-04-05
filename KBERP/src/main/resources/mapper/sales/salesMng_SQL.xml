@@ -423,6 +423,12 @@
 		UPDATE SALES SET PRGRS_STS_NUM = '27'
 		WHERE SALES_NUM = #{salesNum}
 	</update>
+	
+	<!-- 제안에서 견적으로 단계 변경 -->
+	<update id="sales2to3" parameterType="hashmap">
+		UPDATE SALES SET PRGRS_STS_NUM = '37'
+		WHERE SALES_NUM = #{salesNum}
+	</update>
 
 	<!-- 영업기회 실패 -->
 	<update id="sales1Failure" parameterType="hashmap">
@@ -538,16 +544,28 @@
 	<!-- 견적(등록) 상품 리스트 -->
 	<select id="mdList" parameterType="hashmap" resultType="hashmap">
 		SELECT CC.CLNT_CMPNY_NAME, MD.MD_NAME, MD.INTRST_RATE, DECODE(MD_GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D', 5, 'E') AS MD_GRADE, 
-		       MD.LOAN_PRD, MD.LIMIT_AMNT, MD.MD_NUM
+		       DECODE(MD.LOAN_PRD, 0, '6개월', 1, '1년', 2, '3년', 3, '5년') AS LOAN_PRD, MD.LIMIT_AMNT, MD.MD_NUM
 		FROM CLNT_CMPNY CC INNER JOIN MD MD
 		                           ON CC.GRADE_NUM = MD.MD_GRADE_NUM
 		WHERE CC.CLNT_CMPNY_NUM = #{ccn}
 	</select>
 	
 	
+	<!-- 견적 등록 -->
+	<insert id="sales3QtnAdd" parameterType="hashmap">
+		INSERT INTO QTN(QTN_NUM, SALES_NUM, MD_NUM, QTN_NAME, QTN_DATE, SPLY_PRICE, TAX_AMNT, SRTX, INTRST_RATE, PYMNT_DATE, RMKS)
+		VALUES(QTN_SEQ.NEXTVAL, #{salesNum}, #{mdNum}, #{qtnName}, #{qtnDate}, #{sqlyPrice}, #{taxAmnt}, #{srtx}, #{intrstRate}, #{pymntDate}, #{rmksCont})
+	</insert>
 	
+	<!-- 견적 첨부파일 등록 -->
+	<insert  id="sales3QtnAttAdd" parameterType="hashmap">
+		INSERT INTO QTN_ATT_FILE ( ATT_FILE_NUM, QTN_NUM, ATT_FILE_NAME )
+		VALUES (QTN_ATT_FILE_SEQ.NEXTVAL, QTN_SEQ.CURRVAL, #{attFile} )
+	</insert>
 	
-	
+	<select id="getSales3" resultType="hashmap" parameterType="hashmap">
+
+	</select>
 	
 </mapper>
 

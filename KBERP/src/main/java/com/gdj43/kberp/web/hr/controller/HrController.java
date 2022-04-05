@@ -40,21 +40,38 @@ public class HrController {
       return mav;
     }
     
-	// 인사발령ajax
-	@RequestMapping(value = "/apntmListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	// 인사발령ajax       
+	@RequestMapping(value = "/apntmListAjax/{gbn}", method = RequestMethod.POST, 
+			produces = "text/json;charset=UTF-8")
     @ResponseBody
-    public String apnmtListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+    public String apnmtListAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		List<HashMap<String, String>> list = iHrService.getApntmList(params);
-		HashMap<String, String> cont = iHrService.getApntmCont(params);
+	    try {
+		       switch(gbn) {
+		       case "list" :
+		    	   List<HashMap<String, String>> list = iCommonService.getDataList("hr.getApntmList", params);
+		    	   modelMap.put("list", list);
+		          break;
+		       case "cont" :
+		    	   HashMap<String, String> cont = iCommonService.getData("hr.getApntmCont", params);
+		    	   modelMap.put("cont", cont);
+		          break;
+		       case "inqry" :
+		    	   List<HashMap<String, String>> inqry = iCommonService.getDataList("hr.getInqryList", params);
+		    	   modelMap.put("inqry", inqry);
+		          break;
+		       }
+		       modelMap.put("res", "success");
+		    } catch (Throwable e) {
+		       e.printStackTrace();
+		       modelMap.put("res", "failed");
+	    }
+	    
+	    return mapper.writeValueAsString(modelMap);
+	 }
 		
-		modelMap.put("list", list);
-		modelMap.put("cont", cont);
-		
-		return mapper.writeValueAsString(modelMap); 
-    }
 	
 	// 증명서발급(사용자)
 	@RequestMapping(value = "/crtft")
@@ -110,7 +127,6 @@ public class HrController {
 	 @ResponseBody
 	 public String orgnztChartActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
 	    ObjectMapper mapper = new ObjectMapper();
-	    
 	    Map<String, Object> modelMap = new HashMap<String, Object>();
 	    
 	    try {

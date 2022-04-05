@@ -218,12 +218,12 @@
 		</div>
 	</div>
 	
-	<form action="#" id="actionForm" method="post">
+	<%-- <form action="#" id="actionForm" method="post">
 		<input type="hidden" name="no" value="${param.no}" />
 		<input type="hidden" name="page" value="${param.page}" />
 		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
-</form>
+</form> --%>
 	
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
