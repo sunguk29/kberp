@@ -111,6 +111,7 @@ $(document).ready(function() {
 		$("#searchGbn").val($("#oldSearchGbn").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
 		
+		$("#backForm").attr("action","fcltList");
 		$("#backForm").submit();
 	});
 
@@ -142,6 +143,7 @@ $(document).ready(function() {
 						data : params,
 						success : function(res){ 
 							if(res.res == "success"){
+								$("#backForm").attr("action","fcltList");
 								$("#backForm").submit();
 							}else{
 								alert("삭제 중 문제가 발생했습니다.");
