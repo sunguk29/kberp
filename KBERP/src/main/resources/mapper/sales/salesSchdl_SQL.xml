@@ -322,8 +322,8 @@
 	</select>
 	<!-- 리드 상세 -->
 	<select id="getLeadCont" resultType="hashmap" parameterType="hashmap">	
-		SELECT LD.LEAD_NAME, EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, CC.GRADE_NUM, LD.RCGNTN_PATH_NUM, E.EMP_NAME,
-        	   L.PRGRS_STS_NUM
+		SELECT LD.LEAD_NAME, LD.MNGR_EMP_NUM, EC.CLNT_NUM, EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, CC.GRADE_NUM, LD.RCGNTN_PATH_NUM, E.EMP_NAME,
+        	   L.PRGRS_STS_NUM, LAF.ATT_FILE_NAME
 		FROM LEAD LD INNER JOIN ENTRPRS_CLNT EC
 		                     ON LD.CLNT_NUM = EC.CLNT_NUM
 		             INNER JOIN CLNT_CMPNY CC
@@ -332,6 +332,8 @@
 		                     ON LD.MNGR_EMP_NUM = E.EMP_NUM
 		             INNER JOIN LEAD L 
 		             		 ON L.LEAD_NUM = LD.LEAD_NUM
+		        LEFT OUTER JOIN LEAD_ATT_FILE LAF
+		             		 ON LD.LEAD_NUM = LAF.LEAD_NUM
 		WHERE LD.LEAD_NUM = #{leadNum}           
 	</select>
 	<!-- 리드 의견 개수 -->

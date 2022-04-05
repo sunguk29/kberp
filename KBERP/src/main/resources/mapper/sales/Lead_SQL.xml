@@ -285,15 +285,19 @@
 	</insert> 		
 <!-- ******************************* 리드 상세 ******************************* -->		
 	<select id="getLeadCont" resultType="hashmap" parameterType="hashmap">	
-		SELECT LD.LEAD_NUM, LD.LEAD_NAME, EC.CLNT_NUM, EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, CC.GRADE_NUM, LD.RCGNTN_PATH_NUM, E.EMP_NAME, LD.PRGRS_STS_NUM,
-			   LD.MNGR_EMP_NUM
+		SELECT LD.LEAD_NAME, LD.MNGR_EMP_NUM, EC.CLNT_NUM, EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, CC.GRADE_NUM, LD.RCGNTN_PATH_NUM, E.EMP_NAME,
+        	   L.PRGRS_STS_NUM, LAF.ATT_FILE_NAME
 		FROM LEAD LD INNER JOIN ENTRPRS_CLNT EC
 		                     ON LD.CLNT_NUM = EC.CLNT_NUM
 		             INNER JOIN CLNT_CMPNY CC
 		                     ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
 		             INNER JOIN EMP E
 		                     ON LD.MNGR_EMP_NUM = E.EMP_NUM
-		WHERE LD.LEAD_NUM = #{leadNum}             
+		             INNER JOIN LEAD L 
+		             		 ON L.LEAD_NUM = LD.LEAD_NUM
+		             INNER JOIN LEAD_ATT_FILE LAF
+		             		 ON LD.LEAD_NUM = LAF.LEAD_NUM
+		WHERE LD.LEAD_NUM = #{leadNum}           
 	</select>
 <!-- ******************************* 리드 수정 ******************************* -->		
 	<update id="getLeadUpdate" parameterType="hashmap">
@@ -302,6 +306,11 @@
                 CLNT_NUM = #{clntNum},
                 RCGNTN_PATH_NUM =   #{rp},
                 PRGRS_STS_NUM =  #{psNum}
+		WHERE LEAD_NUM = #{leadNum}
+	</update>
+<!-- ******************************* 리드 첨부파일 수정 ******************************* -->		
+	<update id="getLeadAttUpdate" parameterType="hashmap">
+		UPDATE LEAD_ATT_FILE SET ATT_FILE_NAME = #{attFile}
 		WHERE LEAD_NUM = #{leadNum}
 	</update>
 <!-- ******************************* 리드 삭제 ******************************* -->		

@@ -97,8 +97,12 @@
 #pctr_area {
 	width: 141px;
 	height: 188px;
-	background-size: cover;
 	margin: 5px 0px 10px 1px;
+}
+#emp_pctr_area {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
 }
 .cont_line_rt {
 	margin-top: 16px;
@@ -392,7 +396,7 @@ td:nth-child(even) {
 
 .admnstr_btn {
 	display: inline-block;
-	vertical-align: bottom;
+	vertical-align: top;
 	width: 80px;
 	height: 28px;
 	border: 1px solid #00000022;
@@ -419,37 +423,6 @@ td:nth-child(even) {
 	background-color: #F2CB05;
 	color: #222;
 	float: right;
-}
-
-/* 팝업 창 */
-#human_info_edit_popup {
-	/* 숨김용 */
-	/* display: none; */
-	/* 크기변경용 */
-	width: 500px;
-	height: 270px;
-	top: calc(50% - 135px); /* 높이 반  */
-	left: calc(50% - 250px); /* 너비 반 */
-}
-
-#slry_info_edit_popup {
-	/* 숨김용 */
-	/* display: none; */
-	/* 크기변경용 */
-	width: 520px;
-	height: 240px;
-	top: calc(50% - 120px); /* 높이 반  */
-	left: calc(50% - 260px); /* 너비 반 */
-}
-
-#add_info_edit_popup {
-	/* 숨김용 */
-	/* display: none; */
-	/* 크기변경용 */
-	width: 520px;
-	height: 240px;
-	top: calc(50% - 120px); /* 높이 반  */
-	left: calc(50% - 260px); /* 너비 반 */
 }
 
 /* 팝업 내용 */
@@ -499,19 +472,11 @@ td:nth-child(even) {
 #slry_info_edit_popup .popup_cont_text {
 	width: calc(100% - 146px);
 }
-#edit_lt3_e4 #edit_bnk_copy {
+#edit_lt3_e4 #edit_bnkbk_copy {
 	width: calc(100% - 216px);
 }
 
-#add_info_edit_popup .popup_cont_name {
-	width: 56px;
-}
-#add_info_edit_popup .popup_cont_text {
-	width: calc(50% - 83px);
-	margin-right: 10px;
-}
-
-#add_grdtn_crtft {
+#add_grdtn_crtfct {
 	width: calc(100% - 166px);
 }
 
@@ -524,6 +489,19 @@ td:nth-child(even) {
 
 #qlfctn_add_popup #add_copy_file {
 	width: calc(100% - 166px);
+}
+
+#admnstr_edit_popup #edit_emp_pctr_file {
+	width: calc(100% - 166px);
+}
+
+.upld_file {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
 }
 
 .upld_btn {
@@ -539,8 +517,13 @@ td:nth-child(even) {
 	background-color: #dddddd;
 	margin-left: 4px;
 }
+
 .upld_btn:hover {
 	background-color: #d6d6d6;
+	cursor: pointer;
+}
+
+.upld_btn label:hover {
 	cursor: pointer;
 }
 </style>
@@ -1001,7 +984,7 @@ function createAddPopup(pId) {
 	console.log(pId);
 	var title = "";
 	var html = "";
-	var size = [520, 320]; // [width, height]
+	var size = [520, 310]; // [width, height]
 	
 	html += "<form action=\"#\" id=\"addForm\" method=\"post\">";
 	html += "<input type=\"hidden\" class=\"popup_id\" name=\"popup_id\" value=\"" + pId + "\" />";
@@ -1011,7 +994,9 @@ function createAddPopup(pId) {
 	case "edctn_level_btn" :
 		title = "학력사항 추가";
 
-		html += "	<div class=\"popup_cont\" id=\"edctn_level_add_popup\" >                                                                                                                        ";
+		html += "<input type=\"hidden\" class=\"upld_file_name\" name=\"grdtn_crtfct_file\" />";
+		
+		html += "	<div id=\"edctn_level_add_popup\" >                                                                                                                        ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm1_e1\">                                                                                        ";
 		html += "			<label for=\"add_schl_name\" class=\"popup_cont_name\">학교명 :</label>                                                                   ";
 		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_schl_name\" name=\"schl_name\" placeholder=\"학교명\" />                                             ";
@@ -1040,9 +1025,12 @@ function createAddPopup(pId) {
 		html += "		</select>";
 		html += "		</div>                                                                                                                                        ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm1_e6\">                                                                                        ";
-		html += "			<label for=\"add_grdtn_crtft\" class=\"popup_cont_name\">졸업증명서 :</label>                                                             ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_grdtn_crtft\" name=\"grdtn_crtft\" placeholder=\"졸업증명서 파일 업로드\" readonly=\"readonly\" />     ";
-		html += "			<div class=\"upld_btn\">업로드</div>                                                                                                      ";
+		html += "			<label for=\"add_grdtn_crtfct\" class=\"popup_cont_name\">졸업증명서 :</label>                                                             ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_grdtn_crtfct\" placeholder=\"졸업증명서 파일 업로드\" readonly=\"readonly\" />     ";
+		html += "			<div class=\"upld_btn\">";
+		html += "			<label for=\"grdtn_crtfct_btn\">업로드</label>"
+		html += "			<input type=\"file\" class=\"upld_file\" id=\"grdtn_crtfct_btn\" name=\"att\" accept=\"image/*\" />                       ";
+		html += "			</div>";
 		html += "		</div>                                                                                                                                        ";
 		html += "	</div>                                                                                                                                            ";
 		break;
@@ -1050,7 +1038,7 @@ function createAddPopup(pId) {
 	case "cr_btn" :
 		title = "경력사항 추가";
 		
-		html += "	<div class=\"popup_cont\" id=\"cr_add_popup\" >                                                                                                         ";
+		html += "	<div id=\"cr_add_popup\" >                                                                                                         ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm2_e1\">                                                                         ";
 		html += "			<label for=\"add_cmpny_name\" class=\"popup_cont_name\">회사(단체)명 :</label>                                             ";
 		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_cmpny_name\" name=\"cmpny_name\" placeholder=\"회사(단체)명\" />                       ";
@@ -1083,7 +1071,9 @@ function createAddPopup(pId) {
 	case "qlfctn_btn" :
 		title = "자격사항 추가";
 
-		html += "	<div class=\"popup_cont\" id=\"qlfctn_add_popup\" >                                                                                                               ";
+		html += "<input type=\"hidden\" class=\"upld_file_name\" name=\"copy_file\" />";
+		
+		html += "	<div id=\"qlfctn_add_popup\" >                                                                                                               ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm3_e1\">                                                                               ";
 		html += "			<label for=\"add_lcns_name\" class=\"popup_cont_name\">자격증명 :</label>                                                        ";
 		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_lcns_name\" name=\"lcns_name\" placeholder=\"자격증명\" />                                  ";
@@ -1108,8 +1098,11 @@ function createAddPopup(pId) {
 		html += "		</div>                                                                                                                               ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm3_e6\">                                                                               ";
 		html += "			<label for=\"add_evdnc\" class=\"popup_cont_name\">증빙자료 :</label>                                                            ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_copy_file\" name=\"copy_file\" placeholder=\"자격사항 증빙자료 업로드\" readonly=\"readonly\" />     ";
-		html += "			<div class=\"upld_btn\">업로드</div>                                                                                             ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_copy_file\" placeholder=\"자격사항 증빙자료 업로드\" readonly=\"readonly\" />     ";
+		html += "			<div class=\"upld_btn\">";
+		html += "			<label for=\"copy_file_btn\">업로드</label>"
+		html += "			<input type=\"file\" class=\"upld_file\" id=\"copy_file_btn\" name=\"att\" accept=\"image/*\" />                                                 ";
+		html += "			</div>";
 		html += "		</div>                                                                                                                               ";
 		html += "	</div>                                                                                                                             ";
 		break;
@@ -1128,6 +1121,7 @@ function createAddPopup(pId) {
 			name : "추가",
 			func:function() {
 				var flag = false;
+				var file_exist = false;
 
 				$(".popup_cont_element input").css("outline", "1px solid #00000033");
 				switch (pId) {
@@ -1143,6 +1137,9 @@ function createAddPopup(pId) {
 						$("#add_schl_regstr_dvsn").focus();
 					} else {
 						flag = true;
+					}
+					if (!checkEmpty("#add_grdtn_crtfct")) {
+						file_exist = true;
 					}
 					break;
 					
@@ -1174,30 +1171,35 @@ function createAddPopup(pId) {
 					} else {
 						flag = true;
 					}
+					if (!checkEmpty("#add_copy_file")) {
+						file_exist = true;
+					}
 					break;
 				}
 				if (flag) {
-					var params = $("#addForm").serialize();
-					
-					$.ajax({
-						type : "post",
-						url : "prsnlCardActionAjax/insert",
-						dataType : "json",
-						data : params,
-						success : function(res) {
-							if (res.res == "success") {
-								var params = $("#bottomTabForm").serialize();
-								reloadTab(params);
-								closePopup();
-								makeAlert("작업 완료", "추가되었습니다.");
-							} else {
-								makeAlert("작업 실패", "작업 중 문제가 발생했습니다.<br/>관리자에게 문의하세요.");
+					if (file_exist) {
+						var addForm = $("#addForm");
+						
+						addForm.attr("action", "imageUploadAjax");
+						addForm.ajaxForm({
+							success : function(res) {
+								// 물리파일명 보관
+								if (res.fileName.length > 0) {
+									$(".upld_file_name").val(res.fileName[0]);
+									console.log("test : " + $(".upld_file_name").val());
+
+									addFormAjaxFunction();
+								}
+							},
+							error : function(request) {
+								console.log(request.responseText);
 							}
-						},
-						error : function(request, status, error) {
-							console.log(request.responseText);
-						}
-					});
+						});
+						
+						addForm.submit();
+					} else {
+						addFormAjaxFunction();
+					}
 				}
 			}
 		}, {
@@ -1206,85 +1208,442 @@ function createAddPopup(pId) {
 	});
 }
 
-function createEditPopup(pId) {
+function addFormAjaxFunction() {
+	var params = $("#addForm").serialize();
+	
+	console.log("test2 : " + $(".upld_file_name").val());
+	
+	$.ajax({
+		type : "post",
+		url : "prsnlCardActionAjax/insert",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			if (res.res == "success") {
+				var params = $("#bottomTabForm").serialize();
+				reloadTab(params);
+				closePopup();
+				makeAlert("작업 완료", "추가되었습니다.");
+			} else {
+				makeAlert("작업 실패", "작업 중 문제가 발생했습니다.<br/>관리자에게 문의하세요.");
+			}
+		},
+		error : function(request, status, error) {
+			console.log(request.responseText);
+		}
+	});
+}
+
+function createEditPopup(pId, data, bankList) {
 	console.log(pId);
+	var title = "";
 	var html = "";
+	var size = [0, 0]; // [width, height]
+	
+	html += "<form action=\"#\" id=\"editForm\" method=\"post\">";
+	html += "<input type=\"hidden\" class=\"popup_id\" name=\"popup_id\" value=\"" + pId + "\" />";
+	html += "<input type=\"hidden\" name=\"empNum\" value=\"" + $("#nEmpNum").val() + "\" />";
 	
 	switch (pId) {
 	case "human_info_btn" :
-		html += "<div class=\"popup_bg\"></div>                                                                                               ";
-		html += "<div class=\"popup\" id=\"human_info_edit_popup\">                                                                           ";
-		html += "	<div class=\"popup_title\">인적정보 수정</div>                                                                            ";
-		html += "	<div class=\"popup_cont\">                                                                                                ";
+		title = "인적정보 수정";
+		size = [500, 306];
+		
+		html += "	<div id=\"human_info_edit_popup\" >                                                                                                ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt1_e1\">                                                                 ";
 		html += "			<label for=\"edit_email\" class=\"popup_cont_name\">E-mail :</label>                                              ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_email\" placeholder=\"jhk7951@gmail.com\" />             ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_email\" name=\"edit_email\" value=\"" + data.EMAIL + "\" />             ";
 		html += "		</div>                                                                                                                ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt1_e2\">                                                                 ";
-		html += "			<label for=\"edit_adrs_1\" class=\"popup_cont_name\">주소 :</label>                                               ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_adrs_1\" placeholder=\"서울특별시 구로구 경인로27길\" /> ";
+		html += "			<label for=\"edit_zip_code\" class=\"popup_cont_name\">우편번호 :</label>                                               ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_zip_code\" name=\"edit_zip_code\" value=\"" + data.ZIP_CODE + "\" /> ";
 		html += "		</div>                                                                                                                ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt1_e3\">                                                                 ";
-		html += "			<label for=\"edit_adrs_2\" class=\"popup_cont_name\">상세주소 :</label>                                           ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_adrs_2\" />                                              ";
+		html += "			<label for=\"edit_adrs\" class=\"popup_cont_name\">주소 :</label>                                               ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_adrs\" name=\"edit_adrs\" value=\"" + data.ADRS + "\" /> ";
 		html += "		</div>                                                                                                                ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt1_e4\">                                                                 ";
+		html += "			<label for=\"edit_dtl_adrs\" class=\"popup_cont_name\">상세주소 :</label>                                           ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_dtl_adrs\" name=\"edit_dtl_adrs\" value=\"" + data.DTL_ADRS + "\" />          ";
+		html += "		</div>                                                                                                                ";
+		html += "		<div class=\"popup_cont_element\" id=\"edit_lt1_e5\">                                                                 ";
 		html += "			<label for=\"edit_tlphn_num\" class=\"popup_cont_name\">전화번호 : </label>                                       ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_tlphn_num\" />                                           ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_phone_num\" name=\"edit_phone_num\" ";
+		if (data.PHONE_NUM != null) {
+			html += "value=\"" + data.PHONE_NUM;
+		} else {
+			html += "placeholder=\"전화번호를 입력하세요.";
+		}
+		html += "\" />                                           ";
 		html += "		</div>                                                                                                                ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt1_e5\">                                                                 ";
 		html += "			<label for=\"edit_mbl_num\" class=\"popup_cont_name\">휴대폰번호 :</label>                                        ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_mbl_num\" placeholder=\"010-1234-5678\" />               ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_mbl_num\" name=\"edit_mbl_num\" value=\"" + data.MBL_NUM + "\" />               ";
 		html += "		</div>                                                                                                                ";
 		html += "	</div>                                                                                                                    ";
-		html += "	<div class=\"popup_btn_area\">                                                                                            ";
-		html += "			<div class=\"cmn_btn_mr\" id=\"human_info_edit_cnfrm_btn\">확인</div>                                             ";
-		html += "			<div class=\"cmn_btn_mr\" id=\"cnl_btn\">취소</div>                                                               ";
-		html += "	</div>                                                                                                                    ";
-		html += "</div>                                                                                                                       ";
-
-		$(".cont_area").append(html);
-		
-		$(".popup_bg, .popup").hide();
-		$(".popup_bg, .popup").fadeIn();
 		break;
 		
 	case "slry_info_btn" :
-		html += "<div class=\"popup_bg\"></div>                                                                                                                   ";
-		html += "<div class=\"popup\" id=\"slry_info_edit_popup\">                                                                                                ";
-		html += "	<div class=\"popup_title\">급여정보 수정</div>                                                                                                ";
-		html += "	<div class=\"popup_cont\">                                                                                                                    ";
+		title = "급여계좌정보 수정";
+		size = [520, 240];
+		
+		html += "<input type=\"hidden\" class=\"upld_file_name\" name=\"bnkbk_copy_file\" />";
+		
+		html += "	<div id=\"slry_info_edit_popup\" >                                                                                                                    ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt3_e1\">                                                                                     ";
-		html += "			<label for=\"edit_slry_trnsf_bank\" class=\"popup_cont_name\">급여이체은행 :</label>                                                  ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_slry_trnsf_bank\" placeholder=\"신한은행\" />                                ";
+		html += "			<label for=\"edit_bank_name\" class=\"popup_cont_name\">급여이체은행 :</label>                                                  ";
+		html += "		<select class=\"popup_cont_text\" id=\"edit_bank_name\" name=\"edit_bank_name\">";
+		console.log("check 1");
+		var bankName = "";
+		if (data != null && data.BANK_NAME != null) {
+			bankName = data.BANK_NAME;
+		}
+		console.log("bankName : " + bankName);
+		for (var bl of bankList) {
+			if (bl.BANK_NAME == bankName) {
+				html += "			<option value=\"" + bl.BANK_NUM + "\" selected>" + bl.BANK_NAME + "</option>";
+			} else {
+				html += "			<option value=\"" + bl.BANK_NUM + "\">" + bl.BANK_NAME + "</option>";
+			}
+		}
+		html += "		</select>";
+		
 		html += "		</div>                                                                                                                                    ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt3_e2\">                                                                                     ";
 		html += "			<label for=\"edit_slry_trnsf_acnt\" class=\"popup_cont_name\">급여이체계좌번호 :</label>                                              ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_slry_trnsf_acnt\" placeholder=\"110-123-456789\" />                          ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_acnt_num\" name=\"edit_acnt_num\" value=\"";
+		if (data != null && data.ACNT_NUM != null) {
+			html += data.ACNT_NUM;
+		}
+		html += "\" />                          ";
 		html += "		</div>                                                                                                                                    ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt3_e3\">                                                                                     ";
 		html += "			<label for=\"edit_dpstr\" class=\"popup_cont_name\">예금주명 :</label>                                                                ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_dpstr\" placeholder=\"김정희\" />                                            ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_dpstr\" name=\"edit_dpstr\" value=\"";
+		if (data != null && data.DPSTR != null) {
+			html += data.DPSTR;
+		}
+		html += "\" />                                            ";
 		html += "		</div>                                                                                                                                    ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt3_e4\">                                                                                     ";
-		html += "			<label for=\"edit_bnk_copy\" class=\"popup_cont_name\">통장사본 파일 :</label>                                                        ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_bnk_copy\" readonly=\"readonly\" placeholder=\"파일을 업로드해주세요\" />    ";
-		html += "			<div class=\"upld_btn\">업로드</div>                                                                                                  ";
+		html += "			<label for=\"edit_bnkbk_copy\" class=\"popup_cont_name\">통장사본 파일 :</label>                                                        ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_bnkbk_copy\" readonly=\"readonly\" placeholder=\"파일을 업로드해주세요\" />    ";
+		html += "			<div class=\"upld_btn\">";
+		html += "			<label for=\"bnkbk_copy_btn\">업로드</label>"
+		html += "			<input type=\"file\" class=\"upld_file\" id=\"bnkbk_copy_btn\" name=\"att\" accept=\"image/*\" />                                                 ";
+		html += "			</div>";
 		html += "		</div>                                                                                                                                    ";
 		html += "	</div>                                                                                                                                        ";
-		html += "	<div class=\"popup_btn_area\">                                                                                                                ";
-		html += "			<div class=\"cmn_btn_mr\" id=\"slry_info_edit_cnfrm_btn\">확인</div>                                                                  ";
-		html += "			<div class=\"cmn_btn_mr\" id=\"cnl_btn\">취소</div>                                                                                   ";
-		html += "	</div>                                                                                                                                        ";
-		html += "</div>                                                                                                                                           ";
-		
-		$(".cont_area").append(html);
-		
-		$(".popup_bg, .popup").hide();
-		$(".popup_bg, .popup").fadeIn();
 		break;
 	}
+	
+	html += "</form>";
+	
+	makePopup({
+		bg : true,
+		bgClose : false,
+		width : size[0],
+		height : size[1],
+		title : title,
+		contents : html,
+		buttons : [{
+			name : "수정",
+			func:function() {
+				var flag = false;
+				var file_exist = false;
+
+				$(".popup_cont_element input").css("outline", "1px solid #00000033");
+				switch (pId) {
+				case "human_info_btn" :
+					if (checkEmpty("#edit_email")) {
+						$("#edit_email").css("outline", "2px solid #fe3a40");
+						$("#edit_email").focus();
+					} else if (checkEmpty("#edit_zip_code")) {
+						$("#edit_zip_code").css("outline", "2px solid #fe3a40");
+						$("#edit_zip_code").focus();
+					} else if (checkEmpty("#edit_adrs")) {
+						$("#edit_adrs").css("outline", "2px solid #fe3a40");
+						$("#edit_adrs").focus();
+					} else if (checkEmpty("#edit_dtl_adrs")) {
+						$("#edit_dtl_adrs").css("outline", "2px solid #fe3a40");
+						$("#edit_dtl_adrs").focus();
+					} else if (checkEmpty("#edit_mbl_num")) {
+						$("#edit_mbl_num").css("outline", "2px solid #fe3a40");
+						$("#edit_mbl_num").focus();
+					} else {
+						flag = true;
+					}
+					break;
+					
+				case "slry_info_btn" :
+					if (checkEmpty("#edit_bank_name")) {
+						$("#edit_bank_name").css("outline", "2px solid #fe3a40");
+						$("#edit_bank_name").focus();
+					} else if (checkEmpty("#edit_acnt_num")) {
+						$("#edit_acnt_num").css("outline", "2px solid #fe3a40");
+						$("#edit_acnt_num").focus();
+					} else if (checkEmpty("#edit_dpstr")) {
+						$("#edit_dpstr").css("outline", "2px solid #fe3a40");
+						$("#edit_dpstr").focus();
+					} else {
+						flag = true;
+					}
+					if (!checkEmpty("#edit_bnkbk_copy")) {
+						file_exist = true;
+					}
+					break;
+				}
+				if (flag) {
+					if (file_exist) {
+						var editForm = $("#editForm");
+						
+						editForm.attr("action", "imageUploadAjax");
+						editForm.ajaxForm({
+							success : function(res) {
+								// 물리파일명 보관
+								if (res.fileName.length > 0) {
+									$(".upld_file_name").val(res.fileName[0]);
+									console.log("test33 : " + $(".upld_file_name").val());
+
+									editFormAjaxFunction();
+								}
+							},
+							error : function(request) {
+								console.log(request.responseText);
+							}
+						});
+						
+						editForm.submit();
+					} else {
+						editFormAjaxFunction();
+					}
+				}
+			}
+		}, {
+			name : "취소"
+		}]
+	});
 }
+
+function editFormAjaxFunction() {
+	var params = $("#editForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "prsnlCardActionAjax/update",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			if (res.res == "success") {
+				var params = $("#topTabForm").serialize();
+				reloadTab(params);
+				closePopup();
+				makeAlert("작업 완료", "수정되었습니다.");
+			} else {
+				makeAlert("작업 실패", "작업 중 문제가 발생했습니다.<br/>관리자에게 문의하세요.");
+			}
+		},
+		error : function(request, status, error) {
+			console.log(request.responseText);
+		}
+	});
+}
+
+function createAdmnstrEditPopup(data) {
+	var title = "기본정보 수정";
+	var html = "";
+	var size = [520, 235]; // [width, height]
+	
+	html += "<form action=\"#\" id=\"editForm\" method=\"post\">";
+	html += "<input type=\"hidden\" class=\"popup_id\" name=\"popup_id\" value=\"admnstr_edit_popup\" />";
+	html += "<input type=\"hidden\" name=\"empNum\" value=\"" + $("#nEmpNum").val() + "\" />";
+	html += "<input type=\"hidden\" class=\"upld_file_name\" name=\"emp_pctr_file\" value=\"";
+	if (data.EMP_PCTR_FILE != null) {
+		html += data.EMP_PCTR_FILE;
+	}
+	html += "\" />";
+	
+	html += "	<div id=\"admnstr_edit_popup\" >                                                                                                                    ";
+	html += "		<div class=\"popup_cont_element\" id=\"edit_a_e1\">                                                                                     ";
+	html += "			<label for=\"edit_bank_name\" class=\"popup_cont_name\">사원번호 :</label>                                                  ";
+	html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_emp_num\" readonly=\"readonly\" value=\"";
+	html += $("#nEmpNum").val();
+	html += "\" />                          ";
+	html += "		</div>                                                                                                                                    ";
+	html += "		<div class=\"popup_cont_element\" id=\"edit_a_e2\">                                                                                     ";
+	html += "			<label for=\"edit_slry_trnsf_acnt\" class=\"popup_cont_name\">사원명 :</label>                                              ";
+	html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_emp_name\" name=\"emp_name\" value=\"";
+	html += data.EMP_NAME;
+	html += "\" />                          ";
+	html += "		</div>                                                                                                                                    ";
+	html += "		<div class=\"popup_cont_element\" id=\"edit_a_e3\">                                                                                     ";
+	html += "			<label for=\"edit_dpstr\" class=\"popup_cont_name\">영문사원명 :</label>                                                                ";
+	html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_emp_name_eng\" name=\"emp_name_eng\" value=\"";
+	html += data.EMP_NAME_ENG;
+	html += "\" />                                            ";
+	html += "		</div>                                                                                                                                    ";
+	html += "		<div class=\"popup_cont_element\" id=\"edit_a_e4\">                                                                                     ";
+	html += "			<label for=\"edit_emp_pctr_file\" class=\"popup_cont_name\">사원사진 :</label>                                                        ";
+	html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_emp_pctr_file\" readonly=\"readonly\" placeholder=\"파일을 업로드해주세요\" />    ";
+	html += "			<div class=\"upld_btn\">";
+	html += "			<label for=\"emp_pctr_file_btn\">업로드</label>"
+	html += "			<input type=\"file\" class=\"upld_file\" id=\"emp_pctr_file_btn\" name=\"att\" accept=\"image/*\" />                                                 ";
+	html += "			</div>";
+	html += "		</div>                                                                                                                                    ";
+	html += "	</div>                                                                                                                                        ";
+
+	html += "</form>";
+	
+	makePopup({
+		bg : true,
+		bgClose : false,
+		width : size[0],
+		height : size[1],
+		title : title,
+		contents : html,
+		buttons : [{
+			name : "수정",
+			func:function() {
+				var flag = false;
+				var file_exist = false;
+
+				$(".popup_cont_element input").css("outline", "1px solid #00000033");
+				if (checkEmpty("#edit_emp_num")) {
+					$("#edit_emp_num").css("outline", "2px solid #fe3a40");
+					$("#edit_emp_num").focus();
+				} else if (checkEmpty("#edit_emp_name_eng")) {
+					$("#edit_emp_name_eng").css("outline", "2px solid #fe3a40");
+					$("#edit_emp_name_eng").focus();
+				} else {
+					flag = true;
+				}
+				if (!checkEmpty("#edit_emp_pctr_file")) {
+					file_exist = true;
+				}
+				if (flag) {
+					if (file_exist) {
+						var editForm = $("#editForm");
+						
+						editForm.attr("action", "imageUploadAjax");
+						editForm.ajaxForm({
+							success : function(res) {
+								// 물리파일명 보관
+								if (res.fileName.length > 0) {
+									$(".upld_file_name").val(res.fileName[0]);
+									console.log("test4 : " + $(".upld_file_name").val());
+
+									admnstrEditFormAjaxFunction();
+								}
+							},
+							error : function(request) {
+								console.log(request.responseText);
+							}
+						});
+						
+						editForm.submit();
+					} else {
+						admnstrEditFormAjaxFunction();
+					}
+				}
+			}
+		}, {
+			name : "취소"
+		}]
+	});
+}
+
+
+function admnstrEditFormAjaxFunction() {
+	var params = $("#editForm").serialize();
+	console.log("*************");
+	console.log(params);
+	
+	$.ajax({
+		type : "post",
+		url : "prsnlCardActionAjax/update",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			if (res.res == "success") {
+				closePopup();
+				makeAlert("작업 완료", "수정되었습니다.", function() {
+					reloadBasicInfoArea(params);
+				});
+			} else {
+				makeAlert("작업 실패", "작업 중 문제가 발생했습니다.<br/>관리자에게 문의하세요.");
+			}
+		},
+		error : function(request, status, error) {
+			console.log(request.responseText);
+		}
+	});
+}
+
+function reloadBasicInfoArea() {
+	var params = $("#basicInfoForm").serialize();
+	console.log("***** reloadBasicInfoArea *****");
+	console.log(params);
+	
+	$.ajax({
+		type : "post",
+		url : "prsnlCardSubAjax/reloadBasicInfo",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			drawBasicInfoArea(res.data, res.filePath);
+		},
+		error : function(request, status, error) {
+			console.log(request.responseText);
+		}
+	});
+}
+
+function drawBasicInfoArea(params, filePath2) {
+	var html = "";
+	console.log(params);
+	html += "	<div class=\"cont_line_rt\">                                                                                                            ";
+	html += "	<div class=\"cont_element\">                                                                                                            ";
+	html += "		<div class=\"cont_name\">이름(한글)</div>                                                                                           ";
+	html += "		<br/>                                                                                                                               ";
+	html += "		<input type=\"text\" class=\"cont_text\" id=\"emp_name\" readonly=\"readonly\" value=\"" + params.EMP_NAME + "\" />               ";
+	html += "	</div>                                                                                                                                  ";
+	html += "</div>                                                                                                                                     ";
+	html += "<div class=\"cont_line_rt\">                                                                                                               ";
+	html += "	<div class=\"cont_element\">                                                                                                            ";
+	html += "		<div class=\"cont_name\">이름(영문)</div>                                                                                           ";
+	html += "		<br/>                                                                                                                               ";
+	html += "		<input type=\"text\" class=\"cont_text\" id=\"emp_name_eng\" readonly=\"readonly\" value=\"" + params.EMP_NAME_ENG + "\" />       ";
+	html += "	</div>                                                                                                                                  ";
+	html += "</div>                                                                                                                                     ";
+	html += "<div class=\"cont_line_rt\">                                                                                                               ";
+	html += "	<div class=\"cont_element\">                                                                                                            ";
+	html += "		<div class=\"cont_name\">소속부서</div>                                                                                             ";
+	if (params.DEPT_NAME != null) {
+		html += "				<input type=\"text\" class=\"cont_text\" id=\"dprtmn\" readonly=\"readonly\" value=\"" + params.DEPT_NAME + "\" />        ";
+	} else {
+		html += "				<input type=\"text\" class=\"cont_text\" id=\"dprtmn\" readonly=\"readonly\" value=\"\" />                                  ";
+	}
+	html += "		<br/>                                                                                                                               ";
+	html += "	</div>                                                                                                                                  ";
+	html += "</div>                                                                                                                                     ";
+	html += "<div class=\"cont_line_rt\">                                                                                                               ";
+	html += "	<div class=\"cont_element\">                                                                                                            ";
+	html += "		<div class=\"cont_name\">직급</div>                                                                                                 ";
+	html += "		<br/>                                                                                                                               ";
+	html += "		<input type=\"text\" class=\"cont_text\" id=\"pstn\" readonly=\"readonly\" value=\"" + params.RANK_NAME + "\" />                  ";
+	html += "	</div>                                                                                                                                  ";
+	html += "</div>                                                                                                                                     ";
+
+	$("#basic_info_area").html(html);
+	var srcUrl = "";
+	if (params.EMP_PCTR_FILE != null) {
+		srcUrl = "resources/upload/" + params.EMP_PCTR_FILE;
+	} else {
+		srcUrl = "resources/images/cmn/emp_image.png";
+	}
+	$("#emp_pctr_area").attr("src", srcUrl);
+}
+
 
 function createDelPopup(pId) {
 	console.log(pId);
@@ -1345,6 +1704,7 @@ function createDelPopup(pId) {
 
 function reloadTab(params) {
 	console.log("***** reloadTab *****");
+	console.log($("#nEmpNum").val());
 	
 	$.ajax({
 		type : "post",
@@ -1376,14 +1736,6 @@ function btnSetting() {
 }
 
 $(document).ready(function() {
-	if (${basicInfoData.EMP_PCTR_FILE != null}) {
-		$(".pctr_area").css("background-image", "url(\"" + ${basicInfoData.EMP_PCTR_FILE} + "\")");
-		console.log("파일 있음");
-	} else {
-		$(".pctr_area").css("background-image", "url(\"" + "nullFile.png" + "\")");
-		console.log("파일 없음");
-	}
-	
 	$("#isAdmnstr").val(${is_admnstr});
 	console.log("체크 : " + $("#isAdmnstr").val());
 	
@@ -1395,6 +1747,9 @@ $(document).ready(function() {
 	if ($("#isAdmnstr").val() == "1") {
 		$("#topTabAdmnstr").val($("#nEmpNum").val());
 	}
+
+	reloadBasicInfoArea();
+	
 	var params = $("#topTabForm").serialize();
 	reloadTab(params);
 	
@@ -1482,7 +1837,24 @@ $(document).ready(function() {
 	
 
 	$("#lt_edit_btn").click(function() {
-		createEditPopup($(this).find("input[type=hidden]").val());
+		params = $("#topTabForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "prsnlCardTabAjax",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				console.log(res);
+				console.log(res.tabName + "탭을 선택");
+				console.log(res.tabData);
+				
+				createEditPopup(res.tabName, res.tabData, res.bankList);
+			},
+			error : function(request, status, error) {
+				console.log(request.responseText);
+			}
+		});
 	});
 
 	$("#btm_add_btn").click(function() {
@@ -1495,6 +1867,11 @@ $(document).ready(function() {
 		}
 	});
 
+	$("body").on("change", ".upld_file", function(){
+		var fileName = $(this).val().split("\\");
+		console.log(fileName[fileName.length-1]);
+		$(this).parent("div").parent("div").children("input[type=text]").val(fileName[fileName.length-1]);
+	});
 
 	$(".cont_area").on("click", ".popup #cnl_btn", function() {
 		$(".popup_bg, .popup").fadeOut(function() {
@@ -1554,6 +1931,42 @@ $(document).ready(function() {
 			}
 		}
 	});
+	
+	
+	$(".admnstr_btn").on("mouseenter", function() {
+		if ($(this).attr("da") == "false") {
+			$(this).css("cursor", "pointer");
+		}
+	});	
+	$(".admnstr_btn").on("mouseleave", function() {
+		$(this).css("cursor", "default");
+	});
+	
+	
+	$("#a_list_btn").on("click", function() {
+		$("#i_menuNum").val("6");
+		
+		$("#backForm").submit();
+	});
+	
+	$("#a_edit_btn").click(function() {
+		params = $("#basicInfoForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "prsnlCardSubAjax/reloadBasicInfo",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				console.log(res);
+				
+				createAdmnstrEditPopup(res.data);
+			},
+			error : function(request, status, error) {
+				console.log(request.responseText);
+			}
+		});
+	});
 });
 </script>
 </head>
@@ -1580,6 +1993,19 @@ $(document).ready(function() {
 				<c:when test="${is_admnstr eq '1'}">
 					<div class="admnstr_btn" id="a_list_btn" da="false">목록</div>
 					<div class="admnstr_btn" id="a_edit_btn" da="false">수정</div>
+					<form action="empInqry" id="backForm" method="post">
+						<input type="hidden" id="old_srch_sel" name="srch_sel" value="${param.srch_sel}" />
+						<input type="hidden" id="old_srch_txt" name="srch_txt" value="${param.srch_txt}" />
+						<input type="hidden" id="old_work_clsftn" name="work_clsftn" value="${param.work_clsftn}" />
+						<input type="hidden" id="old_emplynt_type" name="emplynt_type" value="${param.emplynt_type}" />
+						<input type="hidden" id="old_join_date" name="join_date" value="${param.join_date}" />
+						<input type="hidden" id="old_prd_start" name="prd_start" value="${param.prd_start}" />
+						<input type="hidden" id="old_prd_end" name="prd_end" value="${param.prd_end}" />
+						<input type="hidden" id="i_top" name="top" value="${param.top}" />
+						<input type="hidden" id="i_menuNum" name="menuNum" value="${param.menuNum}" />
+						<input type="hidden" id="i_menuType" name="menuType" value="${param.menuType}" />
+						<input type="hidden" id="page" name="page" value="${page}" />
+					</form>
 				</c:when>
 			</c:choose>
 		</div>
@@ -1587,7 +2013,26 @@ $(document).ready(function() {
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<input type="hidden" id="isAdmnstr" name="isAdmnstr" value="-1" />
-			<input type="hidden" id="nEmpNum" name="nEmpNum" value="${basicInfoData.EMP_NUM}" />
+			<c:choose>
+				<c:when test="${is_admnstr eq '1'}">
+				<input type="hidden" id="nEmpNum" name="nEmpNum" value="${param.empNum}" />
+				</c:when>
+				<c:otherwise>
+				<input type="hidden" id="nEmpNum" name="nEmpNum" value="${sEmpNum}" />
+				</c:otherwise>
+			</c:choose>
+			<form action="#" id="basicInfoForm" method="post">
+				<c:choose>
+					<c:when test="${is_admnstr eq '1'}">
+					<input type="hidden" name="sEmpNum" value="${param.empNum}" />
+					</c:when>
+					<c:otherwise>
+					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
+					</c:otherwise>
+				</c:choose>
+				<input type="hidden" id="selectedBasicInfo" name="selectedBasicInfo" value="basic_info_area"/>
+				<input type="hidden" id="basicInfoAdmnstr" name="admnstrNum" value="-1"/>
+			</form>
 			<form action="#" id="topTabForm" method="post">
 				<input type="hidden" id="selectedTopTab" name="selectedTopTab" value="human_info_btn"/>
 				<input type="hidden" id="topTabAdmnstr" name="admnstrNum" value="-1"/>
@@ -1614,44 +2059,26 @@ $(document).ready(function() {
 				</div>
 				<div class="dtl_cont" id="right_top">
 					<div id="basic_info_area">
-						<div class="cont_line_rt">
-							<div class="cont_element">
-								<div class="cont_name">이름(한글)</div>
-								<br/>
-								<input type="text" class="cont_text" id="emp_name" readonly="readonly" value="${basicInfoData.EMP_NAME}" />
-							</div>
-						</div>
-						<div class="cont_line_rt">
-							<div class="cont_element">
-								<div class="cont_name">이름(영문)</div>
-								<br/>
-								<input type="text" class="cont_text" id="emp_name_eng" readonly="readonly" value="${basicInfoData.EMP_NAME_ENG}" />
-							</div>
-						</div>
-						<div class="cont_line_rt">
-							<div class="cont_element">
-								<div class="cont_name">소속부서</div>
-								<input type="text" class="cont_text" id="dprtmn" readonly="readonly" value="${basicInfoData.DEPT_NAME}" />
-								<br/>
-							</div>
-						</div>
-						<div class="cont_line_rt">
-							<div class="cont_element">
-								<div class="cont_name">직급</div>
-								<br/>
-								<input type="text" class="cont_text" id="pstn" readonly="readonly" value="${basicInfoData.RANK_NAME}" />
-							</div>
-						</div>
+
 					</div>
 					<div id="basic_info_area_right">
-					<div class="cont_line" id="rt_l1">
-						<div class="cont_element" id="rt_l1_e1">
-							<div class="cont_name">사원번호</div>
-							<input type="text" class="cont_text" id="emp_num" readonly="readonly" value="${basicInfoData.EMP_NUM}" />
+						<div class="cont_line" id="rt_l1">
+							<div class="cont_element" id="rt_l1_e1">
+								<div class="cont_name">사원번호</div>
+									<c:choose>
+										<c:when test="${is_admnstr eq '1'}">
+											<input type="text" class="cont_text" id="emp_num" readonly="readonly" value="${param.empNum}" />
+										</c:when>
+										<c:otherwise>
+											<input type="text" class="cont_text" id="emp_num" readonly="readonly" value="${sEmpNum}" />
+										</c:otherwise>
+									</c:choose>
+							</div>
 						</div>
-					</div>
-					<br/>
-					<div id="pctr_area"></div>
+						<br/>
+						<div id="pctr_area">
+							<img alt="사원이미지" id="emp_pctr_area" src=""/>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -1666,7 +2093,6 @@ $(document).ready(function() {
 					</div>
 					<div class="dtl_cont" id="bottom_cont">
 						<div id="table_area">
-							
 						</div>
 					</div>
 				</div>

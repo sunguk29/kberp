@@ -370,12 +370,11 @@ td:nth-child(1) {
 .plus_btn, .btnImg:hover{
 	cursor: pointer;
 }
-#att {
-	display: none;
-}
+
 #fileName {
 	border: hidden;
 	outline: none;
+	width: 500px;
 }
 .txt{
 	height: 33px;
@@ -1546,7 +1545,7 @@ function uploadName(e) {
 							</tbody>
 						</table>
 						<!-- 첨부자료 -->
-							<input type="file" id="att" name="att" onchange="uploadName(this)" /> 
+							<input type="file" id="att" name="att" style="display: none;" onchange="uploadName(this)" /> 
 							<input type="hidden" id="attFile" name="attFile" />
 						<div class="rvn_txt"> 첨부파일
 							<img class="plus_btn" src="resources/images/sales/plus.png" border='0' > 

@@ -309,6 +309,57 @@ td:nth-child(even) {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	if ("${param.srch_sel}" != "") {
+		$("#srch_sel").val("${param.srch_sel}");
+	} else {
+		$("#old_srch_sel").val("0");
+	}
+	
+	if ("${param.work_clsftn}" != "") {
+		switch ("${param.work_clsftn}") {
+		case "-1" :
+			$("#work_clsftn_entr").prop("checked", true);
+			break;
+		case "0" :
+			$("#work_clsftn_work").prop("checked", true);
+			break;
+		case "1" :
+			$("#work_clsftn_rsgnt").prop("checked", true);
+			break;
+		}
+	}
+
+	if ("${param.emplynt_type}" != "") {
+		switch ("${param.emplynt_type}") {
+		case "-1" :
+			$("#emplynt_type_entr").prop("checked", true);
+			break;
+		case "0" :
+			$("#emplynt_type_rgl_wrk").prop("checked", true);
+			break;
+		case "1" :
+			$("#emplynt_type_cntr_wrk").prop("checked", true);
+			break;
+		}
+	}
+
+	if ("${param.join_date}" != "") {
+		switch ("${param.join_date}") {
+		case "-1" :
+			$("#join_date_entr").prop("checked", true);
+			break;
+		case "0" :
+			$("#join_date_prd_dsgnt").prop("checked", true);
+			if ("${param.prd_start}" != "") {
+				$("#prd_start").val("${param.prd_start}");
+			}
+			if ("${param.prd_end}" != "") {
+				$("#prd_end").val("${param.prd_end}");
+			}
+			break;
+		}
+	}
+	
 	reloadList();
 	btnSetting();
 		
@@ -466,7 +517,11 @@ function drawList(list) {
 			html += "	<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
 			html += "	<td><div class=\"td_cont\">" + data.EMP_NUM + "</div></td> ";
 			html += "	<td><div class=\"td_cont\">" + data.EMP_NAME + "</div></td> ";
-			html += "	<td><div class=\"td_cont\">" + data.DEPT_NAME + "</div></td> ";
+			html += "	<td><div class=\"td_cont\">" 
+			if (data.DEPT_NAME != null) {
+				html += data.DEPT_NAME;
+			}
+			html += "</div></td> ";
 			html += "	<td><div class=\"td_cont\">" + data.RANK_NAME + "</div></td> ";
 			html += "	<td><div class=\"td_cont\">" + data.MBL_NUM + "</div></td> ";
 			html += "	<td><div class=\"td_cont\">" + data.JOIN_DATE + "</div></td> ";
@@ -591,7 +646,7 @@ function btnSetting() {
 							<option value="2">부서명</option>
 						</select>
 						<div class="srch_text_wrap">
-							<input type="text" id="srch_txt" name="srch_txt" />
+							<input type="text" id="srch_txt" name="srch_txt" value="${param.srch_txt}" />
 						</div>
 						<div class="cmn_btn_ml">검색</div>
 					</div>

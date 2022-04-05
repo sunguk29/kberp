@@ -654,13 +654,16 @@ $(document).ready(function() {
 
    // 발령 추가
    $("#apntm_add_btn").on("click", function() {
-      drawNewApntm();
+	   reloadNewApntm();
+		console.log("발령추가 클릭!")
 
 	   // 사원조회 팝업
-		$("#prfl_srch_btn").on("click", function() {
+		$("body").on("click", "#prfl_srch_btn", function() {
+			console.log("돋보기 클릭!")
 						
 			var html = "";
 			html += "<form action=\"#\" id=\"inqryForm\" method=\"post\">" ;
+			html += "<input type=\"hidden\" id=\"inqryNo\" name=\"inqryNo\"  />" ;
 			html += "<div class=\"popup_emp_srch_area\">         ";
 			html += "<select class=\"emp_srch_select\" id=\"inqryGbn\" name=\"inqryGbn\">          ";
 			html += "	<option value=\"0\" selected>전체</option>";
@@ -685,8 +688,8 @@ $(document).ready(function() {
             html += "   <thead>                         ";
             html += "      <tr>                         ";
             html += "         <th>부서</th>             ";
-            html += "         <th>직급</th>             ";
             html += "         <th>사원명</th>           ";
+            html += "         <th>직급</th>             ";
             html += "         <th>사원번호</th>         ";
             html += "      </tr>                        ";
             html += "   </thead>                        ";
@@ -706,17 +709,26 @@ $(document).ready(function() {
 					var params = $("#inqryForm").serialize();	
 			 		$.ajax({
 					      type : "post",
-					      url : "apntmListAjax/inqry",
+					      url : "apntmListAjax/inqryList",
 					      dataType : "json",
 					      data : params,
 					      success : function(res) {
 					    	  console.log(res);
-					    	  drawInqryList(res.inqry);
+					    	  drawInqryList(res.inqryList);
 					      }, 
 					      error : function(req) {
 					         console.log(req.responseText);
 					      }
 				   }); 
+			 		
+			 	   // 사원 선택 
+			 	   $("tbody").on("click", "tr", function() {
+			 	      $("#inqryNo").val($(this).attr("no"));
+			 	      $("tbody").children("tr").css("background-color", "#ffffff");
+			 	      $(this).css("background-color", "rgb(200,218,248)");
+			 	      console.log("inqryNo : " + $("#inqryNo").val())
+			 	   });
+			 	   
 		   	   	   // 사원조회 버튼이벤트
 			 	   $("#inqryTxt").on("keypress", function(event) { // 엔터 시 클릭
 		 			  if(event.keyCode == 13) {
@@ -732,12 +744,12 @@ $(document).ready(function() {
 				   	   console.log("inqryGbn  : " + $("#inqryGbn").val())
 				 		$.ajax({
 						      type : "post",
-						      url : "apntmListAjax/inqry",
+						      url : "apntmListAjax/inqryList",
 						      dataType : "json",
 						      data : params,
 						      success : function(res) {
 						    	  console.log(res);
-						    	  drawInqryList(res.inqry);
+						    	  drawInqryList(res.inqryList);
 						      }, 
 						      error : function(req) {
 						         console.log(req.responseText);
@@ -749,6 +761,23 @@ $(document).ready(function() {
 				buttons : [{
 					name : "확인",
 					func:function() {
+					   	   var params = $("#inqryForm").serialize();	
+					 		$.ajax({
+							      type : "post",
+							      url : "apntmListAjax/inqryEmp",
+							      dataType : "json",
+							      data : params,
+							      success : function(res) {
+							    	  console.log(res);
+							    	  $("#empNum").val(res.inqryEmp.EMP_NUM);
+									  $("#empName").val(res.inqryEmp.EMP_NAME);
+									  $("#deptName").val(res.inqryEmp.RANK_NAME);
+									  $("#rankName").val(res.inqryEmp.DEPT_NAME);
+							      }, 
+							      error : function(req) {
+							         console.log(req.responseText);
+							      }
+						   }); 
 						console.log("사원조회!");
 						closePopup();
 					}
@@ -756,21 +785,20 @@ $(document).ready(function() {
 					name : "취소"
 				}]
 			});
-		// 슬림스크롤
-   		$(".empinqry_area").slimScroll({height: "255px"},{width: "450px"}); 
-		}); // 팝업클릭 끝
-  	});
+   			$(".empinqry_area").slimScroll({height: "255px"},{width: "450px"}); // 슬림스크롤
+		}); // 사원조회팝업 끝
+  	});// 발령추가 끝
 });
 
-// 사원조회 리스트 그리기
-function drawInqryList(inqry) {
+// 사원조회 리스트 생성
+function drawInqryList(inqryList) {
 	var html = "";
 	
-    for(var data of inqry) {
-        html += " <tr>                        ";
+    for(var data of inqryList) {
+        html += "<tr no=\"" + data.EMP_NUM + "\">"   
         html += " 	<td>" + data.DEPT_NAME + "</td> ";
-        html += " 	<td>" + data.RANK_NAME + "</td> ";
         html += " 	<td>" + data.EMP_NAME + "</td> ";
+        html += " 	<td>" + data.RANK_NAME + "</td> ";
         html += " 	<td>" + data.EMP_NUM + "</td> ";
         html += " </tr>                       ";
     }
@@ -816,7 +844,6 @@ function reloadCont() {
    
 }
 
-
 // 발령 리스트 생성
 function drawList(list) {
    var html = "";
@@ -848,6 +875,7 @@ function drawList(list) {
    }
    $("tbody").html(html);
 }   
+
 // 발령 상세정보 생성
 function drawCont(cont){
    var html = "";
@@ -875,13 +903,13 @@ function drawCont(cont){
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_dept\">                                         ";
-   html += "                  <div class=\"prfl_info_text\">부서명</div>                         ";
+   html += "                  <div class=\"prfl_info_text\">부서</div>                         ";
    html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + cont.DEPT_NAME + "\" /> ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_team\">                                         ";
-   html += "                  <div class=\"prfl_info_text\">팀명</div>                           ";
+   html += "                  <div class=\"prfl_info_text\">직급</div>                           ";
    html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + cont.DEPT_NAME + "\" />";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
@@ -947,8 +975,24 @@ function drawCont(cont){
    $("#apntm_cont").html(html);
 }
 
+function reloadNewApntm(){
+	 $.ajax({
+	      type : "post",
+	      url : "apntmListAjax/addApntm",
+	      dataType : "json",
+	      success : function(res) {
+	    	  drawNewApntm(res.dept, res.rank);
+	      },
+	      error : function(req) {
+	         console.log(req.responseText);
+	      }
+	   });
+}
+
 // 발령 등록 생성
-function drawNewApntm(){
+function drawNewApntm(dept,rank){
+	
+	
    var html = "";
    
    html += "<div class=\"apntm_cont_right_area\">                                                     ";
@@ -963,26 +1007,26 @@ function drawNewApntm(){
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_emp_num\">                                      ";
    html += "                  <div class=\"prfl_info_text\">사원번호</div>                       ";
-   html += "                  <input type=\"text\" class=\"prfl_info_input\" value=\"\" />  ";
+   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled id=\"empNum\" value=\"\" />  ";
    html += "                  <div class=\"prfl_srch_btn\" id=\"prfl_srch_btn\"></div>                                ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_emp_name\">                                     ";
    html += "                  <div class=\"prfl_info_text\">사원명</div>                         ";
-   html += "                  <input type=\"text\" class=\"prfl_info_input\" value=\"\" /> ";
+   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled id=\"empName\" value=\"\" /> ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_dept\">                                         ";
-   html += "                  <div class=\"prfl_info_text\">부서명</div>                         ";
-   html += "                  <input type=\"text\" class=\"prfl_info_input\" value=\"\" /> ";
+   html += "                  <div class=\"prfl_info_text\">부서</div>                         ";
+   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled id=\"deptName\"value=\"\" /> ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_team\">                                         ";
-   html += "                  <div class=\"prfl_info_text\">팀명</div>                           ";
-   html += "                  <input type=\"text\" class=\"prfl_info_input\" value=\"\" />";
+   html += "                  <div class=\"prfl_info_text\">직급</div>                           ";
+   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled id=\"rankName\"value=\"\" />";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";
@@ -993,49 +1037,30 @@ function drawNewApntm(){
    html += "               <div class=\"apnmt_info_text\">발령구분*</div>                         ";
    html += "               <select class=\"apnmt_select\">                                        ";
    html += "                  <option selected>선택</option>                                     ";
-   html += "                  <option>입사</option>                                              ";
-   html += "                  <option>퇴사</option>                                              ";
-   html += "                  <option>승진</option>                                              ";
-   html += "                  <option>이동</option>                                              ";
-   html += "               </select>                                                              ";
-   html += "            </div>                                                                     ";
-   html += "            <div class=\"apnmt_info\">                                                 ";
-   html += "               <div class=\"apnmt_info_text\">발령부서*</div>                         ";
-   html += "               <select class=\"apnmt_select\">                                        ";
-   html += "                  <option selected>선택</option>                                     ";
-   html += "                  <option>영업부</option>                                              ";
-   html += "                  <option>선택안함</option>                                              ";
+   html += "                  <option value=\"0\">입사</option>                                              ";
+   html += "                  <option value=\"1\">퇴사</option>                                              ";
+   html += "                  <option value=\"2\">승진</option>                                              ";
+   html += "                  <option value=\"3\">이동</option>                                              ";
    html += "               </select>                                                              ";
    html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";
    html += "         <div class=\"apnmt_info_wrap\">                                                ";
    html += "            <div class=\"apnmt_info\">                                                 ";
-   html += "               <div class=\"apnmt_info_text\">발령팀*</div>                           ";
+   html += "               <div class=\"apnmt_info_text\">발령부서*</div>                           ";
    html += "               <select class=\"apnmt_select\">                                        ";
    html += "                  <option selected>선택</option>                                     ";
-   html += "                  <option>인사팀</option>                                              ";
-   html += "                  <option>경영팀</option>                                              ";
-   html += "                  <option>영업1팀</option>                                              ";
-   html += "                  <option>영업2팀</option>                                              ";
-   html += "                  <option>고객지원팀</option>                                              ";
-   html += "                  <option>ELS팀</option>                                              ";
+   for(var data of dept){
+   html += "                  <option>" + data.DEPT_NAME + "</option>                                              ";
+   }
    html += "               </select>                                                              ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_info\">                                                 ";
    html += "               <div class=\"apnmt_info_text\">발령직급*</div>                         ";
    html += "               <select class=\"apnmt_select\">                                        ";
    html += "                  <option selected>선택</option>                                     ";
-   html += "                  <option>사원</option>                                              ";
-   html += "                  <option>주임</option>                                              ";
-   html += "                  <option>대리</option>                                              ";
-   html += "                  <option>과장</option>                                              ";
-   html += "                  <option>차장</option>                                              ";
-   html += "                  <option>부장</option>                                              ";
-   html += "                  <option>이사</option>                                              ";
-   html += "                  <option>상무</option>                                              ";
-   html += "                  <option>전무</option>                                              ";
-   html += "                  <option>부사장</option>                                              ";
-   html += "                  <option>CEO</option>                                              ";
+   for(var data of rank){
+   html += "                  <option>" + data.RANK_NAME + "</option>                                              ";
+   }
    html += "               </select>                                                              ";
    html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";
@@ -1063,10 +1088,6 @@ function drawNewApntm(){
    html += "   </div>                                                                                 ";
    html += "</div>                                                                                    ";
    $("#apntm_cont").html(html);
-}
-
-function prfl_srch(){
-	
 }
 </script>
 </head>
