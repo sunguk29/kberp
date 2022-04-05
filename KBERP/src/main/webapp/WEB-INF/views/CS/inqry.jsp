@@ -130,6 +130,12 @@ tr:nth-child(5) {
 	padding: 10px 10px;
 }
 
+#att, #ansr_att {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 .cmn_btn_ml {
 	/* 마우스 드래그 금지 */
 	-ms-user-select: none;
@@ -223,6 +229,7 @@ $(document).ready(function() {
 		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 		<input type="hidden" id="emp_name" name="emp_name" value="${data.EMP_NAME}" />
 		<input type="hidden" id="ctgry_name" name="ctgry_name" value="${data.CTGRY_NAME}" />
+		<input type="hidden" id="ansrAttName" value="${fileName}" />
 		<input type="hidden" id="top" name="top" value="${param.top}"/>
 		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
 		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
@@ -348,12 +355,18 @@ $(document).ready(function() {
 									<div class="wrtng_cont">${data.WRTNG_CONT}</div>
 								</td>
 							</tr>
-							<tr>
-								<th scope="row">첨부파일</th>
-								<td>
-									<input type="text" id="att" name="att" readonly="readonly" value="${data.ATT_FILE}" >
-								</td>
-							</tr>
+							<c:if test="${!empty data.ATT_FILE}">
+							<c:set var="fileLength" value="${fn:length(data.ATT_FILE)}"></c:set>
+							<c:set var="fileName" value="${fn:substring(data.ATT_FILE, 20, fileLength)}"></c:set>
+								<tr>
+									<th scope="row">첨부파일</th>
+									<td>
+										<a href="resources/upload/${data.ATT_FILE}" download="${fileName}">
+										${data.ATT_FILE}
+										</a>
+									</td>
+								</tr>
+							</c:if>
 						</tbody>
 						</table>
 					<div class="cnsl_page">답변글</div>
@@ -380,12 +393,18 @@ $(document).ready(function() {
 									<div class="ansr_cont">${data.ANSR_CONT}</div>
 								</td>
 							</tr>
-							<tr>
-								<th scope="row">첨부파일</th>
-								<td>
-									<input type="text" id="att" name="att" readonly="readonly" value="${data.ANSR_ATT_FILE}" >
-								</td>
-							</tr>
+							<c:if test="${!empty data.ANSR_ATT_FILE}">
+							<c:set var="fileLength" value="${fn:length(data.ANSR_ATT_FILE)}"></c:set>
+							<c:set var="fileName" value="${fn:substring(data.ANSR_ATT_FILE, 20, fileLength)}"></c:set>
+								<tr>
+									<th scope="row">첨부파일</th>
+									<td>
+										<a href="resources/upload/${data.ANSR_ATT_FILE}" download="${fileName}">
+										${fileName}
+										</a>
+									</td>
+								</tr>
+							</c:if>
 						</tbody>
 					</table>
 				</c:otherwise>

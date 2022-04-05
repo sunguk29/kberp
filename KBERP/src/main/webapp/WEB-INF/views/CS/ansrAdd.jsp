@@ -18,7 +18,16 @@
 .cont_wrap {
 	width: 900px;
 }
+
 /* 개인 작업 영역 */
+#ansr_File {
+	display: none;
+}
+
+#att_textBox {
+	display: none;
+}
+
 .cmn_btn_mr, .open_cnsl_btn, .see_cnsl_header,
 .open_ansr_btn, .see_ansr_header {
 	/* 마우스 드래그 금지 */
@@ -280,8 +289,13 @@ tr:nth-child(2) input, tr:nth-child(4) input {
 	height: 50px;
 	display: inline-block;
 	position: relative;
+	font-size: 10pt;
 	margin-left: 30px;
 	margin-top: 25px;
+}
+
+#show_att {
+	font-weight: bold;
 }
 
 .cnsl_bottom input[type="file"] {
@@ -332,6 +346,15 @@ $(document).ready(function() {
 		  
 	});
 	
+	$("#fileDelBtn").on("click", function() {
+		$("#ansrAttName").remove();
+		$("#show_att").remove();
+		$(this).remove();
+		$("#ansr_File").show();
+		$("#att_textBox").show();
+		
+		$("#ansr_attFile").val("");
+	});
 	
 	$("#btn1Btn").on("click", function() {
 		makePopup({
@@ -557,7 +580,8 @@ function checkEmpty(sel) {
 								<tr>
 									<th scope="row">첨부파일</th>
 									<td>
-										<input type="text" id="att" name="att" readonly="readonly" >
+										<input type="text" id="att" name="att" readonly="readonly" value="${data.ATT_FILE}" >
+										<input type="hidden" id="attFile" name="attFile" readonly="readonly" >
 									</td>
 								</tr>
 							</tbody>
@@ -614,11 +638,25 @@ function checkEmpty(sel) {
 										<textarea class="ansr_cont" id="ansr_cont" name="ansr_cont" rows="15" cols="110" placeholder="내용을 입력하세요.">${data.ANSR_CONT}</textarea>
 									</div>
 									<div class="cnsl_bottom">
-										<div class="file_atch">
-											<input type="file" name="ansr_file" />
-											<input type="text" id="ansr_att" name="ansr_att" readonly="readonly"/>
-											<input type="hidden" id="ansr_attFile" name="ansr_attFile"/>
-										</div>
+											<div class="file_atch">
+											<c:choose>
+											 	<c:when test="${!empty data.ANSR_ATT_FILE}">
+													<span id="show_att">첨부파일 :   </span>
+													<c:set var="fileLength" value="${fn:length(data.ANSR_ATT_FILE)}"></c:set>
+													<c:set var="fileName" value="${fn:substring(data.ANSR_ATT_FILE, 20, fileLength)}"></c:set>
+													<span id="ansrAttName">${fileName}</span>
+													<input type="button" value="첨부파일 삭제" id="fileDelBtn" />
+													<input type="hidden" id="ansr_attFile" name="ansr_attFile" value="${data.ANSR_ATT_FILE}" />
+													<input type="file" id="ansr_File" name="ansr_File" />
+													<input type="text" id="att_textBox" name="att_textBox" readonly="readonly" />
+												</c:when>
+												<c:otherwise>
+													<input type="file" name="ansr_file" />
+													<input type="text" id="att_textBox2" name="att_textBox" readonly="readonly"/>
+													<input type="hidden" id="ansr_attFile" name="ansr_attFile"/>
+												</c:otherwise>
+											</c:choose>
+											</div>
 										<div class="ansr_btn">
 											<div class="cmn_btn_mr" id="btn1Btn">대응가이드</div>
 											<div class="cmn_btn_mr" id="btn3Btn">수정완료</div>

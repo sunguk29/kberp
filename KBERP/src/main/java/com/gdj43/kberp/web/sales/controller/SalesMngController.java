@@ -272,7 +272,6 @@ public class SalesMngController {
 	
 
 	 // sales3QtnReg : 견적 등록
-	 
 	 @RequestMapping(value = "/sales3QtnReg")
 	 public ModelAndView sales3QtnReg(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 	 
@@ -451,6 +450,53 @@ public class SalesMngController {
 		 
 		 return mapper.writeValueAsString(modelMap);
 	 }
+	 
+	// salesMng3ActionAjax : 견적 등록, 수정, 삭제
+	@RequestMapping(value = "/salesMng3ActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	
+	@ResponseBody
+	public String salesMng3ActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			switch (gbn) {
+			case "insert" :
+				iCommonService.insertData("salesMng.sales3QtnAdd", params); // 견적 
+				iCommonService.insertData("salesMng.sales3QtnAttAdd", params); // 견적 첨부파일
+				iCommonService.updateData("salesMng.sales2to3", params); // 진행 단계 전환
+				break;
+			case "update" :
+				break;
+			}
+			modelMap.put("res", "success");
+		} catch (Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "failed");
+		}
+		
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
+	// sales3SgstnCont : 제안 상세보기
+	@RequestMapping(value="/sales3QtnCont")
+	public ModelAndView sales3QtnCont(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("salesMng.getSales1", params);
+		HashMap<String, String> data2 = iCommonService.getData("salesMng.getSales2", params);
+		HashMap<String, String> data3 = iCommonService.getData("salesMng.getSales3", params);
+		
+		mav.addObject("data", data);
+		mav.addObject("data2", data2);
+		mav.addObject("data3", data3);
+		
+		mav.setViewName("sales/sales3QtnCont");
+		
+		return mav;
+	}
 	
 }
 
