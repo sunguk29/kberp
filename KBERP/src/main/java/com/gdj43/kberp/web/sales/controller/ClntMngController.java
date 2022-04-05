@@ -51,7 +51,7 @@ public class ClntMngController {
 		mav.addObject("EtcCnt", EtcCnt);
 		
 		mav.addObject("page", params.get("page"));
-		mav.setViewName("sales/clntCmpnyList");
+		mav.setViewName("sales/clntCmpny/clntCmpnyList");
 		
 		return mav;
 	}
@@ -67,7 +67,7 @@ public class ClntMngController {
 		mav.addObject("data", data);
 		mav.addObject("clCnt", clCnt);
 		
-		mav.setViewName("sales/clntCmpnyCont");
+		mav.setViewName("sales/clntCmpny/clntCmpnyCont");
 		
 		return mav;
 	}
@@ -79,7 +79,7 @@ public class ClntMngController {
 		HashMap<String, String> data = iCommonService.getData("clntCmpnyMng.clntCmpnyCont", params);
 		
 		mav.addObject("data", data);
-		mav.setViewName("sales/clntCmpnyUpdate");
+		mav.setViewName("sales/clntCmpny/clntCmpnyUpdate");
 		
 		return mav;
 	}
@@ -88,7 +88,7 @@ public class ClntMngController {
 	@RequestMapping(value = "/clntCmpnyReg")
 	public ModelAndView clntCmpnyReg(ModelAndView mav) {
 		
-		mav.setViewName("sales/clntCmpnyReg");
+		mav.setViewName("sales/clntCmpny/clntCmpnyReg");
 		
 		return mav;
 	}
@@ -159,7 +159,7 @@ public class ClntMngController {
 		}
 		
 		mav.addObject("page", params.get("page"));
-		mav.setViewName("sales/clntList");
+		mav.setViewName("sales/clnt/clntList");
 		
 		return mav;
 	}
@@ -172,7 +172,7 @@ public class ClntMngController {
 		
 		mav.addObject("data", data);
 		
-		mav.setViewName("sales/clntCont");
+		mav.setViewName("sales/clnt/clntCont");
 		
 		return mav;
 	}
@@ -210,7 +210,7 @@ public class ClntMngController {
 		
 		mav.addObject("data", data);
 		
-		mav.setViewName("sales/clntUpdate");
+		mav.setViewName("sales/clnt/clntUpdate");
 		
 		return mav;
 	}
@@ -219,7 +219,7 @@ public class ClntMngController {
 	@RequestMapping(value = "/clntReg")
 	public ModelAndView clntReg(ModelAndView mav) {
 		
-		mav.setViewName("sales/clntReg");
+		mav.setViewName("sales/clnt/clntReg");
 		
 		return mav;
 	}

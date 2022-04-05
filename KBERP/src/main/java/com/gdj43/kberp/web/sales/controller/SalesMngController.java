@@ -276,7 +276,6 @@ public class SalesMngController {
 	 @RequestMapping(value = "/sales3QtnReg")
 	 public ModelAndView sales3QtnReg(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 	 
-	 
 		 //조회
 		HashMap<String, String> sales1DataLead = iCommonService.getData("salesMng.getSales2BringLead", params);
 		HashMap<String, String> sales1DataLoan = iCommonService.getData("salesMng.getSales2BringLoan", params);
@@ -285,7 +284,6 @@ public class SalesMngController {
 		HashMap<String, String> sales2DataLoan = iCommonService.getData("salesMng.getSales3BringLoan", params);
 		HashMap<String, String> sales2DataClntCmpny = iCommonService.getData("salesMng.getSales3BringClntCmpny", params);
 		HashMap<String, String> sales2DataDtlInfo = iCommonService.getData("salesMng.getSales3BringDtlInfo", params);
-		
 		
 		mav.addObject("lead", sales1DataLead);
 		mav.addObject("loan", sales1DataLoan);
@@ -296,12 +294,26 @@ public class SalesMngController {
 		mav.addObject("dtlS", sales2DataDtlInfo);
 		// 제안 첨부파일은X
 		 
-		 
 		mav.setViewName("sales/sales3QtnReg");
 		 
 		return mav;
 	 }
 
+	 //(팝업) 상품 상세보기 Ajax
+	 @RequestMapping(value = "/popupMdContAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	 @ResponseBody
+	 public String popupMdContAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		 
+		 ObjectMapper mapper = new ObjectMapper();
+		 
+		 Map<String, Object> modelMap = new HashMap<String, Object>();
+		 
+		 HashMap<String, String> data = iCommonService.getData("md.getMdContData", params);
+		
+		 modelMap.put("data", data);
+		 
+		 return mapper.writeValueAsString(modelMap);
+	 }
 	
 	 // (팝업) 상품 목록 비동기
 	 @RequestMapping(value = "/popupMdListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
@@ -423,6 +435,22 @@ public class SalesMngController {
 		return mapper.writeValueAsString(modelMap);
 		
 	}
+	
+	 // 견적 상품 리스트 비동기
+	 @RequestMapping(value = "/qtnMdListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	 @ResponseBody
+	 public String qtnMdListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		 
+		 ObjectMapper mapper = new ObjectMapper();
+		 
+		 Map<String, Object> modelMap = new HashMap<String, Object>();
+		 
+		 List<HashMap<String, String>> list = iCommonService.getDataList("salesMng.mdList", params);
+		
+		 modelMap.put("list", list);
+		 
+		 return mapper.writeValueAsString(modelMap);
+	 }
 	
 }
 

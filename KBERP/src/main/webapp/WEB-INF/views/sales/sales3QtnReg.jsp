@@ -124,7 +124,6 @@ tr:nth-last-child(1) {
 	line-height: 33px;
 	border: none;
 }
-
 .detailList tr td:nth-child(1) {
 	text-align: center;
 }
@@ -580,8 +579,9 @@ pre{
 }
 .md_bx { /* 스크롤때문에 div 박스 추가 */
 	width: 835x;
-	height: 75px;
+	height: 205px;
 	margin-left: 70px;
+	font-size: 12pt;
 	overflow-y: auto;
 }
 .md_txt{
@@ -610,17 +610,33 @@ pre{
 .txtOp_btn{
 	margin-left: 600px;
 }
-.md_nm, .md_intrst, .md_grd, .md_prd{
-	width: 50px;
-	height: 35px;
-	margin: 0px 15px;
-	font-size: 12pt;
-}
 .md_nm{
+	display: inline-block;
+	vertical-align: middle;
+	width: 120px;
 	font-weight: bold;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.md_intrst, .md_prd {
+	display: inline-block;
+	vertical-align: middle;
+	width: 120px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.md_grd {
+	display: inline-block;
+	vertical-align: middle;
+	width: 190px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 .md_btn{
-	margin-left : 200px;
+	margin-left : 50px;
 }
 .dtl, .apply, .gb{
 	display: inline-block;
@@ -787,13 +803,13 @@ pre{
 }
 
 /* 팝업 페이징 */
-.board_bottom2 {
+/* .board_bottom2 {
 	height: 30px;
 	position: relative;
 	text-align: right;
 	background-color: #fff;
 	padding-bottom: 5px;
-}
+} */
 /* 대출한도, 이자율, 판매상태 */
 .limit_amnt {
 	margin-left: 25px;
@@ -821,7 +837,17 @@ pre{
 	text-align: center;
 }
 /* ********** 상품 팝업 끝 ********** */
-
+.popup_box_md {
+	height: 300px;
+	padding-top: 8px;
+}
+.mdCont_table {
+	display: table-cell;
+	text-align: center;
+}
+.mdCont_table tr:nth-child(8) td:nth-child(2) {
+    border: none;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -964,8 +990,8 @@ $(document).ready(function() {
 		html +="		</div>                                                                                        ";
 		html +="	</form>                                                                                           ";
 		html +="</div>                                                                                                ";
-		html +="<div class=\"popup_cont pc_back\"></div>                                                                      ";
-		html +="<div class=\"board_bottom2\">                                                                         ";
+		html +="<div class=\"popup_box_md\"></div>                                                                      ";
+		html +="<div class=\"board_bottom\">                                                                         ";
 		html +="	<div class=\"pgn_area\"></div>                                                                    ";
 		html +="</div>                                                                                                ";
 		
@@ -980,15 +1006,12 @@ $(document).ready(function() {
 				
 				drawMdList();
 				
-				$/* $.(".pc_back").on("click", ".popup_box_in", function() {
-					
-					var mdnm = $(this).children("#mdnm").val();
+				$(".popup_box_md").on("click", ".popup_box_in", function() {
 					var mdnum = $(this).chilren("#mdnum").val();
+					document.getElementById("getMdNum").value = mdnum;
 					
-					document.getElementById().value = mdnm;
-					document.getElementById().value = mdnum;
 					closePopup();
-				}); */
+				}); 
 				
 				$(".pgn_area").on("click", "div", function() {
 					$("#page").val($(this).attr("page"));
@@ -999,19 +1022,195 @@ $(document).ready(function() {
 			buttons : {
 				name : "닫기",
 				func:function() {
-					console.log("One!");
 					closePopup();
 				}
 			}
 		});
 	}); // Md popup end
 	
+	reloadMdList();
 	
-	/* 상품 목록 */
-	/* reloadMdList(); */
-
+	$(".md_bx").on("click", ".mdBox .dtl", function() {
+		var no = $(this).children("#mdNo").val();
+		document.getElementById("no").value = no;
+		
+		var params = $("#mdNumForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "popupMdContAjax",
+			dataType : "json",
+			data : params,
+			success : function(mdData) {
+                var html = "";
+                
+				$.each(mdData, function(index, data) {
+			
+					html += "<table class=\"mdCont_table\">                                                                                                                                              ";
+					html += "	<tbody>                                                                                                                                                                  ";
+					html += "		<tr>                                                                                                                                                                 ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<input type=\"button\" class=\"btn\" value=\"상품명 *\" readonly=\"readonly\"/>                                                                              ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "			<td colspan=\"3\">                                                                                                                                               ";
+					html += "				<input type=\"text\" class=\"txt\" readonly=\"readonly\" disabled=\"disabled\" value=\"" + data.MD_NAME + "\"/>	                                                 ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "		</tr>                                                                                                                                                                ";
+					html += "		<tr height=\"40\">							                                                                                                                         ";
+					html += "			<td padding=\"none\">                                                                                                                                            ";
+					html += "				<input type=\"button\" class=\"btn\" value=\"상품 유형 *\" />                                                                                                ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<select class=\"txt\" disabled=\"disabled\" id=\"md_type\" >									                                                             ";
+					html += "					<option value=\"-1\">선택 하세요</option>                                                                                                                ";
+					html += "					<option value=\"0\">개인 사업</option>                                                                                                                   ";
+					html += "					<option value=\"1\">법인 사업</option>                                                                                                                   ";
+					html += "					<option value=\"2\">공공 사업</option>                                                                                                                   ";
+					html += "				</select>                                                                                                                                                    ";
+					html += "			</td>	                                                                                                                                                         ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<input type=\"button\" class=\"btn\" value=\"상품 등급 *\" />                                                                                                ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<select class=\"txt\" disabled=\"disabled\" id=\"md_grade\">									                                                             ";
+					html += "					<option value=\"-1\">선택 하세요</option>                                                                                                                ";
+					html += "					<option value=\"0\">S</option>                                                                                                                           ";
+					html += "					<option value=\"1\">A</option>                                                                                                                           ";
+					html += "					<option value=\"2\">B</option>                                                                                                                           ";
+					html += "					<option value=\"3\">C</option>                                                                                                                           ";
+					html += "					<option value=\"4\">D</option>                                                                                                                           ";
+					html += "				</select>                                                                                                                                                    ";
+					html += "			</td>							                                                                                                                                 ";
+					html += "		</tr>                                                                                                                                                                ";
+					html += "		<tr height=\"40\">                                                                                                                                                   ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<input type=\"button\" class=\"btn\" value=\"판매 상태 *\" />                                                                                                ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<select class=\"txt\" disabled=\"disabled\" id=\"sales_sts\">									                                                             ";
+					html += "					<option value=\"-1\">선택 하세요</option>                                                                                                                ";
+					html += "					<option value=\"0\">판매중</option>                                                                                                                      ";
+					html += "					<option value=\"1\">판매중단</option>                                                                                                                    ";
+					html += "					<option value=\"2\">출시예정</option>                                                                                                                    ";
+					html += "				</select>                                                                                                                                                    ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<input type=\"button\" class=\"btn\" value=\"한도 금액 *\" />                                                                                                ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<input type=\"text\" class=\"txt\" readonly=\"readonly\" disabled=\"disabled\" id=\"limit_amnt\" value=\"${data.LIMIT_AMNT}\"/>		                         ";
+					html += "			</td>			                                                                                                                                                 ";
+					html += "		</tr>                                                                                                                                                                ";
+					html += "		<tr height=\"40\">                                                                                                                                                   ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<input type=\"button\" class=\"btn\" value=\"판매 기간 *\" />                                                                                                ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "				<td>                                                                                                                                                         ";
+					html += "					<input type=\"date\" class=\"txt\" readonly=\"readonly\" disabled=\"disabled\" id=\"sales_start_date\" value=\"${data.SALES_START_DATE}\"/>              ";
+					html += "				</td>	                                                                                                                             ";
+					html += "				<td>                                                                                                                                                         ";
+					html += "					<div class=\"date_sign\">                                                                                                                                ";
+					html += "						<span class=\"txt\">~</span>                                                                                                                         ";
+					html += "					</div>                                                                                                                                                   ";
+					html += "				</td>                                                                                                                                                        ";
+					html += "				<td colspan=\"2\">                                                                                                                                           ";
+					html += "					<input type=\"date\" class=\"txt\" readonly=\"readonly\" disabled=\"disabled\" id=\"sales_end_date\" value=\"${data.SALES_END_DATE}\"/>                  ";
+					html += "				</td>                                                                                                                                 ";
+					html += "		</tr>                                                                                                                                                                ";
+					html += "		<tr height=\"40\">                                                                                                                                                   ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<input type=\"button\" class=\"btn\" value=\"이자율 *\" />                                                                                                   ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<input type=\"text\" class=\"txt\" readonly=\"readonly\" disabled=\"disabled\" id=\"intrst_rate\" value=\"${data.INTRST_RATE}\" />                           ";
+					html += "			</td>				                                                                                                                                             ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<input type=\"button\" class=\"btn\" value=\"이자 납부 방식 *\" />                                                                                           ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<select class=\"txt\" disabled=\"disabled\" id=\"intrst_pymnt_mthd\">										                                                 ";
+					html += "					<option value=\"-1\">선택 하세요</option>                                                                                                                ";
+					html += "					<option value=\"0\">원금 균등</option>                                                                                                                   ";
+					html += "					<option value=\"1\">원리금 균등</option>                                                                                                                 ";
+					html += "					<option value=\"2\">만기 일시상환</option>                                                                                                               ";
+					html += "				</select>                                                                                                                                                    ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "		</tr>                                                                                                                                                                ";
+					html += "		<tr height=\"40\">                                                                                                                                                   ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<input type=\"button\" class=\"btn\" value=\"원금 납부 방식 *\" />                                                                                           ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<select class=\"txt\" disabled=\"disabled\" id=\"prncpl_pymnt_mthd\">								                                                         ";
+					html += "					<option value=\"-1\">선택 하세요</option>                                                                                                                ";
+					html += "					<option value=\"0\">원금 균등</option>                                                                                                                   ";
+					html += "					<option value=\"1\">원리금 균등</option>                                                                                                                 ";
+					html += "					<option value=\"2\">만기 일시상환</option>                                                                                                               ";
+					html += "				</select>                                                                                                                                                    ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<input type=\"button\" class=\"btn\" value=\"중도상환 가능 여부 *\" />                                                                                       ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<select class=\"txt\" disabled=\"disabled\" id=\"mid_prdmptn_psbl_check\">	                                                                                 ";
+					html += "					<option value=\"-1\">선택 하세요</option>                                                                                                                ";
+					html += "					<option value=\"0\">가능</option>                                                                                                                        ";
+					html += "					<option value=\"1\">불가능</option>                                                                                                                      ";
+					html += "				</select>                                                                                                                                                    ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "		</tr>                                                                                                                                                                ";
+					html += "		<tr height=\"40\">                                                                                                                                                   ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<input type=\"button\" class=\"btn\" value=\"대출 기간 *\" />                                                                                                ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "			<td>                                                                                                                                                             ";
+					html += "				<select class=\"txt\" disabled=\"disabled\" id=\"loan_prd\">		                                                                                         ";
+					html += "					<option value=\"-1\">선택 하세요</option>                                                                                                                ";
+					html += "					<option value=\"0\">6개월</option>                                                                                                                       ";
+					html += "					<option value=\"1\">1년</option>                                                                                                                         ";
+					html += "					<option value=\"2\">3년</option>                                                                                                                         ";
+					html += "					<option value=\"3\">5년</option>                                                                                                                         ";
+					html += "				</select>                                                                                                                                                    ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "		</tr>                                                                                                                                                                ";
+					html += "		<tr height=\"40\">                                                                                                                                                   ";
+					html += "			<td rowspan=\"2\">                                                                                                                                               ";
+					html += "				<input type=\"button\" class=\"btn\" value=\"상품 설명 \" readonly=\"readonly\"/>                                                                            ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "			<td colspan=\"3\">                                                                                                                                               ";
+					html += "				<textarea rows=\"100\" cols=\"50\" class=\"txt_area\" readonly=\"readonly\" disabled=\"disabled\" >${data.MD_DSCRPTN}</textarea>                             ";
+					html += "			</td>                                                                                                                                                            ";
+					html += "		</tr>                                                                                                                                                                ";
+					html += "	</tbody>                                                                                                                                                                 ";
+					html += "</table>                                                                                                                                                                    ";
+					
+				});
+				
+				makePopup({
+					depth : 1,
+					bg : false,
+					width : 1000,
+					height : 650,
+					title : "상품 상세보기",
+					contents : html,
+					buttons : {
+						name : "닫기",
+						func : function() {
+							closePopup();
+						}
+					}
+				});
+				
+			},
+			error : function(req) {
+				console.log(req.responseText);
+			}
+		});
+		
+	});
+	
+	
 }); // JS end
-
 
 /* **************************************** 상품 팝업 **************************************** */
 function drawMdList() {
@@ -1045,13 +1244,17 @@ function drawList(list) {
 		html += "	</div>                                                                                                   ";
 		html += "	<div class=\"popup_cc_box_right\"><div class=\"md01\">" + data.MD_NUM + "</div>";
 		html += "<span class=\"boldname\"><div class=\"md02\">" + data.MD_NAME + "</div></span>";
-		html += "		<span class=\"limit_amnt\"><div class=\"md03\">" + data.LIMIT_AMNT + "원 / " + data.INTRST_RATE + "%</div></span>              ";
+		html += "		<span class=\"limit_amnt\"><div class=\"md03\">" + data.MD_GRADE + "등급 / " + data.INTRST_RATE + "%</div></span>              ";
 		html += "		<span class=\"sales_sts\">" + data.SALES_STS + "</span>                                          ";
 		html += "	</div>                                                                                                   ";
 		html += "</div>                                                                                                      ";
 	}
 
-	$(".pc_back").html(html);
+	$(".popup_box_md").html(html);
+	
+	
+	
+	
 }
 
 
@@ -1083,8 +1286,49 @@ function drawPaging(pb) {
 	$(".pgn_area").html(html);
 
 }
-
 /* ************************************** 상품 팝업 END ************************************** */
+
+// 상품 목록 Ajax
+function reloadMdList() {
+	var params = $("#mdListForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "qtnMdListAjax",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			qtnMdList(res.list);
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	});
+}
+
+// 상품 목록 html
+function qtnMdList(list) {
+	
+	var html = "";
+	
+	for(var data of list) {
+		html += "<div class=\"mdBox\">";
+		html += "	<div class=\"md_nm\">" + data.MD_NAME + "</div>";
+		html += "	<div class=\"md_intrst\">이자율: " + data.INTRST_RATE + "%</div>";
+		html += "	<div class=\"md_grd\">한도금액: " + data.LIMIT_AMNT + "</div>";
+		html += "	<div class=\"md_prd\">대출기간: " + data.LOAN_PRD + "년</div>	";	
+		html += "	<span class=\"md_btn\">";
+		html += "		<span class=\"dtl\" id=\"dtl\">상세보기<input type=\"hidden\" id=\"mdNo\" name=\"mdNo\" value=\"" + data.MD_NUM + "\" /></span>";
+		html += "		<span class=\"gb\">|</span>";
+		html += "		<span class=\"apply\" id=\"apply\">적용</span>";
+		html += "	</span>";
+		html += "</div>";
+	}
+
+	$(".md_bx").html(html);
+}
+// 상품 목록 끝
+
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
@@ -1094,6 +1338,13 @@ function uploadName(e) {
 </script>
 </head>
 <body>
+<form action="#" id="mdNumForm" method="post" >
+	<input type="hidden" id="no" name="no" /> <!-- 상품 번호 -->
+</form>
+<form action="#" id="mdListForm" method="post">
+ <input type="hidden" name="ccn"  value="${lead.CLNT_CMPNY_NUM}" /> <!-- 고객사 등급 번호 -->
+ <input type="hidden" id="getMdNum" name="getMdNum" /> <!-- 상품 번호 -->
+</form>
 	<form action="#" id="listForm" method="post">
 		<input type="hidden" id="page" name="page" value="${page}" />
 		<input type="hidden" name="top" value="${param.top}" />
@@ -1562,19 +1813,7 @@ function uploadName(e) {
 					<div class="md_hr">
 						<hr color="#D7D7D7" width="830px" />
 					</div>
-					<div class="md_bx">
-							<div class="mdBox">
-								<span class="md_nm">A상품</span>
-								<span class="md_intrst">이자율: 1%</span>
-								<span class="md_grd">상품등급: A</span>
-								<span class="md_prd">대출기간: 1년</span>		
-								<span class="md_btn">
-									<span class="dtl" id="dtl">상세보기</span>
-									<span class="gb">|</span>
-									<span class="apply" id="apply">적용</span>
-								</span>
-								</div>
-					</div>
+					<div class="md_bx"></div>
 					<table>
 						<colgroup>
 							<col width="200" />
