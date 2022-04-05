@@ -361,7 +361,9 @@ textarea {
 	border: hidden;
 	outline: none;
 }
-
+#attFileName {
+	font-size: 10pt;
+}
 .popBtn{
 	width: 80px;
 	height: 40px;
@@ -1221,8 +1223,8 @@ function drawScList(list) {
 
 function uploadName(e) {
 	var files = e.files;
-	var filename = files[0].name;
-	$("#fileName").val(filename);
+	var leadfilename = files[0].name;
+	$("#leadFileName").val(leadfilename);
 	$("#popFileName").val(filename);
 }
 
@@ -1322,7 +1324,7 @@ function uploadName(e) {
 								<td><input type="button" class="btn" value="담당자 *" readonly="readonly"/></td>
 								<td>
 									<input type="text" class="txt" value="${data.EMP_NAME}" readonly="readonly"  />
-									<img class="btnImg_in" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
+									
 								</td>
 							</tr>
 							<tr>
@@ -1341,12 +1343,17 @@ function uploadName(e) {
 					</table>
 					<!-- 첨부파일 -->
 					<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
-					<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
+					<c:set var="leadFileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
 					<div class="rvn_txt">
 						첨부파일
 					</div>
 					<div class="cntrct_box_in">
-						<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
+						<span id="attFileName">
+							<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${leadFileName}">${leadFileName}</a>
+						</span>
+					</div>
+					<div class="next_bot">
+						<div class="cmn_btn nb">영업기회로 전환하기 ▶</div>
 					</div>
 					<!-- 의견 -->
 					<form action="#" id="botOpActionForm" method="post">
