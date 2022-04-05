@@ -7,9 +7,9 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <!-- 헤더추가 -->
+<c:import url="/header"></c:import>
 <script type="text/javascript"
 		src="resources/script/ckeditor/ckeditor.js"></script>
-<c:import url="/header"></c:import>
 <style type="text/css">
 /* 가로 사이즈 조정용 */
 .cont_wrap {
@@ -81,7 +81,7 @@ $(document).ready(function() {
 		height : "300" //세로
 	});
 	$("#cancelBtn").on("click", function() {
-		 makePopup({
+		/*  makePopup({
 			bg : false,
 			bgClose : false,
 			title : "취소",
@@ -93,7 +93,7 @@ $(document).ready(function() {
 					closePopup();
 					}
 				 }
-				}); //makepopup end
+				}); //makepopup end */
 		$("#backForm").submit();
 		
 	}); //cancelBtn end
