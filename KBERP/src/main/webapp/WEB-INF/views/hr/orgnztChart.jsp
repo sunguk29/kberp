@@ -339,16 +339,17 @@ $(document).ready(function() {
 							       data : params,
 							       dataType : "json",
 							       success : function(res) {
+							    	   reloadTree(params);
 									   closePopup();
-									   makeAlert("알림", "부서가 추가되었습니다");
-									   /* window.opener.location.reload();
-									   window.close(); 알럿창 닫고 새로고침 어떻게 하는지? */
+									   makeAlert("알림", "부서가 추가되었습니다", function() {
+										   location.reload();
+									   });
 							       }, 
 							       error : function(req) {
 							          console.log(req.responseText);
 							       }
 							    });
-							console.log("등록!");
+							console.log("등록!"); 
 						}
 				}
 			}, {
@@ -436,9 +437,9 @@ $(document).ready(function() {
 									       dataType : "json",
 									       success : function(res) {
 											   closePopup();
-											   makeAlert("알림", "부서가 수정되었습니다.");
-											   /* window.opener.location.reload();
-											   window.close(); 알럿창 닫기 새로고침 해야함 */
+											   makeAlert("알림", "부서가 수정되었습니다.", function(){
+												   location.reload();
+											   });
 									       }, 
 									       error : function(req) {
 									          console.log(req.responseText);
@@ -489,9 +490,9 @@ $(document).ready(function() {
 						       dataType : "json",
 						       success : function(res) {
 								   closePopup();
-								   makeAlert("알림", "부서가 삭제되었습니다.");
-								   /* window.opener.location.reload();
-								   window.close(); 알럿창 닫기 새로고침 해야함 */
+								   makeAlert("알림", "부서가 삭제되었습니다.", function(){
+									   location.reload();
+								   });
 						       }, 
 						       error : function(req) {
 						          console.log(req.responseText);
@@ -550,10 +551,6 @@ $(document).ready(function() {
 	});
 });
 
-//팝업 부모창 리프레시 (작동 안됨)
-function parentRefresh() {
-	opener.location.reload();
-}
 
 // 조직도 리로드
 function reloadTree() {
