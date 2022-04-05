@@ -654,10 +654,12 @@ $(document).ready(function() {
 
    // 발령 추가
    $("#apntm_add_btn").on("click", function() {
-	   drawNewApntm();
+	   reloadNewApntm();
+	   console.log("발령추가 클릭!")
 
 	   // 사원조회 팝업
 		$("#prfl_srch_btn").on("click", function() {
+			console.log("돋보기 클릭!")
 						
 			var html = "";
 			html += "<form action=\"#\" id=\"inqryForm\" method=\"post\">" ;
@@ -784,8 +786,8 @@ $(document).ready(function() {
 				}]
 			});
    			$(".empinqry_area").slimScroll({height: "255px"},{width: "450px"}); // 슬림스크롤
-		}); // 팝업클릭 끝
-  	});
+		}); // 사원조회팝업 끝
+  	});// 발령추가 끝
 });
 
 // 사원조회 리스트 생성
@@ -973,9 +975,23 @@ function drawCont(cont){
    $("#apntm_cont").html(html);
 }
 
+function reloadNewApntm(){
+	 $.ajax({
+	      type : "post",
+	      url : "apntmListAjax/addApntm",
+	      dataType : "json",
+	      success : function(res) {
+	    	  drawNewApntm(res.dept, res.rank);
+	      },
+	      error : function(req) {
+	         console.log(req.responseText);
+	      }
+	   });
+}
 
 // 발령 등록 생성
-function drawNewApntm(){
+function drawNewApntm(dept,rank){
+	
 	
    var html = "";
    
@@ -1027,43 +1043,24 @@ function drawNewApntm(){
    html += "                  <option value=\"3\">이동</option>                                              ";
    html += "               </select>                                                              ";
    html += "            </div>                                                                     ";
-   html += "            <div class=\"apnmt_info\">                                                 ";
-   html += "               <div class=\"apnmt_info_text\">발령부서*</div>                         ";
-   html += "               <select class=\"apnmt_select\">                                        ";
-   html += "                  <option selected>선택</option>                                     ";
-   html += "                  <option>영업부</option>                                              ";
-   html += "                  <option>선택안함</option>                                              ";
-   html += "               </select>                                                              ";
-   html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";
    html += "         <div class=\"apnmt_info_wrap\">                                                ";
    html += "            <div class=\"apnmt_info\">                                                 ";
-   html += "               <div class=\"apnmt_info_text\">발령팀*</div>                           ";
+   html += "               <div class=\"apnmt_info_text\">발령부서*</div>                           ";
    html += "               <select class=\"apnmt_select\">                                        ";
    html += "                  <option selected>선택</option>                                     ";
-   html += "                  <option>인사팀</option>                                              ";
-   html += "                  <option>경영팀</option>                                              ";
-   html += "                  <option>영업1팀</option>                                              ";
-   html += "                  <option>영업2팀</option>                                              ";
-   html += "                  <option>고객지원팀</option>                                              ";
-   html += "                  <option>ELS팀</option>                                              ";
+   for(var data of dept){
+   html += "                  <option>" + data.DEPT_NAME + "</option>                                              ";
+   }
    html += "               </select>                                                              ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_info\">                                                 ";
    html += "               <div class=\"apnmt_info_text\">발령직급*</div>                         ";
    html += "               <select class=\"apnmt_select\">                                        ";
    html += "                  <option selected>선택</option>                                     ";
-   html += "                  <option>사원</option>                                              ";
-   html += "                  <option>주임</option>                                              ";
-   html += "                  <option>대리</option>                                              ";
-   html += "                  <option>과장</option>                                              ";
-   html += "                  <option>차장</option>                                              ";
-   html += "                  <option>부장</option>                                              ";
-   html += "                  <option>이사</option>                                              ";
-   html += "                  <option>상무</option>                                              ";
-   html += "                  <option>전무</option>                                              ";
-   html += "                  <option>부사장</option>                                              ";
-   html += "                  <option>CEO</option>                                              ";
+   for(var data of rank){
+   html += "                  <option>" + data.RANK_NAME + "</option>                                              ";
+   }
    html += "               </select>                                                              ";
    html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";

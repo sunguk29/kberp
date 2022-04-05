@@ -169,14 +169,19 @@
 	                                            ON A.DEPT_NUM = D.DEPT_NUM
 		WHERE E.EMP_NUM = #{inqryNo}
 	</select>
-<!-- 	<select id="getDeptList" resultType="hashmap" >
-		SELECT DEPT_NAME
-		FROM DEPT
+	<select id="getDeptList" resultType="hashmap" >
+		SELECT D.DEPT_NUM, D.DEPT_NAME, D.SUPER_DEPT_NUM, D.DEPT_LEVEL,D.LEAF
+		FROM( SELECT DEPT_NUM, DEPT_NAME, SUPER_DEPT_NUM, DEPT_LEVEL, CONNECT_BY_ISLEAF AS LEAF
+			  FROM DEPT
+		      START WITH SUPER_DEPT_NUM IS NULL
+		      CONNECT BY PRIOR DEPT_NUM = SUPER_DEPT_NUM) D
+		WHERE D.LEAF = '1'
 	</select>
 	<select id="getRankList" resultType="hashmap" >
-		SELECT DEPT_NAME
-		FROM DEPT
-	</select> -->
+		SELECT RANK_NAME, RANK_NUM
+		FROM RANK
+		ORDER BY SORT_NUM DESC
+	</select>
 	
 	
 	

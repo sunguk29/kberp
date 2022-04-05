@@ -66,6 +66,12 @@ public class HrController {
 		    	   HashMap<String, String> inqryEmp = iCommonService.getData("hr.getInqryEmp", params);
 		    	   modelMap.put("inqryEmp", inqryEmp);
 		    	   break;
+		       case "addApntm" :
+		    	   List<HashMap<String, String>> dept = iCommonService.getDataList("hr.getDeptList", params);
+		    	   List<HashMap<String, String>> rank = iCommonService.getDataList("hr.getRankList", params);
+		    	   modelMap.put("dept", dept);
+		    	   modelMap.put("rank", rank);
+		    	   break;
 		       }
 		       modelMap.put("res", "success");
 		    } catch (Throwable e) {
