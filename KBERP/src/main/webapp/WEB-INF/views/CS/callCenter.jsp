@@ -86,11 +86,12 @@
 	color: #222222;
 	cursor: pointer;
 }
-
 .clnt_srch_table tbody tr:hover {
 	color: #4B94F2;
 	text-decoration: underline;
 }
+
+
 
 /* 저장 팝업 */
 .save_cont{
@@ -486,6 +487,11 @@
 	text-decoration: underline;
 }
 
+.cnsl_rcrd_table tbody tr.on {
+	color: #4B94F2;
+	text-decoration: underline;
+}
+
 
 /* [이력]상담노트 파트 */
 .bottom_2 {
@@ -663,7 +669,7 @@ $(document).ready(function() {
 		html += "	<option value=\"1\">등급</option>";
 		html += "	<option value=\"2\">전화번호</option>";
 		html += "</select>";
-		html += "<input type=\"text\" name=\"searchTxt\" value=\"" + $("#searchTxt").val() + "\"/>"
+		html += "<input type=\"hidden\" name=\"searchTxt\" value=\"" + $("#searchTxt").val() + "\"/>"
 		html += "</div>";
 		html += "</form>";
 		html += "<div class=\"srch_cont\">";
@@ -772,6 +778,9 @@ $(document).ready(function() {
 	// 상담이력 tr 클릭
 	$("#cnslList").on("click", "tr", function() {
 		$("#rcrdCnslForm #cnsl_num").val($(this).attr("no"));
+		
+		$("#cnslList tr").removeAttr("class");
+		$(this).attr("class", "on");
 		
 		var params = $("#rcrdCnslForm").serialize();
 		
