@@ -229,9 +229,67 @@ select {
 	height: 297px;
 	padding-top: 8px;
 }
+
+/********** 제목 영역 **********/
+.sales_text, .img_rect {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 11pt;
+	font-weight: bold;
+	color: #7b7b7b;
+}
+
+.sales_text {
+	width: 100%;
+}
+
+.sales_text_top {
+	display: inline-block;
+}
+
+/* 파란 줄 */
+.prgrs_stage {
+	background-color: #4B94F2;
+	width: 100%;
+	height: 2px;
+}
+
+/* 네모 이미지 */
+.img_rect {
+	width: 12px;
+	height: 12px;
+	padding-top: 4px;
+	margin-right: 10px;
+	margin-left: 10px;
+}
+/********** div 큰 영역  **********/
+.new_sales_actvty {
+	display: inline-block;
+	vertical-align: top;
+	width: 430px;
+	height: 260px;
+	margin-bottom: 30px; 
+}
+
+.sales_text_bot{
+	width: 428px;
+	height: 200px;
+	border: 1px solid #000;
+	margin-top: 10px;
+	font-size: 11pt;
+}
+
+/* 각 그래프 영역 크기 */
+.bsns_type{
+	min-width: 415px;
+	height: 195px;
+	margin : 0 auto;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	
+	getData();
 
 	/* 담당자 팝업 */
 	$("#mngBtn").on("click", function() {
@@ -337,21 +395,57 @@ $(document).ready(function() {
 		var params = $("#getForm").serialize();
 		$.ajax({
 			type : "post",
-			url : "pfmcgetChartData",
+			url : "salesgetChartDataAjax",
 			dataType : "json",
+			data: params,
 			success : function(res) {
-				makeChart(res.list);
+				makeChart(res.bsnList);
+				console.log(res.bsnList);
 			},
 			error : function(request, status, error) {
 				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 			}
 		});
 	}
-	
+
 	/* 차트 그리기 */
+	function makeChart(bsnList) {
+		$('.bsns_type').highcharts({
+			chart: {
+				type: 'pie',
+				zoomType: 'x'
+			},
+			title: {
+				text: '사업유형'
+			},
+			colors: ['#5CB3FF', '#D462FF', '#FBB917', '#00B3A2', '#FB558A', 
+	            '#2870E3', '#FF8F00', '#B5BF07', '#3F9D00', '#CE3C92'],
+	        plotOptions: {
+	        	area: {
+	        		pointStart: 1,
+	        		marker: {
+	        			enabled: false,
+	        			symbol: 'circle',
+	        			redius: 2,
+	        			states: {
+	        				hover: {
+	        					enabeld: true
+	        				}
+	        			}
+	        		}
+	        	}
+	        },
+	        series : bsnList
+		});
+	}
+
+	console.log("제발돼라22222333333");
 	
 		
-});
+}); //jqeury End
+
+
+
 
 /* 담당자 팝업 Ajax */
 function drawMngList() {
@@ -434,7 +528,7 @@ function drawMngPaging(pb) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">보고서 - 실적</div>
+			<div class="page_title_text">보고서 - 영업</div>
 			<!-- 검색영역 선택적 사항 -->
 		
 		</div>
@@ -511,11 +605,14 @@ function drawMngPaging(pb) {
 								</tr>
 							</tbody>
 						</table>
+						<form action="#" id="getForm" method="post">
+						<input type="hidden" name="size" value="3" />
+						<input type="hidden" name="series" value="1" />
 						<dlv class="cont_right">
 							<div class="new_sales_actvty">
 							<div class="sales_text">
 								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />요약
+									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />진행상태
 								</div>
 								<div class="actvty_tLine1"></div>
 							</div>
@@ -525,11 +622,11 @@ function drawMngPaging(pb) {
 						<div class="new_sales_actvty">
 							<div class="sales_text">
 								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />계약구분
+									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />진행단계
 								</div>
-								<div class="actvty_tLine1"></div>
 							</div>
 							<div class="sales_text_bot">
+								<div class="prgrs_stage"></div>
 							</div>
 						</div>
 
@@ -538,17 +635,15 @@ function drawMngPaging(pb) {
 							<div class="new_sales_actvty">
 								<div class="sales_text">
 									<div class="sales_text_top">
-										<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />월
+										<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />사업유형
 									</div>
-									<div class="actvty_tLine1"></div>
-								</div>
-								<div class="sales_text_bot">
+									<span class="bsns_type"></span>
 								</div>
 							</div>
 							<div class="new_sales_actvty">
 							<div class="sales_text">
 								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />계약담당
+									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />영업담당
 								</div>
 								<div class="actvty_cntrct"></div>
 							</div>
@@ -557,27 +652,13 @@ function drawMngPaging(pb) {
 						</div>
 
 						</dlv>
+					</form>
 					<!-- class="bodyWrap" end -->
 					</div>
 				<!-- class="body" end -->
 				</div>
 			<!-- 페이징 및 버튼 영역  -->
 			<div class="board_bottom">
-				<div class="pgn_area">
-					<div class="page_btn page_first">first</div>
-					<div class="page_btn page_prev">prev</div>
-					<div class="page_btn_on">1</div>
-					<div class="page_btn">2</div>
-					<div class="page_btn">3</div>
-					<div class="page_btn">4</div>
-					<div class="page_btn">5</div>
-					<div class="page_btn page_next">next</div>
-					<div class="page_btn page_last">last</div>
-				</div>
-				<div class="cmn_btn_ml">글쓰기</div>
-				<div class="cmn_btn_ml" id="alertBtn">알림</div>
-				<div class="cmn_btn_ml" id="btn1Btn">버튼1개</div>
-				<div class="cmn_btn_ml" id="btn2Btn">버튼2개</div>
 			</div>
 		</div>
 	</div>
