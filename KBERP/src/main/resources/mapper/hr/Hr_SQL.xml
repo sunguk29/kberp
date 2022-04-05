@@ -119,7 +119,7 @@
 		WHERE DEPT_NUM = #{sdeptNum}
 	</update>
 	
-	<update id="updateDept" parameterType="hashmap"><!-- 쿼리 오류  -->
+	<update id="updateDept" parameterType="hashmap">
 		UPDATE DEPT SET DEPT_NAME = #{deptName}, SUPER_DEPT_NUM = #{mdfySuperDeptNum}, DEPT_LEVEL = #{mdfyDeptLevel}
 		WHERE DEPT_NUM = #{sdeptNum}
 	</update>
@@ -135,6 +135,24 @@
 	                                        ON A.RANK_NUM = R.RANK_NUM
 	                                INNER JOIN DEPT D 
 	                                        ON A.DEPT_NUM = D.DEPT_NUM
+     	 <if test="inqryTxt != null and inqryTxt != ''"> <!--  텍스트 조회 필터링 	-->
+			<choose>
+				<when test="inqryGbn == 0">
+			 		WHERE E.EMP_NAME LIKE '%' || #{inqryTxt} || '%' 
+					OR D.DEPT_NAME LIKE '%' || #{inqryTxt} || '%'
+					OR R.RANK_NAME LIKE '%' || #{inqryTxt} || '%'
+				</when>
+				<when test="inqryGbn == 1">
+					WHERE D.DEPT_NAME LIKE '%' || #{inqryTxt} || '%' 
+				</when>
+				<when test="inqryGbn == 2">
+					WHERE E.EMP_NAME LIKE '%' || #{inqryTxt} || '%' 
+				</when>
+				<when test="inqryGbn == 3">
+					WHERE R.RANK_NAME LIKE '%' || #{inqryTxt} || '%' 
+				</when>
+			</choose>
+		</if> 
 		ORDER BY DEPT_NAME, RANK_NUM, EMP_NAME, EMP_NUM       
 	</select>
 	
