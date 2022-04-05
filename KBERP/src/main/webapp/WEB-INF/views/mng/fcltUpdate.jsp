@@ -177,19 +177,19 @@ $(document).ready(function() {
 	
 	$("#addBtn").on("click",function(){
 		if(checkEmpty("#fcltyName")){
-			alert("시설물명을 입력하세요");
+			makeAlert("확인","시설물명을 입력하세요");
 			$("#fcltyName").focus();
 		}else if(checkEmpty("#fcltyPlace")){
-			alert("시설물 위치를 입력하세요");
+			makeAlert("확인","시설물 위치를 입력하세요");
 			$("#fcltyPlace").focus();
 		}else if(checkEmpty("#fcltyEmp")){
-			alert("관리자명을 입력하세요");
+			makeAlert("확인","관리자명을 입력하세요");
 			$("#fcltyEmp").focus();
 		}else if(checkEmpty("#fcltyCnt")){
-			alert("수용인원을 입력하세요");
+			makeAlert("확인","수용인원을 입력하세요");
 			$("#fcltyCnt").focus();
 		}else if(checkEmpty("#attFile")){
-			alert("시설물 사진을 첨부하세요");
+			makeAlert("확인","시설물 사진을 첨부하세요");
 		}else{
 			var updateForm = $("#updateForm");
 			
