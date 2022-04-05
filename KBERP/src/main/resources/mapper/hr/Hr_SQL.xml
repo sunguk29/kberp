@@ -156,6 +156,30 @@
 		ORDER BY DEPT_NAME, RANK_NUM, EMP_NAME, EMP_NUM       
 	</select>
 	
+	<select id="getInqryEmp" resultType="hashmap" parameterType="hashmap">
+		SELECT E.EMP_NUM, E.EMP_NAME, A.RANK_NUM, R.RANK_NAME, A.DEPT_NUM, D.DEPT_NAME
+		FROM (  SELECT EMP_NUM, RANK_NUM, DEPT_NUM, START_DATE, END_DATE, STS_NUM
+		        FROM APNTM 
+		        WHERE STS_NUM = '1'
+		        AND END_DATE IS NULL )A INNER JOIN EMP E
+	                                            ON A.EMP_NUM = E.EMP_NUM
+	                                    INNER JOIN RANK R 
+	                                            ON A.RANK_NUM = R.RANK_NUM
+	                                    INNER JOIN DEPT D 
+	                                            ON A.DEPT_NUM = D.DEPT_NUM
+		WHERE E.EMP_NUM = #{inqryNo}
+	</select>
+<!-- 	<select id="getDeptList" resultType="hashmap" >
+		SELECT DEPT_NAME
+		FROM DEPT
+	</select>
+	<select id="getRankList" resultType="hashmap" >
+		SELECT DEPT_NAME
+		FROM DEPT
+	</select> -->
+	
+	
+	
 	
 
 </mapper>
