@@ -44,6 +44,11 @@
 	border-radius: 2px;
 	margin-top: 3px;
 }
+.hiddenSearch{
+	display: inline-block;
+	width: 100px;
+	margin-right: 10px;
+}
 .srch_slct{
 	width: 100%;
 	height: 20px;
@@ -134,7 +139,7 @@
 	vertical-align: top;
 	text-indent: 10px;
     font-size: 13pt;
-    width: 240px;
+    width: 165px;
 }
 .cmn_btn_ml{
 	margin-top: 5px;
@@ -143,10 +148,22 @@
 }
 
 .clnt_srch {
+	display : inline-block;
 	margin-top: 5px;
 	background-color: #ffffff;
+	margin-left: 3px;
 }
 
+#clnt_slct {
+	display: inline-block;
+	height: 28px;
+	margin-top: 6px;
+	margin-left: 7px;
+}
+
+#searchBtn{
+	display: inline-block;
+}
 .clnt_srch input:focus {
 	outline: 2px solid #F2CB05;
 }
@@ -599,6 +616,7 @@
 	margin-left: 5px;
 }
 
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -663,13 +681,9 @@ $(document).ready(function() {
 		html += "<form action=\"#\" id=\"actionForm\" method=\"post\">"
 		html += "<input type=\"hidden\" id=\"clnt_num\" name=\"clnt_num\"/>"
 		html += "<div class=\"srch_slct\">";
-		html += "<div class=\"name_box\">선택</div>";
-		html += "<select id=\"clnt_slct\" name=\"clnt_slct\">";
-		html += "	<option value=\"0\">이름</option>";
-		html += "	<option value=\"1\">등급</option>";
-		html += "	<option value=\"2\">전화번호</option>";
-		html += "</select>";
-		html += "<input type=\"hidden\" name=\"searchTxt\" value=\"" + $("#searchTxt").val() + "\"/>"
+		html += "<div class=\"name_box\">검색어</div>";
+		html += "<input type=\"hidden\" name=\"clnt_slct\" value=\"" + $("#clnt_slct").val() + "\"/>";
+		html += "<input type=\"text\" class=\"hiddenSearch\" name=\"searchTxt\" readonly=\"readonly\" value=\"" + $("#searchTxt").val() + "\"/>";
 		html += "</div>";
 		html += "</form>";
 		html += "<div class=\"srch_cont\">";
@@ -996,6 +1010,11 @@ function checkEmpty(sel) {
 					<input type="hidden" id="clnt_num" name="clnt_num"/>
 						<div class="clnt_info_Header">
 							<div class="clnt_info">고객정보</div>
+							<select id="clnt_slct" name="clnt_slct">
+								<option value="0">이름</option>
+								<option value="1">등급</option>
+								<option value="2">전화번호</option>
+							</select>
 							<div class="srch_text_wrap clnt_srch">
 								<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
 							</div>
