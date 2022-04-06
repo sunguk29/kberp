@@ -28,7 +28,7 @@
                ROW_NUMBER() OVER(ORDER BY B.WRTNG_NUM DESC) AS RNUM
 		        FROM BOARD B INNER JOIN EMP E
 		                                ON B.EMP_NUM = E.EMP_NUM
-		        WHERE DEL_CHECK = 1
+		        WHERE B.DEL_CHECK = 1
 		        <if test="searchTxt != null and searchTxt != ''">
 					<choose>
 						<when test="searchGbn == 0">
@@ -74,4 +74,39 @@
 		UPDATE BOARD SET DEL_CHECK = 0
 		WHERE WRTNG_NUM = #{no}
 	</delete>
+	
+	<select id="getCmntCnt" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM BOARD_CMNT
+		WHERE DEL_CHECK = 1
+	</select>
+	
+	<select id="boardCmntlist" parameterType="hashmap" resultType="hashmap">
+		SELECT *
+		FROM ( SELECT BC.CMNT_NUM, B.WRTNG_NUM, E.EMP_NAME, BC.CMNT_CONT ,
+                TO_CHAR(WRTNG_DATE, 'YYYY-MM-DD-HH24:MI') AS WRTNG_DATE,
+                   ROW_NUMBER() OVER(ORDER BY CMNT_NUM DESC) AS RNUM
+       FROM BOARD_CMNT BC INNER JOIN BOARD B
+		                                ON BC.WRTNG_NUM = B.WRTNG_NUM
+                          INNER JOIN EMP E
+		                                ON BC.EMP_NUM = E.EMP_NUM                             
+       WHERE BC.DEL_CHECK = 1) A
+		WHERE WRTNG_NUM = #{no}
+	</select>
+	
+	<insert id="boardCmntWrite" parameterType="hashmap">
+			INSERT INTO BOARD_CMNT(CMNT_NUM, WRTNG_NUM, EMP_NUM, CMNT_CONT)
+			VALUES(BOARD_CMNT_SEQ.NEXTVAL, #{no}, #{writer}, #{cmnt_cont})
+	</insert>
+	<!-- <update id="boardCmntUpdate" parameterType="hashmap">
+		UPDATE BOARD SET BOARD_TITLE = #{title},
+             	 	    BOARD_CONT = #{con},
+             	 	   
+		WHERE WRTNG_NUM = #{no}
+	</update> -->
+	<delete id="boardCmntDelete" parameterType="hashmap">
+		UPDATE BOARD_CMNT SET DEL_CHECK = 0
+		WHERE CMNT_NUM = #{cmntNo}
+	</delete>
+	
 </mapper>
