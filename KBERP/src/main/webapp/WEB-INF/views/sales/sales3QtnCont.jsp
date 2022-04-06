@@ -561,7 +561,49 @@ $(document).ready(function() {
 		$("#sgstn_btn").html(html);
 	});
 	
-});
+	
+	
+	
+	//대출금액
+	var loanAmnt = ${data3.LOAN_AMNT};
+	//대출기간
+	var loanPrd
+	if(${data3.LOAN_PRD eq 0} == 0) {
+		loanPrd = 6;
+	} else if(${data3.LOAN_PRD eq 0} == 1) {
+		loanPrd = 12;
+	} else if(${data3.LOAN_PRD eq 0} == 2) {
+		loanPrd = 36;
+	} else if(${data3.LOAN_PRD eq 0} == 3) {
+		loanPrd = 60;
+	}
+	//이자율
+	var intrstRate = ${data3.INTRST_RATE} * 0.01;
+	//이자율(월)
+	var mIntrstRate = (intrstRate / 12);
+	
+	//월 납부액
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 0 ) { // 원금 균등 상환
+		$("#monthPymntAmnt").val(Math.round(loanAmnt / loanPrd));
+		$("#mIntrstRate").val(Math.round(loanAmnt * mIntrstRate));
+	}
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 1 ) { // 원리금 균등 상환
+		var temp1 = Math.pow(1 + mIntrstRate, loanPrd) - 1;
+		var temp2 = loanAmnt * mIntrstRate * Math.pow(1 + mIntrstRate, loanPrd);
+		$("#monthPymntAmnt").val(Math.round(temp2 / temp1));
+		$("#mIntrstRate").val(Math.round(loanAmnt * mIntrstRate));
+	}
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 2 ) { // 만기 일시 상환
+		if(${data3.INTRST_PYMNT_MTHD_NUM} != 2) {
+			$("#monthPymntAmnt").val("0");
+			$("#mIntrstRate").val(Math.round(loanAmnt * mIntrstRate));
+		}
+	
+	}
+	
+	//월 이자액
+	
+}); // document.ready End
 
 /* 의견 목록 Ajax */
 function reloadOpList() {
@@ -1159,26 +1201,22 @@ function drawOpList(list) {
 								<td></td>
 								<td colspan="2" style="border:none;"></td>
 							</tr>
-							<!-- <tr height="40">
+							<tr height="40">
 								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
 								<td><input type="text" class="txt" id="monthPymntAmnt" name="monthPymntAmnt" readonly="readonly" /></td>
 								<td><input type="button" class="btn" value="월 이자액" readonly="readonly" /></td>
 								<td colspan="2"><input type="text" class="txt" id="monthIntrstAmnt" name="monthIntrstAmnt" readonly="readonly" /></td>
-							</tr> -->
+							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="비고" readonly="readonly"/></td>
 								<td colspan="3"><input type="text" class="rmks" name="rmksCont" value="${data3.RMKS}" readonly="readonly" /></td>
 							</tr>							
 						</tbody>
 					</table>
-					
 					<!-- 첨부자료 -->
-					<input type=file id="att" name="att" onchange="uploadName(this)" />
-					<input type="hidden" id="attFile" name="attFile" />
 					<div class="spc">
 						<div class="adc_txt">
 							첨부자료
-							<img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
 						</div>
 						<div class="cntrct_box_in">
 							<input type="text" id="fileName" readonly="readonly" />
