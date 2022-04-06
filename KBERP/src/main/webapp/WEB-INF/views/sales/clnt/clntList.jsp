@@ -359,7 +359,7 @@ function drawPaging(pb) {
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 			<div class="bodyWrap">
-				<div class="tLine"></div>
+				<!-- <div class="tLine"></div> -->
 				<table class="srch_table">
 					<colgroup>
 						<col width="90" />

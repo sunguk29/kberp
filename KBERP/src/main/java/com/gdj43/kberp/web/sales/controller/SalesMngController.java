@@ -225,6 +225,7 @@ public class SalesMngController {
 				iCommonService.updateData("salesMng.sales2UpdateLoan", params); // 제안 대출 상세정보tab 수정
 				iCommonService.updateData("salesMng.sales2UpdateClntCmpny", params); // 제안 고객사 상세정보tab 수정
 				iCommonService.updateData("salesMng.sales2UpdateDtl", params); // 제안 상세정보tab 수정
+				iCommonService.updateData("salesMng.sales2UpdateDtlInfoAtt", params); // 제안 상세정보 첨부파일tab
 				break;
 			case "failure" :
 				iCommonService.updateData("salesMng.sales2Failure", params);

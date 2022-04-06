@@ -608,6 +608,12 @@ textarea {
 	border: hidden;
 	outline: none;
 }
+.text_center{
+	width: 100%;
+	height: 100%;
+	line-height: 100px;
+	text-align: center;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -644,7 +650,7 @@ $(document).ready(function() {
 			bg : false,
 			bgClose : false,
 			title : "경고",
-			contents : "<b>삭제하시겠습니까?</b>",
+			contents : "<div class=\"text_center\"><b>삭제하시겠습니까?</b></div>",
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
@@ -721,7 +727,7 @@ $(document).ready(function() {
 			bg : false,
 			bgClose : false,
 			title : "경고",
-			contents : "삭제하시겠습니까?",
+			contents : "<div class=\"text_center\"><b>삭제하시겠습니까?</b></div>",
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},

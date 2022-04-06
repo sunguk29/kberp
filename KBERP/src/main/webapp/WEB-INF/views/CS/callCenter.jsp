@@ -96,6 +96,19 @@
 	text-decoration: underline;
 }
 
+/* 오시는 길, 연락처 팝업 */
+.call_guide_cont{
+	display: inline-block;
+	vertical-align: top;
+	width: 100%;
+	height: 100%;
+	background-color: white;
+	margin-left: -5px;
+	overflow: auto;
+}
+#guide_imgs{
+	width: 100%;
+}
 
 
 /* 저장 팝업 */
@@ -646,11 +659,21 @@ $(document).ready(function() {
 	$("#call_btn").on("click", function() {
 		var html = "";
 		
+		html += "<div class=\"call_guide_cont\">";
+		html += "<div class=\"name_box\">안내</div>";
+		html += "<img alt=\"오시는길\" src=\"resources/images/CS/road1.png\" id=\"guide_imgs\" />";
+		html += "<img alt=\"오시는길\" src=\"resources/images/CS/road2.png\" id=\"guide_imgs\" />";
+		html += "<div class=\"name_box\">부서연락</div>";
+		html += "<img alt=\"연락처\" src=\"resources/images/CS/dept_call1.png\" id=\"guide_imgs\" />";
+		html += "<img alt=\"연락처\" src=\"resources/images/CS/dept_call2.png\" id=\"guide_imgs\" />";
+		html += "<img alt=\"연락처\" src=\"resources/images/CS/dept_call3.png\" id=\"guide_imgs\" />";
+		html += "</div>";
+		
 		makePopup({
 			bg : false,
 			bgClose : false,
 			width: 510,
-			height: 300,
+			height: 600,
 			title : "안내/부서별연락",
 			contents : html,
 			draggable : true,

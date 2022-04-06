@@ -221,6 +221,12 @@ td:nth-child(1), td:nth-child(3){
 	border: hidden;
 	outline: none;
 }
+.text_center{
+	width: 100%;
+	height: 100%;
+	line-height: 100px;
+	text-align: center;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -230,7 +236,7 @@ $(document).ready(function() {
 			bg : true,
 			bgClose : false,
 			title : "알림",
-			contents : "나가면 저장되지않습니다, 나가시겠습니까?",
+			contents : "<div class=\"text_center\"><b>저장되지않았습니다, 나가시겠습니까?</b></div>",
 			contentsEvent : function() {
 				
 			},
