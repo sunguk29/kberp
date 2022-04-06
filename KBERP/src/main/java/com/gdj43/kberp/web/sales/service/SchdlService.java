@@ -18,5 +18,10 @@ public class SchdlService implements ISchdlService {
 		return iscDao.getDataList(sql);
 	}
 
+	@Override
+	public HashMap<String, Object> getData(String sql) throws Throwable {
+		return iscDao.getData(sql);
+	}
+
 
 }

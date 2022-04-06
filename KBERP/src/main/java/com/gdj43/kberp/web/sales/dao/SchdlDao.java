@@ -16,4 +16,9 @@ public class SchdlDao implements ISchdlDao {
 	public List<HashMap<String, Object>> getDataList(String sql) throws Throwable {
 		return sqlSession.selectList(sql);
 	}
+
+	@Override
+	public HashMap<String, Object> getData(String sql) throws Throwable {
+		return sqlSession.selectOne(sql);
+	}
 }

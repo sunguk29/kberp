@@ -60,14 +60,14 @@
 	
 	<!-- 사업 형태 그래프 -->
 	<select id="getSalesBsnChart" resultType="hashmap">
-		SELECT A.CNT AS TEST, B.CNT AS 관공, C.CNT AS 기타
-		FROM ( SELECT COUNT(*)|| '.0' AS CNT
+		SELECT A.CNT AS bsnType0, B.CNT AS bsnType1, C.CNT AS bsnType2
+		FROM ( SELECT COUNT(*) AS CNT
 		       FROM EXPCTD_BSNS_INFO
-		       WHERE EXPCTD_BSNS_TYPE = 0) A INNER JOIN ( SELECT COUNT(*) || '.0' AS CNT
+		       WHERE EXPCTD_BSNS_TYPE = 0) A INNER JOIN ( SELECT COUNT(*) AS CNT
 		                                                FROM EXPCTD_BSNS_INFO
 		                                                WHERE EXPCTD_BSNS_TYPE = 1 ) B
 		                                             ON 1 = 1    
-		                                     INNER JOIN ( SELECT COUNT(*)|| '.0' AS CNT
+		                                     INNER JOIN ( SELECT COUNT(*) AS CNT
 		                                                FROM EXPCTD_BSNS_INFO
 		                                                WHERE EXPCTD_BSNS_TYPE = 2) C
 		                                             ON 1 = 1

@@ -89,12 +89,11 @@ public class RprtController {
 	/* 영업 차트 데이터 가져오기 */
 	@RequestMapping(value = "/salesgetChartDataAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String salesgetChartDataAjax(HttpServletRequest request) throws Throwable{
+	public String salesgetChartDataAjax(@RequestParam HashMap<String, String> params, HttpServletRequest request) throws Throwable{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		List<HashMap<String, Object>> bsnList = iSchdlService.getDataList("salesRprt.getSalesBsnChart");
 		
 		int size = Integer.parseInt(request.getParameter("size"));
 		
@@ -102,22 +101,27 @@ public class RprtController {
 		
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		
 		for(int s = 0 ; s < series ; s++) {
-			HashMap<String, Object> data = new HashMap<String, Object>();
 			
-			data.put("name", bsnList);
-			data.put("pointInterval", 1);
-			data.put("pointStart", 2022);
+			HashMap<String, Object> bsnList = iSchdlService.getData("salesRprt.getSalesBsnChart");
+			
+			bsnList.put("name", "S" + s);
+			bsnList.put("pointInterval", 1);
+			bsnList.put("pointStart", 1999);
 			
 			ArrayList<Integer> y = new ArrayList<Integer>();
+			
 			
 			for(int i = 0 ; i < size ; i++) {
 				y.add((int) (Math.random() * 100)); 
 			}
+
+			  
+			bsnList.put("data", y);
 			
-			data.put("data", y);
-			
-			list.add(data);
+			list.add(bsnList);
 		}
 		
 		modelMap.put("list", list);
