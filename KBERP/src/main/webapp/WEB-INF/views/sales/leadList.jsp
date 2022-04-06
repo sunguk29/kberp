@@ -465,6 +465,10 @@ $(document).ready(function() {
 		
 		$("#psNum").val($(this).attr("num"));
 		
+
+		$("[name='sales_sts']").prop("checked", false);	
+		$("#sales_sts").prop("checked", true);
+		
 		$("#startDate").val('${startDate}');
 		
  		if($("#searchTxt").val() != "" || $("mngEmp").val != "") { // 담당자, 검색어 txt가 비어있지 않으면 초기화
