@@ -33,12 +33,22 @@ public class HrController {
 	
 	// 인사발령
     @RequestMapping(value = "/apntm")
-    public ModelAndView apntmList(@RequestParam HashMap<String,String> params, 
-                         ModelAndView mav) {
-      mav.setViewName("hr/apntm");
-      
-      return mav;
-    }
+    public ModelAndView apntmList(@RequestParam HashMap<String,String> params, HttpSession session, ModelAndView mav) throws Throwable {
+		try {
+			if(session.getAttribute("sEmpNum") != null) {
+				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
+				mav.setViewName("hr/apntm");
+				System.out.println("sEmpNum : " + params.get("sEmpNum"));
+			} else {
+				mav.setViewName("redirect:login");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			mav.addObject("exception", e);
+			mav.setViewName("exception/EXCEPTION_INFO");
+		}
+		return mav;
+	 } 
     
 	// 인사발령ajax       
 	@RequestMapping(value = "/apntmListAjax/{gbn}", method = RequestMethod.POST, 
@@ -71,6 +81,9 @@ public class HrController {
 		    	   List<HashMap<String, String>> rank = iCommonService.getDataList("hr.getRankList", params);
 		    	   modelMap.put("dept", dept);
 		    	   modelMap.put("rank", rank);
+		    	   break;
+		       case "insertApntm" :
+		    	   iCommonService.insertData("hr.insertApntm", params);
 		    	   break;
 		       }
 		       modelMap.put("res", "success");

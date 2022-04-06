@@ -52,9 +52,30 @@
                             ON AU.EMP_NUM = E.EMP_NUM
                             INNER JOIN ASSET A
                             ON A.ASSET_NUM = AU.ASSET_NUM
-                            WHERE A.ASSET_NUM = #{num}) B
+                            WHERE A.ASSET_NUM = #{num} AND END_DATE IS NULL) B
                             ON 1=1
    </select>
+   
+   <select id="useHistory" resultType="hashmap" parameterType="hashmap">
+		SELECT *
+		FROM(SELECT EMP_NAME, START_DATE, END_DATE,
+		ROW_NUMBER () OVER(ORDER BY ASSET_USE_NUM DESC) AS RNUM
+		FROM ASSET_USE A INNER JOIN EMP E
+		                ON A.EMP_NUM = E.EMP_NUM
+		WHERE ASSET_NUM = #{num}) A
+				WHERE A.RNUM BETWEEN #{startCount} AND #{endCount} 
+	</select>
+	
+	 <select id="useHistoryCnt" resultType="hashmap" parameterType="hashmap">
+		SELECT COUNT (*) AS CNT
+		FROM(SELECT EMP_NAME, START_DATE, END_DATE,
+		ROW_NUMBER () OVER(ORDER BY ASSET_USE_NUM DESC) AS RNUM
+		FROM ASSET_USE A INNER JOIN EMP E
+		                ON A.EMP_NUM = E.EMP_NUM
+		WHERE ASSET_NUM = #{num}) 
+	</select>
+	
+	
 	
 	
 	<select id="assetDtlViewExpndblt" resultType="hashmap" parameterType="hashmap">
@@ -69,6 +90,36 @@
 		INSERT INTO ASSET(ASSET_NUM, ASSET_NAME, RGSTRTN_EMP_NUM, MNGR_NUM, ASSET_TYPE_NUM, QUNTY, QUNTY_DVSN_NUM, ACQRMNT_DATE)
 		VALUES(ASSET_SEQ.NEXTVAL, #{assetName}, #{writer}, #{mngrNum}, #{assetType}, #{qunty}, #{quntyDvsnNum}, #{acqrmntDt})
 	</insert>
+	
+	<select id="getEmpList" resultType="hashmap" parameterType="hashmap">
+		SELECT O.EMP_NUM,O.EMP_NAME
+		FROM       ( SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM DESC) AS RNUM
+	        		FROM DEPT D INNER JOIN APNTM A
+	                    		ON D.DEPT_NUM = A.DEPT_NUM
+	                   			INNER JOIN EMP E
+	                    		ON A.EMP_NUM = E.EMP_NUM
+	        		WHERE D.DEPT_NUM = 5 
+		             <if test="sendSrchTxt != null and sendSrchTxt != ''">
+		             	AND E.EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
+		             </if>
+		            )O
+		WHERE O.RNUM BETWEEN #{startCount} AND #{endCount}
+		
+	</select>
+	
+	<select id="getEmpCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*)
+		FROM(   SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM DESC) AS RNUM
+	       		FROM DEPT D INNER JOIN APNTM A
+	                    ON D.DEPT_NUM = A.DEPT_NUM
+	                    INNER JOIN EMP E
+	                    ON A.EMP_NUM = E.EMP_NUM
+	       		WHERE D.DEPT_NUM = 5 
+			<if test="sendSrchTxt != null and sendSrchTxt != ''">
+				AND E.EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
+			</if>
+			) 
+	</select>
 	
 	<update id="drblMdfy" parameterType="hashmap">
 		UPDATE ASSET SET MNGR_NUM = #{mngrNum},
@@ -210,36 +261,7 @@
 		INSERT INTO ASSET_TKT(TKT_NUM, RGSTRTN_EMP_NUM, ASSET_NUM, TKT_EMP_NUM, RMRKS, TKT_DATE, QUNTY, QUNTY_DVSN_NUM)
 		VALUES(ASSET_TKT_SEQ.NEXTVAL, #{rgstrtnEmpNum}, #{assetNum}, #{empNum}, #{rmrks}, #{tktdt}, #{qunty}, #{quntynum})
 	</insert>
-	
-	<!-- 시설물등록시 관리자리스트 -->
-<select id="getEmpList" resultType="hashmap" parameterType="hashmap">
-	SELECT O.EMP_NUM,O.EMP_NAME
-	FROM       ( SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM DESC) AS RNUM
-        		FROM DEPT D INNER JOIN APNTM A
-                    		ON D.DEPT_NUM = A.DEPT_NUM
-                   			INNER JOIN EMP E
-                    		ON A.EMP_NUM = E.EMP_NUM
-        		WHERE D.DEPT_NUM = 5 
-	             <if test="sendSrchTxt != null and sendSrchTxt != ''">
-	             	AND E.EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
-	             </if>
-	            )O
-	WHERE O.RNUM BETWEEN #{startCount} AND #{endCount}
-	
-</select>
 
-<!-- 시설물등록시 관리자리스트 cnt-->
-<select id="getEmpCnt" resultType="Integer" parameterType="hashmap">
-	SELECT COUNT(*)
-	FROM(   SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM DESC) AS RNUM
-       		FROM DEPT D INNER JOIN APNTM A
-                    ON D.DEPT_NUM = A.DEPT_NUM
-                    INNER JOIN EMP E
-                    ON A.EMP_NUM = E.EMP_NUM
-       		WHERE D.DEPT_NUM = 5 
-		<if test="sendSrchTxt != null and sendSrchTxt != ''">
-			AND E.EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
-		</if>
-		) 
-</select>
+
+
 </mapper>

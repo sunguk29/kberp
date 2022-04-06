@@ -38,6 +38,7 @@ public class CardController {
 		mav.setViewName("mng/cardList");
 		return mav;
 	}
+	
 	@RequestMapping(value="/cardListAjax", method= RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String cardListAjax(@RequestParam HashMap<String,String>params) throws Throwable{
@@ -47,18 +48,47 @@ public class CardController {
 		int cnt = ics.getIntData("card.getCnt", params);
 		
 		//페이징 계산
-		//PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")),cnt,10,5);
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt("1"),cnt,10,5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")),cnt,10,5);
+		//PagingBean pb = iPagingService.getPagingBean(Integer.parseInt("1"),cnt,10,5);
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
 		List<HashMap<String, String>> list = ics.getDataList("card.cardList", params);
 		
-		modelMap.put("list", list);
 		modelMap.put("pb", pb);
+		modelMap.put("list", list);
 		
 		return mapper.writeValueAsString(modelMap);
 	}
+	
+	//카드상세보기
+		@RequestMapping(value = "/cardView")
+		public ModelAndView cardView(@RequestParam HashMap<String, String> params, 
+									 ModelAndView mav) throws Throwable {
+		
+			HashMap<String, String> data = ics.getData("card.cardView", params);
+			
+			mav.addObject("data", data);
+			
+			mav.setViewName("mng/cardView");
+			
+			return mav;
+		}
+		
+		//카드업데이트
+				@RequestMapping(value = "/cardUpdate")
+				public ModelAndView cardUpdate(@RequestParam HashMap<String, String> params, 
+											 ModelAndView mav) throws Throwable {
+					
+					HashMap<String, String> data = ics.getData("card.cardView", params);
+					
+					
+					mav.addObject("data", data);
+					mav.setViewName("mng/cardUpdate");
+					
+					return mav;
+				}
+		
 	// @PathVariable : 주소의 {키} 부분을 변수로 취득
 		@RequestMapping(value ="/cardMngAction/{gbn}", method = RequestMethod.POST,
 				produces = "text/json;charset=UTF-8") 
@@ -77,9 +107,6 @@ public class CardController {
 			case "update":
 				ics.updateData("card.updateCard",params);
 				break;
-			case "delete":
-				ics.deleteData("card.deleteCard",params);
-				break;
 			}
 				modelMap.put("res", "success");
 			} catch (Throwable e) {
@@ -89,4 +116,7 @@ public class CardController {
 		
 			return mapper.writeValueAsString(modelMap);
 		}
+		
+		
+		
 }

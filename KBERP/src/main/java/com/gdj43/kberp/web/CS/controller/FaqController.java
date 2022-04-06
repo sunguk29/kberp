@@ -55,7 +55,7 @@ public class FaqController {
 		
 		//페이징
 		PagingBean pb 
-		= iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 4, 4);
+		= iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 10);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
