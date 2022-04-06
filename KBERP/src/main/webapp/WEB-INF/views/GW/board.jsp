@@ -30,6 +30,7 @@
 $(document).ready(function() {
 	if('${param.searchGbn}' !='') {
 		$('#searchGbn').val('${param.searchGbn}');
+		
 	} else {
 		$("#oldSearchGbn").val("0");
 	}
@@ -143,6 +144,8 @@ function drawPaging(pb) {
 </script>
 </head>
 <body>
+<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}" />
+<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
