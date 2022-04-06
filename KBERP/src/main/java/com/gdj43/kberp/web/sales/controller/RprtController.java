@@ -2,6 +2,7 @@ package com.gdj43.kberp.web.sales.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 
@@ -86,10 +87,11 @@ public class RprtController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
+	
 	/* 영업 차트 데이터 가져오기 */
 	@RequestMapping(value = "/salesgetChartDataAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String salesgetChartDataAjax(@RequestParam HashMap<String, String> params, HttpServletRequest request) throws Throwable{
+	public String salesgetChartDataAjax(HttpServletRequest request) throws Throwable{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -97,31 +99,30 @@ public class RprtController {
 		
 		int size = Integer.parseInt(request.getParameter("size"));
 		
-		int series = Integer.parseInt(request.getParameter("series"));
-		
-		
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		
-		for(int s = 0 ; s < series ; s++) {
+		HashMap<String, Object> bsnList = iSchdlService.getData("salesRprt.getSalesBsnChart");
 			
-			HashMap<String, Object> bsnList = iSchdlService.getData("salesRprt.getSalesBsnChart");
+		
+		
+		for(int i = 0 ; i < size ; i++) {
+			HashMap<String, Object> temp = new HashMap<String, Object>();
 			
-			bsnList.put("name", "S" + s);
-			bsnList.put("pointInterval", 1);
-			bsnList.put("pointStart", 1999);
-			
-			ArrayList<Integer> y = new ArrayList<Integer>();
-			
-			
-			for(int i = 0 ; i < size ; i++) {
-				y.add((int) (Math.random() * 100)); 
+			if(i == 0) {
+				temp.put("name", "민수");
+			} else if(i == 1) {
+				temp.put("name", "관공");
+			} else {
+				temp.put("name", "기타");
 			}
-
-			  
-			bsnList.put("data", y);
+			temp.put("y", Integer.parseInt(String.valueOf(bsnList.get("BSNTYPE"+i))));
 			
-			list.add(bsnList);
+			list.add(temp);
 		}
+		
+		
+		
+	
 		
 		modelMap.put("list", list);
 		
