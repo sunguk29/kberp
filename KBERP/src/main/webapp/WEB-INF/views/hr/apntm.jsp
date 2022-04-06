@@ -896,7 +896,7 @@ function reloadCont() {
       data : params,
       dataType : "json",
       success : function(res) {
-         drawCont(res.cont);
+         drawCont(res.cont, res.emp);
       },
       error : function(req) {
          console.log(req.responseText);
@@ -938,7 +938,7 @@ function drawList(list) {
 }   
 
 // 발령 상세정보 생성
-function drawCont(cont){
+function drawCont(cont, emp){
    var html = "";
    
    html += "<div class=\"apntm_cont_right_area\">                                                     ";
@@ -952,26 +952,26 @@ function drawCont(cont){
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_emp_num\">                                      ";
    html += "                  <div class=\"prfl_info_text\">사원번호</div>                       ";
-   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + cont.APNTM_NUM + "\" />  ";
+   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + emp.EMP_NUM + "\" />  ";
    html += "                  <div class=\"prfl_srch_btn\"></div>                                ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_emp_name\">                                     ";
    html += "                  <div class=\"prfl_info_text\">사원명</div>                         ";
-   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + cont.EMP_NAME + "\" /> ";
+   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + emp.EMP_NAME + "\" /> ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_dept\">                                         ";
    html += "                  <div class=\"prfl_info_text\">부서</div>                         ";
-   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + cont.DEPT_NAME + "\" /> ";
+   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + emp.DEPT_NAME + "\" /> ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_team\">                                         ";
    html += "                  <div class=\"prfl_info_text\">직급</div>                           ";
-   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + cont.DEPT_NAME + "\" />";
+   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + emp.RANK_NAME + "\" />";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";
