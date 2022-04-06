@@ -412,7 +412,7 @@ $(document).ready(function() {
 		console.log(list);
 		$('.bsns_type').highcharts({
 			chart: {
-				type: 'bar',
+				type: 'pie',
 				zoomType: 'x'
 			},
 			title: {
