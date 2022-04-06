@@ -339,7 +339,7 @@ table{
 	width: 927px;
 	margin: 40px auto;
 }
-td:nth-child(2){
+td:nth-child(2), td:nth-child(4){
 	border-bottom: 1px solid #d7d7d7;
 }
 tr:nth-child(10) td{
@@ -354,6 +354,8 @@ td:nth-child(1) {
 .btn{
 	width : 90px;
 	height: 40px;
+	text-align: center;
+	margin-left: 10px;
 }
 .address{
 	width : 90px;
@@ -380,7 +382,7 @@ td:nth-child(1) {
 	height: 33px;
 	width: 90%;
 	padding: 0 5px;
-	font-size: 10.5px;
+	font-size: 12px;
 	color: black;
 	vertical-align: middle;
 	box-sizing: border-box;
@@ -589,6 +591,7 @@ hr { /* 구분선 */
 	float: right;
 	margin-right: 5px;
 	margin-top: 5.5px;
+	
 }
 .plus_btn_bot {
 	display:inline-block;
@@ -603,6 +606,30 @@ hr { /* 구분선 */
 }
 .plus_btn_bot:hover {
 	cursor: pointer;
+}
+#percent {
+	font-size: 10pt;
+	display: inline-block;
+	vertical-align: middle;
+	font-weight: bold;
+	margin-bottom: 5px;
+	/* margin-left: 25px; */
+}
+#userIcon {
+	margin-top: 5px;
+}
+.mngTxt {
+	height: 33px;
+	width: 85%;
+	padding: 0 5px;
+	font-size: 12px;
+	color: black;
+	vertical-align: middle;
+	box-sizing: border-box;
+	outline: none;
+	border-radius: 3px;
+	line-height: 33px;
+	border: none;	
 }
 </style>
 <script type="text/javascript">
@@ -978,7 +1005,7 @@ function ecAddPopup() {
 	html += 		"<div class=\"txt2\">";
 	html += 			"<input type=\"text\" class=\"txt3\" id=\"mngName\" name=\"mngName\" />";
 	html +=				"<input type=\"hidden\" id=\"mngNumber\" name=\"mngNumber\" />";
-	html += 			"<span class=\"imgPos2\"><img class=\"btnImg2\" id=\"userImg\" alt=\"담당자\" src=\"resources/images/sales/usericon.png\" /></span>";
+	html += 			"<span class=\"imgPos2\"><img class=\"btnImg2\" id=\"userImg\" alt=\"담당자\" src=\"resources/images/sales/.png\" /></span>";
 	html += 		"</div>";
 	html += 	"</div>";
 	html += "</form>";
@@ -1482,17 +1509,19 @@ function uploadName(e) {
 				<!-- 시작 -->		
 						<table>
 							<colgroup>
-								<col width="200" />
-								<col width="auto" />
+							<col width="200" />
+							<col width="250" />
+							<col width="150" />
+							<col width="250" />
 							</colgroup>
 							<tbody>
 								<tr>
 									<td><input type="button" class="btn" value="리드명 *" readonly="readonly"/></td>
-									<td><input type="text" class="txt" id="leadName" name="leadName" /></td>
+									<td colspan="3"><input type="text" class="txt" id="leadName" name="leadName" /></td>
 								</tr>
 								<tr>
 									<td><input type="button" class="btn" value="고객명 *" readonly="readonly"/></td>
-									<td>
+									<td colspan="3">
 										<input type="text" class="txt" id="clntName" name="clntName" />
 										<input type="hidden" id="clntNum" name="clntNum" />
 										<img class="btnImg_in" id="clntIcon" alt="팝업" src="resources/images/sales/popup.png" />
@@ -1500,7 +1529,7 @@ function uploadName(e) {
 								</tr>
 								<tr>
 									<td><input type="button" class="btn" value="고객사 *" readonly="readonly"/></td>
-									<td>
+									<td colspan="3">
 										<input type="text" class="txt" id="ccName" name="ccName" />
 										<input type="hidden" id="ccNum" name="ccNum" />
 										<img class="btnImg_in" id="ccIcon" alt="팝업" src="resources/images/sales/popup.png" />
@@ -1508,7 +1537,7 @@ function uploadName(e) {
 								</tr>
 								<tr>
 									<td><input type="button" class="btn" value="고객사 등급" readonly="readonly"/>
-									<td>
+									<td colspan="3">
 										<select class="txt_in" id="ccGrade" name="ccGrade" disabled="disabled">
 											<optgroup>
 												<option value="5">고객사 등록 후 자동 입력</option>
@@ -1523,7 +1552,7 @@ function uploadName(e) {
 								</tr>
 								<tr>
 									<td><input type="button" class="btn" value="인지경로 *" readonly="readonly"/></td>
-									<td>
+									<td colspan="3">
 										<select class="txt_in" id="rp" name="rp">
 											<option value="0">자사홈페이지</option>
 											<option value="1">인터넷검색</option>
@@ -1537,13 +1566,19 @@ function uploadName(e) {
 								<tr>
 									<td><input type="button" class="btn" value="담당자 *" readonly="readonly"/></td>
 									<td>
-										<input type="text" class="txt" id="mngEmp" name="mngEmp" />
 										<input type="hidden" id="mngNum" name="mngNum" />
+										<input type="text" class="mngTxt" id="mngEmp" name="mngEmp" />
 										<img class="btnImg_in" id="userIcon" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
 									</td>
-								</tr>										
+									<td><input type="button" class="btn" value="가능여부" readonly="readonly"/></td>
+									<td>
+										<input type="text" class="txt" id="psblCheck" name="psblCheck" placeholder="0" style="text-align: right;"/>
+										<div id="percent">%</div>
+									</td>
+								</tr>													
 							</tbody>
 						</table>
+						<div></div>
 						<!-- 첨부자료 -->
 							<input type="file" id="att" name="att" style="display: none;" onchange="uploadName(this)" /> 
 							<input type="hidden" id="attFile" name="attFile" />
@@ -1553,6 +1588,7 @@ function uploadName(e) {
 						<div class="cntrct_box_in">
 							<input type="text" id="fileName" name="fileName" readonly="readonly" />
 						</div>
+						
 					</div> <!-- bodyWrap end -->
 				</div>	
 			</form>

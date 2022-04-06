@@ -225,6 +225,17 @@ textarea {
 	width: 100%;
 	height: 30px;
 }
+.next_stage {
+	font-size: 13pt;
+	color: #2E83F2;
+}
+.popup_cont2 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+	font-weight: 600;
+	text-align: center;
+	line-height: 100px;
+}
 .nb {
 	font-size: 14px;
 	float: right;
@@ -541,22 +552,44 @@ textarea {
 #att{
 	display: none;
 }
+#percent {
+	font-size: 10pt;
+	display: inline-block;
+	vertical-align: middle;
+	font-weight: bold;
+	margin-bottom: 5px;
+	/* margin-left: 25px; */
+}
+.mngTxt {
+	height: 33px;
+	width: 85%;
+	padding: 0 5px;
+	font-size: 12px;
+	color: black;
+	vertical-align: middle;
+	box-sizing: border-box;
+	outline: none;
+	border-radius: 3px;
+	line-height: 33px;
+	border: none;	
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function () {
 	
+	/* 목록버튼 선택 시 */
 	$("#listBtn").on("click", function() {
 		
 		$("#actionForm").attr("action", "leadList");
 		$("#actionForm").submit();
 	});
-	
+	/* 수정버튼 선택 시 */
 	$("#updateBtn").on("click", function() {
 		
 		$("#actionForm").attr("action", "leadUpdate");
 		$("#actionForm").submit();
 	});
-	
+	/* 삭제버튼 선택 시 */
 	$("#deleteBtn").on("click", function() {
 		var html = "";
 		
@@ -622,18 +655,65 @@ $(document).ready(function () {
 		}); // makePopup end	
 	});
 	/* 고객사 등급 선택되게 */
-	$("#ccGrade").val(${data.GRADE_NUM}).prop("selected", this.selected);
+	$("#ccGrade").val(${leadData.GRADE_NUM}).prop("selected", this.selected);
 	
 	/* 인지경로 선택 되게 */
-	$("#rp").val(${data.RCGNTN_PATH_NUM}).prop("selected", this.selected);
+	$("#rp").val(${leadData.RCGNTN_PATH_NUM}).prop("selected", this.selected);
 	
 	/* 진행상태 선택 되게 */
-	$("#psNum").val(${data.PRGRS_STS_NUM}).prop("selected", this.selected);
+	$("#psNum").val(${leadData.PRGRS_STS_NUM}).prop("selected", this.selected);
 	
 	
 	/* 리드 상세보기 실행될 시 비동기로 의견 목록 그리기 위해 선언  */
 	reloadOpList();
 	
+	/* 영업기회 전환 버튼 */
+	$("#leadToSales_btn").on("click", function() {
+		var html = "";
+		
+		html += "<div class=\"popup_cont2\">";
+		html += "<span class=\"next_stage\">영업기회</span>로 전환하시겠습니까?</div>";
+		
+		makePopup({
+			depth : 1,
+			bg : false,
+			bgClose : false,
+			title : "영업기회로 전환",
+			contents : html,
+			draggable : false,
+			buttons : [{
+				name : "확인",
+				func:function() {
+					var ltshtml = "";
+					
+					ltshtml += "<div class=\"popup_cont2\">해당 리드가 영업기회로 전환되었습니다.</div>";
+					
+					makePopup({
+						depth : 2,
+						bg : true,
+						width : 400,
+						height : 180,
+						title : "전환 완료",
+						contents : ltshtml,
+						buttons : {
+							name : "확인",
+							func:function() {
+								$("#salesNum").val('${param.leadNum}');
+								console.log(salesNum);
+								$("#actionForm").attr("action", "sales1SalesChncReg");
+								$("#actionForm").submit(); 
+								console.log("One!");
+								closePopup(2);
+							}
+						}
+					});
+					closePopup(1);
+				}
+			}, {
+				name : "취소"
+			}]
+		});
+	});
 	/* 의견등록 start */
 	$(".subm").on("click", function() {
 		var params = $("#botOpActionForm").serialize();
@@ -1241,11 +1321,11 @@ function uploadName(e) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
-	<input type="hidden" name="searchDate" value="${param.searchDate}" />
-	<input type="hidden" name="searchDate2" value="${param.searchDate2}" />
 	<input type="hidden" name="srchType" value="${param.srchType}" />
 	<input type="hidden" name="psNum" value="${param.psNum}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+	<input type="hidden" name="listSort" value="${param.listSort}" />
+	<input type="hidden" name="salesNum" id="salesNum" />																														
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -1266,34 +1346,40 @@ function uploadName(e) {
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
-			<div class="body">
+			<div class="body">																											
 				<div class="bodyWrap">
 				<!-- 시작 -->
 					<table>
 						<colgroup>
 							<col width="200" />
-							<col width="auto" />
+							<col width="250" />
+							<col width="150" />
+							<col width="250" />
 						</colgroup>
 						<tbody>
 							<tr>
+								<td><input type="button" class="btn" value="리드번호" readonly="readonly"/></td>
+								<td colspan="3"><input type="text" class="txt" value="${leadData.LEAD_NUM}" readonly="readonly" /></td>
+							</tr>
+							<tr>
 								<td><input type="button" class="btn" value="리드명 *" readonly="readonly"/></td>
-								<td><input type="text" class="txt" value="${data.LEAD_NAME}" readonly="readonly" /></td>
+								<td colspan="3"><input type="text" class="txt" value="${leadData.LEAD_NAME}" readonly="readonly" /></td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="고객명 *" readonly="readonly"/></td>
-								<td>
-									<input type="text" class="txt" value="${data.CLNT_NAME}" readonly="readonly" />
+								<td colspan="3">
+									<input type="text" class="txt" value="${leadData.CLNT_NAME}" readonly="readonly" />
 								</td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="고객사 *" readonly="readonly"/></td>
-								<td>
-									<input type="text" class="txt" value="${data.CLNT_CMPNY_NAME}" readonly="readonly" />
+								<td colspan="3">
+									<input type="text" class="txt" value="${leadData.CLNT_CMPNY_NAME}" readonly="readonly" />
 								</td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="고객사 등급" readonly="readonly"/></td>
-								<td>
+								<td colspan="3">
 									<select class="txt_in" id="ccGrade" name="ccGrade" disabled="disabled">
 										<optgroup>
 											<option value="0">S</option>										
@@ -1307,7 +1393,7 @@ function uploadName(e) {
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="인지경로 *" readonly="readonly"/></td>
-								<td>
+								<td colspan="3">
 									<select class="txt_in" id="rp" name="rp" disabled="disabled" >
 										<optgroup>
 											<option value="0">자사홈페이지</option>										
@@ -1323,13 +1409,17 @@ function uploadName(e) {
 							<tr>
 								<td><input type="button" class="btn" value="담당자 *" readonly="readonly"/></td>
 								<td>
-									<input type="text" class="txt" value="${data.EMP_NAME}" readonly="readonly"  />
-									
+									<input type="text" class="mngTxt" id="mngEmp" name="mngEmp" value="${leadData.EMP_NAME}" readonly="readonly" />
 								</td>
-							</tr>
+								<td><input type="button" class="btn" value="가능여부" readonly="readonly"/></td>
+								<td>
+									<input type="text" class="txt" id="psblCheck" name="psblCheck" value="${leadData.PSBL_CHECK}" style="text-align: right;" readonly="readonly"/>
+									<div id="percent">%</div>
+								</td>
+							</tr>							
 							<tr>
 								<td><input type="button" class="btn" value="진행상태 *" readonly="readonly" /></td>
-								<td>
+								<td colspan="3">
 									<select class="txt_in" id="psNum" name="psNum" disabled="disabled">
 										<option value="0">선택안함</option>
 										<option value="1">진행중</option>
@@ -1342,18 +1432,18 @@ function uploadName(e) {
 						</tbody>
 					</table>
 					<!-- 첨부파일 -->
-					<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
-					<c:set var="leadFileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
+					<c:set var="fileLength" value="${fn:length(leadData.ATT_FILE_NAME)}"></c:set>
+					<c:set var="leadFileName" value="${fn:substring(leadData.ATT_FILE_NAME, 20, fileLength)}"></c:set>
 					<div class="rvn_txt">
 						첨부파일
 					</div>
 					<div class="cntrct_box_in">
 						<span id="attFileName">
-							<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${leadFileName}">${leadFileName}</a>
+							<a href="resources/upload/${leadData.ATT_FILE_NAME}"  download="${leadFileName}">${leadFileName}</a>
 						</span>
 					</div>
 					<div class="next_bot">
-						<div class="cmn_btn nb">영업기회로 전환하기 ▶</div>
+						<div class="cmn_btn nb" id="leadToSales_btn">영업기회로 전환하기 ▶</div>
 					</div>
 					<!-- 의견 -->
 					<form action="#" id="botOpActionForm" method="post">

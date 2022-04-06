@@ -254,9 +254,9 @@ public class LeadController {
 	public ModelAndView leadCont(@RequestParam HashMap<String, String> params, 
 								 ModelAndView mav) throws Throwable {
 		
-		HashMap<String, String> data = iCommonService.getData("salesSchdl.getLeadCont", params);
+		HashMap<String, String> leadData = iCommonService.getData("salesSchdl.getLeadCont", params);
 		
-		mav.addObject("data", data);
+		mav.addObject("leadData", leadData);
 		
 		mav.setViewName("sales/leadCont");
 		
@@ -267,9 +267,9 @@ public class LeadController {
 	public ModelAndView leadUpdate(@RequestParam HashMap<String, String> params, 
 								 ModelAndView mav) throws Throwable {
 		
-		HashMap<String, String> data = iCommonService.getData("lead.getLeadCont", params);
+		HashMap<String, String> leadData = iCommonService.getData("lead.getLeadCont", params);
 		
-		mav.addObject("data", data);
+		mav.addObject("leadData", leadData);
 		
 		mav.setViewName("sales/leadUpdate");
 		
