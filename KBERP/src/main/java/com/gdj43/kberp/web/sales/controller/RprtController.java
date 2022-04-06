@@ -101,8 +101,6 @@ public class RprtController {
 		
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		
-		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
-		
 		for(int s = 0 ; s < series ; s++) {
 			
 			HashMap<String, Object> bsnList = iSchdlService.getData("salesRprt.getSalesBsnChart");
