@@ -777,7 +777,7 @@ $(document).ready(function() {
 							      data : params,
 							      success : function(res) {
 							    	  console.log(res);
-							    	  $("#empNum").val(res.inqryEmp.EMP_NUM);
+							    	  $("#addEmpNum").val(res.inqryEmp.EMP_NUM);
 									  $("#empName").val(res.inqryEmp.EMP_NAME);
 									  $("#emp_pctr_area").attr("src", "resources/upload/" + res.inqryEmp.EMP_PCTR_FILE);
 									  $("#deptName").val(res.inqryEmp.RANK_NAME);
@@ -798,8 +798,8 @@ $(document).ready(function() {
 		}); // 사원조회팝업 끝
 		$("body").on("click", "#addApntmBtn", function() {
 			console.log("등록클릭!")
-			if ($("#empNum").val() == '') {
-				makeAlert("알림", "돋보기를 누른 후 발령사원을 선택하세요.", function(){
+			if ($("#addEmpNum").val() == '') {
+				makeAlert("알림", "돋보기를 눌러 발령사원을 선택하세요.", function(){
 				$("#prfl_srch_btn").focus();
 				});
 			} else if ($("#addDvsnNum").val() == '선택') {
@@ -832,7 +832,7 @@ $(document).ready(function() {
 				      data : params,
 				      success : function(res) {
 				    	  makeAlert("알림","발령이 등록되었습니다.", function(){
-			    		  	//location.reload();
+			    		  	location.reload();
 				    	  });
 				    	  console.log(res);
 				      }, 
@@ -1070,26 +1070,26 @@ function drawAddApntm(dept,rank){
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_emp_num\">                                      ";
    html += "                  <div class=\"prfl_info_text\">사원번호</div>                       ";
-   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled name=\"addEmpNum\" id=\"empNum\" value=\"\" />  ";
+   html += "                  <input type=\"text\" class=\"prfl_info_input\" readonly=\"readonly\" name=\"addEmpNum\" id=\"addEmpNum\" value=\"\" />  ";
    html += "                  <div class=\"prfl_srch_btn\" id=\"prfl_srch_btn\"></div>                                ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_emp_name\">                                     ";
    html += "                  <div class=\"prfl_info_text\">사원명</div>                         ";
-   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled  id=\"empName\" value=\"\" /> ";
+   html += "                  <input type=\"text\" class=\"prfl_info_input\"  readonly=\"readonly\" id=\"empName\" value=\"\" /> ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_dept\">                                         ";
    html += "                  <div class=\"prfl_info_text\">부서</div>                         ";
-   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled id=\"deptName\"value=\"\" /> ";
+   html += "                  <input type=\"text\" class=\"prfl_info_input\"  readonly=\"readonly\" id=\"deptName\"value=\"\" /> ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_team\">                                         ";
    html += "                  <div class=\"prfl_info_text\">직급</div>                           ";
-   html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled id=\"rankName\"value=\"\" />";
+   html += "                  <input type=\"text\" class=\"prfl_info_input\"  readonly=\"readonly\" id=\"rankName\"value=\"\" />";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";

@@ -14,7 +14,7 @@
 						                       		 ON A.DEPT_NUM = D.DEPT_NUM
 						                       INNER JOIN RANK R
 						                       	 	 ON A.RANK_NUM = R.RANK_NUM
-						                       INNER JOIN APRVL_LINE AP
+						                       LEFT JOIN APRVL_LINE AP
 						                        	 ON A.APRVL_NUM = AP.APRVL_NUM
 					                       <if test="searchTxt != null and searchTxt != ''"> <!--  텍스트 조회 필터링 	-->
 												<choose>
