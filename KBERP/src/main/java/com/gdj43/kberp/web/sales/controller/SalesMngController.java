@@ -467,7 +467,7 @@ public class SalesMngController {
 			case "insert" :
 				iCommonService.insertData("salesMng.sales3QtnAdd", params); // 견적 
 				iCommonService.insertData("salesMng.sales3QtnAttAdd", params); // 견적 첨부파일
-				iCommonService.getDataList("salesMng.getQtnPQList", params); // 지난견적서
+//				iCommonService.getDataList("salesMng.getQtnPQList", params); // 지난견적서
 				iCommonService.updateData("salesMng.sales2to3", params); // 진행 단계 전환
 				break;
 			case "update" :

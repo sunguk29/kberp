@@ -2343,6 +2343,42 @@ function test(t) {
 						</div>
 					</div>
 				</form>	
+		<!-- ******************** 지난 견적서 ******************** -->
+<%-- 				<form action="#" id="pastQtnActionForm" method="post">
+					<input type="hidden" name="salesNum" value="${param.salesNum}" />
+					
+					<!-- 지난 견적서 -->
+					<div class="mgtop"></div>
+					<div class="PQ_title"></div>
+					<hr color="#F2B705" width="925px">
+					<div class="bx">
+						<!-- <div class="qtnBox">
+							<div class="name">21E314 견적서2 (21/12/27 17:01:00)</div>
+							<div class="txtOp"><pre>법인사업    중소기업 소액 대출      3%          1200000만원</pre></div>
+						</div>
+						<div class="qtnBox">
+							<div class="name">21E314 견적서2 (21/12/27 17:01:00)</div>
+							<div class="txtOp"><pre>법인사업    중소기업 소액 대출      3%          1200000만원</pre></div>
+						</div>
+						<div class="qtnBox">
+							<div class="name">21E314 견적서2 (21/12/27 17:01:00)</div>
+							<div class="txtOp"><pre>법인사업    중소기업 소액 대출      3%          1200000만원</pre></div>
+						</div>
+						<div class="qtnBox">
+							<div class="name">21E314 견적서2 (21/12/27 17:01:00)</div>
+							<div class="txtOp"><pre>법인사업    중소기업 소액 대출      3%          1200000만원</pre></div>
+						</div>
+						<div class="qtnBox">
+							<div class="name">21E314 견적서2 (21/12/27 17:01:00)</div>
+							<div class="txtOp"><pre>법인사업    중소기업 소액 대출      3%          1200000만원</pre></div>
+						</div>
+						<div class="qtnBox">
+							<div class="name">21E314 견적서2 (21/12/27 17:01:00)</div>
+							<div class="txtOp"><pre>법인사업    중소기업 소액 대출      3%          1200000만원</pre></div>
+						</div> -->
+					</div>
+					<!-- ********* 견적 끝 ********* -->
+				</form> --%>
 				</div>
 			</div>
 		</div>
