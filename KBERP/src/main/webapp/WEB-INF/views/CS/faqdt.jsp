@@ -189,16 +189,7 @@
 				<div class="date">${data.WRTNG_DATE}</div>
 				<span class="cate">
 					<select disabled="disabled" id="ctgry_name" name="ctgry_name">
-				 	<option>인터넷뱅킹</option>
-					<option>스마트폰뱅킹</option>
-					<option>CD/ATM</option>
-					<option>공인인증서</option>
-					<option>인증/OTP/보안카드</option>
-					<option>예금/신탁</option>
-					<option>펀드</option>
-					<option>대출</option>
-					<option>외환</option>
-					<option>로그인관련</option>
+				 	<option>${data.CTGRY_NAME}</option>
 					</select>
 				</span>
 			</div>
