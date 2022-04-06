@@ -404,10 +404,13 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-	// 수정 버튼
+	// 인쇄 버튼
+	//$("#printBtn")
+	
+	// 견적서 추가(수정) 버튼
 	$("#updateBtn").on("click", function() {
 		
-		$("#actionForm").attr("action", "sales3QtnUpdate");
+		$("#actionForm").attr("action", "sales3QtnAdd");
 		$("#actionForm").submit();
 	});
 	
@@ -675,8 +678,8 @@ function drawOpList(list) {
 		<div class="page_title_bar">
 			<div class="page_title_text">영업관리 - 견적 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
-				<img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" />
-				<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
+				<img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" id="printBtn" />
+				<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" data-toggle="tooltip" title="견적서 추가하기" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -870,7 +873,10 @@ function drawOpList(list) {
 					<hr class="hr_bot" color="#4B94F2" width="925px">
 					<!-- *************** 제안 부분 시작 **************** -->
 					
-						<div class="bot_title"><h3>제안</h3></div>
+						<div class="bot_title">
+							<h3>제안<span id="sgstn_btn"><div class="drop_btn" id="sgstnContBtn_h"></div></span></h3>
+						</div>
+						<div class="sgstnCont">
 						<div class="page_cont_title_text">대출 상세정보</div>
 						<hr class="hr_width">
 						<table class="detailList">

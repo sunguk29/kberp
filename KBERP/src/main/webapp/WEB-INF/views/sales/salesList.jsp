@@ -626,6 +626,7 @@ $(document).ready(function() {
 	
 	$(".salesWrap").on("click", ".salesOpportunityName", function() {
 		$("#salesNum").val($(this).attr("salesNum")); // 영업번호 가져오기
+		$("#qtnNum").val($(this).attr("qtnNum")); // 견적번호 가져오기
 		
 		if($(this).children("#test").val() == "영업기회") {
 			$("#actionForm").attr("action", "sales1SalesChncCont"); // 영업기회 상세보기로 이동.
@@ -879,7 +880,7 @@ function drawList(list) {
 	for(var data of list) {
 		html += "<div class=\"salesOpportunity\">";
 		html += "<div class=\"sledding\">" + data.PRGRS_STS + "</div>";
-		html += "<div class=\"salesOpportunityName\" salesNum = \"" + data.SALES_NUM + "\">" + data.LEAD_NAME + "<input type=\"hidden\" id=\"test\" value=\"" + data.PRGRS_STS2 + "\" /></div>";
+		html += "<div class=\"salesOpportunityName\" salesNum = \"" + data.SALES_NUM + "\" qtnNum=\"" + data.QTN_NUM + "\">" + data.LEAD_NAME + "<input type=\"hidden\" id=\"test\" value=\"" + data.PRGRS_STS2 + "\" /></div>";
 		html += "<table cellspacing=\"0\">";
 		html += "<colgroup>";
 		html += "<col width=\"120\">";
@@ -1102,6 +1103,7 @@ function drawMngPaging(mngPb) {
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
 		<input type="hidden" id="salesNum" name="salesNum" /> <!-- 상세보기 갈 때 필요 -->
+		<input type="hidden" id="qtnNum" name="qtnNum" /> <!-- 상세보기 갈 때 필요 -->
 		
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
