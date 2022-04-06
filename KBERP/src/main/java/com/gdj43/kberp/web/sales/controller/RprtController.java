@@ -100,24 +100,27 @@ public class RprtController {
 		
 		int series = Integer.parseInt(request.getParameter("series"));
 		
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		
 		for(int s = 0 ; s < series ; s++) {
 			HashMap<String, Object> data = new HashMap<String, Object>();
 			
-			data.put("name", "S" + s);
+			data.put("name", bsnList);
 			data.put("pointInterval", 1);
-			data.put("pointStart", 1999);
+			data.put("pointStart", 2022);
 			
 			ArrayList<Integer> y = new ArrayList<Integer>();
 			
+			for(int i = 0 ; i < size ; i++) {
+				y.add((int) (Math.random() * 100)); 
+			}
 			
-			for(int i = 0 ; i < size ; i++) { y.add((int) (Math.random() * 100)); }
-			  
 			data.put("data", y);
 			
-			bsnList.add(data);
+			list.add(data);
 		}
 		
-		modelMap.put("bsnList", bsnList);
+		modelMap.put("list", list);
 		
 		return mapper.writeValueAsString(modelMap);
 	}

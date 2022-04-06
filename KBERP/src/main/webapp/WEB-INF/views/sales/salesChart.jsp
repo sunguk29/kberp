@@ -399,8 +399,7 @@ $(document).ready(function() {
 			dataType : "json",
 			data: params,
 			success : function(res) {
-				makeChart(res.bsnList);
-				console.log(res.bsnList);
+				makeChart(res.list);
 			},
 			error : function(request, status, error) {
 				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -412,7 +411,7 @@ $(document).ready(function() {
 	function makeChart(bsnList) {
 		$('.bsns_type').highcharts({
 			chart: {
-				type: 'pie',
+				type: 'bar',
 				zoomType: 'x'
 			},
 			title: {
@@ -435,13 +434,10 @@ $(document).ready(function() {
 	        		}
 	        	}
 	        },
-	        series : bsnList
+	        series : list
 		});
 	}
 
-	console.log("제발돼라22222333333");
-	
-		
 }); //jqeury End
 
 
@@ -608,6 +604,7 @@ function drawMngPaging(pb) {
 						<form action="#" id="getForm" method="post">
 						<input type="hidden" name="size" value="3" />
 						<input type="hidden" name="series" value="1" />
+						</form>
 						<dlv class="cont_right">
 							<div class="new_sales_actvty">
 							<div class="sales_text">
@@ -652,7 +649,7 @@ function drawMngPaging(pb) {
 						</div>
 
 						</dlv>
-					</form>
+					
 					<!-- class="bodyWrap" end -->
 					</div>
 				<!-- class="body" end -->
