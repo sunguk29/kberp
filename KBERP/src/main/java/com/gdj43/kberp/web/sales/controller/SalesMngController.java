@@ -96,7 +96,7 @@ public class SalesMngController {
 	@RequestMapping(value= "/sales1SalesChncReg")
 	public ModelAndView sales1SalesChncReg(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
-		params.put("leadNum", "12"); // 나중에 지우기...
+	//	params.put("leadNum", "12"); // 나중에 지우기...
 		
 		// 영업시작일 넣어주기
 		Date tday = new Date();
@@ -225,6 +225,7 @@ public class SalesMngController {
 				iCommonService.updateData("salesMng.sales2UpdateLoan", params); // 제안 대출 상세정보tab 수정
 				iCommonService.updateData("salesMng.sales2UpdateClntCmpny", params); // 제안 고객사 상세정보tab 수정
 				iCommonService.updateData("salesMng.sales2UpdateDtl", params); // 제안 상세정보tab 수정
+				iCommonService.updateData("salesMng.sales2UpdateDtlInfoAtt", params); // 제안 상세정보 첨부파일tab
 				break;
 			case "failure" :
 				iCommonService.updateData("salesMng.sales2Failure", params);

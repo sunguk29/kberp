@@ -408,7 +408,7 @@ $(document).ready(function() {
 						makePopup({
 							bg : false,
 							bgClose : false,
-							title : "삭제",
+							title : "수정",
 							contents : html, 
 							draggable : true,
 							buttons : [{

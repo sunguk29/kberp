@@ -55,8 +55,121 @@ $(document).ready(function() {
 		$("#actionForm").attr("action", "assetDtlViewDrblMdfy");
 		$("#actionForm").submit();
 	});
+	
+$("#useHstry").on("click", function() {
+		
+		var html = "";
+		
+		html += "<div class=\"popup_cont\">";
+		html += "<table class=\"board_table\">";
+		html += "<colgroup>";
+		html += "<col width=\"100\">";
+		html += "<col width=\"150\">";
+		html += "<col width=\"150\">";
+		html += "</colgroup>";
+		html += "<thead>";
+		html += "<tr>";
+		html += "<th>자산명</th>";
+		html += "<th>사용시작일</th>";
+		html += "<th>사용종료일</th>";	
+		html += "</tr>";
+		html += "</thead>";
+		html += "<tbody id=\"useHstryList\">";
+		html += "</tbody>";
+		html += "</table>";
+		html += "<div class=\"board_bottom\">";
+		html += "<div class=\"pgn_area\">";
+		html += "</div>";
+		html += "</div>";
+		html += "</div>";
+		
+		makePopup({
+			depth : 1,
+			bg : true,
+			width : 450,
+			height : 250,
+			title : "사용내역",
+			contents : html,
+			contentsEvent : function() {
+				
+				$(".pgn_area").on("click", "div", function() {
+					$("#page").val($(this).attr("page"));
+					reloadList();
+				});		
+			},
+			buttons : {
+				name : "닫기",
+				func:function() {
+					closePopup(1);
+				}
+			}
+		});
+	});
 });
 
+	function reloadList() {
+		var params = $("#hstryForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "assetUseHstryAjax", 
+			dataType : "json",
+			data : params, 
+			success : function(res) {
+				drawList(res.list);
+				drawPaging(res.pb);
+			},
+			error : function(request, status, error) {
+				console.log(request.responseText);
+			}
+		});
+	}
+	
+	
+	function drawList(list) {
+		var html = "";
+		
+		for(data of list) {
+			html += "<tr>";
+			html += "<td>" + data.EMP_NAME + "</td>";
+			html += "<td>" + data.START_DATE + "</td>";
+			html += "<td>" + data.END_DATE + "</td>";
+			html += "</tr>";
+		}
+		
+		$("#useHstryList").html(html);
+	}
+	
+	function drawPaging(pb) {
+		var html = "";
+		
+		html += "<div class=\"page_btn page_first\" page=\"1\">first</div>";
+		
+		if($("#page").val() == "1") {
+			html += "<div class=\"page_btn page_prev\" page=1>prev</div>";
+		} else {
+			html += "<div class=\"page_btn page_prev\" page=\"" + ($("#page").val() * 1 - 1) + "\">prev</div>";		
+		}
+		
+		for(var i = pb.startPcount; i <= pb.endPcount; i++) {
+			if($("#page").val() == i) {
+				html += "<div class=\"page_btn_on\" page=\"" + i + "\">" + i + "</div>";
+			} else {
+				html += "<div class=\"page_btn\" page=\"" + i + "\">" + i + "</div>";
+			}
+		}
+		
+		if($("#page").val() == pb.maxPcount) {
+			html += "<div class=\"page_btn page_next\" page=\"" + pb.maxPcount + "\">next</div>";		
+		} else {
+			html += "<div class=\"page_btn page_next\" page=\"" + ($("#page").val() * 1 + 1) + "\">next</div>";				
+		}
+		
+		html += "<div class=\"page_btn page_last\" page=\"" + pb.maxPcount + "\">last</div>";
+		
+		$(".pgn_area").html(html);
+		
+	}
 
 </script>
 </head>
@@ -70,9 +183,15 @@ $(document).ready(function() {
 <form action="#" id="actionForm" method="post">
 	<input type="hidden" name="num" value="${param.num}"/>
 	<input type="hidden" name="page" value="${param.page}"/>
+	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 	<input type="hidden" id="top" name="top" value="${param.top}" />
 	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+</form>
+
+<form action="#" id="hstryForm" method="post">
+	<input type="hidden" name="num" value="${param.num}"/>
 </form>
 <div class="cont_wrap">
 		<div class="page_title_bar">
@@ -121,6 +240,7 @@ $(document).ready(function() {
 						<div class="rmrks"><b>비고</b></div>
 						<input type="text" id="rmrks" readonly="readonly" value="${data.RMRKS}" />
 			<div class="board_bottom">
+				<input class="cmn_btn" type="button" value="사용내역" id="useHstry"/>
 				<c:if test="${sAthrtyNum==0}">
 				<input class="cmn_btn" type="button" id="mdfyBtn" value="수정">
 				</c:if>

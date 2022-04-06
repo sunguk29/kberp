@@ -289,7 +289,7 @@
 		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
-	<!-- 영업기회 수정 : 기본정보tab -->
+	<!-- 제안 담당자 수정 : 기본정보tab -->
 	<update id="sales1UpdateSales" parameterType="hashmap">
 		UPDATE SALES SET MNGR_EMP_NUM = #{empNum}
 		WHERE SALES_NUM = #{salesNum}
@@ -374,6 +374,12 @@
 		INSERT INTO SGSTN_ATT_FILE ( ATT_FILE_NUM, SALES_NUM, ATT_FILE_NAME )
 		VALUES ( SGSTN_ATT_FILE_SEQ.NEXTVAL, #{salesNum}, #{attFile} )
 	</insert>
+	
+	<!-- 제안 수정 첨부파일tab  -->
+	<update  id="sales2UpdateDtlInfoAtt" parameterType="hashmap">
+		UPDATE SGSTN_ATT_FILE SET ATT_FILE_NAME = #{attFile}
+		WHERE SALES_NUM = #{salesNum}	
+	</update>
 	
 	
 	<!-- 제안 상세보기 -->

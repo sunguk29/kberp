@@ -481,6 +481,7 @@ textarea {
 	border-radius: 7px;
 	margin-bottom: 18px;
 	margin-left: 45px;
+	font-size: 12pt;
 }
 
 .btnImg_in {
@@ -530,10 +531,15 @@ textarea {
 	width: 927px;
 	height: 1138px;
 }
+[href] {
+	color: black;
+	text-decoration: none;
+}
 /* 끝 */
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
 		makePopup({
@@ -557,11 +563,27 @@ $(document).ready(function() {
 			} ]
 		});
 	});
-
+	
+	// 첨부파일
 	$(".att_btn").on("click", function() {
 		$("#att").click();
 	});
-
+	
+	$("#fileDelete").on("click", function() {
+		$("#file_name").remove();
+		$(this).remove();
+		
+		var html = "";
+		
+		html += "<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
+		
+		$("#uploadBtn").html(html);
+	});
+	
+	$(".adc_txt").on("click", ".aff_btn", function() {
+		$("#att").click();
+	});
+	
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
 		if($("#sgstnloanCauseNum").val() == 9) {
@@ -842,6 +864,7 @@ function uploadName(e) {
 	var filename = files[0].name;
 	$("#fileName").val(filename);
 }
+
 </script>
 </head>
 <body>
@@ -875,19 +898,16 @@ function uploadName(e) {
 				<div class="bodyWrap">
 					<!-- 시작 -->
 					<!-- ********** 영업기회 시작 ********** -->
-					<form action="fileUploadAjax" id="updateForm" method="post" enctype="multipart/form-data">
+				<form action="fileUploadAjax" id="updateForm" method="post" enctype="multipart/form-data">
 						<input type="hidden" id="page" name="page" value="${page}" />
 						<input type="hidden" name="top" value="${param.top}" />
 						<input type="hidden" name="menuNum" value="${param.menuNum}" />
 						<input type="hidden" name="menuType" value="${param.menuType}" />
-						<input type="hidden" id="salesNum" name="salesNum" value="${data.SALES_NUM}" />
-						<!-- 영업번호 -->
-
+						<input type="hidden" id="salesNum" name="salesNum" value="${data.SALES_NUM}" /> <!-- 영업번호 -->
 						<div class="bot_title">
 							<h3>영업기회<span id="sales_btn"><div class="drop_btn" id="salesContBtn_h"></div></span></h3>
 						</div>
 						<div class="salesCont">
-						<hr class="hr_bot" color="white" width="925px">
 						<div class="page_cont_title_text">기본정보</div>
 						<hr class="hr_width">
 						<table>
@@ -1123,19 +1143,20 @@ function uploadName(e) {
 						</table>
 						<br />
 						<!-- 첨부자료  -->
-						<input type=file id="att" name="att" />
-						<input type="hidden" id="attFile" name="attFile" />
+						<c:set var="salesFileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+						<c:set var="salesFileName" value="${fn:substring(data.ATT_FILE_NAME, 20, salesFileLength)}"></c:set>
 						<div class="spc">
-							<div class="adc_txt">첨부자료</div>
-							<div class="cntrct_box_in">
-								<input type="text" id="fileName" readonly="readonly" />
+							<div class="adc_txt">
+								첨부자료
 							</div>
+							<div class="cntrct_box_in">
+								<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${salesFileName}">${salesFileName}</a>
+							</div> 
 						</div>
 					</div>
 						<!-- ********** 영업기회 끝 ********** -->
 						<hr class="hr_bot" color="#4B94F2" width="925px">
 						<!-- *************** 제안 부분 시작 **************** -->
-
 						<div class="bot_title">
 							<h3>제안</h3>
 						</div>
@@ -1313,108 +1334,27 @@ function uploadName(e) {
 							</tbody>
 						</table>
 						<!-- 첨부자료  -->
-						<input type=file id="att" name="att" />
-						<input type="hidden" id="attFile" name="attFile" />
+						<c:set var="sgstnFileLength" value="${fn:length(data2.ATT_FILE_NAME)}"></c:set>
+						<c:set var="sgstnFileName" value="${fn:substring(data2.ATT_FILE_NAME, 20, sgstnFileLength)}"></c:set>
 						<div class="spc">
-							<div class="adc_txt">
-								첨부자료 <img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
+							<div class="adc_txt"> 첨부자료
+								<span id="uploadBtn">
+									<c:if test="${empty data2.ATT_FILE_NAME}">
+										<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" />
+									</c:if>
+								</span>
 							</div>
-							<div class="cntrct_box_in"></div>
+							<div class="cntrct_box_in">
+							<span id="file_name">${sgstnFileName}</span>
+								<c:if test="${!empty data2.ATT_FILE_NAME}">
+									<input type="button" id="fileDelete" value="삭제" />
+								</c:if>
+									<input type="text" id="fileName" readonly="readonly" />
+							</div>
+						<input type=file id="att" name="att" onchange="uploadName(this)" />
+						<input type="hidden" id="attFile" name="attFile" />
 						</div>
 						<!-- ********** 제안 끝 ********** -->
-
-						<!-- 의견 -->
-						<div class="mgtop"></div>
-						<div class="bot_title">
-							<h3>의견(7)</h3>
-						</div>
-						<hr color="#F2B705" width="925px">
-						<div class="bx">
-							<div class="OpinionBox">
-								<div class="name">구예지(영업1팀 대리)</div>
-								<div class="txtOp">이 고객사와 계약 하려면 키위대리님에게 연락해서 물어보면 꿀팁 주십니다.</div>
-								<div class="dt">2022-01-10 PM 05:39</div>
-								<div class="del">삭제</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">구예지(영업1팀 대리)</div>
-								<div class="txtOp">이 고객은 상품권 같은 것 보다는 커피 한잔 사드리는것을 더 좋아하시더라구요..!</div>
-								<div class="dt">2022-01-10 PM 05:39</div>
-								<div class="del">삭제</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">김민재(영업1팀 주임)</div>
-								<div class="txtOp">이 고객사와 계약 하려면 키위대리님에게 연락해서 물어보면 꿀팁 주십니다.</div>
-								<div class="dt">2022-01-10 PM 05:39</div>
-								<div class="del">삭제</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">유은정(영업1팀 사원)</div>
-								<div class="txtOp">매출이 큰 회사는 아닌듯 합니다.</div>
-								<div class="dt">2022-01-10 PM 05:39</div>
-								<div class="del">삭제</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">유은정(영업1팀 사원)</div>
-								<div class="txtOp">하하하</div>
-								<div class="dt">2022-01-10 PM 05:39</div>
-								<div class="del">삭제</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">유은정(영업1팀 사원)</div>
-								<div class="txtOp">하하하</div>
-								<div class="dt">2022-01-10 PM 05:39</div>
-								<div class="del">삭제</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">유은정(영업1팀 사원)</div>
-								<div class="txtOp">하하하</div>
-								<div class="dt">2022-01-10 PM 05:39</div>
-								<div class="del">삭제</div>
-							</div>
-						</div>
-						<div class="opBox">
-							<textarea></textarea>
-							<div class="cmn_btn subm">등록</div>
-						</div>
-						<!-- 히스토리 -->
-						<div class="mgtop"></div>
-						<div class="bot_title">
-							<h3>
-								히스토리(5)
-								<div class="drop_btn"></div>
-							</h3>
-						</div>
-						<hr color="#F2B705" width="925px">
-						<div class="bx">
-							<div class="OpinionBox">
-								<div class="name">영업기회 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 등록된 영업기회 표시</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">계약 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">계약 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">계약 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">계약 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-						</div>
-						<hr class="hr_bot" color="white" width="925px">
-						<hr class="hr_bot" color="white" width="925px">
 					</form>
 					<!-- 끝 -->
 				</div>

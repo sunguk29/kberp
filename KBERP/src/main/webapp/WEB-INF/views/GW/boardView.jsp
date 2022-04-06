@@ -9,8 +9,6 @@
 <title>카카오뱅크 ERP - 상세보기</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
-<link rel="icon" href="../images/favicon/favi.gif" />
-<link rel="stylesheet" type="text/css" href="../css/cmn.css" />
 <style type="text/css">
 /* 가로 사이즈 조정용 */
 .cont_wrap {
@@ -33,9 +31,43 @@
 	color: #222222;
 	cursor: pointer;
 }
+
+.scmn_btn {
+	display: inline-block;
+	vertical-align: top;
+	padding: 0px 3px;
+	min-width: 30px;
+	height: 30px;
+	margin-left: 10px;
+	line-height: 30px;
+	font-size: 8pt;
+	font-weight: bold;
+	text-align: center;
+	background-color: #F2B705;
+	border-radius: 2px;
+	color: #222222;
+	cursor: pointer;
+}
+
+.scmn_btn2 {
+	display: inline-block;
+	vertical-align: top;
+	padding: 0px 3px;
+	min-width: 30px;
+	height: 30px;
+	margin-left: 10px;
+	line-height: 30px;
+	font-size: 8pt;
+	font-weight: bold;
+	text-align: center;
+	background-color: #F2B705;
+	border-radius: 2px;
+	color: #222222;
+	cursor: pointer;
+}
 .contbox{
 	width: 800px;
-	height: 800px;
+	height: 1000px;
     padding: 29px 29px 0;
     border: 1px solid #dadada; 
     border-radius: 6px;
@@ -69,6 +101,7 @@
 	margin-right: 6px;
     font-size: 13px;
     font-weight: 700;
+    
 }
 .emp_rank{
 	display: inline-block;
@@ -79,6 +112,11 @@
 }
 .date_info{
 	display: inline-block;
+	font-size: 12px;
+    line-height: 13px;
+    color: #979797;
+}
+.date_info2{
 	font-size: 12px;
     line-height: 13px;
     color: #979797;
@@ -111,7 +149,8 @@
     margin-top: 10px;
 }
 .del_button_area{
-	margin-left : 600px;
+	margin-top :  100px;
+	margin-left : 588px;
 }
 .dcmnt_area{
 	display: inline-block;
@@ -148,9 +187,17 @@
 	vertical-align: top;
 }
 
+.cmnt_btn_area{
+	margin-top: 10px;
+	margin-left:690px;
+}
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	
+	reloadList();
+	
 	$("#listBtn").on("click", function() {
 		$("#actionForm").attr("action", "board");
 		$("#actionForm").submit();
@@ -185,7 +232,117 @@ $(document).ready(function() {
 	     	 });
 		}	
 	});
+	
+	
+	$("#writeBtn").on("click", function() {
+		
+		if(checkEmpty("#cmnt_cont")) {
+			alert("댓글을 입력해 주세요.");
+			$("#cmnt_cont").focus();
+		
+		} else {
+			var params = $("#cmntForm").serialize();
+			
+			$.ajax({
+	        	 type : "post",
+	        	 url : "cmntAction/insert",
+	        	 dataType : "json",
+	        	 data : params,
+	        	 success : function(res) {
+	        		 if(res.res == "success"){	        			       	
+	        			 reloadList();
+	        			 $("#cmnt_cont").val("");
+	        		 } else{
+	        			 alert("문제가 발생하였습니다.");
+	        		 }
+	   			},
+	   			error : function(request, status, error) {
+	   				console.log(request.responseText);
+	   			}
+	     	 });
+		}
+		
+		
+	});
+
+	
+	$("tbody").on("click", "#deleteBtn2", function () {
+		
+		
+			if(confirm("삭제하시겠습니까?")) {
+				
+				var tr = $(this).parent().parent();
+				
+				$("#cmntNo").val(tr.attr("no"));
+				
+				var params = $("#cmntForm").serialize();
+				
+				$.ajax({
+		        	 type : "post",
+		        	 url : "cmntAction/delete",
+		        	 dataType : "json",
+		        	 data : params,
+		        	 success : function(res) {
+		        		 if(res.res == "success"){
+		        			 reloadList();
+		        		 } else{
+		        			 alert("삭제중 문제가 발생하였습니다.");
+		        		 }
+		   			},
+		   			error : function(request, status, error) {
+		   				console.log(request.responseText);
+		   			}
+		     	 });
+			}	
+		
+		
+
+		
+	});
+	
+	
+	function reloadList() { // 목록 조회용 
+		  var params = $("#actionForm").serialize();
+	    
+	    $.ajax({
+	   	 type : "post",
+	   	 url : "cmntAjax",
+	   	 dataType : "json",
+	   	 data : params,
+	   	 success : function(res) {
+	   		 	console.log(res);
+	   		 	drawList(res.list);
+				},
+				error : function(request, status, error) {
+					console.log(request.responseText);
+				}
+	    });
+		
+	}
+	
+	function drawList(list) {		
+		var html = "";
+		
+		for(var data of list){
+			html += "<tr no=\"" + data.CMNT_NUM + "\">";
+			html += "<td class=\"board_wrt\">" + data.EMP_NAME + "</td>";
+			html += "<td class=\"date_info2\">"+ data.WRTNG_DATE + "</td>";
+			html += "<td>";
+			html += "<div class=\"scmn_btn\" id=\"deleteBtn2\">삭제</div>";
+			html += "</td>";
+			html += "<tr>";
+			html += "<td colspan=\"3\">" + data.CMNT_CONT + "</td>";
+		}
+		$("tbody").html(html);
+	}
 });
+function checkEmpty(sel) {
+	if($.trim($(sel).val()) == "") {
+		return true;
+	} else {
+		return false;
+	}
+}
 </script>
 </head>
 <body>
@@ -275,29 +432,51 @@ ${data.BOARD_CONT}
 <br/>
 <br/>
 
-			<div class="cmnt_tab"><h3>댓글</h3>
-			</div>
-			<div class="cmnt_area">
-			<div class="board_wrt">신지수</div>
-			<div class="emp_rank">대리</div>
-				<div class="date_info">
-				<span class="date">2021.12.01. 12:34</span>
-				<div class="cmn_btn">삭제</div>
-				</div>
+			<div class="cmnt_tab"><h3>댓글</h3></div>
+			<form action="#" id="cmntForm" method="post">		
+			<div class="cmnt_area">		
+			<table class="cmnt_table">
+				<colgroup>
+					<col width="50"/>
+					<col width="100"/>
+					<col width="200"/>
+					</colgroup>
+				<thead>
+					<tr>
+					
+						<th></th>
+						<th></th>
+						<th></th>
+					</tr>
+					<tr>
+					<th colspan="3"></th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+			<input type="hidden" id="cmntNo" name="cmntNo" />
+			<input type="hidden" name="no" value="${param.no}" />
+			<input type="hidden" id="writer" name="writer" value="${sEmpNum}"/>
+			<textarea rows="10" cols="5" id= "cmnt_cont" name = "cmnt_cont" class="cmnt_input_box" placeholder="댓글을 입력하세요"></textarea>
 			<br/>
-			ㅇㅇ?			
-			<textarea rows="10" cols="5" class="cmnt_input_box" placeholder="댓글을 입력하세요"></textarea>
+			<div class="cmnt_btn_area">
+				<div class="scmn_btn2" id="writeBtn">댓글 등록</div>
 			</div>
-			<div class="del_button_area">
+				<div class="del_button_area">
 				<div class="cmn_btn" id="listBtn">목록</div>
 				<c:if test="${data.EMP_NAME eq sEmpName}">
 				<div class="cmn_btn" id="updateBtn">수정</div>
 				<div class="cmn_btn" id="deleteBtn">삭제</div>
 				</c:if>
-			</div>		
+			</div>	
+			</div>
+			</form>	
+			
 		</div>
 		</div>
 		</div>
 </div>
+	<!-- bottom -->
+	<c:import url="/bottom"></c:import>
 </body>
 </html>
