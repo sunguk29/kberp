@@ -389,6 +389,7 @@ textarea {
 	background-size: 18px 18px;
 	float: right;
 	margin-right: 5px;
+    margin-top: 5.5px;
 }
 
 /* 끝 */
@@ -396,8 +397,6 @@ textarea {
 <script type="text/javascript">
 $(document).ready(function() {
 
-	console.log(${param.salesNum});
-	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
 		
@@ -408,13 +407,13 @@ $(document).ready(function() {
 	// 수정 버튼
 	$("#updateBtn").on("click", function() {
 		
-		$("#actionForm").attr("action", "sales2Update");
+		$("#actionForm").attr("action", "sales3QtnUpdate");
 		$("#actionForm").submit();
 	});
 	
-	// 다음 단계로 전환하기 버튼 : 견적 등록 페이지
+	// 다음 단계로 전환하기 버튼 : 계약 등록 페이지
 	$("#nextStageBtn").on("click", function() {
-		$("#actionForm").attr("action", "sales3QtnReg");
+		$("#actionForm").attr("action", "sales4CntrctReg");
 		$("#actionForm").submit();
 	});
 	
@@ -472,7 +471,7 @@ $(document).ready(function() {
 		
 		$.ajax({
 			type : "post",
-			url : "sgstnBotActionAjax/insert",
+			url : "qtnBotActionAjax/insert",
 			dataType : "json",
 			data : params,
 			success : function(res) {
@@ -511,7 +510,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "sgstnBotActionAjax/update",
+						url : "qtnBotActionAjax/update",
 						dataType : "json",
 						data : params,
 						success : function(res) {
@@ -548,11 +547,6 @@ $(document).ready(function() {
 		$("#sales_btn").html(html);
 	});
 	
-	console.log('${param.LoanAmnt}');
-	console.log('${LoanAmnt}');
-	console.log(${LoanAmnt});
-	console.log('kkkㅇㅇddk');
-	
 });
 
 /* 의견 목록 Ajax */
@@ -561,7 +555,7 @@ function reloadOpList() {
 	
 	$.ajax({
 		type : "post",
-		url : "sgstnOpBotListAjax",
+		url : "qtnOpBotListAjax",
 		data : params,
 		dataType : "json",
 		success : function(res) {
@@ -625,7 +619,9 @@ function drawOpList(list) {
 		<div class="page_title_bar">
 			<div class="page_title_text">영업관리 - 견적 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
+				<img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" />
 				<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
+				<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -1184,7 +1180,7 @@ function drawOpList(list) {
 					</div>
 				</form>					
 				<form action="#" id="botOpActionForm" method="post">
-					<input type="hidden" name="salesNum" value="${param.salesNum}" />
+					<input type="hidden" name="qtnNum" value="${data3.QTN_NUM}" />
 					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
 					<input type="hidden" id="cmntNum" name="cmntNum" />
 					<!-- 의견 -->

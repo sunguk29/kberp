@@ -402,7 +402,10 @@ $(document).ready(function() {
 			data: params,
 			success : function(res) {
 				makeChart(res.list);
+<<<<<<< HEAD
+=======
 				console.log(res.list);
+>>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 			},
 			error : function(request, status, error) {
 				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -414,7 +417,7 @@ $(document).ready(function() {
 	function makeChart(list) {
 		$('.bsns_type').highcharts({
 			chart: {
-				type: 'pie',
+				type: 'bar',
 				zoomType: 'x'
 			},
 			title: {
@@ -441,9 +444,6 @@ $(document).ready(function() {
 		});
 	}
 
-	console.log("제발돼라22222333333");
-	
-		
 }); //jqeury End
 
 
@@ -610,9 +610,13 @@ function drawMngPaging(pb) {
 						<form action="#" id="getForm" method="post">
 						<input type="hidden" name="size" value="3" />
 						<input type="hidden" name="series" value="1" />
+<<<<<<< HEAD
+						</form>
+=======
 						<input type="hidden" id="bsnType0" name="bsnType0"/>
 						<input type="hidden" name="bsnType1"/>
 						<input type="hidden" name="bsnType2"/>
+>>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 						<dlv class="cont_right">
 							<div class="new_sales_actvty">
 							<div class="sales_text">
@@ -657,7 +661,7 @@ function drawMngPaging(pb) {
 						</div>
 
 						</dlv>
-					</form>
+					
 					<!-- class="bodyWrap" end -->
 					</div>
 				<!-- class="body" end -->

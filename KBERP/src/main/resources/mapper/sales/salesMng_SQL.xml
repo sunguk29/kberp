@@ -576,6 +576,45 @@
 		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
+	<!-- 견적 의견목록 -->
+	<select id="getQtnOpList" parameterType="hashmap" resultType="hashmap">
+		SELECT Q.QTN_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, QC.CONT, TO_CHAR(QC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
+		       QC.CMNT_NUM
+		FROM QTN Q INNER JOIN QTN_CMNT QC
+		                     ON Q.QTN_NUM = QC.QTN_NUM
+		                 INNER JOIN EMP E
+		                         ON QC.EMP_NUM = E.EMP_NUM
+		                 INNER JOIN APNTM A
+		                         ON E.EMP_NUM = A.EMP_NUM
+		                 INNER JOIN DEPT D
+		                         ON A.DEPT_NUM = D.DEPT_NUM
+		                 INNER JOIN RANK R
+		                         ON A.RANK_NUM = R.RANK_NUM
+		WHERE QC.DEL_CHECK IS NULL
+		AND Q.QTN_NUM = #{qtnNum}
+		ORDER BY QC.CMNT_NUM DESC
+	</select>
+	
+	<!-- 견적 의견개수 -->
+	<select id="qtnOpListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM QTN_CMNT
+		WHERE DEL_CHECK IS NULL
+		AND QTN_NUM = #{qtnNum}
+	</select>
+	
+	<!-- 견적 의견등록 -->
+	<insert id="qtnOpContAdd" parameterType="hashmap">
+		INSERT INTO QTN_CMNT(CMNT_NUM, QTN_NUM, EMP_NUM, CONT)
+		VALUES(QTN_CMNT_SEQ.NEXTVAL, #{qtnNum}, #{sEmpNum}, #{tacont})
+	</insert>
+	
+	<!-- 견적 의견삭제 -->
+	<update id="qtnOpContUpdate" parameterType="hashmap">
+		UPDATE QTN_CMNT SET DEL_CHECK = SYSDATE
+		WHERE CMNT_NUM = #{cmntNum}
+	</update>
+	
 </mapper>
 
 

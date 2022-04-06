@@ -500,6 +500,53 @@ public class SalesMngController {
 		return mav;
 	}
 	
+	//견적 의견 등록,삭제 비동기
+	@RequestMapping(value = "/qtnBotActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String qtnBotActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			switch(gbn) {
+			case "insert" :
+				iCommonService.insertData("salesMng.qtnOpContAdd", params);
+				break;
+			case "update" :
+				iCommonService.updateData("salesMng.qtnOpContUpdate", params);
+				break;
+			}
+			modelMap.put("res", "success");
+		} catch (Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "faild");
+		}
+		
+		return mapper.writeValueAsString(modelMap);
+		
+	}
+	
+	//제안 의견 목록 리스트
+	@RequestMapping(value = "/qtnOpBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String qtnOpBotListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		int opListCnt = iCommonService.getIntData("salesMng.qtnOpListCnt", params);
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("salesMng.getQtnOpList", params);
+		
+		modelMap.put("list", list);
+		modelMap.put("opListCnt", opListCnt);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
 }
 
 
