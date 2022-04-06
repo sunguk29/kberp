@@ -96,10 +96,7 @@
    padding: 3px;
    text-align: center;
 }
-.note_cont{
-	width:485px;
-	margin-left: 26px;
-}
+
 .use_date_cont{
 	text-align:left;
 	margin-left: 25px;
@@ -114,77 +111,102 @@
 	height:23px;
 	margin-left: 25px;
 }
+.card_code_cont,.card_name_cont,.use_name_cont{
+	margin-left: 25px;
+	margin-right: 25px;
+}
+.del_cont{
+	width:485px;
+}
 </style>
 <script type="text/javascript">
 
 $(document).ready(function() {
-	reloadList();
 	
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
+	reloadList();
+
+	
+	//카드번호 클릭 이벤트
+	$("tbody").on("click",".board_table_hover", function() {
+		$("#no").val($(this).attr("no"));
+		
+		$("#actionForm").attr("action", "cardView");
+		$("#actionForm").submit();
 	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
+	
+	$("#searchTxt").on("keypress", function(event){
+		if(event.keyCode == 13) {	
+			$("#searchBtn").click();
+			
+			return false;
+		}
 	});
-	$("#btn2Btn").on("click", function() {
+	$("#searchBtn").on("click",function(){	
+		$("#page").val("1");
+		
+		$("#oldSearchGbn").val($("#searchGbn").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
+		
+		reloadList();
+		
+	});
+	
+	$(".pgn_area").on("click","div",function(){
+		$("#page").val($(this).attr("page"));
+		
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		reloadList();
+	});
+	
+	$("#addBtn").on("click", function() {
 		
 		var html="";
-		
+		    html += "<form action=\"fileUploadAjax\" id=\"actionForm\" method=\"post\" enctype=\"multipart/form-data\">";
 		    html += "<div class=\"popup_cont\">";
 		    html += "<table class=\"popup_table\">";
 		    html += "<tbody>";
 		    html += "<tr>";
 		    html += "<td> 카드 번호 </td>";
-		    html += "<td><input type = \"text\" id =\"card_code\" class = \"card_code_cont\" value=\"01\"></td>";  
+		    html += "<td><input type = \"text\" id =\"card_code\" name =\"card_code\" class = \"card_code_cont\" ></td>";  
 			html += "<td> 카드구분 </td>";
-			html += "<td class=\"card_sep_cont\"><select class=\"card_sep_cont\" id =\"card_sep\">";
+			html += "<td class=\"card_sep_cont\"><select class=\"card_sep_cont\" id =\"card_sep\" name =\"card_sep\">";
 			html +=	"<option value=\"0\">신용</option>";
 			html +=	"<option value=\"1\">체크</option>";
 			html +=	"</select></td>";          
 			html += "</tr>";
 			html += "<tr>";
 			html += "<td> 카드명 </td>";
-			html += "<td><input type = \"text\" class = \"card_name_cont\" id =\"card_name\" value=\"팀회식용\"></td>";
+			html += "<td><input type = \"text\" class = \"card_name_cont\" id =\"card_name\" name =\"card_name\" ></td>";
 	        html += "<td> 카드사 </td>";
-	        html += "<td class=\"card_sep_cont\"><select id =\"card_co\" class=\"card_co_cont\">";
-			html +=	"<option value=\"0\">농협</option>";
-			html +=	"<option value=\"1\">기업</option>";
-			html +=	"<option value=\"2\">신한</option>";
-			html +=	"<option value=\"3\">카카오뱅크</option>";
+	        html += "<td class=\"card_sep_cont\"><select id =\"card_co\" name =\"card_co\" class=\"card_co_cont\">";
+			html +=	"<option value=\"1\">농협</option>";
+			html +=	"<option value=\"2\">기업</option>";
+			html +=	"<option value=\"3\">신한</option>";
 			html +=	"<option value=\"4\">현대</option>";
+			html +=	"<option value=\"5\">카카오뱅크</option>";
 			html +=	"</select></td>";     
 	        html += "<tr>";
 	        html += "<td> 카드명의 </td>";
-	        html += "<td><input type = \"text\" class = \"use_name_cont\"  id =\"use_name\" value=\"백종훈\"></td>";
-	        html += "<td> 발급일자 </td>";
-	        html += "<td class = \"use_date_cont\"><input type = \"date\" class = \"use_date_cont\" id =\"use_time\"></td>";
+	        html += "<td><input type = \"text\" class = \"use_name_cont\"  id =\"use_num\" name =\"use_num\" value=\"사번입력\"></td>";
+	        html += "<td></td>";
+	        html += "<td></td>";
 	        html += "</tr>";
-	        html +=	"<tr>";
-	        html += "<td id =\"note\"> 비고 </td>";
-	        html += "<td colspan=3><input type = \"text\" class = \"note_cont\" id =\"note\" value=\"빈칸\" ></td>";
+	        html += "<tr>";
+	        html += "<td> 발급일자 </td>";
+	        html += "<td class = \"use_date_cont\"><input type = \"date\" class = \"use_date_cont\" id =\"issue_dt\" name =\"issue_dt\"></td>";
+	        html += "<td> 종료일자 </td>";
+	        html += "<td class = \"use_date_cont\"><input type = \"date\" class = \"use_date_cont\" id =\"end_dt\" name =\"end_dt\"></td>";
 	        html += "</tr>";
 	        html += "</tbody>";
 	        html +=	"</table>";
 			html += "</div>";
-		
+			html += "</form>";
 		makePopup({
 			depth:1,
 			bg : true,
-			width : 650,
+			width : 550,
 			height : 300,
 			title : "카드등록",
 			contents : html,
@@ -217,9 +239,8 @@ $(document).ready(function() {
 				name : "취소"
 			}]
 		});
-	});
+	})
 });
-
 function reloadList() { // 목록 조회용 + 페이징 조회용
 	var params = $("#actionForm").serialize();
 	
@@ -243,42 +264,51 @@ function drawList(list) {
 	var html = "";
 	
 	for(var data of list) {
-		html += "<tr no=\"" + data.CARD_NUM + "\">";
-		html += "<td>" + data.CARD_NUM + "</td>";
-		html += "<td id=\"click\">" + data.CARD_NAME + "</td>";
-		html += "<td>" + data.EMP_NUM + "</td>";
-		html += "<td>" + data.USE_START_DT + " ~ " + data.USE_END_DT + "</td>";
+		//html += "<tr no=\"" + data.CARD_NUM + "\">";
+		html += "<tr>";
+		html += "<td class=\"board_table_hover\" id=\"clickCard\" no=\"" + data.CARD_NUM +  "\">" + data.CARD_NUM + "</td>";
+		html += "<td>" + data.CARD_NAME + "</td>";
+		if(data.USE_START_DT!=null)
+			html += "<td>" + data.EMP_NAME + "</td>";
+		 else
+	            html += "<td></td>";
+		if(data.USE_START_DT!=null)
+			html += "<td>" + data.USE_START_DT + " ~ " + data.USE_END_DT + "</td>";   
+        else
+            html += "<td></td>";
 		html += "</tr>";
 	}
 	$("tbody").html(html);
 }
 
 function drawPaging(pb) {
-	var html = "";
-	
-	html += "<div class=\"page_btn page_first\" page=\"1\">first</div>";
-	if($("#page").val() == "1") {
-		html += "<div class=\"page_btn page_prev\" page=1>prev</div>";
-	} else {
-		html += "<div class=\"page_btn page_prev\" page=\"" + ($("#page").val() * 1 - 1) + "\">prev</div>";		
+	   var html = "";
+	   
+	   html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
+	   if($("#page").val() == "1") {
+	      html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
+	   } else {
+	      html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
+	   }
+	   
+	   for(var i = pb.startPcount; i <= pb.endPcount; i++) {
+	      if($("#page").val() == i) {
+	         html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
+	      } else {
+	         html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
+	      }
+	   }
+	   
+	   if($("#page").val() == pb.maxPcount) {
+	      html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_next\">next</div>";
+	   } else {
+	      html += "<div page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</div>";
+	   }
+	   html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
+	   
+	   $(".pgn_area").html(html);
+
 	}
-	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
-		if($("#page").val() == i) {
-			html += "<div class=\"page_btn_on\" page=\"" + i + "\">" + i + "</div>";
-		} else {
-			html += "<div class=\"page_btn\" page=\"" + i + "\">" + i + "</div>";
-		}
-	}
-	if($("#page").val() == pb.maxPcount) {
-		html += "<div class=\"page_btn page_next\" page=\"" + pb.maxPcount + "\">next</div>";		
-	} else {
-		html += "<div class=\"page_btn page_next\" page=\"" + ($("#page").val() * 1 + 1) + "\">next</div>";				
-	}
-	html += "<div class=\"page_btn page_last\">last</div>";
-	
-	$(".pgn_area").html(html);
-	
-}
 </script>
 </head>
 <body>
@@ -295,6 +325,11 @@ function drawPaging(pb) {
 			<div class="page_title_text">카드 관리</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
+		<form action="#" id="actionForm" method="post">
+			<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
+			<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
+			<input type="hidden" id="no" name="no"/>
+			<input type="hidden" id="page" name="page" value="${page}" />
 				<select class="srch_sel">
 					<option>카드번호</option>
 					<option>카드명</option>
@@ -304,9 +339,10 @@ function drawPaging(pb) {
 					<option>폐기</option>
 				</select>
 				<div class="srch_text_wrap">
-					<input type="text" />
+					<input type="text" id="searchTxt" name="searchTxt" value="${param.searchTxt}"/>
 				</div>
-				<div class="cmn_btn_ml">검색</div>
+				<div class="cmn_btn_ml" id="searchBtn">검색</div>
+		</form>
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -333,7 +369,7 @@ function drawPaging(pb) {
 			<div class="board_bottom">
 				<div class="pgn_area">
 				</div>
-				<div class="cmn_btn" id="btn2Btn">신규</div>
+				<div class="cmn_btn" id="addBtn">신규</div>
 			</div>
 		</div>
 	</div>

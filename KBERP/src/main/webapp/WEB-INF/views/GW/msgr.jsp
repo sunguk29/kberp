@@ -47,8 +47,8 @@
 	display : inline-block;
 	border : 0px solid;
 	font-size : 13pt;
-	margin-top: 17px;
-	margin-right: 80px;
+	margin-top: 14px;
+	margin-right: 85px;
 	background-color: #f2cb05;
 	font-weight: bold;
 	
@@ -63,7 +63,7 @@
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
 	background-size: 20pt;
-	margin-top: 17px;
+	margin-top: 14px;
 	cursor: pointer;
 }
 
@@ -443,38 +443,44 @@ td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 
 }
 
+ 
+
 </style>
 <script type="text/javascript">
 
 $(document).ready(function() {
-
+	
+	reloadList();
+	
 	$("#main_msgr_btn, .srch_img").on("click", function() {
 
 		var html = "";
 		
 		html += "		<form action = \"#\" id = \"addForm\" method = \"post\">";
-		html += "			<input type = \"hidden\" id = \"no\" name = \"no\" />";					
-/* 		html += "			<input type = \"hidden\" id = \"emp_num\" name = \"EMP_NAME\" />";
-		html += "			<input type = \"hidden\" id = \"chat_num\" name = \"DEPT_\"/>";
-/* 		html += "			<input type = \"hidden\" id = \"srch_check\" name = \"srch_check\"/>"; */
+		html += "			<input type = \"hidden\" id = \"no\" name = \"no\" value = \"${sEMP_NUM}\"/>";		
+	
+ 		html += "			<input type = \"hidden\" id = \"CHAT_NUM\" name = \"CHAT_NUM\" value=\"${chatsq}\"/>";		
+ 		html += "			<input type = \"hidden\" id = \"EMP_NUM\" name = \"EMP_NUM\" value=\"${EMP_NUM}\"/>";
 
 		html +=	"		<div class = \"srch_mid\">                                          ";
 		html +=	"		<div class = \"chart\"></div>                                       ";
 		html +=	"			<div class = \"srch_rcpnt\">받는 사람:</div>                      	";
-		html +=	"			<input type=\"text\" placeholder = \"검색...\" class = \"srch_srch\"> 	";
+		html +=	"			<input type=\"text\" placeholder = \"검색...\" class = \"srch_srch\">";
+		html +=	"			<div id=\"chatList\">                                           ";
 		html +=	"			<table>                                                         ";
 		html +=	"				<thead>                                                     ";
 		html +=	"					<tr>                                                    ";
-		html +=	"					<th>부서</th>                                           	";
-		html +=	"					<th>직급</th>                                           	";
-		html +=	"					<th>성명</th>                                           	";
-		html +=	"					<th>확인</th>                                           	";
-		html +=	"				</tr>                                                       ";
+		html +=	"						<th>부서</th>                                        	";
+		html +=	"						<th>직급</th>                                        	";
+		html +=	"						<th>성명</th>                                        	";
+		html +=	"						<th>확인</th>                                   		";
+		html +=	"					</tr>													";
 		html +=	"				</thead>                                                    ";
 		html +=	"				<tbody>                                                     ";
-		
+                                        	
 		html +=	"				</tbody>					                                ";
 		html +=	"			</table>                                                        ";
+		html +=	"			</div>                                                        ";
 		html +=	"		</div>                                                              ";
 		html += "		</form>";
 		
@@ -499,21 +505,39 @@ $(document).ready(function() {
 						console.log(req.responseText)	
 					}
 				});
+				
+				$("#chatList").slimScroll({height: "340px"});
  			},
-			width : 500,
-			height : 500,
 			buttons : [{
 				name : "완료",
 				func : function() {
-					if(checkEmpty("#srch_check")) {
+					if($("#srch_check:checked").length == 0) {
 						alert("대화상대를 선택하세요.");
 						$("#srch_check").focus();
 					} else {
 						var params = $("#addForm").serialize();
 						console.log(params);
+						// 위 둘은 아닐 수도있음
 						// 아작스 태우기
+						$.ajax ({
+							type : "post",
+							url : "actionChatAjax/insert",
+							dataType : "json",
+							data : params,
+							success : function(res) {
+								if(res.res == "success") {
+									reloadList();
+									closePopup();
+								} else {
+									alert("생성중 문제가 발생하였습니다.");
+								}
+							},
+							error : function(request, status, error) {
+								console.log(request.responseText);
+							}
+						}); 
+						
 						}
-					
 				}
 			}, { 
 				name : "취소",
@@ -524,11 +548,7 @@ $(document).ready(function() {
 			}]
 			
 		});
-		
 	}); // main msgr btn
-	
-
-	
 	
 	$(".chat_list1").on("click", function() {	
 		
@@ -549,9 +569,9 @@ $(document).ready(function() {
 		html += "					</div>					                                              	 ";
 		html += "				</div>                                                                    	 ";
 		html += "				<div class = \"chat_input\">                                            	 ";
-		html += "					<form id = \"insertForm\" method = \"post\">								 ";
-		html += "						<input type = \"hidden\" name = \"empNum\" value = \"${empNum}\"/>			 ";
-		html += "						<input type = \"hidden\" name = \"cont\" id = \"cont\" value = \"${empNum}\"/> ";
+		html += "					<form id = \"insertForm\" method = \"post\">							 ";
+		html += "						<input type = \"hidden\" name = \"empNum\" value = \"${empNum}\"/>	 ";
+		html += "						<input type = \"hidden\" name = \"cont\" id = \"cont\" value = \"${empNum}\"/>";
 		html += "						<div class= \"cmn_btn_ml\" id = \"insertBtn\" style=\"float: left;\">보내기</div>";
 		html += "						<div class = \"chat_img_file\"></div>                                ";
 		html += "						<div class = \"chat_img_plus\"></div>                                ";
@@ -564,7 +584,6 @@ $(document).ready(function() {
 		$(".msgr_main").remove();
 		$(".right_box").html(html);
 		
-	
 		
 		$("#insertBtn").on("click", function() {
 			if($.trim($("#chat_write").val()) == "") {
@@ -589,10 +608,7 @@ function enterCheck() {
 	}
 }
 
-
-
-
-function insert() {
+function insertCont() {
 	$(".chat_dtl").val($(".chat_write").val());
 	
 	var params = $("#insertForm").serialize();
@@ -615,6 +631,14 @@ function insert() {
 		}); 
 	}
 
+function checkInput() {
+	if($("input:checkbox[name=srch_check]").is(":checked") == true) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 function checkEmpty(sel) {
 	if($.trim($(sel).val()) == ""){
 		return true;
@@ -623,20 +647,59 @@ function checkEmpty(sel) {
 	}
 }
 
+function reloadList() {
+	var params = $("#chatBoxForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "addDrawRoomAjax",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			console.log(res)
+			drawRoom(res.list);
+		},
+		error : function(request, status, error) {
+			console.log(request.responseText);
+		}
+	});
+}
+
+
 function drawList(list) {
 	
 	var html = "";
 	
 		for(var data of list) {
-			html +=	"				<tr id = \"srchEmpNum\" no = \"" + data.EMP_NUM + "\">";  
-			html +=	"					<td id = \"srchDept\"> \"" + data.DEPT_NAME + "\"</td>";
-			html +=	"					<td id = \"srchRank\"> \"" + data.RANK_NAME + "\"</td>";
-			html +=	"					<td id = \"srchName\"> \"" + data.EMP_NAME + "\"</td>";
-			html +=	"					<td><input type =\"checkbox\" id = \"srch_check\"></td> ";
-			html +=	"				</tr>                                                       ";
+			html +=	"				<tr id = \"srchEmpNum\" no = \"" +data.EMP_NUM +"\">";
+			html +=	"					<td id = \"srchDept\">" +data.DEPT_NAME + "</td>";
+			html +=	"					<td id = \"srchRank\">" +data.RANK_NAME + "</td>";
+			html +=	"					<td id = \"srchName\">" +data.EMP_NAME + "</td>";
+			html +=	"					<td><input type =\"checkbox\" id = \"srch_check\" name = \"srch_check\" value = \"" +data.EMP_NUM + "\"></td> ";
+			html +=	"				</tr>";
 		}	
 	$("tbody").html(html);
 }
+
+function drawRoom(list) {
+	console.log(list);
+	var html = "";
+		
+		for(var data of list) {
+			html += "		<div class = \"chat_list1\" no = \"" + data.CHAT_NUM + "\">";
+			html += "			<input type=\"text\" value = \"" + data.EMP_NAME + "\" id = \"chat_group\" readonly=\"readonly\" />";
+			html += "			<input type=\"text\" value = \"" + data.CNT + "\" id = \"head_count\" readonly=\"readonly\"/>";
+			if(data.CONT != null) {
+				html += "			<input type=\"text\" value = \"" + data.CONT + "\" id = \"chat_view\" readonly=\"readonly\" style = \"width:150px; color: #85898F\"/>";
+			} else {
+				html += "			<input type=\"text\" value = \"대화가 없습니다.\" id = \"chat_view\" readonly=\"readonly\" style = \"width:150px; color: #85898F\"/>";
+			}
+			html += "			<div class = \"chat_list1_1\"></div>";
+			html += "		</div>";
+		}
+	$(".chat_box").html(html); 
+}
+
 </script>
 </head>
 <body>
@@ -647,6 +710,10 @@ function drawList(list) {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
+	
+	
+	
+	
 	<!-- 내용영역 -->
 <!-- 		<div class="page_title_bar">
 			<div class="page_title_text">메신저</div>
@@ -654,29 +721,20 @@ function drawList(list) {
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
+			<form action="#" id="chatBoxForm">
+				<input type= "hidden" name="EMP_NUM" value="${sEmpNum}"/>
+				<input type= "hidden" name="CHAT_NUM" value="${chatsq}"/>
+				<input type = "hidden" id = "srch_check" name = "srch_check" value = "checked"/>
+			</form>
 				<div class = "main_box">
 	<div class = "left_box">
 		<div class = "rank_box">
-		<div id = "user_rank">사용자 성명 / 부서 / 직급</div>
+		<div id = "user_rank">${sDeptName} ${sRankName} ${sEmpName}	</div>
 		<div class = "srch_img"></div>	
 		</div>
 		
 		<div class = "chat_box">
-			<div class = "chat_list">
-				<div class = "chat_list1">
-					<input type="text" value = "대화상대명" id = "chat_group" readonly="readonly" />
-					<input type="text" value = "3" id = "head_count" readonly="readonly"/>
-					<input type="text" value = "방가방가" id = "chat_view" readonly="readonly" style = "width:150px; color: #85898F" />
-					<div class = "chat_list1_1"></div>
-				</div>
-				
-				<div class = "chat_list2">
-				<input type="text" value = "대화상대1, 대화상대2, 대화상대 3" id = "chat_group" readonly="readonly" />
-				<input type="text" value = "3" id = "head_count" readonly="readonly"/>
-				<input type="text" value = "하이루" id = "chat_view" readonly="readonly" style = "width:150px; color: #85898F" />
-				<div class = "chat_list2_1"></div>
-				</div>
-			</div>
+			
 		</div>
 	</div>
 	

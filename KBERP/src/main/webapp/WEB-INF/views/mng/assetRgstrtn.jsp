@@ -10,6 +10,11 @@
 <c:import url="/header"></c:import>
 <style type="text/css">
 
+#srchEmp{
+	height: 25px;
+	font-size: 10pt;
+	margin-top : 2px;
+}
 #assetName{
 	width:130px;
 }
@@ -149,7 +154,6 @@ $("#srchEmp").on("click", function() {
 					}
 				});
 				$("#empListTbody").on("click", "#empName", function() {
-					console.log("click!");
 					$("#mngrName").val($(this).attr("mngrName"));
 					$("#mngrNum").val($(this).attr("mngrNum"));
 					closePopup(1);
@@ -165,7 +169,7 @@ $("#srchEmp").on("click", function() {
 	});
 	
 	function reloadList() {
-		var params = $("#empSrchForm").serialize();
+		var params = $("#empASrchForm").serialize();
 		
 		$.ajax({
 			type : "post",
@@ -308,13 +312,17 @@ function drawList(list) {
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			
-			<form action="#" id="empSrchForm" method="post">
+			<form action="#" id="empASrchForm" method="post">
 			<input type="hidden" id="sendSrchTxt" name="sendSrchTxt">
 			<input type="hidden" id="page" name="page" value="1">
 			</form>
 			<form action="#" id="rgstrtnForm" method="post" >
 			<input type="hidden" name="writer" value="${sEmpNum}" />
 			<input type="hidden" name="mngrNum" id="mngrNum"/>
+			<input type="hidden" id="top" name="top" value="${param.top}" />
+			<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+			<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+			
 				<table class="intrnl_cost_admnstrtn_new">
 					<tbody>
 						<tr class="sixth_row">
@@ -347,7 +355,8 @@ function drawList(list) {
 							<td id="mngrtd">담당자</td>
 							<td>
 							<input type="text" class="mngrName" id="mngrName"  readonly="readonly">			
-							<div class="cmn_btn" id="srchEmp">검색</div>
+							<input class="cmn_btn" type="button" id="srchEmp" value="검색">
+							
 							</td>
 						</tr>
 					</tbody>

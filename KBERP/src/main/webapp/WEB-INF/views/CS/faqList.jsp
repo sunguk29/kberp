@@ -114,6 +114,7 @@ function drawList(list) {
 		html += "<td>" + data.WRTNG_TITLE + "</td>";
 		html += "<td>" + data.EMP_NAME+ "</td>";
 		html += "<td>" + data.WRTNG_DATE + "</td>";
+		html+="<td>" + data.FAQ_HITS +"</td>";
 		html += "</tr>";
 	}
 	$("tbody").html(html);
@@ -193,6 +194,7 @@ function drawPaging(pb) {
 					<col width="450"/>
 					<col width="100"/>
 					<col width="100"/>
+					<col width="100"/>
 				</colgroup>
 				<thead>
 					<tr>
@@ -201,6 +203,7 @@ function drawPaging(pb) {
 						<th>제목</th>
 						<th>작성자</th>
 						<th>작성일</th>
+						<th>조회수</th>
 					</tr>
 				</thead>
 				<tbody></tbody>

@@ -593,7 +593,7 @@ function drawList(list) {
 		html += "<tr>";
 		html += "<td>" + data.EMP_NAME + "</td>";
 		html += "<td class=\"leadName\" leadNum=\"" + data.LEAD_NUM + "\">" + data.LEAD_NAME + "</td>";
-		html += "<td><span class=\"sales_psbl_btn\"> 50 % </span></td>";
+		html += "<td><span class=\"sales_psbl_btn\">" + data.PSBL_CHECK + "%</span></td>";
 		html += "</tr>";
 		html += "<tr>";
 		html += "<td>" + data.PSNUM + "</td>";
@@ -782,6 +782,16 @@ function drawPaging(pb, sel) {
 	
 	$(sel).html(html);
 }
+
+/* 체크박스 */
+function checkOnly(chk) {
+	var obj = document.getElementsByName("sales_sts");
+	for(var i = 0; i<obj.length; i++) {
+		if(obj[i] != chk) {
+			obj[i].checked = false;
+		}
+	}
+}
 </script>
 </head>
 <body>
@@ -847,17 +857,17 @@ function drawPaging(pb, sel) {
 										<span class="srch_name">가능 여부</span>
 									</td>
 									<td colspan="9">
-										<label><input type="checkbox" name="sales_sts" value="1" checked="checked" />전체</label> 
+										<label><input type="checkbox" id ="sales_sts" name="sales_sts" value="0" checked="checked" onclick="checkOnly(this)" />전체</label> 
 										&nbsp;
-										<label><input type="checkbox" name="sales_sts" value="2" />0% ~ 20%</label> 
+										<label><input type="checkbox" id ="sales_sts" name="sales_sts" value="1" onclick="checkOnly(this)" />0% ~ 20%</label> 
 										&nbsp;
-										<label><input type="checkbox" name="sales_sts" value="3" />21% ~ 40%</label> 
+										<label><input type="checkbox" id ="sales_sts" name="sales_sts" value="2" onclick="checkOnly(this)" />21% ~ 40%</label> 
 										&nbsp;
-										<label><input type="checkbox" name="sales_sts" value="3" />41% ~ 60%</label>
+										<label><input type="checkbox" id ="sales_sts" name="sales_sts" value="3" onclick="checkOnly(this)" />41% ~ 60%</label>
 										&nbsp;
-										<label><input type="checkbox" name="sales_sts" value="3" />61% ~ 80%</label>
+										<label><input type="checkbox" id ="sales_sts" name="sales_sts" value="4" onclick="checkOnly(this)" />61% ~ 80%</label>
 										&nbsp;
-										<label><input type="checkbox" name="sales_sts" value="3" />81% ~ 100%</label>
+										<label><input type="checkbox" id ="sales_sts" name="sales_sts" value="5" onclick="checkOnly(this)" />81% ~ 100%</label>
 									</td>
 								</tr>
 								<tr>

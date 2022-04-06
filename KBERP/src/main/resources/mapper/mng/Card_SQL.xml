@@ -19,8 +19,9 @@
 	</select>
 	 <select id="cardList" resultType="hashmap" parameterType="hashmap">
 		SELECT *
-		FROM (SELECT C.CARD_NUM, C.CARD_NAME, E.EMP_NAME,NVL(CU.EMP_NUM,'')AS EMP_NUM ,NVL(TO_CHAR(USE_START_DT,'YYYY-MM-DD'),'')AS USE_START_DT,
-        			NVL(TO_CHAR(USE_END_DT,'YYYY-MM-DD'),'')AS USE_END_DT,
+		FROM (SELECT C.MNG_NUM,C.CARD_NUM, C.CARD_NAME,E.EMP_NAME AS EMP_NAME ,
+		             TO_CHAR(USE_START_DT,'YYYY-MM-DD')AS USE_START_DT,
+        			 TO_CHAR(USE_END_DT,'YYYY-MM-DD')AS USE_END_DT,
         			 ROW_NUMBER()OVER(ORDER BY C.CARD_NUM DESC) AS RNUM
 			  FROM CARD C INNER JOIN EMP E
                                   ON C.EMP_NUM = E.EMP_NUM
@@ -40,8 +41,37 @@
 				) A
 				WHERE A.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
-	<insert id="writeCard" parameterType="hashmap">
-		INSERT INTO CARD(MNG_NUM,CARD_CMPNY_NUM,CARD_NAME,CARD_DVSN,CARD_NUM,NAME,RGSTRTN_DT)
-		VALUES (CARD_SEQ.nextval,#{card_co},#{card_name},#{card_sep},#{card_code},#{use_name},SYSDATE)
+	
+	 <select id="cardView" resultType="hashmap" parameterType="hashmap">
+		SELECT A.MNG_NUM,B.MNG_NUM
+			 , A.EMP_NUM
+    		 , (SELECT EMP_NAME FROM EMP Z WHERE Z.EMP_NUM =  A.EMP_NUM) AS MNG_EMP_NM
+     		 , B.EMP_NUM
+     		 , (SELECT EMP_NAME FROM EMP Z WHERE Z.EMP_NUM =  B.EMP_NUM) AS USE_EMP_NM
+      		 , A.CARD_NUM 
+     	     , A.CARD_NAME
+     		 , A.CARD_DVSN
+     		 , C.CARD_CMPNY_NAME
+     		 , TO_CHAR(A.ISSUE_DT,'YYYY-MM-DD')AS ISSUE_DT
+     		 , TO_CHAR(A.END_DT,'YYYY-MM-DD')AS END_DT
+    		 ,TO_CHAR(A.DSCRD_DT,'YYYY-MM-DD')AS DSCRD_DT
+ 	   FROM CARD A
+                LEFT JOIN CARD_USER B
+                       ON A.MNG_NUM = B.MNG_NUM
+                LEFT JOIN CARD_CMPNY C
+                       ON A.CARD_CMPNY_NUM = C.CARD_CMPNY_NUM
+       WHERE CARD_NUM = #{no}
+	</select>
+	
+	<insert id="writeCard" parameterType="hashmap"> 
+		INSERT INTO CARD(MNG_NUM,CARD_CMPNY_NUM,CARD_NAME,CARD_DVSN,CARD_NUM,EMP_NUM,ISSUE_DT,END_DT,RGSTRTN_DT)
+		VALUES (CARD_SEQ.NEXTVAL,#{card_co},#{card_name},#{card_sep},#{card_code},#{use_num},#{issue_dt},#{end_dt},sysdate)
 	</insert>
+	 <select id="updateCard" resultType="hashmap" parameterType="hashmap">
+	  UPDATE CARD AS A, CARD_USER AS B
+	  		 SET A.EMP_NUM = #{use_num},A.CARD_CMPNY_NUM =#{card_co} , A.CARD_NAME =#{card_name} ,A.CARD_NUM =#{card_code} ,
+	  		 A.ISSUE_DT =#{issue_dt} ,A.END_DT = #{end_dt}, A.DSCRD_DT =#{del_dt},B.EMP_NUM=#{card_user},
+	  		 B.USE_START_DT=#{use_start_dt},B.USE_END_DT=#{use_end_dt}  
+	 WHERE A.MNG_NUM =#{no} AND B.MNG_NUM =#{no}
+	 </select>
 </mapper>
