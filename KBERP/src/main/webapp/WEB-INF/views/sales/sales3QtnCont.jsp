@@ -389,6 +389,7 @@ textarea {
 	background-size: 18px 18px;
 	float: right;
 	margin-right: 5px;
+    margin-top: 5.5px;
 }
 
 /* 끝 */
@@ -396,8 +397,6 @@ textarea {
 <script type="text/javascript">
 $(document).ready(function() {
 
-	console.log(${param.salesNum});
-	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
 		
@@ -408,13 +407,13 @@ $(document).ready(function() {
 	// 수정 버튼
 	$("#updateBtn").on("click", function() {
 		
-		$("#actionForm").attr("action", "sales2Update");
+		$("#actionForm").attr("action", "sales3QtnUpdate");
 		$("#actionForm").submit();
 	});
 	
-	// 다음 단계로 전환하기 버튼 : 견적 등록 페이지
+	// 다음 단계로 전환하기 버튼 : 계약 등록 페이지
 	$("#nextStageBtn").on("click", function() {
-		$("#actionForm").attr("action", "sales3QtnReg");
+		$("#actionForm").attr("action", "sales4CntrctReg");
 		$("#actionForm").submit();
 	});
 	
@@ -438,7 +437,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "salesMng2ActionAjax/failure",
+						url : "salesMng3ActionAjax/failure",
 						dataType : "json",
 						data : params,
 						success : function(res) {
@@ -472,7 +471,7 @@ $(document).ready(function() {
 		
 		$.ajax({
 			type : "post",
-			url : "sgstnBotActionAjax/insert",
+			url : "qtnBotActionAjax/insert",
 			dataType : "json",
 			data : params,
 			success : function(res) {
@@ -511,7 +510,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "sgstnBotActionAjax/update",
+						url : "qtnBotActionAjax/update",
 						dataType : "json",
 						data : params,
 						success : function(res) {
@@ -536,6 +535,7 @@ $(document).ready(function() {
 		
 	});
 	
+	// 영업기회 탭 접기펼치기
 	$("#sales_btn").on("click", "#salesContBtn_h", function() {
 		$(".salesCont").hide();
 		html = "<div class=\"up_btn\" id=\"salesContBtn_s\"></div>";
@@ -548,12 +548,62 @@ $(document).ready(function() {
 		$("#sales_btn").html(html);
 	});
 	
-	console.log('${param.LoanAmnt}');
-	console.log('${LoanAmnt}');
-	console.log(${LoanAmnt});
-	console.log('kkkㅇㅇddk');
+	// 제안 탭 접기펼치기
+	$("#sgstn_btn").on("click", "#sgstnContBtn_h", function() {
+		$(".sgstnCont").hide();
+		html = "<div class=\"up_btn\" id=\"sgstnContBtn_s\"></div>";
+		$("#sgstn_btn").html(html);
+	});
 	
-});
+	$("#sgstn_btn").on("click", "#sgstnContBtn_s", function() {
+		$(".sgstnCont").show();
+		html = "<div class=\"drop_btn\" id=\"sgstnContBtn_h\"></div>";
+		$("#sgstn_btn").html(html);
+	});
+	
+	
+	
+	
+	//대출금액
+	var loanAmnt = ${data3.LOAN_AMNT};
+	//대출기간
+	var loanPrd
+	if(${data3.LOAN_PRD eq 0} == 0) {
+		loanPrd = 6;
+	} else if(${data3.LOAN_PRD eq 0} == 1) {
+		loanPrd = 12;
+	} else if(${data3.LOAN_PRD eq 0} == 2) {
+		loanPrd = 36;
+	} else if(${data3.LOAN_PRD eq 0} == 3) {
+		loanPrd = 60;
+	}
+	//이자율
+	var intrstRate = ${data3.INTRST_RATE} * 0.01;
+	//이자율(월)
+	var mIntrstRate = (intrstRate / 12);
+	
+	//월 납부액
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 0 ) { // 원금 균등 상환
+		$("#monthPymntAmnt").val(Math.round(loanAmnt / loanPrd));
+		$("#mIntrstRate").val(Math.round(loanAmnt * mIntrstRate));
+	}
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 1 ) { // 원리금 균등 상환
+		var temp1 = Math.pow(1 + mIntrstRate, loanPrd) - 1;
+		var temp2 = loanAmnt * mIntrstRate * Math.pow(1 + mIntrstRate, loanPrd);
+		$("#monthPymntAmnt").val(Math.round(temp2 / temp1));
+		$("#mIntrstRate").val(Math.round(loanAmnt * mIntrstRate));
+	}
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 2 ) { // 만기 일시 상환
+		if(${data3.INTRST_PYMNT_MTHD_NUM} != 2) {
+			$("#monthPymntAmnt").val("0");
+			$("#mIntrstRate").val(Math.round(loanAmnt * mIntrstRate));
+		}
+	
+	}
+	
+	//월 이자액
+	
+}); // document.ready End
 
 /* 의견 목록 Ajax */
 function reloadOpList() {
@@ -561,7 +611,7 @@ function reloadOpList() {
 	
 	$.ajax({
 		type : "post",
-		url : "sgstnOpBotListAjax",
+		url : "qtnOpBotListAjax",
 		data : params,
 		dataType : "json",
 		success : function(res) {
@@ -625,6 +675,7 @@ function drawOpList(list) {
 		<div class="page_title_bar">
 			<div class="page_title_text">영업관리 - 견적 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
+				<img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" />
 				<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>
@@ -984,13 +1035,14 @@ function drawOpList(list) {
 							
 							</div>
 						</div>
+						</div>
 						
 						
 <!-- *************************************** 견적 시작 *************************************** -->			
 	<hr class="hr_bot" color="#4B94F2" width="925px">
 	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
 					<input type="hidden" id= "mdNum" name="mdNum" /> <!-- 영업기회에서 가져온 영업번호 -->
-					<div class="bot_title"><h3>견적<div class="drop_btn"></div></h3></div>
+					<div class="bot_title"><h3>견적</h3></div>
 					 <hr class="hr_bot" color="white" width="925px"> 
 					<div class="hr_bot"></div>
 					<table>
@@ -1149,26 +1201,22 @@ function drawOpList(list) {
 								<td></td>
 								<td colspan="2" style="border:none;"></td>
 							</tr>
-							<!-- <tr height="40">
+							<tr height="40">
 								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
 								<td><input type="text" class="txt" id="monthPymntAmnt" name="monthPymntAmnt" readonly="readonly" /></td>
 								<td><input type="button" class="btn" value="월 이자액" readonly="readonly" /></td>
 								<td colspan="2"><input type="text" class="txt" id="monthIntrstAmnt" name="monthIntrstAmnt" readonly="readonly" /></td>
-							</tr> -->
+							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="비고" readonly="readonly"/></td>
 								<td colspan="3"><input type="text" class="rmks" name="rmksCont" value="${data3.RMKS}" readonly="readonly" /></td>
 							</tr>							
 						</tbody>
 					</table>
-					
 					<!-- 첨부자료 -->
-					<input type=file id="att" name="att" onchange="uploadName(this)" />
-					<input type="hidden" id="attFile" name="attFile" />
 					<div class="spc">
 						<div class="adc_txt">
 							첨부자료
-							<img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
 						</div>
 						<div class="cntrct_box_in">
 							<input type="text" id="fileName" readonly="readonly" />
@@ -1184,7 +1232,7 @@ function drawOpList(list) {
 					</div>
 				</form>					
 				<form action="#" id="botOpActionForm" method="post">
-					<input type="hidden" name="salesNum" value="${param.salesNum}" />
+					<input type="hidden" name="qtnNum" value="${data3.QTN_NUM}" />
 					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
 					<input type="hidden" id="cmntNum" name="cmntNum" />
 					<!-- 의견 -->

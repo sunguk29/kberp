@@ -99,7 +99,6 @@ public class RprtController {
 		
 		int series = Integer.parseInt(request.getParameter("series"));
 		
-		
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		
 		for(int s = 0 ; s < series ; s++) {

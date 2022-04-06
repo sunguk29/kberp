@@ -118,7 +118,11 @@ function drawList(list) {
 		html += "</td>";
 		html += "<td>" + data.CLNT_NAME + "</td>";
 		html += "<td>" + data.WRTNG_DATE + "</td>";
-		html += "<td>" + data.ANSR + "</td>";
+		if(data.ANSR == "완료") {
+	     	 html += "<td style=\"color:#2E83F2; font-weight: bold;\">" + data.ANSR + "</td>";
+	      } else {
+	    	  html += "<td>" + data.ANSR + "</td>";
+	      }
 		html += "</tr>";
 	}
 	$("tbody").html(html);
