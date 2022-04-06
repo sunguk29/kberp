@@ -96,7 +96,7 @@ public class SalesMngController {
 	@RequestMapping(value= "/sales1SalesChncReg")
 	public ModelAndView sales1SalesChncReg(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
-		params.put("leadNum", "12"); // 나중에 지우기...
+	//	params.put("leadNum", "12"); // 나중에 지우기...
 		
 		// 영업시작일 넣어주기
 		Date tday = new Date();

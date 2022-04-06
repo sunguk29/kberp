@@ -1362,10 +1362,6 @@ function uploadName(e) {
 						</colgroup>
 						<tbody>
 							<tr>
-								<td><input type="button" class="btn" value="리드번호" readonly="readonly"/></td>
-								<td colspan="3"><input type="text" class="txt" value="${data.LEAD_NUM}" readonly="readonly" /></td>
-							</tr>
-							<tr>
 								<td><input type="button" class="btn" value="리드명 *" readonly="readonly"/></td>
 								<td colspan="3"><input type="text" class="txt" value="${data.LEAD_NAME}" readonly="readonly" /></td>
 							</tr>
