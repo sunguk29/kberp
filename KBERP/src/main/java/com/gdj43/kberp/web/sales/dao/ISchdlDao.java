@@ -7,4 +7,6 @@ public interface ISchdlDao {
 
 	public List<HashMap<String, Object>> getDataList(String sql) throws Throwable;
 
+	public HashMap<String, Object> getData(String sql) throws Throwable;
+
 }
