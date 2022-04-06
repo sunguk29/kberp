@@ -164,19 +164,19 @@ $(document).ready(function() {
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
 	<!-- 내용영역 -->
-	<form action="cardList" id="actionForm" method="post">
-	<input type="hidden" id="top" name="top" value="${param.top}" />
-	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
-	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
-	<input type="hidden" name="page" value="${param.page}" />
-	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
- 	</form>
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">카드 관리</div>
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
+	<form action="cardList" id="actionForm" method="post">
+	<input type="hidden" id="top" name="top" value="${param.top}" />
+	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+	<input type="hidden" name="page" value="${param.page}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+	<input type="hidden" name="no" value="${param.no}" />
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<table class="board_table">
@@ -246,6 +246,7 @@ $(document).ready(function() {
 				<div class="cmn_btn" id="updateBtn">수정</div>
 			</div>
 		</div>
+		</form>
 	</div>
 
 	<!-- bottom -->

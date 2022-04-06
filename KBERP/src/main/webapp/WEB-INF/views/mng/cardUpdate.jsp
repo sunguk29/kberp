@@ -123,12 +123,7 @@
 $(document).ready(function() {
 	reloadList();
 	
-	$("#listBtn").on("click",function(){
-		$("#searchGbn").val($("#oldSearchGbn").val());
-		$("#searchTxt").val($("#oldSearchTxt").val());
-		
-		$("#backForm").submit();
-	});
+	
 	$("#cancelBtn").on("click", function(){
 		$("#backForm").submit();
 	});
@@ -152,18 +147,6 @@ $(document).ready(function() {
 	});	
 	
 	$("#updateBtn").on("click", function() {
-		if(checkEmpty("#card_code")) {
-			alert("카드번호를 입력하세요.")
-			$("#card_code").focus();
-		} else if(checkEmpty("#card_name")) {
-			alert("카드명을 입력하세요.")
-			$("#card_name").focus();
-		} else if(checkEmpty("#use_num")) {
-			alert("카드명의를 입력하세요.")
-			$("#use_num").focus();
-		} else {
-			$("#updateForm").submit();
-			
 			var updateForm = $("#updateForm");
 			
 			updateForm.ajaxForm({
@@ -171,8 +154,6 @@ $(document).ready(function() {
 					// 물리파일명 보관
 					if(res.fileName.length > 0) {
 						$("#attFile").val(res.fileName[0]);						
-					}
-					
 					// 글 저장
 					var params = $("#updateForm").serialize();
 					
@@ -214,7 +195,7 @@ $(document).ready(function() {
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
 	<!-- 내용영역 -->
-	<form action="cardList" id="backForm" method="post">
+<form action="cardView" id="backForm" method="post">
 	<input type="hidden" name="no" value="${param.no}" />
 	<input type="hidden" name="page" value="${param.page}" />
 	<input type="hidden" name="searchMon" value="${param.searchMon}" />
@@ -227,14 +208,14 @@ $(document).ready(function() {
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
-		<div class="cont_area">
-			<!-- 여기부터 쓰면 됨 -->
-<form action="cardUpdate" id="updateForm" method="post">
+<form action="#" id="updateForm" method="post" enctype="multipart/form-data">
 <input type="hidden" name="no" value="${param.no}" />
 <input type="hidden" name="page" value="${param.page}" />
 <input type="hidden" name="searchMon" value="${param.searchMon}" />
 <input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 <input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+		<div class="cont_area">
+			<!-- 여기부터 쓰면 됨 -->
 			<table class="board_table">
 				<colgroup>
                <col width="110"/>
@@ -245,40 +226,35 @@ $(document).ready(function() {
       <tbody>
       	<tr>
             <td> 관리 번호 </td>
-            <td><input type = "text" id ="mng_num" name ="mng_num" class ="mng_num" readonly value="${data.MNG_NUM}"></td>   
+            <td>${data.MNG_NUM}</td>   
             <td> </td>
             <td></td>
         </tr>
       	<tr>
             <td> 카드 번호 </td>
-               <td><input type = "text" id ="card_code" name ="card_code" class ="card_code_cont" value="${data.CARD_NUM}">
-               </td>   
+               <td>${data.CARD_NUM}</td> 
             <td> 카드구분 </td>
-			<td class="card_sep_cont"><select class="card_sep_cont" id ="card_sep" name ="card_sep">
-			<option>${data.CARD_DVSN}</option>
-			<option value="0">신용</option>
-			<option value="1">체크</option>
-             </select></td>
+			<c:set var="name" value="${data.CARD_DVSN}" />
+           <c:choose>
+           <c:when test="${name eq '0'}">
+           <td>신용</td>
+    	   </c:when>
+    	   <c:when test="${name eq '1'}">
+           <td>체크</td>
+    	</c:when>
+           </c:choose>
         </tr>
          <tr>
             <td> 카드명 </td>
-               <td><input type ="text" class = "card_name_cont" id ="card_name" name ="card_name" value="${data.CARD_NAME}"></td>
+               <td>${data.CARD_NAME}</td>
             <td> 카드사 </td>
-            <td class="card_sep_cont">
-            	<select id ="card_co" name ="card_co" class="card_co_cont">
-				<option >${data.CARD_CMPNY_NAME}</option>
-				<option value="1">농협</option>
-				<option value="2">기업</option>
-				<option value="3">신한</option>
-				<option value="4">현대</option>
-				<option value="5">카카오뱅크</option>
-				</select></td>
+            <td>${data.CARD_CMPNY_NAME}</td>
          </tr>
          <tr>
             <td> 카드명의 </td>
-               <td><input type = "text" class ="use_name_cont"  id ="use_num" name ="use_num" value="${data.MNG_EMP_NM}"></td>
+               <td>${data.MNG_EMP_NM}</td>
             <td> 사용자 </td>
-               <td><input type = "text" class ="use_name_cont"  id ="card_user" name ="card_user" value="${data.USE_EMP_NM}"></td>
+              <td>${data.USE_EMP_NM}</td>
 
          </tr>
          <tr>
@@ -291,16 +267,13 @@ $(document).ready(function() {
          </tr>
          <tr>
             <td> 사용시작일자 </td>
-            <td class = "use_start_cont"><input type ="date" class ="use_start_cont" id ="use_start_dt" name ="use_start_dt" value="${data.ISSUE_DT}">
-            </td>
+            <td class = "use_date_cont">${data.USE_START_DT}</td>
             <td> 사용종료일자 </td>
-            <td class = "use_end_cont"><input type ="date" class ="use_end_cont" id ="use_end_dt" name ="use_end_dt" value="${data.END_DT}">
-            </td>
+             <td class = "use_date_cont">${data.USE_END_DT}</td>
          </tr>
  		<tr>
             <td> 폐기일자 </td>
-               <td colspan=3><input type = "date" id ="del_dt" name ="del_dt" class ="del_dt" value="${data.DSCRD_DT}"></td>
-
+               <td colspan=3 class = "del_cont">${data.DSCRD_DT}</td>
          </tr>
          </tbody>
 			</table>
@@ -311,8 +284,8 @@ $(document).ready(function() {
 				<div class="cmn_btn" id="delBtn">폐기</div>
 				<div class="cmn_btn" id="cancelBtn">취소</div>
 			</div>
-		</form>
 		</div>
+		</form>
 	</div>
 
 	<!-- bottom -->

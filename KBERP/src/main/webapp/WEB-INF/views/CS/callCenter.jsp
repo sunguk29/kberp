@@ -628,7 +628,7 @@ $(document).ready(function() {
 			bg : false,
 			bgClose : false,
 			width: 510,
-			height: 300,
+			height: 600,
 			title : "대응가이드",
 			contents : html,
 			draggable : true,
