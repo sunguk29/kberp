@@ -408,13 +408,13 @@ $(document).ready(function() {
 	// 수정 버튼
 	$("#updateBtn").on("click", function() {
 		
-		$("#actionForm").attr("action", "sales2Update");
+		$("#actionForm").attr("action", "sales3Update");
 		$("#actionForm").submit();
 	});
 	
 	// 다음 단계로 전환하기 버튼 : 견적 등록 페이지
 	$("#nextStageBtn").on("click", function() {
-		$("#actionForm").attr("action", "sales3QtnReg");
+		$("#actionForm").attr("action", "sales4CntrctReg");
 		$("#actionForm").submit();
 	});
 	
@@ -438,7 +438,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "salesMng2ActionAjax/failure",
+						url : "salesMng3ActionAjax/failure",
 						dataType : "json",
 						data : params,
 						success : function(res) {
@@ -536,6 +536,7 @@ $(document).ready(function() {
 		
 	});
 	
+	// 영업기회 탭 접기펼치기
 	$("#sales_btn").on("click", "#salesContBtn_h", function() {
 		$(".salesCont").hide();
 		html = "<div class=\"up_btn\" id=\"salesContBtn_s\"></div>";
@@ -546,6 +547,19 @@ $(document).ready(function() {
 		$(".salesCont").show();
 		html = "<div class=\"drop_btn\" id=\"salesContBtn_h\"></div>";
 		$("#sales_btn").html(html);
+	});
+	
+	// 제안 탭 접기펼치기
+	$("#sgstn_btn").on("click", "#sgstnContBtn_h", function() {
+		$(".sgstnCont").hide();
+		html = "<div class=\"up_btn\" id=\"sgstnContBtn_s\"></div>";
+		$("#sgstn_btn").html(html);
+	});
+	
+	$("#sgstn_btn").on("click", "#sgstnContBtn_s", function() {
+		$(".sgstnCont").show();
+		html = "<div class=\"drop_btn\" id=\"sgstnContBtn_h\"></div>";
+		$("#sgstn_btn").html(html);
 	});
 	
 	console.log('${param.LoanAmnt}');
@@ -625,7 +639,8 @@ function drawOpList(list) {
 		<div class="page_title_bar">
 			<div class="page_title_text">영업관리 - 견적 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
-				<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
+				<img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" />
+				<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" data-toggle="tooltip" title="견적서 추가하기" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -818,8 +833,12 @@ function drawOpList(list) {
 					
 					<hr class="hr_bot" color="#4B94F2" width="925px">
 					<!-- *************** 제안 부분 시작 **************** -->
-					
-						<div class="bot_title"><h3>제안</h3></div>
+						
+						<div class="bot_title">
+							<h3>제안<span id="sgstn_btn"><div class="drop_btn" id="sgstnContBtn_h"></div></span></h3>
+						</div>
+						
+						<div class="sgstnCont">
 						<div class="page_cont_title_text">대출 상세정보</div>
 						<hr class="hr_width">
 						<table class="detailList">
@@ -984,13 +1003,14 @@ function drawOpList(list) {
 							
 							</div>
 						</div>
+						</div>
 						
 						
 <!-- *************************************** 견적 시작 *************************************** -->			
 	<hr class="hr_bot" color="#4B94F2" width="925px">
 	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
 					<input type="hidden" id= "mdNum" name="mdNum" /> <!-- 영업기회에서 가져온 영업번호 -->
-					<div class="bot_title"><h3>견적<div class="drop_btn"></div></h3></div>
+					<div class="bot_title"><h3>견적</h3></div>
 					 <hr class="hr_bot" color="white" width="925px"> 
 					<div class="hr_bot"></div>
 					<table>

@@ -442,6 +442,12 @@
 		WHERE SALES_NUM = #{salesNum}
 	</update>
 	
+	<!-- 견적 실패 -->
+	<update id="sales3Failure" parameterType="hashmap">
+		UPDATE SALES SET PRGRS_STS_NUM = '36'
+		WHERE SALES_NUM = #{salesNum}
+	</update>
+	
 	<!-- 영업기회 의견목록 -->
 	<select id="getSalesOpList" parameterType="hashmap" resultType="hashmap">
 		SELECT S.SALES_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, SOC.CONT, TO_CHAR(SOC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,

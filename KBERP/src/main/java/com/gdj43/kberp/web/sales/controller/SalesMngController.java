@@ -469,6 +469,10 @@ public class SalesMngController {
 				iCommonService.updateData("salesMng.sales2to3", params); // 진행 단계 전환
 				break;
 			case "update" :
+				iCommonService.updateData("salesMng.sales1UpdateSales", params); // 제안 담당자 수정
+				break;
+			case "failure" :
+				iCommonService.updateData("salesMng.sales3Failure", params);
 				break;
 			}
 			modelMap.put("res", "success");
