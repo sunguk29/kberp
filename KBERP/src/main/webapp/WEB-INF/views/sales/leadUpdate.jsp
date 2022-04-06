@@ -640,6 +640,11 @@ hr { /* 구분선 */
 	line-height: 33px;
 	border: none;	
 }
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -679,13 +684,13 @@ $(document).ready(function() {
 	});	
 	
  	/* 고객사 등급 선택되게 */
-	$("#ccGrade").val(${leadData.GRADE_NUM}).prop("selected", this.selected);
+	$("#ccGrade").val(${data.GRADE_NUM}).prop("selected", this.selected);
 	
 	/* 인지경로 선택 되게 */
-	$("#rp").val(${leadData.RCGNTN_PATH_NUM}).prop("selected", this.selected);
+	$("#rp").val(${data.RCGNTN_PATH_NUM}).prop("selected", this.selected);
 	
 	/* 진행상태 선택 되게 */
-	$("#psNum").val(${leadData.PRGRS_STS_NUM}).prop("selected", this.selected); 
+	$("#psNum").val(${data.PRGRS_STS_NUM}).prop("selected", this.selected); 
 	
 	// 첨부파일 +버튼
 	$(".plus_btn").on("click", function() {
@@ -717,6 +722,9 @@ $(document).ready(function() {
 		} else if(checkEmpty("#mngEmp")) {
 			alert("담당자를 입력하세요.");
 			$("#mngEmp").focus();
+		} else if(checkEmpty("#psblCheck")) {
+			alert("가능여부를 입력하세요.");
+			$("#psblCheck").focus();
 		} else {	
 			var html = "";
 			
@@ -1541,24 +1549,24 @@ function uploadName(e) {
 							<tbody>
 								<tr>
 									<td><input type="button" class="btn" value="리드번호" readonly="readonly"/></td>
-									<td colspan="3"><input type="text" class="txt" value="${leadData.LEAD_NUM}" readonly="readonly" /></td>
+									<td colspan="3"><input type="text" class="txt" value="${data.LEAD_NUM}" readonly="readonly" /></td>
 								</tr>
 								<tr>
 									<td><input type="button" class="btn" value="리드명 *" readonly="readonly"/></td>
-									<td colspan="3"><input type="text" class="txt" id="leadName" name="leadName" value="${leadData.LEAD_NAME}" /></td>
+									<td colspan="3"><input type="text" class="txt" id="leadName" name="leadName" value="${data.LEAD_NAME}" /></td>
 								</tr>
 								<tr>
 									<td><input type="button" class="btn" value="고객명 *" readonly="readonly"/></td>
 									<td colspan="3">
-										<input type="text" class="txt" id="clntName" name="clntName" value="${leadData.CLNT_NAME}"/>
-										<input type="hidden" id="clntNum" name="clntNum" value="${leadData.CLNT_NUM}"/>
+										<input type="text" class="txt" id="clntName" name="clntName" value="${data.CLNT_NAME}"/>
+										<input type="hidden" id="clntNum" name="clntNum" value="${data.CLNT_NUM}"/>
 										<img class="btnImg_in" id="clntIcon" alt="팝업" src="resources/images/sales/popup.png" />
 									</td>
 								</tr>
 								<tr>
 									<td><input type="button" class="btn" value="고객사 *" readonly="readonly"/></td>
 									<td colspan="3">
-										<input type="text" class="txt" id="ccName" name="ccName" value="${leadData.CLNT_CMPNY_NAME}" />
+										<input type="text" class="txt" id="ccName" name="ccName" value="${data.CLNT_CMPNY_NAME}" />
 										<input type="hidden" id="ccNum" name="ccNum" />
 										<img class="btnImg_in" id="ccIcon" alt="팝업" src="resources/images/sales/popup.png" />
 									</td>
@@ -1594,13 +1602,14 @@ function uploadName(e) {
 								<tr>
 									<td><input type="button" class="btn" value="담당자 *" readonly="readonly"/></td>
 									<td>
-										<input type="text" class="mngTxt" id="mngEmp" name="mngEmp" value="${leadData.EMP_NAME}" />
-										<input type="hidden" id="mngNum" name="mngNum" value="${leadData.MNGR_EMP_NUM}" />
+										<input type="text" class="mngTxt" id="mngEmp" name="mngEmp" value="${data.EMP_NAME}" />
+										<input type="hidden" id="mngNum" name="mngNum" value="${data.MNGR_EMP_NUM}" />
 										<img class="btnImg_in" id="userIcon" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
 									</td>
-									<td><input type="button" class="btn" value="가능여부" readonly="readonly"/></td>
+									<td><input type="button" class="btn" value="가능여부 *" readonly="readonly"/></td>
 									<td>
-										<input type="text" class="txt" id="psblCheck" name="psblCheck" value="${leadData.PSBL_CHECK}" style="text-align: right;"/>
+										<input type="text" class="txt" id="psblCheck" name="psblCheck" min="0" max="100" value="${data.PSBL_CHECK}" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" style="text-align: right;"/>
+										<%-- <input type="number" class="txt" id="psblCheck" name="psblCheck" min="0" max="100" value="${data.PSBL_CHECK}" style="text-align: right;"/> --%>
 										<div id="percent">%</div>
 									</td>
 								</tr>
@@ -1619,7 +1628,7 @@ function uploadName(e) {
 						</table>
 						<!-- 첨부자료 -->
 						<c:choose>
-							<c:when test="${empty leadData.ATT_FILE_NAME}">
+							<c:when test="${empty data.ATT_FILE_NAME}">
 								<input type="file" id="att" name="att" style="display: none;" onchange="uploadName(this)" /> 
 								<input type="hidden" id="attFile" name="attFile" />
 								<div class="rvn_txt"> 첨부파일 
@@ -1630,8 +1639,8 @@ function uploadName(e) {
 								</div>								
 							</c:when>
 							<c:otherwise>
-								<c:set var="fileLength" value="${fn:length(leadData.ATT_FILE_NAME)}"></c:set>
-								<c:set var="leadFileName" value="${fn:substring(leadData.ATT_FILE_NAME, 20, fileLength)}"></c:set>
+								<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+								<c:set var="leadFileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
 								<div class="rvn_txt"> 첨부파일 
 									<img class="plus_btn" src="resources/images/sales/plus.png" border='0' style="display: none;"> 
 								</div>

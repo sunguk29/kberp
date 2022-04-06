@@ -573,6 +573,11 @@ textarea {
 	line-height: 33px;
 	border: none;	
 }
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function () {
@@ -655,13 +660,13 @@ $(document).ready(function () {
 		}); // makePopup end	
 	});
 	/* 고객사 등급 선택되게 */
-	$("#ccGrade").val(${leadData.GRADE_NUM}).prop("selected", this.selected);
+	$("#ccGrade").val(${data.GRADE_NUM}).prop("selected", this.selected);
 	
 	/* 인지경로 선택 되게 */
-	$("#rp").val(${leadData.RCGNTN_PATH_NUM}).prop("selected", this.selected);
+	$("#rp").val(${data.RCGNTN_PATH_NUM}).prop("selected", this.selected);
 	
 	/* 진행상태 선택 되게 */
-	$("#psNum").val(${leadData.PRGRS_STS_NUM}).prop("selected", this.selected);
+	$("#psNum").val(${data.PRGRS_STS_NUM}).prop("selected", this.selected);
 	
 	
 	/* 리드 상세보기 실행될 시 비동기로 의견 목록 그리기 위해 선언  */
@@ -694,12 +699,11 @@ $(document).ready(function () {
 						width : 400,
 						height : 180,
 						title : "전환 완료",
+						draggable : true,
 						contents : ltshtml,
 						buttons : {
 							name : "확인",
 							func:function() {
-								$("#salesNum").val('${param.leadNum}');
-								console.log(salesNum);
 								$("#actionForm").attr("action", "sales1SalesChncReg");
 								$("#actionForm").submit(); 
 								console.log("One!");
@@ -1359,22 +1363,22 @@ function uploadName(e) {
 						<tbody>
 							<tr>
 								<td><input type="button" class="btn" value="리드번호" readonly="readonly"/></td>
-								<td colspan="3"><input type="text" class="txt" value="${leadData.LEAD_NUM}" readonly="readonly" /></td>
+								<td colspan="3"><input type="text" class="txt" value="${data.LEAD_NUM}" readonly="readonly" /></td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="리드명 *" readonly="readonly"/></td>
-								<td colspan="3"><input type="text" class="txt" value="${leadData.LEAD_NAME}" readonly="readonly" /></td>
+								<td colspan="3"><input type="text" class="txt" value="${data.LEAD_NAME}" readonly="readonly" /></td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="고객명 *" readonly="readonly"/></td>
 								<td colspan="3">
-									<input type="text" class="txt" value="${leadData.CLNT_NAME}" readonly="readonly" />
+									<input type="text" class="txt" value="${data.CLNT_NAME}" readonly="readonly" />
 								</td>
 							</tr>
 							<tr>
 								<td><input type="button" class="btn" value="고객사 *" readonly="readonly"/></td>
 								<td colspan="3">
-									<input type="text" class="txt" value="${leadData.CLNT_CMPNY_NAME}" readonly="readonly" />
+									<input type="text" class="txt" value="${data.CLNT_CMPNY_NAME}" readonly="readonly" />
 								</td>
 							</tr>
 							<tr>
@@ -1409,11 +1413,11 @@ function uploadName(e) {
 							<tr>
 								<td><input type="button" class="btn" value="담당자 *" readonly="readonly"/></td>
 								<td>
-									<input type="text" class="mngTxt" id="mngEmp" name="mngEmp" value="${leadData.EMP_NAME}" readonly="readonly" />
+									<input type="text" class="mngTxt" id="mngEmp" name="mngEmp" value="${data.EMP_NAME}" readonly="readonly" />
 								</td>
-								<td><input type="button" class="btn" value="가능여부" readonly="readonly"/></td>
+								<td><input type="button" class="btn" value="가능여부 *" readonly="readonly"/></td>
 								<td>
-									<input type="text" class="txt" id="psblCheck" name="psblCheck" value="${leadData.PSBL_CHECK}" style="text-align: right;" readonly="readonly"/>
+									<input type="number" class="txt" id="psblCheck" name="psblCheck" value="${data.PSBL_CHECK}" style="text-align: right;" readonly="readonly"/>
 									<div id="percent">%</div>
 								</td>
 							</tr>							
@@ -1432,14 +1436,14 @@ function uploadName(e) {
 						</tbody>
 					</table>
 					<!-- 첨부파일 -->
-					<c:set var="fileLength" value="${fn:length(leadData.ATT_FILE_NAME)}"></c:set>
-					<c:set var="leadFileName" value="${fn:substring(leadData.ATT_FILE_NAME, 20, fileLength)}"></c:set>
+					<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+					<c:set var="leadFileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
 					<div class="rvn_txt">
 						첨부파일
 					</div>
 					<div class="cntrct_box_in">
 						<span id="attFileName">
-							<a href="resources/upload/${leadData.ATT_FILE_NAME}"  download="${leadFileName}">${leadFileName}</a>
+							<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${leadFileName}">${leadFileName}</a>
 						</span>
 					</div>
 					<div class="next_bot">

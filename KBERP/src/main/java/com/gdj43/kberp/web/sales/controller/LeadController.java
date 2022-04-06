@@ -216,7 +216,7 @@ public class LeadController {
 				break;	
 			case "update" :
 				iCommonService.updateData("lead.getLeadUpdate", params); // 리드 수정
-				iCommonService.updateData("lead.getLeadAttUpdate", params); // 리드 수정
+				iCommonService.updateData("lead.getLeadAttUpdate", params); // 리드 첨부파일 수정
 				break;
 			case "delete" :
 				iCommonService.updateData("lead.getLeadDelete", params); // 리드 삭제
@@ -254,9 +254,9 @@ public class LeadController {
 	public ModelAndView leadCont(@RequestParam HashMap<String, String> params, 
 								 ModelAndView mav) throws Throwable {
 		
-		HashMap<String, String> leadData = iCommonService.getData("salesSchdl.getLeadCont", params);
+		HashMap<String, String> data = iCommonService.getData("salesSchdl.getLeadCont", params);
 		
-		mav.addObject("leadData", leadData);
+		mav.addObject("data", data);
 		
 		mav.setViewName("sales/leadCont");
 		
@@ -267,9 +267,9 @@ public class LeadController {
 	public ModelAndView leadUpdate(@RequestParam HashMap<String, String> params, 
 								 ModelAndView mav) throws Throwable {
 		
-		HashMap<String, String> leadData = iCommonService.getData("lead.getLeadCont", params);
+		HashMap<String, String> data = iCommonService.getData("lead.getLeadCont", params);
 		
-		mav.addObject("leadData", leadData);
+		mav.addObject("data", data);
 		
 		mav.setViewName("sales/leadUpdate");
 		
