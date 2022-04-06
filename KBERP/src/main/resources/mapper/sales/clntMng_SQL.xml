@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="clntCmpnyMng">
-
+	<!-- 고객사 목록 -->
 	<select id="getClntCmpntList" parameterType="hashmap" resultType="hashmap">
 		SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, TRIM(TO_CHAR(RVN, 'L999,999,999,999,999')) AS RVN, A.CNT, A.DEL_CHECK
 		FROM (  SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, A.RVN, A.CNT,
@@ -66,6 +66,7 @@
 		WHERE A.RNUM2 BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
+	<!-- 고객사 목록 개수 -->
 	<select id="clntCmpnyListCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
@@ -96,6 +97,7 @@
 		</if>
 	</select>
 	
+	<!-- 고객사 등록 -->
 	<insert id="ClntCmpnyAdd" parameterType="hashmap">
 		INSERT INTO CLNT_CMPNY (CLNT_CMPNY_NUM, CLNT_CMPNY_CLSFY_NUM, GRADE_NUM, RCGNTN_PATH_NUM, CLNT_CMPNY_NAME, BSNSMN_RGSTRTN_NUM,
 							    CLNT_NAME, PHONE_NUM, FAX, HMPG, ZIP_CODE_NUM, ADRS, DTL_ADRS, RVN, EMP_NUM)
@@ -103,6 +105,7 @@
 			    #{zipCodeNum}, #{adrs}, #{dtlAdrs}, #{rvn}, #{sEmpNum})
 	</insert>
 	
+	<!-- 고객사 목록 전체 개수 -->
 	<select id="clntCmpnyListAllCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
@@ -110,6 +113,7 @@
 		AND DEL_CHECK IS NULL
 	</select>
 	
+	<!-- 거래고객사 개수 -->
 	<select id="clntCmpnyCntrctCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
         FROM CLNT_CMPNY
@@ -117,7 +121,8 @@
         AND DEL_CHECK IS NULL
 		AND CLNT_CMPNY_CLSFY_NUM = 0
 	</select>
-
+	
+	<!-- 파트너사 개수 -->
 	<select id="clntCmpnyPartnerCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
@@ -126,6 +131,7 @@
 		AND CLNT_CMPNY_CLSFY_NUM = 1
 	</select>
 	
+	<!-- 해지고객사 개수 -->
 	<select id="clntCmpnyTmnCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
@@ -134,6 +140,7 @@
 		AND CLNT_CMPNY_CLSFY_NUM = 2
 	</select>
 	
+	<!-- 정지고객사 개수 -->
 	<select id="clntCmpnySspsCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
@@ -142,6 +149,7 @@
 		AND CLNT_CMPNY_CLSFY_NUM = 3
 	</select>
 	
+	<!-- 외국파트너사 개수 -->
 	<select id="clntCmpnyForeignCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
@@ -150,6 +158,7 @@
 		AND CLNT_CMPNY_CLSFY_NUM = 4
 	</select>
 	
+	<!-- 기타 개수 -->
 	<select id="clntCmpnyEtcCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
@@ -158,21 +167,25 @@
 		AND CLNT_CMPNY_CLSFY_NUM = 5
 	</select>
 	
+	<!-- 고객사 첨부파일 등록 -->
 	<insert id="ClntCmpnyAddAttFile" parameterType="hashmap">
 		INSERT INTO CLNT_CMPNY_ATT_FILE (ATT_FILE_NUM, CLNT_CMPNY_NUM, ATT_FILE_NAME)
 		VALUES (CLNT_CMPNY_ATT_FILE_SEQ.NEXTVAL, CLNT_CMPNY_SEQ.CURRVAL, #{attFile})
 	</insert>
 	
+	<!-- 고객사 의견 등록 -->
 	<insert id="opContAdd" parameterType="hashmap">
 		INSERT INTO CLNT_CMPNY_CMNT(CMNT_NUM, CLNT_CMPNY_NUM, EMP_NUM, CONT)
 		VALUES(CLNT_CMPNY_CMNT_SEQ.NEXTVAL, #{ccn}, #{sEmpNum}, #{tacont})
 	</insert>
 	
+	<!-- 고객 첨부파일 등록 -->
 	<insert id="clntAttAdd" parameterType="hashmap">
 		INSERT INTO CLNT_ATT_FILE (ATT_FILE_NUM, CLNT_NUM, ATT_FILE_NAME)
 		VALUES (CLNT_ATT_FILE_SEQ.NEXTVAL, ENTRPRS_CLNT_SEQ.CURRVAL, #{attFile})
 	</insert>
 	
+	<!-- 고객 목록 -->
 	<select id="getClntList" parameterType="hashmap" resultType="hashmap">
 		SELECT EC.CLNT_NUM, NVL(EC.DEPT, ' ') AS DEPT, NVL(EC.DUTY, ' ') AS DUTY, NVL(EC.EMAIL, ' ') AS EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM
 		FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM,
@@ -212,6 +225,7 @@
 		WHERE EC.RNUM2 BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
+	<!-- 고객 목록 개수 -->
 	<select id="clntListCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM ENTRPRS_CLNT EC INNER JOIN CLNT_CMPNY CC
@@ -233,6 +247,7 @@
 		AND EC.DEL_CHECK IS NULL
 	</select>
 	
+	<!-- 고객사 상세보기 -->
 	<select id="clntCmpnyCont" parameterType="hashmap" resultType="hashmap">
 		SELECT CC.CLNT_CMPNY_NAME, CC.CLNT_CMPNY_CLSFY_NUM, CC.GRADE_NUM, CC.BSNSMN_RGSTRTN_NUM, CC.CLNT_NAME,
 		       CC.PHONE_NUM, CC.FAX, CC.HMPG, CC.ZIP_CODE_NUM, CC.ADRS, CC.DTL_ADRS, 
@@ -243,6 +258,7 @@
 		WHERE CC.CLNT_CMPNY_NUM = #{ccn}
 	</select>
 	
+	<!-- 고객 상세보기 -->
 	<select id="clntCont" parameterType="hashmap" resultType="hashmap">
 		SELECT EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, EC.DEPT, EC.DUTY, EC.MBL, EC.EMAIL,
 		       E.EMP_NAME, CAF.ATT_FILE_NAME, EC.RGSTRTN_EMP_NUM, EC.MNGR_EMP_NUM, EC.CLNT_CMPNY_NUM
@@ -255,21 +271,25 @@
 		WHERE EC.CLNT_NUM = #{cn}
 	</select>
 
+	<!-- 고객사 삭제 -->
 	<update id="ccDelete" parameterType="hashmap">
 		UPDATE CLNT_CMPNY SET DEL_CHECK = SYSDATE
 		WHERE CLNT_CMPNY_NUM = #{cmNum}
 	</update>
 	
+	<!-- 고객 삭제 -->
 	<update id="clntDelete" parameterType="hashmap">
 		UPDATE ENTRPRS_CLNT SET DEL_CHECK = SYSDATE
 		WHERE CLNT_NUM = #{cn}
 	</update>
 	
+	<!-- 고객 등록 -->
 	<select id="clntAdd" parameterType="hashmap" resultType="hashmap">
 		INSERT INTO ENTRPRS_CLNT (CLNT_NUM, CLNT_NAME, CLNT_CMPNY_NUM, MNGR_EMP_NUM, RGSTRTN_EMP_NUM, DEPT, DUTY, MBL, EMAIL)
 		VALUES (ENTRPRS_CLNT_SEQ.NEXTVAL, #{cName}, #{ccNum}, #{mngNum}, #{sEmpNum}, #{dept}, #{duty}, #{mbl}, #{email})
 	</select>
 	
+	<!-- (팝업) 고객사 목록 개수 -->
 	<select id="popupCcListCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
@@ -277,6 +297,7 @@
 		AND DEL_CHECK IS NULL
 	</select>
 	
+	<!-- (팝업) 담당자 목록 개수 -->
 	<select id="popupMngListCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM EMP E INNER JOIN APNTM A
@@ -303,6 +324,7 @@
 		</if>
 	</select>
 	
+	<!-- (팝업) 고객사 목록 -->
 	<select id="popupCcList" parameterType="hashmap" resultType="hashmap">
 		SELECT CC.CLNT_CMPNY_NAME, CC.CLNT_CMPNY_CLSFY_NUM, CC.GRADE_NUM, CC.ADRS, TO_CHAR(CC.RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE,
 		       CC.CLNT_CMPNY_NUM
@@ -313,6 +335,7 @@
 		WHERE CC.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
+	<!-- (팝업) 담당자 목록 -->
 	<select id="popupMngList" parameterType="hashmap" resultType="hashmap">
 		SELECT ME.EMP_NUM, ME.EMP_NAME, ME.RANK_NAME, ME.DEPT_NAME
 		FROM (	SELECT E.EMP_NUM, E.EMP_NAME, R.RANK_NAME, D.DEPT_NUM, D.DEPT_NAME,
@@ -342,6 +365,7 @@
 		</if>
 	</select>
 	
+	<!-- 고객사 의견 목록 -->
 	<select id="getOpList" parameterType="hashmap" resultType="hashmap">
 		SELECT CCC.CLNT_CMPNY_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, CCC.CONT, TO_CHAR(CCC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
 		       CCC.CMNT_NUM
@@ -360,6 +384,7 @@
 		ORDER BY CCC.CMNT_NUM DESC
 	</select>
 	
+	<!-- 고객사 상세보기/고객 목록 -->
 	<select id="getClList" parameterType="hashmap" resultType="hashmap">
 		SELECT EC.CLNT_NAME, NVL(EC.DUTY, ' ') AS DUTY, NVL(EC.DEPT, ' ') AS DEPT, EC.MBL, NVL(EC.EMAIL, ' ') AS EMAIL
 		FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
@@ -369,11 +394,13 @@
         ORDER BY EC.CLNT_NUM DESC
 	</select>
 	
+	<!-- 고객사 의견 삭제 -->
 	<update id="opContUpdate" parameterType="hashmap">
 		UPDATE CLNT_CMPNY_CMNT SET DEL_CHECK = SYSDATE
 		WHERE CMNT_NUM = #{cmntNum}
 	</update>
 	
+	<!-- 고객사 의견 개수 -->
 	<select id="opListCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY_CMNT
@@ -381,6 +408,7 @@
 		AND CLNT_CMPNY_NUM = #{ccn}
 	</select>
 	
+	<!-- 고객사 상세보기/고객 개수 -->
 	<select id="clListCnt" parameterType="hashmap" resultType="Integer">
         SELECT COUNT(*) AS CNT
 		FROM ENTRPRS_CLNT
@@ -388,6 +416,7 @@
 		AND CLNT_CMPNY_NUM = #{ccn}
 	</select>
 	
+	<!-- 고객사 수정 -->
 	<update id="ClntCmpnyUpdate" parameterType="hashmap">
 		UPDATE CLNT_CMPNY SET CLNT_CMPNY_CLSFY_NUM = #{ccClsfy},
 		                      GRADE_NUM = #{ccGrade},
@@ -406,11 +435,13 @@
 		WHERE CLNT_CMPNY_NUM = #{ccn}
 	</update>
 	
+	<!-- 고객사 첨부파일 수정 -->
 	<update id="ClntCmpnyAttFileUpdate" parameterType="hashmap">
 		UPDATE CLNT_CMPNY_ATT_FILE SET ATT_FILE_NAME = #{attFile}
 		WHERE CLNT_CMPNY_NUM = #{ccn}
 	</update>
 	
+	<!-- 고객 수정 -->
 	<update id="clntUpdate" parameterType="hashmap">
 		UPDATE ENTRPRS_CLNT SET CLNT_NAME = #{cName}, 
 		                        MNGR_EMP_NUM = ${mngNum}, 
@@ -422,6 +453,7 @@
 		WHERE CLNT_NUM = #{cn}
 	</update>
 	
+	<!-- 고객 첨부파일 수정 -->
 	<update id="clntAttUpdate" parameterType="hashmap">
 		UPDATE CLNT_ATT_FILE SET ATT_FILE_NAME = #{attFile}
 		WHERE CLNT_NUM = #{cn}

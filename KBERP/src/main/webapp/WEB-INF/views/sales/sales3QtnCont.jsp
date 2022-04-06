@@ -585,18 +585,18 @@ $(document).ready(function() {
 	//월 납부액
 	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 0 ) { // 원금 균등 상환
 		$("#monthPymntAmnt").val(Math.round(loanAmnt / loanPrd));
-		$("#mIntrstRate").val(Math.round(loanAmnt * mIntrstRate));
+		$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
 	}
 	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 1 ) { // 원리금 균등 상환
 		var temp1 = Math.pow(1 + mIntrstRate, loanPrd) - 1;
 		var temp2 = loanAmnt * mIntrstRate * Math.pow(1 + mIntrstRate, loanPrd);
 		$("#monthPymntAmnt").val(Math.round(temp2 / temp1));
-		$("#mIntrstRate").val(Math.round(loanAmnt * mIntrstRate));
+		$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
 	}
 	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 2 ) { // 만기 일시 상환
 		if(${data3.INTRST_PYMNT_MTHD_NUM} != 2) {
 			$("#monthPymntAmnt").val("0");
-			$("#mIntrstRate").val(Math.round(loanAmnt * mIntrstRate));
+			$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
 		}
 	
 	}
@@ -1035,8 +1035,6 @@ function drawOpList(list) {
 							
 							</div>
 						</div>
-						</div>
-						
 						
 <!-- *************************************** 견적 시작 *************************************** -->			
 	<hr class="hr_bot" color="#4B94F2" width="925px">
@@ -1133,24 +1131,28 @@ function drawOpList(list) {
 									</td>
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="이자납부방식" readonly="readonly" /></td>
+								<td><input type="button" class="btn" value="대출기간" readonly="readonly" /></td>
 								<td>
-									<select class="txt" id="intrst_pymnt" name="intrstPymnt"disabled="disabled">
+									<select class="txt" id="loanPrd" name="loanPrd" disabled="disabled">
 										<optgroup>
 											<c:choose>
-												<c:when test="${data3.INTRST_PYMNT_MTHD_NUM eq 0}">
-													<option value="0" selected="selected">원금 균등 상환</option>
+												<c:when test="${data3.LOAN_PRD eq 0}">
+													<option value="0" selected="selected">6개월</option>
 												</c:when>
-												<c:when test="${data3.INTRST_PYMNT_MTHD_NUM eq 1}">
-													<option value="0" selected="selected">원리금 균등 상환</option>
+												<c:when test="${data3.LOAN_PRD eq 1}">
+													<option value="0" selected="selected">1년</option>
 												</c:when>
-												<c:when test="${data3.INTRST_PYMNT_MTHD_NUM eq 2}">
-													<option value="0" selected="selected">만기 일시 상환</option>
+												<c:when test="${data3.LOAN_PRD eq 2}">
+													<option value="0" selected="selected">3년</option>
+												</c:when>
+												<c:when test="${data3.LOAN_PRD eq 2}">
+													<option value="0" selected="selected">5년</option>
 												</c:when>
 											</c:choose>
 										</optgroup>
-									</select>
+									</select>	
 								</td>
+								
 								<td><input type="button" class="btn" value="원금상환방식" readonly="readonly" /></td>
 								<td colspan="2">
 									<select class="txt" id="prncpl_pymnt" name="prncplPymnt" disabled="disabled">
@@ -1177,31 +1179,6 @@ function drawOpList(list) {
 								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" value="${data3.PYMNT_DATE}" readonly="readonly" placeholder="매달    일" /></td>
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="대출기간" readonly="readonly" /></td>
-								<td>
-									<select class="txt" id="loanPrd" name="loanPrd" disabled="disabled">
-										<optgroup>
-											<c:choose>
-												<c:when test="${data3.LOAN_PRD eq 0}">
-													<option value="0" selected="selected">6개월</option>
-												</c:when>
-												<c:when test="${data3.LOAN_PRD eq 1}">
-													<option value="0" selected="selected">1년</option>
-												</c:when>
-												<c:when test="${data3.LOAN_PRD eq 2}">
-													<option value="0" selected="selected">3년</option>
-												</c:when>
-												<c:when test="${data3.LOAN_PRD eq 2}">
-													<option value="0" selected="selected">5년</option>
-												</c:when>
-											</c:choose>
-										</optgroup>
-									</select>	
-								</td>
-								<td></td>
-								<td colspan="2" style="border:none;"></td>
-							</tr>
-							<tr height="40">
 								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
 								<td><input type="text" class="txt" id="monthPymntAmnt" name="monthPymntAmnt" readonly="readonly" /></td>
 								<td><input type="button" class="btn" value="월 이자액" readonly="readonly" /></td>
@@ -1222,7 +1199,7 @@ function drawOpList(list) {
 							<input type="text" id="fileName" readonly="readonly" />
 						</div>
 					</div>
-
+				
 
 
 			
@@ -1280,12 +1257,10 @@ function drawOpList(list) {
 					<hr class="hr_bot" color="white" width="925px">
 					<div class="salesOver_btn nb">영업 종료하기</div>
 					<!-- 끝 -->
-					
-					
+					</div>
 				</div>
 			</div>	
 		</div>
-	</div>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>
