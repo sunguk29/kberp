@@ -467,6 +467,7 @@ public class SalesMngController {
 			case "insert" :
 				iCommonService.insertData("salesMng.sales3QtnAdd", params); // 견적 
 				iCommonService.insertData("salesMng.sales3QtnAttAdd", params); // 견적 첨부파일
+				iCommonService.getDataList("salesMng.getQtnPQList", params); // 지난견적서
 				iCommonService.updateData("salesMng.sales2to3", params); // 진행 단계 전환
 				break;
 			case "update" :
@@ -486,7 +487,7 @@ public class SalesMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	// sales3QtnCont : 제안 상세보기
+	// sales3QtnCont : 견적 상세보기
 	@RequestMapping(value = "/sales3QtnCont")
 	public ModelAndView sales3QtnCont(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
@@ -533,7 +534,7 @@ public class SalesMngController {
 		
 	}
 	
-	//제안 의견 목록 리스트
+	// 견적 의견 목록 리스트
 	@RequestMapping(value = "/qtnOpBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String qtnOpBotListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
@@ -552,6 +553,25 @@ public class SalesMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
+	
+	// 견적 - 지난견적서 목록 리스트
+	@RequestMapping(value = "/PQListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String PQListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		int PQListCnt = iCommonService.getIntData("salesMng.PQListCnt", params);
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("salesMng.getQtnPQList", params);
+		
+		modelMap.put("list", list);
+		modelMap.put("PQListCnt", PQListCnt);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 }
 
 
