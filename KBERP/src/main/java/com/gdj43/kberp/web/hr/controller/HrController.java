@@ -66,7 +66,9 @@ public class HrController {
 		          break;
 		       case "cont" :
 		    	   HashMap<String, String> cont = iCommonService.getData("hr.getApntmCont", params);
+		    	   HashMap<String, String> emp = iCommonService.getData("hr.getEmpCont", params);
 		    	   modelMap.put("cont", cont);
+		    	   modelMap.put("emp", emp);
 		          break;
 		       case "inqryList" :
 		    	   List<HashMap<String, String>> inqryList = iCommonService.getDataList("hr.getInqryList", params);
