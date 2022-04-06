@@ -94,7 +94,6 @@ function reloadList() { // 목록 조회용 + 페이징 조회용
 		dataType : "json",
 		data : params, 
 		success : function(res) { 
-			console.log(res);
 			drawList(res.list);
 			drawPaging(res.pb);
 				},
@@ -109,7 +108,7 @@ function drawList(list) {
 	var html = "";
 	
 	for(var data of list) {
-		html += "<tr num=\""+ data.RSVTN_NUM + "\">";
+		html += "<tr>";
 		html += "<td>" + data.RSVTN_NUM + "</td>";
 		html += "<td>" + data.FCLTY_NUM + "</td>";
 		html += "<td id=\"click\" num=\""+ data.RSVTN_NUM + "\">" + data.FCLTY_NAME + "</td>";
@@ -182,8 +181,8 @@ function drawPaging(pb) {
 			<input type="hidden" id="num" name="num"/>
 			<input type="hidden" id="page" name="page" value="${page}"/>
 			<input type="hidden" id="top" name="top" value="${param.top}" />
-		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
-		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+			<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+			<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 	
 		<select id="searchGbn" name="searchGbn">
 			<option value="0">예약코드</option>

@@ -95,12 +95,12 @@
 	
 	<!-- 영업관리 리스트 -->
 	<select id="getSalesList" parameterType="hashmap" resultType="hashmap">
-		SELECT SS.SALES_NUM, SS.PRGRS_STS, SS.PRGRS_STS2, SS.LEAD_NAME, SS.CLNT_CMPNY_NAME, SS.CLNT_NAME, SS.EMP_NAME, SS.EXPCTN_LOAN_SCALE
+		SELECT SS.SALES_NUM, SS.PRGRS_STS, SS.PRGRS_STS2, SS.LEAD_NAME, SS.CLNT_CMPNY_NAME, SS.CLNT_NAME, SS.EMP_NAME, SS.EXPCTN_LOAN_SCALE, SS.QTN_NUM
 		FROM ( SELECT S.SALES_NUM, S.MNGR_EMP_NUM, E.EMP_NUM, LDI.EXPCTN_LOAN_SCALE, E.EMP_NAME, L.LEAD_NAME,
 		              EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, S.START_DATE,
 		              DECODE(SUBSTR(S.PRGRS_STS_NUM, 2, 1), 5, '종료(성공)', 6, '종료(실패)', 7, '진행중') AS PRGRS_STS,
 		              DECODE(SUBSTR(S.PRGRS_STS_NUM, 1, 1), 1, '영업기회', 2, '제안', 3, '견적', 4, '계약') AS PRGRS_STS2,
-		              ROW_NUMBER() OVER(ORDER BY S.SALES_NUM DESC) AS RNUM
+		              ROW_NUMBER() OVER(ORDER BY S.SALES_NUM DESC) AS RNUM, Q.QTN_NUM
 		       FROM SALES S INNER JOIN EMP E
 		                            ON S.MNGR_EMP_NUM = E.EMP_NUM
 		                    INNER JOIN LEAD L
@@ -111,7 +111,9 @@
 		                            ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
 		                    LEFT OUTER JOIN LOAN_DTL_INFO LDI
 		                                 ON S.SALES_NUM = LDI.SALES_NUM
-              WHERE 1 = 1
+		                    LEFT OUTER JOIN QTN Q 
+		                                 ON  SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 3                 
+		      WHERE 1 = 1
 		<choose>
 			<when test="mngName != null and mngName != ''">
 				AND E.EMP_NAME = #{mngName}
@@ -287,7 +289,7 @@
 		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
-	<!-- 영업기회 수정 : 기본정보tab -->
+	<!-- 제안 담당자 수정 : 기본정보tab -->
 	<update id="sales1UpdateSales" parameterType="hashmap">
 		UPDATE SALES SET MNGR_EMP_NUM = #{empNum}
 		WHERE SALES_NUM = #{salesNum}
@@ -373,6 +375,12 @@
 		VALUES ( SGSTN_ATT_FILE_SEQ.NEXTVAL, #{salesNum}, #{attFile} )
 	</insert>
 	
+	<!-- 제안 수정 첨부파일tab  -->
+	<update  id="sales2UpdateDtlInfoAtt" parameterType="hashmap">
+		UPDATE SGSTN_ATT_FILE SET ATT_FILE_NAME = #{attFile}
+		WHERE SALES_NUM = #{salesNum}	
+	</update>
+	
 	
 	<!-- 제안 상세보기 -->
 	<select id="getSales2" resultType="hashmap" parameterType="hashmap">
@@ -439,6 +447,12 @@
 	<!-- 제안 실패 -->
 	<update id="sales2Failure" parameterType="hashmap">
 		UPDATE SALES SET PRGRS_STS_NUM = '26'
+		WHERE SALES_NUM = #{salesNum}
+	</update>
+	
+	<!-- 견적 실패 -->
+	<update id="sales3Failure" parameterType="hashmap">
+		UPDATE SALES SET PRGRS_STS_NUM = '36'
 		WHERE SALES_NUM = #{salesNum}
 	</update>
 	
@@ -573,8 +587,70 @@
 		                     ON S.SALES_NUM = Q.SALES_NUM
 		             INNER JOIN MD M
 		                     ON Q.MD_NUM = M.MD_NUM
-		WHERE S.SALES_NUM = #{salesNum}
+		WHERE Q.QTN_NUM = #{qtnNum}
 	</select>
+	
+	<!-- 견적 의견목록 -->
+	<select id="getQtnOpList" parameterType="hashmap" resultType="hashmap">
+		SELECT Q.QTN_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, QC.CONT, TO_CHAR(QC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
+		       QC.CMNT_NUM
+		FROM QTN Q INNER JOIN QTN_CMNT QC
+		                     ON Q.QTN_NUM = QC.QTN_NUM
+		                 INNER JOIN EMP E
+		                         ON QC.EMP_NUM = E.EMP_NUM
+		                 INNER JOIN APNTM A
+		                         ON E.EMP_NUM = A.EMP_NUM
+		                 INNER JOIN DEPT D
+		                         ON A.DEPT_NUM = D.DEPT_NUM
+		                 INNER JOIN RANK R
+		                         ON A.RANK_NUM = R.RANK_NUM
+		WHERE QC.DEL_CHECK IS NULL
+		AND Q.QTN_NUM = #{qtnNum}
+		ORDER BY QC.CMNT_NUM DESC
+	</select>
+	
+	<!-- 견적 의견개수 -->
+	<select id="qtnOpListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM QTN_CMNT
+		WHERE DEL_CHECK IS NULL
+		AND QTN_NUM = #{qtnNum}
+	</select>
+	
+	<!-- 견적 의견등록 -->
+	<insert id="qtnOpContAdd" parameterType="hashmap">
+		INSERT INTO QTN_CMNT(CMNT_NUM, QTN_NUM, EMP_NUM, CONT)
+		VALUES(QTN_CMNT_SEQ.NEXTVAL, #{qtnNum}, #{sEmpNum}, #{tacont})
+	</insert>
+	
+	<!-- 견적 의견삭제 -->
+	<update id="qtnOpContUpdate" parameterType="hashmap">
+		UPDATE QTN_CMNT SET DEL_CHECK = SYSDATE
+		WHERE CMNT_NUM = #{cmntNum}
+	</update>
+	
+	<!-- 견적 지난견적서 개수 -->
+	<select id="PQListCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM QTN
+		WHERE SALES_NUM = #{salesNum}
+		AND QTN_NUM NOT IN #{qtnNum}
+	</select>
+	
+	<!-- 견적 지난견적서 목록 -->
+	<select id="getQtnPQList" parameterType="hashmap" resultType="hashmap">
+		SELECT Q.QTN_NUM, Q.QTN_NAME, TO_CHAR(Q.QTN_DATE, 'YYYY/MM/DD AMFM HH:MI') AS QTN_DATE,
+		       DECODE(M.MD_TYPE_NUM, 0, '개인사업', 1, '법인사업', 2, '공공사업') AS MD_TYPE_NUM, M.MD_NAME, M.INTRST_RATE, M.LIMIT_AMNT
+		FROM QTN Q INNER JOIN MD M
+		                   ON Q.MD_NUM = M.MD_NUM
+		           INNER JOIN SALES S
+		                   ON S.SALES_NUM = Q.SALES_NUM
+		WHERE S.SALES_NUM = #{salesNum}
+		AND Q.QTN_NUM NOT IN #{qtnNum}
+		AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = '3'
+	</select>
+	
+	
 	
 </mapper>
 

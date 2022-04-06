@@ -96,7 +96,7 @@ public class SalesMngController {
 	@RequestMapping(value= "/sales1SalesChncReg")
 	public ModelAndView sales1SalesChncReg(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
-		params.put("leadNum", "12"); // 나중에 지우기...
+	//	params.put("leadNum", "12"); // 나중에 지우기...
 		
 		// 영업시작일 넣어주기
 		Date tday = new Date();
@@ -225,6 +225,7 @@ public class SalesMngController {
 				iCommonService.updateData("salesMng.sales2UpdateLoan", params); // 제안 대출 상세정보tab 수정
 				iCommonService.updateData("salesMng.sales2UpdateClntCmpny", params); // 제안 고객사 상세정보tab 수정
 				iCommonService.updateData("salesMng.sales2UpdateDtl", params); // 제안 상세정보tab 수정
+				iCommonService.updateData("salesMng.sales2UpdateDtlInfoAtt", params); // 제안 상세정보 첨부파일tab
 				break;
 			case "failure" :
 				iCommonService.updateData("salesMng.sales2Failure", params);
@@ -466,9 +467,14 @@ public class SalesMngController {
 			case "insert" :
 				iCommonService.insertData("salesMng.sales3QtnAdd", params); // 견적 
 				iCommonService.insertData("salesMng.sales3QtnAttAdd", params); // 견적 첨부파일
+//				iCommonService.getDataList("salesMng.getQtnPQList", params); // 지난견적서
 				iCommonService.updateData("salesMng.sales2to3", params); // 진행 단계 전환
 				break;
 			case "update" :
+				iCommonService.updateData("salesMng.sales1UpdateSales", params); // 제안 담당자 수정
+				break;
+			case "failure" :
+				iCommonService.updateData("salesMng.sales3Failure", params);
 				break;
 			}
 			modelMap.put("res", "success");
@@ -481,7 +487,7 @@ public class SalesMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	// sales3QtnCont : 제안 상세보기
+	// sales3QtnCont : 견적 상세보기
 	@RequestMapping(value = "/sales3QtnCont")
 	public ModelAndView sales3QtnCont(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
@@ -500,6 +506,72 @@ public class SalesMngController {
 		return mav;
 	}
 	
+	//견적 의견 등록,삭제 비동기
+	@RequestMapping(value = "/qtnBotActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String qtnBotActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			switch(gbn) {
+			case "insert" :
+				iCommonService.insertData("salesMng.qtnOpContAdd", params);
+				break;
+			case "update" :
+				iCommonService.updateData("salesMng.qtnOpContUpdate", params);
+				break;
+			}
+			modelMap.put("res", "success");
+		} catch (Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "faild");
+		}
+		
+		return mapper.writeValueAsString(modelMap);
+		
+	}
+	
+	// 견적 의견 목록 리스트
+	@RequestMapping(value = "/qtnOpBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String qtnOpBotListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		int opListCnt = iCommonService.getIntData("salesMng.qtnOpListCnt", params);
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("salesMng.getQtnOpList", params);
+		
+		modelMap.put("list", list);
+		modelMap.put("opListCnt", opListCnt);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
+	
+	// 견적 - 지난견적서 목록 리스트
+	@RequestMapping(value = "/PQListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String PQListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		int PQListCnt = iCommonService.getIntData("salesMng.PQListCnt", params);
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("salesMng.getQtnPQList", params);
+		
+		modelMap.put("list", list);
+		modelMap.put("PQListCnt", PQListCnt);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 }
 
 

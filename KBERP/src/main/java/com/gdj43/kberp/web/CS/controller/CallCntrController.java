@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gdj43.kberp.common.bean.PagingBean;
+import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.CS.service.ICallCntrService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 
@@ -128,8 +130,53 @@ public class CallCntrController {
 			
 			return mapper.writeValueAsString(modelMap); 
 		}
+	
+	// 대응가이드 리스트
+	
+	@Autowired
+	public IPagingService ips;
+	
+	@RequestMapping(value = "rspndList/")
+	public ModelAndView rspndList(@RequestParam HashMap<String, String> params, 
+			  						ModelAndView mav) {
+		
+		if(params.get("page") == null || params.get("page") == "") {
+			params.put("page", "1");
+		}
+		
+		mav.addObject("page", params.get("page"));
+		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/rspndListAjax", method = RequestMethod.POST, 
+			produces = "text/json;charset=UTF-8")
+		@ResponseBody
+		public String rspndListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+			ObjectMapper mapper = new ObjectMapper();
+			
+			Map<String, Object> modelMap = new HashMap<String, Object>();
+			
+			// 총 게시글 수
+			int cnt = iCommonService.getIntData("in.getRspndCnt", params);
+			
+			// 페이징 계산
+			PagingBean pb = ips.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
+			
+			params.put("startCount", Integer.toString(pb.getStartCount()));
+			params.put("endCount", Integer.toString(pb.getEndCount()));
+			
+			List<HashMap<String, String>> list = iCommonService.getDataList("CC.getRspndList", params);
+			
+			modelMap.put("list", list);
+			modelMap.put("pb", pb);
+			
+			return mapper.writeValueAsString(modelMap); 
+		}
 		
 	}
+
+	
 	
 	
 

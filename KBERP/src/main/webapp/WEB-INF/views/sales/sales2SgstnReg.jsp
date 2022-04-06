@@ -781,14 +781,14 @@ function uploadName(e) {
 						</table>
 						<br /> <br />
 						<!-- 첨부자료  -->
-						<c:set var="fileLength" value="${fn:length(bsns.ATT_FILE_NAME)}"></c:set>
-						<c:set var="fileName" value="${fn:substring(bsns.ATT_FILE_NAME, 20, fileLength)}"></c:set>
+						<c:set var="salesFileLength" value="${fn:length(bsns.ATT_FILE_NAME)}"></c:set>
+						<c:set var="salesFileName" value="${fn:substring(bsns.ATT_FILE_NAME, 20, salesFileLength)}"></c:set>
 						<div class="spc">
 							<div class="adc_txt">
 								첨부파일
 							</div>
 							<div class="cntrct_box_in">
-								<a href="resources/upload/${bsns.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
+								<a href="resources/upload/${bsns.ATT_FILE_NAME}"  download="${salesFileName}">${salesFileName}</a>
 							</div>
 						</div>
 					</div>
