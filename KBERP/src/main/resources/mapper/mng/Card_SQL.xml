@@ -68,10 +68,8 @@
 		VALUES (CARD_SEQ.NEXTVAL,#{card_co},#{card_name},#{card_sep},#{card_code},#{use_num},#{issue_dt},#{end_dt},sysdate)
 	</insert>
 	 <select id="updateCard" resultType="hashmap" parameterType="hashmap">
-	  UPDATE CARD AS A, CARD_USER AS B
-	  		 SET A.EMP_NUM = #{use_num},A.CARD_CMPNY_NUM =#{card_co} , A.CARD_NAME =#{card_name} ,A.CARD_NUM =#{card_code} ,
-	  		 A.ISSUE_DT =#{issue_dt} ,A.END_DT = #{end_dt}, A.DSCRD_DT =#{del_dt},B.EMP_NUM=#{card_user},
-	  		 B.USE_START_DT=#{use_start_dt},B.USE_END_DT=#{use_end_dt}  
-	 WHERE A.MNG_NUM =#{no} AND B.MNG_NUM =#{no}
+	  UPDATE CARD
+	     SET ISSUE_DT =#{issue_dt} ,END_DT = #{end_dt}
+	 WHERE MNG_NUM =#{no}
 	 </select>
 </mapper>

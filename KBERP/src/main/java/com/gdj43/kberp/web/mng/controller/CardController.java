@@ -82,11 +82,8 @@ public class CardController {
 					
 					HashMap<String, String> data = ics.getData("card.cardView", params);
 					
-					System.out.println("===============");
-					System.out.println(data);
+					
 					mav.addObject("data", data);
-					System.out.println("--------------");
-					System.out.println(data);
 					mav.setViewName("mng/cardUpdate");
 					
 					return mav;
