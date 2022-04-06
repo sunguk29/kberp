@@ -251,7 +251,7 @@ $(document).ready(function() {
 	        	 success : function(res) {
 	        		 if(res.res == "success"){	        			       	
 	        			 reloadList();
-	        			 
+	        			 $("#cmnt_cont").val("");
 	        		 } else{
 	        			 alert("문제가 발생하였습니다.");
 	        		 }
@@ -261,6 +261,8 @@ $(document).ready(function() {
 	   			}
 	     	 });
 		}
+		
+		
 	});
 
 	
