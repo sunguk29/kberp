@@ -491,6 +491,8 @@ $(document).ready(function() {
 		}
 	});
 	
+	$(".salesCont").hide();
+	
 	$("#sales_btn").on("click", "#salesContBtn_h", function() {
 		$(".salesCont").hide();
 		html = "<div class=\"up_btn\" id=\"salesContBtn_s\"></div>";
@@ -544,7 +546,7 @@ function uploadName(e) {
 					<!-- 시작 -->
 
 					<div class="bot_title">
-						<h3>영업기회<span id="sales_btn"><div class="drop_btn" id="salesContBtn_h"></div></span></h3>
+						<h3>영업기회<span id="sales_btn"><div class="up_btn" id="salesContBtn_s"></div></span></h3>
 					</div>
 					<div class="salesCont">
 					<!-- 영업기회 -->
