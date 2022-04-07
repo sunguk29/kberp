@@ -72,13 +72,14 @@ $(document).ready(function() {
 	});
 	
 	$("#rgstrtnBtn").on("click", function() {
+		
 		if(checkEmpty("#assetNum")) {
 			alert("자산코드를 입력하세요.");
 			$("#assetNum").focus();
 		}  else if(checkEmpty("#qunty")) {
 			alert("수량을 선택하세요.");
 			$("#qunty").focus();
-		} else if(checkEmpty("#useEmpName")) {
+		}  else if(checkEmpty("#useEmpName")) {
 			alert("사용자를 선택하세요.");
 			$("#useEmpName").focus();
 		} else if(checkEmpty("#tktdt")) {
@@ -277,7 +278,9 @@ $("#srchAsset").on("click", function() {
 					$("#assetNum").val($(this).attr("assetNum"));
 					$("#assetName").val($(this).attr("assetName"));
 					$("#quntynum").val($(this).attr("quntynum"));
+					$("#quntynuma").val($(this).attr("quntynuma"));
 					$("#crntQunty").val($(this).attr("crntQunty"));
+					/* $("#quntynum").attr("disabled",true) */
 					closePopup(1);
 				});
 			},
@@ -409,7 +412,7 @@ function drawList1(list) {
 	for(data of list) {
 		html += "<tr>";
 		html += "<td>" + data.ASSET_NUM + "</td>";
-		html += "<td class=\"board_table_hover\" id=\"useAssetName\" assetNum=\"" + data.ASSET_NUM + "\" assetName=\"" + data.ASSET_NAME + "\" quntynum=\"" + data.QUNTY_DVSN_NUM + "\"  crntQunty=\"" + data.QUNTY + "\">" + data.ASSET_NAME + "</td>";
+		html += "<td class=\"board_table_hover\" id=\"useAssetName\" assetNum=\"" + data.ASSET_NUM + "\" assetName=\"" + data.ASSET_NAME + "\" quntynum=\"" + data.QUNTY_DVSN_NUM + "\" quntynuma=\"" + data.QUNTY_DVSN_NUM + "\"  crntQunty=\"" + data.QUNTY + "\">" + data.ASSET_NAME + "</td>";
 		html += "<td>" + data.QUNTY + "</td>";
 		html += "</tr>";
 	}
@@ -462,6 +465,10 @@ function checkEmpty(sel) {
 			<input type="hidden" name="rgstrtnEmpNum" value="${sEmpNum}"/>
 			<input type="hidden" name="useEmpNum" id="useEmpNum" />
 			<input type="hidden" name="assetNum" id="assetNum" />
+			<input type="hidden" name="quntynuma" id="quntynuma" />
+			<input type="hidden" id="top" name="top" value="${param.top}" />
+			<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+			<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 				<div class="cont_area">
 				<table class="intrnl_cost_admnstrtn_new">
 					<tbody>
@@ -480,10 +487,10 @@ function checkEmpty(sel) {
 								<input style=width:50px; type="text" id="qunty" name="qunty" />			
 							</td>
 							<td>
-								<select id="quntynum" name="quntynum">
-								<option value="0" <c:if test="${data.QUNTY_DVSN_NUM eq 0}">selected</c:if>>ea</option>
-								<option value="1" <c:if test="${data.QUNTY_DVSN_NUM eq 1}">selected</c:if>>set</option>
-								<option value="2" <c:if test="${data.QUNTY_DVSN_NUM eq 2}">selected</c:if>>box</option>
+								<select id="quntynum" name="quntynum" disabled="disabled">
+								<option value="0">ea</option>
+								<option value="1">set</option>
+								<option value="2">box</option>
 
 								</select>		
 							</td>

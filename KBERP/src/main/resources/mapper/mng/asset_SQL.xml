@@ -338,8 +338,8 @@
 		SELECT ASSET_NUM, ASSET_NAME, QUNTY, QUNTY_DVSN_NUM
 		FROM ASSET 
 		WHERE ASSET_TYPE_NUM = 1 AND QUNTY > 0 AND DSCRD_DATE IS NULL
-		<if test="searchTxt != null and searchTxt != ''">
-					AND ASSET_NAME LIKE '%' || #{searchTxt} || '%'	
+		<if test="assetSrchTxt != null and assetSrchTxt != ''">
+					AND ASSET_NAME LIKE '%' || #{assetSrchTxt} || '%'	
 		</if>
 	</select>
 	
@@ -347,14 +347,14 @@
 		SELECT COUNT(*) AS CNT
 		FROM ASSET 
 		WHERE ASSET_TYPE_NUM = 1 AND QUNTY > 0 AND DSCRD_DATE IS NULL
-		<if test="searchTxt != null and searchTxt != ''">
-					AND ASSET_NAME LIKE '%' || #{searchTxt} || '%'	
+		<if test="assetSrchTxt != null and assetSrchTxt != ''">
+					AND ASSET_NAME LIKE '%' || #{assetSrchTxt} || '%'	
 		</if>
 	</select>
 	
 	<insert id="assetTktRgstrtn" parameterType="hashmap">
 		INSERT INTO ASSET_TKT(TKT_NUM, RGSTRTN_EMP_NUM, ASSET_NUM, TKT_EMP_NUM, RMRKS, TKT_DATE, QUNTY, QUNTY_DVSN_NUM)
-		VALUES(ASSET_TKT_SEQ.NEXTVAL, #{rgstrtnEmpNum}, #{assetNum}, #{useEmpNum}, #{rmrks}, #{tktdt}, #{qunty}, #{quntynum})
+		VALUES(ASSET_TKT_SEQ.NEXTVAL, #{rgstrtnEmpNum}, #{assetNum}, #{useEmpNum}, #{rmrks}, #{tktdt}, #{qunty}, #{quntynuma})
 	</insert>
 	
 	<update id="assetTktCntUpdate" parameterType="hashmap">

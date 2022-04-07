@@ -121,6 +121,7 @@ public class AssetController {
 			ics.insertData("asset.assetRntlRgstrtn",params);
 			break;
 		case "insertTkt":
+			System.out.println(params);
 			ics.insertData("asset.assetTktRgstrtn",params);
 			ics.updateData("asset.assetTktCntUpdate", params);
 			break;
