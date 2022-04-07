@@ -26,8 +26,26 @@
 	SELECT APRVL_RFRNC_SEQ.NEXTVAL
 	FROM DUAL
 </select>
+<insert id="aprvlAdd" parameterType="hashmap">
+	INSERT INTO APRVL (APRVL_NUM, EMP_NUM, TITLE, CONT)
+	VALUES(#{aprvl_num}, #{emp_num}, #{title}, #{cont})
+</insert>
+<insert id="aprvlerAdd" parameterType="hashmap">
+	INSERT INTO APRVL_LINE (APRVL_NUM, EMP_NUM, APRVL_TURN)
+	VALUES(#{aprvl_num}, #{aprvler}, #{aprvl_turn}) 
+</insert>
+<insert id="rfrncAdd" parameterType="hashmap">
+	INSERT INTO APRVL_RFRNC (APRVL_NUM, EMP_NUM)
+	VALUES(#{aprvl_num}, #{rfrnc}) 
+</insert>
 
-
-
+<select id = "aprvlResult" resultType="String">
+	SELECT  DISTINCT CASE WHEN APRVL_STS = 0 THEN '대기'
+        				  WHEN APRVL_STS = 1 THEN '승인'
+        				  WHEN APRVL_STS = 2 THEN '거부'
+    END AS  APRVL_STS
+	FROM APRVL_LINE
+	WHERE APRVL_NUM = #{aprvl_num} 
+</select>
 
 </mapper>

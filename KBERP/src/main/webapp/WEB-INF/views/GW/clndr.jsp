@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -1271,6 +1270,7 @@ $(document).ready(function() {
 });
 
 </script>
+
 </head>
 <body>
 	<!-- top & left -->
@@ -1288,9 +1288,9 @@ $(document).ready(function() {
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
-				<input type="hidden" id="clndrDvsn" value="month">
 		<div class="cont_area">
-			<!-- 여기부터 쓰면 됨 -->			
+			<!-- 여기부터 쓰면 됨 -->
+			<input type="hidden" id="clndrDvsn" value="month">
 			<input type="button" value="일정 등록" id="new_schdl">
 			<form action="#" id="userForm" method="post">
 				<input type="hidden" name="emp_num" value="${sEmpNum}">
@@ -1313,7 +1313,6 @@ $(document).ready(function() {
 		<div class="schdl_ctgry">
 			<h5 class="side_bar_title">범주</h5>
 			 <form action="#" id="ctgryForm" method="post">
-				<input type="hidden" name="clndrDate" value="">
 				<input type="checkbox" class="ctgry_box" id="bsns" name="bsns" value="1"><label for="bsns" class="type_label">업무</label><div id="bsns_color"></div><br>
 				<input type="checkbox" class="ctgry_box" id="leave" name="leave" value="2"><label for="leave" class="type_label">휴가</label><div id="leave_color"></div><br>
 				<input type="checkbox" class="ctgry_box" id="edctn" name="edctn" value="3"><label for="edctn" class="type_label">교육</label><div id="edctn_color"></div><br>
@@ -1331,7 +1330,6 @@ $(document).ready(function() {
 				<input type="hidden" class="h_ctgry" id="h_bsns_trip" name="bsns_trip" value="6"> 
 				<input type="hidden" class="h_ctgry" id="h_devel" name="devel" value="7"> 
 			 </form>
-			
 		</div>
 		
 		<div class="today">		

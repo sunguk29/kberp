@@ -1,5 +1,6 @@
 package com.gdj43.kberp.web.GW.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,17 +18,20 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.util.Utils;
+import com.gdj43.kberp.web.GW.service.IAprvlService;
 import com.gdj43.kberp.web.GW.service.IClndrService;
+import com.gdj43.kberp.web.common.dao.ICommonDao;
 
 @Controller
 public class ClndrController {
 	@Autowired
 	public IClndrService iClndrService;
+	@Autowired
+	public IAprvlService iAprvlService;
 	
 	
 	@RequestMapping(value = "/clndr")
-	public ModelAndView clndr(ModelAndView mav) {
-		
+	public ModelAndView clndr(ModelAndView mav) throws Throwable {
 		mav.setViewName("GW/clndr");
 		
 		return mav;
