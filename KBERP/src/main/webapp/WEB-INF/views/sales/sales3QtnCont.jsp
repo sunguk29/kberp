@@ -455,16 +455,14 @@ $(document).ready(function() {
 			dataType : "json",
 			data : params,
 			success : function(res) {
-				location.href = "sales3QtnCont";
+				$("#actionForm").attr("action", "sales3QtnReg");
+				$("#actionForm").submit();
 			},
 			error : function(req) {
 				console.log(req.responseText);
 			}
 		});
-		
-		
-		$("#actionForm").attr("action", "sales3QtnReg");
-		$("#actionForm").submit();
+
 	});
 	
 	// 다음 단계로 전환하기 버튼 : 계약 등록 페이지

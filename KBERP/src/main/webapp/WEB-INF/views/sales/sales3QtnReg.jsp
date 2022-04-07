@@ -904,10 +904,22 @@ $(document).ready(function() {
 			buttons : [ {
 				name : "확인",
 				func : function() {
-					$("#listForm").attr("action", "salesList");
-					$("#listForm").submit();
-					console.log("One!");
-					closePopup();
+					var params = $("#listForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "qtnBackAjax",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							closePopup();
+							$("#listForm").attr("action", "salesList");
+							$("#listForm").submit();
+						},
+						error : function(req) {
+							console.log(req.responseText);
+						}
+					});
 				}
 			}, {
 				name : "취소"
@@ -964,8 +976,9 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
-											location.href = "salesList";
-											console.log("성공");
+											closePopup();
+											$("#listForm").attr("action", "sales3QtnCont");
+											$("#listForm").submit();
 										} else {
 											alert("등록중 문제가 발생하였습니다.");
 										}
@@ -1570,8 +1583,6 @@ $(document).ready(function() {
 		$("#sgstn_btn").html(html);
 	});
 	
-	$(".qtnDiv").hide();
-	
  	/* 지난 견적서 리스트 */	
  	reloadSgstnList();
 	
@@ -1788,6 +1799,7 @@ function test(t) {
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
 		<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
+		<input type="hidden" name="qtnNum" value="${param.qtnNum}" /> <!-- 견적 번호 -->
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
