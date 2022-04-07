@@ -449,7 +449,7 @@ hr { /* 구분선 */
 .bot_title { 
 	font-size: 11pt;
 }
-.bx { /* 스크롤때문에 div 박스 추가 */
+.qBox { /* 스크롤때문에 div 박스 추가 */
 	width: 860px;
 	height: 305px;
 	margin-left: 47.5px;
@@ -853,6 +853,39 @@ pre{
 	width: 100%;
 	height: 100%;
 }
+.PQ_title {
+	position: relative;
+	font-size: 11pt;
+}
+.drop_btn_bot {
+	position: absolute;
+	top: 7px;
+	left: 909px;
+	width: 18px;
+	height: 18px;
+	background-image: url("resources/images/sales/downarrow.png");
+	background-size: 18px 18px;
+	float: right;
+}
+.drop_btn_bot:hover {
+	cursor: pointer;
+}
+.qtnBox {
+    width: 830px;
+    height: 60px;
+    font-size: 10pt;
+    border: 1px solid gray;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    margin: 5px;
+    background-color: #F2F2F2;
+}
+pre {
+	font-family: "맑은 고딕";
+    margin-top: 3px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -1233,7 +1266,7 @@ $(document).ready(function() {
 											$("#intrst_pymnt").val(data.INTRST_PYMNT_MTHD_NUM).prop("selected", this.selected);
 											$("#prncpl_pymnt").val(data.PRNCPL_PYMNT_MTHD_NUM).prop("selected", this.selected);
 											$("#intrstRate").val(data.INTRST_RATE);
-											console.log("kk");
+											$("#loanPrd").val(data.LOAN_PRD).prop("selected", this.selected);
 											closePopup(2);
 										}
 									}, {
@@ -1489,8 +1522,7 @@ $(document).ready(function() {
 								$("#intrst_pymnt").val(data.INTRST_PYMNT_MTHD_NUM).prop("selected", this.selected);
 								$("#prncpl_pymnt").val(data.PRNCPL_PYMNT_MTHD_NUM).prop("selected", this.selected);
 								$("#intrstRate").val(data.INTRST_RATE);
-								$("#loanPrd").val(data.LOAN_PRD);
-								console.log("kkkkk");
+								$("#loanPrd").val(data.LOAN_PRD).prop("selected", this.selected);
 								closePopup();
 							}
 						}, {
@@ -1509,13 +1541,42 @@ $(document).ready(function() {
 		
 	});
 	
+	
+	$(".salesCont").hide();
+	$(".sgstnCont").hide();
+	// 영업기회 탭 접기펼치기
+	$("#sales_btn").on("click", "#salesContBtn_h", function() {
+		$(".salesCont").hide();
+		html = "<div class=\"up_btn\" id=\"salesContBtn_s\"></div>";
+		$("#sales_btn").html(html);
+	});
+	
+	$("#sales_btn").on("click", "#salesContBtn_s", function() {
+		$(".salesCont").show();
+		html = "<div class=\"drop_btn\" id=\"salesContBtn_h\"></div>";
+		$("#sales_btn").html(html);
+	});
+	
+	// 제안 탭 접기펼치기
+	$("#sgstn_btn").on("click", "#sgstnContBtn_h", function() {
+		$(".sgstnCont").hide();
+		html = "<div class=\"up_btn\" id=\"sgstnContBtn_s\"></div>";
+		$("#sgstn_btn").html(html);
+	});
+	
+	$("#sgstn_btn").on("click", "#sgstnContBtn_s", function() {
+		$(".sgstnCont").show();
+		html = "<div class=\"drop_btn\" id=\"sgstnContBtn_h\"></div>";
+		$("#sgstn_btn").html(html);
+	});
+	
+	$(".qtnDiv").hide();
+	
  	/* 지난 견적서 리스트 */
- 	if(${param.qtnNum ne ""}) {
+ 	if(${param.qtnNum ne null} && ${param.qtnNum ne ""}) {
+ 		console.log('${param.qtnNum}');
  		$(".qtnDiv").show();	
  		reloadSgstnList();
- 	} else {
- 		console.log("?");
- 		$(".qtnDiv").hide();
  	}
 	
 	
@@ -1647,7 +1708,7 @@ function reloadSgstnList() {
 		url : "PQListAjax",
 		dataType : "json",
 		data : params,
-		seccess : function(res) {
+		success : function(res) {
 			drawPQCnt(res.PQListCnt);
 			drawPQList(res.list);
 		},
@@ -1661,7 +1722,7 @@ function reloadSgstnList() {
 function drawPQCnt(PQListCnt) {
 	var html = "";
 	
-	html = "<h3>지난 견적서(" + PQListCnt + ")</h3><div class=\"drop_btn\"></div>";
+	html = "<h3>지난 견적서(" + PQListCnt + ")</h3><div class=\"drop_btn_bot\"></div>";
 	
 	$(".PQ_title").html(html);
 }
@@ -1672,11 +1733,11 @@ function drawPQList(list) {
 	
 	for(var data of list) {
 		html +="<div class=\"qtnBox\">";
-		html +="<div class=\"name\">" + data.QTN_NUM + " " + data.QTN_NAME + " (" + data.QTN_DATE +")</div>";
-		html +="<div class=\"txtOp\"><pre>" + dat.MD_TYPE_NUM + "  " + data.MD_NAME + " " + data.INTRST_RATE + "%    " + data.LIMIT_AMNT + "원</pre></div>";
+		html +="<div class=\"name\">" + data.QTN_NAME + " (" + data.QTN_DATE +")</div>";
+		html +="<div class=\"txtOp\"><pre>" + data.MD_TYPE_NUM + "  " + data.MD_NAME + " " + data.INTRST_RATE + "%    " + data.LIMIT_AMNT + "원</pre></div>";
 		html +="</div>";
 	}
-	$(".bx").html(html);
+	$(".qBox").html(html);
 }
 
 
@@ -1755,11 +1816,9 @@ function test(t) {
 				<div class="bodyWrap">
 					<!-- 시작 -->
 					<div class="bot_title">
-						<h3>
-							영업기회
-							<div class="drop_btn"></div>
-						</h3>
+						<h3>영업기회<span id="sales_btn"><div class="up_btn" id="salesContBtn_s"></div></span></h3>
 					</div>
+					<div class="salesCont">
 					<!-- 영업기회 -->
 						<div class="page_cont_title_text">기본정보</div>
 						<hr class="hr_width">
@@ -2005,17 +2064,15 @@ function test(t) {
 							</div>
 						</div>
 						<!-- 끝 -->
-
+					</div>
 					<hr class="hr_bot" color="#4B94F2" width="925px">
 					
 						<!-- ******************* 제안 시작 ******************* -->
 
 						<div class="bot_title">
-							<h3>
-								제안
-								<div class="drop_btn"></div>
-							</h3>
+							<h3>제안<span id="sgstn_btn"><div class="up_btn" id="sgstnContBtn_s"></div></span></h3>
 						</div>
+						<div class="sgstnCont">
 						<div class="page_cont_title_text">대출 상세정보</div>
 						<hr class="hr_width">
 						<table class="detailList">
@@ -2196,13 +2253,13 @@ function test(t) {
 								<a href="resources/upload/${bsns.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
 							</div>
 						</div>
+						</div>
 						
+<!-- ************************************************ 견적 시작 ************************************************ -->
 						<hr class="hr_bot" color="#4B94F2" width="925px">
-						
 				<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
 					<input type="hidden" id= "mdNum" name="mdNum" />
-<!-- ************************************************ 견적 시작 ************************************************ -->
 					<div class="bot_title"><h3>견적<div class="drop_btn"></div></h3></div>
 					 <hr class="hr_bot" color="white" width="925px"> 
 					<div class="hr_bot"></div>
@@ -2362,7 +2419,7 @@ function test(t) {
 					<div class="mgtop"></div>
 					<div class="PQ_title"></div>
 					<hr color="#F2B705" width="925px">
-					<div class="bx"></div>
+					<div class="qBox"></div>
 					<!-- ********* 견적 끝 ********* -->
 				</form>
 				</div>

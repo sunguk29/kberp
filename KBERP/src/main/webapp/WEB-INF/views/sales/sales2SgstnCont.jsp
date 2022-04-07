@@ -525,7 +525,7 @@ $(document).ready(function() {
 		});
 		
 	});
-	
+	$(".salesCont").hide();
 	$("#sales_btn").on("click", "#salesContBtn_h", function() {
 		$(".salesCont").hide();
 		html = "<div class=\"up_btn\" id=\"salesContBtn_s\"></div>";
@@ -628,7 +628,7 @@ function drawOpList(list) {
 						<input type="text" id="salesNum" name="salesNum" value="${data.SALES_NUM}" />
 				
 					<div class="bot_title">
-						<h3>영업기회<span id="sales_btn"><div class="drop_btn" id="salesContBtn_h"></div></span></h3>
+						<h3>영업기회<span id="sales_btn"><div class="up_btn" id="salesContBtn_s"></div></span></h3>
 					</div>
 				<div class="salesCont">
 					<div class="page_cont_title_text">기본정보</div>
