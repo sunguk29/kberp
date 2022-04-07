@@ -1572,12 +1572,8 @@ $(document).ready(function() {
 	
 	$(".qtnDiv").hide();
 	
- 	/* 지난 견적서 리스트 */
- 	if(${param.qtnNum ne null} && ${param.qtnNum ne ""}) {
- 		console.log('${param.qtnNum}');
- 		$(".qtnDiv").show();	
- 		reloadSgstnList();
- 	}
+ 	/* 지난 견적서 리스트 */	
+ 	reloadSgstnList();
 	
 	
 }); // JS end
@@ -2414,7 +2410,7 @@ function test(t) {
 				<div class="qtnDiv">
 				<form action="#" id="pastQtnActionForm" method="post">
 					<input type="hidden" name="salesNum" value="${param.salesNum}" />
-					<input type="hidden" name="qtnNum" value="${param.qtnNum}" />
+					<input type="hidden" name="qtnNum" value="${param.qtnStsNum}" />
 					<!-- 지난 견적서 -->
 					<div class="mgtop"></div>
 					<div class="PQ_title"></div>

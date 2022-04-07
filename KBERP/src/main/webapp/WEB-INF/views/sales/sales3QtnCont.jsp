@@ -447,6 +447,22 @@ $(document).ready(function() {
 	
 	// 견적서 추가(수정) 버튼
 	$("#updateBtn").on("click", function() {
+		var params = $("#actionForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "qtnAddAjax",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				location.href = "sales3QtnCont";
+			},
+			error : function(req) {
+				console.log(req.responseText);
+			}
+		});
+		
+		
 		$("#actionForm").attr("action", "sales3QtnReg");
 		$("#actionForm").submit();
 	});
@@ -746,7 +762,7 @@ function drawPQList(list) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
-	<input type="hidden" id="salesNum" name="salesNum" value="${data.SALES_NUM}" /> <!-- 영업번호 -->
+	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업번호 -->
 	<input type="hidden" name="qtnNum" value="${param.qtnNum}" /> <!-- 견적 번호 -->
 </form>
 	<!-- top & left -->
