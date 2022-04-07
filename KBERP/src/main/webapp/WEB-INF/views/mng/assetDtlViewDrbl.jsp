@@ -88,11 +88,11 @@ $("#useHstry").on("click", function() {
 			depth : 1,
 			bg : true,
 			width : 450,
-			height : 250,
+			height : 600,
 			title : "사용내역",
 			contents : html,
 			contentsEvent : function() {
-				console.log("@@@@")
+						reloadList();
 				
 				
 				$(".pgn_area").on("click", "div", function() {
@@ -138,6 +138,9 @@ $("#useHstry").on("click", function() {
 			html += "<tr>";
 			html += "<td>" + data.EMP_NAME + "</td>";
 			html += "<td>" + data.START_DATE + "</td>";
+			if(data.END_DATE == null)
+			html +="<td>사용중<td>"
+			else
 			html += "<td>" + data.END_DATE + "</td>";
 			html += "</tr>";
 		}
@@ -197,6 +200,7 @@ $("#useHstry").on("click", function() {
 
 <form action="#" id="hstryForm" method="post">
 	<input type="hidden" name="num" value="${param.num}"/>
+	<input type="hidden" name="page" value="1"/>
 </form>
 <div class="cont_wrap">
 		<div class="page_title_bar">

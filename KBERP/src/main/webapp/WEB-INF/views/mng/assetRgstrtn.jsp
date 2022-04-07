@@ -163,11 +163,11 @@ $("#srchEmp").on("click", function() {
 	});
 	
 	function reloadList() {
-		var params = $("#empASrchForm").serialize();
+		var params = $("#mngmntEmpSrchForm").serialize();
 		
 		$.ajax({
 			type : "post",
-			url : "empASrchAjax", 
+			url : "mngmntEmpSrchAjax", 
 			dataType : "json",
 			data : params, 
 			success : function(res) {
@@ -306,7 +306,7 @@ function drawList(list) {
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			
-			<form action="#" id="empASrchForm" method="post">
+			<form action="#" id="mngmntEmpSrchForm" method="post">
 			<input type="hidden" id="sendSrchTxt" name="sendSrchTxt">
 			<input type="hidden" id="page" name="page" value="1">
 			</form>

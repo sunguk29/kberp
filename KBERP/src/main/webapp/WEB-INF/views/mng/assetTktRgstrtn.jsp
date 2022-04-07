@@ -78,9 +78,9 @@ $(document).ready(function() {
 		}  else if(checkEmpty("#qunty")) {
 			alert("수량을 선택하세요.");
 			$("#qunty").focus();
-		} else if(checkEmpty("#empNum")) {
+		} else if(checkEmpty("#useEmpName")) {
 			alert("사용자를 선택하세요.");
-			$("#empNum").focus();
+			$("#useEmpName").focus();
 		} else if(checkEmpty("#tktdt")) {
 			alert("반출일을 선택하세요.");
 			$("#tktdt").focus();
@@ -121,7 +121,302 @@ $(document).ready(function() {
 			
 		} // else end
 	});
+	
+$("#srchEmp").on("click", function() {
+		
+		var html = "";
+		
+		html += "<div class=\"popup_cont\">";
+		html += "<div class=\"name_srch_wrap\">";
+		html += "<table class=\"name_srch_table\">";
+		html += "<tbody>";
+		html += "<tr>";
+		html += "<td>사원명</td>";
+		html += "<td><input type=\"text\" id=\"empSrchTxt\"></td>";
+		html += "<td><div class=\"cmn_btn\" id=\"empSrchBtn\">검색</div></td>";
+		html += "</tr>";
+		html += "</tbody>";
+		html += "</table>";
+		html += "</div>";
+		html += "<table class=\"board_table\">";
+		html += "<colgroup>";
+		html += "<col width=\"100\">";
+		html += "<col width=\"100\">";
+		html += "<col width=\"100\">";
+		html += "</colgroup>";
+		html += "<thead>";
+		html += "<tr>";
+		html += "<th>부서명</th>";
+		html += "<th>직급</th>";
+		html += "<th>사원명</th>";
+		html += "</tr>";
+		html += "</thead>";
+		html += "<tbody id=\"empAllListTbody\">";
+		html += "</tbody>";
+		html += "</table>";
+		html += "<div class=\"board_bottom\">";
+		html += "<div class=\"pgn_area\" id=\"pgn_area\">";
+		html += "</div>";
+		html += "</div>";
+		html += "</div>";
+		
+		makePopup({
+			depth : 1,
+			bg : true,
+			width : 400,
+			height : 450,
+			title : "사원검색",
+			contents : html,
+			contentsEvent : function() {
+				$("#sendSrchTxt").val("");
+				
+				reloadList();
+				
+				$("#pgn_area").on("click", "div", function() {
+					$("#page").val($(this).attr("page"));
+					reloadList();
+				});
+				
+				$("#empSrchBtn").on("click", function() {
+					$("#sendSrchTxt").val($("#empSrchTxt").val());
+					reloadList();
+				});
+				
+				$("#empSrchTxt").on("keypress", function(event) {
+					if(event.keyCode == 13) {
+						
+						$("#empSrchBtn").click();
+						
+						return false;
+					}
+				});
+				$("#empAllListTbody").on("click", "#empName", function() {
+					$("#useEmpNum").val($(this).attr("useEmpNum"));
+					$("#useEmpName").val($(this).attr("useEmpName"));
+					closePopup(1);
+				});
+			},
+			buttons : {
+				name : "닫기",
+				func:function() {
+					closePopup(1);
+				}
+			}
+		});
+	});	//srchEmp
+	
+$("#srchAsset").on("click", function() {
+		
+		var html = "";
+		
+		html += "<div class=\"popup_cont\">";
+		html += "<div class=\"Asset_srch_wrap\">";
+		html += "<table class=\"Asset_srch_table\">";
+		html += "<tbody>";
+		html += "<tr>";
+		html += "<td>자산명</td>";
+		html += "<td><input type=\"text\" id=\"assetSrchTxt\"></td>";
+		html += "<td><div class=\"cmn_btn\" id=\"assetSrchBtn\">검색</div></td>";
+		html += "</tr>";
+		html += "</tbody>";
+		html += "</table>";
+		html += "</div>";
+		html += "<table class=\"board_table\">";
+		html += "<colgroup>";
+		html += "<col width=\"100\">";
+		html += "<col width=\"100\">";
+		html += "<col width=\"100\">";
+		html += "</colgroup>";
+		html += "<thead>";
+		html += "<tr>";
+		html += "<th>자산번호</th>";
+		html += "<th>자산명</th>";
+		html += "<th>수량</th>";
+		html += "</tr>";
+		html += "</thead>";
+		html += "<tbody id=\"assetListTbody\">";
+		html += "</tbody>";
+		html += "</table>";
+		html += "<div class=\"board_bottom\">";
+		html += "<div class=\"pgn_area\" id=\"pgn_area1\">";
+		html += "</div>";
+		html += "</div>";
+		html += "</div>";
+		
+		makePopup({
+			depth : 1,
+			bg : true,
+			width : 350,
+			height : 450,
+			title : "자산검색",
+			contents : html,
+			contentsEvent : function() {
+				$("#sendSrchTxt1").val("");
+				
+				reloadList1();
+				
+				$("#pgn_area1").on("click", "div", function() {
+					$("#assetSrchForm #page").val($(this).attr("page"));
+					reloadList1();
+				});
+				
+				$("#assetSrchBtn").on("click", function() {
+					$("#assetSrchForm #sendSrchTxt1").val($("#assetSrchTxt").val());
+					reloadList1();
+				});
+				
+				$("#assetSrchForm #assetSrchTxt").on("keypress", function(event) {
+					if(event.keyCode == 13) {
+						
+						$("#assetSrchForm #assetSrchBtn").click();
+						
+						return false;
+					}
+				});
+				$("#assetListTbody").on("click", "#useAssetName", function() {
+					$("#assetNum").val($(this).attr("assetNum"));
+					$("#assetName").val($(this).attr("assetName"));
+					$("#quntynum").val($(this).attr("quntynum"));
+					$("#crntQunty").val($(this).attr("crntQunty"));
+					closePopup(1);
+				});
+			},
+			buttons : {
+				name : "닫기",
+				func:function() {
+					closePopup(1);
+				}
+			}
+		});
+	});	//srchAsset
 });
+
+function reloadList() {
+	var params = $("#allEmpSrchForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "allEmpSrchAjax", 
+		dataType : "json",
+		data : params, 
+		success : function(res) {
+			drawList(res.list);
+			drawPaging(res.pb);
+		},
+		error : function(request, status, error) {
+			console.log(request.responseText);
+		}
+	}); 
+}// 사원검색
+
+function reloadList1() {
+	var params = $("#assetSrchForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "tktAssetSrchAjax", 
+		dataType : "json",
+		data : params, 
+		success : function(res) {
+			drawList1(res.list);
+			drawPaging1(res.pb);
+		},
+		error : function(request, status, error) {
+			console.log(request.responseText);
+		}
+	});
+} // 자산검색
+
+function drawPaging(pb) {
+	var html = "";
+	
+	html += "<div class=\"page_btn page_first\" page=\"1\">first</div>";
+	
+	if($("#page").val() == "1") {
+		html += "<div class=\"page_btn page_prev\" page=1>prev</div>";
+	} else {
+		html += "<div class=\"page_btn page_prev\" page=\"" + ($("#page").val() * 1 - 1) + "\">prev</div>";		
+	}
+	
+	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
+		if($("#page").val() == i) {
+			html += "<div class=\"page_btn_on\" page=\"" + i + "\">" + i + "</div>";
+		} else {
+			html += "<div class=\"page_btn\" page=\"" + i + "\">" + i + "</div>";
+		}
+	}
+	
+	if($("#page").val() == pb.maxPcount) {
+		html += "<div class=\"page_btn page_next\" page=\"" + pb.maxPcount + "\">next</div>";		
+	} else {
+		html += "<div class=\"page_btn page_next\" page=\"" + ($("#page").val() * 1 + 1) + "\">next</div>";				
+	}
+	
+	html += "<div class=\"page_btn page_last\" page=\"" + pb.maxPcount + "\">last</div>";
+	
+	$("#pgn_area").html(html);
+	
+} // 사원 페이징
+
+function drawPaging1(pb) {
+	var html = "";
+	
+	html += "<div class=\"page_btn page_first\" page=\"1\">first</div>";
+	
+	if($("#assetSrchForm #page").val() == "1") {
+		html += "<div class=\"page_btn page_prev\" page=1>prev</div>";
+	} else {
+		html += "<div class=\"page_btn page_prev\" page=\"" + ($("#assetSrchForm #page").val() * 1 - 1) + "\">prev</div>";		
+	}
+	
+	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
+		if($("#assetSrchForm #page").val() == i) {
+			html += "<div class=\"page_btn_on\" page=\"" + i + "\">" + i + "</div>";
+		} else {
+			html += "<div class=\"page_btn\" page=\"" + i + "\">" + i + "</div>";
+		}
+	}
+	
+	if($("#assetSrchForm #page").val() == pb.maxPcount) {
+		html += "<div class=\"page_btn page_next\" page=\"" + pb.maxPcount + "\">next</div>";		
+	} else {
+		html += "<div class=\"page_btn page_next\" page=\"" + ($("#assetSrchForm #page").val() * 1 + 1) + "\">next</div>";				
+	}
+	
+	html += "<div class=\"page_btn page_last\" page=\"" + pb.maxPcount + "\">last</div>";
+	
+	$("#pgn_area1").html(html);
+	
+} // 자산 페이징
+
+function drawList(list) {
+	var html = "";
+	
+	for(data of list) {
+		html += "<tr>";
+		html += "<td>" + data.DEPT_NAME + "</td>";
+		html += "<td>" + data.RANK_NAME + "</td>";
+		html += "<td class=\"board_table_hover\" id=\"empName\" useEmpNum=\"" + data.EMP_NUM + "\" useEmpName=\"" + data.EMP_NAME + "\">" + data.EMP_NAME + "</td>";
+		html += "</tr>";
+	}
+	
+	$("#empAllListTbody").html(html);
+} // 사원 목록
+
+function drawList1(list) {
+	var html = "";
+	
+	for(data of list) {
+		html += "<tr>";
+		html += "<td>" + data.ASSET_NUM + "</td>";
+		html += "<td class=\"board_table_hover\" id=\"useAssetName\" assetNum=\"" + data.ASSET_NUM + "\" assetName=\"" + data.ASSET_NAME + "\" quntynum=\"" + data.QUNTY_DVSN_NUM + "\"  crntQunty=\"" + data.QUNTY + "\">" + data.ASSET_NAME + "</td>";
+		html += "<td>" + data.QUNTY + "</td>";
+		html += "</tr>";
+	}
+	
+	$("#assetListTbody").html(html);
+} // 자산 목록
+
 
 function checkEmpty(sel) {
 	if($.trim($(sel).val()) == "") {
@@ -153,30 +448,51 @@ function checkEmpty(sel) {
 		<div class="page_title_bar">
 			<div class="page_title_text">자산반출 등록</div>
 		</div>
-			<form action="#" id="rgstrtnForm" method="post" >
+		<form action="#" id="allEmpSrchForm" method="post">
+			<input type="hidden" id="sendSrchTxt" name="sendSrchTxt">
+			<input type="hidden" id="page" name="page" value="1">
+		</form>
+		
+		<form action="#" id="assetSrchForm" method="post">
+			<input type="hidden" id="sendSrchTxt1" name="sendSrchTxt1">
+			<input type="hidden" id="page" name="page" value="1">
+		</form>
+		
+		<form action="#" id="rgstrtnForm" method="post" >
 			<input type="hidden" name="rgstrtnEmpNum" value="${sEmpNum}"/>
+			<input type="hidden" name="useEmpNum" id="useEmpNum" />
+			<input type="hidden" name="assetNum" id="assetNum" />
 				<div class="cont_area">
 				<table class="intrnl_cost_admnstrtn_new">
 					<tbody>
 						<tr class="sixth_row">
-							<td>자산코드</td>
-							<td>
-								<input style=width:80px; type="text" id="assetNum" name="assetNum" />
-							</td>
 							<td>자산명</td>
 							<td>
-								<input style=width:80px; type="text" />
+								<input style=width:80px; type="text" id="assetName" name="assetName" readonly="readonly" />
+								<input class="cmn_btn" type="button" id="srchAsset" value="검색">
+							</td>
+							<td>현재수량</td>
+							<td>
+								<input style= width:40px; type="text" id="crntQunty" readonly="readonly"/>
 							</td>
 							<td>수량</td>
 							<td>
-								<input style=width:50px; type="text" id="qunty" name="qunty" />
-								<input style=width:50px; type="text" id="quntynum" name="quntynum" />
+								<input style=width:50px; type="text" id="qunty" name="qunty" />			
+							</td>
+							<td>
+								<select id="quntynum" name="quntynum">
+								<option value="0" <c:if test="${data.QUNTY_DVSN_NUM eq 0}">selected</c:if>>ea</option>
+								<option value="1" <c:if test="${data.QUNTY_DVSN_NUM eq 1}">selected</c:if>>set</option>
+								<option value="2" <c:if test="${data.QUNTY_DVSN_NUM eq 2}">selected</c:if>>box</option>
+
+								</select>		
 							</td>
 						</tr>
 						<tr class="sixth_row">
 							<td>사용자</td>
 							<td>
-								<input style=width:120px; type="text" id="empNum" name="empNum" />
+								<input style=width:120px; type="text" id="useEmpName" name="useEmpName" readonly="readonly"/>
+								<input class="cmn_btn" type="button" id="srchEmp" value="검색">
 							</td>
 							<td>반출일</td>
 							<td >

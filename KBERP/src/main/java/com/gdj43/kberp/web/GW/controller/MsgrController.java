@@ -83,7 +83,7 @@ public class MsgrController {
 				break;
 			case "join" :
 				ics.updateData("msgr.joinChat", params);
-				break;	
+				break;
 	/*			case "delete" :
 				ims.deleteChat(params);
 				break; */
@@ -139,10 +139,6 @@ public class MsgrController {
 		
 		List<HashMap<String, String>> list = ics.getDataList("msgr.addDrawRoom", params) ;
 
-		
-		modelMap.put("CHAT_NUM", params);
-		System.out.println("@@@@@@@@@@@@@@@@@@@!!" + params);
-		
 		modelMap.put("list", list);
 		
 		return mapper.writeValueAsString(modelMap);
@@ -172,22 +168,28 @@ public class MsgrController {
 	@ResponseBody
 	public String insertChatAjax(@RequestParam HashMap<String, String> params,
 											   HttpServletRequest request,
+											   HttpSession session,
 											   ModelAndView modelAndView) throws Throwable {
 		
 		System.out.println("######################"+params);
 		
-		
 		ObjectMapper mapper = new ObjectMapper();
-		
 		Map<String, Object> modelMap = new HashMap<String, Object>();	
+		
+		params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
+		
 		
 		// #{chatNum}, #{empNum}, #{cont},
 		
 		try {
-			String seq = ics.getStringData("msgr.insertCont");
-			params.put("contsq", seq);
-			ics.insertData("msgr.insertCont", params);
+			String conSeq = ics.getStringData("msgr.contSeq");
+			String chatSeq = ics.getStringData("msgr.chatSeq");
+			params.put("contsq", conSeq);
+			params.put("chatsq", chatSeq);
+			System.out.println("!!!!!!!!!!!!!!!" + params);
 			
+			
+			ics.insertData("msgr.insertCont", params);
 			
 			modelMap.put("messege", CommonProperties.RESULT_SUCCESS);
 		} catch (Exception e) {
