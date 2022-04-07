@@ -646,9 +646,11 @@ $(document).ready(function() {
    
    // 발령 상세보기 
    $("tbody").on("click", "tr", function() {
-      $("#no").val($(this).attr("no"));
+      $("#empNum").val($(this).attr("empNum"));
+      $("#apntmNum").val($(this).attr("apntmNum"));
       $("tbody").children("tr").css("background-color", "#ffffff");
       $(this).css("background-color", "rgb(200,218,248)");
+	   console.log("발령리스트 클릭! empnum : " + $("#empNum").val() + "apntmNum : " + $("#apntmNum").val())
 
       reloadCont();
    });
@@ -974,7 +976,7 @@ function drawList(list) {
    var html = "";
    
    for(var data of list) {                                 
-      html += "<tr id=\"tbodyTr\" no=\"" + data.APNTM_NUM + "\">"        ;
+      html += "<tr id=\"tbodyTr\" apntmNum=\"" + data.APNTM_NUM + "\"empNum=\"" + data.EMP_NUM + " \">" ;
       html += "<td>" + data.APNTM_NUM + "</td>"           ;
       if(data.APNTM_DVSN_NUM == 0) {
      	 html += "<td>입사</td>"      ;
@@ -1246,10 +1248,11 @@ function drawAddApntm(dept,rank){
 		</div>
 		<!--------------------- 발령 조회 Form ------------------------->
 		<form action="#" id="actionForm" method="post">
-			<input type="hidden" name="top" value="${param.top}"> <input
-				type="hidden" name="menuNum" value="${param.menuNum}"> <input
-				type="hidden" name="menuType" value="${param.menuType}"> <input
-				type="hidden" id="no" name="no" />
+			<input type="hidden" name="top" value="${param.top}"> 
+			<input type="hidden" name="menuNum" value="${param.menuNum}"> 
+			<input type="hidden" name="menuType" value="${param.menuType}"> 
+			<input type="hidden" id="apntmNum" name="apntmNum" />
+			<input type="hidden" id="empNum" name="empNum" />
 			<div class="srch_wrap">
 				<div class="srch_top_area">
 					<select class="srch_select" id="searchGbn" name="searchGbn">

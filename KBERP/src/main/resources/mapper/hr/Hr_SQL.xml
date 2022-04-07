@@ -3,9 +3,9 @@
 <mapper namespace="hr">
 	<!--    인사발령 쿼리    -->
 	<select id="getApntmList" resultType="hashmap" parameterType="hashmap"><!-- 발령조회 -->
-		SELECT AAA.APNTM_NUM, AAA.EMP_NAME, AAA.APNTM_DVSN_NUM, AAA.DEPT_NAME, AAA.RANK_NAME, AAA.START_DATE, AAA.APRVL_STS 
-		FROM( SELECT AA.APNTM_NUM, AA.EMP_NAME, AA.APNTM_DVSN_NUM, AA.DEPT_NAME, AA.RANK_NAME, AA.START_DATE, AA.APRVL_STS
-				FROM( SELECT A.APNTM_NUM, E.EMP_NAME, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, A.START_DATE, AP.APRVL_STS
+		SELECT AAA.APNTM_NUM, AAA.EMP_NAME, AAA.EMP_NUM, AAA.APNTM_DVSN_NUM, AAA.DEPT_NAME, AAA.RANK_NAME, AAA.START_DATE, AAA.APRVL_STS 
+		FROM( SELECT AA.APNTM_NUM, AA.EMP_NAME, AA.EMP_NUM, AA.APNTM_DVSN_NUM, AA.DEPT_NAME, AA.RANK_NAME, AA.START_DATE, AA.APRVL_STS
+				FROM( SELECT A.APNTM_NUM, E.EMP_NUM, E.EMP_NAME, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, A.START_DATE, AP.APRVL_STS
 						FROM ( SELECT APNTM_NUM, APNTM_DVSN_NUM, EMP_NUM, DEPT_NUM, RANK_NUM, 
 						              TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE , APRVL_NUM
 						       FROM APNTM )  A INNER JOIN EMP E
@@ -66,21 +66,21 @@
 	                                ON A.DEPT_NUM = D.DEPT_NUM
 	                     	  INNER JOIN RANK R
 	                        		ON A.RANK_NUM = R.RANK_NUM
-		 WHERE APNTM_NUM = #{no}
+		 WHERE APNTM_NUM = #{apntmNum}
 	</select>
-	 <select id="getEmpCont" resultType="hashmap" parameterType="hashmap"><!-- 발령목록 상세정보(사원정보) -->
-		SELECT AA.EMP_NUM, AA.EMP_NAME, AA.EMP_PCTR_FILE, D.DEPT_NAME, R.RANK_NAME
-		FROM(SELECT E.EMP_NUM, E.EMP_NAME, E.EMP_PCTR_FILE, A2.DEPT_NUM, A2.RANK_NUM
-			   FROM (SELECT EMP_NUM
-		               FROM APNTM
-		              WHERE APNTM_NUM =  #{no})A INNER JOIN EMP E
-		                                                 ON A.EMP_NUM = E.EMP_NUM
-                                           	     INNER JOIN APNTM A2
-		                               					 ON A.EMP_NUM = A2.EMP_NUM
-				WHERE STS_NUM = '1' )AA INNER JOIN DEPT D
-		                                	    ON AA.DEPT_NUM = D.DEPT_NUM
-		                                INNER JOIN RANK R
-		                                        ON AA.RANK_NUM = R.RANK_NUM     
+	<select id="getEmpCont" resultType="hashmap" parameterType="hashmap"><!-- 발령목록 상세정보(사원정보) -->
+		SELECT  AA.EMP_NUM, AA.EMP_NAME, AA.EMP_PCTR_FILE, D.DEPT_NAME, R.RANK_NAME
+		FROM( SELECT E.EMP_NUM, E.EMP_NAME, E.EMP_PCTR_FILE, A.DEPT_NUM, A.RANK_NUM
+		        FROM( SELECT EMP_NUM, RANK_NUM, DEPT_NUM
+		                FROM APNTM
+		               WHERE STS_NUM = '1'
+		                 AND START_DATE <![CDATA[<=]]>  SYSDATE
+		                 AND (END_DATE >= SYSDATE OR END_DATE IS NULL))A RIGHT JOIN EMP E 
+		                                                                         ON A.EMP_NUM = E.EMP_NUM)AA LEFT JOIN DEPT D
+		                                                                                                            ON AA.DEPT_NUM = D.DEPT_NUM
+		                                                                                                     LEFT JOIN RANK R
+		                                                                                                            ON AA.RANK_NUM = R.RANK_NUM  
+        WHERE AA.EMP_NUM = #{empNum}                                                                        
 	</select>
 	<select id="getInqryList" resultType="hashmap" parameterType="hashmap"><!-- 발령등록 사원조회 리스트 -->
 		SELECT EE.EMP_NUM, EE.EMP_NAME, AA.RANK_NUM, AA.RANK_NAME, AA.DEPT_NUM, AA.DEPT_NAME
@@ -116,17 +116,19 @@
 		ORDER BY AA.DEPT_NAME, AA.RANK_NUM, EE.EMP_NAME, EE.EMP_NUM       
 	</select>
 	<select id="getInqryEmp" resultType="hashmap" parameterType="hashmap"><!-- 발령등록 사원정보 -->
-		SELECT E.EMP_NUM, E.EMP_NAME, E.EMP_PCTR_FILE, A.RANK_NUM, R.RANK_NAME, A.DEPT_NUM, D.DEPT_NAME
-		FROM (  SELECT EMP_NUM, RANK_NUM, DEPT_NUM, START_DATE, END_DATE, STS_NUM
-		        FROM APNTM 
-		        WHERE STS_NUM = '1'
-		        AND END_DATE IS NULL )A INNER JOIN EMP E
-	                                            ON A.EMP_NUM = E.EMP_NUM
-	                                    INNER JOIN RANK R 
-	                                            ON A.RANK_NUM = R.RANK_NUM
-	                                    INNER JOIN DEPT D 
-	                                            ON A.DEPT_NUM = D.DEPT_NUM
-		WHERE E.EMP_NUM = #{inqryNo}
+		SELECT EE.EMP_NUM, EE.EMP_NAME, AA.RANK_NUM, AA.RANK_NAME, AA.DEPT_NUM, AA.DEPT_NAME
+    	FROM ( SELECT A.EMP_NUM, E.EMP_NAME, A.RANK_NUM, R.RANK_NAME, A.DEPT_NUM, D.DEPT_NAME
+				 FROM (  SELECT EMP_NUM, RANK_NUM, DEPT_NUM, START_DATE, END_DATE, STS_NUM
+	        			   FROM APNTM 
+		       			  WHERE STS_NUM = '1'
+	       				    AND (END_DATE IS NULL OR END_DATE >= SYSDATE)) A INNER JOIN EMP E
+	                                       										     ON A.EMP_NUM = E.EMP_NUM
+											                                 INNER JOIN RANK R 
+											                                         ON A.RANK_NUM = R.RANK_NUM
+											                                 INNER JOIN DEPT D 
+											                                         ON A.DEPT_NUM = D.DEPT_NUM ) AA RIGHT JOIN EMP EE
+										                                                                                     ON AA.EMP_NUM = EE.EMP_NUM
+		WHERE EE.EMP_NUM = #{inqryNo}
 	</select>
 	<select id="getDeptList" resultType="hashmap" ><!-- 발령등록 <select> 부서목록  -->
 		SELECT DD.DEPT_NUM, DD.DEL_CHECK, DD.DEPT_NAME, DD.SUPER_DEPT_NUM, DD.DEPT_LEVEL, DD.LEAF
@@ -145,7 +147,7 @@
 	</select>
  	<insert id="insertApntm" parameterType="hashmap"  ><!-- 발령등록 INSERT -->
 		INSERT INTO APNTM ( APNTM_NUM, EMP_NUM, RANK_NUM, DEPT_NUM, APNTM_DVSN_NUM, START_DATE, END_DATE, DTL_CONT)
-		VALUES ( APNTM_SEQ.NEXTVAL,  #{addEmpNum},  #{addRankNum},  #{addDeptNum}, #{addDvsnNum}, #{addStart},  #{addCont} )
+		VALUES ( APNTM_SEQ.NEXTVAL,  #{addEmpNum},  #{addRankNum},  #{addDeptNum}, #{addDvsnNum}, #{addStart},  #{addEnd}, #{addCont} )
 	</insert>
 	<update id="updateApntm" parameterType="hashmap" ><!-- 발령등록(퇴사) UPDATE -->
 		UPDATE APNTM SET END_DATE = #{addEnd}
