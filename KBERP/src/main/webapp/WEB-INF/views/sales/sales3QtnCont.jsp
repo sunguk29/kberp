@@ -1,5 +1,5 @@
 <!-- 
-	제안 상세보기 : sales2SgstnCont
+	견적 상세보기 : sales3QtnCont
  -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>제안 상세보기</title>
+<title>견적 상세보기</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -164,7 +164,7 @@ hr { /* 구분선 */
 .bot_title { 
 	font-size: 11pt;
 }
-.bx { /* 스크롤때문에 div 박스 추가 */
+.qBox {
 	width: 860px;
 	height: 305px;
 	margin-left: 47.5px;
@@ -380,12 +380,60 @@ textarea {
 	width: 927px;
 	height: 1138px;
 }
+.plus_btn {
+	display: inline-block;
+	vertical-align: middle;
+	width: 18px;
+	height: 18px;
+	background-image: url("resources/images/sales/plus.png");
+	background-size: 18px 18px;
+	float: right;
+	margin-right: 5px;
+    margin-top: 5.5px;
+}
+
 /* 끝 */
+.PQ_title {
+	position: relative;
+	font-size: 11pt;
+}
+.drop_btn_bot {
+	position: absolute;
+	top: 7px;
+	left: 909px;
+	width: 18px;
+	height: 18px;
+	background-image: url("resources/images/sales/downarrow.png");
+	background-size: 18px 18px;
+	float: right;
+}
+.drop_btn_bot:hover {
+	cursor: pointer;
+}
+.qtnBox {
+    width: 830px;
+    height: 60px;
+    font-size: 10pt;
+    border: 1px solid gray;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    margin: 5px;
+    background-color: #F2F2F2;
+}
+pre {
+	font-family: "맑은 고딕";
+    margin-top: 3px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
 
 	console.log(${param.salesNum});
+	console.log(${param.qtnNum});
+	
+	reloadSgstnList();
 	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
@@ -394,16 +442,18 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-	// 수정 버튼
+	// 인쇄 버튼
+	//$("#printBtn")
+	
+	// 견적서 추가(수정) 버튼
 	$("#updateBtn").on("click", function() {
-		
-		$("#actionForm").attr("action", "sales2Update");
+		$("#actionForm").attr("action", "sales3QtnReg");
 		$("#actionForm").submit();
 	});
 	
-	// 다음 단계로 전환하기 버튼 : 견적 등록 페이지
+	// 다음 단계로 전환하기 버튼 : 계약 등록 페이지
 	$("#nextStageBtn").on("click", function() {
-		$("#actionForm").attr("action", "sales3QtnReg");
+		$("#actionForm").attr("action", "sales4CntrctReg");
 		$("#actionForm").submit();
 	});
 	
@@ -427,7 +477,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "salesMng2ActionAjax/failure",
+						url : "salesMng3ActionAjax/failure",
 						dataType : "json",
 						data : params,
 						success : function(res) {
@@ -461,7 +511,7 @@ $(document).ready(function() {
 		
 		$.ajax({
 			type : "post",
-			url : "sgstnBotActionAjax/insert",
+			url : "qtnBotActionAjax/insert",
 			dataType : "json",
 			data : params,
 			success : function(res) {
@@ -500,7 +550,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "sgstnBotActionAjax/update",
+						url : "qtnBotActionAjax/update",
 						dataType : "json",
 						data : params,
 						success : function(res) {
@@ -524,7 +574,9 @@ $(document).ready(function() {
 		});
 		
 	});
-	
+	$(".salesCont").hide();
+	$(".sgstnCont").hide();
+	// 영업기회 탭 접기펼치기
 	$("#sales_btn").on("click", "#salesContBtn_h", function() {
 		$(".salesCont").hide();
 		html = "<div class=\"up_btn\" id=\"salesContBtn_s\"></div>";
@@ -537,7 +589,61 @@ $(document).ready(function() {
 		$("#sales_btn").html(html);
 	});
 	
-});
+	// 제안 탭 접기펼치기
+	$("#sgstn_btn").on("click", "#sgstnContBtn_h", function() {
+		$(".sgstnCont").hide();
+		html = "<div class=\"up_btn\" id=\"sgstnContBtn_s\"></div>";
+		$("#sgstn_btn").html(html);
+	});
+	
+	$("#sgstn_btn").on("click", "#sgstnContBtn_s", function() {
+		$(".sgstnCont").show();
+		html = "<div class=\"drop_btn\" id=\"sgstnContBtn_h\"></div>";
+		$("#sgstn_btn").html(html);
+	});
+	
+	
+	
+	
+	//대출금액
+	var loanAmnt = ${data3.LOAN_AMNT};
+	//대출기간
+	var loanPrd
+	if(${data3.LOAN_PRD eq 0} == 0) {
+		loanPrd = 6;
+	} else if(${data3.LOAN_PRD eq 0} == 1) {
+		loanPrd = 12;
+	} else if(${data3.LOAN_PRD eq 0} == 2) {
+		loanPrd = 36;
+	} else if(${data3.LOAN_PRD eq 0} == 3) {
+		loanPrd = 60;
+	}
+	//이자율
+	var intrstRate = ${data3.INTRST_RATE} * 0.01;
+	//이자율(월)
+	var mIntrstRate = (intrstRate / 12);
+	
+	//월 납부액
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 0 ) { // 원금 균등 상환
+		$("#monthPymntAmnt").val(Math.round(loanAmnt / loanPrd));
+		$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
+	}
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 1 ) { // 원리금 균등 상환
+		var temp1 = Math.pow(1 + mIntrstRate, loanPrd) - 1;
+		var temp2 = loanAmnt * mIntrstRate * Math.pow(1 + mIntrstRate, loanPrd);
+		$("#monthPymntAmnt").val(Math.round(temp2 / temp1));
+		$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
+	}
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 2 ) { // 만기 일시 상환
+		if(${data3.INTRST_PYMNT_MTHD_NUM} != 2) {
+			$("#monthPymntAmnt").val("0");
+			$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
+		}
+	
+	}
+	
+	
+}); // document.ready End
 
 /* 의견 목록 Ajax */
 function reloadOpList() {
@@ -545,7 +651,7 @@ function reloadOpList() {
 	
 	$.ajax({
 		type : "post",
-		url : "sgstnOpBotListAjax",
+		url : "qtnOpBotListAjax",
 		data : params,
 		dataType : "json",
 		success : function(res) {
@@ -586,6 +692,52 @@ function drawOpList(list) {
 	
 }
 
+//*************** 지난견적서 목록 Ajax *************** 
+function reloadSgstnList() {
+	var params = $("#pastQtnActionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "PQListAjax",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			drawPQCnt(res.PQListCnt);
+			drawPQList(res.list);
+			console.log("ok");
+		},
+		error : function(req) {
+			console.log(req.responseText);
+			console.log("no");
+		}
+	});
+}
+
+/* 지난견적서 목록 개수 html */
+function drawPQCnt(PQListCnt) {
+	var html = "";
+	
+	html = "<h3>지난 견적서(" + PQListCnt + ")</h3><div class=\"drop_btn_bot\"></div>";
+	
+	$(".PQ_title").html(html);
+}
+
+/* 지난견적서 목록 html */
+function drawPQList(list) {
+	var html = "";
+	
+	for(var data of list) {
+		html +="<div class=\"qtnBox\">";
+		html +="<div class=\"name\">" + data.QTN_NAME + " (" + data.QTN_DATE +")</div>";
+		html +="<div class=\"txtOp\"><pre>" + data.MD_TYPE_NUM + "  " + data.MD_NAME + " " + data.INTRST_RATE + "%    " + data.LIMIT_AMNT + "원</pre></div>";
+		html +="</div>";
+	}
+	$(".qBox").html(html);
+}
+
+
+// *************** 지난견적서 목록 끝
+
 </script>
 </head>
 <body>
@@ -595,6 +747,7 @@ function drawOpList(list) {
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" id="salesNum" name="salesNum" value="${data.SALES_NUM}" /> <!-- 영업번호 -->
+	<input type="hidden" name="qtnNum" value="${param.qtnNum}" /> <!-- 견적 번호 -->
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -607,9 +760,10 @@ function drawOpList(list) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">영업관리 - 제안 상세보기</div>
+			<div class="page_title_text">영업관리 - 견적 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
-				<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
+				<img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" id="printBtn" />
+				<img alt="수정버튼" src="resources/images/sales/newAdd.png" class="btnImg" id="updateBtn" data-toggle="tooltip" title="견적서 추가하기" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -627,7 +781,7 @@ function drawOpList(list) {
 						<input type="text" id="salesNum" name="salesNum" value="${data.SALES_NUM}" />
 				
 					<div class="bot_title">
-						<h3>영업기회<span id="sales_btn"><div class="drop_btn" id="salesContBtn_h"></div></span></h3>
+						<h3>영업기회<span id="sales_btn"><div class="up_btn" id="salesContBtn_s"></div></span></h3>
 					</div>
 				<div class="salesCont">
 					<div class="page_cont_title_text">기본정보</div>
@@ -803,7 +957,10 @@ function drawOpList(list) {
 					<hr class="hr_bot" color="#4B94F2" width="925px">
 					<!-- *************** 제안 부분 시작 **************** -->
 					
-						<div class="bot_title"><h3>제안</h3></div>
+						<div class="bot_title">
+							<h3>제안<span id="sgstn_btn"><div class="up_btn" id="sgstnContBtn_s"></div></span></h3>
+						</div>
+					<div class="sgstnCont">
 						<div class="page_cont_title_text">대출 상세정보</div>
 						<hr class="hr_width">
 						<table class="detailList">
@@ -968,12 +1125,187 @@ function drawOpList(list) {
 							
 							</div>
 						</div>
+					</div>
+<!-- *************************************** 견적 시작 *************************************** -->			
+	<hr class="hr_bot" color="#4B94F2" width="925px">
+	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
+					<input type="hidden" id= "mdNum" name="mdNum" /> <!-- 영업기회에서 가져온 영업번호 -->
+					<div class="bot_title"><h3>견적</h3></div>
+					 <hr class="hr_bot" color="white" width="925px"> 
+					<div class="hr_bot"></div>
+					<table>
+						<colgroup>
+							<col width="200" />
+							<col width="250" />
+							<col width="200" />
+							<col width="250" />
+						</colgroup>
+						<tbody>
+							<tr height="40">
+								<td><input type="button" class="btn" value="견적명*" readonly="readonly" /></td>
+								<td colspan="3"><input type="text" class="txt" id="qtnName" name="qtnName" value="${data3.QTN_NAME}" readonly="readonly" /></td>		
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="상품유형" readonly="readonly" /></td>
+								<td colspan="3">
+									<select class="txt" id="mdType" name="mdType" disabled="disabled">
+									 	<optgroup>
+									 		<c:choose>
+									 			<c:when test="${data3.MD_TYPE_NUM eq 0}">
+											 		<option value="0" selected="selected">개인사업</option>
+									 			</c:when>
+									 			<c:when test="${data3.MD_TYPE_NUM eq 1}">
+											 		<option value="0" selected="selected">법인사업</option>
+									 			</c:when>
+									 			<c:when test="${data3.MD_TYPE_NUM eq 2}">
+											 		<option value="0" selected="selected">공공사업</option>
+									 			</c:when>
+									 		</c:choose>
+									 	</optgroup>
+									</select>
+								</td>
+							</tr>
+							<tr height="40">
+									<td><input type="button" class="btn" value="견적일*" readonly="readonly" /></td>
+									<td colspan="3"><input type="date" class="txt" id="qtnDate" name="qtnDate" value="${data3.QTN_DATE}" readonly="readonly" /></td>
+							</tr>
+							<tr height="40">
+									<td><input type="button" class="btn" value="대출금액*" readonly="readonly" /></td>
+									<td colspan="3"><input type="text" class="txt" id="LoanAmnt" name="LoanAmnt" value="${data3.LOAN_AMNT}" readonly="readonly" /></td>		
+							</tr> 
+							<tr height="40">
+									<td><input type="button" class="btn" value="공급가액*" readonly="readonly" /></td>
+									<td colspan="3"><input type="text" class="txt" id="splyPrice" name="sqlyPrice" value="${data3.SPLY_PRICE}" readonly="readonly" /></td>		
+							</tr> 
+							<tr height="40">
+									<td><input type="button" class="btn" value="세액*" readonly="readonly" /></td>
+									<td colspan="3"><input type="text" class="txt" id="taxAmnt" name="taxAmnt" value="${data3.TAX_AMNT}" readonly="readonly" /></td>
+							</tr>
+							<tr height="40">
+									<td><input type="button" class="btn" value="합계액*" readonly="readonly" /></td>
+									<td colspan="3"><input type="text" class="txt" id="sumAmnt" name="sumAmnt" value="${data3.TOTAL}" readonly="readonly" /></td>
+							</tr>
+							<tr height="40">
+									<td><input type="button" class="btn" value="중도상환가능여부" readonly="readonly" /></td>
+									<td>
+										<select class="txt" id="prdmptn_psbl_check" name="prdmptnPsbl"  disabled="disabled">
+											<optgroup>
+												<c:choose>
+													<c:when test="${data3.MID_RDMPTN_PSBL_CHECK eq 0}">
+														<option value="0" selected="selected">가능</option>
+													</c:when>
+													<c:when test="${data3.MID_RDMPTN_PSBL_CHECK eq 1}">
+														<option value="0" selected="selected">불가능</option>
+													</c:when>
+												</c:choose>
+											</optgroup>
+										</select>
+									</td>
+									<td><input type="button" class="btn" value="부가세*" readonly="readonly" /></td>
+									<td>
+										<select class="txt" id="srtx" name="srtx" onchange="test(this);" disabled="disabled">
+										 	<optgroup>
+										 		<c:choose>
+										 			<c:when test="${data3.SRTX eq 0}">
+										 				<option value="0" selected="selected">미포함</option>
+										 			</c:when>
+										 			<c:when test="${data3.SRTX eq 1}">
+										 				<option value="0" selected="selected">포함</option>
+										 			</c:when>
+										 			<c:when test="${data3.SRTX eq 2}">
+										 				<option value="0" selected="selected">면세</option>
+										 			</c:when>
+										 		</c:choose>
+										 	</optgroup>
+										</select>
+									</td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="대출기간" readonly="readonly" /></td>
+								<td>
+									<select class="txt" id="loanPrd" name="loanPrd" disabled="disabled">
+										<optgroup>
+											<c:choose>
+												<c:when test="${data3.LOAN_PRD eq 0}">
+													<option value="0" selected="selected">6개월</option>
+												</c:when>
+												<c:when test="${data3.LOAN_PRD eq 1}">
+													<option value="0" selected="selected">1년</option>
+												</c:when>
+												<c:when test="${data3.LOAN_PRD eq 2}">
+													<option value="0" selected="selected">3년</option>
+												</c:when>
+												<c:when test="${data3.LOAN_PRD eq 2}">
+													<option value="0" selected="selected">5년</option>
+												</c:when>
+											</c:choose>
+										</optgroup>
+									</select>	
+								</td>
+								
+								<td><input type="button" class="btn" value="원금상환방식" readonly="readonly" /></td>
+								<td colspan="2">
+									<select class="txt" id="prncpl_pymnt" name="prncplPymnt" disabled="disabled">
+										<optgroup>
+											<c:choose>
+												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 0}">
+													<option value="0" selected="selected">원금 균등 상환</option>
+												</c:when>
+												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 1}">
+													<option value="0" selected="selected">원리금 균등 상환</option>
+												</c:when>
+												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 2}">
+													<option value="0" selected="selected">만기 일시 상환</option>
+												</c:when>
+											</c:choose>
+										</optgroup>
+									</select>
+								</td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="이자율(%)" /></td>
+								<td><input type="text" class="txt" id="intrstRate" name="intrstRate" value="${data3.INTRST_RATE}" readonly="readonly" /></td>
+								<td><input type="button" class="btn" value="납부일" readonly="readonly" /></td>
+								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" value="${data3.PYMNT_DATE}" readonly="readonly" placeholder="매달    일" /></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
+								<td><input type="text" class="txt" id="monthPymntAmnt" name="monthPymntAmnt" readonly="readonly" /></td>
+								<td><input type="button" class="btn" value="월 이자액" readonly="readonly" /></td>
+								<td colspan="2"><input type="text" class="txt" id="monthIntrstAmnt" name="monthIntrstAmnt" readonly="readonly" /></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="비고" readonly="readonly"/></td>
+								<td colspan="3"><input type="text" class="rmks" name="rmksCont" value="${data3.RMKS}" readonly="readonly" /></td>
+							</tr>							
+						</tbody>
+					</table>
+					<!-- 첨부자료 -->
+					<div class="spc">
+						<div class="adc_txt">
+							첨부자료
+						</div>
+						<div class="cntrct_box_in">
+							<input type="text" id="fileName" readonly="readonly" />
+						</div>
+					</div>		
+<!-- *************************************** 견적 끝 *************************************** -->						
 					<div class="next_bot">
 						<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
 					</div>
-				</form>					
-				<form action="#" id="botOpActionForm" method="post">
+				</form>	
+				<form action="#" id="pastQtnActionForm" method="post">
 					<input type="hidden" name="salesNum" value="${param.salesNum}" />
+					<input type="hidden" name="qtnNum" value="${param.qtnNum}" />
+					<!-- 지난 견적서 -->
+					<div class="mgtop"></div>
+					<div class="PQ_title"></div>
+					<hr color="#F2B705" width="925px">
+					<div class="qBox"></div>
+				</form>				
+					<!-- ********* 견적 끝 ********* -->
+				<form action="#" id="botOpActionForm" method="post">
+					<input type="hidden" name="qtnNum" value="${data3.QTN_NUM}" />
 					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
 					<input type="hidden" id="cmntNum" name="cmntNum" />
 					<!-- 의견 -->
@@ -986,47 +1318,14 @@ function drawOpList(list) {
 						<div class="cmn_btn subm">등록</div>
 					</div>
 				</form>
-					<!-- 히스토리 -->
-<!-- 					<div class="mgtop"></div>
-					<div class="bot_title"><h3>히스토리(5)<div class="drop_btn"></div></h3></div>
-					<hr color="#F2B705" width="925px">
-					<div class="bx">
-							<div class="OpinionBox">
-								<div class="name">영업기회 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 등록된 영업기회 표시</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">계약 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">계약 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">계약 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">계약 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-					</div> -->
 					<hr class="hr_bot" color="white" width="925px">
 					<hr class="hr_bot" color="white" width="925px">
 					<div class="salesOver_btn nb">영업 종료하기</div>
 					<!-- 끝 -->
-					
-					
+					</div>
 				</div>
 			</div>	
 		</div>
-	</div>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

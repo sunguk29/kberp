@@ -42,7 +42,7 @@
 	display:inline-block;
 	font-size: 12pt;
 	width: 551px;
-	height: 365px;
+	height: 600px;
 	border: 1px solid #DDD;
 	overflow: auto;
 	vertical-align: top;
@@ -93,6 +93,15 @@
 #fclt_list_head{
 	background-color: #f2f2f2;
 }
+#fcltyNamePlace{
+	font-weight: bold;
+	color: black;
+}
+#listBtn{
+	margin-left: 1048px;
+    margin-top: 10px;
+    width: 70px;
+}
 </style>
 <!-- Moment Script -->
 <script type="text/javascript" src="resources/script/jquery/moment.js"></script>
@@ -102,8 +111,51 @@
 <script type="text/javascript" src="resources/script/fullcalendar/fullcalendar.js"></script>
 <script type="text/javascript" src="resources/script/fullcalendar/locale-all.js"></script>
 <script type="text/javascript">
+
+
 $(document).ready(function() {
+	
+	$("#fSearchBtn").on("click",function(){	
+		$("#page").val("1");
+		
+		$("#fOldSearchGbn").val($("#fSearchGbn").val());
+		$("#fOldSearchTxt").val($("#fSearchTxt").val());
+		
+		reloadList();
+		
+	});
+	
+	$("#fSearchTxt").on("keypress", function(event){
+		if(event.keyCode == 13) {	
+			$("#fSearchBtn").click();
+			
+			return false;
+		}
+	});
+	
+	$("#fcltyListBody").on("click",".board_table_hover",function(){
+		$("#no").val($(this).attr("no"));
+		$("#fcltyName").val($(this).attr("fcltyName"));
+		$("#fcltyPlace").val($(this).attr("fcltyPlace"));
+		
+		$("#fSearchGbn").val($("#fOldSearchGbn").val());
+		$("#fSearchTxt").val($("#fOldSearchTxt").val());
+		
+		$("#actionForm").attr("action","fcltUseRqstTimeWrite");
+		$("#actionForm").submit();
+
+	});	
+	
+	$("#listBtn").on("click",function(){
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		$("#backForm").attr("action","fcltUseRqst");
+		$("#backForm").submit();
+	});
+	
 	var data = [
+		
         {
             title: 'All Day Event',
             start: '2019-01-01',
@@ -124,38 +176,58 @@ $(document).ready(function() {
             id: 999,
             title: 'Repeating Event',
             start: '2019-01-16T16:00:00'
-          }
+          },
+          
         ];
+		
 	
 	$("#fullCalendarArea").fullCalendar({
 		header: {
 	        left: 'prev,next today',
 	        center: 'title',
-	        right: 'month,agendaWeek,agendaDay,listMonth'
 	      },
-	      defaultDate: '2019-01-12',
 	      locale: "ko",
 	      editable: false,
 	      height: 600,
 	      events: data,
+	      selectable: true,
 	      dayClick: function(date, js, view) { // 일자 클릭
+	    	  console.log(date.format('YYYY-MM-DD'));
 	    	  //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-
 	    	  //alert('Current view: ' + view.name);
+	    	  reloadList();
+	    	  $("#rsvtnDate").val(date.format('YYYY-MM-DD'));
 	      }
 	});
 
 });
+
+function reloadList() { //목록 조회용
+	var params = $("#actionForm").serialize();
+	$.ajax({
+		type : "post",
+		url : "fcltUseRqstCalListAjax",
+		dataType : "json",
+		data : params,
+		success : function(res){ 
+			console.log(res);
+			drawList(res.list);
+		},
+		error : function(request, status, error){
+			console.log(request.responseText);
+		}
+	});
+}
 
 function drawList(list){
 	var html = "";
 	
 	for(var data of list){
 		html += "<tr>";
-		html += "<td>" + data.FCLTY_NAME + "</td>";
+		html += "<td class=\"board_table_hover\" fcltyPlace=\"" + data.PLACE + "\" no=\"" + data.FCLTY_NUM + "\" fcltyName=\"" + data.FCLTY_NAME + "\">" + data.FCLTY_NAME + "</td>";
 		html += "<td>" + data.PLACE + "</td>";
 	}
-	$("tbody").html(html);
+	$("#fcltyListBody").html(html);
 	
 }
 </script>
@@ -173,15 +245,16 @@ function drawList(list){
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">시설물 사용 신청</div>
-<form action="#" id="actionForm" method="post">
+<form action="#" id="backForm" method="post">
 	<input type="hidden" id="gbn" name="gbn"/>
 	<input type="hidden" id="top" name="top" value="${param.top}" />
 	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
-	<input type="hidden" name="no" value="${param.no}" />
 	<input type="hidden" name="page" value="${param.page}" />
+	<!-- 시설물예약목록의 검색유지 -->
 	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+	
 </form>
 			
 		</div>
@@ -189,58 +262,58 @@ function drawList(list){
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div id = "cont_top">
-				<div id="fclt_list">
-					<table class="board_table">
-				<colgroup>
-					<col width="150"/>
-					<col width="400"/>
-					<col width="100"/>
-				</colgroup>
-				<thead id="fclt_list_head">
-					<tr>
-						<th id="fclt_list_title">시설물 목록</th>
-						<th colspan="2">
-									<select class="srch_sel">
-											<option>시설물명</option>
-											<option>위치</option>
-									</select>
-										<div class="srch_text_wrap">
-											<input type="text" />
-										</div>
-										<div class="cmn_btn_ml">검색</div>
-						</th>
-						
-					</tr>
-				</thead>
-				<tbody>
-					
-				</tbody>
-					</table>
-				</div>
-				<div id = calendar>
+			<div id = calendar>
 					<input type="hidden" id="stdt" name="stdt" value="${stdt}" />
 					<input type="hidden" id="eddt" name="eddt" value="${eddt}" />
 					
 					<div id="fullCalendarArea"></div>
 				</div>
-			</div>
-			<div id ="cont_bottom">
-				<div class="rsrv_row">
-					<div class="cmn_btn_mr">09:00 ~ 10:00</div>
-					<div class="cmn_btn_mr">10:00 ~ 11:00</div>
-					<div class="cmn_btn_mr">11:00 ~ 12:00</div>
-					<div class="cmn_btn_mr">12:00 ~ 13:00</div>
-					<div class="cmn_btn_mr">13:00 ~ 14:00</div>
+				<div id="fclt_list">
+					<table class="board_table">
+						<colgroup>
+							<col width="150"/>
+							<col width="400"/>
+						</colgroup>
+						<thead id="fclt_list_head">
+							<tr>
+								<th id="fclt_list_title">시설물 목록</th>
+								<th colspan="2">
+						<form action="#" id="actionForm" method="post">
+							<input type="hidden" id="top" name="top" value="${param.top}" />
+							<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+							<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
+							<!-- 시설물예약시 예약가능한 시설물 목록의 검색어유지 -->							
+							<input type="hidden" id="fOldSearchGbn" value="${param.fSearchGbn}"/>
+							<input type="hidden" id="fOldSearchTxt" value="${param.fSearchTxt}"/>
+							<!-- 시설물번호, 이름, 예약일 -->
+							<input type="hidden" id="no" name="no" value="${param.no}"/>
+							<input type="hidden" id="rsvtnDate" name="rsvtnDate" value="${param.rsvtnDate}"/>
+							<input type="hidden" id="fcltyName" name="fcltyName" value="${param.fcltyName}" />
+							<input type="hidden" id="fcltyPlace" name="fcltyPlace" value="${param.fcltyPlace}" />
+									<select class="srch_sel" id="fSearchGbn" name="fSearchGbn">
+										<option value = "0">시설물명</option>
+										<option value = "1">위치</option>
+									</select>
+									<div class="srch_text_wrap">
+										<input type="text" id="fSearchTxt" name="fSearchTxt"/>
+									</div>
+									<div class="cmn_btn_ml" id="fSearchBtn">검색</div>
+						</form>
+								</th>
+							</tr>
+							
+						</thead>
+							<tr id="fcltyNamePlace">
+								<td>시설물명</td>
+								<td>시설물 위치</td>
+							</tr>
+						<tbody id="fcltyListBody">
+						</tbody>
+					</table>
 				</div>
-				<div class="rsrv_row">
-					<div class="cmn_btn_mr">14:00 ~ 15:00</div>
-					<div class="cmn_btn_mr">15:00 ~ 16:00</div>
-					<div class="cmn_btn_mr">16:00 ~ 17:00</div>
-					<div class="cmn_btn_mr">17:00 ~ 18:00</div>
-					<div class="cmn_btn_mr">18:00 ~ 19:00</div>
-				</div>
-
+				
 			</div>
+					<div class="cmn_btn_ml" id="listBtn">목록으로</div>
 		</div>
 	</div>
 	<!-- bottom -->

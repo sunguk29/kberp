@@ -304,6 +304,7 @@ textarea {
     border-radius: 7px;
     margin-bottom: 18px;
     margin-left: 45px;
+    font-size: 12pt;
 }
 .btnImg_in{
 	display: inline-block;
@@ -524,7 +525,7 @@ $(document).ready(function() {
 		});
 		
 	});
-	
+	$(".salesCont").hide();
 	$("#sales_btn").on("click", "#salesContBtn_h", function() {
 		$(".salesCont").hide();
 		html = "<div class=\"up_btn\" id=\"salesContBtn_s\"></div>";
@@ -627,7 +628,7 @@ function drawOpList(list) {
 						<input type="text" id="salesNum" name="salesNum" value="${data.SALES_NUM}" />
 				
 					<div class="bot_title">
-						<h3>영업기회<span id="sales_btn"><div class="drop_btn" id="salesContBtn_h"></div></span></h3>
+						<h3>영업기회<span id="sales_btn"><div class="up_btn" id="salesContBtn_s"></div></span></h3>
 					</div>
 				<div class="salesCont">
 					<div class="page_cont_title_text">기본정보</div>
@@ -790,11 +791,15 @@ function drawOpList(list) {
 					</table>
 					<br/>
 					<!-- 첨부자료  -->
+					<c:set var="salesFileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+					<c:set var="salesFileName" value="${fn:substring(data.ATT_FILE_NAME, 20, salesFileLength)}"></c:set>
 					<div class="spc">
-						<div class="adc_txt"> 첨부자료 (0)
-								<input type=file name='file1' style='display: none;'> 
+						<div class="adc_txt">
+							첨부자료
 						</div>
-						<div class="cntrct_box_in"></div> 
+						<div class="cntrct_box_in">
+							<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${salesFileName}">${salesFileName}</a>
+						</div> 
 					</div>
 				</div>
 					
@@ -958,15 +963,15 @@ function drawOpList(list) {
 							</tbody>
 						</table>
 						<!-- 첨부자료  -->
-						<input type=file id="att" name="att" />
-						<input type="hidden" id="attFile" name="attFile" />
+						<c:set var="sgstnFileLength" value="${fn:length(data2.ATT_FILE_NAME)}"></c:set>
+						<c:set var="sgstnFileName" value="${fn:substring(data2.ATT_FILE_NAME, 20, sgstnFileLength)}"></c:set>
 						<div class="spc">
 							<div class="adc_txt">
 								첨부자료
 							</div>
 							<div class="cntrct_box_in">
-							
-							</div>
+								<a href="resources/upload/${data2.ATT_FILE_NAME}"  download="${sgstnFileName}">${sgstnFileName}</a>
+							</div> 
 						</div>
 					<div class="next_bot">
 						<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
@@ -986,37 +991,6 @@ function drawOpList(list) {
 						<div class="cmn_btn subm">등록</div>
 					</div>
 				</form>
-					<!-- 히스토리 -->
-<!-- 					<div class="mgtop"></div>
-					<div class="bot_title"><h3>히스토리(5)<div class="drop_btn"></div></h3></div>
-					<hr color="#F2B705" width="925px">
-					<div class="bx">
-							<div class="OpinionBox">
-								<div class="name">영업기회 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 등록된 영업기회 표시</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">계약 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">계약 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">계약 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">계약 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-					</div> -->
 					<hr class="hr_bot" color="white" width="925px">
 					<hr class="hr_bot" color="white" width="925px">
 					<div class="salesOver_btn nb">영업 종료하기</div>

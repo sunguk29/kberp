@@ -800,37 +800,6 @@ function drawOpList(list) {
 						<div class="cmn_btn subm">등록</div>
 					</div>
 				</form>
- 					<!-- 히스토리 -->
-<!-- 					<div class="mgtop"></div>
-					<div class="bot_title"><h3>히스토리(5)<div class="drop_btn"></div></h3></div>
-					<hr color="#F2B705" width="925px">
-					<div class="bx">
-							<div class="OpinionBox">
-								<div class="name">영업기회 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 등록된 영업기회 표시</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">계약 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">계약 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">계약 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-							<div class="OpinionBox">
-								<div class="name">계약 (21/12/27 17:01:00)</div>
-								<div class="txtOp">내용: 계약 외 추가된 내용 기록</div>
-								<div class="txtOp">담당자:000</div>
-							</div>
-					</div>  -->
 					<hr class="hr_bot" color="white" width="925px">
 					<hr class="hr_bot" color="white" width="925px">
 					<div class="salesOver_btn nb">영업 종료하기</div>

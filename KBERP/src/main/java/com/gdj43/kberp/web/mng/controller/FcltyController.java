@@ -58,7 +58,7 @@ public class FcltyController {
 
 		int cnt = iCommonService.getIntData("Fclty.fcltyListRqstCnt", params);
 
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 10);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
 
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
@@ -85,33 +85,22 @@ public class FcltyController {
 		return mav;
 	}
 	
-	//예약가능한 시설물 목록
+	//예약가능한 시설물 목록 Ajax
 	@RequestMapping(value = "/fcltUseRqstCalListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String fcltUseRqstCalAjax(@RequestParam HashMap<String, String> params) throws Throwable {
 		ObjectMapper mapper = new ObjectMapper();
 
 		Map<String, Object> modelMap = new HashMap<String, Object>();
-
-		
-		 int cnt = iCommonService.getIntData("Fclty.fcltUseRqstCalListCnt",params);
-		 
-		 PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt,5,5);
-		
-		 params.put("startCount", Integer.toString(pb.getStartCount()));
-		 params.put("endCount", Integer.toString(pb.getEndCount()));
-		  
 		 
 		List<HashMap<String, String>> list = iCommonService.getDataList("Fclty.fcltUseRqstCalList", params);
 
-		modelMap.put("pb", pb);
 		modelMap.put("list", list);
 
 		return mapper.writeValueAsString(modelMap);
 
 	}
-	
-	//시설물예약등록
+	//시설물예약등록 1페이지 날짜 + 시설물
 	@RequestMapping(value = "/fcltUseRqstWrite")
 	public ModelAndView fcltUseRqstWrite(@RequestParam HashMap<String, String> params, ModelAndView mav)
 			throws Throwable {
@@ -120,12 +109,39 @@ public class FcltyController {
 
 		return mav;
 	}
+	//시설물 예약가능한 시간대 리스트 
+	@RequestMapping(value = "/timeSelAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String timeSelAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("Fclty.getTimeList", params);
+		
+		modelMap.put("list", list);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
+	//시설물예약등록 2페이지
+	@RequestMapping(value = "/fcltUseRqstTimeWrite")
+	public ModelAndView fcltUseRqstTimeWrite(@RequestParam HashMap<String, String> params
+											, ModelAndView mav) throws Throwable {
+
+		mav.setViewName("mng/fcltUseRqstTimeWrite");
+
+		return mav;
+	}
+	
 	//시설물 action insert 캘린더 해결안됨
 	@RequestMapping(value = "/fcltRqstAction/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String fcltRqstActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn)
+	public String fcltRqstActionAjax(@RequestParam HashMap<String, String> params, HttpSession session, @PathVariable String gbn)
 			throws Throwable {
 
+		params.put("sesEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
+		
 		ObjectMapper mapper = new ObjectMapper();
 
 		Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -133,7 +149,7 @@ public class FcltyController {
 		try {
 			switch (gbn) {
 			case "insert":
-				iCommonService.deleteData("Fclty.fcltUseRqstWrite", params);
+				iCommonService.insertData("Fclty.fcltUseRqstWrite", params);
 				break;
 			case "delete":
 				iCommonService.deleteData("Fclty.fcltUseRqstCncl", params);
@@ -170,7 +186,7 @@ public class FcltyController {
 		
 		 int cnt = iCommonService.getIntData("Fclty.fcltyListCnt",params);
 		 
-		 PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt,5,5);
+		 PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt,10,5);
 		
 		 params.put("startCount", Integer.toString(pb.getStartCount()));
 		 params.put("endCount", Integer.toString(pb.getEndCount()));
@@ -287,7 +303,7 @@ public class FcltyController {
 		int cnt = iCommonService.getIntData("Fclty.getEmpCnt", params);
 		
 		// 페이징 계산
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));

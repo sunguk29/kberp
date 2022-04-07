@@ -33,12 +33,22 @@ public class HrController {
 	
 	// 인사발령
     @RequestMapping(value = "/apntm")
-    public ModelAndView apntmList(@RequestParam HashMap<String,String> params, 
-                         ModelAndView mav) {
-      mav.setViewName("hr/apntm");
-      
-      return mav;
-    }
+    public ModelAndView apntmList(@RequestParam HashMap<String,String> params, HttpSession session, ModelAndView mav) throws Throwable {
+		try {
+			if(session.getAttribute("sEmpNum") != null) {
+				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
+				mav.setViewName("hr/apntm");
+				System.out.println("sEmpNum : " + params.get("sEmpNum"));
+			} else {
+				mav.setViewName("redirect:login");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			mav.addObject("exception", e);
+			mav.setViewName("exception/EXCEPTION_INFO");
+		}
+		return mav;
+	 } 
     
 	// 인사발령ajax       
 	@RequestMapping(value = "/apntmListAjax/{gbn}", method = RequestMethod.POST, 
@@ -56,12 +66,27 @@ public class HrController {
 		          break;
 		       case "cont" :
 		    	   HashMap<String, String> cont = iCommonService.getData("hr.getApntmCont", params);
+		    	   HashMap<String, String> emp = iCommonService.getData("hr.getEmpCont", params);
 		    	   modelMap.put("cont", cont);
+		    	   modelMap.put("emp", emp);
 		          break;
-		       case "inqry" :
-		    	   List<HashMap<String, String>> inqry = iCommonService.getDataList("hr.getInqryList", params);
-		    	   modelMap.put("inqry", inqry);
+		       case "inqryList" :
+		    	   List<HashMap<String, String>> inqryList = iCommonService.getDataList("hr.getInqryList", params);
+		    	   modelMap.put("inqryList", inqryList);
 		          break;
+		       case "inqryEmp" :
+		    	   HashMap<String, String> inqryEmp = iCommonService.getData("hr.getInqryEmp", params);
+		    	   modelMap.put("inqryEmp", inqryEmp);
+		    	   break;
+		       case "addApntm" :
+		    	   List<HashMap<String, String>> dept = iCommonService.getDataList("hr.getDeptList", params);
+		    	   List<HashMap<String, String>> rank = iCommonService.getDataList("hr.getRankList", params);
+		    	   modelMap.put("dept", dept);
+		    	   modelMap.put("rank", rank);
+		    	   break;
+		       case "insertApntm" :
+		    	   iCommonService.insertData("hr.insertApntm", params);
+		    	   break;
 		       }
 		       modelMap.put("res", "success");
 		    } catch (Throwable e) {

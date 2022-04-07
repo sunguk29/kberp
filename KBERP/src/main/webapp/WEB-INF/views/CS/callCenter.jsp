@@ -44,6 +44,11 @@
 	border-radius: 2px;
 	margin-top: 3px;
 }
+.hiddenSearch{
+	display: inline-block;
+	width: 100px;
+	margin-right: 10px;
+}
 .srch_slct{
 	width: 100%;
 	height: 20px;
@@ -91,6 +96,19 @@
 	text-decoration: underline;
 }
 
+/* 오시는 길, 연락처 팝업 */
+.call_guide_cont{
+	display: inline-block;
+	vertical-align: top;
+	width: 100%;
+	height: 100%;
+	background-color: white;
+	margin-left: -5px;
+	overflow: auto;
+}
+#guide_imgs{
+	width: 100%;
+}
 
 
 /* 저장 팝업 */
@@ -134,7 +152,7 @@
 	vertical-align: top;
 	text-indent: 10px;
     font-size: 13pt;
-    width: 240px;
+    width: 165px;
 }
 .cmn_btn_ml{
 	margin-top: 5px;
@@ -143,10 +161,22 @@
 }
 
 .clnt_srch {
+	display : inline-block;
 	margin-top: 5px;
 	background-color: #ffffff;
+	margin-left: 3px;
 }
 
+#clnt_slct {
+	display: inline-block;
+	height: 28px;
+	margin-top: 6px;
+	margin-left: 7px;
+}
+
+#searchBtn{
+	display: inline-block;
+}
 .clnt_srch input:focus {
 	outline: 2px solid #F2CB05;
 }
@@ -599,6 +629,7 @@
 	margin-left: 5px;
 }
 
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -610,7 +641,7 @@ $(document).ready(function() {
 			bg : false,
 			bgClose : false,
 			width: 510,
-			height: 300,
+			height: 600,
 			title : "대응가이드",
 			contents : html,
 			draggable : true,
@@ -628,11 +659,21 @@ $(document).ready(function() {
 	$("#call_btn").on("click", function() {
 		var html = "";
 		
+		html += "<div class=\"call_guide_cont\">";
+		html += "<div class=\"name_box\">안내</div>";
+		html += "<img alt=\"오시는길\" src=\"resources/images/CS/road1.png\" id=\"guide_imgs\" />";
+		html += "<img alt=\"오시는길\" src=\"resources/images/CS/road2.png\" id=\"guide_imgs\" />";
+		html += "<div class=\"name_box\">부서연락</div>";
+		html += "<img alt=\"연락처\" src=\"resources/images/CS/dept_call1.png\" id=\"guide_imgs\" />";
+		html += "<img alt=\"연락처\" src=\"resources/images/CS/dept_call2.png\" id=\"guide_imgs\" />";
+		html += "<img alt=\"연락처\" src=\"resources/images/CS/dept_call3.png\" id=\"guide_imgs\" />";
+		html += "</div>";
+		
 		makePopup({
 			bg : false,
 			bgClose : false,
 			width: 510,
-			height: 300,
+			height: 600,
 			title : "안내/부서별연락",
 			contents : html,
 			draggable : true,
@@ -663,13 +704,9 @@ $(document).ready(function() {
 		html += "<form action=\"#\" id=\"actionForm\" method=\"post\">"
 		html += "<input type=\"hidden\" id=\"clnt_num\" name=\"clnt_num\"/>"
 		html += "<div class=\"srch_slct\">";
-		html += "<div class=\"name_box\">선택</div>";
-		html += "<select id=\"clnt_slct\" name=\"clnt_slct\">";
-		html += "	<option value=\"0\">이름</option>";
-		html += "	<option value=\"1\">등급</option>";
-		html += "	<option value=\"2\">전화번호</option>";
-		html += "</select>";
-		html += "<input type=\"hidden\" name=\"searchTxt\" value=\"" + $("#searchTxt").val() + "\"/>"
+		html += "<div class=\"name_box\">검색어</div>";
+		html += "<input type=\"hidden\" name=\"clnt_slct\" value=\"" + $("#clnt_slct").val() + "\"/>";
+		html += "<input type=\"text\" class=\"hiddenSearch\" name=\"searchTxt\" readonly=\"readonly\" value=\"" + $("#searchTxt").val() + "\"/>";
 		html += "</div>";
 		html += "</form>";
 		html += "<div class=\"srch_cont\">";
@@ -996,6 +1033,11 @@ function checkEmpty(sel) {
 					<input type="hidden" id="clnt_num" name="clnt_num"/>
 						<div class="clnt_info_Header">
 							<div class="clnt_info">고객정보</div>
+							<select id="clnt_slct" name="clnt_slct">
+								<option value="0">이름</option>
+								<option value="1">등급</option>
+								<option value="2">전화번호</option>
+							</select>
 							<div class="srch_text_wrap clnt_srch">
 								<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
 							</div>

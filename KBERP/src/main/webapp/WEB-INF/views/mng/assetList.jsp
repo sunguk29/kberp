@@ -122,7 +122,7 @@ function drawList(list) {
 	var html = "";
 	
 	for(var data of list) {
-		html += "<tr num=\""+ data.ASSET_NUM + "\">";
+		html += "<tr>";
 		html += "<td>" + data.ASSET_NUM + "</td>";
 		html += "<td id=\"click\" num=\""+ data.ASSET_NUM +"\" type=\""+data.ASSET_TYPE_NUM+"\">" + data.ASSET_NAME + "</td>";
 		if(data.ASSET_TYPE_NUM==0)

@@ -493,6 +493,96 @@ table {
 	cursor: default;
 	padding-bottom: 0px;
 }
+
+/* ******** 견적 ******** */
+.qtn_txt {
+	height: 33px;
+	width: 885px;
+	padding: 0 5px;
+	font-size: 14px;
+	color: black;
+	vertical-align: middle;
+	box-sizing: border-box;
+	outline: none;
+	border-radius: 3px;
+	line-height: 33px;
+	border: 1px solid #000;
+	background-color: #F2F2F2;
+	text-align: center;
+	font-weight: bold;
+	margin-left: 40px;
+}
+
+.qtn_title_name, .title_name {
+	font-size: 15px;
+	font-weight: bold;
+	border-bottom: 3px solid #2E83F2;
+	padding-bottom: 10px;
+	margin-bottom: 30px;
+	margin-left: 40px;
+	width: 900px;
+}
+.title_name {
+	margin-top: 30px;
+}
+.qtn_box_in {
+	width: 885px;
+	height: 150px;
+	border: 1px solid #000;
+	border-radius: 7px;
+	margin-bottom: 18px;
+	margin-left: 40px;
+}
+.past_ngtn {
+	margin-left: 40px;
+	font-size: 11pt;
+	font-weight: bold;
+	color: black;
+	text-align: center;
+}
+.cc_box_in {
+	display: inline-block;
+	vertical-align: top;
+	width: 480px;
+	height: 70px;
+	padding-left: 20px;
+	white-space: pre;
+	font-size: 14px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	line-height: 20px;
+}
+.cc_box_in:hover {
+	cursor: pointer;
+	color: #2E83F2;
+}
+.cc_box_right {
+	display: inline-block;
+	vertical-align: top;
+	width: 365px;
+	height: 70px;
+	padding-right: 20px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.right_box {
+	width: 200px;
+	height: 50px;
+	margin: 10px auto;
+	font-size: 14px;
+	text-align: right;
+}
+.hands{
+	display: inline-block;
+	vertical-align: middle;
+	width: 48px;
+	height: 48px;
+	background-image: url("resources/images/sales/hands.png");
+	background-size: 48px 48px;
+	margin-right: 10px;
+}
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -536,6 +626,7 @@ $(document).ready(function() {
 	
 	$(".salesWrap").on("click", ".salesOpportunityName", function() {
 		$("#salesNum").val($(this).attr("salesNum")); // 영업번호 가져오기
+		$("#qtnNum").val($(this).attr("qtnNum")); // 견적번호 가져오기
 		
 		if($(this).children("#test").val() == "영업기회") {
 			$("#actionForm").attr("action", "sales1SalesChncCont"); // 영업기회 상세보기로 이동.
@@ -544,7 +635,7 @@ $(document).ready(function() {
 			$("#actionForm").attr("action", "sales2SgstnCont"); // 제안 상세보기로 이동.
 			$("#actionForm").submit();
 		} else if($(this).children("#test").val() == "견적") {
-			$("#actionForm").attr("action", "sales3QntCont"); // 견적 상세보기로 이동.
+			$("#actionForm").attr("action", "sales3QtnCont"); // 견적 상세보기로 이동.
 			$("#actionForm").submit();
 		}  else if($(this).children("#test").val() == "계약") {
 			$("#actionForm").attr("action", "sales4CntrctCont"); // 계약 상세보기로 이동.
@@ -789,7 +880,7 @@ function drawList(list) {
 	for(var data of list) {
 		html += "<div class=\"salesOpportunity\">";
 		html += "<div class=\"sledding\">" + data.PRGRS_STS + "</div>";
-		html += "<div class=\"salesOpportunityName\" salesNum = \"" + data.SALES_NUM + "\">" + data.LEAD_NAME + "<input type=\"hidden\" id=\"test\" value=\"" + data.PRGRS_STS2 + "\" /></div>";
+		html += "<div class=\"salesOpportunityName\" salesNum = \"" + data.SALES_NUM + "\" qtnNum=\"" + data.QTN_NUM + "\">" + data.LEAD_NAME + "<input type=\"hidden\" id=\"test\" value=\"" + data.PRGRS_STS2 + "\" /></div>";
 		html += "<table cellspacing=\"0\">";
 		html += "<colgroup>";
 		html += "<col width=\"120\">";
@@ -859,13 +950,13 @@ function drawList(list) {
 		}
 		if(data.PRGRS_STS2 == "견적") {
 			html += "<td class=\"stick1\" style=\"background-color:#FFE150;\"></td>";
-			html += "<td class=\"stick2\" style=\"background-color:#FFE150;></td>";
+			html += "<td class=\"stick2\" style=\"background-color:#FFE150;\"></td>";
 			html += "<td class=\"stick3\"></td>";
 		}
 		if(data.PRGRS_STS2 == "계약") {
 			html += "<td class=\"stick1\" style=\"background-color:#FFE150;\"></td>";
-			html += "<td class=\"stick2\" style=\"background-color:#FFE150;></td>";
-			html += "<td class=\"stick3\" style=\"background-color:#FFE150;></td>";
+			html += "<td class=\"stick2\" style=\"background-color:#FFE150;\"></td>";
+			html += "<td class=\"stick3\" style=\"background-color:#FFE150;\"></td>";
 		}
 		html += "</tr>";
 		html += "<tr height=\"10\">";
@@ -1012,6 +1103,7 @@ function drawMngPaging(mngPb) {
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
 		<input type="hidden" id="salesNum" name="salesNum" /> <!-- 상세보기 갈 때 필요 -->
+		<input type="hidden" id="qtnNum" name="qtnNum" /> <!-- 상세보기 갈 때 필요 -->
 		
 	<!-- 내용영역 -->
 	<div class="cont_wrap">

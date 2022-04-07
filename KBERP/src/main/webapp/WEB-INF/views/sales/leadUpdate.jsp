@@ -339,7 +339,7 @@ table{
 	width: 927px;
 	margin: 40px auto;
 }
-td:nth-child(2){
+td:nth-child(2), td:nth-child(4) {
 	border-bottom: 1px solid #d7d7d7;
 }
 tr:nth-child(10) td{
@@ -616,6 +616,35 @@ hr { /* 구분선 */
 #attFileName {
 	font-size: 10pt;
 }
+#percent {
+	font-size: 10pt;
+	display: inline-block;
+	vertical-align: middle;
+	font-weight: bold;
+	margin-bottom: 5px;
+	/* margin-left: 25px; */
+}
+#userIcon {
+	margin-top: 5px;
+}
+.mngTxt {
+	height: 33px;
+	width: 85%;
+	padding: 0 5px;
+	font-size: 12px;
+	color: black;
+	vertical-align: middle;
+	box-sizing: border-box;
+	outline: none;
+	border-radius: 3px;
+	line-height: 33px;
+	border: none;	
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -654,20 +683,21 @@ $(document).ready(function() {
 		}
 	});	
 	
-	/* 고객사 등급 선택되게 */
+ 	/* 고객사 등급 선택되게 */
 	$("#ccGrade").val(${data.GRADE_NUM}).prop("selected", this.selected);
 	
 	/* 인지경로 선택 되게 */
 	$("#rp").val(${data.RCGNTN_PATH_NUM}).prop("selected", this.selected);
 	
 	/* 진행상태 선택 되게 */
-	$("#psNum").val(${data.PRGRS_STS_NUM}).prop("selected", this.selected);
+	$("#psNum").val(${data.PRGRS_STS_NUM}).prop("selected", this.selected); 
 	
 	// 첨부파일 +버튼
 	$(".plus_btn").on("click", function() {
 		$("#att").click();
 	});
 	
+	// 첨부파일 -버튼
 	$(".minus_btn").on("click", function() {
 		$("#attFileName").remove();
 		$(this).remove();
@@ -693,6 +723,9 @@ $(document).ready(function() {
 		} else if(checkEmpty("#mngEmp")) {
 			alert("담당자를 입력하세요.");
 			$("#mngEmp").focus();
+		} else if(checkEmpty("#psblCheck")) {
+			alert("가능여부를 입력하세요.");
+			$("#psblCheck").focus();
 		} else {	
 			var html = "";
 			
@@ -1479,8 +1512,6 @@ function uploadName(e) {
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="srchType" value="${param.srchType}" />
 	<input type="hidden" name="psNum" value="${param.psNum}" />
-	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
-	<input type="hidden" name="listSort" value="${param.listSort}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -1512,16 +1543,18 @@ function uploadName(e) {
 						<table>
 							<colgroup>
 								<col width="200" />
-								<col width="auto" />
+								<col width="250" />
+								<col width="150" />
+								<col width="250" />
 							</colgroup>
 							<tbody>
 								<tr>
 									<td><input type="button" class="btn" value="리드명 *" readonly="readonly"/></td>
-									<td><input type="text" class="txt" id="leadName" name="leadName" value="${data.LEAD_NAME}" /></td>
+									<td colspan="3"><input type="text" class="txt" id="leadName" name="leadName" value="${data.LEAD_NAME}" /></td>
 								</tr>
 								<tr>
 									<td><input type="button" class="btn" value="고객명 *" readonly="readonly"/></td>
-									<td>
+									<td colspan="3">
 										<input type="text" class="txt" id="clntName" name="clntName" value="${data.CLNT_NAME}"/>
 										<input type="hidden" id="clntNum" name="clntNum" value="${data.CLNT_NUM}"/>
 										<img class="btnImg_in" id="clntIcon" alt="팝업" src="resources/images/sales/popup.png" />
@@ -1529,7 +1562,7 @@ function uploadName(e) {
 								</tr>
 								<tr>
 									<td><input type="button" class="btn" value="고객사 *" readonly="readonly"/></td>
-									<td>
+									<td colspan="3">
 										<input type="text" class="txt" id="ccName" name="ccName" value="${data.CLNT_CMPNY_NAME}" />
 										<input type="hidden" id="ccNum" name="ccNum" />
 										<img class="btnImg_in" id="ccIcon" alt="팝업" src="resources/images/sales/popup.png" />
@@ -1537,7 +1570,7 @@ function uploadName(e) {
 								</tr>
 								<tr>
 									<td><input type="button" class="btn" value="고객사 등급" readonly="readonly"/>
-									<td>
+									<td colspan="3">
 										<select class="txt_in" id="ccGrade" name="ccGrade" disabled="disabled">
 											<optgroup>
 												<option value="5">고객사 등록 후 자동 입력</option>
@@ -1552,7 +1585,7 @@ function uploadName(e) {
 								</tr>
 								<tr>
 									<td><input type="button" class="btn" value="인지경로 *" readonly="readonly"/></td>
-									<td>
+									<td colspan="3">
 										<select class="txt_in" id="rp" name="rp">
 											<option value="0">자사홈페이지</option>
 											<option value="1">인터넷검색</option>
@@ -1566,14 +1599,20 @@ function uploadName(e) {
 								<tr>
 									<td><input type="button" class="btn" value="담당자 *" readonly="readonly"/></td>
 									<td>
-										<input type="text" class="txt" id="mngEmp" name="mngEmp" value="${data.EMP_NAME}" />
+										<input type="text" class="mngTxt" id="mngEmp" name="mngEmp" value="${data.EMP_NAME}" />
 										<input type="hidden" id="mngNum" name="mngNum" value="${data.MNGR_EMP_NUM}" />
 										<img class="btnImg_in" id="userIcon" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
+									</td>
+									<td><input type="button" class="btn" value="가능여부 *" readonly="readonly"/></td>
+									<td>
+										<input type="text" class="txt" id="psblCheck" name="psblCheck" min="0" max="100" value="${data.PSBL_CHECK}" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" style="text-align: right;"/>
+										<%-- <input type="number" class="txt" id="psblCheck" name="psblCheck" min="0" max="100" value="${data.PSBL_CHECK}" style="text-align: right;"/> --%>
+										<div id="percent">%</div>
 									</td>
 								</tr>
 								<tr>
 									<td><input type="button" class="btn" value="진행상태 *" readonly="readonly"/></td>
-									<td>
+									<td colspan="3">
 										<select class="txt_in" id="psNum" name="psNum">
 											<option value="0">선택안함</option>
 											<option value="1">진행중</option>

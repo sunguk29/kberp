@@ -55,7 +55,7 @@ public class FaqController {
 		
 		//페이징
 		PagingBean pb 
-		= iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 4, 4);
+		= iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 10);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
@@ -90,7 +90,7 @@ public class FaqController {
 	  }
 	  
 		
-	  @RequestMapping(value = "/faqdtAction/{gbn}", method = RequestMethod.POST,
+	  @RequestMapping(value = "/faqdtActionAjax/{gbn}", method = RequestMethod.POST,
 	  produces = "text/json;charset=UTF-8")
 	  
 	  @ResponseBody public String faqdtActionAjax(@RequestParam HashMap<String, String>

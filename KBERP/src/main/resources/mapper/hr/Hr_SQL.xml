@@ -14,7 +14,7 @@
 						                       		 ON A.DEPT_NUM = D.DEPT_NUM
 						                       INNER JOIN RANK R
 						                       	 	 ON A.RANK_NUM = R.RANK_NUM
-						                       INNER JOIN APRVL_LINE AP
+						                       LEFT JOIN APRVL_LINE AP
 						                        	 ON A.APRVL_NUM = AP.APRVL_NUM
 					                       <if test="searchTxt != null and searchTxt != ''"> <!--  텍스트 조회 필터링 	-->
 												<choose>
@@ -58,7 +58,7 @@
 	 </select>
 	
 	 <select id="getApntmCont" resultType="hashmap" parameterType="hashmap">
-	 	 SELECT A.APNTM_NUM, E.EMP_NAME, E.EMP_NUM, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, A.START_DATE, A.END_DATE, A.DTL_CONT 
+	 	 SELECT A.APNTM_NUM, E.EMP_NAME, E.EMP_PCTR_FILE, E.EMP_NUM, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, A.START_DATE, A.END_DATE, A.DTL_CONT 
 		 FROM ( SELECT APNTM_NUM, APNTM_DVSN_NUM, EMP_NUM, DEPT_NUM, RANK_NUM, 
 	                   TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE , TO_CHAR(END_DATE,'YYYY-MM-DD') AS END_DATE ,DTL_CONT
 	       	    FROM APNTM )A INNER JOIN EMP E
@@ -68,6 +68,20 @@
 	                     	  INNER JOIN RANK R
 	                        		ON A.RANK_NUM = R.RANK_NUM
 		 WHERE APNTM_NUM = #{no}
+	</select>
+	 <select id="getEmpCont" resultType="hashmap" parameterType="hashmap">
+		SELECT AA.EMP_NUM, AA.EMP_NAME, D.DEPT_NAME, R.RANK_NAME
+		FROM(SELECT E.EMP_NUM, E.EMP_NAME, A2.DEPT_NUM, A2.RANK_NUM
+			   FROM (SELECT EMP_NUM
+		               FROM APNTM
+		              WHERE APNTM_NUM =  #{no})A INNER JOIN EMP E
+		                                                 ON A.EMP_NUM = E.EMP_NUM
+                                           	     INNER JOIN APNTM A2
+		                               					 ON A.EMP_NUM = A2.EMP_NUM
+				WHERE STS_NUM = '1' )AA INNER JOIN DEPT D
+		                                	    ON AA.DEPT_NUM = D.DEPT_NUM
+		                                INNER JOIN RANK R
+		                                        ON AA.RANK_NUM = R.RANK_NUM     
 	</select>
 	
 	<!--    증명서발급 쿼리    -->
@@ -156,6 +170,40 @@
 		ORDER BY DEPT_NAME, RANK_NUM, EMP_NAME, EMP_NUM       
 	</select>
 	
+	<select id="getInqryEmp" resultType="hashmap" parameterType="hashmap">
+		SELECT E.EMP_NUM, E.EMP_NAME, E.EMP_PCTR_FILE, A.RANK_NUM, R.RANK_NAME, A.DEPT_NUM, D.DEPT_NAME
+		FROM (  SELECT EMP_NUM, RANK_NUM, DEPT_NUM, START_DATE, END_DATE, STS_NUM
+		        FROM APNTM 
+		        WHERE STS_NUM = '1'
+		        AND END_DATE IS NULL )A INNER JOIN EMP E
+	                                            ON A.EMP_NUM = E.EMP_NUM
+	                                    INNER JOIN RANK R 
+	                                            ON A.RANK_NUM = R.RANK_NUM
+	                                    INNER JOIN DEPT D 
+	                                            ON A.DEPT_NUM = D.DEPT_NUM
+		WHERE E.EMP_NUM = #{inqryNo}
+	</select>
+	<select id="getDeptList" resultType="hashmap" >
+		SELECT D.DEPT_NUM, D.DEPT_NAME, D.SUPER_DEPT_NUM, D.DEPT_LEVEL,D.LEAF
+		FROM( SELECT DEPT_NUM, DEPT_NAME, SUPER_DEPT_NUM, DEPT_LEVEL, CONNECT_BY_ISLEAF AS LEAF
+			  FROM DEPT
+		      START WITH SUPER_DEPT_NUM IS NULL
+		      CONNECT BY PRIOR DEPT_NUM = SUPER_DEPT_NUM) D
+		WHERE D.LEAF = '1'
+	</select>
+	<select id="getRankList" resultType="hashmap" >
+		SELECT RANK_NAME, RANK_NUM
+		FROM RANK
+		ORDER BY SORT_NUM DESC
+	</select>
+<!--  	<insert id="addApntmAprvl" parameterType="hashmap"  >
+		INSERT INTO APRVL (APRVL_NUM, EMP_NUM, TITLE, CONT)
+		VALUES (APRVL_SEQ.NEXTVAL, #{sEmpNum}, '인사발령', #{aprvlCont})
+	</insert> -->
+ 	<insert id="insertApntm" parameterType="hashmap"  >
+		INSERT INTO APNTM ( APNTM_NUM, EMP_NUM, RANK_NUM, DEPT_NUM, APNTM_DVSN_NUM, START_DATE, END_DATE, DTL_CONT)
+		VALUES ( APNTM_SEQ.NEXTVAL,  #{addEmpNum},  #{addRankNum},  #{addDeptNum}, #{addDvsnNum}, #{addStart},  #{addEnd}, #{addCont} )
+	</insert>
 	
 
 </mapper>

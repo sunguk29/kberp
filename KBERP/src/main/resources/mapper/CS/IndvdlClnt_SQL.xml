@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cl">
+	<select id="icloginCheck" parameterType="hashmap" resultType="hashmap">
+		SELECT CLNT_NUM, ID, PW, CLNT_NAME, PHONE_NUM_1, PHONE_NUM_2, ZIP_CODE, ADRS, DTL_ADRS
+		FROM INDVDL_CLNT
+		WHERE DEL_CHECK = '1'
+		AND ID = #{id}
+		AND PW = #{pw}
+	</select>
+</mapper>
