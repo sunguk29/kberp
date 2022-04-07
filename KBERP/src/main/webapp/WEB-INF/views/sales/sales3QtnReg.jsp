@@ -1275,6 +1275,7 @@ $(document).ready(function() {
 									buttons : [{
 										name : "적용",
 										func:function() {
+											$("#mdName").val(data.MD_NAME);
 											$("#prdmptn_psbl_check").val(data.MID_RDMPTN_PSBL_CHECK).prop("selected", this.selected);
 											$("#intrst_pymnt").val(data.INTRST_PYMNT_MTHD_NUM).prop("selected", this.selected);
 											$("#prncpl_pymnt").val(data.PRNCPL_PYMNT_MTHD_NUM).prop("selected", this.selected);
@@ -1530,6 +1531,7 @@ $(document).ready(function() {
 						buttons : [{
 							name : "적용",
 							func:function() {
+								$("#mdName").val(data.MD_NAME);
 								$("#mdType").val(data.MD_TYPE_NUM).prop("selected", this.selected);
 								$("#prdmptn_psbl_check").val(data.MID_RDMPTN_PSBL_CHECK).prop("selected", this.selected);
 								$("#intrst_pymnt").val(data.INTRST_PYMNT_MTHD_NUM).prop("selected", this.selected);
@@ -1583,9 +1585,9 @@ $(document).ready(function() {
 		$("#sgstn_btn").html(html);
 	});
 	
+	
  	/* 지난 견적서 리스트 */	
  	reloadSgstnList();
-	
 	
 }); // JS end
 
@@ -1716,8 +1718,13 @@ function reloadSgstnList() {
 		dataType : "json",
 		data : params,
 		success : function(res) {
-			drawPQCnt(res.PQListCnt);
-			drawPQList(res.list);
+			if(res.PQListCnt != 0) {
+				drawPQCnt(res.PQListCnt);
+				drawPQList(res.list);
+				$(".qtnDiv").show();
+			} else {
+				$(".qtnDiv").hide();
+			}
 		},
 		error : function(req) {
 			console.log(req.responseText);
@@ -2268,6 +2275,7 @@ function test(t) {
 				<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
 					<input type="hidden" id= "mdNum" name="mdNum" />
+					<input type="hidden" id= "mdName" name="mdName" />
 					<div class="bot_title"><h3>견적<div class="drop_btn"></div></h3></div>
 					 <hr class="hr_bot" color="white" width="925px"> 
 					<div class="hr_bot"></div>

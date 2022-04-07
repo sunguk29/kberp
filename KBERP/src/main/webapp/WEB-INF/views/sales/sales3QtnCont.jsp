@@ -623,13 +623,13 @@ $(document).ready(function() {
 	var loanAmnt = ${data3.LOAN_AMNT};
 	//대출기간
 	var loanPrd
-	if(${data3.LOAN_PRD eq 0} == 0) {
+	if(${data3.LOAN_PRD eq 0}) {
 		loanPrd = 6;
-	} else if(${data3.LOAN_PRD eq 0} == 1) {
+	} else if(${data3.LOAN_PRD eq 1}) {
 		loanPrd = 12;
-	} else if(${data3.LOAN_PRD eq 0} == 2) {
+	} else if(${data3.LOAN_PRD eq 2}) {
 		loanPrd = 36;
-	} else if(${data3.LOAN_PRD eq 0} == 3) {
+	} else if(${data3.LOAN_PRD eq 3}) {
 		loanPrd = 60;
 	}
 	//이자율
@@ -762,6 +762,7 @@ function drawPQList(list) {
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업번호 -->
 	<input type="hidden" name="qtnNum" value="${param.qtnNum}" /> <!-- 견적 번호 -->
+	<input type="hidden" name="mdName" value="${param.mdName}" /> <!-- 상품 이름 -->
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -1169,10 +1170,10 @@ function drawPQList(list) {
 											 		<option value="0" selected="selected">개인사업</option>
 									 			</c:when>
 									 			<c:when test="${data3.MD_TYPE_NUM eq 1}">
-											 		<option value="0" selected="selected">법인사업</option>
+											 		<option value="1" selected="selected">법인사업</option>
 									 			</c:when>
 									 			<c:when test="${data3.MD_TYPE_NUM eq 2}">
-											 		<option value="0" selected="selected">공공사업</option>
+											 		<option value="2" selected="selected">공공사업</option>
 									 			</c:when>
 									 		</c:choose>
 									 	</optgroup>
@@ -1224,10 +1225,10 @@ function drawPQList(list) {
 										 				<option value="0" selected="selected">미포함</option>
 										 			</c:when>
 										 			<c:when test="${data3.SRTX eq 1}">
-										 				<option value="0" selected="selected">포함</option>
+										 				<option value="1" selected="selected">포함</option>
 										 			</c:when>
 										 			<c:when test="${data3.SRTX eq 2}">
-										 				<option value="0" selected="selected">면세</option>
+										 				<option value="2" selected="selected">면세</option>
 										 			</c:when>
 										 		</c:choose>
 										 	</optgroup>
@@ -1244,13 +1245,13 @@ function drawPQList(list) {
 													<option value="0" selected="selected">6개월</option>
 												</c:when>
 												<c:when test="${data3.LOAN_PRD eq 1}">
-													<option value="0" selected="selected">1년</option>
+													<option value="1" selected="selected">1년</option>
 												</c:when>
 												<c:when test="${data3.LOAN_PRD eq 2}">
-													<option value="0" selected="selected">3년</option>
+													<option value="2" selected="selected">3년</option>
 												</c:when>
-												<c:when test="${data3.LOAN_PRD eq 2}">
-													<option value="0" selected="selected">5년</option>
+												<c:when test="${data3.LOAN_PRD eq 3}">
+													<option value="3" selected="selected">5년</option>
 												</c:when>
 											</c:choose>
 										</optgroup>
@@ -1266,10 +1267,10 @@ function drawPQList(list) {
 													<option value="0" selected="selected">원금 균등 상환</option>
 												</c:when>
 												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 1}">
-													<option value="0" selected="selected">원리금 균등 상환</option>
+													<option value="1" selected="selected">원리금 균등 상환</option>
 												</c:when>
 												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 2}">
-													<option value="0" selected="selected">만기 일시 상환</option>
+													<option value="2" selected="selected">만기 일시 상환</option>
 												</c:when>
 											</c:choose>
 										</optgroup>
