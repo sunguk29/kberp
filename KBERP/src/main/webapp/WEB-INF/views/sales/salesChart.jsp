@@ -591,17 +591,10 @@ function drawMngPaging(pb) {
 						</table>
 						<form action="#" id="getForm" method="post">
 						<input type="hidden" name="size" value="3" />
-<<<<<<< HEAD
-=======
-						<input type="hidden" name="series" value="1" />
-<<<<<<< HEAD
 						</form>
-=======
 						<input type="hidden" id="bsnType0" name="bsnType0"/>
 						<input type="hidden" name="bsnType1"/>
 						<input type="hidden" name="bsnType2"/>
->>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
->>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 						<dlv class="cont_right">
 							<div class="new_sales_actvty">
 							<div class="sales_text">
