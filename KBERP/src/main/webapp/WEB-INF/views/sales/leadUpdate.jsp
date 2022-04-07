@@ -697,6 +697,7 @@ $(document).ready(function() {
 		$("#att").click();
 	});
 	
+	// 첨부파일 -버튼
 	$(".minus_btn").on("click", function() {
 		$("#attFileName").remove();
 		$(this).remove();

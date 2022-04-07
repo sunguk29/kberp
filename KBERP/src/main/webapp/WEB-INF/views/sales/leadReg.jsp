@@ -678,7 +678,7 @@ $(document).ready(function() {
 	$(".plus_btn").on("click", function() {
 		$("#att").click();
 	});
-	
+
 	// 저장버튼
 	$("#writeBtn").on("click", function() {
 		if(checkEmpty("#leadName")) {
@@ -1595,7 +1595,7 @@ function uploadName(e) {
 							<img class="plus_btn" src="resources/images/sales/plus.png" border='0' > 
 						</div>
 						<div class="cntrct_box_in">
-							<input type="text" id="fileName" name="fileName" readonly="readonly" />
+							<input type="text" id="fileName" name="fileName" readonly="readonly" /> 
 						</div>
 						
 					</div> <!-- bodyWrap end -->

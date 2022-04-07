@@ -66,7 +66,7 @@
 				WHERE A.RNUM BETWEEN #{startCount} AND #{endCount} 
 	</select>
 	
-	 <select id="useHistoryCnt" resultType="hashmap" parameterType="hashmap">
+	 <select id="useHistoryCnt" resultType="Integer">
 		SELECT COUNT (*) AS CNT
 		FROM(SELECT EMP_NAME, START_DATE, END_DATE,
 		ROW_NUMBER () OVER(ORDER BY ASSET_USE_NUM DESC) AS RNUM

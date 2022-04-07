@@ -290,8 +290,6 @@ select {
 $(document).ready(function() {
 	
 	getData();
-	
-	console.log($("#bsnType0").val());
 
 	/* 담당자 팝업 */
 	$("#mngBtn").on("click", function() {
@@ -402,10 +400,6 @@ $(document).ready(function() {
 			data: params,
 			success : function(res) {
 				makeChart(res.list);
-<<<<<<< HEAD
-=======
-				console.log(res.list);
->>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 			},
 			error : function(request, status, error) {
 				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -415,32 +409,20 @@ $(document).ready(function() {
 
 	/* 차트 그리기 */
 	function makeChart(list) {
+		console.log(list);
 		$('.bsns_type').highcharts({
 			chart: {
-				type: 'bar',
+				type: 'pie',
 				zoomType: 'x'
 			},
 			title: {
-				text: '사업유형'
+				text: ''
 			},
-			colors: ['#5CB3FF', '#D462FF', '#FBB917', '#00B3A2', '#FB558A', 
-	            '#2870E3', '#FF8F00', '#B5BF07', '#3F9D00', '#CE3C92'],
-	        plotOptions: {
-	        	area: {
-	        		pointStart: 1,
-	        		marker: {
-	        			enabled: false,
-	        			symbol: 'circle',
-	        			redius: 2,
-	        			states: {
-	        				hover: {
-	        					enabeld: true
-	        				}
-	        			}
-	        		}
-	        	}
-	        },
-	        series : list
+			colors: ['#5CB3FF', '#D462FF', '#FBB917'],
+	        series : [{
+	        	name: '건 수',
+	        	data : list
+	        }]
 		});
 	}
 
@@ -609,6 +591,8 @@ function drawMngPaging(pb) {
 						</table>
 						<form action="#" id="getForm" method="post">
 						<input type="hidden" name="size" value="3" />
+<<<<<<< HEAD
+=======
 						<input type="hidden" name="series" value="1" />
 <<<<<<< HEAD
 						</form>
@@ -616,6 +600,7 @@ function drawMngPaging(pb) {
 						<input type="hidden" id="bsnType0" name="bsnType0"/>
 						<input type="hidden" name="bsnType1"/>
 						<input type="hidden" name="bsnType2"/>
+>>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 >>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 						<dlv class="cont_right">
 							<div class="new_sales_actvty">

@@ -97,9 +97,6 @@ $("#srchEmp").on("click", function() {
 		html += "</tbody>";
 		html += "</table>";
 		html += "</div>";
-		html += "<div>";
-		html += "<div>";
-		html += "<div>";
 		html += "<table class=\"board_table\">";
 		html += "<colgroup>";
 		html += "<col width=\"130\">";
@@ -116,9 +113,6 @@ $("#srchEmp").on("click", function() {
 		html += "</table>";
 		html += "<div class=\"board_bottom\">";
 		html += "<div class=\"pgn_area\" id=\"pgn_area\">";
-		html += "</div>";
-		html += "</div>";
-		html += "</div>";
 		html += "</div>";
 		html += "</div>";
 		html += "</div>";

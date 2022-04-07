@@ -46,6 +46,7 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	
 	$("#listBtn").on("click", function(){
 		$("#actionForm").attr("action", "assetList");
 		$("#actionForm").submit();
@@ -91,6 +92,8 @@ $("#useHstry").on("click", function() {
 			title : "사용내역",
 			contents : html,
 			contentsEvent : function() {
+				console.log("@@@@")
+				
 				
 				$(".pgn_area").on("click", "div", function() {
 					$("#page").val($(this).attr("page"));
@@ -105,8 +108,7 @@ $("#useHstry").on("click", function() {
 			}
 		});
 	});
-});
-
+	
 	function reloadList() {
 		var params = $("#hstryForm").serialize();
 		
@@ -118,12 +120,15 @@ $("#useHstry").on("click", function() {
 			success : function(res) {
 				drawList(res.list);
 				drawPaging(res.pb);
-			},
+					},
 			error : function(request, status, error) {
 				console.log(request.responseText);
 			}
 		});
 	}
+
+});
+
 	
 	
 	function drawList(list) {
@@ -195,7 +200,7 @@ $("#useHstry").on("click", function() {
 </form>
 <div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">승인관리 상세보기</div>
+			<div class="page_title_text">자산 상세보기</div>
 		</div>
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
