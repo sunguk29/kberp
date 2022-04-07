@@ -849,6 +849,10 @@ pre{
 .mdCont_table tr:nth-child(8) td:nth-child(2) {
     border: none;
 }
+.qtnDiv {
+	width: 100%;
+	height: 100%;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -1505,8 +1509,14 @@ $(document).ready(function() {
 		
 	});
 	
-/* 	/* 지난 견적서 리스트 */
-	reloadSgstnList(); */
+ 	/* 지난 견적서 리스트 */
+ 	if(${param.qtnNum ne ""}) {
+ 		$(".qtnDiv").show();	
+ 		reloadSgstnList();
+ 	} else {
+ 		console.log("?");
+ 		$(".qtnDiv").hide();
+ 	}
 	
 	
 }); // JS end
@@ -1629,7 +1639,7 @@ function qtnMdList(list) {
 // *************** 상품 목록 끝
 
 // *************** 지난견적서 목록 Ajax *************** 
-/* function reloadSgstnList() {
+function reloadSgstnList() {
 	var params = $("#pastQtnActionForm").serialize();
 	
 	$.ajax({
@@ -1667,7 +1677,7 @@ function drawPQList(list) {
 		html +="</div>";
 	}
 	$(".bx").html(html);
-} */
+}
 
 
 // *************** 지난견적서 목록 끝
@@ -2342,7 +2352,20 @@ function test(t) {
 							<input type="text" id="fileName" readonly="readonly" />
 						</div>
 					</div>
-				</form>	
+				</form>
+				<!-- ******************** 지난 견적서 ******************** -->
+				<div class="qtnDiv">
+				<form action="#" id="pastQtnActionForm" method="post">
+					<input type="hidden" name="salesNum" value="${param.salesNum}" />
+					<input type="hidden" name="qtnNum" value="${param.qtnNum}" />
+					<!-- 지난 견적서 -->
+					<div class="mgtop"></div>
+					<div class="PQ_title"></div>
+					<hr color="#F2B705" width="925px">
+					<div class="bx"></div>
+					<!-- ********* 견적 끝 ********* -->
+				</form>
+				</div>
 				</div>
 			</div>
 		</div>
