@@ -55,8 +55,6 @@ public class AprvlService implements IAprvlService{
 			// 해쉬맵 사용 결재권자 데이터 저장
 			iCommonDao.insertData("elctrncAprvl.rfrncAdd", rfrnc);
 		}
-			// 해쉬맵 만들기
-			// 해쉬맵 사용 참조 데이터 저장
 		
 		return aprvl_num;
 		
