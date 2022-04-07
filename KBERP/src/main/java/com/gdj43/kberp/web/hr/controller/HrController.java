@@ -87,6 +87,9 @@ public class HrController {
 		       case "insertApntm" :
 		    	   iCommonService.insertData("hr.insertApntm", params);
 		    	   break;
+		       case "updateApntm" :
+		    	   iCommonService.updateData("hr.updateApntm", params);
+		    	   break;
 		       }
 		       modelMap.put("res", "success");
 		    } catch (Throwable e) {
@@ -165,6 +168,9 @@ public class HrController {
 	       case "delete" :
 	    	   iCommonService.updateData("hr.deleteDept", params);
 	          break;
+	       case "empInfo" :
+	    	   HashMap<String, String> empInfo = iCommonService.getData("hr.orgnztEmpInfo", params);
+	    	   modelMap.put("empInfo", empInfo);
 	       }
 	       modelMap.put("res", "success");
 	    } catch (Throwable e) {
