@@ -11,29 +11,23 @@
 		AND  M.EMP_NUM = #{sEmpNum}
 	</select>
 
-<!-- 채팅방 참여인원 -->
-<!-- 	<select id = "headCnt" parameterType="hashmap" resultType="Integer">
-		SELECT COUNT(*) AS CNT
-		      FROM MSGR_CONT MC INNER JOIN MSGR_HEAD_COUNT MHC
-		      ON MC.EMP_NUM = MHC.EMP_NUM
-	</select> -->
-
 <!-- 채팅방 삽입 -->
 	<insert id = "insertChat" parameterType= "hashmap">
 		INSERT INTO MSGR(CHAT_NUM, EMP_NUM)
 		VALUES(#{chatsq}, #{sEmpNum})
 	</insert>
 	
+<!-- 채팅방 참여인원 -->	
 	<insert id="insertChatHead" parameterType= "hashmap">
 		INSERT INTO MSGR_HEAD_COUNT (CHAT_NUM, EMP_NUM)
 		VALUES (#{chatsq}, #{num})
 	</insert>
 		
 <!-- 채팅 삽입 -->		
-	<!-- <insert id = "insertCont" parameterType= "hashmap">
-		INSERT INTO MSGR_CONT(CONT_NUM, CHAT_NUM, EMP_NUM, CONT, RGSTRTN_DT)
-		VALUES (#{contsq}, #{chatsq}, #{EMP_NUM}, #{CONT_NUM}, TO_DATE(#{rgdt}, 'YYYY-MM-DD HH24:MI:SS'))
-	</insert> -->
+	<insert id = "insertCont" parameterType= "hashmap">
+		INSERT INTO MSGR_CONT(CONT_NUM, CHAT_NUM, EMP_NUM, CONT)
+		VALUES (#{contsq}, #{chatsq}, #{sEmpNum}, #{cont})
+	</insert>
 		
 <!-- 채팅방 시퀀스 -->		
 	<select id="chatSeq" resultType="String">
@@ -103,12 +97,34 @@
 			                        ON A.RANK_NUM = R.RANK_NUM
 		  )
 	WHERE EMP_NUM != #{sEmpNum}
+	
 	</select>
 	
+<!-- 아이디별 채팅방 -->
+	<!-- <select id = "idChatRoom" parameterType = "hashmap" resultType="hashmap">
+		SELECT DISTINCT CHAT_NUM, EMP_NUM
+		FROM (SELECT M.CHAT_NUM, M.EMP_NUM
+	      	  FROM MSGR M INNER JOIN MSGR_CONT MC
+	                		ON M.EMP_NUM = MC.EMP_NUM) A
+		WHERE CHAT_NUM = #{sEmpNum}
+	</select> -->
+	
+<!-- 채팅방 인원 추가 -->	
 	<update id="joinChat" parameterType="hashmap">
 		UPDATE MSGR SET EMP_NUM = #{EMP_NUM},
 	                 RGSTRTN_DT = #{rgdt}
 		WHERE CHAT_NUM = #{CHAT_NUM}
 	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 </mapper>

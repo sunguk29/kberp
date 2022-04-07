@@ -431,7 +431,7 @@ thead {
 	margin: 2px 0;
 	font-size: 9pt;
 	font-weight: 600;
-	color: #4B94F2;
+	color: #595959;
 	margin: 18px;
 }
 
@@ -447,6 +447,14 @@ thead {
 	vertical-align: top;
 	width: 70px;
 	height: 30px;
+}
+
+.apnmt_add_info_text {
+	display: inline-block;
+	vertical-align: top;
+	width: 70px;
+	height: 30px;
+	color: #2E83F2;
 }
 
 .apnmt_info_text_end {
@@ -600,12 +608,23 @@ thead {
 	background-color: rgb(200, 218, 248);
 }
 
+.dvsnInfo {
+	display: inline-block;
+	width: 200px;
+	height: 30px;
+	font-size: 13px;
+	color: #222222;
+	
+}
 #emp_pctr_area {
 	width: 100%;
     height: 100%;
     object-fit: contain;
 }
 
+.page_title_bar_custom {
+    height: 30px;
+}
 /* 개인 작업 영역 */
 </style>
 
@@ -810,7 +829,9 @@ $(document).ready(function() {
 			    	$("#addEnd").focus();
 			    } else {
 			    	$("#addDeptNum").attr("disabled", false);
+			    	$("#addDeptNum").val("선택");
 			    	$("#addRankNum").attr("disabled", false);
+			    	$("#addRankNum").val("선택");
 			    	$("#addStart").attr("disabled", false);
 			    }
 		  }); 
@@ -1032,15 +1053,10 @@ function drawCont(cont, emp){
    html += "               <input type=\"text\" class=\"apnmt_info_input\" disabled value=\"이동\" />                                        ";
    }
    html += "            </div>                                                                     ";
-   html += "            <div class=\"apnmt_info\">                                                 ";
-   html += "               <div class=\"apnmt_info_text\">발령부서</div>                         ";
-   html += "               <input type=\"text\" class=\"apnmt_info_input\" disabled value=\"" + cont.DEPT_NAME + "\" />                                        ";
-   html += "               </select>                                                              ";
-   html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";
    html += "         <div class=\"apnmt_info_wrap\">                                                ";
    html += "            <div class=\"apnmt_info\">                                                 ";
-   html += "               <div class=\"apnmt_info_text\">발령팀</div>                           ";
+   html += "               <div class=\"apnmt_info_text\">발령부서</div>                           ";
    html += "               <input type=\"text\" class=\"apnmt_info_input\" disabled value=\"" + cont.DEPT_NAME + "\" />                                        ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_info\">                                                 ";
@@ -1139,7 +1155,7 @@ function drawAddApntm(dept,rank){
    html += "      <div class=\"apnmt_add_mid_area\">                                                 ";
    html += "         <div class=\"apnmt_info_wrap\">                                                ";
    html += "            <div class=\"apnmt_info\">                                                 ";
-   html += "               <div class=\"apnmt_info_text\">발령구분*</div>                         ";
+   html += "               <div class=\"apnmt_add_info_text\">발령구분</div>                         ";
    html += "               <select class=\"apnmt_select\" id=\"addDvsnNum\" name=\"addDvsnNum\">                                        ";
    html += "                  <option selected>선택</option>                                     ";
    html += "                  <option value=\"0\" cont=\"입사\">입사</option>                                              ";
@@ -1147,11 +1163,11 @@ function drawAddApntm(dept,rank){
    html += "                  <option value=\"2\" cont=\"승진\">승진</option>                                              ";
    html += "                  <option value=\"3\" cont=\"이동\">이동</option>                                              ";
    html += "               </select>                                                              ";
-   html += "            </div>                                                                     ";
+   html += "            </div>                                                                    ";
    html += "         </div>                                                                         ";
    html += "         <div class=\"apnmt_info_wrap\">                                                ";
    html += "            <div class=\"apnmt_info\">                                                 ";
-   html += "               <div class=\"apnmt_info_text\">발령부서*</div>                           ";
+   html += "               <div class=\"apnmt_add_info_text\">발령부서</div>                           ";
    html += "               <select class=\"apnmt_select\"  id=\"addDeptNum\" name=\"addDeptNum\">                                        ";
    html += "                  <option selected>선택</option>                                     ";
    for(var data of dept){
@@ -1160,7 +1176,7 @@ function drawAddApntm(dept,rank){
    html += "               </select>                                                              ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_info\">                                                 ";
-   html += "               <div class=\"apnmt_info_text\">발령직급*</div>                         ";
+   html += "               <div class=\"apnmt_add_info_text\">발령직급</div>                         ";
    html += "               <select class=\"apnmt_select\" id=\"addRankNum\" name=\"addRankNum\" >                                        ";
    html += "                  <option selected>선택</option>                                     ";
    for(var data of rank){
@@ -1171,7 +1187,7 @@ function drawAddApntm(dept,rank){
    html += "         </div>                                                                         ";
    html += "         <div class=\"apnmt_info_wrap\">                                                ";
    html += "            <div class=\"apnmt_info\">                                                 ";
-   html += "               <div class=\"apnmt_info_text\">발령시작*</div>                         ";
+   html += "               <div class=\"apnmt_add_info_text\">발령시작</div>                         ";
    html += "               <div class=\"prd_text_wrap\">                                          ";
    html += "                  <input type=\"date\" class=\"apntm_date_input\" id=\"addStart\" name=\"addStart\"/>         ";
    html += "               </div>                                                                 ";
@@ -1220,7 +1236,7 @@ function drawAddApntm(dept,rank){
 	</c:import>
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
-		<div class="page_title_bar">
+		<div class="page_title_bar_custom">
 			<div class="page_title_text">인사발령</div>
 		</div>
 		<div class="apntm_add_btn_area">

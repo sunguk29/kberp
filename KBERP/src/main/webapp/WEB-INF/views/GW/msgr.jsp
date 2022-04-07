@@ -281,9 +281,6 @@ td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 	height: 39.5px;
 }
 
-#srchEmpNum {
-	overflow: auto;
-}
 
 #srch_check {
 
@@ -350,7 +347,7 @@ td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 	position: relative;
 }
 
-.chat_write {
+#cont {
 	display: inline-block;
 	width : 470px;
 	height : 40px;
@@ -458,7 +455,6 @@ $(document).ready(function() {
 		
 		html += "		<form action = \"#\" id = \"addForm\" method = \"post\">";
 		html += "			<input type = \"hidden\" id = \"no\" name = \"no\" value = \"${sEMP_NUM}\"/>";		
-	
  		html += "			<input type = \"hidden\" id = \"CHAT_NUM\" name = \"CHAT_NUM\" value=\"${chatsq}\"/>";		
  		html += "			<input type = \"hidden\" id = \"EMP_NUM\" name = \"EMP_NUM\" value=\"${EMP_NUM}\"/>";
 
@@ -550,18 +546,18 @@ $(document).ready(function() {
 		});
 	}); // main msgr btn
 	
-	$(".chat_list1").on("click", function() {	
+	$("div").on("click", ".chat_list1", function() {	
 		
 		var html = "";
 		
 		html += "			<div class = \"right_box\">                                                      ";
 		html += "			<div class = \"rcpnt_rank_box\">                                                 ";
-		html += "				<div id = \"rcpnt_rank\">대화상대 성명 / 부서 / 직급  외 2명</div>          			 ";
+		html += "				<div id = \"rcpnt_rank\"> ${DeptName} ${RankName} ${EmpName} 외  </div>         ";
 		html += "			</div>		                                                                  	 ";
 		html += "			                                                                              	 ";
 		html += "			<div class = \"chat_room\">                                                      ";
 		html += "				<div class = \"chat_dtl\">                                                   ";
-		html += "					<div class = \"chat_rcpnt\">반갑습니다.&nbsp;                          	  	 ";
+		html += "					<div class = \"chat_rcpnt\">${cont}.&nbsp;                          	  	 ";
 		html += "						<div class= \"chat_time_rcpnt\"><small>오전 11:20</small></div>        ";
 		html += "					</div>                                                                	 ";
 		html += "					<div class = \"chat_user\">저도요.&nbsp;                                   ";
@@ -569,14 +565,18 @@ $(document).ready(function() {
 		html += "					</div>					                                              	 ";
 		html += "				</div>                                                                    	 ";
 		html += "				<div class = \"chat_input\">                                            	 ";
-		html += "					<form id = \"insertForm\" method = \"post\">							 ";
-		html += "						<input type = \"hidden\" name = \"empNum\" value = \"${empNum}\"/>	 ";
-		html += "						<input type = \"hidden\" name = \"cont\" id = \"cont\" value = \"${empNum}\"/>";
+		
+		html += "					<form action = \"#\" id = \"insertForm\" method = \"post\">";
+		html += "						<input type = \"hidden\" name = \"EMP_NUM\" value = \"${sEmpNum}\"/> ";
+		html += "						<input type = \"hidden\" name = \"CONT_NUM\" value = \"${contsq}\"/>";
+		html += "						<input type = \"hidden\" name = \"CHAT_NUM\" value = \"${chatsq}\"/>";
+		html += "						<input type = \"hidden\" name = \"CONT\" value = \"${cont}\"/>";
 		html += "						<div class= \"cmn_btn_ml\" id = \"insertBtn\" style=\"float: left;\">보내기</div>";
 		html += "						<div class = \"chat_img_file\"></div>                                ";
 		html += "						<div class = \"chat_img_plus\"></div>                                ";
-		html += "						<input type= \"text\" placeholder = \"메시지 입력..\" class = \"chat_write\" id = \"chat_wrtie\" onkeydown= \"enterCheck();\" style = \"float: right;\"/>";
+		html += "						<input type= \"text\" placeholder = \"메시지 입력..\" name = \"cont\"  id = \"cont\" onkeydown= \"enterCheck();\" style = \"float: right;\"/>";
 		html += "					</form>																	 ";
+		
 		html += "				</div>                                                                     	 ";
 		html += "			</div>	                                                                         ";
 		html += "			</div>	                                                                         ";
@@ -586,10 +586,10 @@ $(document).ready(function() {
 		
 		
 		$("#insertBtn").on("click", function() {
-			if($.trim($("#chat_write").val()) == "") {
+			if($.trim($("#chat_write").val()) == null) {
 				alert("내용을 입력하세요.");
 			} else {
-				insert();
+				insertCont();
 			}
 		});
 		
@@ -602,14 +602,14 @@ function enterCheck() {
 		if($.trim($("#chat_write").val()) == "") {
 			alert("내용을 입력해 주세요.");
 		} else {
-			insert();
+			insertCont();
 		}
 		return;
 	}
 }
 
 function insertCont() {
-	$(".chat_dtl").val($(".chat_write").val());
+	$(".chat_dtl").val($("#cont").val());
 	
 	var params = $("#insertForm").serialize();
 	
@@ -621,12 +621,12 @@ function insertCont() {
 			success : function(res) {
 				console.log(res);
 				$(".chat_dtl").val("");
-				$(".chat_write").val("");
+				$("#cont").val("");
 			},
 			error : function(res) { 
 				alert(res.errorMessage);
 				$(".chat_dtl").val("");
-				$(".chat_write").val("");
+				$("#cont").val("");
 			}
 		}); 
 	}
@@ -656,7 +656,7 @@ function reloadList() {
 		dataType : "json",
 		data : params,
 		success : function(res) {
-			console.log(res)
+			console.log(res);
 			drawRoom(res.list);
 		},
 		error : function(request, status, error) {
@@ -671,21 +671,23 @@ function drawList(list) {
 	var html = "";
 	
 		for(var data of list) {
-			html +=	"				<tr id = \"srchEmpNum\" no = \"" +data.EMP_NUM +"\">";
-			html +=	"					<td id = \"srchDept\">" +data.DEPT_NAME + "</td>";
-			html +=	"					<td id = \"srchRank\">" +data.RANK_NAME + "</td>";
-			html +=	"					<td id = \"srchName\">" +data.EMP_NAME + "</td>";
-			html +=	"					<td><input type =\"checkbox\" id = \"srch_check\" name = \"srch_check\" value = \"" +data.EMP_NUM + "\"></td> ";
-			html +=	"				</tr>";
+			html +=	"<tr no =\"" +data.EMP_NUM +"\">";
+			html +=	"<td>" +data.DEPT_NAME + "</td>";
+			html +=	"<td>" +data.RANK_NAME + "</td>";
+			html +=	"<td>" +data.EMP_NAME + "</td>";
+			html +=	"<td><input type =\"checkbox\" id = \"srch_check\" name = \"srch_check\" value = \"" +data.EMP_NUM + "\"></td> ";
+			html +=	"</tr>";
 		}	
 	$("tbody").html(html);
 }
 
 function drawRoom(list) {
+	
 	console.log(list);
+	
 	var html = "";
 		
-		for(var data of list) {
+		for(var data of list) { 
 			html += "		<div class = \"chat_list1\" no = \"" + data.CHAT_NUM + "\">";
 			html += "			<input type=\"text\" value = \"" + data.EMP_NAME + "\" id = \"chat_group\" readonly=\"readonly\" />";
 			html += "			<input type=\"text\" value = \"" + data.CNT + "\" id = \"head_count\" readonly=\"readonly\"/>";
@@ -726,6 +728,7 @@ function drawRoom(list) {
 				<input type= "hidden" name="CHAT_NUM" value="${chatsq}"/>
 				<input type = "hidden" id = "srch_check" name = "srch_check" value = "checked"/>
 			</form>
+			
 				<div class = "main_box">
 	<div class = "left_box">
 		<div class = "rank_box">

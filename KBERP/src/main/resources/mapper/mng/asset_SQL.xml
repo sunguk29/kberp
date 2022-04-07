@@ -58,7 +58,7 @@
    
    <select id="useHistory" resultType="hashmap" parameterType="hashmap">
 		SELECT *
-		FROM(SELECT EMP_NAME, START_DATE, END_DATE,
+		FROM(SELECT EMP_NAME,TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE, TO_CHAR(END_DATE,'YYYY-MM-DD') AS END_DATE,
 		ROW_NUMBER () OVER(ORDER BY ASSET_USE_NUM DESC) AS RNUM
 		FROM ASSET_USE A INNER JOIN EMP E
 		                ON A.EMP_NUM = E.EMP_NUM
@@ -66,7 +66,7 @@
 				WHERE A.RNUM BETWEEN #{startCount} AND #{endCount} 
 	</select>
 	
-	 <select id="useHistoryCnt" resultType="Integer">
+	 <select id="useHistoryCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT (*) AS CNT
 		FROM(SELECT EMP_NAME, START_DATE, END_DATE,
 		ROW_NUMBER () OVER(ORDER BY ASSET_USE_NUM DESC) AS RNUM
@@ -91,9 +91,9 @@
 		VALUES(ASSET_SEQ.NEXTVAL, #{assetName}, #{writer}, #{mngrNum}, #{assetType}, #{qunty}, #{quntyDvsnNum}, #{acqrmntDt})
 	</insert>
 	
-	<select id="getEmpList" resultType="hashmap" parameterType="hashmap">
+	<select id="getMngmntEmpList" resultType="hashmap" parameterType="hashmap">
 		SELECT O.EMP_NUM,O.EMP_NAME
-		FROM       ( SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM DESC) AS RNUM
+		FROM       ( SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM
 	        		FROM DEPT D INNER JOIN APNTM A
 	                    		ON D.DEPT_NUM = A.DEPT_NUM
 	                   			INNER JOIN EMP E
@@ -107,9 +107,9 @@
 		
 	</select>
 	
-	<select id="getEmpCnt" resultType="Integer" parameterType="hashmap">
+	<select id="getMngmntEmpCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*)
-		FROM(   SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM DESC) AS RNUM
+		FROM(   SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM
 	       		FROM DEPT D INNER JOIN APNTM A
 	                    ON D.DEPT_NUM = A.DEPT_NUM
 	                    INNER JOIN EMP E
@@ -198,8 +198,85 @@
 	
 	<insert id="assetRntlRgstrtn" parameterType="hashmap">
 		INSERT INTO ASSET_USE(ASSET_USE_NUM, ASSET_NUM, EMP_NUM, RMRKS, START_DATE)
-		VALUES(ASSET_USE_SEQ.NEXTVAL, #{assetNum}, #{empNum}, #{rmrks}, #{startDt})
+		VALUES(ASSET_USE_SEQ.NEXTVAL, #{assetNum}, #{useEmpNum}, #{rmrks}, #{startDt})
 	</insert>
+	
+	<select id="psblassetListCnt" resultType="Integer" parameterType="hashmap">
+	SELECT COUNT(*) AS CNT
+	FROM(SELECT ASSET_NUM, ASSET_NAME, RMRKS,ROW_NUMBER()OVER(ORDER BY ASSET_NUM DESC) AS RNUM1
+    FROM ( SELECT ASSET_NUM, ASSET_NAME,END_DATE,START_DATE,RMRKS
+    FROM(SELECT A.ASSET_NUM,ASSET_NAME, ROW_NUMBER () OVER (PARTITION BY A.ASSET_NUM ORDER BY ASSET_USE_NUM DESC) AS RNUM, START_DATE, END_DATE,A.RMRKS
+    FROM ASSET A LEFT OUTER JOIN ASSET_USE AU
+                         ON A.ASSET_NUM = AU.ASSET_NUM
+    WHERE ASSET_TYPE_NUM = 0
+    ORDER BY A.ASSET_NUM ASC)A
+    WHERE A.RNUM = 1) A
+    WHERE START_DATE IS NULL
+     <if test="sendSrchTxt1 != null and sendSrchTxt1 != ''">
+		             	AND ASSET_NAME LIKE '%' || #{sendSrchTxt1} || '%'
+	 </if>
+	  		OR END_DATE IS NOT NULL
+	  <if test="sendSrchTxt1 != null and sendSrchTxt1 != ''">
+		             	AND ASSET_NAME LIKE '%' || #{sendSrchTxt1} || '%'
+	 </if>
+	 )
+	</select>
+	
+	<select id="psblassetList" resultType="hashmap" parameterType="hashmap">
+	SELECT *
+	FROM(SELECT ASSET_NUM, ASSET_NAME, RMRKS,ROW_NUMBER()OVER(ORDER BY ASSET_NUM DESC) AS RNUM1
+    FROM ( SELECT ASSET_NUM, ASSET_NAME,END_DATE,START_DATE,RMRKS
+    FROM(SELECT A.ASSET_NUM,ASSET_NAME, ROW_NUMBER () OVER (PARTITION BY A.ASSET_NUM ORDER BY ASSET_USE_NUM DESC) AS RNUM, START_DATE, END_DATE,A.RMRKS
+    FROM ASSET A LEFT OUTER JOIN ASSET_USE AU
+                         ON A.ASSET_NUM = AU.ASSET_NUM
+    WHERE ASSET_TYPE_NUM = 0
+    ORDER BY A.ASSET_NUM ASC)A
+    WHERE A.RNUM = 1) A
+    WHERE START_DATE IS NULL 
+     <if test="sendSrchTxt1 != null and sendSrchTxt1 != ''">
+		             	AND ASSET_NAME LIKE '%' || #{sendSrchTxt1} || '%'
+	 </if>
+	 	  OR END_DATE IS NOT NULL
+	  <if test="sendSrchTxt1 != null and sendSrchTxt1 != ''">
+		             	AND ASSET_NAME LIKE '%' || #{sendSrchTxt1} || '%'
+	 </if>
+	 )A
+	 WHERE RNUM1 BETWEEN #{startCount} AND #{endCount}
+	</select>
+	
+	<select id="getAllEmpCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM(  SELECT A.EMP_NUM, EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM,DEPT_NAME,RANK_NAME
+	        		FROM DEPT D INNER JOIN APNTM A
+	                    		ON D.DEPT_NUM = A.DEPT_NUM
+	                   			INNER JOIN EMP E
+	                    		ON A.EMP_NUM = E.EMP_NUM
+                                INNER JOIN RANK R
+                                ON A.RANK_NUM = R.RANK_NUM
+	        		WHERE 1=1 
+			<if test="sendSrchTxt != null and sendSrchTxt != ''">
+				AND EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
+			</if>
+			) 
+	</select>
+	
+	<select id="getAllEmpList" resultType="hashmap" parameterType="hashmap">
+		SELECT EMP_NAME, DEPT_NAME, RANK_NAME, EMP_NUM
+		FROM       (SELECT A.EMP_NUM, EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM,DEPT_NAME,RANK_NAME
+	        		FROM DEPT D INNER JOIN APNTM A
+	                    		ON D.DEPT_NUM = A.DEPT_NUM
+	                   			INNER JOIN EMP E
+	                    		ON A.EMP_NUM = E.EMP_NUM
+                                INNER JOIN RANK R
+                                ON A.RANK_NUM = R.RANK_NUM
+	        		WHERE 1=1 
+		             <if test="sendSrchTxt != null and sendSrchTxt != ''">
+		             	AND EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
+		             </if>
+		            )A
+		WHERE RNUM BETWEEN #{startCount} AND #{endCount}
+		
+	</select>
 	
 	<select id="getTktCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
@@ -257,10 +334,33 @@
                 ON 1=1
 	</select>
 	
+	<select id="psblTktAssetList" resultType="hashmap" parameterType="hashmap">
+		SELECT ASSET_NUM, ASSET_NAME, QUNTY, QUNTY_DVSN_NUM
+		FROM ASSET 
+		WHERE ASSET_TYPE_NUM = 1 AND QUNTY > 0 AND DSCRD_DATE IS NULL
+		<if test="searchTxt != null and searchTxt != ''">
+					AND ASSET_NAME LIKE '%' || #{searchTxt} || '%'	
+		</if>
+	</select>
+	
+	<select id="psblTktAssetListCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM ASSET 
+		WHERE ASSET_TYPE_NUM = 1 AND QUNTY > 0 AND DSCRD_DATE IS NULL
+		<if test="searchTxt != null and searchTxt != ''">
+					AND ASSET_NAME LIKE '%' || #{searchTxt} || '%'	
+		</if>
+	</select>
+	
 	<insert id="assetTktRgstrtn" parameterType="hashmap">
 		INSERT INTO ASSET_TKT(TKT_NUM, RGSTRTN_EMP_NUM, ASSET_NUM, TKT_EMP_NUM, RMRKS, TKT_DATE, QUNTY, QUNTY_DVSN_NUM)
-		VALUES(ASSET_TKT_SEQ.NEXTVAL, #{rgstrtnEmpNum}, #{assetNum}, #{empNum}, #{rmrks}, #{tktdt}, #{qunty}, #{quntynum})
+		VALUES(ASSET_TKT_SEQ.NEXTVAL, #{rgstrtnEmpNum}, #{assetNum}, #{useEmpNum}, #{rmrks}, #{tktdt}, #{qunty}, #{quntynum})
 	</insert>
+	
+	<update id="assetTktCntUpdate" parameterType="hashmap">
+		UPDATE ASSET SET QUNTY = QUNTY-#{qunty}
+		WHERE ASSET_NUM = #{assetNum}
+	</update>
 
 
 

@@ -35,17 +35,17 @@ $black: #222222;
 }
 
 .orgnzt_btn {
-	border: solid 1px #d7d7d7;
+    border: solid 1px #d7d7d7;
     display: inline-block;
     vertical-align: top;
     padding: 0px 7px;
-    width: 71px;
+    width: 96px;
     height: 32px;
     line-height: 30px;
     font-size: 10pt;
     font-weight: 600;
     text-align: center;
-    background-color: #F2B705;
+    background-color: #f2f2f2;
     margin: 0 2px;
     border-radius: 4px;
     color: #222222;
@@ -55,6 +55,9 @@ $black: #222222;
 .orgnzt_btn:active {
 	background-color: #F2CB05;
 }
+.orgnzt_btn:hover {
+	background-color: #F2CB05;
+}
 
 .orgnzt_area {
     padding: 20px 0 20px 20px;
@@ -62,7 +65,7 @@ $black: #222222;
     vertical-align: top;
     width: 277px;
     height: 455px;
-    border: solid 1px #7d7d7d;
+    border: solid 1px #d7d7d7;
     border-radius: 6px;
     user-select: none;
 }
@@ -288,8 +291,8 @@ $black: #222222;
 .orgnzt_emp_info_box {
     display: inline-block;
     vertical-align: top;
-    width: 383px;
-    height: 170px;
+    width: 367px;
+    height: 167px;
     border: solid 1px #d7d7d7;
     border-radius: 10px;
     padding: 6px;
@@ -298,16 +301,16 @@ $black: #222222;
 }
 
 .orgnzt_empp_info_box_left {
-display: inline-block;
+    display: inline-block;
     vertical-align: top;
     width: 111px;
     height: 148px;
     border-radius: 10px;
-    margin: 5px 5px 5px 15px;
+    margin: 5px 5px 5px 8px;
 }
 
 .orgnzt_emp_img_wrap {
-display: inline-block;
+    display: inline-block;
     vertical-align: top;
     width: 95px;
     height: 105px;
@@ -336,7 +339,7 @@ display: inline-block;
 .orgnzt_emp_info_box_right {
     display: inline-block;
     vertical-align: top;
-    width: 239px;
+    width: 230px;
     height: 153px;
     border-radius: 10px;
     padding: 5px;
@@ -345,7 +348,7 @@ display: inline-block;
 .orgnzt_emp_info_wrap {
     display: inline-block;
     vertical-align: top;
-    width: 248px;
+    width: 228px;
     height: 32px;
     border-radius: 10px;
     padding: 3px;
@@ -361,13 +364,13 @@ display: inline-block;
     color: #444444;
     font-size: 11px;
     font-weight: 600;
-    text-align: RIGHT;
+    text-align: right;
     line-height: 30px;
     letter-spacing: 2px;
     margin-right: 17px;
 }
 
-.orgnzt_emp_info_input {
+.orgnzt_emp_info_input {	
     display: inline-block;
     vertical-align: top;
     width: 143px;
@@ -762,19 +765,19 @@ function drawEmpInfo(empInfo){
 	html += "	<div class=\"orgnzt_emp_info_box_right\">                               ";
 	html += "		<div class=\"orgnzt_emp_info_wrap\">                                ";
 	html += "			<div class=\"orgnzt_emp_info_txt\" id=\"empDeptName\" >부서</div> ";
-	html += "			<input type=\"text\" class=\"orgnzt_emp_info_input\" value=\"" + empInfo.DEPT_NAME + "\"/>          ";
+	html += "			<input type=\"text\" class=\"orgnzt_emp_info_input\" readonly=\"readonly\" value=\"" + empInfo.DEPT_NAME + "\"/>          ";
 	html += "		</div>                                                              ";
 	html += "		<div class=\"orgnzt_emp_info_wrap\">                                ";
 	html += "			<div class=\"orgnzt_emp_info_txt\" id=\"empRankName\" >직급</div> ";
-	html += "			<input type=\"text\" class=\"orgnzt_emp_info_input\" value=\"" + empInfo.RANK_NAME + "\"/>          ";
+	html += "			<input type=\"text\" class=\"orgnzt_emp_info_input\" readonly=\"readonly\"  value=\"" + empInfo.RANK_NAME + "\"/>          ";
 	html += "		</div>                                                              ";
 	html += "		<div class=\"orgnzt_emp_info_wrap\">                                ";
 	html += "			<div class=\"orgnzt_emp_info_txt\" id=\"empHp\" >연락처</div>   ";
-	html += "			<input type=\"text\" class=\"orgnzt_emp_info_input\" value=\"" + empInfo.PHONE_NUM + "\"/>          ";
+	html += "			<input type=\"text\" class=\"orgnzt_emp_info_input\" readonly=\"readonly\"  value=\"" + empInfo.PHONE_NUM + "\"/>          ";
 	html += "		</div>                                                              ";
 	html += "		<div class=\"orgnzt_emp_info_wrap\">                                ";
 	html += "			<div class=\"orgnzt_emp_info_txt\" id=\"empMail\" >이메일</div> ";
-	html += "			<input type=\"text\" class=\"orgnzt_emp_info_input\" value=\"" + empInfo.EMAIL + "\"/>          ";
+	html += "			<input type=\"text\" class=\"orgnzt_emp_info_input\" readonly=\"readonly\"  value=\"" + empInfo.EMAIL + "\"/>          ";
 	html += "		</div>                                                              ";
 	html += "	 </div>                                                                 ";
 	html +=   "</div> ";
@@ -813,10 +816,9 @@ function drawEmpInfo(empInfo){
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="cont_left">
 				<div class="orgnzt_btn_area">
-					<input type="button" class="orgnzt_btn" id="emp_edit_btn" value="사원편집" />
-					<input type="button" class="orgnzt_btn" id="orgnzt_add_btn" value="조직추가" />
-					<input type="button" class="orgnzt_btn" id="orgnzt_mdfy_btn" value="조직수정" />
-				    <input type="button" class="orgnzt_btn" id="orgnzt_del_btn" value="조직삭제" />
+					<input type="button" class="orgnzt_btn" id="orgnzt_add_btn" value="부서등록" />
+					<input type="button" class="orgnzt_btn" id="orgnzt_mdfy_btn" value="부서수정" />
+				    <input type="button" class="orgnzt_btn" id="orgnzt_del_btn" value="부서삭제" />
 				</div>
 				<div class="orgnzt_area">
 					<div class="scroll_area">

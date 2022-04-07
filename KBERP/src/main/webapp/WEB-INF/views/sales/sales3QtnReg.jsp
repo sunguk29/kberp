@@ -904,10 +904,22 @@ $(document).ready(function() {
 			buttons : [ {
 				name : "확인",
 				func : function() {
-					$("#listForm").attr("action", "salesList");
-					$("#listForm").submit();
-					console.log("One!");
-					closePopup();
+					var params = $("#listForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "qtnBackAjax",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							closePopup();
+							$("#listForm").attr("action", "salesList");
+							$("#listForm").submit();
+						},
+						error : function(req) {
+							console.log(req.responseText);
+						}
+					});
 				}
 			}, {
 				name : "취소"
@@ -964,8 +976,9 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
-											location.href = "salesList";
-											console.log("성공");
+											closePopup();
+											$("#listForm").attr("action", "sales3QtnCont");
+											$("#listForm").submit();
 										} else {
 											alert("등록중 문제가 발생하였습니다.");
 										}
@@ -1262,6 +1275,7 @@ $(document).ready(function() {
 									buttons : [{
 										name : "적용",
 										func:function() {
+											$("#mdName").val(data.MD_NAME);
 											$("#prdmptn_psbl_check").val(data.MID_RDMPTN_PSBL_CHECK).prop("selected", this.selected);
 											$("#intrst_pymnt").val(data.INTRST_PYMNT_MTHD_NUM).prop("selected", this.selected);
 											$("#prncpl_pymnt").val(data.PRNCPL_PYMNT_MTHD_NUM).prop("selected", this.selected);
@@ -1517,6 +1531,7 @@ $(document).ready(function() {
 						buttons : [{
 							name : "적용",
 							func:function() {
+								$("#mdName").val(data.MD_NAME);
 								$("#mdType").val(data.MD_TYPE_NUM).prop("selected", this.selected);
 								$("#prdmptn_psbl_check").val(data.MID_RDMPTN_PSBL_CHECK).prop("selected", this.selected);
 								$("#intrst_pymnt").val(data.INTRST_PYMNT_MTHD_NUM).prop("selected", this.selected);
@@ -1570,15 +1585,9 @@ $(document).ready(function() {
 		$("#sgstn_btn").html(html);
 	});
 	
-	$(".qtnDiv").hide();
 	
- 	/* 지난 견적서 리스트 */
- 	if(${param.qtnNum ne null} && ${param.qtnNum ne ""}) {
- 		console.log('${param.qtnNum}');
- 		$(".qtnDiv").show();	
- 		reloadSgstnList();
- 	}
-	
+ 	/* 지난 견적서 리스트 */	
+ 	reloadSgstnList();
 	
 }); // JS end
 
@@ -1709,8 +1718,13 @@ function reloadSgstnList() {
 		dataType : "json",
 		data : params,
 		success : function(res) {
-			drawPQCnt(res.PQListCnt);
-			drawPQList(res.list);
+			if(res.PQListCnt != 0) {
+				drawPQCnt(res.PQListCnt);
+				drawPQList(res.list);
+				$(".qtnDiv").show();
+			} else {
+				$(".qtnDiv").hide();
+			}
 		},
 		error : function(req) {
 			console.log(req.responseText);
@@ -1792,6 +1806,7 @@ function test(t) {
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
 		<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
+		<input type="hidden" name="qtnNum" value="${param.qtnNum}" /> <!-- 견적 번호 -->
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -2260,6 +2275,7 @@ function test(t) {
 				<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
 					<input type="hidden" id= "mdNum" name="mdNum" />
+					<input type="hidden" id= "mdName" name="mdName" />
 					<div class="bot_title"><h3>견적<div class="drop_btn"></div></h3></div>
 					 <hr class="hr_bot" color="white" width="925px"> 
 					<div class="hr_bot"></div>
@@ -2414,7 +2430,7 @@ function test(t) {
 				<div class="qtnDiv">
 				<form action="#" id="pastQtnActionForm" method="post">
 					<input type="hidden" name="salesNum" value="${param.salesNum}" />
-					<input type="hidden" name="qtnNum" value="${param.qtnNum}" />
+					<input type="hidden" name="qtnNum" value="${param.qtnStsNum}" />
 					<!-- 지난 견적서 -->
 					<div class="mgtop"></div>
 					<div class="PQ_title"></div>

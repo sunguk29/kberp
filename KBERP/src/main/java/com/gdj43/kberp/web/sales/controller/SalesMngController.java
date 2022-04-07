@@ -597,6 +597,34 @@ public class SalesMngController {
 		
 		return mapper.writeValueAsString(modelMap);
 	}
+	
+	// 견적 추가 등록
+	@RequestMapping(value = "/qtnAddAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String qtnAddAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		iCommonService.updateData("salesMng.salesQtnAddUpdate", params);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
+	// 견적 추가 등록 취소
+	@RequestMapping(value = "/qtnBackAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String qtnBackAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		iCommonService.updateData("salesMng.salesQtnBackUpdate", params);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 }
 
 
