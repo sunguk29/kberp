@@ -90,7 +90,7 @@ public class FaqController {
 	  }
 	  
 		
-	  @RequestMapping(value = "/faqdtAction/{gbn}", method = RequestMethod.POST,
+	  @RequestMapping(value = "/faqdtActionAjax/{gbn}", method = RequestMethod.POST,
 	  produces = "text/json;charset=UTF-8")
 	  
 	  @ResponseBody public String faqdtActionAjax(@RequestParam HashMap<String, String>
