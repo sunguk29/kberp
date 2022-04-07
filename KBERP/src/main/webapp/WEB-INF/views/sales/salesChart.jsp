@@ -591,10 +591,6 @@ function drawMngPaging(pb) {
 						</table>
 						<form action="#" id="getForm" method="post">
 						<input type="hidden" name="size" value="3" />
-						</form>
-						<input type="hidden" id="bsnType0" name="bsnType0"/>
-						<input type="hidden" name="bsnType1"/>
-						<input type="hidden" name="bsnType2"/>
 						<dlv class="cont_right">
 							<div class="new_sales_actvty">
 							<div class="sales_text">

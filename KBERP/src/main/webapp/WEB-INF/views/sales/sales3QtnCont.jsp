@@ -164,7 +164,7 @@ hr { /* 구분선 */
 .bot_title { 
 	font-size: 11pt;
 }
-.bx { /* 스크롤때문에 div 박스 추가 */
+.qBox {
 	width: 860px;
 	height: 305px;
 	margin-left: 47.5px;
@@ -393,10 +393,48 @@ textarea {
 }
 
 /* 끝 */
+.PQ_title {
+	position: relative;
+	font-size: 11pt;
+}
+.drop_btn_bot {
+	position: absolute;
+	top: 7px;
+	left: 909px;
+	width: 18px;
+	height: 18px;
+	background-image: url("resources/images/sales/downarrow.png");
+	background-size: 18px 18px;
+	float: right;
+}
+.drop_btn_bot:hover {
+	cursor: pointer;
+}
+.qtnBox {
+    width: 830px;
+    height: 60px;
+    font-size: 10pt;
+    border: 1px solid gray;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    margin: 5px;
+    background-color: #F2F2F2;
+}
+pre {
+	font-family: "맑은 고딕";
+    margin-top: 3px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
 
+	console.log(${param.salesNum});
+	console.log(${param.qtnNum});
+	
+	reloadSgstnList();
+	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
 		
@@ -409,8 +447,7 @@ $(document).ready(function() {
 	
 	// 견적서 추가(수정) 버튼
 	$("#updateBtn").on("click", function() {
-		
-		$("#actionForm").attr("action", "sales3QtnAdd");
+		$("#actionForm").attr("action", "sales3QtnReg");
 		$("#actionForm").submit();
 	});
 	
@@ -537,7 +574,8 @@ $(document).ready(function() {
 		});
 		
 	});
-	
+	$(".salesCont").hide();
+	$(".sgstnCont").hide();
 	// 영업기회 탭 접기펼치기
 	$("#sales_btn").on("click", "#salesContBtn_h", function() {
 		$(".salesCont").hide();
@@ -604,7 +642,6 @@ $(document).ready(function() {
 	
 	}
 	
-	//월 이자액
 	
 }); // document.ready End
 
@@ -655,6 +692,52 @@ function drawOpList(list) {
 	
 }
 
+//*************** 지난견적서 목록 Ajax *************** 
+function reloadSgstnList() {
+	var params = $("#pastQtnActionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "PQListAjax",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			drawPQCnt(res.PQListCnt);
+			drawPQList(res.list);
+			console.log("ok");
+		},
+		error : function(req) {
+			console.log(req.responseText);
+			console.log("no");
+		}
+	});
+}
+
+/* 지난견적서 목록 개수 html */
+function drawPQCnt(PQListCnt) {
+	var html = "";
+	
+	html = "<h3>지난 견적서(" + PQListCnt + ")</h3><div class=\"drop_btn_bot\"></div>";
+	
+	$(".PQ_title").html(html);
+}
+
+/* 지난견적서 목록 html */
+function drawPQList(list) {
+	var html = "";
+	
+	for(var data of list) {
+		html +="<div class=\"qtnBox\">";
+		html +="<div class=\"name\">" + data.QTN_NAME + " (" + data.QTN_DATE +")</div>";
+		html +="<div class=\"txtOp\"><pre>" + data.MD_TYPE_NUM + "  " + data.MD_NAME + " " + data.INTRST_RATE + "%    " + data.LIMIT_AMNT + "원</pre></div>";
+		html +="</div>";
+	}
+	$(".qBox").html(html);
+}
+
+
+// *************** 지난견적서 목록 끝
+
 </script>
 </head>
 <body>
@@ -679,7 +762,7 @@ function drawOpList(list) {
 			<div class="page_title_text">영업관리 - 견적 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
 				<img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" id="printBtn" />
-				<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" data-toggle="tooltip" title="견적서 추가하기" />
+				<img alt="수정버튼" src="resources/images/sales/newAdd.png" class="btnImg" id="updateBtn" data-toggle="tooltip" title="견적서 추가하기" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -697,7 +780,7 @@ function drawOpList(list) {
 						<input type="text" id="salesNum" name="salesNum" value="${data.SALES_NUM}" />
 				
 					<div class="bot_title">
-						<h3>영업기회<span id="sales_btn"><div class="drop_btn" id="salesContBtn_h"></div></span></h3>
+						<h3>영업기회<span id="sales_btn"><div class="up_btn" id="salesContBtn_s"></div></span></h3>
 					</div>
 				<div class="salesCont">
 					<div class="page_cont_title_text">기본정보</div>
@@ -874,9 +957,9 @@ function drawOpList(list) {
 					<!-- *************** 제안 부분 시작 **************** -->
 					
 						<div class="bot_title">
-							<h3>제안<span id="sgstn_btn"><div class="drop_btn" id="sgstnContBtn_h"></div></span></h3>
+							<h3>제안<span id="sgstn_btn"><div class="up_btn" id="sgstnContBtn_s"></div></span></h3>
 						</div>
-						<div class="sgstnCont">
+					<div class="sgstnCont">
 						<div class="page_cont_title_text">대출 상세정보</div>
 						<hr class="hr_width">
 						<table class="detailList">
@@ -1041,7 +1124,7 @@ function drawOpList(list) {
 							
 							</div>
 						</div>
-						
+					</div>
 <!-- *************************************** 견적 시작 *************************************** -->			
 	<hr class="hr_bot" color="#4B94F2" width="925px">
 	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
@@ -1209,7 +1292,17 @@ function drawOpList(list) {
 					<div class="next_bot">
 						<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
 					</div>
-				</form>					
+				</form>	
+				<form action="#" id="pastQtnActionForm" method="post">
+					<input type="hidden" name="salesNum" value="${param.salesNum}" />
+					<input type="hidden" name="qtnNum" value="${param.qtnNum}" />
+					<!-- 지난 견적서 -->
+					<div class="mgtop"></div>
+					<div class="PQ_title"></div>
+					<hr color="#F2B705" width="925px">
+					<div class="qBox"></div>
+				</form>				
+					<!-- ********* 견적 끝 ********* -->
 				<form action="#" id="botOpActionForm" method="post">
 					<input type="hidden" name="qtnNum" value="${data3.QTN_NUM}" />
 					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
