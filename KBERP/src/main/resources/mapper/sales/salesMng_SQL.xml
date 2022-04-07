@@ -112,8 +112,8 @@
 		                    LEFT OUTER JOIN LOAN_DTL_INFO LDI
 		                                 ON S.SALES_NUM = LDI.SALES_NUM
 		                    LEFT OUTER JOIN QTN Q 
-		                                 ON  SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 3                 
-		      WHERE 1 = 1
+		                                 ON  S.SALES_NUM = Q.SALES_NUM               
+		      WHERE 1 = 1                
 		<choose>
 			<when test="mngName != null and mngName != ''">
 				AND E.EMP_NAME = #{mngName}
@@ -639,7 +639,7 @@
 	
 	<!-- 견적 지난견적서 목록 -->
 	<select id="getQtnPQList" parameterType="hashmap" resultType="hashmap">
-		SELECT Q.QTN_NUM, Q.QTN_NAME, TO_CHAR(Q.QTN_DATE, 'YYYY/MM/DD AMFM HH:MI') AS QTN_DATE,
+		SELECT Q.QTN_NUM, Q.QTN_NAME, TO_CHAR(Q.QTN_DATE, 'YYYY/MM/DD AM HH:MI') AS QTN_DATE,
 		       DECODE(M.MD_TYPE_NUM, 0, '개인사업', 1, '법인사업', 2, '공공사업') AS MD_TYPE_NUM, M.MD_NAME, M.INTRST_RATE, M.LIMIT_AMNT
 		FROM QTN Q INNER JOIN MD M
 		                   ON Q.MD_NUM = M.MD_NUM
@@ -649,8 +649,6 @@
 		AND Q.QTN_NUM NOT IN #{qtnNum}
 		AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = '3'
 	</select>
-	
-	
 	
 </mapper>
 
