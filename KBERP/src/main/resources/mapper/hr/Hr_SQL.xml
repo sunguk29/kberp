@@ -127,12 +127,14 @@
 		WHERE E.EMP_NUM = #{inqryNo}
 	</select>
 	<select id="getDeptList" resultType="hashmap" ><!-- 발령등록 <select> 부서목록  -->
-		SELECT D.DEPT_NUM, D.DEPT_NAME, D.SUPER_DEPT_NUM, D.DEPT_LEVEL,D.LEAF
-		FROM( SELECT DEPT_NUM, DEPT_NAME, SUPER_DEPT_NUM, DEPT_LEVEL, CONNECT_BY_ISLEAF AS LEAF
-			  FROM DEPT
-		      START WITH SUPER_DEPT_NUM IS NULL
-		      CONNECT BY PRIOR DEPT_NUM = SUPER_DEPT_NUM) D
-		WHERE D.LEAF = '1'
+		SELECT DD.DEPT_NUM, DD.DEL_CHECK, DD.DEPT_NAME, DD.SUPER_DEPT_NUM, DD.DEPT_LEVEL, DD.LEAF
+        FROM( SELECT D.DEPT_NUM, D.DEL_CHECK, D.DEPT_NAME, D.SUPER_DEPT_NUM, D.DEPT_LEVEL, CONNECT_BY_ISLEAF AS LEAF
+       		    FROM ( SELECT DEPT_NUM,DEL_CHECK, DEPT_NAME, SUPER_DEPT_NUM, DEPT_LEVEL
+                         FROM DEPT
+                        WHERE DEL_CHECK = '1' ) D
+                START WITH SUPER_DEPT_NUM IS NULL
+              CONNECT BY PRIOR DEPT_NUM = SUPER_DEPT_NUM ) DD
+        WHERE DD.LEAF = '1'
 	</select>
 	<select id="getRankList" resultType="hashmap" ><!-- 발령등록 <select> 직급목록  -->
 		SELECT RANK_NAME, RANK_NUM
