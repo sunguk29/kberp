@@ -796,55 +796,97 @@ $(document).ready(function() {
 			});
    			$(".empinqry_area").slimScroll({height: "255px"},{width: "450px"}); // 슬림스크롤
 		}); // 사원조회팝업 끝
+		
+		// 발령구분 퇴사 선택 시 발령종료일 외 비활성화
+		$("body").on("change", "#addDvsnNum", function(){
+			  console.log("발령구분값: " + $('#addDvsnNum option:selected').val())
+			    if ($('#addDvsnNum option:selected').val() == 1) {
+			    	$("#addDeptNum").attr("disabled", true);
+			    	$("#addDeptNum").val("");
+			    	$("#addRankNum").attr("disabled", true);
+			    	$("#addRankNum").val("");
+			    	$("#addStart").attr("disabled", true);
+			    	$("#addStart").val("");
+			    	$("#addEnd").focus();
+			    } else {
+			    	$("#addDeptNum").attr("disabled", false);
+			    	$("#addRankNum").attr("disabled", false);
+			    	$("#addStart").attr("disabled", false);
+			    }
+		  }); 
+		
 		$("body").on("click", "#addApntmBtn", function() {
 			console.log("등록클릭!")
-			if ($("#addEmpNum").val() == '') {
-				makeAlert("알림", "돋보기를 눌러 발령사원을 선택하세요.", function(){
-				$("#prfl_srch_btn").focus();
-				});
-			} else if ($("#addDvsnNum").val() == '선택') {
-				makeAlert("알림", "필수항목이 누락되었습니다.", function(){
-				$("#addDvsnNum").focus();
-				});
-			} else if ($("#addDeptNum").val() == '선택') {
-				makeAlert("알림", "필수항목이 누락되었습니다.", function(){
-				$("#addDeptNum").focus();
-				});
-			} else if ($("#addRankNum").val() == '선택') {
-				makeAlert("알림", "필수항목이 누락되었습니다.", function(){
-				$("#addRankNum").focus();
-				});
-			} else if ($("#addStart").val() == '')  {
-				makeAlert("알림", "필수항목이 누락되었습니다.", function(){
-				$("#addStart").focus();
-				});
-			} else {
-				$("#aprvlCont").val($("#addDvsnNum option:selected").attr("cont"))
-				console.log("등록완료! ")
-				console.log("결재요청내용 : " + $("#addDvsnNum option:selected").attr("cont"))
-				console.log("결재요청사원번호 : " + $("#sEmp").val())
-		   	   var params = $("#addApntmForm").serialize();	
-				console.log("파람즈 : " + params)
-		 		$.ajax({
-				      type : "post",
-				      url : "apntmListAjax/insertApntm",
-				      dataType : "json",
-				      data : params,
-				      success : function(res) {
-				    	  makeAlert("알림","발령이 등록되었습니다.", function(){
-			    		  	location.reload();
-				    	  });
-				    	  console.log(res);
-				      }, 
-				      error : function(req) {
-				         console.log(req.responseText);
-				      }
-			   }); 
-
+			// 발령구분 퇴사 아닐 시 
+			if($('#addDvsnNum option:selected').val() != 1) {
+				if ($("#addEmpNum").val() == '') {
+					makeAlert("알림", "돋보기를 눌러 발령사원을 선택하세요.", function(){
+					$("#prfl_srch_btn").focus();
+					});
+				} else if ($("#addDvsnNum").val() == '선택') {
+					makeAlert("알림", "필수항목이 누락되었습니다.", function(){
+					$("#addDvsnNum").focus();
+					});
+				} else if ($("#addDeptNum").val() == '선택') {
+					makeAlert("알림", "필수항목이 누락되었습니다.", function(){
+					$("#addDeptNum").focus();
+					});
+				} else if ($("#addRankNum").val() == '선택') {
+					makeAlert("알림", "필수항목이 누락되었습니다.", function(){
+					$("#addRankNum").focus();
+					});
+				} else if ($("#addStart").val() == '')  {
+					makeAlert("알림", "필수항목이 누락되었습니다.", function(){
+					$("#addStart").focus();
+					});
+				} else {
+					$("#aprvlCont").val($("#addDvsnNum option:selected").attr("cont"))
+					console.log("등록완료! ")
+					console.log("결재요청내용 : " + $("#addDvsnNum option:selected").attr("cont"))
+					console.log("결재요청사원번호 : " + $("#sEmp").val())
+			   	   var params = $("#addApntmForm").serialize();	
+			 		$.ajax({
+					      type : "post",
+					      url : "apntmListAjax/insertApntm",
+					      dataType : "json",
+					      data : params,
+					      success : function(res) {
+					    	  makeAlert("알림","발령이 등록되었습니다.", function(){
+				    		  	location.reload();
+					    	  });
+					    	  console.log(res);
+					      }, 
+					      error : function(req) {
+					         console.log(req.responseText);
+					      }
+				   }); 
+	
+				}
+			} else { // 발령구분 퇴사일 시 
+				if($("#addEnd").val() == '') {
+						makeAlert("알림", "필수항목이 누락되었습니다.", function(){
+						$("#addEnd").focus();
+					});
+				} else {
+					var params = $("#addApntmForm").serialize();	
+			 		$.ajax({
+					      type : "post",
+					      url : "apntmListAjax/updateApntm",
+					      dataType : "json",
+					      data : params,
+					      success : function(res) {
+					    	  makeAlert("알림","발령이 등록되었습니다.", function(){
+				    		  	location.reload();
+					    	  });
+					    	  console.log(res);
+					      }, 
+					      error : function(req) {
+					         console.log(req.responseText);
+					      }
+				   }); 
+				}
 			}
-			
 		});
-		
 		
   	});// 발령추가 끝
   	
@@ -947,7 +989,7 @@ function drawCont(cont, emp){
    html += "   </div>                                                                                 ";
    html += "   <div class=\"apnmt_add_area\">                                                         ";
    html += "      <div class=\"apnmt_add_top_area\">                                                 ";
-   html += "         <div class=\"apnmt_prfl_img\"></div>                                           ";
+   html += "        <div class=\"apnmt_prfl_img\" id=\"empImg\"><img id=\"emp_pctr_area\" src=\"resources/upload/" + emp.EMP_PCTR_FILE + "\" /></div>";
    html += "         <div class=\"apnmt_prfl_info_wrap\">                                           ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_emp_num\">                                      ";
@@ -1137,7 +1179,7 @@ function drawAddApntm(dept,rank){
    html += "            <div class=\"apnmt_info\">                                                 ";
    html += "               <div class=\"apnmt_info_text_end\">발령종료</div>                      ";
    html += "               <div class=\"prd_text_wrap\">                                          ";
-   html += "                  <input type=\"date\" class=\"apntm_date_input\" id=\"prd_end\" name=\"addEnd\"/>           ";
+   html += "                  <input type=\"date\" class=\"apntm_date_input\" id=\"addEnd\" name=\"addEnd\"/>           ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";

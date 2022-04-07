@@ -132,12 +132,12 @@
 				
 				$.ajax({
 					type : "post", 
-					url : "faqdtAction/delete", 
+					url : "faqdtActionAjax/delete", 
 					dataType : "json", 
 					data : params, 
 					success : function(res) { 
 						if(res.res == "success") {
-							location.href = "faq";
+							$("#actionForm").submit();
 						} else {
 							alert("삭제중 문제가 발생하였습니다.");
 						}
