@@ -820,6 +820,7 @@ $(document).ready(function() {
 		$("body").on("change", "#addDvsnNum", function(){
 			  console.log("발령구분값: " + $('#addDvsnNum option:selected').val())
 			    if ($('#addDvsnNum option:selected').val() == 1) {
+			    	makeAlert("알림", "퇴사는 발령종료일만 입력하세요");
 			    	$("#addDeptNum").attr("disabled", true);
 			    	$("#addDeptNum").val("");
 			    	$("#addRankNum").attr("disabled", true);
@@ -845,19 +846,19 @@ $(document).ready(function() {
 					$("#prfl_srch_btn").focus();
 					});
 				} else if ($("#addDvsnNum").val() == '선택') {
-					makeAlert("알림", "필수항목이 누락되었습니다.", function(){
+					makeAlert("알림", "발령구분을 선택하세요.", function(){
 					$("#addDvsnNum").focus();
 					});
 				} else if ($("#addDeptNum").val() == '선택') {
-					makeAlert("알림", "필수항목이 누락되었습니다.", function(){
+					makeAlert("알림", "발령부서를 선택하세요.", function(){
 					$("#addDeptNum").focus();
 					});
 				} else if ($("#addRankNum").val() == '선택') {
-					makeAlert("알림", "필수항목이 누락되었습니다.", function(){
+					makeAlert("알림", "발령직급을 선택하세요.", function(){
 					$("#addRankNum").focus();
 					});
 				} else if ($("#addStart").val() == '')  {
-					makeAlert("알림", "필수항목이 누락되었습니다.", function(){
+					makeAlert("알림", "발령시작일을 입력하세요.", function(){
 					$("#addStart").focus();
 					});
 				} else {
@@ -885,7 +886,7 @@ $(document).ready(function() {
 				}
 			} else { // 발령구분 퇴사일 시 
 				if($("#addEnd").val() == '') {
-						makeAlert("알림", "필수항목이 누락되었습니다.", function(){
+						makeAlert("알림", "발령종료일을 입력하세요.", function(){
 						$("#addEnd").focus();
 					});
 				} else {
@@ -1016,7 +1017,7 @@ function drawCont(cont, emp){
    html += "               <div class=\"prfl_info_emp_num\">                                      ";
    html += "                  <div class=\"prfl_info_text\">사원번호</div>                       ";
    html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + emp.EMP_NUM + "\" />  ";
-   html += "                  <div class=\"prfl_srch_btn\"></div>                                ";
+  // html += "                  <div class=\"prfl_srch_btn\"></div>                                ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
