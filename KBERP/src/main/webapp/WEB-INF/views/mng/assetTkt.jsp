@@ -127,7 +127,7 @@ function drawList(list) {
 			html += "<td>" + data.QUNTY +"set</td>";
 		else
 			html += "<td>" + data.QUNTY +"box</td>";
-		html += "<td>" + data.MNGR_NAME + "</td>";
+		html += "<td>" + data.EMP_NAME + "</td>";
 		html += "<td>" + data.TKT_DATE + "</td>";
 		html += "</tr>";
 	}
@@ -218,7 +218,7 @@ function drawPaging(pb) {
 						<th>자산번호</th>
 						<th>자산명</th>
 						<th>수량</th>
-						<th>담당자</th>
+						<th>사용자</th>
 						<th>반출일</th>
 					</tr>
 				</thead>
