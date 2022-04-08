@@ -21,17 +21,13 @@ public class AprvlService implements IAprvlService{
 		
 		// 시퀀스랑 나머지 데이터로 해쉬맵 생성
 		HashMap<String, String> aprvl_data = new HashMap<String, String>();
-		String aprvl_turn = "";
+		
 		
 		aprvl_data.put("aprvl_num",aprvl_num);
 		aprvl_data.put("emp_num", emp_num);
 		aprvl_data.put("title", title);
 		aprvl_data.put("cont", cont);
-		for (int i = 0; i < aprvlerList.size(); i++) { // 결재순번
-			aprvl_turn += "" + i;
-			System.out.println(aprvl_turn);
-		}
-		aprvl_data.put("aprvl_turn",aprvl_turn);
+		
 		if(att != null) {
 			aprvl_data.put("att", att);
 		}
@@ -40,6 +36,7 @@ public class AprvlService implements IAprvlService{
 		iCommonDao.insertData("elctrncAprvl.aprvlAdd", aprvl_data);
 		// 결재권자 리스트 사이즈만큼 반복문돌기
 		for (int i = 0; i < aprvlerList.size(); i++) {
+			String aprvl_turn = "" + i;
 			// 해쉬맵 만들기
 			HashMap<String, String> aprvler = new HashMap<String, String>();
 			aprvler.put("aprvl_num",aprvl_num); // 해쉬맵에 결재번호 담기
