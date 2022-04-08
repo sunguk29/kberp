@@ -77,4 +77,9 @@
 		VALUES(EVENT_CMNT_SEQ.NEXTVAL, #{no}, #{clnt_num}, #{co_cont})
 	</insert> -->
 	
+	<update id="updateHit" parameterType="hashmap">
+		UPDATE EVENT SET EVENT_HITS= EVENT_HITS + 1
+		WHERE EVENT_NUM = #{no}
+	</update>
+	
 </mapper>
