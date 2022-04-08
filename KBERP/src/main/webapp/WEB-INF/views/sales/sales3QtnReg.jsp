@@ -913,7 +913,7 @@ $(document).ready(function() {
 						data : params,
 						success : function(res) {
 							closePopup();
-							$("#listForm").attr("action", "salesList");
+							$("#listForm").attr("action", "sales3QtnCont");
 							$("#listForm").submit();
 						},
 						error : function(req) {
@@ -976,9 +976,8 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
-											closePopup();
-											$("#listForm").attr("action", "salesList");
-											$("#listForm").submit();
+											$("#contForm").attr("action", "sales3QtnCont");
+											$("#contForm").submit();
 										} else {
 											alert("등록중 문제가 발생하였습니다.");
 										}
@@ -1807,6 +1806,13 @@ function test(t) {
 		<input type="hidden" name="menuType" value="${param.menuType}" />
 		<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
 		<input type="hidden" name="qtnNum" value="${param.qtnNum}" />
+	</form>
+	<form action="#" id="contForm" method="post">
+		<input type="hidden" id="page" name="page" value="${page}" />
+		<input type="hidden" name="top" value="${param.top}" />
+		<input type="hidden" name="menuNum" value="${param.menuNum}" />
+		<input type="hidden" name="menuType" value="${param.menuType}" />
+		<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">

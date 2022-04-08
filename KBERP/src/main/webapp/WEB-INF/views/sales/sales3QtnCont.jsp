@@ -426,6 +426,10 @@ pre {
 	font-family: "맑은 고딕";
     margin-top: 3px;
 }
+.qtnDiv {
+	width: 100%;
+	height: 100%;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -457,6 +461,7 @@ $(document).ready(function() {
 			success : function(res) {
 				$("#actionForm").attr("action", "sales3QtnReg");
 				$("#actionForm").submit();
+				console.log("여기도?");
 			},
 			error : function(req) {
 				console.log(req.responseText);
@@ -716,13 +721,16 @@ function reloadSgstnList() {
 		dataType : "json",
 		data : params,
 		success : function(res) {
-			drawPQCnt(res.PQListCnt);
-			drawPQList(res.list);
-			console.log("ok");
+			if(res.PQListCnt != 0) {
+				drawPQCnt(res.PQListCnt);
+				drawPQList(res.list);
+				$(".qtnDiv").show();
+			} else {
+				$(".qtnDiv").hide();
+			}
 		},
 		error : function(req) {
 			console.log(req.responseText);
-			console.log("no");
 		}
 	});
 }
@@ -1309,6 +1317,7 @@ function drawPQList(list) {
 						<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
 					</div>
 				</form>	
+				<div class="qtnDiv">
 				<form action="#" id="pastQtnActionForm" method="post">
 					<input type="hidden" name="salesNum" value="${param.salesNum}" />
 					<input type="hidden" name="qtnNum" value="${param.qtnNum}" />
@@ -1317,7 +1326,8 @@ function drawPQList(list) {
 					<div class="PQ_title"></div>
 					<hr color="#F2B705" width="925px">
 					<div class="qBox"></div>
-				</form>				
+				</form>		
+				</div>		
 					<!-- ********* 견적 끝 ********* -->
 				<form action="#" id="botOpActionForm" method="post">
 					<input type="hidden" name="qtnNum" value="${data3.QTN_NUM}" />

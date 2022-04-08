@@ -591,7 +591,8 @@
 		                     ON S.SALES_NUM = Q.SALES_NUM
 		             INNER JOIN MD M
 		                     ON Q.MD_NUM = M.MD_NUM
-		WHERE Q.QTN_NUM = #{qtnNum}
+		WHERE S.SALES_NUM = #{salesNum}
+		AND Q.QTN_STS_NUM = 0
 	</select>
 	
 	<!-- 견적 의견목록 -->
