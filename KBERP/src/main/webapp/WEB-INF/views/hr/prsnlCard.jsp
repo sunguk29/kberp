@@ -690,10 +690,12 @@ function tabContChange(tId, data, dataList) {
 		html += "		<div class=\"cont_name\">재직구분</div>                                                                    ";
 		html += "		<br/>                                                                                                      ";
 		html += "		<input type=\"text\" class=\"cont_text\" id=\"rsdnt_rgstn_num\" readonly=\"readonly\" value=\"";
-		if (data.WORK_TYPE == 1) {
-			html += '재직';
-		} else {
-			html += '퇴사';
+		if (data.WORK_TYPE == 0) {
+			html += "재직";
+		} else if (data.WORK_TYPE == 1) {
+			html += "퇴사";
+		} else if (data.WORK_TYPE == -1) {
+			html += "발령 전";
 		}
 		html += "\" />    ";
 		html += "	</div>                                                                                                         ";
@@ -1626,11 +1628,11 @@ function drawBasicInfoArea(params, filePath2) {
 	html += "<div class=\"cont_line_rt\">                                                                                                               ";
 	html += "	<div class=\"cont_element\">                                                                                                            ";
 	html += "		<div class=\"cont_name\">소속부서</div>                                                                                             ";
+	html += "				<input type=\"text\" class=\"cont_text\" id=\"dprtmn\" readonly=\"readonly\" value=\"";
 	if (params.DEPT_NAME != null) {
-		html += "				<input type=\"text\" class=\"cont_text\" id=\"dprtmn\" readonly=\"readonly\" value=\"" + params.DEPT_NAME + "\" />        ";
-	} else {
-		html += "				<input type=\"text\" class=\"cont_text\" id=\"dprtmn\" readonly=\"readonly\" value=\"\" />                                  ";
+		html += params.DEPT_NAME;
 	}
+	html += "\" />        ";
 	html += "		<br/>                                                                                                                               ";
 	html += "	</div>                                                                                                                                  ";
 	html += "</div>                                                                                                                                     ";
@@ -1638,7 +1640,11 @@ function drawBasicInfoArea(params, filePath2) {
 	html += "	<div class=\"cont_element\">                                                                                                            ";
 	html += "		<div class=\"cont_name\">직급</div>                                                                                                 ";
 	html += "		<br/>                                                                                                                               ";
-	html += "		<input type=\"text\" class=\"cont_text\" id=\"pstn\" readonly=\"readonly\" value=\"" + params.RANK_NAME + "\" />                  ";
+	html += "		<input type=\"text\" class=\"cont_text\" id=\"pstn\" readonly=\"readonly\" value=\"";
+	if (params.RANK_NAME != null) {
+		html += params.RANK_NAME;
+	}
+	html += "\" />                  ";
 	html += "	</div>                                                                                                                                  ";
 	html += "</div>                                                                                                                                     ";
 

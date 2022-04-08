@@ -15,7 +15,16 @@
 }
 
 /* 개인 작업 영역 */
-
+td:nth-child(3) {
+	text-align: left;
+	color: #222222;
+	font-weight: bold;
+	cursor: pointer;
+}
+td:nth-child(3):hover {
+	color: #4B94F2;
+	text-decoration: underline;
+}
 </style>
 <script type = "text/javascript">
 $(document).ready(function() {
@@ -190,11 +199,11 @@ function drawPaging(pb) {
 			<table class="board_table">
 				<colgroup>
 					<col width="50"/>
-					<col width="115"/>
-					<col width="450"/>
-					<col width="100"/>
-					<col width="100"/>
-					<col width="100"/>
+					<col width="125"/>
+					<col width="460"/>
+					<col width="90"/>
+					<col width="90"/>
+					<col width="50"/>
 				</colgroup>
 				<thead>
 					<tr>

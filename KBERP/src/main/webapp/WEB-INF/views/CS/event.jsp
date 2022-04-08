@@ -455,10 +455,12 @@ $(document).ready(function() {
 				</c:forEach>
 				
 				<div id="comment_write">
+				
 					<div id="co_writer">
-					관리자
+					${sEmpName}
+					<%-- ${emp_num} 로그인된 관리자 이름 --%>
 					</div>
-					<div id="co_content"><textarea id="co_cont"></textarea></div>
+					<div id="co_content"><textarea id="co_cont"><%-- ${cmnt_cont} 댓글 내용 --%></textarea></div>
 					<div><input type="submit" value="댓글 쓰기" id="btn_cowrite"></div>		
 				</div>
 			</div>
