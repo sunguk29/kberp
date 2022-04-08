@@ -3,17 +3,31 @@
 <mapper namespace="ev">
 
 	<select id="getEventList" resultType="hashmap" parameterType="hashmap">
-		SELECT EVENT.EVENT_NUM, EVENT.EMP_NUM, event_title, event_cont, write_date, event_hits, del_check
-		FROM EVENT
-		ORDER BY EVENT.EVENT_NUM DESC
-<!-- 		WHERE SELL.RNUM BETWEEN #{startCount} AND #{endCount} -->
+		  SELECT EV.EVENT_NUM, EV.EMP_NUM, EV.EMP_NAME, EV.EVENT_TITLE, EV.WRITE_DATE, EV.EVENT_HITS
+          FROM (  SELECT EV.EVENT_NUM, EV.EMP_NUM, E.EMP_NAME, EV.EVENT_TITLE,
+                      TO_CHAR(EV.WRITE_DATE, 'YYYY-MM-DD') AS WRITE_DATE, EV.EVENT_HITS,
+                      ROW_NUMBER() OVER(ORDER BY EV.EVENT_NUM DESC) AS RNUM
+                FROM EVENT EV LEFT OUTER JOIN EMP E
+                                                ON EV.EMP_NUM=E.EMP_NUM
+                WHERE 1 = 1
+                ) EV
+        WHERE EV.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
-	<select id="getEvent" resultType="hashmap" parameterType="hashmap">
+	<!-- <select id="getEvent" resultType="hashmap" parameterType="hashmap">
 		SELECT EVENT.EVENT_NUM, EVENT.EMP_NUM, event_title, event_cont, write_date, event_hits, del_check
 		FROM EVENT
 		WHERE EVENT.EVENT_NUM = #{no}
-	</select>
+	</select> -->
+	
+	 <select id="getEvent" resultType="hashmap" parameterType="hashmap">
+		SELECT EV.EVENT_NUM, EV.EMP_NUM, E.EMP_NAME, EV.EVENT_TITLE, EVENT_CONT,
+                      TO_CHAR(EV.WRITE_DATE, 'YYYY-MM-DD') AS WRITE_DATE, EV.EVENT_HITS
+                    
+                FROM EVENT EV LEFT OUTER JOIN EMP E
+                                           ON EV.EMP_NUM=E.EMP_NUM
+                WHERE EV.EVENT_NUM = #{no}
+	</select> 
 	
 	<select id="getEventCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
@@ -52,10 +66,20 @@
 		AND EVENT_NUM = #{no}
 	</select>
 	
-	<insert id="EventCmntAdd" parameterType="hashmap">
-		INSERT INTO EVENT_CMNT(CMNT_NUM, CLNT_NUM, EVENT_NUM, EMP_NUM, CMNT_CONT) 
-		VALUES(#{cmnt_num}, #{clnt_num}, #{no}, #{emp_num}, #{cmnt_cont})
+	<insert id="EventCmntAdd" parameterType="hashmap"> <!-- 직원이 댓글 달때 / 외부용 고객 댓글 쿼리 따로 만들어야함 -->
+		INSERT INTO EVENT_CMNT(CMNT_NUM, EVENT_NUM, EMP_NUM, EVENT_CMNT.CMNT_CONT) 
+		VALUES(EVENT_CMNT_SEQ.NEXTVAL, #{no}, #{emp_num}, #{co_cont})
 	</insert>
 	
+	<!-- 외부 고객용 댓글 추가 -->
+	<!-- <insert id="EventCmntGuestAdd" parameterType="hashmap"> 직원이 댓글 달때 / 외부용 고객 댓글 쿼리 따로 만들어야함
+		INSERT INTO EVENT_CMNT(CMNT_NUM, EVENT_NUM, CLNT_NUM, EVENT_CMNT.CMNT_CONT) 
+		VALUES(EVENT_CMNT_SEQ.NEXTVAL, #{no}, #{clnt_num}, #{co_cont})
+	</insert> -->
+	
+	<update id="updateHit" parameterType="hashmap">
+		UPDATE EVENT SET EVENT_HITS= EVENT_HITS + 1
+		WHERE EVENT_NUM = #{no}
+	</update>
 	
 </mapper>

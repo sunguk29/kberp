@@ -96,9 +96,14 @@
 		               ZIP_CODE = #{edit_zip_code},
 		               ADRS = #{edit_adrs},
 		               DTL_ADRS = #{edit_dtl_adrs},
-		<if test="edit_phone_num != '' and edit_phone_num != null">
+		<choose>
+			<when test="edit_phone_num != '' and edit_phone_num != null">
 		               PHONE_NUM = #{edit_phone_num},
-		</if>
+			</when>
+			<otherwise>
+					   PHONE_NUM = NULL, 
+			</otherwise>
+		</choose>
 		               MBL_NUM = #{edit_mbl_num}
 		WHERE EMP_NUM = #{empNum}
 	</update>
