@@ -508,6 +508,12 @@ td:nth-child(even) {
 	width: 100%;
 }
 
+#delete_info_text {
+	margin-left: 10px;
+	font-weight: 700;
+	color: #fe3a40;
+}
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -688,7 +694,7 @@ $(document).ready(function() {
 	
 	$("#del_btn").click(function() {
 		if ($("#empNum").val() != "-1") {
-			
+			deleteCheck();
 		}
 	});
 	
@@ -1168,7 +1174,7 @@ function createAddSuccessPopup(params) {
 		html += "여성";
 	}
 	html += "\" readonly=\"\" />              ";
-	html += "		</div>                                                                                                                                    ";
+	html += "		</div>                          ";
 	html += "	</div>";
 
 	
@@ -1241,6 +1247,125 @@ function createAddBankPopup() {
 			}
 		}, {
 			name : "취소"
+		}]
+	});
+}
+
+function deleteCheck() {
+	var params = $("#inqryForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "empInqryActionAjax/deleteCheck",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			if (res.res == "success") {
+				if (res.delCheck == "1") {
+					createDeletePopup(res.edctnLevelCount, res.crCount, res.qlfctnCount);
+				} else {
+					createDeleteFailedPopup();
+				}
+			} else {
+				makeAlert("작업 실패", "작업 중 문제가 발생했습니다.<br/>관리자에게 문의하세요.");
+			}
+		},
+		error : function(request, status, error) {
+			console.log(request.responseText);
+		}
+	});
+}
+
+function createDeletePopup(el, cr, qlfctn) {
+	var title = "사원정보 삭제";
+	var html = "";
+	var size = [330, 230]; // [width, height]
+	
+	html += "	<div id=\"delete_popup\" >                                                                     ";
+	html += "		<div class=\"popup_cont_element\">                                                                                     ";
+	html += "			<label for=\"el_count\" class=\"popup_cont_name\">학력사항 :</label>                                                                ";
+	html += "			<input type=\"text\" class=\"read_popup_cont_text\" id=\"el_count\" value=\"" + el + " 개\" readonly=\"\" />              ";
+	html += "		</div>                                                                                                                                    ";
+	html += "		<div class=\"popup_cont_element\">                                                                                     ";
+	html += "			<label for=\"add_emp_name\" class=\"popup_cont_name\">경력사항 :</label>                                                  ";
+	html += "			<input type=\"text\" class=\"read_popup_cont_text\" id=\"el_count\" value=\"" + cr + " 개\" readonly=\"\" />                          ";
+	html += "		</div>                                                                                                                                    ";
+	html += "		<div class=\"popup_cont_element\">                                                                                     ";
+	html += "			<label for=\"add_emp_name_eng\" class=\"popup_cont_name\">자격사항 :</label>                                              ";
+	html += "			<input type=\"text\" class=\"read_popup_cont_text\" id=\"el_count\" value=\"" + qlfctn + " 개\" readonly=\"\" />                          ";
+	html += "		</div>                                                                                                                                    ";
+	html += "		<div class=\"popup_cont_element\" id=\"delete_info_text\">                                                                                     ";
+	html += "			해당 사원과 연결된 정보도 함께 삭제합니다.";
+	html += "		</div>            ";
+	html += "	</div>";
+
+	
+	makePopup({
+		bg : true,
+		bgClose : false,
+		width : size[0],
+		height : size[1],
+		title : title,
+		contents : html,
+		buttons : [{
+			name : "확인",
+			func:function() {
+				var params = $("#inqryForm").serialize();
+				
+				$.ajax({
+					type : "post",
+					url : "empInqryActionAjax/delete",
+					dataType : "json",
+					data : params,
+					success : function(res) {
+						if (res.res == "success") {
+							console.log("삭제~~");
+							closePopup();
+							makeAlert("작업 완료", "삭제되었습니다.", function() {
+								location.reload();
+							});
+						} else {
+							makeAlert("작업 실패", "작업 중 문제가 발생했습니다.<br/>관리자에게 문의하세요.");
+						}
+					},
+					error : function(request, status, error) {
+						console.log(request.responseText);
+					}
+				});
+			}
+		}, {
+			name : "취소"
+		}]
+	});
+}
+
+function createDeleteFailedPopup() {
+	var title = "사원정보 삭제 불가";
+	var html = "";
+	var size = [400, 150]; // [width, height]
+	
+	html += "	<div id=\"delete_failed_popup\" >                                                                     ";
+	html += "		<div class=\"popup_cont_element\">                                                                                     ";
+	html += "		<div class=\"popup_cont_element\" id=\"delete_failed_info_text\">                                                                                     ";
+	html += "			발령 기록이 존재하는 사원은 삭제할 수 없습니다.";
+	html += "		</div>                                                  ";
+	html += "	</div>";
+	html += "	</div>";
+
+
+	
+	makePopup({
+		bg : true,
+		bgClose : false,
+		width : size[0],
+		height : size[1],
+		title : title,
+		contents : html,
+		buttons : [{
+			name : "확인",
+			func:function() {
+				closePopup();
+			}
 		}]
 	});
 }

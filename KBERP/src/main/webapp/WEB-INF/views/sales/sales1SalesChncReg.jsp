@@ -164,7 +164,17 @@
 	padding: 5px 0px;
 	margin-top: -20px;
 }
-/* 팝업 끝 */
+/* 담당자 팝업 끝 */
+
+/* **** 저장 팝업 **** */
+.popup_cont2 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+	font-weight: 600;
+	text-align: center;
+	line-height: 100px;
+}
+
 .body {
 	display: block;
 	background-color: white;
@@ -444,6 +454,8 @@ tr:nth-child(9) td:nth-child(3) {
 #fileName {
 	border: hidden;
 	outline: none;
+	text-indent: 12px;
+    line-height: 40px;
 }
 
 /* 끝 */
@@ -494,62 +506,87 @@ $(document).ready(function() {
 			alert("예정 사업 형태를 입력하세요.");
 			$("#expctdBsnsType").focus();
 		} else {
+			var html = "";
+			
+			html += "<div class=\"popup_cont2\">저장하시겠습니까?</div>";
+			
 			makePopup({
-				bg : true,
+				depth : 1,
+				bg : false,
 				bgClose : false,
 				title : "알림",
-				contents : "저장하시겠습니까?",
+				width : 400,
+				height : 200,
+				contents : html,
 				contentsEvent : function() {
 					$("#popup1").draggable();
 				},
 				buttons : [{
 					name : "확인",
 					func:function() {
-						/* 여기에 넣기 */
-						var addForm = $("#addForm");
-			
-						addForm.ajaxForm({
-							success : function(res) {
-								// 물리파일명 보관
-								if(res.fileName.length > 0) {
-									$("#attFile").val(res.fileName[0]);
-								}
-								
-								// 글 수정
-								var params = $("#addForm").serialize();
-								
-								$.ajax({
-									type : "post",
-									url : "salesMng1ActionAjax/insert",
-									dataType : "json",
-									data : params,
-									success : function(res) {
-										if(res.res == "success") {
-											$("#salesNum").val(res.seq); // 영업기회 등록 후 영업기회 상세보기로 이동할 때 필요.
+						var html = "";
+						
+						html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
+						
+						makePopup({
+							depth : 2,
+							bg : true,
+							bgClose : false,
+							width : 400,
+							height : 200,
+							title : "저장 완료",
+							contents : html,
+							buttons : {
+								name : "확인",
+								func:function() {
+									var addForm = $("#addForm");
+									
+									addForm.ajaxForm({
+										success : function(res) {
+											// 물리파일명 보관
+											if(res.fileName.length > 0) {
+												$("#attFile").val(res.fileName[0]);
+											}
 											
-											$("#listForm").attr("action", "sales1SalesChncCont");
-											$("#listForm").submit();
-										} else {
-											alert("등록중 문제가 발생하였습니다.");
+											// 글 수정
+											var params = $("#addForm").serialize();
+											
+											$.ajax({
+												type : "post",
+												url : "salesMng1ActionAjax/insert",
+												dataType : "json",
+												data : params,
+												success : function(res) {
+													if(res.res == "success") {
+														$("#salesNum").val(res.seq); // 영업기회 등록 후 영업기회 상세보기로 이동할 때 필요.
+														
+														$("#listForm").attr("action", "sales1SalesChncCont");
+														$("#listForm").submit();
+													} else {
+														alert("등록중 문제가 발생하였습니다.");
+													}
+												},
+												error : function(request, status, error) {
+													console.log(request.responseText);
+												}
+											});
+										},
+										error : function(req) {
+											console.log(req.responseText);
 										}
-									},
-									error : function(request, status, error) {
-										console.log(request.responseText);
-									}
-								});
-							},
-							error : function(req) {
-								console.log(req.responseText);
+									}); // ajaxForm end
+									addForm.submit();
+									
+								}
 							}
-						}); // ajaxForm end
-						addForm.submit();
+						}); // makePopup depth2 end
 						console.log("One!");
 						closePopup();
 					}
 				}, {
-					name : "닫기"
+					name : "취소"
 				}]
-			});
+			}); // makePopup depth1 end
 		} // else end
 	});
 	

@@ -450,7 +450,6 @@ $(document).ready(function() {
 							       data : params,
 							       dataType : "json",
 							       success : function(res) {
-							    	   reloadTree(params);
 									   closePopup();
 									   makeAlert("알림", "부서가 추가되었습니다", function() {
 										   location.reload();
@@ -621,11 +620,11 @@ $(document).ready(function() {
 	
 	// 조직도 토글
 	$(".orgnzt_area").on("click", ".orgnzt_depth1, .orgnzt_depth2, .orgnzt_depth3", function(e) {
+		console.log(this)
 		$("#sdeptNum").val($(this).attr("sdeptNum"));
 		$("#dname").val($(this).attr("dname"));
 		$("#deptLevel").val($(this).attr("deptLevel"));
 		$("#superDeptNum").val($(this).attr("superDeptNum"));
-		console.log(this)
 		var depth = $(this).attr("class").substring(12);
 		var obj = $(this);
 		console.log(depth == "1");

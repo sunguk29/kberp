@@ -21,7 +21,6 @@
 	height: 100%;
 	margin: auto;
 }
-
 .bodyWrap {
 	display: block;
 	background-color: white;
@@ -29,14 +28,12 @@
 	height: 100%;
 	margin: 20px auto;
 }
-
 .tLine{
 	background-color: #4B94F2;
 	width: 927px;
 	height: 3px;
 	margin: 10px auto;
 }
-/********** srch_table **********/
 .srch_table {
 	border-collapse: collapse;
 	background-color: #f2f2f2;
@@ -45,49 +42,40 @@
 	text-align: left;
 	margin: 10px 0px;
 }
-
 .srch_table tr {
 	height: 50px;
 }
-
 .srch_table tr:nth-child(2) {
 	height: 45px;
 	border-top: 0.5px solid #d7d7d7;
 }
-
 .asc_btn {
 	width: 30px;
 	height: 25px;
 }
-
 .asc_btn:hover {
 	cursor: pointer;
 }
-
 select {
 	height: 23px;
 	width: 150px;
 	font-size: 12px;
 }
-
 .srch_name {
 	margin: 0px 10px 0px 20px;
 	font-weight: bold;
 }
-
 .srch_msg {
 	height: 20px;
 	width: 305px;
 	font-size: 12px;
 }
-/*---------  검색결과 : n건 --------- */
-.SearchResult { /* 영업기회 검색결과 */
+.SearchResult {
 	width: 927px;
 	font-size: 11pt;
 	text-align: left;
 	margin-top: 30px;
 }
-/********** list_table **********/
 .list_table {
 	border-collapse: collapse;
 	background-color: #FFF;
@@ -96,7 +84,6 @@ select {
 	text-align: left;
 	table-layout: fixed;
 }
-
 .list_table thead th {
 	font-weight: bold;
 }
@@ -106,24 +93,18 @@ select {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
-
 .list_table thead tr:nth-child(1) {
 	border-top: 2px solid gray;
 }
-
 .list_table thead tr:nth-child(2) {
 	border-bottom: 2px solid gray;
 }
-
 .list_table tbody tr:nth-child(2), .list_table tbody td:nth-child(1)  {
 	border-bottom: 1px solid gray;
 }
-
-/* 글번호 */
 .list_table thead tr:nth-child(1) th:nth-child(1), .list_table tbody tr:nth-child(1) td:nth-child(1) {
 	text-align: center;
 }
-/* 고객사명 */
 .list_table tbody tr:nth-child(2) td:nth-child(2) {
 	font-weight: bold;
 	font-size: 10pt;
@@ -134,7 +115,6 @@ select {
 	font-size: 10pt;
 	text-decoration: underline;
 }
-/* 거래 횟수 이미지 */
 .deal{
 	height: 40px;
 }
@@ -143,8 +123,6 @@ select {
 	top: -15px;
 	right: -5px;
 }
-
-/* 상단 버튼 */
 .sales_psbl_btn {
 	display: inline-block;
 	vertical-align: top;
@@ -161,7 +139,6 @@ select {
 	color: #f2f2f2;
 	cursor: pointer;
 }
-
 .sales_psbl_btn:active {
 	background-color: #2e83f2;
 }
@@ -173,11 +150,11 @@ select {
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	// 검색어 구분 설정
+	//검색 구분 설정
 	if('${param.searchType}' != '') {
-		$("#searchType").val("${param.searchType}"); // 검색어 구분 유지
+		$("#searchType").val("${param.searchType}"); // 검색 구분 유지
 	} else {
-		$("#oldSearchType").val("0"); // 검색어 구분 초기값
+		$("#oldSearchType").val("0"); // 검색 구분 초기값
 	}
 	
 	// 목록 실행
@@ -185,10 +162,10 @@ $(document).ready(function() {
 	
 	// 페이지 클릭 이벤트
 	$(".pgn_area").on("click", "div", function() {
-		$("#page").val($(this).attr("page")); // 현재 페이지를 내가 누른 페이지로 변경
+		$("#page").val($(this).attr("page")); // 현재 페이지를 누른 페이지로 변경
 		$("#listSort").val("9"); // 정렬 초기화
 
-		$("#searchType").val($("#oldSearchType").val()); // 검색어 구분 유지
+		$("#searchType").val($("#oldSearchType").val()); // 검색 구분 유지
 		$("#searchTxt").val($("#oldSearchTxt").val()); // 검색어 유지
 		
 		reloadList(); // 목록 실행
@@ -209,21 +186,24 @@ $(document).ready(function() {
 		}
 	});
 	
+	//검색버튼 
 	$("#searchBtn").on("click", function() {
 		$("#page").val("1");
 		
-		$("#oldSearchType").val($("#searchType").val());
-		$("#oldSearchTxt").val($("#searchTxt").val());
+		$("#oldSearchType").val($("#searchType").val()); //검색 구분 유지
+		$("#oldSearchTxt").val($("#searchTxt").val()); //검색어 유지
 		
 		reloadList();
 	});
 	
+	//정렬버튼
 	$("#sortBtn").on("click", function() {
 		reloadList();
 	});
 	
 });
 
+//고객 목록 Ajax
 function reloadList() {
 	var params = $("#actionForm").serialize();
 	
@@ -233,9 +213,9 @@ function reloadList() {
 		data : params,
 		dataType : "json",
 		success : function(res) {
-			drawSearchCnt(res.listCnt);
-			drawList(res.list);
-			drawPaging(res.pb);
+			drawSearchCnt(res.listCnt); //검색개수
+			drawList(res.list); //목록
+			drawPaging(res.pb); //페이징
 		},
 		error : function(req) {
 			console.log(req.responseText);
@@ -244,6 +224,7 @@ function reloadList() {
 	
 }
 
+//검색 개수 html
 function drawSearchCnt(listCnt) {
 	var html = "";
 	html += "<h3>"; 
@@ -254,6 +235,7 @@ function drawSearchCnt(listCnt) {
 	
 }
 
+//목록 html
 function drawList(list) {
 	var html = "";
 		
@@ -304,6 +286,7 @@ function drawList(list) {
 
 }
 
+//페이징
 function drawPaging(pb) {
 	var html = "";
 	
@@ -377,8 +360,6 @@ function drawPaging(pb) {
 						<col width="55" />
 					</colgroup>
 					<tbody>
-						<!-- col=10 -->
-						
 						<tr>
 							<td>
 								<span class="srch_name">검색어</span>

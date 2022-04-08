@@ -268,8 +268,12 @@ hr { /* 구분선 */
 	border-radius: 7px;
 	margin-bottom: 18px;
 	margin-left: 45px;
+    font-size: 10pt;
 }
-
+[href] {
+	color: black;
+	text-decoration: none;
+}
 .txt_area {
 	width: 720px;
 	height: 200px;
@@ -2072,18 +2076,17 @@ function test(t) {
 								</tr>
 							</tbody>
 						</table>
-						<br /> <br />
+						<br/> 
 						<!-- 첨부자료  -->
-						<!-- 첨부자료  -->
-						<c:set var="salesFileLength" value="${fn:length(bsns.ATT_FILE_NAME)}"></c:set>
-						<c:set var="salesFileName" value="${fn:substring(bsns.ATT_FILE_NAME, 20, salesFileLength)}"></c:set>
+						<c:set var="salesFileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+						<c:set var="salesFileName" value="${fn:substring(data.ATT_FILE_NAME, 20, salesFileLength)}"></c:set>
 						<div class="spc">
 							<div class="adc_txt">
-								첨부파일
+								첨부자료
 							</div>
 							<div class="cntrct_box_in">
-								<a href="resources/upload/${bsns.ATT_FILE_NAME}"  download="${salesFileName}">${salesFileName}</a>
-							</div>
+								<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${salesFileName}">${salesFileName}</a>
+							</div> 
 						</div>
 						<!-- 끝 -->
 					</div>
@@ -2264,14 +2267,14 @@ function test(t) {
 						</table>
 						<!-- 첨부자료  -->
 						<!-- 첨부자료  -->
-						<c:set var="dtlSFileLength" value="${fn:length(dtlS.ATT_FILE_NAME)}"></c:set>
-						<c:set var="dtlSFileName" value="${fn:substring(dtlS.ATT_FILE_NAME, 20, dtlSFileLength)}"></c:set>
+						<c:set var="dtlSFileLength" value="${fn:length(data2.ATT_FILE_NAME)}"></c:set>
+						<c:set var="dtlSFileName" value="${fn:substring(data2.ATT_FILE_NAME, 20, dtlSFileLength)}"></c:set>
 						<div class="spc">
 							<div class="adc_txt">
 								첨부파일
 							</div>
 							<div class="cntrct_box_in">
-								<a href="resources/upload/${dtlS.ATT_FILE_NAME}"  download="${dtlSFileName}">${dtlSFileName}</a>
+								<a href="resources/upload/${data2.ATT_FILE_NAME}"  download="${dtlSFileName}">${dtlSFileName}</a>
 							</div>
 						</div>
 					</div>
