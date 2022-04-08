@@ -457,7 +457,7 @@ $(document).ready(function() {
 				<div id="comment_write">
 				
 					<div id="co_writer">
-					${comments.WRITER_NAME}
+					${sEmpName}
 					<%-- ${emp_num} 로그인된 관리자 이름 --%>
 					</div>
 					<div id="co_content"><textarea id="co_cont"><%-- ${cmnt_cont} 댓글 내용 --%></textarea></div>
