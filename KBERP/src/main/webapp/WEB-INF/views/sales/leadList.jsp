@@ -233,11 +233,9 @@
 	width: 30px;
 	height: 25px;
 }
-
 .asc_btn:hover {
 	cursor: pointer;
 }
-
 select {
 	height: 23px;
 	width: 150px;
@@ -330,7 +328,6 @@ input:focus {
 .list_table thead tr:nth-child(3) {
 	border-bottom: 1.5px solid #d7d7d7;
 }
-
 .list_table thead tr {
 	border-bottom: none;
 }
