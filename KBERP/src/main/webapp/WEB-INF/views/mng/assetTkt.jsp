@@ -227,7 +227,18 @@ function drawPaging(pb) {
 			<div>
 			<div class="board_bottom">
 				<div class="pgn_area"></div>
+				<c:if test="${sAthrtyNum==0}">
 				<input class="cmn_btn" type="button" value="등록" id="rgstrtnBtn"/>
+				</c:if>
+				<c:if test="${sAthrtyNum==1}">
+				<input class="cmn_btn" type="button" value="등록" id="rgstrtnBtn"/>
+				</c:if>
+				<c:if test="${sAthrtyNum==6}">
+				<input class="cmn_btn" type="button" value="등록" id="rgstrtnBtn"/>
+				</c:if>
+				<c:if test="${sAthrtyNum==7}">
+				<input class="cmn_btn" type="button" value="등록" id="rgstrtnBtn"/>
+				</c:if>
 			</div>
 			</div>
 		</div>

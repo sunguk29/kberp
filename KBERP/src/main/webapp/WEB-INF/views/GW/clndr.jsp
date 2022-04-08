@@ -498,6 +498,7 @@ $(document).ready(function() {
 	  			bgClose : false,
 	  			title : "일정등록",
 	  			contents : html,
+	  			draggable : true,
 	  			width : 540,
 	  			height : 620,
 	  			buttons : [{
@@ -737,13 +738,23 @@ $(document).ready(function() {
   				bgClose : false,
   				title : "상세일정",
   				contents : html,
+  				draggable : true,
   				width : 540,
   				height : 520,
   				buttons : [{
   					name : "수정",
   					func:function() {
   						if(${sEmpNum} != data.emp_num){
-  							alert("본인의 일정만 수정할 수 있습니다.");
+  							makePopup({
+	  							bg : true,
+	  							bgClose : false,
+	  							title : "경고",
+	  							contents : "본인의 일정만 수정할 수 있습니다.",
+	  							draggable : true,
+	  							buttons : [{
+	  								name : "확인"
+	  							}]
+	  						});
   						} else{
   						schdlUpdate(data);
   						if(data.aldy_dvsn == "1"){
@@ -758,7 +769,16 @@ $(document).ready(function() {
   					name : "삭제",
   					func:function(){
   						if(${sEmpNum} != data.emp_num){
-  							alert("본인의 일정만 삭제할 수 있습니다.");
+  							makePopup({
+	  							bg : true,
+	  							bgClose : false,
+	  							title : "경고",
+	  							contents : "본인의 일정만 삭제할 수 있습니다.",
+	  							draggable : true,
+	  							buttons : [{
+	  								name : "확인"
+	  							}]
+	  						});
   						} else{
 	  						makePopup({
 	  							bg : true,
@@ -901,6 +921,7 @@ function schdlUpdate(data){
 		bgClose : false,
 		title : "일정수정",
 		contents : html,
+		draggable : true,
 		contentsEvent : function() {
 			$("#schdl_type").val(data.schdl_type_num);
 			$("#schdl_ctgry").val(data.schdl_ctgry_num);
@@ -1210,6 +1231,7 @@ $(document).ready(function() {
 			bgClose : false,
 			title : "일정등록",
 			contents : html,
+			draggable : true,
 			width : 540,
 			height : 620,
 			buttons : [{

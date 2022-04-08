@@ -643,7 +643,7 @@ $(document).ready(function() {
 	$("#listBtn").on("click", function() {
 		// 내용이 입력되어있으면 팝업창 띄움
 		if($("#leadName").val() != "" || $("#clntName").val() != ""  || 
-		   $("#ccName").val() != "" || $("#mngEmp").val() != "" ) {
+		   $("#ccName").val() != "" || $("#mngEmp").val() != "" || $("#psblCheck").val() != "") {
 			var html = "";
 			
 			html += "<div class=\"popup_cont1\">";

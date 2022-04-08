@@ -646,9 +646,11 @@ $(document).ready(function() {
    
    // 발령 상세보기 
    $("tbody").on("click", "tr", function() {
-      $("#no").val($(this).attr("no"));
+      $("#empNum").val($(this).attr("empNum"));
+      $("#apntmNum").val($(this).attr("apntmNum"));
       $("tbody").children("tr").css("background-color", "#ffffff");
       $(this).css("background-color", "rgb(200,218,248)");
+	   console.log("발령리스트 클릭! empnum : " + $("#empNum").val() + "apntmNum : " + $("#apntmNum").val())
 
       reloadCont();
    });
@@ -820,6 +822,7 @@ $(document).ready(function() {
 		$("body").on("change", "#addDvsnNum", function(){
 			  console.log("발령구분값: " + $('#addDvsnNum option:selected').val())
 			    if ($('#addDvsnNum option:selected').val() == 1) {
+			    	makeAlert("알림", "퇴사는 발령종료일만 입력하세요");
 			    	$("#addDeptNum").attr("disabled", true);
 			    	$("#addDeptNum").val("");
 			    	$("#addRankNum").attr("disabled", true);
@@ -845,19 +848,19 @@ $(document).ready(function() {
 					$("#prfl_srch_btn").focus();
 					});
 				} else if ($("#addDvsnNum").val() == '선택') {
-					makeAlert("알림", "필수항목이 누락되었습니다.", function(){
+					makeAlert("알림", "발령구분을 선택하세요.", function(){
 					$("#addDvsnNum").focus();
 					});
 				} else if ($("#addDeptNum").val() == '선택') {
-					makeAlert("알림", "필수항목이 누락되었습니다.", function(){
+					makeAlert("알림", "발령부서를 선택하세요.", function(){
 					$("#addDeptNum").focus();
 					});
 				} else if ($("#addRankNum").val() == '선택') {
-					makeAlert("알림", "필수항목이 누락되었습니다.", function(){
+					makeAlert("알림", "발령직급을 선택하세요.", function(){
 					$("#addRankNum").focus();
 					});
 				} else if ($("#addStart").val() == '')  {
-					makeAlert("알림", "필수항목이 누락되었습니다.", function(){
+					makeAlert("알림", "발령시작일을 입력하세요.", function(){
 					$("#addStart").focus();
 					});
 				} else {
@@ -885,7 +888,7 @@ $(document).ready(function() {
 				}
 			} else { // 발령구분 퇴사일 시 
 				if($("#addEnd").val() == '') {
-						makeAlert("알림", "필수항목이 누락되었습니다.", function(){
+						makeAlert("알림", "발령종료일을 입력하세요.", function(){
 						$("#addEnd").focus();
 					});
 				} else {
@@ -973,7 +976,7 @@ function drawList(list) {
    var html = "";
    
    for(var data of list) {                                 
-      html += "<tr id=\"tbodyTr\" no=\"" + data.APNTM_NUM + "\">"        ;
+      html += "<tr id=\"tbodyTr\" apntmNum=\"" + data.APNTM_NUM + "\"empNum=\"" + data.EMP_NUM + " \">" ;
       html += "<td>" + data.APNTM_NUM + "</td>"           ;
       if(data.APNTM_DVSN_NUM == 0) {
      	 html += "<td>입사</td>"      ;
@@ -1016,7 +1019,7 @@ function drawCont(cont, emp){
    html += "               <div class=\"prfl_info_emp_num\">                                      ";
    html += "                  <div class=\"prfl_info_text\">사원번호</div>                       ";
    html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + emp.EMP_NUM + "\" />  ";
-   html += "                  <div class=\"prfl_srch_btn\"></div>                                ";
+  // html += "                  <div class=\"prfl_srch_btn\"></div>                                ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
@@ -1245,10 +1248,11 @@ function drawAddApntm(dept,rank){
 		</div>
 		<!--------------------- 발령 조회 Form ------------------------->
 		<form action="#" id="actionForm" method="post">
-			<input type="hidden" name="top" value="${param.top}"> <input
-				type="hidden" name="menuNum" value="${param.menuNum}"> <input
-				type="hidden" name="menuType" value="${param.menuType}"> <input
-				type="hidden" id="no" name="no" />
+			<input type="hidden" name="top" value="${param.top}"> 
+			<input type="hidden" name="menuNum" value="${param.menuNum}"> 
+			<input type="hidden" name="menuType" value="${param.menuType}"> 
+			<input type="hidden" id="apntmNum" name="apntmNum" />
+			<input type="hidden" id="empNum" name="empNum" />
 			<div class="srch_wrap">
 				<div class="srch_top_area">
 					<select class="srch_select" id="searchGbn" name="searchGbn">
