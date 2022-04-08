@@ -674,6 +674,13 @@
 	text-align: center;
 	border-radius: 2px;
 }
+
+#rspndActionForm input:focus {
+	outline: 2px solid #F2CB05;
+}
+#rspndActionForm textarea:focus{
+	outline: 2px solid #F2CB05;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {

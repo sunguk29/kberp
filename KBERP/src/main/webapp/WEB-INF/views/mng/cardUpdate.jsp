@@ -201,6 +201,7 @@ $(document).ready(function() {
 	<!-- 내용영역 -->
 <form action="cardView" id="backForm" method="post">
 	<input type="hidden" name="no" value="${param.no}" />
+	<input type="hidden" name="mng_num" value="${param.mng_num}" />
 	<input type="hidden" name="page" value="${param.page}" />
 	<input type="hidden" name="searchMon" value="${param.searchMon}" />
 	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
@@ -214,7 +215,7 @@ $(document).ready(function() {
 		<!-- 해당 내용에 작업을 진행하시오. -->
 <form action="#" id="updateForm" method="post" enctype="multipart/form-data">
 <input type="hidden" name="no" value="${param.no}" />
-<input type="hidden" name="mng_num" value="${data.MNG_NUM}" />
+<input type="hidden" name="mng_num" value="${param.mng_num}" />
 <input type="hidden" name="page" value="${param.page}" />
 <input type="hidden" name="searchMon" value="${param.searchMon}" />
 <input type="hidden" name="searchGbn" value="${param.searchGbn}" />

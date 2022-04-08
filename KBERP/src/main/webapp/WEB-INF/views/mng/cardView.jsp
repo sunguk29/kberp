@@ -177,6 +177,7 @@ $(document).ready(function() {
 	<input type="hidden" name="page" value="${param.page}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 	<input type="hidden" name="no" value="${param.no}" />
+	<input type="hidden" name="mng_num" value="${param.mng_num}" />
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<table class="board_table">
@@ -234,7 +235,7 @@ $(document).ready(function() {
          </tr>
  		<tr>
             <td> 폐기일자 </td>
-               <td colspan=3 class = "del_cont">${data.DSCRD_DT}</td>
+               <td class = "del_cont">${data.DSCRD_DT}</td>
 
          </tr>
          </tbody>

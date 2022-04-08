@@ -64,12 +64,45 @@
 	</select>
 	
 	<insert id="writeCard" parameterType="hashmap"> 
-		INSERT INTO CARD(MNG_NUM,CARD_CMPNY_NUM,CARD_NAME,CARD_DVSN,CARD_NUM,EMP_NUM,ISSUE_DT,END_DT,RGSTRTN_DT)
-		VALUES (CARD_SEQ.NEXTVAL,#{card_co},#{card_name},#{card_sep},#{card_code},#{use_num},#{issue_dt},#{end_dt},sysdate)
+		INSERT INTO CARD(MNG_NUM,CARD_CMPNY_NUM,CARD_NAME,CARD_DVSN,CARD_NUM,NAME,EMP_NUM,ISSUE_DT,END_DT,RGSTRTN_DT)
+		VALUES (CARD_SEQ.NEXTVAL,#{card_co},#{card_name},#{card_sep},#{card_code},#{use_name},#{use_num},#{issue_dt},#{end_dt},sysdate)
 	</insert>
 	 <select id="updateCard" resultType="hashmap" parameterType="hashmap">
 	  UPDATE CARD
 	     SET ISSUE_DT =#{issue_dt} ,END_DT = #{end_dt}, DSCRD_DT=#{del_dt}
 	 WHERE MNG_NUM =#{mng_num}
 	 </select>
+	 <select id="getAllEmpCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM(  SELECT A.EMP_NUM, EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM,DEPT_NAME,RANK_NAME
+	        		FROM DEPT D INNER JOIN APNTM A
+	                    		ON D.DEPT_NUM = A.DEPT_NUM
+	                   			INNER JOIN EMP E
+	                    		ON A.EMP_NUM = E.EMP_NUM
+                                INNER JOIN RANK R
+                                ON A.RANK_NUM = R.RANK_NUM
+	        		WHERE 1=1 
+			<if test="sendSrchTxt != null and sendSrchTxt != ''">
+				AND EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
+			</if>
+			) 
+	</select>
+	
+	<select id="getAllEmpList" resultType="hashmap" parameterType="hashmap">
+		SELECT EMP_NAME, DEPT_NAME, RANK_NAME, EMP_NUM
+		FROM       (SELECT A.EMP_NUM, EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM,DEPT_NAME,RANK_NAME
+	        		FROM DEPT D INNER JOIN APNTM A
+	                    		ON D.DEPT_NUM = A.DEPT_NUM
+	                   			INNER JOIN EMP E
+	                    		ON A.EMP_NUM = E.EMP_NUM
+                                INNER JOIN RANK R
+                                ON A.RANK_NUM = R.RANK_NUM
+	        		WHERE 1=1 
+		             <if test="sendSrchTxt != null and sendSrchTxt != ''">
+		             	AND EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
+		             </if>
+		            )A
+		WHERE RNUM BETWEEN #{startCount} AND #{endCount}
+		
+	</select>
 </mapper>

@@ -173,32 +173,35 @@ select {
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	console.log('${param.searchTxt}');
-	
+	// 검색어 구분 설정
 	if('${param.searchType}' != '') {
-		$("#searchType").val("${param.searchType}");
+		$("#searchType").val("${param.searchType}"); // 검색어 구분 유지
 	} else {
-		$("#oldSearchType").val("0");
+		$("#oldSearchType").val("0"); // 검색어 구분 초기값
 	}
 	
+	// 목록 실행
 	reloadList();
 	
+	// 페이지 클릭 이벤트
 	$(".pgn_area").on("click", "div", function() {
-		$("#page").val($(this).attr("page"));
-		$("#listSort").val("9");
+		$("#page").val($(this).attr("page")); // 현재 페이지를 내가 누른 페이지로 변경
+		$("#listSort").val("9"); // 정렬 초기화
 
-		$("#searchType").val($("#oldSearchType").val());
-		$("#searchTxt").val($("#oldSearchTxt").val());
+		$("#searchType").val($("#oldSearchType").val()); // 검색어 구분 유지
+		$("#searchTxt").val($("#oldSearchTxt").val()); // 검색어 유지
 		
-		reloadList();
+		reloadList(); // 목록 실행
 	});
 	
+	// 등록 버튼
 	$("#addBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntReg");
 		$("#actionForm").submit();
 	});
 	
-	$("#searchTxt").on("keypress", function(event) { // 엔터 처리
+	// 검색어 엔터 처리
+	$("#searchTxt").on("keypress", function(event) {
 		if(event.keyCode == 13) {
 			$("#searchBtn").click(); 
 			
