@@ -482,6 +482,8 @@ textarea {
 	margin-bottom: 18px;
 	margin-left: 45px;
     font-size: 10pt;
+    text-indent: 12px;
+    line-height: 40px;
 }
 
 .btnImg_in {
@@ -528,6 +530,13 @@ textarea {
 	border: hidden;
 	outline: none;
 }
+.popup_cont2 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+	font-weight: 600;
+	text-align: center;
+	line-height: 100px;
+}
 /* 끝 */
 </style>
 <script type="text/javascript">
@@ -545,7 +554,6 @@ $(document).ready(function() {
 			buttons : [ {
 				name : "확인",
 				func : function() {
-					$("#backForm").attr("action", "sales1SalesChncCont");
 					$("#backForm").submit();
 					console.log("One!");
 					closePopup();
@@ -579,11 +587,16 @@ $(document).ready(function() {
 	
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
+		
+		var html = "";
+		
+		html += "<div class=\"popup_cont2\">저장하시겠습니까?</div>";
+		
 		makePopup({
 			bg : true,
 			bgClose : false,
 			title : "알림",
-			contents : "저장하시겠습니까?",
+			contents : html,
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
@@ -610,7 +623,6 @@ $(document).ready(function() {
 								data : params,
 								success : function(res) {
 									if (res.res == "success") {
-										$("#backForm").attr("action", "sales1SalesChncCont");
 										$("#backForm").submit();
 									} else {
 										alert("수정중 문제가 발생하였습니다.");
@@ -818,12 +830,12 @@ function uploadName(e) {
 </script>
 </head>
 <body>
-	<form action="#" id="backForm" method="post">
+	<form action="sales1SalesChncCont" id="backForm" method="post">
 		<input type="hidden" id="page" name="page" value="${page}" />
 		<input type="hidden" name="top" value="${param.top}" />
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
-		<input type="hidden" id="salesNum" name="salesNum" value="${data.SALES_NUM}" />
+		<input type="hidden" id="salesNum" name="salesNum" value="${param.salesNum}" />
 		<!-- 영업번호 -->
 	</form>
 	<!-- top & left -->
