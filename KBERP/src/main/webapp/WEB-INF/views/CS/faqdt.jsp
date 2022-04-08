@@ -157,26 +157,16 @@
 			</div>
 		</div>
 			
-			<div class="cont">
-			${data.WRTNG_CONT}
-			</div>
-			<div class="buttons_bottom">
-					<div class="cmn_btn" id="listBtn">목록</div>
-				
-					<div class="cmn_btn" id="updateBtn">수정</div>
-				
-					<div class="cmn_btn" id="deleteBtn">삭제</div>
-				
+		<div class="cont">
+		${data.WRTNG_CONT}
+		</div>
+		<div class="buttons_bottom">
+				<div class="cmn_btn" id="listBtn">목록</div>
+				<div class="cmn_btn" id="updateBtn">수정</div>
+				<div class="cmn_btn" id="deleteBtn">삭제</div>
 			</div>
 		</div>
 	</div>
-	
-	<%-- <form action="#" id="actionForm" method="post">
-		<input type="hidden" name="no" value="${param.no}" />
-		<input type="hidden" name="page" value="${param.page}" />
-		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
-		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
-</form> --%>
 	
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
