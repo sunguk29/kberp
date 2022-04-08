@@ -79,10 +79,13 @@ $(document).ready(function() {
 		}  else if(checkEmpty("#qunty")) {
 			alert("수량을 선택하세요.");
 			$("#qunty").focus();
+		}  else if($("#qunty").val()>$("#crntQunty").val()){
+			alert("현재 수량보다 많습니다.");
+			$("#qunty").focus();
 		}  else if(checkEmpty("#useEmpName")) {
 			alert("사용자를 선택하세요.");
 			$("#useEmpName").focus();
-		} else if(checkEmpty("#tktdt")) {
+		}  else if(checkEmpty("#tktdt")) {
 			alert("반출일을 선택하세요.");
 			$("#tktdt").focus();
 		} else if(checkEmpty("#rmrks")) {
@@ -124,6 +127,7 @@ $(document).ready(function() {
 	});
 	
 $("#srchEmp").on("click", function() {
+
 		
 		var html = "";
 		

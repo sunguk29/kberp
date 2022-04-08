@@ -23,7 +23,8 @@
 	</select>
 <select id ="getBoardList" resultType="hashmap" parameterType="hashmap">
 		SELECT *
-		FROM (  SELECT B.WRTNG_NUM, B.BOARD_TITLE, E.EMP_NAME,
+        FROM(SELECT *
+		FROM (  SELECT B.WRTNG_NUM, B.BOARD_TITLE, E.EMP_NAME, B.BOARD_ADMNSTRTN_NUM,
                B.BOARD_HITS, TO_CHAR(BOARD_WRTNG_DATE, 'YYYY-MM-DD') AS BOARD_WRTNG_DATE, B.BOARD_CONT,
                ROW_NUMBER() OVER(ORDER BY B.WRTNG_NUM DESC) AS RNUM
 		        FROM BOARD B INNER JOIN EMP E
@@ -44,7 +45,8 @@
 					</choose>
 				</if>
 		    ) A
-		WHERE A.RNUM BETWEEN #{startCount} AND #{endCount}
+		WHERE A.RNUM BETWEEN #{startCount} AND #{endCount})
+		WHERE BOARD_ADMNSTRTN_NUM = #{menuNum}
 	</select>
 	<select id="boardView" resultType="hashmap" parameterType="hashmap">
 	SELECT B.WRTNG_NUM, B.BOARD_TITLE, B.BOARD_CONT, E.EMP_NAME,
@@ -61,7 +63,7 @@
 	<insert id="boardWrite" parameterType="hashmap">
 			INSERT INTO BOARD(WRTNG_NUM, BOARD_TITLE, EMP_NUM, BOARD_CONT, BOARD_ADMNSTRTN_NUM, 
 			ATCHD_FILE )
-			VALUES(BOARD_SEQ.NEXTVAL, #{title}, #{writer}, #{con} , 2,  #{attFile})
+			VALUES(BOARD_SEQ.NEXTVAL, #{title}, #{writer}, #{con} , #{menuNum},  #{attFile})
 	</insert>
 	<update id="boardUpdate" parameterType="hashmap">
 		UPDATE BOARD SET BOARD_TITLE = #{title},
@@ -108,5 +110,19 @@
 		UPDATE BOARD_CMNT SET DEL_CHECK = 0
 		WHERE CMNT_NUM = #{cmntNo}
 	</delete>
+	<select id="boardAdmnstrlist" parameterType="hashmap" resultType="hashmap">
+		SELECT BOARD_ADMNSTRTN_NUM, CTGRY_NAME, DEL_CHECK,
+		 		ROW_NUMBER() OVER(ORDER BY WRTNG_DATE ASC) AS RNUM
+		FROM BOARD_ADMNSTRTN
+		WHERE DEL_CHECK = 1
+	</select>
 	
+	<insert id="boardAdmnstrWrite" parameterType="hashmap">
+			INSERT INTO BOARD_ADMNSTRTN(BOARD_ADMNSTRTN_NUM, EMP_NUM, CTGRY_NAME)
+			VALUES(BOARD_ADMNSTRTN_SEQ.NEXTVAL,  #{writer}, #{ctgry_name})
+	</insert>
+	<delete id="boardAdmnstrDelete" parameterType="hashmap">
+		UPDATE BOARD_ADMNSTRTN SET DEL_CHECK = 0
+		WHERE CTGRY_NAME = #{admstrName}
+	</delete>
 </mapper>
