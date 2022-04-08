@@ -173,14 +173,14 @@ select {
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	console.log('${param.searchTxt}');
-	
+	// 검색어 구분 초기값
 	if('${param.searchType}' != '') {
 		$("#searchType").val("${param.searchType}");
 	} else {
 		$("#oldSearchType").val("0");
 	}
 	
+	// 목록 함수 실행
 	reloadList();
 	
 	$(".pgn_area").on("click", "div", function() {
