@@ -468,7 +468,7 @@ $(document).ready(function() {
 
 	});
 	
-	
+	//
 	
 	// 영업 종료하기 버튼
 	$(".salesOver_btn").on("click", function() {
