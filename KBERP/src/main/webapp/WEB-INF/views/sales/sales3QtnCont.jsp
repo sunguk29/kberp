@@ -619,7 +619,7 @@ $(document).ready(function() {
 	
 	
 	
-	//대출금액
+ 	//대출금액
 	var loanAmnt = ${data3.LOAN_AMNT};
 	//대출기간
 	var loanPrd
@@ -638,18 +638,18 @@ $(document).ready(function() {
 	var mIntrstRate = (intrstRate / 12);
 	
 	//월 납부액
-	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 0 ) { // 원금 균등 상환
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM eq 0}) { // 원금 균등 상환
 		$("#monthPymntAmnt").val(Math.round(loanAmnt / loanPrd));
 		$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
 	}
-	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 1 ) { // 원리금 균등 상환
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM eq 1}) { // 원리금 균등 상환
 		var temp1 = Math.pow(1 + mIntrstRate, loanPrd) - 1;
 		var temp2 = loanAmnt * mIntrstRate * Math.pow(1 + mIntrstRate, loanPrd);
 		$("#monthPymntAmnt").val(Math.round(temp2 / temp1));
 		$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
 	}
-	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 2 ) { // 만기 일시 상환
-		if(${data3.INTRST_PYMNT_MTHD_NUM} != 2) {
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM eq 2}) { // 만기 일시 상환
+		if(${data3.INTRST_PYMNT_MTHD_NUM ne 2}) {
 			$("#monthPymntAmnt").val("0");
 			$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
 		}
@@ -777,7 +777,7 @@ function drawPQList(list) {
 		<div class="page_title_bar">
 			<div class="page_title_text">영업관리 - 견적 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
-				<img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" id="printBtn" />
+				<!-- <img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" id="printBtn" /> -->
 				<img alt="수정버튼" src="resources/images/sales/newAdd.png" class="btnImg" id="updateBtn" data-toggle="tooltip" title="견적서 추가하기" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>

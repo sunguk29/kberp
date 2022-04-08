@@ -221,7 +221,7 @@
 		                     ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
 		             INNER JOIN CLNT_CMPNY_GRADE CCG
 		                     ON CCG.GRADE_NUM = CC.GRADE_NUM
-	WHERE S.SALES_NUM = #{salesNum}
+		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
 	

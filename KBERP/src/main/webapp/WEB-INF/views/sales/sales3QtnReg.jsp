@@ -977,7 +977,7 @@ $(document).ready(function() {
 									success : function(res) {
 										if(res.res == "success") {
 											closePopup();
-											$("#listForm").attr("action", "sales3QtnCont");
+											$("#listForm").attr("action", "salesList");
 											$("#listForm").submit();
 										} else {
 											alert("등록중 문제가 발생하였습니다.");
@@ -1806,7 +1806,7 @@ function test(t) {
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
 		<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
-		<input type="hidden" name="qtnNum" value="${param.qtnNum}" /> <!-- 견적 번호 -->
+		<input type="hidden" name="qtnNum" value="${param.qtnNum}" />
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -2068,14 +2068,15 @@ function test(t) {
 						</table>
 						<br /> <br />
 						<!-- 첨부자료  -->
-						<c:set var="fileLength" value="${fn:length(bsns.ATT_FILE_NAME)}"></c:set>
-						<c:set var="fileName" value="${fn:substring(bsns.ATT_FILE_NAME, 20, fileLength)}"></c:set>
+						<!-- 첨부자료  -->
+						<c:set var="salesFileLength" value="${fn:length(bsns.ATT_FILE_NAME)}"></c:set>
+						<c:set var="salesFileName" value="${fn:substring(bsns.ATT_FILE_NAME, 20, salesFileLength)}"></c:set>
 						<div class="spc">
 							<div class="adc_txt">
 								첨부파일
 							</div>
 							<div class="cntrct_box_in">
-								<a href="resources/upload/${bsns.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
+								<a href="resources/upload/${bsns.ATT_FILE_NAME}"  download="${salesFileName}">${salesFileName}</a>
 							</div>
 						</div>
 						<!-- 끝 -->
@@ -2256,19 +2257,18 @@ function test(t) {
 							</tbody>
 						</table>
 						<!-- 첨부자료  -->
-						<c:set var="fileLength" value="${fn:length(bsns.ATT_FILE_NAME)}"></c:set>
-						<c:set var="fileName" value="${fn:substring(bsns.ATT_FILE_NAME, 20, fileLength)}"></c:set>
-						<input type=file id="att" name="att">
-						<input type="hidden" id="attFile" name="attFile" />
+						<!-- 첨부자료  -->
+						<c:set var="dtlSFileLength" value="${fn:length(dtlS.ATT_FILE_NAME)}"></c:set>
+						<c:set var="dtlSFileName" value="${fn:substring(dtlS.ATT_FILE_NAME, 20, dtlSFileLength)}"></c:set>
 						<div class="spc">
 							<div class="adc_txt">
 								첨부파일
 							</div>
 							<div class="cntrct_box_in">
-								<a href="resources/upload/${bsns.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
+								<a href="resources/upload/${dtlS.ATT_FILE_NAME}"  download="${dtlSFileName}">${dtlSFileName}</a>
 							</div>
 						</div>
-						</div>
+					</div>
 						
 <!-- ************************************************ 견적 시작 ************************************************ -->
 						<hr class="hr_bot" color="#4B94F2" width="925px">
