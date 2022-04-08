@@ -349,12 +349,54 @@ public class PrsnlController {
 				modelMap.put("newEmpInfo", newEmpInfo);
 				break;
 				
-			case "addBank" :
-				
+			case "deleteCheck" :
+				int del_check = iCommonService.getIntData("prsnl.delApntmCount", params);
+				if (del_check == 0) {
+					int edctn_level_count = iCommonService.getIntData("prsnl.delEdctnLevelCount", params);
+					int cr_count = iCommonService.getIntData("prsnl.delCrCount", params);
+					int qlfctn_count = iCommonService.getIntData("prsnl.delQlfctnCount", params);
+					modelMap.put("edctnLevelCount", edctn_level_count);
+					modelMap.put("crCount", cr_count);
+					modelMap.put("qlfctnCount", qlfctn_count);
+					modelMap.put("delCheck", "1");
+				} else {
+					modelMap.put("delCheck", "0");
+				}
+				check = 1;
 				break;
 				
 			case "delete" :
-				
+				int del_check_2 = iCommonService.getIntData("prsnl.delApntmCount", params);
+				if (del_check_2 == 0) {
+					int edctn_level_count = iCommonService.getIntData("prsnl.delEdctnLevelCount", params);
+					int cr_count = iCommonService.getIntData("prsnl.delCrCount", params);
+					int qlfctn_count = iCommonService.getIntData("prsnl.delQlfctnCount", params);
+					
+					check = iCommonService.deleteData("prsnl.delEdctnLevel", params);
+					System.out.println("학력사항 삭제 : " + check + " 개");
+					if (check == edctn_level_count) {
+						check = 0;
+						check = iCommonService.deleteData("prsnl.delCr", params);
+						System.out.println("경력사항 삭제 : " + check + " 개");
+						if (check == cr_count) {
+							check = 0;
+							check = iCommonService.deleteData("prsnl.delQlfctn", params);
+							System.out.println("자격사항 삭제 : " + check + " 개");
+							if (check == qlfctn_count) {
+								check = 0;
+								check = iCommonService.deleteData("prsnl.delSlryAcnt", params);
+								System.out.println("계좌정보 삭제 : " + check + " 개");
+								if (check >= 0) {
+									check = 0;
+									check = iCommonService.deleteData("prsnl.delEmp", params);
+									System.out.println("사원 삭제 : " + check + " 명");
+								}
+							}
+						}
+
+					}
+
+				}
 				break;
 			}
 			

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="clntRprt">
+<!-- 신규고객사 전월 개수 -->
+	<select id="ccLastMonthCnt" resultType="Integer" parameterType="hashmap">
+		SELECT  COUNT(*) AS CNT
+		FROM CLNT_CMPNY
+		WHERE TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM')
+		AND DEL_CHECK IS NULL
+	</select>
+<!-- 신규고객사 당월 개수 -->	
+	<select id="ccThatMonthCnt" resultType="Integer" parameterType="hashmap">
+		SELECT  COUNT(*) AS CNT
+		FROM CLNT_CMPNY
+		WHERE DEL_CHECK IS NULL
+		AND TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
+	</select>
+<!-- 신규고객사 평균3개월 개수 -->		
+	<select id="ccAvgCnt" resultType="Double" parameterType="hashmap">
+		SELECT ROUND((CNT / 3), 1) 
+		FROM (SELECT  COUNT(*) AS CNT
+		      FROM CLNT_CMPNY
+		      WHERE DEL_CHECK IS NULL)
+	</select>
+<!-- 신규고객 전월 개수 -->
+	<select id="clntLastMonthCnt" resultType="Integer" parameterType="hashmap">
+		SELECT  COUNT(*) AS CNT
+		FROM ENTRPRS_CLNT
+		WHERE TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM')
+		AND DEL_CHECK IS NULL
+	</select>
+<!-- 신규고객 당월 개수 -->	
+	<select id="clntThatMonthCnt" resultType="Integer" parameterType="hashmap">
+		SELECT  COUNT(*) AS CNT
+		FROM ENTRPRS_CLNT
+		WHERE DEL_CHECK IS NULL
+		AND TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
+	</select>
+<!-- 신규고객 평균3개월 개수 -->		
+	<select id="clntAvgCnt" resultType="Double" parameterType="hashmap">
+		SELECT ROUND((CNT / 3), 1) 
+		FROM (SELECT  COUNT(*) AS CNT
+		      FROM ENTRPRS_CLNT
+		      WHERE DEL_CHECK IS NULL)
+	</select>
+<!-- 신규고객 전체 개수 -->
+	<select id="clntAllCnt" resultType="Integer" parameterType="hashmap">
+		SELECT  COUNT(*) AS CNT
+		FROM ENTRPRS_CLNT
+		WHERE 1 = 1
+		AND DEL_CHECK IS NULL
+	</select>
+</mapper>

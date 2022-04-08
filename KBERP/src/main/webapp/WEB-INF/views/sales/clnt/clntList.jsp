@@ -21,7 +21,6 @@
 	height: 100%;
 	margin: auto;
 }
-
 .bodyWrap {
 	display: block;
 	background-color: white;
@@ -29,14 +28,12 @@
 	height: 100%;
 	margin: 20px auto;
 }
-
 .tLine{
 	background-color: #4B94F2;
 	width: 927px;
 	height: 3px;
 	margin: 10px auto;
 }
-/********** srch_table **********/
 .srch_table {
 	border-collapse: collapse;
 	background-color: #f2f2f2;
@@ -45,49 +42,40 @@
 	text-align: left;
 	margin: 10px 0px;
 }
-
 .srch_table tr {
 	height: 50px;
 }
-
 .srch_table tr:nth-child(2) {
 	height: 45px;
 	border-top: 0.5px solid #d7d7d7;
 }
-
 .asc_btn {
 	width: 30px;
 	height: 25px;
 }
-
 .asc_btn:hover {
 	cursor: pointer;
 }
-
 select {
 	height: 23px;
 	width: 150px;
 	font-size: 12px;
 }
-
 .srch_name {
 	margin: 0px 10px 0px 20px;
 	font-weight: bold;
 }
-
 .srch_msg {
 	height: 20px;
 	width: 305px;
 	font-size: 12px;
 }
-/*---------  검색결과 : n건 --------- */
-.SearchResult { /* 영업기회 검색결과 */
+.SearchResult {
 	width: 927px;
 	font-size: 11pt;
 	text-align: left;
 	margin-top: 30px;
 }
-/********** list_table **********/
 .list_table {
 	border-collapse: collapse;
 	background-color: #FFF;
@@ -96,7 +84,6 @@ select {
 	text-align: left;
 	table-layout: fixed;
 }
-
 .list_table thead th {
 	font-weight: bold;
 }
@@ -106,24 +93,18 @@ select {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
-
 .list_table thead tr:nth-child(1) {
 	border-top: 2px solid gray;
 }
-
 .list_table thead tr:nth-child(2) {
 	border-bottom: 2px solid gray;
 }
-
 .list_table tbody tr:nth-child(2), .list_table tbody td:nth-child(1)  {
 	border-bottom: 1px solid gray;
 }
-
-/* 글번호 */
 .list_table thead tr:nth-child(1) th:nth-child(1), .list_table tbody tr:nth-child(1) td:nth-child(1) {
 	text-align: center;
 }
-/* 고객사명 */
 .list_table tbody tr:nth-child(2) td:nth-child(2) {
 	font-weight: bold;
 	font-size: 10pt;
@@ -134,7 +115,6 @@ select {
 	font-size: 10pt;
 	text-decoration: underline;
 }
-/* 거래 횟수 이미지 */
 .deal{
 	height: 40px;
 }
@@ -143,8 +123,6 @@ select {
 	top: -15px;
 	right: -5px;
 }
-
-/* 상단 버튼 */
 .sales_psbl_btn {
 	display: inline-block;
 	vertical-align: top;
@@ -161,7 +139,6 @@ select {
 	color: #f2f2f2;
 	cursor: pointer;
 }
-
 .sales_psbl_btn:active {
 	background-color: #2e83f2;
 }
@@ -173,11 +150,11 @@ select {
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	// 검색어 구분 설정
+	//검색 구분 설정
 	if('${param.searchType}' != '') {
-		$("#searchType").val("${param.searchType}"); // 검색어 구분 유지
+		$("#searchType").val("${param.searchType}"); // 검색 구분 유지
 	} else {
-		$("#oldSearchType").val("0"); // 검색어 구분 초기값
+		$("#oldSearchType").val("0"); // 검색 구분 초기값
 	}
 	
 	// 목록 실행
@@ -185,10 +162,10 @@ $(document).ready(function() {
 	
 	// 페이지 클릭 이벤트
 	$(".pgn_area").on("click", "div", function() {
-		$("#page").val($(this).attr("page")); // 현재 페이지를 내가 누른 페이지로 변경
+		$("#page").val($(this).attr("page")); // 현재 페이지를 누른 페이지로 변경
 		$("#listSort").val("9"); // 정렬 초기화
 
-		$("#searchType").val($("#oldSearchType").val()); // 검색어 구분 유지
+		$("#searchType").val($("#oldSearchType").val()); // 검색 구분 유지
 		$("#searchTxt").val($("#oldSearchTxt").val()); // 검색어 유지
 		
 		reloadList(); // 목록 실행
@@ -209,21 +186,24 @@ $(document).ready(function() {
 		}
 	});
 	
+	//검색버튼 
 	$("#searchBtn").on("click", function() {
 		$("#page").val("1");
 		
-		$("#oldSearchType").val($("#searchType").val());
-		$("#oldSearchTxt").val($("#searchTxt").val());
+		$("#oldSearchType").val($("#searchType").val()); //검색 구분 유지
+		$("#oldSearchTxt").val($("#searchTxt").val()); //검색어 유지
 		
 		reloadList();
 	});
 	
+	//정렬버튼
 	$("#sortBtn").on("click", function() {
 		reloadList();
 	});
 	
 });
 
+//고객 목록 Ajax
 function reloadList() {
 	var params = $("#actionForm").serialize();
 	
@@ -233,27 +213,28 @@ function reloadList() {
 		data : params,
 		dataType : "json",
 		success : function(res) {
-			drawSearchCnt(res.listCnt);
-			drawList(res.list);
-			drawPaging(res.pb);
+			drawSearchCnt(res.listCnt); //검색개수
+			drawList(res.list); //목록
+			drawPaging(res.pb); //페이징
 		},
 		error : function(req) {
 			console.log(req.responseText);
 		}
 	});
-	
 }
 
+//검색 개수 html
 function drawSearchCnt(listCnt) {
 	var html = "";
+	
 	html += "<h3>"; 
 	html += "고객 (검색결과: " + listCnt + "건)";
 	html += "</h3>";
 	
 	$(".SearchResult").html(html);
-	
 }
 
+//목록 html
 function drawList(list) {
 	var html = "";
 		
@@ -304,6 +285,7 @@ function drawList(list) {
 
 }
 
+//페이징
 function drawPaging(pb) {
 	var html = "";
 	
@@ -338,97 +320,95 @@ function drawPaging(pb) {
 <body>
 <input type="hidden" id="oldSearchType" value="${param.searchType}" />
 <input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
-<!-- top & left -->
-<c:import url="/topLeft">
-	<c:param name="top">${param.top}</c:param>
-	<c:param name="menuNum">${param.menuNum}</c:param>
-	<%-- board로 이동하는 경우 B 나머지는 M --%>
-	<c:param name="menuType">${param.menuType}</c:param>
-</c:import>
-<form action="#" id="actionForm" method="post">
-	<!-- 내용영역 -->
-	<div class="cont_wrap">
-		<div class="page_title_bar">
-			<div class="page_title_text">고객 목록</div>
-			<!-- 검색영역 선택적 사항 -->
-			
-		</div>
-		<!-- 해당 내용에 작업을 진행하시오. -->
-		<div class="cont_area">
-			<!-- 여기부터 쓰면 됨 -->
-	<input type="hidden" id="cn" name="cn" />
-	<input type="hidden" id="page" name="page" value="${page}" />
-	<input type="hidden" name="top" value="${param.top}" />
-	<input type="hidden" name="menuNum" value="${param.menuNum}" />
-	<input type="hidden" name="menuType" value="${param.menuType}" />
-			<div class="bodyWrap">
-				<!-- <div class="tLine"></div> -->
-				<table class="srch_table">
-					<colgroup>
-						<col width="90" />
-						<col width="60" />
-						<col width="40" />
-						<col width="60" />
-						<col width="60" />
-						<col width="60" />
-						<col width="60" />
-						<col width="60" />
-						<col width="0" />
-						<col width="55" />
-					</colgroup>
-					<tbody>
-						<!-- col=10 -->
-						
-						<tr>
-							<td>
-								<span class="srch_name">검색어</span>
-							</td>
-							<td>
-								<select id="searchType" name="searchType">
-									<option value="0">고객명</option>
-									<option value="1">고객사명</option>
-									<option value="2">고객번호</option>
-								</select>
-							</td>
-							<td colspan="3">
-								<input type="text" class="srch_msg" placeholder="검색어를 입력해주세요." id="searchTxt" name="searchTxt" value="${param.searchTxt}" />
-							</td>
-							<td colspan="5">
-								<span class="cmn_btn" id="searchBtn">검색</span>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<span class="srch_name">정렬</span>
-							</td>
-							<td>
-								<select id="listSort" name="listSort">
-									<option value="9">선택안함</option>
-									<option value="0">고객명</option>
-									<option value="1">고객사명</option>
-								</select>
-							</td>
-							<td>
-								<img class="asc_btn cmn_btn" alt="정렬버튼" src="resources/images/sales/asc.png" id="sortBtn" />
-							</td>
-							<td colspan="7"></td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="SearchResult"><h3>고객 (검색결과: 83건)</h3></div>
-				<div class="cont_table">
-					<table class="list_table"></table>
-				</div>
-				<div class="body_bottom">
-					<div class="board_bottom">
-						<div class="pgn_area"></div>
-						<div class="cmn_btn" id="addBtn">등록</div>
+	<!-- top & left -->
+	<c:import url="/topLeft">
+		<c:param name="top">${param.top}</c:param>
+		<c:param name="menuNum">${param.menuNum}</c:param>
+		<%-- board로 이동하는 경우 B 나머지는 M --%>
+		<c:param name="menuType">${param.menuType}</c:param>
+	</c:import>
+	<form action="#" id="actionForm" method="post">
+		<!-- 내용영역 -->
+		<div class="cont_wrap">
+			<div class="page_title_bar">
+				<div class="page_title_text">고객 목록</div>
+				<!-- 검색영역 선택적 사항 -->
+				
+			</div>
+			<!-- 해당 내용에 작업을 진행하시오. -->
+			<div class="cont_area">
+				<!-- 여기부터 쓰면 됨 -->
+		<input type="hidden" id="cn" name="cn" />
+		<input type="hidden" id="page" name="page" value="${page}" />
+		<input type="hidden" name="top" value="${param.top}" />
+		<input type="hidden" name="menuNum" value="${param.menuNum}" />
+		<input type="hidden" name="menuType" value="${param.menuType}" />
+				<div class="bodyWrap">
+					<!-- <div class="tLine"></div> -->
+					<table class="srch_table">
+						<colgroup>
+							<col width="90" />
+							<col width="60" />
+							<col width="40" />
+							<col width="60" />
+							<col width="60" />
+							<col width="60" />
+							<col width="60" />
+							<col width="60" />
+							<col width="0" />
+							<col width="55" />
+						</colgroup>
+						<tbody>
+							<tr>
+								<td>
+									<span class="srch_name">검색어</span>
+								</td>
+								<td>
+									<select id="searchType" name="searchType">
+										<option value="0">고객명</option>
+										<option value="1">고객사명</option>
+										<option value="2">고객번호</option>
+									</select>
+								</td>
+								<td colspan="3">
+									<input type="text" class="srch_msg" placeholder="검색어를 입력해주세요." id="searchTxt" name="searchTxt" value="${param.searchTxt}" />
+								</td>
+								<td colspan="5">
+									<span class="cmn_btn" id="searchBtn">검색</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<span class="srch_name">정렬</span>
+								</td>
+								<td>
+									<select id="listSort" name="listSort">
+										<option value="9">선택안함</option>
+										<option value="0">고객명</option>
+										<option value="1">고객사명</option>
+									</select>
+								</td>
+								<td>
+									<img class="asc_btn cmn_btn" alt="정렬버튼" src="resources/images/sales/asc.png" id="sortBtn" />
+								</td>
+								<td colspan="7"></td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="SearchResult"><h3>고객 (검색결과: 83건)</h3></div>
+					<div class="cont_table">
+						<table class="list_table"></table>
 					</div>
-				</div>
-			</div> <!-- bodyWrap end -->
-		</div> <!-- cont_area end -->
-	</div> <!--cont_wrap end -->
-</form>		
+					<div class="body_bottom">
+						<div class="board_bottom">
+							<div class="pgn_area"></div>
+							<div class="cmn_btn" id="addBtn">등록</div>
+						</div>
+					</div>
+				</div> <!-- bodyWrap end -->
+			</div> <!-- cont_area end -->
+		</div> <!--cont_wrap end -->
+	</form>		
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

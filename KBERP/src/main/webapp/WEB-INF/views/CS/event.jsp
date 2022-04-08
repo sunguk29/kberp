@@ -393,52 +393,34 @@ $(document).ready(function() {
 			buttons : [{
 				name : "예",
 				func:function() {
-		/* 			$("#cont").val(CKEDITOR.instances['cont'].getData()); */
-					if(checkEmpty("#cmnt_cont")) {
+					if(checkEmpty("#co_cont")) {
 						alert("댓글 내용을 입력하세요.");
-						$("#cmnt_cont").focus();
+						$("#co_cont").focus();
 					} else {
-						var CmntAddForm = $("#CmntAddForm");
-						
-						CmntAddForm.ajaxForm({
+						// 글 저장
+						var params =  $("#CmntAddForm").serialize();
+				
+						$.ajax({
+							type : "post",
+							url : "eventCmntAction/insert",
+							dataType : "json",
+							data : params,
 							success : function(res) {
-								// 물리파일명 보관
-								/* if(res.fileName.length > 0) {
-									$("#event_attFile").val(res.fileName[0]);
-								} */
-								
-								// 글 저장
-								var params =  $("#CmntAddForm").serialize();
-						
-								$.ajax({
-									type : "post",
-									url : "eventCmntAction/insert",
-									dataType : "json",
-									data : params,
-									success : function(res) {
-										if(res.res == "success") {
-											location.href = "event";
-										} else {
-											alert("댓글 작성중 문제가 발생하였습니다.");
-										}
-									}, // success end
-									error : function(request, status, error) {
-										console.log(request.responseText);
-									} // error end
-								}); // ajax end
+								if(res.res == "success") {
+									location.reload();
+								} else {
+									alert("댓글 작성중 문제가 발생하였습니다.");
+								}
 							}, // success end
-							error : function(req) {
-								console.log(req.responseText);
+							error : function(request, status, error) {
+								console.log(request.responseText);
 							} // error end
-						});// ajaxForm end
-						
-						CmntAddForm.submit(); // ajaxForm 실행
-							closePopup();
-						} // else end
+						}); // ajax end
+					}
 				}
-					}, {
-						name : "아니오"
-					}]
+				}, {
+					name : "아니오"
+				}]
 		}); // makePopup end
 	});
 	
@@ -475,7 +457,7 @@ $(document).ready(function() {
 				<div class="title">${data.EVENT_TITLE}</div>
 				<div class="writer_area">
 					<div class="write_info">
-						<div class="writer">${data.EMP_NUM}</div>
+						<div class="writer">${data.EMP_NAME}</div>
 						<div class="date">${data.WRITE_DATE}</div>
 					</div>
 				</div>
@@ -513,8 +495,7 @@ $(document).ready(function() {
 				</c:forEach>
 				
 				<div id="comment_write">
-				<form action="fileUploadAjax" id="CmntAddForm" method="post"
-							  enctype="multipart/form-data">
+				<form action="#" id="CmntAddForm" method="post">
 				<input type="hidden" name="no" value="${param.no}" />
 							<input type="hidden" id="emp_num" name="emp_num" value="${sEmpNum}" />
 							<!--<input type="hidden" id="emp_name" name="emp_name" value="${data.EMP_NAME}" />-->
@@ -524,8 +505,8 @@ $(document).ready(function() {
 					<div id="co_writer">
 					${sEmpName}
 					</div>
-					<div id="co_content"><textarea id="co_cont"></textarea></div>
-					<div><input type="submit" value="댓글 쓰기" id="btn_cowrite"></div>		
+					<div id="co_content"><textarea id="co_cont" name="co_cont"></textarea></div>
+					<div><input type="button" value="댓글 쓰기" id="btn_cowrite"></div>		
 				</form>
 				</div>
 				

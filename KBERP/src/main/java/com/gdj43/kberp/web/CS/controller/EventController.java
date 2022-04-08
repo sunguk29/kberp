@@ -80,6 +80,9 @@ public class EventController {
 		HashMap<String, String> data = iCommonService.getData("ev.getEvent", params);
 		List<HashMap<String, String>> comments = iCommonService.getDataList("ev.getEventCmnt", params);
 
+		
+		 iCommonService.updateData("ev.updateHit",params);
+		
 		mav.addObject("data", data);
 		mav.addObject("comments", comments);
 		mav.addObject("cmnt_count", comments.size()); // 댓글 개수 불러오기 

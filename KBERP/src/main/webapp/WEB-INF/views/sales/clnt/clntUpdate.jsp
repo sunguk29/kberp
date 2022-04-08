@@ -842,10 +842,13 @@ function uploadName(e) {
 							</tr>
 						</tbody>
 					</table>
+					<!-- 파일명 길이 -->
 					<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+					<!-- 파일명 재정의 -->
 					<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
 					<div class="rvn_txt"> 첨부파일
 						<span id="uploadBtn">
+							<!-- 파일명이 비어있으면 버튼 표시 -->
 							<c:if test="${empty data.ATT_FILE_NAME}">
 								<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" />
 							</c:if>
@@ -853,13 +856,14 @@ function uploadName(e) {
 					</div>
 					<div class="cntrct_box_in">
 						<span id="file_name">${fileName}</span>
-					<c:if test="${!empty data.ATT_FILE_NAME}">
-						<input type="button" id="fileDelete" value="삭제" />
-					</c:if>	
+						<!-- 파일명이 비어져있지 않으면 삭제버튼 표시 -->
+						<c:if test="${!empty data.ATT_FILE_NAME}">
+							<input type="button" id="fileDelete" value="삭제" />
+						</c:if>	
 						<input type="text" id="fileName" readonly="readonly" />
 					</div>
 					<input type="file" id="att" name="att" onchange="uploadName(this)" />
-					<input type="hidden" id="attFile" name="attFile" />
+					<input type="hidden" id="attFile" name="attFile" /> <!-- 파일명 전송용 -->
 				</form>	
 			</div>
 		</div>

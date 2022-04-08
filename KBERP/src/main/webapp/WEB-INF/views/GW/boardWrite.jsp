@@ -141,7 +141,7 @@ function checkEmpty(sel) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">임시게시판</div>
+			<div class="page_title_text">글 쓰기</div>
 			
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		</div>

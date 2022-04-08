@@ -96,9 +96,14 @@
 		               ZIP_CODE = #{edit_zip_code},
 		               ADRS = #{edit_adrs},
 		               DTL_ADRS = #{edit_dtl_adrs},
-		<if test="edit_phone_num != '' and edit_phone_num != null">
+		<choose>
+			<when test="edit_phone_num != '' and edit_phone_num != null">
 		               PHONE_NUM = #{edit_phone_num},
-		</if>
+			</when>
+			<otherwise>
+					   PHONE_NUM = NULL, 
+			</otherwise>
+		</choose>
 		               MBL_NUM = #{edit_mbl_num}
 		WHERE EMP_NUM = #{empNum}
 	</update>
@@ -430,5 +435,46 @@
 	</select>
 	
 	<!--* 사원조회 : 삭제하기 쿼리 *-->
+	<select id="delApntmCount" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*)
+		FROM EMP E INNER JOIN APNTM A
+		                   ON E.EMP_NUM = A.EMP_NUM
+		WHERE E.EMP_NUM = #{empNum}
+	</select>
+	<select id="delEdctnLevelCount" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*)
+		FROM EDCTN_LEVEL
+		WHERE EMP_NUM = #{empNum}
+	</select>
+	<select id="delCrCount" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*)
+		FROM CR
+		WHERE EMP_NUM = #{empNum}
+	</select>
+	<select id="delQlfctnCount" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*)
+		FROM LCNS
+		WHERE EMP_NUM = #{empNum}
+	</select>
 	
+	<delete id="delEdctnLevel" parameterType="hashmap">
+		DELETE FROM EDCTN_LEVEL
+		WHERE EMP_NUM = #{empNum}
+	</delete>
+	<delete id="delCr" parameterType="hashmap">
+		DELETE FROM CR
+		WHERE EMP_NUM = #{empNum}
+	</delete>
+	<delete id="delQlfctn" parameterType="hashmap">
+		DELETE FROM LCNS
+		WHERE EMP_NUM = #{empNum}
+	</delete>
+	<delete id="delSlryAcnt" parameterType="hashmap">
+		DELETE FROM SLRY_ACNT
+		WHERE EMP_NUM = #{empNum}
+	</delete>
+	<delete id="delEmp" parameterType="hashmap">
+		DELETE FROM EMP
+		WHERE EMP_NUM = #{empNum}
+	</delete>
 </mapper>
