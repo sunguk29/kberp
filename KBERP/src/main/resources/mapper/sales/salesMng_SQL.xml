@@ -22,6 +22,9 @@
 		                     ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
 		             LEFT OUTER JOIN LOAN_DTL_INFO LDI
 		                          ON S.SALES_NUM = LDI.SALES_NUM
+		             LEFT OUTER JOIN QTN Q 
+		                          ON  S.SALES_NUM = Q.SALES_NUM
+		                         AND Q.QTN_STS_NUM = 0 
 		WHERE 1 = 1
 		<choose>
 			<when test="mngNum != null and mngNum != ''">
@@ -95,12 +98,12 @@
 	
 	<!-- 영업관리 리스트 -->
 	<select id="getSalesList" parameterType="hashmap" resultType="hashmap">
-		SELECT SS.SALES_NUM, SS.PRGRS_STS, SS.PRGRS_STS2, SS.LEAD_NAME, SS.CLNT_CMPNY_NAME, SS.CLNT_NAME, SS.EMP_NAME, SS.EXPCTN_LOAN_SCALE, SS.QTN_NUM
+		SELECT SS.SALES_NUM, SS.PRGRS_STS, SS.PRGRS_STS2, SS.LEAD_NAME, SS.CLNT_CMPNY_NAME, SS.CLNT_NAME, SS.EMP_NAME, SS.EXPCTN_LOAN_SCALE, SS.QTN_NUM, SS.QTN_STS_NUM
 		FROM ( SELECT S.SALES_NUM, S.MNGR_EMP_NUM, E.EMP_NUM, LDI.EXPCTN_LOAN_SCALE, E.EMP_NAME, L.LEAD_NAME,
 		              EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, S.START_DATE,
 		              DECODE(SUBSTR(S.PRGRS_STS_NUM, 2, 1), 5, '종료(성공)', 6, '종료(실패)', 7, '진행중') AS PRGRS_STS,
 		              DECODE(SUBSTR(S.PRGRS_STS_NUM, 1, 1), 1, '영업기회', 2, '제안', 3, '견적', 4, '계약') AS PRGRS_STS2,
-		              ROW_NUMBER() OVER(ORDER BY S.SALES_NUM DESC) AS RNUM, Q.QTN_NUM
+		              ROW_NUMBER() OVER(ORDER BY S.SALES_NUM DESC) AS RNUM, Q.QTN_NUM, Q.QTN_STS_NUM
 		       FROM SALES S INNER JOIN EMP E
 		                            ON S.MNGR_EMP_NUM = E.EMP_NUM
 		                    INNER JOIN LEAD L
@@ -112,7 +115,8 @@
 		                    LEFT OUTER JOIN LOAN_DTL_INFO LDI
 		                                 ON S.SALES_NUM = LDI.SALES_NUM
 		                    LEFT OUTER JOIN QTN Q 
-		                                 ON  SUBSTR(S.PRGRS_STS_NUM, 1, 1) = 3                 
+		                                 ON  S.SALES_NUM = Q.SALES_NUM
+		                                AND Q.QTN_STS_NUM = 0 
 		      WHERE 1 = 1
 		<choose>
 			<when test="mngName != null and mngName != ''">
@@ -629,25 +633,38 @@
 		WHERE CMNT_NUM = #{cmntNum}
 	</update>
 	
+	<!-- 추가 견적 업데이트  -->
+	<update id="salesQtnAddUpdate" parameterType="hashmap">
+		UPDATE QTN SET QTN_STS_NUM = 1
+		WHERE QTN_NUM = #{qtnNum}
+	</update>
+	
+	<!-- 추가 견적 취소 업데이트  -->
+	<update id="salesQtnBackUpdate" parameterType="hashmap">
+		UPDATE QTN SET QTN_STS_NUM = 0
+		WHERE QTN_NUM = #{qtnNum}
+	</update>
+	
 	<!-- 견적 지난견적서 개수 -->
 	<select id="PQListCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
 		FROM QTN
 		WHERE SALES_NUM = #{salesNum}
-		AND QTN_NUM NOT IN #{qtnNum}
+		AND QTN_STS_NUM NOT IN 0
 	</select>
 	
 	<!-- 견적 지난견적서 목록 -->
 	<select id="getQtnPQList" parameterType="hashmap" resultType="hashmap">
-		SELECT Q.QTN_NUM, Q.QTN_NAME, TO_CHAR(Q.QTN_DATE, 'YYYY/MM/DD AMFM HH:MI') AS QTN_DATE,
-		       DECODE(M.MD_TYPE_NUM, 0, '개인사업', 1, '법인사업', 2, '공공사업') AS MD_TYPE_NUM, M.MD_NAME, M.INTRST_RATE, M.LIMIT_AMNT
+		SELECT Q.QTN_NUM, Q.QTN_NAME, TO_CHAR(Q.QTN_DATE, 'YYYY/MM/DD AM HH:MI') AS QTN_DATE,
+		       DECODE(M.MD_TYPE_NUM, 0, '개인사업', 1, '법인사업', 2, '공공사업') AS MD_TYPE_NUM, M.MD_NAME, M.INTRST_RATE, M.LIMIT_AMNT, Q.QTN_STS_NUM
 		FROM QTN Q INNER JOIN MD M
 		                   ON Q.MD_NUM = M.MD_NUM
 		           INNER JOIN SALES S
 		                   ON S.SALES_NUM = Q.SALES_NUM
 		WHERE S.SALES_NUM = #{salesNum}
-		AND Q.QTN_NUM NOT IN #{qtnNum}
+		AND Q.QTN_STS_NUM NOT IN 0
 		AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = '3'
+		ORDER BY Q.QTN_DATE DESC
 	</select>
 	
 	<!-- 계약 등록 -->
@@ -674,6 +691,7 @@
 	</update>
 
 	
+
 </mapper>
 
 

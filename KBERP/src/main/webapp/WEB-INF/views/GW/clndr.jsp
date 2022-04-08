@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -499,6 +498,7 @@ $(document).ready(function() {
 	  			bgClose : false,
 	  			title : "일정등록",
 	  			contents : html,
+	  			draggable : true,
 	  			width : 540,
 	  			height : 620,
 	  			buttons : [{
@@ -738,13 +738,23 @@ $(document).ready(function() {
   				bgClose : false,
   				title : "상세일정",
   				contents : html,
+  				draggable : true,
   				width : 540,
   				height : 520,
   				buttons : [{
   					name : "수정",
   					func:function() {
   						if(${sEmpNum} != data.emp_num){
-  							alert("본인의 일정만 수정할 수 있습니다.");
+  							makePopup({
+	  							bg : true,
+	  							bgClose : false,
+	  							title : "경고",
+	  							contents : "본인의 일정만 수정할 수 있습니다.",
+	  							draggable : true,
+	  							buttons : [{
+	  								name : "확인"
+	  							}]
+	  						});
   						} else{
   						schdlUpdate(data);
   						if(data.aldy_dvsn == "1"){
@@ -759,7 +769,16 @@ $(document).ready(function() {
   					name : "삭제",
   					func:function(){
   						if(${sEmpNum} != data.emp_num){
-  							alert("본인의 일정만 삭제할 수 있습니다.");
+  							makePopup({
+	  							bg : true,
+	  							bgClose : false,
+	  							title : "경고",
+	  							contents : "본인의 일정만 삭제할 수 있습니다.",
+	  							draggable : true,
+	  							buttons : [{
+	  								name : "확인"
+	  							}]
+	  						});
   						} else{
 	  						makePopup({
 	  							bg : true,
@@ -902,6 +921,7 @@ function schdlUpdate(data){
 		bgClose : false,
 		title : "일정수정",
 		contents : html,
+		draggable : true,
 		contentsEvent : function() {
 			$("#schdl_type").val(data.schdl_type_num);
 			$("#schdl_ctgry").val(data.schdl_ctgry_num);
@@ -1211,6 +1231,7 @@ $(document).ready(function() {
 			bgClose : false,
 			title : "일정등록",
 			contents : html,
+			draggable : true,
 			width : 540,
 			height : 620,
 			buttons : [{
@@ -1271,6 +1292,7 @@ $(document).ready(function() {
 });
 
 </script>
+
 </head>
 <body>
 	<!-- top & left -->
@@ -1288,9 +1310,9 @@ $(document).ready(function() {
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
-				<input type="hidden" id="clndrDvsn" value="month">
 		<div class="cont_area">
-			<!-- 여기부터 쓰면 됨 -->			
+			<!-- 여기부터 쓰면 됨 -->
+			<input type="hidden" id="clndrDvsn" value="month">
 			<input type="button" value="일정 등록" id="new_schdl">
 			<form action="#" id="userForm" method="post">
 				<input type="hidden" name="emp_num" value="${sEmpNum}">
@@ -1313,7 +1335,6 @@ $(document).ready(function() {
 		<div class="schdl_ctgry">
 			<h5 class="side_bar_title">범주</h5>
 			 <form action="#" id="ctgryForm" method="post">
-				<input type="hidden" name="clndrDate" value="">
 				<input type="checkbox" class="ctgry_box" id="bsns" name="bsns" value="1"><label for="bsns" class="type_label">업무</label><div id="bsns_color"></div><br>
 				<input type="checkbox" class="ctgry_box" id="leave" name="leave" value="2"><label for="leave" class="type_label">휴가</label><div id="leave_color"></div><br>
 				<input type="checkbox" class="ctgry_box" id="edctn" name="edctn" value="3"><label for="edctn" class="type_label">교육</label><div id="edctn_color"></div><br>
@@ -1331,7 +1352,6 @@ $(document).ready(function() {
 				<input type="hidden" class="h_ctgry" id="h_bsns_trip" name="bsns_trip" value="6"> 
 				<input type="hidden" class="h_ctgry" id="h_devel" name="devel" value="7"> 
 			 </form>
-			
 		</div>
 		
 		<div class="today">		

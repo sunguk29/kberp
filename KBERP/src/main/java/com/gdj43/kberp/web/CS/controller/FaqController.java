@@ -26,6 +26,7 @@ public class FaqController {
 	@Autowired
 	public IPagingService iPagingService;
 	
+	//목록
 	@RequestMapping(value = "/faq")
 	public ModelAndView faq(@RequestParam HashMap<String,String> params,
 								ModelAndView mav) throws Throwable {
@@ -41,7 +42,7 @@ public class FaqController {
 		return mav;
 	
 	}
-	
+	//목록Ajax
 	@RequestMapping(value = "/faqListAjax", method = RequestMethod.POST, 
 			  produces = "text/json;charset=UTF-8")
 	@ResponseBody
@@ -53,7 +54,7 @@ public class FaqController {
 		// 총 게시글 수
 		int cnt = iCommonService.getIntData("FQ.getfaqCnt",params);
 		
-		//페이징
+		//페이징계산
 		PagingBean pb 
 		= iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 10);
 		
@@ -67,12 +68,15 @@ public class FaqController {
 		
 		return mapper.writeValueAsString(modelMap);
 		}
-	
+	  
+	  //상세보기
 	  @RequestMapping(value = "/faqdt") 
 	  public ModelAndView faqdt(@RequestParam HashMap<String, String> params,
 			  					ModelAndView mav) throws Throwable {
 
-	HashMap<String, String> data = iCommonService.getData("FQ.getfaqdt", params);
+	  HashMap<String, String> data = iCommonService.getData("FQ.getfaqdt", params);
+	  //조회수
+	  iCommonService.updateData("FQ.updateHit",params);
 	  
 	  mav.addObject("data", data);
 	  
@@ -80,7 +84,8 @@ public class FaqController {
 	  
 	  return mav;
 	  }
-	 
+	  
+	  //등록
 	  @RequestMapping(value = "/faqAdd")
 	  public ModelAndView faqAdd(@RequestParam HashMap<String, String> params, 
 			  						ModelAndView mav) throws Throwable {
@@ -90,7 +95,7 @@ public class FaqController {
 	  }
 	  
 		
-	  @RequestMapping(value = "/faqdtAction/{gbn}", method = RequestMethod.POST,
+	  @RequestMapping(value = "/faqdtActionAjax/{gbn}", method = RequestMethod.POST,
 	  produces = "text/json;charset=UTF-8")
 	  
 	  @ResponseBody public String faqdtActionAjax(@RequestParam HashMap<String, String>
@@ -124,13 +129,12 @@ public class FaqController {
 		  
 		  }
 	 
-	 
-		
+	  //수정
 	  @RequestMapping(value = "/faqUpdate") 
 	  public ModelAndView faqUpdate(@RequestParam HashMap<String, String> params,
 			  						 ModelAndView mav) throws Throwable {
 		  
-		HashMap<String, String> data = iCommonService.getData("FQ.getfaqdt", params);
+	  HashMap<String, String> data = iCommonService.getData("FQ.getfaqdt", params);
 	  
 	  mav.addObject("data", data);
 	  

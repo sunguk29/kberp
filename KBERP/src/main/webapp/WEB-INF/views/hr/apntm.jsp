@@ -431,7 +431,7 @@ thead {
 	margin: 2px 0;
 	font-size: 9pt;
 	font-weight: 600;
-	color: #4B94F2;
+	color: #595959;
 	margin: 18px;
 }
 
@@ -447,6 +447,14 @@ thead {
 	vertical-align: top;
 	width: 70px;
 	height: 30px;
+}
+
+.apnmt_add_info_text {
+	display: inline-block;
+	vertical-align: top;
+	width: 70px;
+	height: 30px;
+	color: #2E83F2;
 }
 
 .apnmt_info_text_end {
@@ -600,12 +608,23 @@ thead {
 	background-color: rgb(200, 218, 248);
 }
 
+.dvsnInfo {
+	display: inline-block;
+	width: 200px;
+	height: 30px;
+	font-size: 13px;
+	color: #222222;
+	
+}
 #emp_pctr_area {
 	width: 100%;
     height: 100%;
     object-fit: contain;
 }
 
+.page_title_bar_custom {
+    height: 30px;
+}
 /* 개인 작업 영역 */
 </style>
 
@@ -627,9 +646,11 @@ $(document).ready(function() {
    
    // 발령 상세보기 
    $("tbody").on("click", "tr", function() {
-      $("#no").val($(this).attr("no"));
+      $("#empNum").val($(this).attr("empNum"));
+      $("#apntmNum").val($(this).attr("apntmNum"));
       $("tbody").children("tr").css("background-color", "#ffffff");
       $(this).css("background-color", "rgb(200,218,248)");
+	   console.log("발령리스트 클릭! empnum : " + $("#empNum").val() + "apntmNum : " + $("#apntmNum").val())
 
       reloadCont();
    });
@@ -796,55 +817,100 @@ $(document).ready(function() {
 			});
    			$(".empinqry_area").slimScroll({height: "255px"},{width: "450px"}); // 슬림스크롤
 		}); // 사원조회팝업 끝
+		
+		// 발령구분 퇴사 선택 시 발령종료일 외 비활성화
+		$("body").on("change", "#addDvsnNum", function(){
+			  console.log("발령구분값: " + $('#addDvsnNum option:selected').val())
+			    if ($('#addDvsnNum option:selected').val() == 1) {
+			    	makeAlert("알림", "퇴사는 발령종료일만 입력하세요");
+			    	$("#addDeptNum").attr("disabled", true);
+			    	$("#addDeptNum").val("");
+			    	$("#addRankNum").attr("disabled", true);
+			    	$("#addRankNum").val("");
+			    	$("#addStart").attr("disabled", true);
+			    	$("#addStart").val("");
+			    	$("#addEnd").focus();
+			    } else {
+			    	$("#addDeptNum").attr("disabled", false);
+			    	$("#addDeptNum").val("선택");
+			    	$("#addRankNum").attr("disabled", false);
+			    	$("#addRankNum").val("선택");
+			    	$("#addStart").attr("disabled", false);
+			    }
+		  }); 
+		
 		$("body").on("click", "#addApntmBtn", function() {
 			console.log("등록클릭!")
-			if ($("#addEmpNum").val() == '') {
-				makeAlert("알림", "돋보기를 눌러 발령사원을 선택하세요.", function(){
-				$("#prfl_srch_btn").focus();
-				});
-			} else if ($("#addDvsnNum").val() == '선택') {
-				makeAlert("알림", "필수항목이 누락되었습니다.", function(){
-				$("#addDvsnNum").focus();
-				});
-			} else if ($("#addDeptNum").val() == '선택') {
-				makeAlert("알림", "필수항목이 누락되었습니다.", function(){
-				$("#addDeptNum").focus();
-				});
-			} else if ($("#addRankNum").val() == '선택') {
-				makeAlert("알림", "필수항목이 누락되었습니다.", function(){
-				$("#addRankNum").focus();
-				});
-			} else if ($("#addStart").val() == '')  {
-				makeAlert("알림", "필수항목이 누락되었습니다.", function(){
-				$("#addStart").focus();
-				});
-			} else {
-				$("#aprvlCont").val($("#addDvsnNum option:selected").attr("cont"))
-				console.log("등록완료! ")
-				console.log("결재요청내용 : " + $("#addDvsnNum option:selected").attr("cont"))
-				console.log("결재요청사원번호 : " + $("#sEmp").val())
-		   	   var params = $("#addApntmForm").serialize();	
-				console.log("파람즈 : " + params)
-		 		$.ajax({
-				      type : "post",
-				      url : "apntmListAjax/insertApntm",
-				      dataType : "json",
-				      data : params,
-				      success : function(res) {
-				    	  makeAlert("알림","발령이 등록되었습니다.", function(){
-			    		  	location.reload();
-				    	  });
-				    	  console.log(res);
-				      }, 
-				      error : function(req) {
-				         console.log(req.responseText);
-				      }
-			   }); 
-
+			// 발령구분 퇴사 아닐 시 
+			if($('#addDvsnNum option:selected').val() != 1) {
+				if ($("#addEmpNum").val() == '') {
+					makeAlert("알림", "돋보기를 눌러 발령사원을 선택하세요.", function(){
+					$("#prfl_srch_btn").focus();
+					});
+				} else if ($("#addDvsnNum").val() == '선택') {
+					makeAlert("알림", "발령구분을 선택하세요.", function(){
+					$("#addDvsnNum").focus();
+					});
+				} else if ($("#addDeptNum").val() == '선택') {
+					makeAlert("알림", "발령부서를 선택하세요.", function(){
+					$("#addDeptNum").focus();
+					});
+				} else if ($("#addRankNum").val() == '선택') {
+					makeAlert("알림", "발령직급을 선택하세요.", function(){
+					$("#addRankNum").focus();
+					});
+				} else if ($("#addStart").val() == '')  {
+					makeAlert("알림", "발령시작일을 입력하세요.", function(){
+					$("#addStart").focus();
+					});
+				} else {
+					$("#aprvlCont").val($("#addDvsnNum option:selected").attr("cont"))
+					console.log("등록완료! ")
+					console.log("결재요청내용 : " + $("#addDvsnNum option:selected").attr("cont"))
+					console.log("결재요청사원번호 : " + $("#sEmp").val())
+			   	   var params = $("#addApntmForm").serialize();	
+			 		$.ajax({
+					      type : "post",
+					      url : "apntmListAjax/insertApntm",
+					      dataType : "json",
+					      data : params,
+					      success : function(res) {
+					    	  makeAlert("알림","발령이 등록되었습니다.", function(){
+				    		  	location.reload();
+					    	  });
+					    	  console.log(res);
+					      }, 
+					      error : function(req) {
+					         console.log(req.responseText);
+					      }
+				   }); 
+	
+				}
+			} else { // 발령구분 퇴사일 시 
+				if($("#addEnd").val() == '') {
+						makeAlert("알림", "발령종료일을 입력하세요.", function(){
+						$("#addEnd").focus();
+					});
+				} else {
+					var params = $("#addApntmForm").serialize();	
+			 		$.ajax({
+					      type : "post",
+					      url : "apntmListAjax/updateApntm",
+					      dataType : "json",
+					      data : params,
+					      success : function(res) {
+					    	  makeAlert("알림","발령이 등록되었습니다.", function(){
+				    		  	location.reload();
+					    	  });
+					    	  console.log(res);
+					      }, 
+					      error : function(req) {
+					         console.log(req.responseText);
+					      }
+				   }); 
+				}
 			}
-			
 		});
-		
 		
   	});// 발령추가 끝
   	
@@ -910,7 +976,7 @@ function drawList(list) {
    var html = "";
    
    for(var data of list) {                                 
-      html += "<tr id=\"tbodyTr\" no=\"" + data.APNTM_NUM + "\">"        ;
+      html += "<tr id=\"tbodyTr\" apntmNum=\"" + data.APNTM_NUM + "\"empNum=\"" + data.EMP_NUM + " \">" ;
       html += "<td>" + data.APNTM_NUM + "</td>"           ;
       if(data.APNTM_DVSN_NUM == 0) {
      	 html += "<td>입사</td>"      ;
@@ -947,13 +1013,13 @@ function drawCont(cont, emp){
    html += "   </div>                                                                                 ";
    html += "   <div class=\"apnmt_add_area\">                                                         ";
    html += "      <div class=\"apnmt_add_top_area\">                                                 ";
-   html += "         <div class=\"apnmt_prfl_img\"></div>                                           ";
+   html += "        <div class=\"apnmt_prfl_img\" id=\"empImg\"><img id=\"emp_pctr_area\" src=\"resources/upload/" + emp.EMP_PCTR_FILE + "\" /></div>";
    html += "         <div class=\"apnmt_prfl_info_wrap\">                                           ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
    html += "               <div class=\"prfl_info_emp_num\">                                      ";
    html += "                  <div class=\"prfl_info_text\">사원번호</div>                       ";
    html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + emp.EMP_NUM + "\" />  ";
-   html += "                  <div class=\"prfl_srch_btn\"></div>                                ";
+  // html += "                  <div class=\"prfl_srch_btn\"></div>                                ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
@@ -990,15 +1056,10 @@ function drawCont(cont, emp){
    html += "               <input type=\"text\" class=\"apnmt_info_input\" disabled value=\"이동\" />                                        ";
    }
    html += "            </div>                                                                     ";
-   html += "            <div class=\"apnmt_info\">                                                 ";
-   html += "               <div class=\"apnmt_info_text\">발령부서</div>                         ";
-   html += "               <input type=\"text\" class=\"apnmt_info_input\" disabled value=\"" + cont.DEPT_NAME + "\" />                                        ";
-   html += "               </select>                                                              ";
-   html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";
    html += "         <div class=\"apnmt_info_wrap\">                                                ";
    html += "            <div class=\"apnmt_info\">                                                 ";
-   html += "               <div class=\"apnmt_info_text\">발령팀</div>                           ";
+   html += "               <div class=\"apnmt_info_text\">발령부서</div>                           ";
    html += "               <input type=\"text\" class=\"apnmt_info_input\" disabled value=\"" + cont.DEPT_NAME + "\" />                                        ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_info\">                                                 ";
@@ -1097,7 +1158,7 @@ function drawAddApntm(dept,rank){
    html += "      <div class=\"apnmt_add_mid_area\">                                                 ";
    html += "         <div class=\"apnmt_info_wrap\">                                                ";
    html += "            <div class=\"apnmt_info\">                                                 ";
-   html += "               <div class=\"apnmt_info_text\">발령구분*</div>                         ";
+   html += "               <div class=\"apnmt_add_info_text\">발령구분</div>                         ";
    html += "               <select class=\"apnmt_select\" id=\"addDvsnNum\" name=\"addDvsnNum\">                                        ";
    html += "                  <option selected>선택</option>                                     ";
    html += "                  <option value=\"0\" cont=\"입사\">입사</option>                                              ";
@@ -1105,11 +1166,11 @@ function drawAddApntm(dept,rank){
    html += "                  <option value=\"2\" cont=\"승진\">승진</option>                                              ";
    html += "                  <option value=\"3\" cont=\"이동\">이동</option>                                              ";
    html += "               </select>                                                              ";
-   html += "            </div>                                                                     ";
+   html += "            </div>                                                                    ";
    html += "         </div>                                                                         ";
    html += "         <div class=\"apnmt_info_wrap\">                                                ";
    html += "            <div class=\"apnmt_info\">                                                 ";
-   html += "               <div class=\"apnmt_info_text\">발령부서*</div>                           ";
+   html += "               <div class=\"apnmt_add_info_text\">발령부서</div>                           ";
    html += "               <select class=\"apnmt_select\"  id=\"addDeptNum\" name=\"addDeptNum\">                                        ";
    html += "                  <option selected>선택</option>                                     ";
    for(var data of dept){
@@ -1118,7 +1179,7 @@ function drawAddApntm(dept,rank){
    html += "               </select>                                                              ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_info\">                                                 ";
-   html += "               <div class=\"apnmt_info_text\">발령직급*</div>                         ";
+   html += "               <div class=\"apnmt_add_info_text\">발령직급</div>                         ";
    html += "               <select class=\"apnmt_select\" id=\"addRankNum\" name=\"addRankNum\" >                                        ";
    html += "                  <option selected>선택</option>                                     ";
    for(var data of rank){
@@ -1129,7 +1190,7 @@ function drawAddApntm(dept,rank){
    html += "         </div>                                                                         ";
    html += "         <div class=\"apnmt_info_wrap\">                                                ";
    html += "            <div class=\"apnmt_info\">                                                 ";
-   html += "               <div class=\"apnmt_info_text\">발령시작*</div>                         ";
+   html += "               <div class=\"apnmt_add_info_text\">발령시작</div>                         ";
    html += "               <div class=\"prd_text_wrap\">                                          ";
    html += "                  <input type=\"date\" class=\"apntm_date_input\" id=\"addStart\" name=\"addStart\"/>         ";
    html += "               </div>                                                                 ";
@@ -1137,7 +1198,7 @@ function drawAddApntm(dept,rank){
    html += "            <div class=\"apnmt_info\">                                                 ";
    html += "               <div class=\"apnmt_info_text_end\">발령종료</div>                      ";
    html += "               <div class=\"prd_text_wrap\">                                          ";
-   html += "                  <input type=\"date\" class=\"apntm_date_input\" id=\"prd_end\" name=\"addEnd\"/>           ";
+   html += "                  <input type=\"date\" class=\"apntm_date_input\" id=\"addEnd\" name=\"addEnd\"/>           ";
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "         </div>                                                                         ";
@@ -1178,7 +1239,7 @@ function drawAddApntm(dept,rank){
 	</c:import>
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
-		<div class="page_title_bar">
+		<div class="page_title_bar_custom">
 			<div class="page_title_text">인사발령</div>
 		</div>
 		<div class="apntm_add_btn_area">
@@ -1187,10 +1248,11 @@ function drawAddApntm(dept,rank){
 		</div>
 		<!--------------------- 발령 조회 Form ------------------------->
 		<form action="#" id="actionForm" method="post">
-			<input type="hidden" name="top" value="${param.top}"> <input
-				type="hidden" name="menuNum" value="${param.menuNum}"> <input
-				type="hidden" name="menuType" value="${param.menuType}"> <input
-				type="hidden" id="no" name="no" />
+			<input type="hidden" name="top" value="${param.top}"> 
+			<input type="hidden" name="menuNum" value="${param.menuNum}"> 
+			<input type="hidden" name="menuType" value="${param.menuType}"> 
+			<input type="hidden" id="apntmNum" name="apntmNum" />
+			<input type="hidden" id="empNum" name="empNum" />
 			<div class="srch_wrap">
 				<div class="srch_top_area">
 					<select class="srch_select" id="searchGbn" name="searchGbn">

@@ -385,7 +385,53 @@
 	</select>
 	
 	<!--* 사원조회 : 추가하기 쿼리 *-->
-	
+	<insert id="addEmp" parameterType="hashmap">
+		INSERT INTO EMP(EMP_NUM, PW, EMP_NAME, EMP_NAME_ENG, EMP_PCTR_FILE, BRTHDT, GNDR, EMAIL, ZIP_CODE, ADRS, DTL_ADRS, PHONE_NUM, MBL_NUM, HIRE_TYPE, ATHRTY_NUM)
+		VALUES (TO_NUMBER(CONCAT(TO_CHAR(SYSDATE, 'YYYY'), TO_CHAR(LPAD(EMP_SEQ.NEXTVAL, 6, '0')))), <!-- 사원번호 생성 -->
+		        #{temp_pw}, <!-- 비밀번호 -->
+		        #{emp_name}, #{emp_name_eng},  <!-- 사원명, 사원영문명 -->
+		<choose>
+			<when test="emp_pctr_file != '' and emp_pctr_file != null">
+		        #{emp_pctr_file},  <!-- 사원사진 -->
+		    </when>
+		    <otherwise>
+		    	NULL, 
+		    </otherwise>
+		</choose>
+		        #{brthdt}, #{gndr}, #{email}, #{zip_code}, #{adrs}, #{dtl_adrs}, <!-- 생년월일, 성별, 이메일, 우편번호, 주소, 상세주소 -->
+		        
+		<choose>
+			<when test="phone_num != '' and phone_num != null">
+		        #{phone_num}, <!-- 전화번호 -->
+		    </when>
+		    <otherwise>
+		    	NULL, 
+		    </otherwise>
+		</choose>
+		        #{mbl_num}, #{hire_type}, '19')  <!-- 휴대폰번호, 고용형태, 권한번호 -->
+		
+		<selectKey keyProperty="newEmpNum" resultType="Integer" order="AFTER">
+			SELECT TO_NUMBER(CONCAT(TO_CHAR(SYSDATE, 'YYYY'), TO_CHAR(LPAD(EMP_SEQ.CURRVAL, 6, '0')))) AS N_EMP_NUM
+			FROM DUAL
+		</selectKey>
+	</insert>
+	<insert id="addSlryAcnt" parameterType="hashmap">
+		INSERT INTO SLRY_ACNT(SLRY_ACNT_NUM, BANK_NUM, EMP_NUM, ACNT_NUM, DPSTR, BNKBK_COPY_FILE)
+		VALUES (SLRY_ACNT_SEQ.NEXTVAL, #{bank_num}, #{newEmpNum}, #{acnt_num}, #{dpstr}, 
+		<choose>
+			<when test="bnkbk_copy_file != '' and bnkbk_copy_file != null">
+		        #{bnkbk_copy_file})
+		    </when>
+		    <otherwise>
+		    	NULL)
+		    </otherwise>
+		</choose>
+	</insert>
+	<select id="getNewEmpInfo" parameterType="hashmap" resultType="hashmap">
+		SELECT EMP_NUM, EMP_NAME, EMP_NAME_ENG, TO_CHAR(BRTHDT, 'YYYY-MM-DD') AS BRTHDT, GNDR
+		FROM EMP
+		WHERE EMP_NUM = #{newEmpNum}
+	</select>
 	
 	<!--* 사원조회 : 삭제하기 쿼리 *-->
 	

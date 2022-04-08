@@ -1,4 +1,4 @@
-package com.gdj43.kberp.web.CS.controller;
+package com.gdj43.kberp.web.clnt.controller;
 
 import java.util.HashMap;
 import java.util.Map;

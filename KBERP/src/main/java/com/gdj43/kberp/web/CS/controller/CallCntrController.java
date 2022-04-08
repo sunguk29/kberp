@@ -27,6 +27,9 @@ public class CallCntrController {
 	@Autowired
 	public ICommonService iCommonService;
 	
+	@Autowired
+	public IPagingService ips;
+	
 	@RequestMapping(value="callCenter")
 	public ModelAndView callCenter(@RequestParam HashMap<String, String> params,
 								   ModelAndView mav) {
@@ -133,10 +136,9 @@ public class CallCntrController {
 	
 	// 대응가이드 리스트
 	
-	@Autowired
-	public IPagingService ips;
 	
-	@RequestMapping(value = "rspndList/")
+	
+	@RequestMapping(value = "/rspndList")
 	public ModelAndView rspndList(@RequestParam HashMap<String, String> params, 
 			  						ModelAndView mav) {
 		
@@ -158,13 +160,13 @@ public class CallCntrController {
 			Map<String, Object> modelMap = new HashMap<String, Object>();
 			
 			// 총 게시글 수
-			int cnt = iCommonService.getIntData("in.getRspndCnt", params);
+			int cnt = iCommonService.getIntData("CC.getRspndCnt", params);
 			
 			// 페이징 계산
-			PagingBean pb = ips.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
+			PagingBean pb = ips.getPagingBean(Integer.parseInt(params.get("page")), cnt, 4, 5);
 			
-			params.put("startCount", Integer.toString(pb.getStartCount()));
-			params.put("endCount", Integer.toString(pb.getEndCount()));
+			params.put("startCnt", Integer.toString(pb.getStartCount()));
+			params.put("endCnt", Integer.toString(pb.getEndCount()));
 			
 			List<HashMap<String, String>> list = iCommonService.getDataList("CC.getRspndList", params);
 			
@@ -173,6 +175,39 @@ public class CallCntrController {
 			
 			return mapper.writeValueAsString(modelMap); 
 		}
+	
+	// 대응가이드 등록, 수정, 삭제
+	@RequestMapping(value="/rspndListAction/{gbn}", method = RequestMethod.POST,
+			produces = "text/json;charset=UTF-8")
+			@ResponseBody
+			public String rspndListActionAjax(@RequestParam HashMap<String, String> params,
+										   	   @PathVariable String gbn) throws Throwable {
+				ObjectMapper mapper = new ObjectMapper();
+		
+				Map<String, Object> modelMap = new HashMap<String, Object>();
+				
+				try {
+					switch(gbn) {
+					case "i":
+						iCommonService.insertData("CC.rspndAdd", params);
+						break;
+					case "u":
+						iCommonService.updateData("CC.rspndUp", params);
+						break;
+					case "d":
+						iCommonService.updateData("CC.rspndDel", params);
+						break;
+					}
+					modelMap.put("res", "success");
+					
+				} catch(Throwable e) {
+					e.printStackTrace();
+					modelMap.put("res", "failed");
+				}
+				
+				return mapper.writeValueAsString(modelMap);
+			}
+	
 		
 	}
 
