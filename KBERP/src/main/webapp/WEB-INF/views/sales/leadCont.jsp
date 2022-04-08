@@ -704,8 +704,8 @@ $(document).ready(function () {
 						buttons : {
 							name : "확인",
 							func:function() {
-								$("#actionForm").attr("action", "sales1SalesChncReg");
-								$("#actionForm").submit(); 
+								$("#salesForm").attr("action", "sales1SalesChncReg");
+								$("#salesForm").submit(); 
 								console.log("One!");
 								closePopup(2);
 							}
@@ -1329,6 +1329,14 @@ function uploadName(e) {
 	<input type="hidden" name="psNum" value="${param.psNum}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 	<input type="hidden" name="listSort" value="${param.listSort}" />
+	<input type="hidden" name="salesNum" id="salesNum" />																														
+</form>
+<form action="#" id="salesForm" method="post">
+	<input type="hidden" name="leadNum" value="${param.leadNum}" />	
+	<input type="hidden" name="top" value="${param.top}" />
+	<input type="hidden" name="menuNum" value="61" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" name="psNum" value="${param.psNum}" />
 	<input type="hidden" name="salesNum" id="salesNum" />																														
 </form>
 	<!-- top & left -->

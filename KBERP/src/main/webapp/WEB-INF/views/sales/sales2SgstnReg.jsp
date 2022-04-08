@@ -464,7 +464,6 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
-											
 											$("#listForm").attr("action", "sales2SgstnCont");
 											$("#listForm").submit();
 										} else {

@@ -1245,7 +1245,6 @@ function drawMngPaging(mngPb) {
 					<div class="body_bottom">
 						<div class="board_bottom">
 							<div class="pgn_area"></div>
-							<div class="cmn_btn" id="addBtn">등록</div>
 						</div>
 					</div>
 				</div>
