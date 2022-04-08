@@ -650,7 +650,29 @@
 		AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = '3'
 	</select>
 	
+	<!-- 계약 등록 -->
+	<insert id="sales4CntrctAdd" parameterType="hashmap">
+		INSERT INTO CNTRCT (CNTRCT_NUM, SALES_NUM, DPST_BANK_NUM, CNTRCT_DATE, CNTRCT_START_DATE, CNTRCT_END_DATE,
+                    DPST_ACNT_NUM, DPST_TRSC_OWNER_NAME, PYMT_ACNT_NUM, PAYER_NAME, RNWL_EXPCTD_DATE)
+		VALUES(CNTRCT_SEQ.NEXTVAL,  #{salesNum}, #{dbNum}, #{cntrctDt}, #{cntrctSdt}, #{cntrctEdt}, #{daNum}, #{daoName},
+        		#{paNum}, #{payerName}, #{reDate})
+	</insert>
 	
+	<!-- 계약 첨부파일 등록 -->
+	<insert  id="sales4CntrctAttAdd" parameterType="hashmap">
+		INSERT INTO CNTRCT_ATT_FILE ( ATT_FILE_NUM, CNTRCT_NUM, ATT_FILE_NAME )
+		VALUES (CNTRCT_ATT_FILE_SEQ.NEXTVAL, CNTRCT_SEQ.CURRVAL, #{attFile} )
+	</insert>
+	
+	<!-- 견적에서 계약으로 단계 변경 -->
+	<update id="sales3to4" parameterType="hashmap">
+		MERGE INTO SALES S
+		USING QTN Q
+		ON (S.SALES_NUM = Q.SALES_NUM AND Q.QTN_STS_NUM = 0 AND S.SALES_NUM = #{salesNum})
+		WHEN MATCHED THEN
+		UPDATE SET S.PRGRS_STS_NUM = '47'
+	</update>
+
 	
 </mapper>
 
