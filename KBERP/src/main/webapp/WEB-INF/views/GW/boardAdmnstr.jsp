@@ -151,23 +151,23 @@ $("#deleteBtn").on("click", function() {
 	}	
 });
 $("tbody").on("click", "tr", function() {
-	var state = $(this).find(".item_selected").val();
+	var state = $(this).find(".tr_selected").val();
 	var flag = $(this).find(".val_existed").val();
 	if (flag == "true") {
 		if (state == "false") {
-			$(this).parent("tbody").find(".table_item .item_selected").val("false");
-			$(this).find(".item_selected").val("true");
+			$(this).parent("tbody").find(".trtr .tr_selected").val("false");
+			$(this).find(".tr_selected").val("true");
 			
 			$("#admstrName").val($(this).attr("name"));
 			
 			console.log("selected : " + $("#admstrName").val());
 	
-			$(this).parent("tbody").find(".table_item").children("td:nth-child(odd)").css("background-color", "#ffffff");
-			$(this).parent("tbody").find(".table_item").children("td:nth-child(even)").css("background-color", "#ffffff");
+			$(this).parent("tbody").find(".trtr").children("td:nth-child(odd)").css("background-color", "#ffffff");
+			$(this).parent("tbody").find(".trtr").children("td:nth-child(even)").css("background-color", "#ffffff");
 			
 			$(this).children("td").css("background-color", "#ef9a9a");
 		} else {
-			$(this).find(".item_selected").val("false");
+			$(this).find(".tr_selected").val("false");
 			
 			
 			console.log("unselected");
@@ -203,8 +203,8 @@ function drawList(list) {
 	var html = "";
 	
 	for(var data of list){
-		html += "<tr class=\"table_item\" name=\"" + data.CTGRY_NAME + "\">    ";
-		html += "	<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
+		html += "<tr class=\"trtr\" name=\"" + data.CTGRY_NAME + "\">    ";
+		html += "	<input type=\"hidden\" class=\"tr_selected\" value=\"false\" />        ";
 		html += "	<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
 		html += "<td>" + data.BOARD_ADMNSTRTN_NUM + "</td>";
 		html += "<td class=\"tree_list\">" + data.CTGRY_NAME + "</td>";
