@@ -716,7 +716,7 @@ $(document).ready(function() {
 			contentsEvent : function() {
 				rspndRe();
 				
-				$("#paging_wrap").on("click", "span", function() {
+				$("#paging_wrap").on("click", "div", function() {
 					$("#page").val($(this).attr("page"));
 					
 					rspndRe();
@@ -1090,29 +1090,29 @@ $(document).ready(function() {
 	function drawPaging(pb) {
 		var html = "";
 		
-		html += "<span page=\"1\">처음</span>";
+		html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
 		
 		if($("#page").val() == "1") {
-			html += "<span page=\"1\">이전</span>";
+			html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
 		} else {
-			html += "<span page=\"" + ($("#page").val() - 1 * 1) + "\">이전</span>";
+			html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
 		}
 		
 		for(var i = pb.startPcount ; i <= pb.endPcount ; i++) {
 			if($("#page").val() == i){
-				html += "<span page=\"" + i + "\"><b>" + i + "</b></span>";
+				html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
 			} else {
-				html += "<span page=\"" + i + "\">" + i + "</span>";
+				html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
 			}
 		}
 		
 		if($("#page").val() == pb.maxPcount) {
-			html += "<span page=\"" + pb.maxPcount + "\">다음</span>";
+			html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_next\">next</div>";
 		} else {
-			html += "<span page=\"" + ($("#page").val() * 1 + 1) + "\">다음</span>";
+			html += "<div page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</div>";
 		}
 		
-		html += "<span page=\"" + pb.maxPcount + "\">마지막</span>";
+		html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
 		
 		$("#paging_wrap").html(html);
 	}
