@@ -976,13 +976,8 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
-<<<<<<< HEAD
-											$("#addForm").attr("action", "sales3QtnCont");
-											$("#addForm").submit();
-=======
 											$("#contForm").attr("action", "sales3QtnCont");
 											$("#contForm").submit();
->>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 										} else {
 											alert("등록중 문제가 발생하였습니다.");
 										}
