@@ -29,16 +29,23 @@
 
 <select id = "addListChat" parameterType = "hashmap" resultType="hashmap">
 SELECT *
-FROM (SELECT E.EMP_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME
+FROM (SELECT E.EMP_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, AL.APRVL_STS
 FROM  EMP E INNER JOIN APNTM A
                         ON E.EMP_NUM = A.EMP_NUM
             INNER JOIN DEPT D
                         ON A.DEPT_NUM = D.DEPT_NUM
             INNER JOIN RANK R
                         ON A.RANK_NUM = R.RANK_NUM 
+            INNER JOIN APRVL_LINE AL
+                        ON A.EMP_NUM = AL.EMP_NUM
      )
 WHERE 1 = 1
 </select>
 
+<select id="tmpltCont" parameterType="hashmap" resultType="hashmap">
+SELECT *
+FROM DRAFT_TMPLT
+WHERE TMPLT_NUM = #{no}
+</select>
 
 </mapper>

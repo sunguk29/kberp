@@ -29,16 +29,25 @@ public class elctrncAprvlController {
 		
 		List<HashMap<String, String>> list = iElctrncAprvlService.getAprvlTmpltBox(params);
 		
+		
+		
 		mav.addObject("list", list);
+		
+		
 		
 		mav.setViewName("GW/draftTmpltBox");	
 		return mav;	
+		
 	}
 	
+	
+	
 	@RequestMapping(value="/draftTmpltBoxWrite")
-	public ModelAndView draftTmpltBoxWrite(ModelAndView mav) throws Throwable {
+	public ModelAndView draftTmpltBoxWrite(@RequestParam HashMap<String, String>params, ModelAndView mav) throws Throwable {
 		
+		HashMap<String, String> cont = ics.getData("elctrncAprvl.tmpltCont",params);
 		
+		mav.addObject("cont", cont);
 		
 		mav.setViewName("GW/draftTmpltBoxWrite");
 		
@@ -59,8 +68,10 @@ public class elctrncAprvlController {
 		try {
 			switch (gbn) {
 			case "insert":
+				System.out.println("@@@@@@@@@@@@@" + params);
 				String seq = ics.getStringData("elctrncAprvl.aprvlSeq");
 				params.put("al", seq);
+				
 			break;
 			} 
 				modelMap.put("res", "success");

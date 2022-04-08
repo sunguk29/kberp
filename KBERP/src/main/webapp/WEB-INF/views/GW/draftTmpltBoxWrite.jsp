@@ -120,11 +120,18 @@ span {
 	width: 300px;
 }
 
-.crbn_copy {
+.rfrnc {
 	margin-left: 100px;
 }
 
-#crbn_copy_1{
+#aprvl_line_emp_name {
+	margin-left: 40px;
+	height: 50px;
+	margin-top: 20px;
+	width: 300px;
+}
+
+#rfrnc_emp_name{
 	height: 50px;
 	font-size: 14px;
 	margin-left : 55px;
@@ -149,7 +156,7 @@ span {
 	margin-left: 100px;
 }
 
-#cont_1 {
+#tmplt_cont {
 	
 	font-size: 14px;
 	margin-left : 170px;
@@ -160,7 +167,7 @@ span {
 
 .orgnzt_chart {
 	display:inline-block;
-	width: 300px;
+	width: 400px;
 	height: 400px;
 	border: 1px solid #000;
 	margin-top: 10px;
@@ -221,30 +228,36 @@ span {
 </style>
 <script type="text/javascript"
 		src="resources/script/ckeditor/ckeditor.js"></script>
+
 <script type="text/javascript">
+var aprvlEmpNumList = new Array();
+var aprvlEmpNameList = new Array();
+var rfrncEmpNumList = new Array();
+var rfrncEmpNameList = new Array();
 $(document).ready(function() {
+	
+	
 	
 	$(".srch").on("click", function() {
 		
 		var html = "";
 		
 		
-			html+= "	<form action = \"#\" id = \"addForm\" method = \"post\">";
-			html+= "	<input type =\"hidden\" id = \"al\" name = \"al\" value = \"${al}\"/>";
-			html+= "	<input type =\"hidden\" id = \"empNum\" name = \"empNum\" value = \"${empNum}\"/>";
-			html+= "	<input type =\"hidden\" id = \"title\" name = \"title\" value = \"${title}\"/>";
-			html+= "	<input type =\"hidden\" id = \"cont\" name = \"cont\" value = \"${cont}\"/>";
 			html+= "	<div>																																	";
-			html+= "	<div style= \"border:1px solid #000; width:50px; height: 25px;\" >조직도</div>															";
+			html+= "	<div style= \"border:1px solid #000; width:50px;\" >";
+			html+= "<input type=\"text\" id=\"checkEmpNum\" />";
+			html+= "<div style = \"border: 1px solid #000; width: 300px;\" id=\"checkEmpName\"></div>";
+			html+= "</div>";
 			html+= "	</div>                                                                                                                                  ";
 			html+= "	<div style=\"display:inline-block; height: 400px; margin-top: 1opx;\">                                                                  ";
-			html+= "	<div class=\"orgnzt_chart\">                                                                                                        	";
+			html+= "	<div class=\"orgnzt_chart\"> ";
+			
 			html+= "	<table class=\"orgnzt_chart1\">";
 			html+= "	<colgroup>                                                                                                                      		";
-			html+= "	<col width=\"75\">                                                                                                           		    ";
-			html+= "	<col width=\"75\">                                                                                                            			";
-			html+= "	<col width=\"75\">                                                                                                         		    ";
-			html+= "	<col width=\"75\">                                                                                                         		    ";
+			html+= "	<col width=\"100\">                                                                                                           		    ";
+			html+= "	<col width=\"100\">                                                                                                            			";
+			html+= "	<col width=\"100\">                                                                                                         		    ";
+			html+= "	<col width=\"100\">                                                                                                         		    ";
 			html+= "	</colgroup>                                                                                                                    		    ";
 			html+= "	<thead>";
 			html+= "	<tr>";
@@ -257,64 +270,28 @@ $(document).ready(function() {
 			html+= "	</tr>";
 			html+= "	</thead>";
 			html+= "	<tbody class=\"og\">";
-		
+			
 			html+= "	</tbody>";
 			
-			html+= "	</table>";   
+			html+= "	</table>";
+			
+			html+= "	</div>";
 			html+= "	</div>                                                                                                                            	    ";
-			html+= "	<div style=\" border: 1px solid #000; width: 100px; display:inline-block; vertical-align: top; margin-top: 150px;\">              	    ";
-			html+= "	<span>결재방법</span><br/>                                                                                                      			";	
-			html+= "	<input type = \"radio\" name=\"a\" id=\"r1\"/><label for = \"r1\" >결재</label><br/>                                         	     		";
-			html+= "	<input type = \"radio\" name=\"a\" id=\"r2\"/><label for = \"r2\" >전결</label><br/>                                                     ";
-			html+= "	<input type = \"radio\" name=\"a\" id=\"r3\"/><label for = \"r3\" >후결</label><br/><br/>                                                ";
-			html+= "	<input type=\"button\" class=\"page_next\"><br/>                                                                                        ";
-			html+= "	<input type=\"button\" class=\"page_prev\">                                                                                       ";
-			html+= "	</div>                                                                                                                              	";
-			html+= "	<div style=\"display: inline-block; border: 1px solid #000;  width: 300px; height: 400px; vertical-align: top; margin-top: 10px;\">     ";
-			html+= "	<div style=\"margin-top:30px; margin-left: 10px;\">결재선 정보</div>                                                             		    ";
-			html+= "	<table class=\"user_aprvl_line\">                                                                                                	    ";
-			html+= "	<colgroup>                                                                                                                      		";
-			html+= "	<col width=\"50\">                                                                                                           		    ";
-			html+= "	<col width=\"70\">                                                                                                            			";
-			html+= "	<col width=\"180\">                                                                                                         		    ";
-			html+= "	</colgroup>                                                                                                                    		    ";
-			html+= "	<thead>                                                                                                                     			";
-			html+= "	<tr>                                                                                                                  				    ";
-			html+= "	<th></th>                                                                                                          					    ";
-			html+= "	<th>결재</th>                                                                                                      					    ";
-			html+= "	<th>홍길동 기안 그룹웨어팀</th>                                                                                     							";
-			html+= "	</tr>                                                                                                                  				    ";
-			html+= "	</thead>                                                                                                                  			    ";
-			html+= "	<tbody>                                                                                                                   			    ";
-			html+= "	<tr>                                                                                                                   				    ";
-			html+= "	<td></td>                                                                                                          					    ";
-			html+= "	<td>결재</td>                                                                                                     					    ";
-			html+= "	<td>길동이 그룹웨어팀 팀장</td>                                                                                     							";
-			html+= "	</tr>                                                                                                                 				    ";
-			html+= "	<tr>                                                                                                                  				    ";
-			html+= "	<td></td>                                                                                                          					    ";
-			html+= "	<td>결재</td>                                                                                                      					    ";
-			html+= "	<td>아버지 인사팀 팀장</td>                                                                                         							";
-			html+= "	</tr>                                                                                                                 				    ";
-			html+= "	<tr>                                                                                                                   				    ";
-			html+= "	<td>최종</td>                                                                                                      					    ";
-			html+= "	<td>결재</td>                                                                                                       						";
-			html+= "	<td>나사장 사장</td>                                                                                                						";
-			html+= "	</tr>                                                                                                                   				";
-			html+= "	</tbody>                                                                                                                    			";
-			html+= "	</table>                                                                                                                        		";
-			html+= "	</div>                                                                                                                              	";
-			html+= "	</div>		                                                                                                                            ";
-			html+= "		</form>";
 			
 		makePopup({
 			bg : false,
 			bgClose : false,
-			width : 800,
+			width : 600,
 			height : 600,
 			title : "결재라인",
 			contents : html,
 			contentsEvent : function() {
+				if($("#aprvl_line_emp_num").val() != "") {
+					aprvlEmpNumList = $("#aprvl_line_emp_num").val().split(",");
+					aprvlEmpNameList = $("#aprvl_line_emp_name").val().split(",");
+					$("#checkEmpNum").val(aprvlEmpNumList.toString());
+					$("#checkEmpName").html(aprvlEmpNameList.toString());
+				}
 				// Ajax태우고
 				// list받아서 팝업 테이블에 내용 추가 id추가
 				$.ajax({
@@ -328,47 +305,28 @@ $(document).ready(function() {
 						console.log(req.responseText)	
 					}
 				});
+				$(".orgnzt_chart").slimScroll({height: "450px"});
+				
+				$(".og").on("click", "input[type='checkbox']", function() {
+					if($(this).is(":checked")) {
+						aprvlEmpNumList.push($(this).val());
+						aprvlEmpNameList.push($(this).attr("emp_name"));
+					} else {
+						removeValToArray(aprvlEmpNumList, $(this).val());
+						removeValToArray(aprvlEmpNameList, $(this).attr("emp_name"));
+					}
+					$("#checkEmpNum").val(aprvlEmpNumList.toString());
+					$("#checkEmpName").html(aprvlEmpNameList.toString());
+				});
  			},
 			buttons : [{
 				name : "저장",
 				func:function() {
+					
 					/* 여기에 넣기 */
-					var addForm = $("#addForm");
-		
-					addForm.ajaxForm({
-						success : function(res) {
-						/* 	// 물리파일명 보관
-							if(res.fileName.length > 0) {
-								$("#attFile").val(res.fileName[0]);
-							} */
-							
-							// 글 수정
-							var params = $("#addForm").serialize();
-							
-							$.ajax({
-								type : "post",
-								url : "draftTmpltBoxWriteAjax/insert",
-								dataType : "json",
-								data : params,
-								success : function(res) {
-									if(res.res == "success") {
-										console.log("@@@@@@@잘갔니")
-										closePopup();
-									} else {
-										alert("등록중 문제가 발생하였습니다.");
-									}
-								},
-								error : function(request, status, error) {
-									console.log(request.responseText);
-								}
-							});
-						},
-						error : function(req) {
-							console.log(req.responseText);
-						}
-					}); // ajaxForm end
-					addForm.submit();
-					console.log("One!");
+					$("#aprvl_line_emp_num").val(aprvlEmpNumList.toString());
+					$("#aprvl_line_emp_name").val(aprvlEmpNameList.toString());
+					
 					closePopup();
 				}
 			}, {
@@ -377,39 +335,100 @@ $(document).ready(function() {
 		});
 	});
 	
+	
+	
 	$(".srch_1").on("click", function() {
+		
 		
 		var html = "";
 		
-		html+= "	<div>";
-		html+= "	<div style= \"border:1px solid #000; width:50px; height: 25px;\" >조직도</div>		                                                      ";
-		html+= "	</div>                                                                                                                                    ";
-		html+= "	<div style=\"display:inline-block; height: 400px; margin-top: 1opx;\">                                                                      ";
-		html+= "	<div class=\"orgnzt_chart\">                                                                                                                ";
-		html+= "	조직도                                                                                                                                    ";
-		html+= "	</div>                                                                                                                                    ";
-		html+= "	<div style=\" border: 1px solid #000; width: 100px; display:inline-block; vertical-align: top; margin-top: 150px;\">                        ";
-		html+= "	<input type=\"button\" class=\"page_next\"><br/>                                                                                                           ";
-		html+= "	<input type=\"button\" class=\"page_prev\">				                                                                                              ";
-		html+= "	</div>                                                                                                                                    ";
-		html+= "	<div style=\"display: inline-block; border: 1px solid #000;  width: 300px; height: 400px; vertical-align: top; margin-top: 10px;\">         "; 
-		html+= "	<div style=\"margin-top:20px; margin-left: 10px; border-bottom: 1px solid #000;\">선택(1/100)</div>                                         ";
-		html+= "	<div style=\"margin-top:20px;\"> 나사장 사장</div>                                                                                          ";
-		html+= "	</div>                                                                                                                                    ";
-		html+= "	</div>                                                                                                                                    ";
+		html+= "	<div>																																	";
+		html+= "	<div style= \"border:1px solid #000; width:50px;\" >";
+		html+= "<input type=\"text\" id=\"checkEmpNums\" />";
+		html+= "<div style = \"border: 1px solid #000; width: 300px;\" id=\"checkEmpNames\"></div>";
+		html+= "</div>";
+		html+= "	</div>                                                                                                                                  ";
+		html+= "	<div style=\"display:inline-block; height: 400px; margin-top: 1opx;\">                                                                  ";
+		html+= "	<div class=\"orgnzt_chart\"> ";
+		
+		html+= "	<table class=\"orgnzt_chart1\">";
+		html+= "	<colgroup>                                                                                                                      		";
+		html+= "	<col width=\"100\">                                                                                                           		    ";
+		html+= "	<col width=\"100\">                                                                                                            			";
+		html+= "	<col width=\"100\">                                                                                                         		    ";
+		html+= "	<col width=\"100\">                                                                                                         		    ";
+		html+= "	</colgroup>                                                                                                                    		    ";
+		html+= "	<thead>";
+		html+= "	<tr>";
+		html+= "	<th>부서</th>";
+		html+= "	<th>직급</th>";
+		html+= "	<th>성명</th>";
+		html+= "	<th>확인</th>";
+		
+		
+		html+= "	</tr>";
+		html+= "	</thead>";
+		html+= "	<tbody class=\"og\">";
+		
+		html+= "	</tbody>";
+		
+		html+= "	</table>";
+		
+		html+= "	</div>";
+		html+= "	</div>                                                                                                                            	    ";
 		
 		
 		makePopup({
 			bg : false,
 			bgClose : false,
-			width : 800,
+			width : 600,
 			height : 600,
 			title : "참조자",
 			contents : html,
+			contentsEvent : function() {
+				if($("#rfrnc_emp_num").val() != "") {
+					console.log()
+					
+					rfrncEmpNumList = $("#rfrnc_emp_num").val().split(",");
+					rfrncEmpNameList = $("#rfrnc_emp_name").val().split(",");
+					$("#checkEmpNums").val(rfrncEmpNumList.toString());
+					$("#checkEmpNames").html(rfrncEmpNameList.toString());
+				}
+				// Ajax태우고
+				// list받아서 팝업 테이블에 내용 추가 id추가
+				$.ajax({
+					type : "post",
+					url : "addListChatAjax",
+					dataType : "json",
+					success : function(res) {
+						drawEmp(res.list);
+					},
+					error : function(req) {
+						console.log(req.responseText)	
+					}
+				});
+				$(".orgnzt_chart").slimScroll({height: "450px"});
+				
+				$(".og").on("click", "input[type='checkbox']", function() {
+					if($(this).is(":checked")) {
+						rfrncEmpNumList.push($(this).val());
+						rfrncEmpNameList.push($(this).attr("emp_name"));
+					} else {
+						removeValToArray(rfrncEmpNumList, $(this).val());
+						removeValToArray(rfrncEmpNameList, $(this).attr("emp_name"));
+					}
+					$("#checkEmpNums").val(rfrncEmpNumList.toString());
+					$("#checkEmpNames").html(rfrncEmpNameList.toString());
+				});
+ 			},
 			buttons : [{
 				name : "저장",
 				func:function() {
-					console.log("One!");
+					
+					/* 여기에 넣기 */
+					$("#rfrnc_emp_num").val(rfrncEmpNumList.toString());
+					$("#rfrnc_emp_name").val(rfrncEmpNameList.toString());
+					
 					closePopup();
 				}
 			}, {
@@ -419,7 +438,7 @@ $(document).ready(function() {
 	});
 
 	
-	CKEDITOR.replace("cont_1", {
+	CKEDITOR.replace("tmplt_cont", {
 		//옵션
 		resize_enabled : false, // 크기변경
 		language : "ko", //언어
@@ -429,15 +448,15 @@ $(document).ready(function() {
 	});
 	
 	$("#writeBtn").on("click", function(){
-		$("#cont_1").val(CKEDITOR.instances['cont_1'].getData());
+		$("#tmplt_cont").val(CKEDITOR.instances['tmplt_cont'].getData());
 		if(checkEmpty("#dcmnt_tlte_1")){
 			alert("문서제목을 입력하세요.");
 			$("#dcmnt_tlte_1").focus();
-		} else if(checkEmpty("#aprvl_line_1")){
+		} else if(checkEmpty("#aprvl_line_emp_name")){
 			alert("결재라인을 입력하세요.");
-			$("#aprvl_line_1").focus();
+			$("#aprvl_line_emp_name").focus();
 		}
-		else if(checkEmpty("#cont_1")){
+		else if(checkEmpty("#tmplt_cont")){
 			alert("내용을 입력하세요.");
 			$("#cont_1").focus();
 		}
@@ -450,19 +469,66 @@ function drawList(list) {
 	var html = "";
 	
 		for(var data of list) {
-			html +=	"				<tr id = \"srchEmpNum\" no = \"" + data.EMP_NUM + "\">";  
-			html +=	"					<td id = \"srchDept\"> \"" + data.DEPT_NAME + "\"</td>";
-			html +=	"					<td id = \"srchRank\"> \"" + data.RANK_NAME + "\"</td>";
-			html +=	"					<td id = \"srchName\"> \"" + data.EMP_NAME + "\"</td>";
-			html +=	"					<td><input type =\"checkbox\" id = \"srch_check\"></td> ";
+			html +=	"				<tr id = \"srchEmpNum\" no = " + data.EMP_NUM + "\>";  
+			html +=	"					<td id = \"srchDept\"> " + data.DEPT_NAME + "\</td>";
+			html +=	"					<td id = \"srchRank\"> " + data.RANK_NAME + "\</td>";
+			html +=	"					<td id = \"srchName\"> " + data.EMP_NAME + "\</td>";
+			html +=	"					<td><input type =\"checkbox\" id = \"srch_check\" name=\"humans\" value=\"" + data.EMP_NUM + "\" emp_name=\"" + data.EMP_NAME + " " + data.RANK_NAME + "\" /></td> ";
 			html +=	"				</tr>                                                       ";
 		}	
 	$("tbody.og").html(html);
+	
+	$(".og input[type='checkbox']").each(function() {
+		if(aprvlEmpNumList.indexOf($(this).val()) >= 0) {
+			$(this).prop("checked", true);
+		}
+	});
 }	
+	
+	
+	function drawEmp(list) {
+		
+		var html = "";
+		
+			for(var data of list) {
+				html +=	"				<tr id = \"srchEmpNum\" no = " + data.EMP_NUM + "\>";  
+				html +=	"					<td id = \"srchDept\"> " + data.DEPT_NAME + "\</td>";
+				html +=	"					<td id = \"srchRank\"> " + data.RANK_NAME + "\</td>";
+				html +=	"					<td id = \"srchName\"> " + data.EMP_NAME + "\</td>";
+				html +=	"					<td><input type =\"checkbox\" id = \"srch_check\" name=\"humans\" value=\"" + data.EMP_NUM + "\" emp_name=\"" + data.EMP_NAME + " " + data.RANK_NAME + "\" /></td> ";
+				html +=	"				</tr>                                                       ";
+			}	
+		$("tbody.og").html(html);
+		
+		$(".og input[type='checkbox']").each(function() {
+			if(rfrncEmpNumList.indexOf($(this).val()) >= 0) {
+				$(this).prop("checked", true);
+			}
+		});
+	}	
+	
 	
 	
 
 });
+
+function removeValToArray(arr, val) {
+	for(var i = 0 ; i < arr.length ; i++) {
+		if(arr[i] == val) {
+			arr.splice(i, 1);
+			break;
+		}
+	}
+}
+
+function removeAllValToArray(arr, val) {
+	for(var i = 0 ; i < arr.length ; i++) {
+		if(arr[i] == val) {
+			arr.splice(i, 1);
+			i--;
+		}
+	}
+}
 </script>
 </head>
 <body>
@@ -473,6 +539,10 @@ function drawList(list) {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
+	<form action="#" id="actionForm" method="post">
+		<%-- <input type= "hidden" id="tmplt_num" name="tmplt_num" value="${cont.TMPLT_NUM}"> --%>
+		
+	</form>
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
@@ -499,19 +569,21 @@ function drawList(list) {
 			</div>
 			<div class="aprvl_line">
 				<span>결재라인</span>
-				<input type= "text" id="aprvl_line_1">
+				<input type="hidden" id="aprvl_line_emp_num" name="aprvl_line_emp_num" />
+				<input type= "text" id="aprvl_line_emp_name">
 				<img class= "srch" alt="srch_icon.png" src="resources/images/GW/cmn/srch_icon.png"/>
 			</div>
-			<div class="crbn_copy">
+			<div class="rfrnc">
 				<span>참조자</span>
-				<input type= "text" id="crbn_copy_1">
+				<input type="hidden" id="rfrnc_emp_num" name="rfrnc_emp_num" />
+				<input type= "text" id="rfrnc_emp_name">
 				<img class= "srch_1" alt="srch_icon.png" src="resources/images/GW/cmn/srch_icon.png"/> 
 			</div>
 		
 			
 			<div class="cont">
 				
-				<textarea rows="20" cols="50" id="cont_1" name="cont_1"></textarea><br/> >
+				<textarea rows="20" cols="50" id="tmplt_cont" name="tmplt_cont">${cont.TMPLT_CONT}</textarea><br/> >
 			</div>
 			<div class="atchd_file">
 				<span>첨부파일</span>
