@@ -144,7 +144,7 @@ select {
 }
 .cont_table {
 	width: 927px;
-	height: 250px;
+	height: 328px;
 }
 </style>
 <script type="text/javascript">

@@ -863,7 +863,7 @@ function uploadName(e) {
 						<input type="text" id="fileName" readonly="readonly" />
 					</div>
 					<input type="file" id="att" name="att" onchange="uploadName(this)" />
-					<input type="hidden" id="attFile" name="attFile" /> <!-- 파일명 전송용 -->
+					<input type="hidden" id="attFile" name="attFile" value="${data.ATT_FILE_NAME}" } /> <!-- 파일명 전송용 -->
 				</form>	
 			</div>
 		</div>

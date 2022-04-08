@@ -565,11 +565,7 @@ $(document).ready(function() {
 	});
 
 	
-	// 첨부파일
-	$(".att_btn").on("click", function() {
-		$("#att").click();
-	});
-	
+	//파일삭제
 	$("#fileDelete").on("click", function() {
 		$("#file_name").remove();
 		$(this).remove();
@@ -581,6 +577,7 @@ $(document).ready(function() {
 		$("#uploadBtn").html(html);
 	});
 	
+	//첨부파일 버튼
 	$(".adc_txt").on("click", ".aff_btn", function() {
 		$("#att").click();
 	});
