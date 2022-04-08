@@ -69,44 +69,6 @@
 </style>
 <script type="text/javascript">
 
-/* $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	}); //btn1Btn end
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]//btn2Btn buttons
-		}); //makePopup
-	});//btn2Btn end */
 	$(document).ready(function() {
 		$("#listBtn").on("click", function() {
 			$("#actionForm").attr("action", "faq");
@@ -129,7 +91,7 @@
 					name : "예",
 					func:function() {
 						var params =  $("#actionForm").serialize();
-				
+						$("#actionForm").attr("action", "faq");
 				$.ajax({
 					type : "post", 
 					url : "faqdtActionAjax/delete", 
@@ -195,26 +157,16 @@
 			</div>
 		</div>
 			
-			<div class="cont">
-			${data.WRTNG_CONT}
-			</div>
-			<div class="buttons_bottom">
-					<div class="cmn_btn" id="listBtn">목록</div>
-				
-					<div class="cmn_btn" id="updateBtn">수정</div>
-				
-					<div class="cmn_btn" id="deleteBtn">삭제</div>
-				
+		<div class="cont">
+		${data.WRTNG_CONT}
+		</div>
+		<div class="buttons_bottom">
+				<div class="cmn_btn" id="listBtn">목록</div>
+				<div class="cmn_btn" id="updateBtn">수정</div>
+				<div class="cmn_btn" id="deleteBtn">삭제</div>
 			</div>
 		</div>
 	</div>
-	
-	<%-- <form action="#" id="actionForm" method="post">
-		<input type="hidden" name="no" value="${param.no}" />
-		<input type="hidden" name="page" value="${param.page}" />
-		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
-		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
-</form> --%>
 	
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
