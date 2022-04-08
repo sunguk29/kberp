@@ -1111,7 +1111,7 @@ function uploadName(e) {
 								<input type="button" id="fileDelete" value="삭제" />
 							</c:if>
 						<input type="text" id="fileName" readonly="readonly" />
-						<input type="file" id="att" name="att" onchange="uploadName(this)" />
+						<input type="file" id="att" name="att" onchange="uploadName(this)" value="${data.ATT_FILE_NAME}" />
 						<input type="hidden" id="schdlAttFile" name="schdlAttFile" />
 					</div>
 					</form>
