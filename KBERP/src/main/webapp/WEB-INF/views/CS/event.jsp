@@ -397,6 +397,7 @@ $(document).ready(function() {
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
 	<form action="#" id="actionForm" method="post">
+		<input type="hidden" name="event_num" value="${no}" />
 		<input type="hidden" name="no" value="${param.no}" />
 		<input type="hidden" name="page" value="${param.page}" />
 		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
@@ -455,10 +456,11 @@ $(document).ready(function() {
 				</c:forEach>
 				
 				<div id="comment_write">
+				
 					<div id="co_writer">
-					관리자
+					${emp_num}
 					</div>
-					<div id="co_content"><textarea id="co_cont"></textarea></div>
+					<div id="co_content"><textarea id="co_cont">${cmnt_cont}</textarea></div>
 					<div><input type="submit" value="댓글 쓰기" id="btn_cowrite"></div>		
 				</div>
 			</div>

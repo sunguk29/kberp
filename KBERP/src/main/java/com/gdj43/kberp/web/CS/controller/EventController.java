@@ -82,7 +82,7 @@ public class EventController {
 
 		mav.addObject("data", data);
 		mav.addObject("comments", comments);
-		mav.addObject("cmt_count", comments.size()); // 댓글 개수 불러오기 
+		mav.addObject("cmnt_count", comments.size()); // 댓글 개수 불러오기 
 		
 		mav.setViewName("CS/event");
 		
