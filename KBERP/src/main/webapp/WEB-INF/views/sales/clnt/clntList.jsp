@@ -221,18 +221,17 @@ function reloadList() {
 			console.log(req.responseText);
 		}
 	});
-	
 }
 
 //검색 개수 html
 function drawSearchCnt(listCnt) {
 	var html = "";
+	
 	html += "<h3>"; 
 	html += "고객 (검색결과: " + listCnt + "건)";
 	html += "</h3>";
 	
 	$(".SearchResult").html(html);
-	
 }
 
 //목록 html
@@ -321,95 +320,95 @@ function drawPaging(pb) {
 <body>
 <input type="hidden" id="oldSearchType" value="${param.searchType}" />
 <input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
-<!-- top & left -->
-<c:import url="/topLeft">
-	<c:param name="top">${param.top}</c:param>
-	<c:param name="menuNum">${param.menuNum}</c:param>
-	<%-- board로 이동하는 경우 B 나머지는 M --%>
-	<c:param name="menuType">${param.menuType}</c:param>
-</c:import>
-<form action="#" id="actionForm" method="post">
-	<!-- 내용영역 -->
-	<div class="cont_wrap">
-		<div class="page_title_bar">
-			<div class="page_title_text">고객 목록</div>
-			<!-- 검색영역 선택적 사항 -->
-			
-		</div>
-		<!-- 해당 내용에 작업을 진행하시오. -->
-		<div class="cont_area">
-			<!-- 여기부터 쓰면 됨 -->
-	<input type="hidden" id="cn" name="cn" />
-	<input type="hidden" id="page" name="page" value="${page}" />
-	<input type="hidden" name="top" value="${param.top}" />
-	<input type="hidden" name="menuNum" value="${param.menuNum}" />
-	<input type="hidden" name="menuType" value="${param.menuType}" />
-			<div class="bodyWrap">
-				<!-- <div class="tLine"></div> -->
-				<table class="srch_table">
-					<colgroup>
-						<col width="90" />
-						<col width="60" />
-						<col width="40" />
-						<col width="60" />
-						<col width="60" />
-						<col width="60" />
-						<col width="60" />
-						<col width="60" />
-						<col width="0" />
-						<col width="55" />
-					</colgroup>
-					<tbody>
-						<tr>
-							<td>
-								<span class="srch_name">검색어</span>
-							</td>
-							<td>
-								<select id="searchType" name="searchType">
-									<option value="0">고객명</option>
-									<option value="1">고객사명</option>
-									<option value="2">고객번호</option>
-								</select>
-							</td>
-							<td colspan="3">
-								<input type="text" class="srch_msg" placeholder="검색어를 입력해주세요." id="searchTxt" name="searchTxt" value="${param.searchTxt}" />
-							</td>
-							<td colspan="5">
-								<span class="cmn_btn" id="searchBtn">검색</span>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<span class="srch_name">정렬</span>
-							</td>
-							<td>
-								<select id="listSort" name="listSort">
-									<option value="9">선택안함</option>
-									<option value="0">고객명</option>
-									<option value="1">고객사명</option>
-								</select>
-							</td>
-							<td>
-								<img class="asc_btn cmn_btn" alt="정렬버튼" src="resources/images/sales/asc.png" id="sortBtn" />
-							</td>
-							<td colspan="7"></td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="SearchResult"><h3>고객 (검색결과: 83건)</h3></div>
-				<div class="cont_table">
-					<table class="list_table"></table>
-				</div>
-				<div class="body_bottom">
-					<div class="board_bottom">
-						<div class="pgn_area"></div>
-						<div class="cmn_btn" id="addBtn">등록</div>
+	<!-- top & left -->
+	<c:import url="/topLeft">
+		<c:param name="top">${param.top}</c:param>
+		<c:param name="menuNum">${param.menuNum}</c:param>
+		<%-- board로 이동하는 경우 B 나머지는 M --%>
+		<c:param name="menuType">${param.menuType}</c:param>
+	</c:import>
+	<form action="#" id="actionForm" method="post">
+		<!-- 내용영역 -->
+		<div class="cont_wrap">
+			<div class="page_title_bar">
+				<div class="page_title_text">고객 목록</div>
+				<!-- 검색영역 선택적 사항 -->
+				
+			</div>
+			<!-- 해당 내용에 작업을 진행하시오. -->
+			<div class="cont_area">
+				<!-- 여기부터 쓰면 됨 -->
+		<input type="hidden" id="cn" name="cn" />
+		<input type="hidden" id="page" name="page" value="${page}" />
+		<input type="hidden" name="top" value="${param.top}" />
+		<input type="hidden" name="menuNum" value="${param.menuNum}" />
+		<input type="hidden" name="menuType" value="${param.menuType}" />
+				<div class="bodyWrap">
+					<!-- <div class="tLine"></div> -->
+					<table class="srch_table">
+						<colgroup>
+							<col width="90" />
+							<col width="60" />
+							<col width="40" />
+							<col width="60" />
+							<col width="60" />
+							<col width="60" />
+							<col width="60" />
+							<col width="60" />
+							<col width="0" />
+							<col width="55" />
+						</colgroup>
+						<tbody>
+							<tr>
+								<td>
+									<span class="srch_name">검색어</span>
+								</td>
+								<td>
+									<select id="searchType" name="searchType">
+										<option value="0">고객명</option>
+										<option value="1">고객사명</option>
+										<option value="2">고객번호</option>
+									</select>
+								</td>
+								<td colspan="3">
+									<input type="text" class="srch_msg" placeholder="검색어를 입력해주세요." id="searchTxt" name="searchTxt" value="${param.searchTxt}" />
+								</td>
+								<td colspan="5">
+									<span class="cmn_btn" id="searchBtn">검색</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<span class="srch_name">정렬</span>
+								</td>
+								<td>
+									<select id="listSort" name="listSort">
+										<option value="9">선택안함</option>
+										<option value="0">고객명</option>
+										<option value="1">고객사명</option>
+									</select>
+								</td>
+								<td>
+									<img class="asc_btn cmn_btn" alt="정렬버튼" src="resources/images/sales/asc.png" id="sortBtn" />
+								</td>
+								<td colspan="7"></td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="SearchResult"><h3>고객 (검색결과: 83건)</h3></div>
+					<div class="cont_table">
+						<table class="list_table"></table>
 					</div>
-				</div>
-			</div> <!-- bodyWrap end -->
-		</div> <!-- cont_area end -->
-	</div> <!--cont_wrap end -->
-</form>		
+					<div class="body_bottom">
+						<div class="board_bottom">
+							<div class="pgn_area"></div>
+							<div class="cmn_btn" id="addBtn">등록</div>
+						</div>
+					</div>
+				</div> <!-- bodyWrap end -->
+			</div> <!-- cont_area end -->
+		</div> <!--cont_wrap end -->
+	</form>		
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>
