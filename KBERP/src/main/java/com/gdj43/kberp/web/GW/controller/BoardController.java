@@ -83,6 +83,22 @@ import com.gdj43.kberp.web.common.service.ICommonService;
 		return mapper.writeValueAsString(modelMap);
 	}
 	
+	@RequestMapping(value = "/admnstrAjax", method = RequestMethod.POST,
+			produces = "test/json;charset=UTF-8")
+	@ResponseBody 
+	public String admnstrAjax(@RequestParam HashMap<String, String> params) throws Throwable{
+		ObjectMapper mapper = new ObjectMapper();
+	
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+			
+		List<HashMap<String, String>> list = ics.getDataList("board.boardAdmnstrlist",params);
+		
+		modelMap.put("list", list);
+
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
 	@RequestMapping(value = "/boardWrite")
 	public ModelAndView boardWrite(ModelAndView mav) {
 		
@@ -190,6 +206,37 @@ import com.gdj43.kberp.web.common.service.ICommonService;
 		
 		return mav;
 
+	}
+	
+	@RequestMapping(value = "/admnstrAction/{gbn}", method = RequestMethod.POST,
+			produces = "test/json;charset=UTF-8")
+	@ResponseBody 
+	public String admnstrActionAjax(@RequestParam HashMap<String, String> params,
+							@PathVariable String gbn, HttpSession session) throws Throwable{
+		ObjectMapper mapper = new ObjectMapper();
+		
+		
+	
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		try {
+			switch(gbn) {
+			case "insert":
+				ics.getData("board.boardAdmnstrWrite",params);
+				break;
+			case "update":
+				ics.getData("board.boardAdmnstrUpdate",params);
+				break;
+			case "delete":
+				ics.getData("board.boardAdmnstrDelete",params);
+				break;
+			}
+			modelMap.put("res", "success");
+		} catch (Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "failed");
+		}
+		
+		return mapper.writeValueAsString(modelMap);
 	}
 	
 }
