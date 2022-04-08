@@ -251,7 +251,7 @@ thead {
 	background-color: #f3f3f3;
 	border-bottom: 1px solid #d7d7d7;
 	height: 40px;
-	font-size: 10pt;
+	font-size: 13px;
 	position: sticky;
 	top: 0;
 }
@@ -375,7 +375,7 @@ thead {
 .apnmt_prfl_info_wrap {
 	display: inline-block;
 	vertical-align: top;
-	width: 359px;
+	width: 230px;
 	height: 135px;
 	margin: 12px;
 }

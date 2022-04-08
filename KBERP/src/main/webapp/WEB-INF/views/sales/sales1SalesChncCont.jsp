@@ -315,6 +315,8 @@ textarea {
     margin-bottom: 18px;
     margin-left: 45px;
     font-size: 10pt;
+    text-indent: 12px;
+    line-height: 40px;
 }
 .btnImg_in{
 	display: inline-block;
@@ -578,7 +580,7 @@ function drawOpList(list) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
-	<input type="hidden" id="salesNum" name="salesNum" value="${data.SALES_NUM}" /> <!-- 영업번호 -->
+	<input type="hidden" id="salesNum" name="salesNum" value="${param.salesNum}" /> <!-- 영업번호 -->
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">

@@ -123,6 +123,17 @@ public class HrController {
 		return mav;
 	 }
 	
+	@RequestMapping(value = "/crtfctUserAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+    @ResponseBody
+    public String crtfctUserAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		iCommonService.insertData("hr.addCrtfct", params);
+		
+		return mapper.writeValueAsString(modelMap); 
+    }
+	
 	// 조직도
     @RequestMapping(value = "/orgnztChart")
     public ModelAndView orgnzt(@RequestParam HashMap<String,String> params, 

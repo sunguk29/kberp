@@ -158,16 +158,24 @@
 	</update>
 	
 	<!--    증명서발급 쿼리    -->
-	 <select id="getEmpInfo" resultType="hashmap" parameterType="hashmap">
+	 <select id="getEmpInfo" resultType="hashmap" parameterType="hashmap"><!-- (관리자) 요청사원정보 가져오기 -->
 		SELECT EMP_NAME, TO_CHAR(BRTHDT, 'YYYY-MM-DD') AS BRTHDT, ZIP_CODE, ADRS, DTL_ADRS
 		FROM EMP
 		WHERE EMP_NUM = #{sEmpNum}
 	</select>
-	 <select id="getEmpRqstList" resultType="hashmap" parameterType="hashmap">
-		SELECT CRTFCT_NUM, CRTFCT_KIND, USE, TO_CHAR(RQST_DATE, 'YYYY-MM-DD') AS RQST_DATE, TO_CHAR(ISSUE_DATE, 'YYYY-MM-DD') AS ISSUE_DATE , ISSUE_STS_NUM
-		FROM CRTFCT
-		WHERE RQST_EMP_NUM = #{sEmpNum}
+	 <select id="getEmpRqstList" resultType="hashmap" parameterType="hashmap"><!-- (사용자) 발급요청목록 -->
+		SELECT ROWNUM, C.CRTFCT_NUM, C.CRTFCT_KIND, C.USE, C.RQST_DATE, C.ISSUE_DATE, C.ISSUE_TYPE, C.ISSUE_STS_NUM, C.RSN
+        FROM ( SELECT CRTFCT_NUM, CRTFCT_KIND, USE, TO_CHAR(RQST_DATE, 'YYYY-MM-DD') AS RQST_DATE, ISSUE_TYPE, 
+    				  TO_CHAR(ISSUE_DATE, 'YYYY-MM-DD') AS ISSUE_DATE, ISSUE_STS_NUM, RSN
+                 FROM CRTFCT
+                WHERE RQST_EMP_NUM = #{sEmpNum}
+                ORDER BY CRTFCT_NUM DESC) C
+        
 	</select>
+	<insert id="addCrtfct" parameterType="hashmap"><!-- (사용자) 증명서발급 산청 insert -->
+		INSERT INTO CRTFCT (CRTFCT_NUM, RQST_EMP_NUM, CRTFCT_KIND, ISSUE_COUNT, ISSUE_TYPE, USE)
+		VALUES (CRTFCT_SEQ.NEXTVAL, #{sEmpNum}, #{kind}, #{issueCount}, #{issueType}, #{use})
+	</insert>
 	
 	<!-- 조직도 쿼리 -->
 	 <select id="getOrgnztDeptList" resultType="hashmap" parameterType="hashmap">

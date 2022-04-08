@@ -138,7 +138,7 @@ vertical-align: top;
 
 .crtfct_list {
     display: block;
-    width: 900px;
+    width: 882px;
     height: 430px;
     padding: 10px 0px;
 }
@@ -154,7 +154,7 @@ height: 25px;
 .crtfct_list_cont {
     display: inline-block;
     vertical-align: top;
-    width: 892px;
+    width: 882px;
     height: 289px;
     padding: 0px 0 10px 0;
     border-top: solid 1px #d7d7d7;
@@ -190,13 +190,38 @@ height: 25px;
    background-color: rgb(200,218,248);
 }
 
-
+.crtfct_table thead tr{
+	color: #333333;
+	font-size: 13px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-   $(".crtfct_list_cont").slimScroll({height: "280px"});
-
+	console.log()
+   $(".crtfct_list_cont").slimScroll({height: "280px"}); // 슬림스크롤
+   $("#rqstBtn").on("click", function() {
+		var params = $("#addForm").serialize();	
+		console.log("발급신청버튼 클릭! 파람즈 값 : " + params)
+ 		$.ajax({
+		      type : "post",
+		      url : "crtfctUserAjax",
+		      dataType : "json",
+		      data : params,
+		      success : function(res) {
+		    	  console.log(res);
+		    	  makeAlert("알림","발급요청이 완료되었습니다.", function(){
+			    	  location.reload();
+		    	  })
+		      }, 
+		      error : function(req) {
+		         console.log(req.responseText);
+		      }
+	   }); 
+	   
+   });
+   
 });
+
 </script>
 </head>
 <body>
@@ -214,61 +239,66 @@ $(document).ready(function() {
 			<div class="page_title_text">증명서발급</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
-				<div class="cont_area">
-			<div class="crtfct_rqst">
-				<div class="crtfct_rqst_title">발급신청</div>
-				<div class="crtfct_rqst_cont">
-					<div class="rqst_slct_wrap">
-						<div class="rqst_slct_title">증명서종류*</div>
-						<select class="rqst_slct">
-							<option value="0">선택</option>
-							<option value="1">재직증명서</option>
-							<option value="2">경력증명서</option>
-							<option value="3">퇴직증명서</option>
-							<option value="4">기타</option>
-						</select>
-					</div>
-					<div class="rqst_slct_wrap">
-						<div class="rqst_slct_title">발급매수*</div>
-						<select class="rqst_slct">
-							<option value="0">선택</option>
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-						</select>
-					</div>
-					<div class="rqst_slct_wrap">
-						<div class="rqst_slct_title">발급유형*</div>
-						<select class="rqst_slct">
-							<option value="선택">선택</option>
-							<option value="1">국문증명서</option>
-							<option value="2">영문증명서</option>
-						</select>
-					</div>
-					<div class="rqst_input_wrap">
-						<div class="rqst_input_title">용도 및 제출처*</div>
-						<textarea class="rqst_input" rows="5" cols="20"></textarea>
-						<div class="rqst_btn_area">
-							<input type="button" value="신청" class="rqst_btn" />
+		<div class="cont_area">
+			<form action="#" id="addForm" method="post">
+			<input type="hidden" id="sEmpNum" name="sEmpNum" value="${sEmpNum}" />
+				<div class="crtfct_rqst">
+					<div class="crtfct_rqst_title">발급신청</div>
+					<div class="crtfct_rqst_cont">
+						<div class="rqst_slct_wrap">
+							<div class="rqst_slct_title">증명서종류*</div>
+							<select class="rqst_slct" id="kind" name="kind">
+								<option >선택</option>
+								<option value="0">재직증명서</option>
+								<option value="1">경력증명서</option>
+								<option value="2">퇴직증명서</option>
+								<option value="3">기타</option>
+							</select>
+						</div>
+						<div class="rqst_slct_wrap">
+							<div class="rqst_slct_title">발급매수*</div>
+							<select class="rqst_slct" id="issueCount" name="issueCount">
+								<option value="0">선택</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+							</select>
+						</div>
+						<div class="rqst_slct_wrap">
+							<div class="rqst_slct_title">발급유형*</div>
+							<select class="rqst_slct" id="issueType" name="issueType" >
+								<option >선택</option>
+								<option value="0">국문증명서</option>
+								<option value="1">영문증명서</option>
+							</select>
+						</div>
+						<div class="rqst_input_wrap">
+							<div class="rqst_input_title">용도 및 제출처*</div>
+								<textarea class="rqst_input" rows="1" cols="20" id="use" name="use"></textarea>
+							<div class="rqst_btn_area">
+								<input type="button" value="신청" class="rqst_btn" id="rqstBtn"/>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			</form>
 			<div class="crtfct_list">
 				<div class="crtfct_list_title">발급목록</div>
 				<div class="crtfct_list_cont">
 					<table class="crtfct_table">
 						<colgroup>
-							<col width="50">
+							<col width="30">      
+							<col width="80">      
 							<col width="100">
 							<col width="200">
 							<col width="100">
 							<col width="100">
-							<col width="80">
+							<col width="150">
 						</colgroup>
 						<thead>
 							<tr>
 								<th>no</th>
+								<th>증명서번호</th>
 								<th>증명서종류</th>
 								<th>발급용도</th>
 								<th>발급요청일</th>
@@ -279,18 +309,19 @@ $(document).ready(function() {
 						<tbody>
 							<c:forEach var="data" items="${list}">
 						         <tr>
+						            <td>${data.ROWNUM}</td>
 						            <td >${data.CRTFCT_NUM}</td>
 						         	<c:choose>
-						         		<c:when test="${data.CRTFCT_KIND==1}">
+						         		<c:when test="${data.CRTFCT_KIND==0}">
 						         			<td>재직증명서</td> 
 						         		</c:when>
-						         		<c:when test="${data.CRTFCT_KIND==2}">
+						         		<c:when test="${data.CRTFCT_KIND==1}">
 						         			<td>경력증명서</td> 
 						         		</c:when>
-						         		<c:when test="${data.CRTFCT_KIND==3}">
+						         		<c:when test="${data.CRTFCT_KIND==2}">
 						         			<td>퇴직증명서</td> 
 						         		</c:when>
-						         		<c:when test="${data.CRTFCT_KIND==4}">
+						         		<c:when test="${data.CRTFCT_KIND==3}">
 						         			<td>기타</td> 
 						         		</c:when>
 						         	</c:choose>
@@ -305,7 +336,7 @@ $(document).ready(function() {
 						         			<td style="color:#4B94F2;">발급완료</td> 
 						         		</c:when>
 						         		<c:when test="${data.ISSUE_STS_NUM==2}">
-						         			<td style="color:#ff6f60;">발급불가</td> 
+						         			<td style="color:#ff6f60;">발급불가: ${data.RSN}</td> 
 						         		</c:when>
 						         	</c:choose>
 						         </tr>

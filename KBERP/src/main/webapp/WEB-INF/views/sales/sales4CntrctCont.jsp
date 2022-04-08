@@ -1,5 +1,5 @@
 <!-- 
-	견적 상세보기 : sales3QtnCont
+	계약 상세보기 : sales4CntrctCont
  -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>견적 상세보기</title>
+<title>계약 상세보기</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -304,7 +304,6 @@ textarea {
     border-radius: 7px;
     margin-bottom: 18px;
     margin-left: 45px;
-    font-size: 10pt;
 }
 .btnImg_in{
 	display: inline-block;
@@ -447,8 +446,6 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-	// 인쇄 버튼
-	//$("#printBtn")
 	
 	// 견적서 추가(수정) 버튼
 	$("#updateBtn").on("click", function() {
@@ -471,12 +468,7 @@ $(document).ready(function() {
 
 	});
 	
-	// 다음 단계로 전환하기 버튼 : 계약 등록 페이지
-	$("#nextStageBtn").on("click", function() {
-		$("#actionForm").attr("action", "sales4CntrctReg");
-		$("#actionForm").submit();
-	});
-	
+	//
 	
 	// 영업 종료하기 버튼
 	$(".salesOver_btn").on("click", function() {
@@ -531,7 +523,7 @@ $(document).ready(function() {
 		
 		$.ajax({
 			type : "post",
-			url : "qtnBotActionAjax/insert",
+			url : "cntrctBotActionAjax/insert",
 			dataType : "json",
 			data : params,
 			success : function(res) {
@@ -968,15 +960,11 @@ function drawPQList(list) {
 					</table>
 					<br/>
 					<!-- 첨부자료  -->
-					<c:set var="salesFileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
-					<c:set var="salesFileName" value="${fn:substring(data.ATT_FILE_NAME, 20, salesFileLength)}"></c:set>
 					<div class="spc">
-						<div class="adc_txt">
-							첨부자료
+						<div class="adc_txt"> 첨부자료 (0)
+								<input type=file name='file1' style='display: none;'> 
 						</div>
-						<div class="cntrct_box_in">
-							<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${salesFileName}">${salesFileName}</a>
-						</div> 
+						<div class="cntrct_box_in"></div> 
 					</div>
 				</div>
 					
@@ -1143,15 +1131,15 @@ function drawPQList(list) {
 							</tbody>
 						</table>
 						<!-- 첨부자료  -->
-						<c:set var="sgstnFileLength" value="${fn:length(data2.ATT_FILE_NAME)}"></c:set>
-						<c:set var="sgstnFileName" value="${fn:substring(data2.ATT_FILE_NAME, 20, sgstnFileLength)}"></c:set>
+						<input type=file id="att" name="att" />
+						<input type="hidden" id="attFile" name="attFile" />
 						<div class="spc">
 							<div class="adc_txt">
 								첨부자료
 							</div>
 							<div class="cntrct_box_in">
-								<a href="resources/upload/${data2.ATT_FILE_NAME}"  download="${sgstnFileName}">${sgstnFileName}</a>
-							</div> 
+							
+							</div>
 						</div>
 					</div>
 <!-- *************************************** 견적 시작 *************************************** -->			
@@ -1309,16 +1297,14 @@ function drawPQList(list) {
 						</tbody>
 					</table>
 					<!-- 첨부자료 -->
-					<c:set var="qtnFileLength" value="${fn:length(data3.ATT_FILE_NAME)}"></c:set>
-						<c:set var="qtnFileName" value="${fn:substring(data3.ATT_FILE_NAME, 20, qtnFileLength)}"></c:set>
-						<div class="spc">
-							<div class="adc_txt">
-								첨부자료
-							</div>
-							<div class="cntrct_box_in">
-								<a href="resources/upload/${data3.ATT_FILE_NAME}"  download="${qtnFileName}">${qtnFileName}</a>
-							</div> 
-						</div>		
+					<div class="spc">
+						<div class="adc_txt">
+							첨부자료
+						</div>
+						<div class="cntrct_box_in">
+							<input type="text" id="fileName" readonly="readonly" />
+						</div>
+					</div>		
 <!-- *************************************** 견적 끝 *************************************** -->						
 					<div class="next_bot">
 						<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>

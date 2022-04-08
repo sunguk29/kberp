@@ -13,7 +13,6 @@
 .cont_wrap {
 	width: 1013px;
 }
-
 /* 개인 작업 영역 */
 .body {
 	display: block;
@@ -30,7 +29,6 @@
 	margin: 20px auto;
 }
 table{
-	
 	border: 1px;
 	width: 927px;
 	margin: 40px auto;
@@ -71,21 +69,18 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 33px;
 	border: none;
 }
-
 .btnImg{
 	width: 30px;
 	float: right;
 	margin-left: 10px;
 }
 
-/* 목록, 수정, 삭제 영역 */
 .imgPos{
 	position: relative;
 }
 .plus_btn:hover {
 	cursor: pointer;
 }
-/* 첨부자료 */
 .cntrct_box_in {
 	width: 885px;
 	height: 100px;
@@ -136,7 +131,6 @@ td:nth-child(1), td:nth-child(3){
 .imgName {
 	padding-right: 30px;
 }
-/* 팝업 */
 .popup_title_mid {
 	width: calc(100% + 20px);
 	height: 70px;
@@ -231,7 +225,6 @@ td:nth-child(1), td:nth-child(3){
 	height: 32px;
 	text-align: center;
 }
-/* 팝업 내용 */
 .popup_box_left {
    display: inline-block;
    vertical-align: top;
@@ -268,7 +261,6 @@ td:nth-child(1), td:nth-child(3){
    background-color: #F2F2F2;
    margin-bottom: 5px;
 }
-
 .popup_mng_box_in:hover, .popup_cc_box_in:hover {
    cursor: pointer;
    border: 2px solid #2E83F2;
@@ -319,32 +311,33 @@ td:nth-child(1), td:nth-child(3){
 [href] {
 	color: black;
 	text-decoration: none;
-	
 }
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	console.log('${param.searchTxt}');
-	
+	//목록버튼
 	$("#listBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntList");
 		$("#actionForm").submit();
 	});
 	
+	//수정버튼
 	$("#updateBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntUpdate");
 		$("#actionForm").submit();
 	});
 	
+	//삭제버튼
 	$("#deleteBtn").on("click", function() {
+		//팝업
 		makePopup({
 			bg : false,
 			bgClose : false,
 			title : "경고",
 			contents : "삭제하시겠습니까?",
 			contentsEvent : function() {
-				$("#popup1").draggable();
+				$("#popup1").draggable(); //팝업 드래그
 			},
 			buttons : [{
 				name : "삭제",
@@ -369,8 +362,6 @@ $(document).ready(function() {
 							console.log(request.responseText);
 						}
 					});
-					
-					console.log("One!");
 					closePopup();
 				}
 			}, {
@@ -464,9 +455,7 @@ $(document).ready(function() {
 					<!-- 첨부파일 -->
 					<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
 					<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
-					<div class="rvn_txt">
-						첨부파일
-					</div>
+					<div class="rvn_txt"> 첨부파일</div>
 					<div class="cntrct_box_in">
 						<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
 					</div>
