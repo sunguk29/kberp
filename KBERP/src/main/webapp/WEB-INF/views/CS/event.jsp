@@ -383,6 +383,64 @@ $(document).ready(function() {
 	}); // deleteBtn end
 	
 	
+	$("#btn_cowrite").on("click", function() {
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "등록",
+			contents : "댓글을 등록하시겠습니까?",
+			draggable : true,
+			buttons : [{
+				name : "예",
+				func:function() {
+		/* 			$("#cont").val(CKEDITOR.instances['cont'].getData()); */
+					if(checkEmpty("#cmnt_cont")) {
+						alert("댓글 내용을 입력하세요.");
+						$("#cmnt_cont").focus();
+					} else {
+						var writeForm = $("#writeForm");
+						
+						writeForm.ajaxForm({
+							success : function(res) {
+								// 물리파일명 보관
+								/* if(res.fileName.length > 0) {
+									$("#event_attFile").val(res.fileName[0]);
+								} */
+								
+								// 글 저장
+								var params =  $("#writeForm").serialize();
+						
+								$.ajax({
+									type : "post",
+									url : "eventCmntAction/insert",
+									dataType : "json",
+									data : params,
+									success : function(res) {
+										if(res.res == "success") {
+											location.href = "event";
+										} else {
+											alert("댓글 작성중 문제가 발생하였습니다.");
+										}
+									}, // success end
+									error : function(request, status, error) {
+										console.log(request.responseText);
+									} // error end
+								}); // ajax end
+							}, // success end
+							error : function(req) {
+								console.log(req.responseText);
+							} // error end
+						});// ajaxForm end
+						
+						writeForm.submit(); // ajaxForm 실행
+							closePopup();
+						} // else end
+				}
+					}, {
+						name : "아니오"
+					}]
+		}); // makePopup end
+	});
 	
 	
 });
@@ -455,14 +513,13 @@ $(document).ready(function() {
 				</c:forEach>
 				
 				<div id="comment_write">
-				
 					<div id="co_writer">
 					${sEmpName}
-					<%-- ${emp_num} 로그인된 관리자 이름 --%>
 					</div>
-					<div id="co_content"><textarea id="co_cont"><%-- ${cmnt_cont} 댓글 내용 --%></textarea></div>
+					<div id="co_content"><textarea id="co_cont"></textarea></div>
 					<div><input type="submit" value="댓글 쓰기" id="btn_cowrite"></div>		
 				</div>
+				
 			</div>
 		</div><!-- cont_area end -->
 	</div>
