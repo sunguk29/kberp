@@ -80,7 +80,7 @@ public class SchdlController {
 		return mapper.writeValueAsString(modelMap);
 	}
 
-	/* 담당자 팝업 띄우기 */
+	/* 담당자 팝업 띄우 */
 	@RequestMapping(value = "/mgrListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String mgrListAjax(@RequestParam HashMap<String, String> params, 
