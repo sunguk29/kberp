@@ -304,6 +304,7 @@ textarea {
     border-radius: 7px;
     margin-bottom: 18px;
     margin-left: 45px;
+    font-size: 10pt;
 }
 .btnImg_in{
 	display: inline-block;
@@ -967,11 +968,15 @@ function drawPQList(list) {
 					</table>
 					<br/>
 					<!-- 첨부자료  -->
+					<c:set var="salesFileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+					<c:set var="salesFileName" value="${fn:substring(data.ATT_FILE_NAME, 20, salesFileLength)}"></c:set>
 					<div class="spc">
-						<div class="adc_txt"> 첨부자료 (0)
-								<input type=file name='file1' style='display: none;'> 
+						<div class="adc_txt">
+							첨부자료
 						</div>
-						<div class="cntrct_box_in"></div> 
+						<div class="cntrct_box_in">
+							<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${salesFileName}">${salesFileName}</a>
+						</div> 
 					</div>
 				</div>
 					
@@ -1138,15 +1143,15 @@ function drawPQList(list) {
 							</tbody>
 						</table>
 						<!-- 첨부자료  -->
-						<input type=file id="att" name="att" />
-						<input type="hidden" id="attFile" name="attFile" />
+						<c:set var="sgstnFileLength" value="${fn:length(data2.ATT_FILE_NAME)}"></c:set>
+						<c:set var="sgstnFileName" value="${fn:substring(data2.ATT_FILE_NAME, 20, sgstnFileLength)}"></c:set>
 						<div class="spc">
 							<div class="adc_txt">
 								첨부자료
 							</div>
 							<div class="cntrct_box_in">
-							
-							</div>
+								<a href="resources/upload/${data2.ATT_FILE_NAME}"  download="${sgstnFileName}">${sgstnFileName}</a>
+							</div> 
 						</div>
 					</div>
 <!-- *************************************** 견적 시작 *************************************** -->			
@@ -1304,14 +1309,16 @@ function drawPQList(list) {
 						</tbody>
 					</table>
 					<!-- 첨부자료 -->
-					<div class="spc">
-						<div class="adc_txt">
-							첨부자료
-						</div>
-						<div class="cntrct_box_in">
-							<input type="text" id="fileName" readonly="readonly" />
-						</div>
-					</div>		
+					<c:set var="qtnFileLength" value="${fn:length(data3.ATT_FILE_NAME)}"></c:set>
+						<c:set var="qtnFileName" value="${fn:substring(data3.ATT_FILE_NAME, 20, qtnFileLength)}"></c:set>
+						<div class="spc">
+							<div class="adc_txt">
+								첨부자료
+							</div>
+							<div class="cntrct_box_in">
+								<a href="resources/upload/${data3.ATT_FILE_NAME}"  download="${qtnFileName}">${qtnFileName}</a>
+							</div> 
+						</div>		
 <!-- *************************************** 견적 끝 *************************************** -->						
 					<div class="next_bot">
 						<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
