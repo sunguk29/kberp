@@ -69,7 +69,7 @@
 	</insert>
 	 <select id="updateCard" resultType="hashmap" parameterType="hashmap">
 	  UPDATE CARD
-	     SET ISSUE_DT =#{issue_dt} ,END_DT = #{end_dt}
-	 WHERE MNG_NUM =#{no}
+	     SET ISSUE_DT =#{issue_dt} ,END_DT = #{end_dt}, DSCRD_DT=#{del_dt}
+	 WHERE MNG_NUM =#{mng_num}
 	 </select>
 </mapper>

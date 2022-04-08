@@ -6,17 +6,17 @@
 	<select id="getBasicInfo" parameterType="hashmap" resultType="hashmap">
 		SELECT EMP.EMP_NUM, EMP.EMP_NAME, EMP.EMP_NAME_ENG, EMP.EMP_PCTR_FILE,
 		       A.DEPT_NUM, A.START_DATE, A.END_DATE, R.RANK_NAME, D.DEPT_NAME
-		FROM EMP INNER JOIN (   SELECT TO_CHAR(SQ.START_DATE, 'YYYY-MM-DD') AS START_DATE, TO_CHAR(SQ.END_DATE, 'YYYY-MM-DD') AS END_DATE,
-		                               SQ.EMP_NUM, SQ.RANK_NUM, SQ.DEPT_NUM
-		                        FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
-						                       ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE DESC) AS NEWEST
-						                FROM APNTM
-						                WHERE STS_NUM = '1' ) SQ
-						        WHERE SQ.NEWEST = '1'
-		                        ) A
-		                 ON EMP.EMP_NUM = A.EMP_NUM
-		         INNER JOIN RANK R
-		                 ON A.RANK_NUM = R.RANK_NUM
+		FROM EMP LEFT OUTER JOIN (  SELECT TO_CHAR(SQ.START_DATE, 'YYYY-MM-DD') AS START_DATE, TO_CHAR(SQ.END_DATE, 'YYYY-MM-DD') AS END_DATE,
+			                               SQ.EMP_NUM, SQ.RANK_NUM, SQ.DEPT_NUM
+			                        FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
+							                       ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE DESC) AS NEWEST
+							                FROM APNTM
+							                WHERE STS_NUM = '1' ) SQ
+							        WHERE SQ.NEWEST = '1'
+			                        ) A
+		                 	  ON EMP.EMP_NUM = A.EMP_NUM
+		         LEFT OUTER JOIN RANK R
+		                 	  ON A.RANK_NUM = R.RANK_NUM
 		         LEFT OUTER JOIN (  SELECT DEPT_NUM, DEPT_NAME, DEL_CHECK
 		                            FROM DEPT
 		                            WHERE DEL_CHECK = 1
@@ -33,29 +33,29 @@
 	<!-- 인사기록카드 - 재직정보 가져오기 -->
 	<select id="getWorkInfo" parameterType="hashmap" resultType="hashmap">
 		SELECT EMP.EMP_NUM, EMP.HIRE_TYPE, EMP.PRBTN_CHECK,
-		       DECODE(A2.END_DATE, NULL, 1, 0) AS WORK_TYPE,
+		       DECODE(A1.START_DATE, NULL, -1, DECODE(A2.END_DATE, NULL, 0, 1)) AS WORK_TYPE,
 		       DECODE(A1.START_DATE, NULL, ' ', TO_CHAR(A1.START_DATE, 'YYYY-MM-DD')) AS JOIN_DATE,
 		       DECODE(A2.END_DATE, NULL, ' ', TO_CHAR(A2.END_DATE, 'YYYY-MM-DD')) AS RSGNT_DATE
-		FROM EMP INNER JOIN (   SELECT SQ.START_DATE, SQ.END_DATE, SQ.EMP_NUM
-		                        FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
-		                                       ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE ASC) AS OLDEST
-		                                FROM APNTM
-		                                WHERE STS_NUM = '1' ) SQ
-		                        WHERE SQ.OLDEST = '1'
-		                        ) A1
-		                 ON EMP.EMP_NUM = A1.EMP_NUM
-		         INNER JOIN (   SELECT SQ.START_DATE, SQ.EMP_NUM, SQ.RANK_NUM, SQ.DEPT_NUM,
-		                               CASE WHEN SQ.END_DATE > SYSDATE
-		                                    THEN NULL
-		                                    ELSE SQ.END_DATE
-		                               END AS END_DATE
-		                        FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
-		                                       ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE DESC) AS NEWEST
-		                                FROM APNTM
-		                                WHERE STS_NUM = '1' ) SQ
-		                        WHERE SQ.NEWEST = '1'
+		FROM EMP LEFT OUTER JOIN (  SELECT SQ.START_DATE, SQ.END_DATE, SQ.EMP_NUM
+			                        FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
+			                                       ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE ASC) AS OLDEST
+			                                FROM APNTM
+			                                WHERE STS_NUM = '1' ) SQ
+			                        WHERE SQ.OLDEST = '1'
+			                        ) A1
+		                 	  ON EMP.EMP_NUM = A1.EMP_NUM
+		         LEFT OUTER JOIN (  SELECT SQ.START_DATE, SQ.EMP_NUM, SQ.RANK_NUM, SQ.DEPT_NUM,
+			                               CASE WHEN SQ.END_DATE > SYSDATE
+			                                    THEN NULL
+			                                    ELSE SQ.END_DATE
+			                               END AS END_DATE
+			                        FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
+			                                       ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE DESC) AS NEWEST
+			                                FROM APNTM
+			                                WHERE STS_NUM = '1' ) SQ
+			                        WHERE SQ.NEWEST = '1'
 		                            ) A2
-		                 ON EMP.EMP_NUM = A2.EMP_NUM
+		                 	  ON EMP.EMP_NUM = A2.EMP_NUM
 		WHERE EMP.EMP_NUM = #{sEmpNum}
 	</select>
 	<!-- 인사기록카드 - 급여정보 가져오기 -->
@@ -239,36 +239,34 @@
 	<select id="getEmpCount" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*)
 		FROM (  SELECT EMP.EMP_NUM, EMP.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, EMP.MBL_NUM, EMP.HIRE_TYPE,
-                       DECODE(A2.END_DATE, NULL, 0, 1) AS WORK_TYPE,
-                       DECODE(A1.START_DATE, NULL, ' ', TO_CHAR(A1.START_DATE, 'YYYY-MM-DD')) AS JOIN_DATE,
-                       DECODE(A2.END_DATE, NULL, ' ', TO_CHAR(A2.END_DATE, 'YYYY-MM-DD')) AS RSGNT_DATE
-                FROM EMP INNER JOIN (   SELECT SQ.START_DATE, SQ.END_DATE, SQ.EMP_NUM
-                                        FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
-                                                       ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE ASC) AS OLDEST
-                                                FROM APNTM
-                                                WHERE STS_NUM = '1' ) SQ
-                                        WHERE SQ.OLDEST = '1'
-                                        ) A1
-                                 ON EMP.EMP_NUM = A1.EMP_NUM
-                         INNER JOIN (   SELECT SQ.START_DATE, SQ.EMP_NUM, SQ.RANK_NUM, SQ.DEPT_NUM,
-                                               CASE WHEN SQ.END_DATE > SYSDATE
-                                                    THEN NULL
-                                                    ELSE SQ.END_DATE
-                                               END AS END_DATE
-                                        FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
-                                                       ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE DESC) AS NEWEST
-                                                FROM APNTM
-                                                WHERE STS_NUM = '1' ) SQ
-                                        WHERE SQ.NEWEST = '1'
-                                            ) A2
-                                 ON EMP.EMP_NUM = A2.EMP_NUM
-                         INNER JOIN RANK R
-                                 ON A2.RANK_NUM = R.RANK_NUM
-                         LEFT OUTER JOIN (  SELECT DEPT_NUM, DEPT_NAME, DEL_CHECK
-                                            FROM DEPT
-                                            WHERE DEL_CHECK = 1
-                                            ) D
-                                      ON A2.DEPT_NUM = D.DEPT_NUM
+                       DECODE(A1.START_DATE, NULL, -1, DECODE(A2.END_DATE, NULL, 0, 1)) AS WORK_TYPE,
+                       DECODE(A1.START_DATE, NULL, NULL, TO_CHAR(A1.START_DATE, 'YYYY-MM-DD')) AS JOIN_DATE,
+                       DECODE(A2.END_DATE, NULL, NULL, TO_CHAR(A2.END_DATE, 'YYYY-MM-DD')) AS RSGNT_DATE
+                FROM EMP LEFT OUTER JOIN (  SELECT SQ.START_DATE, SQ.END_DATE, SQ.EMP_NUM
+	                                        FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
+	                                                       ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE ASC) AS OLDEST
+	                                                FROM APNTM ) SQ
+	                                        WHERE SQ.OLDEST = '1'
+	                                        ) A1
+	                                 ON EMP.EMP_NUM = A1.EMP_NUM
+	                         LEFT OUTER JOIN (   SELECT SQ.START_DATE, SQ.EMP_NUM, SQ.RANK_NUM, SQ.DEPT_NUM,
+	                                               CASE WHEN SQ.END_DATE > SYSDATE
+	                                                    THEN NULL
+	                                                    ELSE SQ.END_DATE
+	                                               END AS END_DATE
+	                                        FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
+	                                                       ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE DESC) AS NEWEST
+	                                                FROM APNTM ) SQ
+	                                        WHERE SQ.NEWEST = '1'
+	                                            ) A2
+	                                 ON EMP.EMP_NUM = A2.EMP_NUM
+	                         LEFT OUTER JOIN RANK R
+	                                 ON A2.RANK_NUM = R.RANK_NUM
+	                         LEFT OUTER JOIN (  SELECT DEPT_NUM, DEPT_NAME, DEL_CHECK
+	                                            FROM DEPT
+	                                            WHERE DEL_CHECK = 1
+	                                            ) D
+	                                      ON A2.DEPT_NUM = D.DEPT_NUM
 		        ) S
 		WHERE 1 = 1
 		<if test="srch_txt != '' and srch_txt != null">
@@ -313,30 +311,28 @@
 		FROM (  SELECT S.EMP_NUM, S.EMP_NAME, S.DEPT_NAME, S.RANK_NAME, S.MBL_NUM, S.HIRE_TYPE, S.WORK_TYPE, S.JOIN_DATE, S.RSGNT_DATE,
 		               ROW_NUMBER() OVER(ORDER BY S.EMP_NUM) AS RN
 		        FROM (  SELECT EMP.EMP_NUM, EMP.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, EMP.MBL_NUM, EMP.HIRE_TYPE,
-		                       DECODE(A2.END_DATE, NULL, 0, 1) AS WORK_TYPE,
-		                       DECODE(A1.START_DATE, NULL, ' ', TO_CHAR(A1.START_DATE, 'YYYY-MM-DD')) AS JOIN_DATE,
-		                       DECODE(A2.END_DATE, NULL, ' ', TO_CHAR(A2.END_DATE, 'YYYY-MM-DD')) AS RSGNT_DATE
-		                FROM EMP INNER JOIN (   SELECT SQ.START_DATE, SQ.END_DATE, SQ.EMP_NUM
+		                       DECODE(A1.START_DATE, NULL, -1, DECODE(A2.END_DATE, NULL, 0, 1)) AS WORK_TYPE,
+		                       DECODE(A1.START_DATE, NULL, NULL, TO_CHAR(A1.START_DATE, 'YYYY-MM-DD')) AS JOIN_DATE,
+		                       DECODE(A2.END_DATE, NULL, NULL, TO_CHAR(A2.END_DATE, 'YYYY-MM-DD')) AS RSGNT_DATE
+		                FROM EMP LEFT OUTER JOIN (   SELECT SQ.START_DATE, SQ.END_DATE, SQ.EMP_NUM
 		                                        FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
 		                                                       ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE ASC) AS OLDEST
-		                                                FROM APNTM
-		                                                WHERE STS_NUM = '1' ) SQ
+		                                                FROM APNTM ) SQ
 		                                        WHERE SQ.OLDEST = '1'
 		                                        ) A1
 		                                 ON EMP.EMP_NUM = A1.EMP_NUM
-		                         INNER JOIN (   SELECT SQ.START_DATE, SQ.EMP_NUM, SQ.RANK_NUM, SQ.DEPT_NUM,
+		                         LEFT OUTER JOIN (   SELECT SQ.START_DATE, SQ.EMP_NUM, SQ.RANK_NUM, SQ.DEPT_NUM,
 		                                               CASE WHEN SQ.END_DATE > SYSDATE
 		                                                    THEN NULL
 		                                                    ELSE SQ.END_DATE
 		                                               END AS END_DATE
 		                                        FROM (  SELECT EMP_NUM, START_DATE, END_DATE, RANK_NUM, DEPT_NUM,
 		                                                       ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY START_DATE DESC) AS NEWEST
-		                                                FROM APNTM
-		                                                WHERE STS_NUM = '1' ) SQ
+		                                                FROM APNTM ) SQ
 		                                        WHERE SQ.NEWEST = '1'
 		                                            ) A2
 		                                 ON EMP.EMP_NUM = A2.EMP_NUM
-		                         INNER JOIN RANK R
+		                         LEFT OUTER JOIN RANK R
 		                                 ON A2.RANK_NUM = R.RANK_NUM
 		                         LEFT OUTER JOIN (  SELECT DEPT_NUM, DEPT_NAME, DEL_CHECK
 		                                            FROM DEPT

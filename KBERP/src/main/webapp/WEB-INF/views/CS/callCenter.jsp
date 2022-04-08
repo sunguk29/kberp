@@ -647,8 +647,9 @@
 #clnt_type, #type_case{
 	width: 100px;
 }
-#rspndSaveBtn, #rspndUpBtn, #rspndCanBtn{
-	margin-bottom: 15px;
+#rspndAddBtn, #rspndUpBtn, #rspndCanBtn{
+	float:right;
+	margin-bottom: 5px;
 }
 
 .add #rspndUpBtn, .add #rspndCanBtn{
@@ -656,6 +657,22 @@
 }
 .update #rspndAddBtn{
 	display: none;
+}
+#rspns_plan{
+	display: inline-block;
+	vertical-align: top;
+	resize: none;
+	margin-bottom: 5px;
+}
+.rspndPopTxt{
+	display: inline-block;
+	vertical-align: top;
+	font-weight: bold;
+	background-color: #F2F2F2;
+	width: 80px;
+	height: 20px;
+	text-align: center;
+	border-radius: 2px;
 }
 </style>
 <script type="text/javascript">
@@ -674,13 +691,13 @@ $(document).ready(function() {
 		html += "			<input type=\"hidden\" id=\"gbn\" name=\"gbn\"/>";
 		html += "			<input type=\"hidden\" id=\"guide_num\" name=\"guide_num\"/>";
 		html += "			<input type=\"hidden\" id=\"emp_num\" name=\"emp_num\" value=\"" + $("#emp_num").val() + "\"/>";
-		html += "			고객유형<input type=\"text\" id=\"clnt_type\" name=\"clnt_type\"/>";
-		html += "			유형별 사례<input type=\"text\" id=\"type_case\" name=\"type_case\"/>";
-		html += "			대응방안<input type=\"text\" id=\"rspns_plan\" name=\"rspns_plan\"/>";
+		html += "			<div class=\"rspndPopTxt\">고객유형</div><input type=\"text\" id=\"clnt_type\" name=\"clnt_type\"/>";
+		html += "			<div class=\"rspndPopTxt\">유형별 사례</div><input type=\"text\" id=\"type_case\" name=\"type_case\"/>";
+		html += "			<div class=\"rspndPopTxt\">대응방안</div><textarea rows=\"3\" cols=\"24\" id=\"rspns_plan\" name=\"rspns_plan\"></textarea>";
 		html += "			<span class=\"add\">";
 		html += "			<div class=\"cmn_btn_mr\" id=\"rspndAddBtn\">등록</div>";
-		html += "			<div class=\"cmn_btn_mr\" id=\"rspndUpBtn\">수정</div>";
 		html += "			<div class=\"cmn_btn_mr\" id=\"rspndCanBtn\">취소</div>";
+		html += "			<div class=\"cmn_btn_mr\" id=\"rspndUpBtn\">수정</div>";
 		html += "			</span>";
 		html += "		</form>";
 		html += "		<table class=\"board_table\" id=\"guide_table\">";

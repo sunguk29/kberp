@@ -461,9 +461,10 @@ td:nth-child(even) {
 
 #add_pctr_area {
 	display: block;
-	height: 160px;
-	width: 120px;
+	height: 152px;
+	width: 114px;
 	outline: 1px solid #e2e2e2;
+	padding: 4px 3px 4px 3px;
 }
 
 #emp_pctr_area {
@@ -779,9 +780,17 @@ function drawList(list) {
 				html += data.DEPT_NAME;
 			}
 			html += "</div></td> ";
-			html += "	<td><div class=\"td_cont\">" + data.RANK_NAME + "</div></td> ";
+			html += "	<td><div class=\"td_cont\">";
+			if (data.RANK_NAME) {
+				html += data.RANK_NAME;
+			}
+			html += "</div></td> ";
 			html += "	<td><div class=\"td_cont\">" + data.MBL_NUM + "</div></td> ";
-			html += "	<td><div class=\"td_cont\">" + data.JOIN_DATE + "</div></td> ";
+			html += "	<td><div class=\"td_cont\">";
+			if (data.JOIN_DATE != null) {
+				html += data.JOIN_DATE;
+			}
+			html += "</div></td> ";
 			html += "	<td><div class=\"td_cont\">";
 			if (data.HIRE_TYPE == 0) {
 				html += "정규직";
@@ -795,9 +804,15 @@ function drawList(list) {
 				html += "재직";
 			} else if (data.WORK_TYPE == 1) {
 				html += "퇴사";
+			} else if (data.WORK_TYPE == -1) {
+				html += "발령 전";
 			}
 			html += "</div></td> ";
-			html += "	<td><div class=\"td_cont\">" + data.RSGNT_DATE + "</div></td> ";
+			html += "	<td><div class=\"td_cont\">";
+			if (data.RSGNT_DATE != null) {
+				html += data.RSGNT_DATE;
+			}
+			html += "</div></td> ";
 			html += "</tr>                                     ";
 		}
 	}
