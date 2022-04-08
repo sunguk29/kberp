@@ -426,6 +426,10 @@ pre {
 	font-family: "맑은 고딕";
     margin-top: 3px;
 }
+.qtnDiv {
+	width: 100%;
+	height: 100%;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -447,8 +451,23 @@ $(document).ready(function() {
 	
 	// 견적서 추가(수정) 버튼
 	$("#updateBtn").on("click", function() {
-		$("#actionForm").attr("action", "sales3QtnReg");
-		$("#actionForm").submit();
+		var params = $("#actionForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "qtnAddAjax",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				$("#actionForm").attr("action", "sales3QtnReg");
+				$("#actionForm").submit();
+				console.log("여기도?");
+			},
+			error : function(req) {
+				console.log(req.responseText);
+			}
+		});
+
 	});
 	
 	// 다음 단계로 전환하기 버튼 : 계약 등록 페이지
@@ -605,17 +624,17 @@ $(document).ready(function() {
 	
 	
 	
-	//대출금액
+ 	//대출금액
 	var loanAmnt = ${data3.LOAN_AMNT};
 	//대출기간
 	var loanPrd
-	if(${data3.LOAN_PRD eq 0} == 0) {
+	if(${data3.LOAN_PRD eq 0}) {
 		loanPrd = 6;
-	} else if(${data3.LOAN_PRD eq 0} == 1) {
+	} else if(${data3.LOAN_PRD eq 1}) {
 		loanPrd = 12;
-	} else if(${data3.LOAN_PRD eq 0} == 2) {
+	} else if(${data3.LOAN_PRD eq 2}) {
 		loanPrd = 36;
-	} else if(${data3.LOAN_PRD eq 0} == 3) {
+	} else if(${data3.LOAN_PRD eq 3}) {
 		loanPrd = 60;
 	}
 	//이자율
@@ -624,18 +643,18 @@ $(document).ready(function() {
 	var mIntrstRate = (intrstRate / 12);
 	
 	//월 납부액
-	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 0 ) { // 원금 균등 상환
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM eq 0}) { // 원금 균등 상환
 		$("#monthPymntAmnt").val(Math.round(loanAmnt / loanPrd));
 		$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
 	}
-	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 1 ) { // 원리금 균등 상환
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM eq 1}) { // 원리금 균등 상환
 		var temp1 = Math.pow(1 + mIntrstRate, loanPrd) - 1;
 		var temp2 = loanAmnt * mIntrstRate * Math.pow(1 + mIntrstRate, loanPrd);
 		$("#monthPymntAmnt").val(Math.round(temp2 / temp1));
 		$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
 	}
-	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 2 ) { // 만기 일시 상환
-		if(${data3.INTRST_PYMNT_MTHD_NUM} != 2) {
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM eq 2}) { // 만기 일시 상환
+		if(${data3.INTRST_PYMNT_MTHD_NUM ne 2}) {
 			$("#monthPymntAmnt").val("0");
 			$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
 		}
@@ -702,13 +721,16 @@ function reloadSgstnList() {
 		dataType : "json",
 		data : params,
 		success : function(res) {
-			drawPQCnt(res.PQListCnt);
-			drawPQList(res.list);
-			console.log("ok");
+			if(res.PQListCnt != 0) {
+				drawPQCnt(res.PQListCnt);
+				drawPQList(res.list);
+				$(".qtnDiv").show();
+			} else {
+				$(".qtnDiv").hide();
+			}
 		},
 		error : function(req) {
 			console.log(req.responseText);
-			console.log("no");
 		}
 	});
 }
@@ -746,8 +768,9 @@ function drawPQList(list) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
-	<input type="hidden" id="salesNum" name="salesNum" value="${data.SALES_NUM}" /> <!-- 영업번호 -->
+	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업번호 -->
 	<input type="hidden" name="qtnNum" value="${param.qtnNum}" /> <!-- 견적 번호 -->
+	<input type="hidden" name="mdName" value="${param.mdName}" /> <!-- 상품 이름 -->
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -762,7 +785,7 @@ function drawPQList(list) {
 		<div class="page_title_bar">
 			<div class="page_title_text">영업관리 - 견적 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
-				<img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" id="printBtn" />
+				<!-- <img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" id="printBtn" /> -->
 				<img alt="수정버튼" src="resources/images/sales/newAdd.png" class="btnImg" id="updateBtn" data-toggle="tooltip" title="견적서 추가하기" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>
@@ -1155,10 +1178,10 @@ function drawPQList(list) {
 											 		<option value="0" selected="selected">개인사업</option>
 									 			</c:when>
 									 			<c:when test="${data3.MD_TYPE_NUM eq 1}">
-											 		<option value="0" selected="selected">법인사업</option>
+											 		<option value="1" selected="selected">법인사업</option>
 									 			</c:when>
 									 			<c:when test="${data3.MD_TYPE_NUM eq 2}">
-											 		<option value="0" selected="selected">공공사업</option>
+											 		<option value="2" selected="selected">공공사업</option>
 									 			</c:when>
 									 		</c:choose>
 									 	</optgroup>
@@ -1210,10 +1233,10 @@ function drawPQList(list) {
 										 				<option value="0" selected="selected">미포함</option>
 										 			</c:when>
 										 			<c:when test="${data3.SRTX eq 1}">
-										 				<option value="0" selected="selected">포함</option>
+										 				<option value="1" selected="selected">포함</option>
 										 			</c:when>
 										 			<c:when test="${data3.SRTX eq 2}">
-										 				<option value="0" selected="selected">면세</option>
+										 				<option value="2" selected="selected">면세</option>
 										 			</c:when>
 										 		</c:choose>
 										 	</optgroup>
@@ -1230,13 +1253,13 @@ function drawPQList(list) {
 													<option value="0" selected="selected">6개월</option>
 												</c:when>
 												<c:when test="${data3.LOAN_PRD eq 1}">
-													<option value="0" selected="selected">1년</option>
+													<option value="1" selected="selected">1년</option>
 												</c:when>
 												<c:when test="${data3.LOAN_PRD eq 2}">
-													<option value="0" selected="selected">3년</option>
+													<option value="2" selected="selected">3년</option>
 												</c:when>
-												<c:when test="${data3.LOAN_PRD eq 2}">
-													<option value="0" selected="selected">5년</option>
+												<c:when test="${data3.LOAN_PRD eq 3}">
+													<option value="3" selected="selected">5년</option>
 												</c:when>
 											</c:choose>
 										</optgroup>
@@ -1252,10 +1275,10 @@ function drawPQList(list) {
 													<option value="0" selected="selected">원금 균등 상환</option>
 												</c:when>
 												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 1}">
-													<option value="0" selected="selected">원리금 균등 상환</option>
+													<option value="1" selected="selected">원리금 균등 상환</option>
 												</c:when>
 												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 2}">
-													<option value="0" selected="selected">만기 일시 상환</option>
+													<option value="2" selected="selected">만기 일시 상환</option>
 												</c:when>
 											</c:choose>
 										</optgroup>
@@ -1294,6 +1317,7 @@ function drawPQList(list) {
 						<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
 					</div>
 				</form>	
+				<div class="qtnDiv">
 				<form action="#" id="pastQtnActionForm" method="post">
 					<input type="hidden" name="salesNum" value="${param.salesNum}" />
 					<input type="hidden" name="qtnNum" value="${param.qtnNum}" />
@@ -1302,7 +1326,8 @@ function drawPQList(list) {
 					<div class="PQ_title"></div>
 					<hr color="#F2B705" width="925px">
 					<div class="qBox"></div>
-				</form>				
+				</form>		
+				</div>		
 					<!-- ********* 견적 끝 ********* -->
 				<form action="#" id="botOpActionForm" method="post">
 					<input type="hidden" name="qtnNum" value="${data3.QTN_NUM}" />

@@ -79,5 +79,40 @@ FROM INDVDL_CLNT
 WHERE CLNT_NUM = #{clnt_num}
 </select>
 
+<!-- 대응가이드 파트 -->
+<!-- 총 게시글 수 -->
+<select id="getRspndCnt" resultType="Integer">
+SELECT COUNT(*) CNT
+FROM RSPND_GUIDE
+WHERE DEL_CHECK = 1 AND CTGRY_NUM = 2
+</select>
 
+<select id="getRspndList" parameterType="hashmap" resultType="hashmap">
+SELECT R.GUIDE_NUM, C.CTGRY_NAME, E.EMP_NAME, R.CLNT_TYPE, R.TYPE_CASE, R.RSPNS_PLAN, TO_CHAR(R.WRITE_DATE, 'YYYY-MM-DD')AS WRITE_DATE
+FROM(SELECT CTGRY_NUM, CTGRY_NAME
+     FROM RSPND_GUIDE_CTGRY)C INNER JOIN (SELECT GUIDE_NUM, EMP_NUM, CTGRY_NUM, CLNT_TYPE, TYPE_CASE, RSPNS_PLAN, WRITE_DATE, DEL_CHECK,
+                                                 ROW_NUMBER() OVER(ORDER BY GUIDE_NUM DESC) AS RNUM
+                                          FROM RSPND_GUIDE)R
+                                      ON C.CTGRY_NUM = R.CTGRY_NUM
+                              INNER JOIN EMP E
+                                      ON R.EMP_NUM = E.EMP_NUM
+WHERE R.DEL_CHECK = 1 AND R.CTGRY_NUM = 2 AND R.RNUM BETWEEN #{startCnt} AND #{endCnt}
+</select>
+
+<insert id="rspndAdd" parameterType="hashmap">
+INSERT INTO RSPND_GUIDE(GUIDE_NUM, CTGRY_NUM, EMP_NUM, CLNT_TYPE, TYPE_CASE, RSPNS_PLAN)
+VALUES(RSPND_GUIDE_SEQ.NEXTVAL, 2, #{emp_num}, #{clnt_type}, #{type_case}, #{rspns_plan})
+</insert>
+
+<update id="rspndUp" parameterType="hashmap">
+UPDATE RSPND_GUIDE SET CLNT_TYPE = #{clnt_type},
+                       TYPE_CASE = #{type_case},
+                       RSPNS_PLAN = #{rspns_plan}
+WHERE GUIDE_NUM = #{guide_num}
+</update>
+
+<update id="rspndDel" parameterType="hashmap">
+UPDATE RSPND_GUIDE SET DEL_CHECK = 0
+WHERE GUIDE_NUM = #{guide_num}
+</update>
 </mapper>

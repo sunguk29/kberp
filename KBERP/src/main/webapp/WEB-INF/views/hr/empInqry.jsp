@@ -306,6 +306,214 @@ td:nth-child(even) {
 	text-align: center;
 	line-height: 40px;
 }
+
+/* 팝업 내용 */
+
+.popup_cont_element {
+	display: inline-block;
+	vertical-align: top;
+	height: 26px;
+	width: 100%;
+	margin: 0px 0px 10px 0px;
+	-ms-user-select: none; 
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+.popup_cont_name {
+	display: inline-block;
+	vertical-align: center;
+	height: 24px;
+	width: 72px;
+	line-height: 24px;
+	margin-left: 6px;
+	margin-right: 6px;
+	background-color: #ffffff00;
+	font-size: 12px;
+	color: #444444;
+}
+
+
+.popup_cont_text {
+	display: inline-block;
+	vertical-align: center;
+	width: calc(100% - 98px);
+	height: 24px;
+	background-color: #ffffff;
+	text-align: left;
+	font-size: 12px;
+	padding: 0px 0px 0px 4px;
+	margin: 2px 0px 0px 0px;
+	border: 0px;
+	outline: 1px solid #00000033;
+}
+
+.read_popup_cont_text {
+	display: inline-block;
+	vertical-align: center;
+	width: calc(100% - 98px);
+	height: 24px;
+	background-color: #ffffff;
+	text-align: left;
+	font-size: 12px;
+	font-weight: 700;
+	padding: 0px 0px 0px 4px;
+	margin: 2px 0px 0px 0px;
+	border: 0px;
+	outline: 0;
+}
+
+.upld_file {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}
+
+.upld_btn {
+	display: inline-block;
+	vertical-align: bottom;
+	width: 60px;
+	height: 24px;
+	font-size: 8pt;
+	text-align: center;
+	line-height: 22px;
+	outline: 1px solid #bbbbbb;
+	border-radius: 2px;
+	background-color: #dddddd;
+	margin-left: 4px;
+}
+
+.upld_btn:hover {
+	background-color: #d6d6d6;
+	cursor: pointer;
+}
+
+.upld_btn label:hover {
+	cursor: pointer;
+}
+
+.add_popup_area {
+	padding: 10px;
+	outline: 1px solid #cccccc;
+}
+
+#popup_left {
+	display: inline-block;
+	vertical-align: top;
+	width: 385px;
+	height: 355px;
+}
+
+#popup_right {
+	display: inline-block;
+	vertical-align: top;
+	width: 385px;
+	height: 355px;
+	margin-left: 5px;
+}
+
+.add_popup_area_right {
+	display: block;
+}
+
+#popup_right_top {
+	height: 140px;
+}
+
+#popup_right_bottom {
+	height: 190px;
+	margin-top: 5px;
+}
+
+#add_text_area {
+	display: inline-block;
+	vertical-align: top;
+	height: 160px;
+	width: 230px;
+}
+
+#add_zip_code {
+	width: 80px;
+}
+
+#add_adrs {
+	width: 194px;
+	margin-left: 4px;
+}
+
+#add_bnkbk_copy_file {
+	width: calc(100% - 166px);
+}
+
+#add_pctr_wrap {
+	display: inline-block;
+	vertical-align: top;
+	height: 100%;
+	width: 120px;
+	margin-left: 5px;
+	float: right;
+}
+
+#add_pctr_area {
+	display: block;
+	height: 152px;
+	width: 114px;
+	outline: 1px solid #e2e2e2;
+	padding: 4px 3px 4px 3px;
+}
+
+#emp_pctr_area {
+	width: 100%;
+	height: 100%;
+	opacity: 35%;
+	object-fit: contain;
+}
+
+#emp_pctr_file_btn_area {
+	display: block;
+	width: 120px;
+	margin: 5px 0px 0px 0px;
+}
+
+#emp_pctr_instrcn_wrap {
+	height: 130px;
+	width: 230px;
+	padding: 5px;
+}
+
+#right_bottom_e1_name {
+	font-size: 10pt;
+	font-weight: 700;
+}
+
+.emp_pctr_instrcn_title {
+	font-size: 9pt;
+	color: #fe3a40;
+	font-weight: 700;
+	margin-top: 5px;
+}
+.emp_pctr_instrcn_cont {
+	font-size: 8.5pt;
+	color: #ee1a20;
+	font-weight: 500;
+	margin-top: 3px;
+}
+
+#add_emp_pctr_file {
+	width: 100%;
+}
+
+#delete_info_text {
+	margin-left: 10px;
+	font-weight: 700;
+	color: #fe3a40;
+}
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -461,9 +669,32 @@ $(document).ready(function() {
 		}
 	});
 	
+	$("#add_btn").click(function() {
+		$.ajax({
+			type : "post",
+			url : "empInqryActionAjax/select",
+			success : function(res) {
+				if (res.res == "success") {
+					createAddPopup(res.bankList);
+				} else {
+					makeAlert("작업 실패", "작업 중 문제가 발생했습니다.<br/>관리자에게 문의하세요.");
+				}
+			},
+			error : function(request, status, error) {
+				console.log(request.responseText);
+			}
+		});
+	});
+	
+	$("body").on("change", "#add_bank_name", function() {
+		if ($(this).val() == "addBank") {
+			console.log("은행 추가하기");
+		}
+	});
+	
 	$("#del_btn").click(function() {
 		if ($("#empNum").val() != "-1") {
-			
+			deleteCheck();
 		}
 	});
 	
@@ -477,6 +708,39 @@ $(document).ready(function() {
 		$(".popup_bg, .popup").fadeOut(function() {
 			$(".popup_bg, .popup").remove();
 		});
+	});
+	
+	$("body").on("change", "#emp_pctr_file_btn", function() {
+		console.log("check 0");
+		if ($(this).context.files && $(this).context.files[0]) {
+			console.log("check 1");
+			var file = $(this).context.files[0];
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				console.log("check 2");
+				console.log(e);
+				$("#emp_pctr_area").attr("src", e.target.result);
+				$("#emp_pctr_area").css("opacity", "100%");
+			}
+			reader.readAsDataURL(file);
+		} else {
+			console.log("check -1");
+		}
+		console.log("check 3");
+	});
+	
+	$("body").on("change", ".upld_file", function(){
+		var fileName = $(this).val().split("\\");
+		console.log(fileName[fileName.length-1]);
+		switch($(this).attr("id")) {
+		case "bnkbk_copy_file_btn" :
+			$("#add_bnkbk_copy_file").val(fileName[fileName.length-1]);
+			break;
+			
+		case "emp_pctr_file_btn" :
+			$("#add_emp_pctr_file").val(fileName[fileName.length-1]);
+			break;
+		}
 	});
 });
 
@@ -522,9 +786,17 @@ function drawList(list) {
 				html += data.DEPT_NAME;
 			}
 			html += "</div></td> ";
-			html += "	<td><div class=\"td_cont\">" + data.RANK_NAME + "</div></td> ";
+			html += "	<td><div class=\"td_cont\">";
+			if (data.RANK_NAME) {
+				html += data.RANK_NAME;
+			}
+			html += "</div></td> ";
 			html += "	<td><div class=\"td_cont\">" + data.MBL_NUM + "</div></td> ";
-			html += "	<td><div class=\"td_cont\">" + data.JOIN_DATE + "</div></td> ";
+			html += "	<td><div class=\"td_cont\">";
+			if (data.JOIN_DATE != null) {
+				html += data.JOIN_DATE;
+			}
+			html += "</div></td> ";
 			html += "	<td><div class=\"td_cont\">";
 			if (data.HIRE_TYPE == 0) {
 				html += "정규직";
@@ -538,9 +810,15 @@ function drawList(list) {
 				html += "재직";
 			} else if (data.WORK_TYPE == 1) {
 				html += "퇴사";
+			} else if (data.WORK_TYPE == -1) {
+				html += "발령 전";
 			}
 			html += "</div></td> ";
-			html += "	<td><div class=\"td_cont\">" + data.RSGNT_DATE + "</div></td> ";
+			html += "	<td><div class=\"td_cont\">";
+			if (data.RSGNT_DATE != null) {
+				html += data.RSGNT_DATE;
+			}
+			html += "</div></td> ";
 			html += "</tr>                                     ";
 		}
 	}
@@ -601,6 +879,497 @@ function btnSetting() {
 		$("#del_btn").css("color", "#fff");
 	}
 }
+
+function createAddPopup(bankList) {
+	var title = "신규사원 추가";
+	var html = "";
+	var size = [820, 475]; // [width, height]
+	
+	/* 	추가할 내용
+	
+		* EMP
+			- 이름, 영문이름, 사진파일, 생년월일, 성별, 이메일, 우편번호, 주소, 상세주소, 전화번호, 휴대폰번호
+		* SLRY_ACNT
+			- 은행번호, 계좌번호, 예금주, 통장사본파일
+	*/
+	
+	html += "<form action=\"#\" id=\"empAddForm\" method=\"post\">";
+	html += "<input type=\"hidden\" class=\"upld_file_name\" id=\"emp_pctr_file_name\" name=\"emp_pctr_file\" value=\"";
+	html += "\" />";
+	html += "<input type=\"hidden\" class=\"upld_file_name\" id=\"bnkbk_copy_file_name\" name=\"bnkbk_copy_file\" value=\"";
+	html += "\" />";
+	
+	html += "	<div id=\"emp_add_popup\" >                                                                     ";
+	html += "		<div class=\"add_popup_area\" id=\"popup_left\" >";
+	html += "			<div class=\"popup_cont_element\" id=\"add_left_e1\">                                                                                     ";
+	html += "				<label for=\"add_emp_name\" class=\"popup_cont_name\">사원명* :</label>                                                  ";
+	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_emp_name\" name=\"emp_name\" placeholder=\"사원명\" />                          ";
+	html += "			</div>                                                                                                                                    ";
+	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e2\">                                                                                     ";
+	html += "				<label for=\"add_emp_name_eng\" class=\"popup_cont_name\">영문사원명* :</label>                                              ";
+	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_emp_name_eng\" name=\"emp_name_eng\" placeholder=\"사원명(영문)\" />                          ";
+	html += "			</div>                                                                                                                                    ";
+	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e3\">                                                                                     ";
+	html += "				<label for=\"add_brthdt\" class=\"popup_cont_name\">생년월일* :</label>                                                                ";
+	html += "				<input type=\"date\" class=\"popup_cont_text\" id=\"add_brthdt\" name=\"brthdt\" />              ";
+	html += "			</div>                                                                                                                                    ";
+	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e4\">                                                                                     ";
+	html += "				<label for=\"add_emp_name_eng\" class=\"popup_cont_name\">성별* :</label>                                                                ";
+	html += "				<input type=\"radio\" id=\"add_gndr_man\" name=\"gndr\" value=\"0\" /><label class=\"radio_item_name\" for=\"add_gndr_man\">남성</label> ";
+	html += "				<input type=\"radio\" id=\"add_gndr_woman\" name=\"gndr\" value=\"1\" /><label class=\"radio_item_name\" for=\"add_gndr_woman\">여성</label> ";
+	html += "			</div>                                                                                                                                    ";
+	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e5\">                                                                                     ";
+	html += "				<label for=\"add_email\" class=\"popup_cont_name\">이메일* :</label>                                                                ";
+	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_email\" name=\"email\" placeholder=\"이메일\" />              ";
+	html += "			</div>                                                                                                                                    ";
+	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e6\">                                                                                     ";
+	html += "				<label for=\"add_zip_code\" class=\"popup_cont_name\">주소* :</label>                                                                ";
+	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_zip_code\" name=\"zip_code\" placeholder=\"우편번호\" />              ";
+	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_adrs\" name=\"adrs\" placeholder=\"주소\" />              ";
+	html += "			</div>                                                                                                                                    ";
+	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e7\">                                                                                     ";
+	html += "				<label for=\"add_dtl_adrs\" class=\"popup_cont_name\">상세주소* :</label>                                                                ";
+	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_dtl_adrs\" name=\"dtl_adrs\" placeholder=\"상세주소\" />              ";
+	html += "			</div>                                                                                                                                    ";
+	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e8\">                                                                                     ";
+	html += "				<label for=\"add_phone_num\" class=\"popup_cont_name\">전화번호 :</label>                                                                ";
+	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_phone_num\" name=\"phone_num\" placeholder=\"\" />              ";
+	html += "			</div>                                                                                                                                    ";
+	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e9\">                                                                                     ";
+	html += "				<label for=\"add_mbl_num\" class=\"popup_cont_name\">휴대폰번호* :</label>                                                                ";
+	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_mbl_num\" name=\"mbl_num\" placeholder=\"\" />              ";
+	html += "			</div>                                                                                                                                    ";
+	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e10\">                                                                                     ";
+	html += "				<label for=\"add_adrs\" class=\"popup_cont_name\">고용형태* :</label>                                                                ";
+	html += "				<select class=\"popup_cont_text\" id=\"add_hire_type\" name=\"hire_type\">";
+	html += "					<option value=\"0\" selected>정규직</option>";
+	html += "					<option value=\"1\">계약직</option>";
+	html += "					<option value=\"2\">기타</option>";
+	html += "				</select>";
+	html += "			</div>                                                                                                                                    ";
+	
+	
+	html += "		</div>";
+	
+	html += "		<div id=\"popup_right\" >";
+	html += "		<div class=\"add_popup_area\" id=\"popup_right_top\" >";
+	html += "			<div class=\"popup_cont_element\" id=\"edit_right_e1\">                                                                                     ";
+	html += "				<label for=\"add_bank_name\" class=\"popup_cont_name\">은행명* :</label>                                                  ";
+	html += "				<select class=\"popup_cont_text\" id=\"add_bank_name\" name=\"bank_num\">";
+	html += "			<option value=\"-1\" selected>은행을 선택하세요.</option>";
+	for (var bl of bankList) {
+		html += "			<option value=\"" + bl.BANK_NUM + "\">" + bl.BANK_NAME + "</option>";
+	}
+	html += "				<option value=\"addBank\">+ 추가</option>";
+	html += "				</select>";
+	
+	html += "			</div>                                                                                                                                    ";
+	html += "			<div class=\"popup_cont_element\" id=\"edit_right_e2\">                                                                                     ";
+	html += "				<label for=\"add_acnt_num\" class=\"popup_cont_name\">계좌번호* :</label>                                                                ";
+	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_acnt_num\" name=\"acnt_num\" value=\"\" />              ";
+	html += "			</div>                                                                                                                                    ";
+	html += "			<div class=\"popup_cont_element\" id=\"edit_right_e3\">                                                                                     ";
+	html += "				<label for=\"add_dpstr\" class=\"popup_cont_name\">예금주명* :</label>                                                                ";
+	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_dpstr\" name=\"dpstr\" value=\"\" />              ";
+	html += "			</div>                                                                                                                                    ";
+	html += "			<div class=\"popup_cont_element\" id=\"edit_right_e4\">                                                                                     ";
+	html += "				<label for=\"add_bnkbk_copy_file\" class=\"popup_cont_name\">통장사본 :</label>                                                        ";
+	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_bnkbk_copy_file\" readonly=\"readonly\" placeholder=\"파일을 업로드해주세요\" />    ";
+	html += "					<label for=\"bnkbk_copy_file_btn\">";
+	html += "				<div class=\"upld_btn\" id=\"bnkbk_copy_file_btn_area\" >";
+	html += "				<label for=\"bnkbk_copy_file_btn\">업로드</label>"
+	html += "				<input type=\"file\" class=\"upld_file\" id=\"bnkbk_copy_file_btn\" name=\"attFile1\" accept=\"image/*\" />                                                 ";
+	html += "				</div>";
+	html += "					</label>";
+	html += "			</div>                                                                                                                                    ";
+	html += "		</div>";
+	html += "		<div class=\"add_popup_area\" id=\"popup_right_bottom\" >";
+	html += "			<div class=\"popup_cont_element\" id=\"add_right_bottom_e1\">                       ";
+	html += "				<div id=\"add_text_area\">";
+	html += "					<label for=\"add_emp_pctr_file\" class=\"popup_cont_name\" id=\"right_bottom_e1_name\">사원사진</label>                                                        ";
+	html += "					<div id=\"emp_pctr_instrcn_wrap\">";
+	html += "						<div class=\"emp_pctr_instrcn_title\">업로드 유의사항</div>";
+	html += "						<div class=\"emp_pctr_instrcn_cont\">- 가로:세로 비율이 3:4인 증명사진</div>";
+	html += "						<div class=\"emp_pctr_instrcn_cont\">- 단색 배경에서 촬영한 사진</div>";
+	html += "						<div class=\"emp_pctr_instrcn_cont\">- 이미지 파일만 업로드</div>";
+	html += "						<div class=\"emp_pctr_instrcn_cont\">- (확장자 : .jpg, .png)</div>";
+	html += "						<div class=\"emp_pctr_instrcn_cont\">- 단정한 사진으로 올려주세요 ^^</div>";
+	html += "					</div>";
+	html += "					<input type=\"text\" class=\"popup_cont_text\" id=\"add_emp_pctr_file\" readonly=\"readonly\" placeholder=\"파일을 업로드해주세요\" />    ";
+
+	html += "				</div>";
+	html += "				<div id=\"add_pctr_wrap\" >";
+	html += "					<div id=\"add_pctr_area\">";
+	html += "						<img alt=\"사원이미지\" id=\"emp_pctr_area\" src=\"resources/images/cmn/emp_image.png\"/>";
+	html += "					</div>";
+	html += "					<label for=\"emp_pctr_file_btn\">";
+	html += "					<div class=\"upld_btn\" id=\"emp_pctr_file_btn_area\" >";
+	html += "						<label for=\"emp_pctr_file_btn\">업로드</label>"
+	html += "						<input type=\"file\" class=\"upld_file\" id=\"emp_pctr_file_btn\" name=\"attFile2\" accept=\".jpg,.png\" />          ";
+	html += "					</div>";
+	html += "					</label>";
+	html += "				</div>";
+	html += "			</div>             ";
+	html += "		</div>";
+	html += "		</div>";
+	html += "	</div>                                                                                                                                        ";
+
+	html += "</form>";
+	
+	makePopup({
+		bg : true,
+		bgClose : false,
+		width : size[0],
+		height : size[1],
+		title : title,
+		contents : html,
+		buttons : [{
+			name : "추가",
+			func:function() {
+				var flag = false;
+				var file_exist = 0;
+
+				$(".popup_cont_element input").css("outline", "1px solid #00000033");
+				$(".popup_cont_element select").css("outline", "1px solid #00000033");
+				if (checkEmpty("#add_emp_name")) {
+					$("#add_emp_name").css("outline", "2px solid #fe3a40");
+					$("#add_emp_name").focus();
+				} else if (checkEmpty("#add_emp_name_eng")) {
+					$("#add_emp_name_eng").css("outline", "2px solid #fe3a40");
+					$("#add_emp_name_eng").focus();
+				} else if (checkEmpty("#add_brthdt")) {
+					$("#add_brthdt").css("outline", "2px solid #fe3a40");
+					$("#add_brthdt").focus();
+				} else if (!$("#add_gndr_man").is(":checked") && !$("#add_gndr_woman").is(":checked")) {
+					console.log("성별 선택안됨");
+				} else if (checkEmpty("#add_email")) {
+					$("#add_email").css("outline", "2px solid #fe3a40");
+					$("#add_email").focus();
+				} else if (checkEmpty("#add_zip_code")) {
+					$("#add_zip_code").css("outline", "2px solid #fe3a40");
+					$("#add_zip_code").focus();
+				} else if (checkEmpty("#add_adrs")) {
+					$("#add_adrs").css("outline", "2px solid #fe3a40");
+					$("#add_adrs").focus();
+				} else if (checkEmpty("#add_dtl_adrs")) {
+					$("#add_dtl_adrs").css("outline", "2px solid #fe3a40");
+					$("#add_dtl_adrs").focus();
+				} else if (checkEmpty("#add_mbl_num")) {
+					$("#add_mbl_num").css("outline", "2px solid #fe3a40");
+					$("#add_mbl_num").focus();
+				} else if ($("#add_bank_name").val() == "-1") {
+					$("#add_bank_name").css("outline", "2px solid #fe3a40");
+					$("#add_bank_name").focus();
+				} else if (checkEmpty("#add_acnt_num")) {
+					$("#add_acnt_num").css("outline", "2px solid #fe3a40");
+					$("#add_acnt_num").focus();
+				} else if (checkEmpty("#add_dpstr")) {
+					$("#add_dpstr").css("outline", "2px solid #fe3a40");
+					$("#add_dpstr").focus();
+				} else {
+					flag = true;
+				}
+				if (!checkEmpty("#add_bnkbk_copy_file")) {
+					file_exist++;
+				}
+				if (!checkEmpty("#add_emp_pctr_file")) {
+					file_exist++;
+				}
+				if (flag) {
+					if (file_exist > 0) {
+						var editForm = $("#empAddForm");
+						
+						editForm.attr("action", "imageUploadAjax");
+						editForm.ajaxForm({
+							success : function(res) {
+								// 물리파일명 보관
+								if (res.fileName.length > 0) {
+									if (res.fileName.length == 1 && file_exist == 1) {
+										if (!checkEmpty("#add_bnkbk_copy_file")) {
+											$("#bnkbk_copy_file_name").val(res.fileName[0]);
+										}
+										if (!checkEmpty("#add_emp_pctr_file")) {
+											$("#emp_pctr_file_name").val(res.fileName[0]);
+										}
+									} else if (res.fileName.length == 2 && file_exist == 2) {
+										$("#bnkbk_copy_file_name").val(res.fileName[0]);
+										$("#emp_pctr_file_name").val(res.fileName[1]);
+									} else {
+										console.log("뭔가 이상한데..?");
+									}
+									
+									console.log("통장사본: " + $("#bnkbk_copy_file_name").val());
+									console.log("사원사진: " + $("#emp_pctr_file_name").val());
+
+									empAddFormAjaxFunction();
+								}
+							},
+							error : function(request) {
+								console.log(request.responseText);
+							}
+						});
+						
+						editForm.submit();
+					} else {
+						empAddFormAjaxFunction();
+					}
+				}
+			}
+		}, {
+			name : "취소"
+		}]
+	});
+}
+
+function empAddFormAjaxFunction() {
+	var params = $("#empAddForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "empInqryActionAjax/insert",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			if (res.res == "success") {
+				closePopup();
+				createAddSuccessPopup(res.newEmpInfo);
+			} else {
+				makeAlert("작업 실패", "작업 중 문제가 발생했습니다.<br/>관리자에게 문의하세요.");
+			}
+		},
+		error : function(request, status, error) {
+			console.log(request.responseText);
+		}
+	});
+}
+
+function createAddSuccessPopup(params) {
+	var title = "사원추가 성공";
+	var html = "";
+	var size = [360, 270]; // [width, height]
+	
+	html += "	<div id=\"add_success_popup\" >                                                                     ";
+	html += "		<div class=\"popup_cont_element\">                                                                                     ";
+	html += "			<label for=\"add_zip_code\" class=\"popup_cont_name\">사원번호 :</label>                                                                ";
+	html += "			<input type=\"text\" class=\"read_popup_cont_text\" value=\"" + params.EMP_NUM + "\" readonly=\"\" />              ";
+	html += "		</div>                                                                                                                                    ";
+	html += "		<div class=\"popup_cont_element\">                                                                                     ";
+	html += "			<label for=\"add_emp_name\" class=\"popup_cont_name\">사원명 :</label>                                                  ";
+	html += "			<input type=\"text\" class=\"read_popup_cont_text\" value=\"" + params.EMP_NAME + "\" readonly=\"\" />                          ";
+	html += "		</div>                                                                                                                                    ";
+	html += "		<div class=\"popup_cont_element\">                                                                                     ";
+	html += "			<label for=\"add_emp_name_eng\" class=\"popup_cont_name\">영문사원명 :</label>                                              ";
+	html += "			<input type=\"text\" class=\"read_popup_cont_text\" value=\"" + params.EMP_NAME_ENG + "\" readonly=\"\" />                          ";
+	html += "		</div>                                                                                                                                    ";
+	html += "		<div class=\"popup_cont_element\">                                                                                     ";
+	html += "			<label for=\"add_brthdt\" class=\"popup_cont_name\">생년월일 :</label>                                                                ";
+	html += "			<input type=\"text\" class=\"read_popup_cont_text\" value=\"" + params.BRTHDT + "\" readonly=\"\" />              ";
+	html += "		</div>                                                                                                                                    ";
+	html += "		<div class=\"popup_cont_element\">                                                                                     ";
+	html += "			<label for=\"add_emp_name_eng\" class=\"popup_cont_name\">성별 :</label>                                                                ";
+	html += "			<input type=\"text\" class=\"read_popup_cont_text\" value=\"" 
+	if (params.GNDR == "0") {
+		html += "남성";
+	} else {
+		html += "여성";
+	}
+	html += "\" readonly=\"\" />              ";
+	html += "		</div>                          ";
+	html += "	</div>";
+
+	
+	makePopup({
+		bg : true,
+		bgClose : false,
+		width : size[0],
+		height : size[1],
+		title : title,
+		contents : html,
+		buttons : [{
+			name : "확인",
+			func:function() {
+				closePopup();
+				location.reload();
+			}
+		}]
+	});
+}
+
+function createAddBankPopup() {
+	makePopup({
+		bg : true,
+		bgClose : false,
+		width : size[0],
+		height : size[1],
+		title : "신규은행 추가",
+		contents : "",
+		buttons : [{
+			name : "추가",
+			func:function() {
+				var flag = false;
+				
+				if (checkEmpty("#add_lcns_name")) {
+					$("#add_lcns_name").css("outline", "2px solid #fe3a40");
+					$("#add_lcns_name").focus();
+				} else if (checkEmpty("#add_acqrmnt_date")) {
+					$("#add_acqrmnt_date").css("outline", "2px solid #fe3a40");
+					$("#add_acqrmnt_date").focus();
+				} else if (checkEmpty("#add_issue_orgnzt")) {
+					$("#add_issue_orgnzt").css("outline", "2px solid #fe3a40");
+					$("#add_issue_orgnzt").focus();
+				} else {
+					flag = true;
+				}
+				
+				if (flag) {
+					var params = $("#addForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "empInqryActionAjax/addBank",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							if (res.res == "success") {
+								var params = $("#bottomTabForm").serialize();
+								reloadTab(params);
+								closePopup();
+								makeAlert("작업 완료", "추가되었습니다.");
+							} else {
+								makeAlert("작업 실패", "작업 중 문제가 발생했습니다.<br/>관리자에게 문의하세요.");
+							}
+						},
+						error : function(request, status, error) {
+							console.log(request.responseText);
+						}
+					});
+				}
+			}
+		}, {
+			name : "취소"
+		}]
+	});
+}
+
+function deleteCheck() {
+	var params = $("#inqryForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "empInqryActionAjax/deleteCheck",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			if (res.res == "success") {
+				if (res.delCheck == "1") {
+					createDeletePopup(res.edctnLevelCount, res.crCount, res.qlfctnCount);
+				} else {
+					createDeleteFailedPopup();
+				}
+			} else {
+				makeAlert("작업 실패", "작업 중 문제가 발생했습니다.<br/>관리자에게 문의하세요.");
+			}
+		},
+		error : function(request, status, error) {
+			console.log(request.responseText);
+		}
+	});
+}
+
+function createDeletePopup(el, cr, qlfctn) {
+	var title = "사원정보 삭제";
+	var html = "";
+	var size = [330, 230]; // [width, height]
+	
+	html += "	<div id=\"delete_popup\" >                                                                     ";
+	html += "		<div class=\"popup_cont_element\">                                                                                     ";
+	html += "			<label for=\"el_count\" class=\"popup_cont_name\">학력사항 :</label>                                                                ";
+	html += "			<input type=\"text\" class=\"read_popup_cont_text\" id=\"el_count\" value=\"" + el + " 개\" readonly=\"\" />              ";
+	html += "		</div>                                                                                                                                    ";
+	html += "		<div class=\"popup_cont_element\">                                                                                     ";
+	html += "			<label for=\"add_emp_name\" class=\"popup_cont_name\">경력사항 :</label>                                                  ";
+	html += "			<input type=\"text\" class=\"read_popup_cont_text\" id=\"el_count\" value=\"" + cr + " 개\" readonly=\"\" />                          ";
+	html += "		</div>                                                                                                                                    ";
+	html += "		<div class=\"popup_cont_element\">                                                                                     ";
+	html += "			<label for=\"add_emp_name_eng\" class=\"popup_cont_name\">자격사항 :</label>                                              ";
+	html += "			<input type=\"text\" class=\"read_popup_cont_text\" id=\"el_count\" value=\"" + qlfctn + " 개\" readonly=\"\" />                          ";
+	html += "		</div>                                                                                                                                    ";
+	html += "		<div class=\"popup_cont_element\" id=\"delete_info_text\">                                                                                     ";
+	html += "			해당 사원과 연결된 정보도 함께 삭제합니다.";
+	html += "		</div>            ";
+	html += "	</div>";
+
+	
+	makePopup({
+		bg : true,
+		bgClose : false,
+		width : size[0],
+		height : size[1],
+		title : title,
+		contents : html,
+		buttons : [{
+			name : "확인",
+			func:function() {
+				var params = $("#inqryForm").serialize();
+				
+				$.ajax({
+					type : "post",
+					url : "empInqryActionAjax/delete",
+					dataType : "json",
+					data : params,
+					success : function(res) {
+						if (res.res == "success") {
+							console.log("삭제~~");
+							closePopup();
+							makeAlert("작업 완료", "삭제되었습니다.", function() {
+								location.reload();
+							});
+						} else {
+							makeAlert("작업 실패", "작업 중 문제가 발생했습니다.<br/>관리자에게 문의하세요.");
+						}
+					},
+					error : function(request, status, error) {
+						console.log(request.responseText);
+					}
+				});
+			}
+		}, {
+			name : "취소"
+		}]
+	});
+}
+
+function createDeleteFailedPopup() {
+	var title = "사원정보 삭제 불가";
+	var html = "";
+	var size = [400, 150]; // [width, height]
+	
+	html += "	<div id=\"delete_failed_popup\" >                                                                     ";
+	html += "		<div class=\"popup_cont_element\">                                                                                     ";
+	html += "		<div class=\"popup_cont_element\" id=\"delete_failed_info_text\">                                                                                     ";
+	html += "			발령 기록이 존재하는 사원은 삭제할 수 없습니다.";
+	html += "		</div>                                                  ";
+	html += "	</div>";
+	html += "	</div>";
+
+
+	
+	makePopup({
+		bg : true,
+		bgClose : false,
+		width : size[0],
+		height : size[1],
+		title : title,
+		contents : html,
+		buttons : [{
+			name : "확인",
+			func:function() {
+				closePopup();
+			}
+		}]
+	});
+}
+
 </script>
 </head>
 <body>

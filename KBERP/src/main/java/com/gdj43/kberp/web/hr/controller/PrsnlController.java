@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.common.CommonProperties;
 import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
+import com.gdj43.kberp.util.Utils;
 import com.gdj43.kberp.web.common.service.ICommonService;
 import com.gdj43.kberp.web.hr.service.IPrsnlService;
 
@@ -313,6 +314,102 @@ public class PrsnlController {
 			e.printStackTrace();
 		}
 		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
+	@RequestMapping(value = "/empInqryActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String empInqryActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		// 구현 내용
+		try {
+			int check = 0;
+			
+			switch (gbn) {
+			case "select" :
+				List<HashMap<String, String>> bankList = new ArrayList<>();
+				bankList = iCommonService.getDataList("prsnl.getBankList");
+				
+				if (!bankList.isEmpty()) {
+					check = 1;
+					modelMap.put("bankList", bankList);
+				}
+
+				break;
+			case "insert" :
+				params.put("temp_pw", Utils.encryptAES128("1234"));
+				check = iCommonService.insertData("prsnl.addEmp", params); // params.get("newEmpNum") - 새로 추가된 사원의 사원번호
+				if (check == 1) {
+					check = 0;
+					check = iCommonService.insertData("prsnl.addSlryAcnt", params);
+				}
+				HashMap<String, String> newEmpInfo = iCommonService.getData("prsnl.getNewEmpInfo", params);
+				modelMap.put("newEmpInfo", newEmpInfo);
+				break;
+				
+			case "deleteCheck" :
+				int del_check = iCommonService.getIntData("prsnl.delApntmCount", params);
+				if (del_check == 0) {
+					int edctn_level_count = iCommonService.getIntData("prsnl.delEdctnLevelCount", params);
+					int cr_count = iCommonService.getIntData("prsnl.delCrCount", params);
+					int qlfctn_count = iCommonService.getIntData("prsnl.delQlfctnCount", params);
+					modelMap.put("edctnLevelCount", edctn_level_count);
+					modelMap.put("crCount", cr_count);
+					modelMap.put("qlfctnCount", qlfctn_count);
+					modelMap.put("delCheck", "1");
+				} else {
+					modelMap.put("delCheck", "0");
+				}
+				check = 1;
+				break;
+				
+			case "delete" :
+				int del_check_2 = iCommonService.getIntData("prsnl.delApntmCount", params);
+				if (del_check_2 == 0) {
+					int edctn_level_count = iCommonService.getIntData("prsnl.delEdctnLevelCount", params);
+					int cr_count = iCommonService.getIntData("prsnl.delCrCount", params);
+					int qlfctn_count = iCommonService.getIntData("prsnl.delQlfctnCount", params);
+					
+					check = iCommonService.deleteData("prsnl.delEdctnLevel", params);
+					System.out.println("학력사항 삭제 : " + check + " 개");
+					if (check == edctn_level_count) {
+						check = 0;
+						check = iCommonService.deleteData("prsnl.delCr", params);
+						System.out.println("경력사항 삭제 : " + check + " 개");
+						if (check == cr_count) {
+							check = 0;
+							check = iCommonService.deleteData("prsnl.delQlfctn", params);
+							System.out.println("자격사항 삭제 : " + check + " 개");
+							if (check == qlfctn_count) {
+								check = 0;
+								check = iCommonService.deleteData("prsnl.delSlryAcnt", params);
+								System.out.println("계좌정보 삭제 : " + check + " 개");
+								if (check >= 0) {
+									check = 0;
+									check = iCommonService.deleteData("prsnl.delEmp", params);
+									System.out.println("사원 삭제 : " + check + " 명");
+								}
+							}
+						}
+
+					}
+
+				}
+				break;
+			}
+			
+			if (check == 1) {
+				modelMap.put("res", "success");
+			} else {
+				modelMap.put("res", "failed");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			modelMap.put("res", "failed");
+		}
+
 		return mapper.writeValueAsString(modelMap);
 	}
 }

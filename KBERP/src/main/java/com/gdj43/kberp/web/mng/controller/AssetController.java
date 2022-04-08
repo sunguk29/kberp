@@ -121,7 +121,9 @@ public class AssetController {
 			ics.insertData("asset.assetRntlRgstrtn",params);
 			break;
 		case "insertTkt":
+			System.out.println(params);
 			ics.insertData("asset.assetTktRgstrtn",params);
+			ics.updateData("asset.assetTktCntUpdate", params);
 			break;
 		case "update":
 			ics.updateData("asset.drblMdfy",params);
@@ -308,15 +310,15 @@ public class AssetController {
 		
 	}
 	
-	@RequestMapping(value = "/empASrchAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@RequestMapping(value = "/mngmntEmpSrchAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String empASrchAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+	public String mngmntEmpSrchAjax(@RequestParam HashMap<String, String> params) throws Throwable {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		// 총 게시글 수
-		int cnt = ics.getIntData("asset.getEmpCnt", params);
+		int cnt = ics.getIntData("asset.getMngmntEmpCnt", params);
 		
 		// 페이징 계산
 		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
@@ -324,7 +326,7 @@ public class AssetController {
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
-		List<HashMap<String, String>> list = ics.getDataList("asset.getEmpList", params);
+		List<HashMap<String, String>> list = ics.getDataList("asset.getMngmntEmpList", params);
 		
 		modelMap.put("list", list); 
 		modelMap.put("pb", pb);
@@ -340,7 +342,7 @@ public class AssetController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		// 총 게시글 수
-		int cnt = ics.getIntData("asset.useHistoryCnt", params);
+		int cnt = ics.getIntData("asset.useHistoryCnt",params);
 		
 		// 페이징 계산
 		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
@@ -349,6 +351,81 @@ public class AssetController {
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
 		List<HashMap<String, String>> list = ics.getDataList("asset.useHistory", params);
+		
+		modelMap.put("list", list); 
+		modelMap.put("pb", pb);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
+	@RequestMapping(value = "/allEmpSrchAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String allEmpSrchAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		// 총 게시글 수
+		System.out.println(params);
+		int cnt = ics.getIntData("asset.getAllEmpCnt",params);
+		
+		// 페이징 계산
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
+		
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		List<HashMap<String, String>> list = ics.getDataList("asset.getAllEmpList", params);
+		
+		modelMap.put("list", list); 
+		modelMap.put("pb", pb);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
+	@RequestMapping(value = "/assetSrchAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String assetSrchAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		// 총 게시글 수
+		System.out.println(params);
+		int cnt = ics.getIntData("asset.psblassetListCnt",params);
+		
+		// 페이징 계산
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
+		
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		List<HashMap<String, String>> list = ics.getDataList("asset.psblassetList", params);
+		
+		modelMap.put("list", list); 
+		modelMap.put("pb", pb);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
+	@RequestMapping(value = "/tktAssetSrchAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String tktAssetSrchAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		// 총 게시글 수
+		System.out.println(params);
+		int cnt = ics.getIntData("asset.psblTktAssetListCnt",params);
+		
+		// 페이징 계산
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
+		
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		List<HashMap<String, String>> list = ics.getDataList("asset.psblTktAssetList", params);
 		
 		modelMap.put("list", list); 
 		modelMap.put("pb", pb);

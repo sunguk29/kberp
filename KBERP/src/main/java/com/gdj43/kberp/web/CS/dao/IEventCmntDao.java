@@ -9,5 +9,7 @@ public interface IEventCmntDao {
 	public HashMap<String, String> getEventCmnt(HashMap<String, String> params) throws Throwable;
 
 	public int getEventCmntCnt(HashMap<String, String> params) throws Throwable;
+
+	public HashMap<String, String> getEventCmntAdd(HashMap<String, String> params) throws Throwable;
 	
 }

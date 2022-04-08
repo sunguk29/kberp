@@ -35,17 +35,17 @@ $black: #222222;
 }
 
 .orgnzt_btn {
-	border: solid 1px #d7d7d7;
+    border: solid 1px #d7d7d7;
     display: inline-block;
     vertical-align: top;
     padding: 0px 7px;
-    width: 71px;
+    width: 96px;
     height: 32px;
     line-height: 30px;
     font-size: 10pt;
     font-weight: 600;
     text-align: center;
-    background-color: #F2B705;
+    background-color: #f2f2f2;
     margin: 0 2px;
     border-radius: 4px;
     color: #222222;
@@ -55,6 +55,9 @@ $black: #222222;
 .orgnzt_btn:active {
 	background-color: #F2CB05;
 }
+.orgnzt_btn:hover {
+	background-color: #F2CB05;
+}
 
 .orgnzt_area {
     padding: 20px 0 20px 20px;
@@ -62,7 +65,7 @@ $black: #222222;
     vertical-align: top;
     width: 277px;
     height: 455px;
-    border: solid 1px gray;
+    border: solid 1px #d7d7d7;
     border-radius: 6px;
     user-select: none;
 }
@@ -188,7 +191,7 @@ $black: #222222;
     background-image:url(resources/images/hr/folder_icon.png);
     background-repeat: no-repeat;
     background-position:center;
-    background-size: 11px;
+    background-size: 10px;
 }
 
 
@@ -285,7 +288,108 @@ $black: #222222;
 	display: inline-block;
 	/*text-align: center;*/
 }
+.orgnzt_emp_info_box {
+    display: inline-block;
+    vertical-align: top;
+    width: 367px;
+    height: 167px;
+    border: solid 1px #d7d7d7;
+    border-radius: 10px;
+    padding: 6px;
+    margin: 50px;
+ 
+}
 
+.orgnzt_empp_info_box_left {
+    display: inline-block;
+    vertical-align: top;
+    width: 111px;
+    height: 148px;
+    border-radius: 10px;
+    margin: 5px 5px 5px 8px;
+}
+
+.orgnzt_emp_img_wrap {
+    display: inline-block;
+    vertical-align: top;
+    width: 95px;
+    height: 105px;
+    border: solid 1px #d7d7d7;
+    border-radius: 10px;
+    margin: 11px 4px 0 4px;
+}
+
+.orgnzt_emp_name {
+    display: inline-block;
+    vertical-align: top;
+    width: 100px;
+    height: 33px;
+    border-radius: 10px;
+    margin: 5px 5px 5px 5px;
+    color: #2E83F2;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 30px;
+    letter-spacing: 12px;
+    padding-left: 6px;
+   	
+}
+	
+.orgnzt_emp_info_box_right {
+    display: inline-block;
+    vertical-align: top;
+    width: 230px;
+    height: 153px;
+    border-radius: 10px;
+    padding: 5px;
+}
+ 
+.orgnzt_emp_info_wrap {
+    display: inline-block;
+    vertical-align: top;
+    width: 228px;
+    height: 32px;
+    border-radius: 10px;
+    padding: 3px;
+}
+ 
+.orgnzt_emp_info_txt {
+    display: inline-block;
+    vertical-align: top;
+    width: 49px;
+    height: 25px;
+    border-radius: 5px;
+    padding: 2px;
+    color: #444444;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: right;
+    line-height: 30px;
+    letter-spacing: 2px;
+    margin-right: 17px;
+}
+
+.orgnzt_emp_info_input {	
+    display: inline-block;
+    vertical-align: top;
+    width: 143px;
+    height: 22px;
+    border: solid 1px #d7d7d7;
+    border-radius: 2px;
+    padding-left: 5px;
+    margin-top: 6px;
+}
+#cont_right{
+	display: inline-block;
+    vertical-align: top;
+    margin-top: 17px;
+}
+#orgnzt_emp_img {
+	width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
 
 
 </style>
@@ -297,6 +401,13 @@ $(document).ready(function() {
     
 	// 슬림스크롤
 	$(".scroll_area").slimScroll({height: "460px"},{width: "275px"});
+	   
+   // 사원 상세보기 
+   $(".orgnzt_area").on("click", "#orgnztEmp", function() {
+      $("#orgnztEmpNum").val($(this).attr("orgnztEmpNum"));
+
+      reloadEmpInfo();
+   });
 	
 	// 조직추가
 	$("#orgnzt_add_btn").on("click", function() {
@@ -339,7 +450,6 @@ $(document).ready(function() {
 							       data : params,
 							       dataType : "json",
 							       success : function(res) {
-							    	   reloadTree(params);
 									   closePopup();
 									   makeAlert("알림", "부서가 추가되었습니다", function() {
 										   location.reload();
@@ -510,11 +620,11 @@ $(document).ready(function() {
 	
 	// 조직도 토글
 	$(".orgnzt_area").on("click", ".orgnzt_depth1, .orgnzt_depth2, .orgnzt_depth3", function(e) {
+		console.log(this)
 		$("#sdeptNum").val($(this).attr("sdeptNum"));
 		$("#dname").val($(this).attr("dname"));
 		$("#deptLevel").val($(this).attr("deptLevel"));
 		$("#superDeptNum").val($(this).attr("superDeptNum"));
-		console.log(this)
 		var depth = $(this).attr("class").substring(12);
 		var obj = $(this);
 		console.log(depth == "1");
@@ -612,7 +722,7 @@ function drawTree2(dept) {
 function drawTree3(emp) {
 	for(var data of emp){
 		var html = "";
-			html += "<div class=\"orgnzt_depth3\" deptLevel=\"" 
+			html += "<div class=\"orgnzt_depth3\" id=\"orgnztEmp\" orgnztEmpNum=\"" + data.EMP_NUM + "\" deptLevel=\"" 
 			+ (data.DEPT_LEVEL * 1 + 1) +  "\" sdeptNum=\"" + data.DEPT_NUM + "\" dname=\"" + data.DEPT_NAME + "\" superDeptNum=\"" + data.SUPER_DEPT_NUM + "\">  ";
 			html += "	<div class=\"orgnzt_depth3_area\">                     ";
 			html += "		<div class=\"depth_emp_icon\"></div>               ";
@@ -624,9 +734,61 @@ function drawTree3(emp) {
 	}
 }
 
+// 사원 상세정보 리로드
+function reloadEmpInfo() {
+   var params = $("#empInfoForm").serialize();
+   
+   $.ajax({
+      type : "post",
+      url : "orgnztChartActionAjax/empInfo",
+      data : params,
+      dataType : "json",
+      success : function(res) {
+    	  drawEmpInfo(res.empInfo);
+      },
+      error : function(req) {
+         console.log(req.responseText);
+      }
+   });
+   
+}
+// 사원 상세정보 생성
+function drawEmpInfo(empInfo){
+    var html = "";
+    
+    html +=   " <div class=\"orgnzt_emp_info_box\">                                     ";
+	html += "	<div class=\"orgnzt_empp_info_box_left\">                               ";
+	html += "		<div class=\"orgnzt_emp_img_wrap\"><img id=\"orgnzt_emp_img\" src=\"resources/upload/" + empInfo.EMP_PCTR_FILE + "\" /></div>                           ";
+	html += "		<div class=\"orgnzt_emp_name\" id=\"orgnztEmpName\" >" + empInfo.EMP_NAME + "</div>   ";
+	html += "	</div>                                                                  ";
+	html += "	<div class=\"orgnzt_emp_info_box_right\">                               ";
+	html += "		<div class=\"orgnzt_emp_info_wrap\">                                ";
+	html += "			<div class=\"orgnzt_emp_info_txt\" id=\"empDeptName\" >부서</div> ";
+	html += "			<input type=\"text\" class=\"orgnzt_emp_info_input\" readonly=\"readonly\" value=\"" + empInfo.DEPT_NAME + "\"/>          ";
+	html += "		</div>                                                              ";
+	html += "		<div class=\"orgnzt_emp_info_wrap\">                                ";
+	html += "			<div class=\"orgnzt_emp_info_txt\" id=\"empRankName\" >직급</div> ";
+	html += "			<input type=\"text\" class=\"orgnzt_emp_info_input\" readonly=\"readonly\"  value=\"" + empInfo.RANK_NAME + "\"/>          ";
+	html += "		</div>                                                              ";
+	html += "		<div class=\"orgnzt_emp_info_wrap\">                                ";
+	html += "			<div class=\"orgnzt_emp_info_txt\" id=\"empHp\" >연락처</div>   ";
+	html += "			<input type=\"text\" class=\"orgnzt_emp_info_input\" readonly=\"readonly\"  value=\"" + empInfo.PHONE_NUM + "\"/>          ";
+	html += "		</div>                                                              ";
+	html += "		<div class=\"orgnzt_emp_info_wrap\">                                ";
+	html += "			<div class=\"orgnzt_emp_info_txt\" id=\"empMail\" >이메일</div> ";
+	html += "			<input type=\"text\" class=\"orgnzt_emp_info_input\" readonly=\"readonly\"  value=\"" + empInfo.EMAIL + "\"/>          ";
+	html += "		</div>                                                              ";
+	html += "	 </div>                                                                 ";
+	html +=   "</div> ";
+	   
+   $("#cont_right").html(html);
+}
 </script>
 </head>
 <body>
+	<form action="#" id="empInfoForm"> 
+		<input type="hidden" id="orgnztEmpNum" name="orgnztEmpNum" />
+	</form>
 		<input type="hidden" id="dname" /> 
 	<form action="#" id="actionForm">
 		<input type="hidden" id="sdeptNum" name="sdeptNum" value="${sdeptNum}" /> 
@@ -653,10 +815,9 @@ function drawTree3(emp) {
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="cont_left">
 				<div class="orgnzt_btn_area">
-					<input type="button" class="orgnzt_btn" id="emp_edit_btn" value="사원편집" />
-					<input type="button" class="orgnzt_btn" id="orgnzt_add_btn" value="조직추가" />
-					<input type="button" class="orgnzt_btn" id="orgnzt_mdfy_btn" value="조직수정" />
-				    <input type="button" class="orgnzt_btn" id="orgnzt_del_btn" value="조직삭제" />
+					<input type="button" class="orgnzt_btn" id="orgnzt_add_btn" value="부서등록" />
+					<input type="button" class="orgnzt_btn" id="orgnzt_mdfy_btn" value="부서수정" />
+				    <input type="button" class="orgnzt_btn" id="orgnzt_del_btn" value="부서삭제" />
 				</div>
 				<div class="orgnzt_area">
 					<div class="scroll_area">
@@ -672,6 +833,7 @@ function drawTree3(emp) {
 					</div>
 				</div>
 			</div>
+			<div class="cont_right" id="cont_right"></div>
 		</div>
 	</div>
 	<!-- bottom -->

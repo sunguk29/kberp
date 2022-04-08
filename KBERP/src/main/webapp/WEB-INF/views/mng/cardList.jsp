@@ -129,11 +129,18 @@ $(document).ready(function() {
 	//카드번호 클릭 이벤트
 	$("tbody").on("click",".board_table_hover", function() {
 		$("#no").val($(this).attr("no"));
+		$("#mng_num").val($(this).attr("mng_num"));
 		
 		$("#actionForm").attr("action", "cardView");
 		$("#actionForm").submit();
 	});
-	
+	$("#addBtn").on("click",function(){
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		$("#actionForm").attr("action","cardWrite");
+		$("#actionForm").submit();
+	});
 	$("#searchTxt").on("keypress", function(event){
 		if(event.keyCode == 13) {	
 			$("#searchBtn").click();
@@ -160,86 +167,7 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
-	$("#addBtn").on("click", function() {
-		
-		var html="";
-		    html += "<form action=\"fileUploadAjax\" id=\"actionForm\" method=\"post\" enctype=\"multipart/form-data\">";
-		    html += "<div class=\"popup_cont\">";
-		    html += "<table class=\"popup_table\">";
-		    html += "<tbody>";
-		    html += "<tr>";
-		    html += "<td> 카드 번호 </td>";
-		    html += "<td><input type = \"text\" id =\"card_code\" name =\"card_code\" class = \"card_code_cont\" ></td>";  
-			html += "<td> 카드구분 </td>";
-			html += "<td class=\"card_sep_cont\"><select class=\"card_sep_cont\" id =\"card_sep\" name =\"card_sep\">";
-			html +=	"<option value=\"0\">신용</option>";
-			html +=	"<option value=\"1\">체크</option>";
-			html +=	"</select></td>";          
-			html += "</tr>";
-			html += "<tr>";
-			html += "<td> 카드명 </td>";
-			html += "<td><input type = \"text\" class = \"card_name_cont\" id =\"card_name\" name =\"card_name\" ></td>";
-	        html += "<td> 카드사 </td>";
-	        html += "<td class=\"card_sep_cont\"><select id =\"card_co\" name =\"card_co\" class=\"card_co_cont\">";
-			html +=	"<option value=\"1\">농협</option>";
-			html +=	"<option value=\"2\">기업</option>";
-			html +=	"<option value=\"3\">신한</option>";
-			html +=	"<option value=\"4\">현대</option>";
-			html +=	"<option value=\"5\">카카오뱅크</option>";
-			html +=	"</select></td>";     
-	        html += "<tr>";
-	        html += "<td> 카드명의 </td>";
-	        html += "<td><input type = \"text\" class = \"use_name_cont\"  id =\"use_num\" name =\"use_num\" value=\"사번입력\"></td>";
-	        html += "<td></td>";
-	        html += "<td></td>";
-	        html += "</tr>";
-	        html += "<tr>";
-	        html += "<td> 발급일자 </td>";
-	        html += "<td class = \"use_date_cont\"><input type = \"date\" class = \"use_date_cont\" id =\"issue_dt\" name =\"issue_dt\"></td>";
-	        html += "<td> 종료일자 </td>";
-	        html += "<td class = \"use_date_cont\"><input type = \"date\" class = \"use_date_cont\" id =\"end_dt\" name =\"end_dt\"></td>";
-	        html += "</tr>";
-	        html += "</tbody>";
-	        html +=	"</table>";
-			html += "</div>";
-			html += "</form>";
-		makePopup({
-			depth:1,
-			bg : true,
-			width : 550,
-			height : 300,
-			title : "카드등록",
-			contents : html,
-			buttons : [{
-				name : "등록",
-				func:function() {
-					var params = $("#actionForm").serialize();
-					
-					$.ajax({
-						type : "post", // 전송 형태
-						url : "cardMngAction/insert", // 통신 주소
-						dataType : "json", // 받을 데이터 형태
-						data : params, // 보낼 데이터. 보낼 것이 없으면 안 씀
-						success : function(res) { // 성공 시 실행 함수. 인자는 받아온 데이터
-							if(res.res=="success"){
-								$("#actionForm").attr("action","cardList");
-								$("#actionForm").submit();
-							}else {
-								alert("저장 중 문제가 발생했습니다.");
-							}
-						},
-						error : function(request, status, error) { // 문제 발생 시 실행 함수
-							console.log(request.responseText); // 결과 텍스트
-						}
-					});
-			
-					closePopup();
-				}
-			}, {
-				name : "취소"
-			}]
-		});
-	})
+
 });
 function reloadList() { // 목록 조회용 + 페이징 조회용
 	var params = $("#actionForm").serialize();
@@ -260,13 +188,14 @@ function reloadList() { // 목록 조회용 + 페이징 조회용
 	});
 }
 
+
 function drawList(list) {
 	var html = "";
 	
 	for(var data of list) {
 		//html += "<tr no=\"" + data.CARD_NUM + "\">";
 		html += "<tr>";
-		html += "<td class=\"board_table_hover\" id=\"clickCard\" no=\"" + data.CARD_NUM +  "\">" + data.CARD_NUM + "</td>";
+		html += "<td class=\"board_table_hover\" id=\"clickCard\" mng_num=\"" + data.MNG_NUM +  "\" no=\"" + data.CARD_NUM +  "\">" + data.CARD_NUM + "</td>";
 		html += "<td>" + data.CARD_NAME + "</td>";
 		if(data.USE_START_DT!=null)
 			html += "<td>" + data.EMP_NAME + "</td>";
@@ -309,6 +238,7 @@ function drawPaging(pb) {
 	   $(".pgn_area").html(html);
 
 	}
+
 </script>
 </head>
 <body>
@@ -325,10 +255,12 @@ function drawPaging(pb) {
 			<div class="page_title_text">카드 관리</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
+
 		<form action="#" id="actionForm" method="post">
 			<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
 			<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
 			<input type="hidden" id="no" name="no"/>
+			<input type="hidden" id="mng_num" name="mng_num"/>
 			<input type="hidden" id="page" name="page" value="${page}" />
 				<select class="srch_sel">
 					<option>카드번호</option>

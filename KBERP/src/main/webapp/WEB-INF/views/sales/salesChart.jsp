@@ -514,7 +514,6 @@ function drawMngPaging(pb) {
 		<div class="page_title_bar">
 			<div class="page_title_text">보고서 - 영업</div>
 			<!-- 검색영역 선택적 사항 -->
-		<!--  -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">

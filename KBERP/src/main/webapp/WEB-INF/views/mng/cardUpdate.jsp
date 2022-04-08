@@ -121,8 +121,7 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-	reloadList();
-	
+
 	
 	$("#cancelBtn").on("click", function(){
 		$("#backForm").submit();
@@ -145,15 +144,19 @@ $(document).ready(function() {
 			}
 		});
 	});	
-	
 	$("#updateBtn").on("click", function() {
+		if(checkEmpty("#issue_dt")) {
+			alert("발급일자를 입력하세요.")
+			$("#issue_dt").focus();
+		} else if(checkEmpty("#end_dt")) {
+			alert("종료일자를 입력하세요.")
+			$("#end_dt").focus();
+		} else {
 			var updateForm = $("#updateForm");
 			
 			updateForm.ajaxForm({
 				success : function(res) {
-					// 물리파일명 보관
-					if(res.fileName.length > 0) {
-						$("#attFile").val(res.fileName[0]);						
+
 					// 글 저장
 					var params = $("#updateForm").serialize();
 					
@@ -182,6 +185,7 @@ $(document).ready(function() {
 			updateForm.submit(); // ajaxForm 실행	
 		}
 	});
+	
 });
 
 </script>
@@ -197,6 +201,7 @@ $(document).ready(function() {
 	<!-- 내용영역 -->
 <form action="cardView" id="backForm" method="post">
 	<input type="hidden" name="no" value="${param.no}" />
+	<input type="hidden" name="mng_num" value="${param.mng_num}" />
 	<input type="hidden" name="page" value="${param.page}" />
 	<input type="hidden" name="searchMon" value="${param.searchMon}" />
 	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
@@ -210,6 +215,7 @@ $(document).ready(function() {
 		<!-- 해당 내용에 작업을 진행하시오. -->
 <form action="#" id="updateForm" method="post" enctype="multipart/form-data">
 <input type="hidden" name="no" value="${param.no}" />
+<input type="hidden" name="mng_num" value="${param.mng_num}" />
 <input type="hidden" name="page" value="${param.page}" />
 <input type="hidden" name="searchMon" value="${param.searchMon}" />
 <input type="hidden" name="searchGbn" value="${param.searchGbn}" />
@@ -273,7 +279,7 @@ $(document).ready(function() {
          </tr>
  		<tr>
             <td> 폐기일자 </td>
-               <td colspan=3 class = "del_cont">${data.DSCRD_DT}</td>
+               <td class = "del_cont"><input type ="date" class ="use_date_cont" id ="del_dt" name ="del_dt" value="${data.DSCRD_DT}"></td>
          </tr>
          </tbody>
 			</table>
@@ -281,7 +287,6 @@ $(document).ready(function() {
 				<div class="pgn_area">
 				</div>
 				<div class="cmn_btn" id="updateBtn">수정</div>
-				<div class="cmn_btn" id="delBtn">폐기</div>
 				<div class="cmn_btn" id="cancelBtn">취소</div>
 			</div>
 		</div>
