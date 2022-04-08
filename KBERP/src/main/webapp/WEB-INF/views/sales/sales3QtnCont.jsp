@@ -426,6 +426,10 @@ pre {
 	font-family: "맑은 고딕";
     margin-top: 3px;
 }
+.qtnDiv {
+	width: 100%;
+	height: 100%;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -457,6 +461,7 @@ $(document).ready(function() {
 			success : function(res) {
 				$("#actionForm").attr("action", "sales3QtnReg");
 				$("#actionForm").submit();
+				console.log("여기도?");
 			},
 			error : function(req) {
 				console.log(req.responseText);
@@ -619,7 +624,7 @@ $(document).ready(function() {
 	
 	
 	
-	//대출금액
+ 	//대출금액
 	var loanAmnt = ${data3.LOAN_AMNT};
 	//대출기간
 	var loanPrd
@@ -638,18 +643,18 @@ $(document).ready(function() {
 	var mIntrstRate = (intrstRate / 12);
 	
 	//월 납부액
-	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 0 ) { // 원금 균등 상환
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM eq 0}) { // 원금 균등 상환
 		$("#monthPymntAmnt").val(Math.round(loanAmnt / loanPrd));
 		$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
 	}
-	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 1 ) { // 원리금 균등 상환
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM eq 1}) { // 원리금 균등 상환
 		var temp1 = Math.pow(1 + mIntrstRate, loanPrd) - 1;
 		var temp2 = loanAmnt * mIntrstRate * Math.pow(1 + mIntrstRate, loanPrd);
 		$("#monthPymntAmnt").val(Math.round(temp2 / temp1));
 		$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
 	}
-	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 2 ) { // 만기 일시 상환
-		if(${data3.INTRST_PYMNT_MTHD_NUM} != 2) {
+	if(${data3.PRNCPL_PYMNT_MTHD_NUM eq 2}) { // 만기 일시 상환
+		if(${data3.INTRST_PYMNT_MTHD_NUM ne 2}) {
 			$("#monthPymntAmnt").val("0");
 			$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
 		}
@@ -716,13 +721,16 @@ function reloadSgstnList() {
 		dataType : "json",
 		data : params,
 		success : function(res) {
-			drawPQCnt(res.PQListCnt);
-			drawPQList(res.list);
-			console.log("ok");
+			if(res.PQListCnt != 0) {
+				drawPQCnt(res.PQListCnt);
+				drawPQList(res.list);
+				$(".qtnDiv").show();
+			} else {
+				$(".qtnDiv").hide();
+			}
 		},
 		error : function(req) {
 			console.log(req.responseText);
-			console.log("no");
 		}
 	});
 }
@@ -777,7 +785,7 @@ function drawPQList(list) {
 		<div class="page_title_bar">
 			<div class="page_title_text">영업관리 - 견적 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
-				<img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" id="printBtn" />
+				<!-- <img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" id="printBtn" /> -->
 				<img alt="수정버튼" src="resources/images/sales/newAdd.png" class="btnImg" id="updateBtn" data-toggle="tooltip" title="견적서 추가하기" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>
@@ -1309,6 +1317,7 @@ function drawPQList(list) {
 						<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
 					</div>
 				</form>	
+				<div class="qtnDiv">
 				<form action="#" id="pastQtnActionForm" method="post">
 					<input type="hidden" name="salesNum" value="${param.salesNum}" />
 					<input type="hidden" name="qtnNum" value="${param.qtnNum}" />
@@ -1317,7 +1326,8 @@ function drawPQList(list) {
 					<div class="PQ_title"></div>
 					<hr color="#F2B705" width="925px">
 					<div class="qBox"></div>
-				</form>				
+				</form>		
+				</div>		
 					<!-- ********* 견적 끝 ********* -->
 				<form action="#" id="botOpActionForm" method="post">
 					<input type="hidden" name="qtnNum" value="${data3.QTN_NUM}" />
