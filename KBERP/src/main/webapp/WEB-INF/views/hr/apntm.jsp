@@ -1457,7 +1457,7 @@ function drawList(list) {
       html += "<td>" + data.RANK_NAME + "</td>"           ;
       html += "<td>" + data.START_DATE + "</td>"          ;
       if(data.STS_NUM == "0") {
-     	 html += "<td>결재진행중ㄴ</td>"           ;
+     	 html += "<td>결재진행중</td>"           ;
       } else if(data.STS_NUM == "1") {
      	 html += "<td style=\"color:#4B94F2;\">결재완료</td>"           ;
       } else if(data.STS_NUM == "2") {
