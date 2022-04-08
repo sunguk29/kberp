@@ -27,8 +27,7 @@ public class CommonAOP {
 			+ "&&!execution(* com.gdj43.kberp..*Controller.*Ajax(..))"
 			+ "&&!execution(* com.gdj43.kberp..*Controller.loc(..))"
 			+ "&&!execution(* com.gdj43.kberp..*Controller.*login*(..))"
-			+ "&&!execution(* com.gdj43.kberp..*Controller.*logout*(..))"
-			+ "&&!execution(* com.gdj43.kberp..clnt..*Controller.*(..))")
+			+ "&&!execution(* com.gdj43.kberp..*Controller.*logout*(..))")
 	public void testAOP() {}
 	
 	@Around("testAOP()")
