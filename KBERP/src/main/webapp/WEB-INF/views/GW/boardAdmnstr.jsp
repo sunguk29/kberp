@@ -35,7 +35,7 @@
 .tree{
 	display: inline-block;
 	border: 1px solid #6f6f65;
-	height: 390px;
+	height: 520px;
 	width: 220px;
 	margin-bottom: 20px;
 	font-size: 12px;
@@ -76,6 +76,152 @@
 /* 개인 작업 영역 */
 
 </style>
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	reloadList();
+
+	
+$("#writeBtn").on("click", function () {
+	 // getData() : 입력된 데이터 취득
+     if(checkEmpty("#ctgry_name")){
+        alert("카테고리명을 입력하세요.");
+        $("#ctgry_name").focus();
+      } else {
+   	var actionForm = $("#actionForm");
+   	
+   	actionForm.ajaxForm({
+   		success : function(res) {
+				
+				//글 저장
+				var params = $("#actionForm").serialize();
+		        
+		        $.ajax({
+		        	 type : "post",
+		        	 url : "admnstrAction/insert",
+		        	 dataType : "json",
+		        	 data : params,
+		        	 success : function(res) {
+		        		 if(res.res == "success"){
+		        			 $("#locationForm").attr("action", "boardAdmnstr");
+		        			 $("#locationForm").submit();
+		        		 } else{
+		        			 alert("작성중 문제가 발생하였습니다.");
+		        		 }
+		   			},
+		   			error : function(request, status, error) {
+		   				console.log(request.responseText);
+		   			}
+		     	 }); // ajax end
+			}, // success end
+			error : function(req) {
+				console.log(req.responseText);
+			} // error end
+   	}); // ajaxForm end
+   	
+   	actionForm.submit(); // ajaxForm 실행
+    } // else end
+ }); // writeBtn click end
+$("#deleteBtn").on("click", function() {
+		if(confirm("삭제하시겠습니까?")) {
+		
+		var tr = $(this).parent().parent();
+				
+		var params = $("#actionForm").serialize();
+		
+		$.ajax({
+        	 type : "post",
+        	 url : "admnstrAction/delete",
+        	 dataType : "json",
+        	 data : params,
+        	 success : function(res) {
+        		 if(res.res == "success"){
+        			 reloadList(); 
+        			 console.log($("#admstrName").val());
+        			 console.log($("#admstrName").val());
+        			 console.log($("#admstrName").val());
+         		 } else{
+        			 alert("삭제중 문제가 발생하였습니다.");
+        		 }
+   			},
+   			error : function(request, status, error) {
+   				console.log(request.responseText);
+   			}
+     	 });
+	}	
+});
+$("tbody").on("click", "tr", function() {
+	var state = $(this).find(".item_selected").val();
+	var flag = $(this).find(".val_existed").val();
+	if (flag == "true") {
+		if (state == "false") {
+			$(this).parent("tbody").find(".table_item .item_selected").val("false");
+			$(this).find(".item_selected").val("true");
+			
+			$("#admstrName").val($(this).attr("name"));
+			
+			console.log("selected : " + $("#admstrName").val());
+	
+			$(this).parent("tbody").find(".table_item").children("td:nth-child(odd)").css("background-color", "#ffffff");
+			$(this).parent("tbody").find(".table_item").children("td:nth-child(even)").css("background-color", "#ffffff");
+			
+			$(this).children("td").css("background-color", "#ef9a9a");
+		} else {
+			$(this).find(".item_selected").val("false");
+			
+			
+			console.log("unselected");
+			
+			$(this).children("td:nth-child(odd)").css("background-color", "#ffffff");
+			$(this).children("td:nth-child(even)").css("background-color", "#ffffff");
+		}
+	}
+});
+
+ 
+ 
+});// document end
+function reloadList() { // 목록 조회용
+	  var params = $("#actionForm").serialize();
+  
+  $.ajax({
+ 	 type : "post",
+ 	 url : "admnstrAjax",
+ 	 dataType : "json",
+ 	 data : params,
+ 	 success : function(res) {
+ 		 	console.log(res);
+ 		 	drawList(res.list);
+			},
+			error : function(request, status, error) {
+				console.log(request.responseText);
+			}
+  });
+	
+}
+function drawList(list) {
+	var html = "";
+	
+	for(var data of list){
+		html += "<tr class=\"table_item\" name=\"" + data.CTGRY_NAME + "\">    ";
+		html += "	<input type=\"hidden\" class=\"item_selected\" value=\"false\" />        ";
+		html += "	<input type=\"hidden\" class=\"val_existed\" value=\"true\" />        ";
+		html += "<td>" + data.BOARD_ADMNSTRTN_NUM + "</td>";
+		html += "<td class=\"tree_list\">" + data.CTGRY_NAME + "</td>";
+		html += "</tr>";
+	}
+	$("tbody").html(html);
+}
+
+function checkEmpty(sel) {
+	if($.trim($(sel).val()) == "") {
+		return true;
+	} else {
+		return false;
+	}
+	
+}
+</script>
 </head>
 <body>
 <!-- top & left -->
@@ -84,43 +230,49 @@
 		<c:param name="menuNum">${param.menuNum}</c:param>
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
-	</c:import>
-	<!-- 내용영역 -->
-<div class="right_area">
-	<div class="navi_bar">
-		Home
-		<div class="navi_next"></div>
-		그룹웨어
-		<div class="navi_next"></div>
-		게시판
-		<div class="navi_next"></div>
-		게시판 관리
-	</div>
+	</c:import>	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
-		<div class="page_title_bar">
-			<div class="page_title_text">게시판 관리
-			<div class="emp_opt_btn"></div></div>
-			<!-- 검색영역 선택적 사항 -->
-			<h1 class="cont_title">카테고리 관리·설정</h1>
+			<div class="page_title_bar">
+				<div class="page_title_text">게시판관리<div class="emp_opt_btn"></div></div>				
+		<!-- 해당 내용에 작업을 진행하시오. -->
+		
+		
+		
+		</div>
+		<div class="cont_area">
+		<form action="#" id="actionForm" method="post">
+					<input type="hidden" id="top" name="top" value="${param.top}" />
+					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+					
+		<h1 class="cont_title">카테고리 관리·설정</h1>
 				<div class="tree">
-					<div class="tree_list">자유게시판(10)</div><br/>
-					<div class="tree_list">공용문서함(0)</div><br/>
+					<table class="board_table">
+				<colgroup>
+					<col width="50"/>
+					<col width="100"/>
+				</colgroup>
+				<thead>
+					<tr>
+						<th>No</th>
+						<th>카테고리명</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
 				</div>
 				<div class="ctgr_name">카테고리명
-					<input type="text" class="tltle_input_box" placeholder="제목을 입력하세요">
+					<input type="hidden" id="admstrName" name="admstrName"/>
+					<input type="hidden" id="writer" name="writer" value="${sEmpNum}"/>
+					<input type="text" id= "ctgry_name" name = "ctgry_name" class="tltle_input_box" placeholder="카테고리명을 입력하세요">
 				</div>
-			<div class="cmn_btn">카테고리 추가</div>
-			<div class="cmn_btn_ml">삭제</div>
-			
+			<div class="cmn_btn" id="writeBtn">카테고리 추가</div>
+			<div class="cmn_btn_ml" id="deleteBtn">삭제</div>
+		</form>
 		</div>
-		
-		<!-- 해당 내용에 작업을 진행하시오. -->
-		<div class="cont_area">
-			<!-- 여기부터 쓰면 됨 -->
-		
 		</div>
-	</div>
-</div>
+<!-- bottom -->
+	<c:import url="/bottom"></c:import>
 </body>
 </html>

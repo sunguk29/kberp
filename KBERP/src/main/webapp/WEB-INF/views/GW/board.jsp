@@ -156,7 +156,7 @@ function drawPaging(pb) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">임시게시판</div>
+			<div class="page_title_text" >게시판</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
 			<form action="#" id="actionForm" method="post">
@@ -165,6 +165,7 @@ function drawPaging(pb) {
 					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 					<input type="hidden" id="no" name="no"/>
 					<input type="hidden" id="page" name="page" value="${page}"/>
+					
 					<select id="searchGbn" name="searchGbn">
 						<option value="0">제목</option>
 						<option value="1">내용</option>
