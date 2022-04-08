@@ -455,9 +455,7 @@ $(document).ready(function() {
 					<!-- 첨부파일 -->
 					<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
 					<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
-					<div class="rvn_txt">
-						첨부파일
-					</div>
+					<div class="rvn_txt"> 첨부파일</div>
 					<div class="cntrct_box_in">
 						<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
 					</div>
