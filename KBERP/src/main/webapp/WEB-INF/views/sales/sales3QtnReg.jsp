@@ -976,8 +976,13 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
+<<<<<<< HEAD
+											$("#addForm").attr("action", "sales3QtnCont");
+											$("#addForm").submit();
+=======
 											$("#contForm").attr("action", "sales3QtnCont");
 											$("#contForm").submit();
+>>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 										} else {
 											alert("등록중 문제가 발생하였습니다.");
 										}
@@ -2279,7 +2284,12 @@ function test(t) {
 <!-- ************************************************ 견적 시작 ************************************************ -->
 						<hr class="hr_bot" color="#4B94F2" width="925px">
 				<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
+					<input type="hidden" id="page" name="page" value="${page}" />
+					<input type="hidden" name="top" value="${param.top}" />
+					<input type="hidden" name="menuNum" value="${param.menuNum}" />
+					<input type="hidden" name="menuType" value="${param.menuType}" />
 					<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
+					<input type="hidden" name="qtnNum" value="${param.qtnNum}" /> <!-- 견적 번호 -->
 					<input type="hidden" id= "mdNum" name="mdNum" />
 					<input type="hidden" id= "mdName" name="mdName" />
 					<div class="bot_title"><h3>견적<div class="drop_btn"></div></h3></div>
