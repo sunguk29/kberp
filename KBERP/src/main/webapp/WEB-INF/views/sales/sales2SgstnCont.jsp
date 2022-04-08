@@ -304,7 +304,7 @@ textarea {
     border-radius: 7px;
     margin-bottom: 18px;
     margin-left: 45px;
-    font-size: 12pt;
+    font-size: 10pt;
 }
 .btnImg_in{
 	display: inline-block;

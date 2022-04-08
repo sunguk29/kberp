@@ -285,6 +285,10 @@ public class SalesMngController {
 		HashMap<String, String> sales2DataClntCmpny = iCommonService.getData("salesMng.getSales3BringClntCmpny", params);
 		HashMap<String, String> sales2DataDtlInfo = iCommonService.getData("salesMng.getSales3BringDtlInfo", params);
 		
+		HashMap<String, String> data = iCommonService.getData("salesMng.getSales1", params);
+		HashMap<String, String> data2 = iCommonService.getData("salesMng.getSales2", params);
+		HashMap<String, String> data3 = iCommonService.getData("salesMng.getSales3", params);
+		
 		mav.addObject("lead", sales1DataLead);
 		mav.addObject("loan", sales1DataLoan);
 		mav.addObject("bsns", sales1DataBsns);
@@ -292,7 +296,12 @@ public class SalesMngController {
 		mav.addObject("loanS", sales2DataLoan);
 		mav.addObject("ccS", sales2DataClntCmpny);
 		mav.addObject("dtlS", sales2DataDtlInfo);
-		// 제안 첨부파일은X
+		
+		
+		
+		mav.addObject("data", data);
+		mav.addObject("data2", data2);
+		mav.addObject("data3", data3);
 		 
 		mav.setViewName("sales/sales3QtnReg");
 		 
