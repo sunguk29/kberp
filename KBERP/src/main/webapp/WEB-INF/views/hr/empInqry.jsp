@@ -721,8 +721,6 @@ $(document).ready(function() {
 	
 	$("#inqry_btn").on("click", function() {
 		if ($("#empNum").val() != "-1") {
-			console.log($("#empNum").val());
-			
 			$("#i_menuNum").val("5");
 			
  			$("#inqryForm").attr("action", "prsnlCard");
@@ -747,12 +745,6 @@ $(document).ready(function() {
 		});
 	});
 	
-	$("body").on("change", "#add_bank_name", function() {
-		if ($(this).val() == "addBank") {
-			console.log("은행 추가하기");
-		}
-	});
-	
 	$("#del_btn").click(function() {
 		if ($("#empNum").val() != "-1") {
 			deleteCheck();
@@ -772,27 +764,20 @@ $(document).ready(function() {
 	});
 	
 	$("body").on("change", "#emp_pctr_file_btn", function() {
-		console.log("check 0");
 		if ($(this).context.files && $(this).context.files[0]) {
-			console.log("check 1");
 			var file = $(this).context.files[0];
 			var reader = new FileReader();
 			reader.onload = function(e) {
-				console.log("check 2");
 				console.log(e);
 				$("#emp_pctr_area").attr("src", e.target.result);
 				$("#emp_pctr_area").css("opacity", "100%");
 			}
 			reader.readAsDataURL(file);
-		} else {
-			console.log("check -1");
 		}
-		console.log("check 3");
 	});
 	
 	$("body").on("change", ".upld_file", function(){
 		var fileName = $(this).val().split("\\");
-		console.log(fileName[fileName.length-1]);
 		switch($(this).attr("id")) {
 		case "bnkbk_copy_file_btn" :
 			$("#add_bnkbk_copy_file").val(fileName[fileName.length-1]);
@@ -946,7 +931,7 @@ function btnSetting() {
 }
 
 function numMaxLimit(e) {
-	if (e.value.length == 4) {
+	if (e.value.length >= 4) {
 		if (e.className.indexOf("phone_num_1") != -1) {
 			$("#" + e.id).parent("div").children(".phone_num_2").focus();
 		}
@@ -999,7 +984,7 @@ function createAddPopup(bankList) {
 	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e4\">                                                                                     ";
 	html += "				<label for=\"add_emp_name_eng\" class=\"popup_cont_name\">성별* :</label>                                                                ";
 	html += "				<label class=\"add_popup_radio_wrap\" for=\"add_gndr_man\" >";
-	html += "				<input type=\"radio\" id=\"add_gndr_man\" name=\"gndr\" value=\"0\" /><div class=\"add_popup_radio_item_name\">남성</div> ";
+	html += "				<input type=\"radio\" id=\"add_gndr_man\" name=\"gndr\" value=\"0\" checked=\"checked\" /><div class=\"add_popup_radio_item_name\">남성</div> ";
 	html += "				</label>";
 	html += "				<label class=\"add_popup_radio_wrap\" for=\"add_gndr_woman\" >";
 	html += "				<input type=\"radio\" id=\"add_gndr_woman\" name=\"gndr\" value=\"1\" /><div class=\"add_popup_radio_item_name\">여성</div> ";
@@ -1066,7 +1051,6 @@ function createAddPopup(bankList) {
 	for (var bl of bankList) {
 		html += "			<option value=\"" + bl.BANK_NUM + "\">" + bl.BANK_NAME + "</option>";
 	}
-	html += "				<option value=\"addBank\">+ 추가</option>";
 	html += "				</select>";
 	
 	html += "			</div>                                                                                                                                    ";
@@ -1135,7 +1119,8 @@ function createAddPopup(bankList) {
 				var flag = false;
 				var file_exist = 0;
 
-				$(".popup_cont_element input").css("outline", "1px solid #00000033");
+				$(".popup_cont_element input[type=text]").css("outline", "1px solid #00000033");
+				$(".popup_cont_element input[type=date]").css("outline", "1px solid #00000033");
 				$(".popup_cont_element select").css("outline", "1px solid #00000033");
 				if (checkEmpty("#add_emp_name")) {
 					$("#add_emp_name").css("outline", "2px solid #fe3a40");
@@ -1162,7 +1147,6 @@ function createAddPopup(bankList) {
 					$("#add_dtl_adrs").focus();
 				} else if (($("#phone_num_sel").val() == "-1" || checkEmpty("#add_phone_num_1") || checkEmpty("#add_phone_num_2")) &&
 						!($("#phone_num_sel").val() == "-1" && checkEmpty("#add_phone_num_1") && checkEmpty("#add_phone_num_2"))){
-					console.log("check 1");
 					if ($("#phone_num_sel").val() == "-1") {
 						$("#phone_num_sel").css("outline", "2px solid #fe3a40");
 						$("#phone_num_sel").focus();
@@ -1174,7 +1158,6 @@ function createAddPopup(bankList) {
 						$("#add_phone_num_2").focus();
 					}
 				} else if ($("#mbl_num_sel").val() == "-1" || checkEmpty("#add_mbl_num_1") || checkEmpty("#add_mbl_num_2")){
-					console.log("check 2");
 					if ($("#mbl_num_sel").val() == "-1") {
 						$("#mbl_num_sel").css("outline", "2px solid #fe3a40");
 						$("#mbl_num_sel").focus();
@@ -1195,7 +1178,6 @@ function createAddPopup(bankList) {
 					$("#add_dpstr").css("outline", "2px solid #fe3a40");
 					$("#add_dpstr").focus();
 				} else {
-					console.log("check 3");
 					flag = true;
 				}
 				if (!checkEmpty("#add_bnkbk_copy_file")) {
@@ -1312,7 +1294,6 @@ function createAddSuccessPopup(params) {
 	html += "		</div>                          ";
 	html += "	</div>";
 
-	
 	makePopup({
 		bg : true,
 		bgClose : false,
@@ -1326,62 +1307,6 @@ function createAddSuccessPopup(params) {
 				closePopup();
 				location.reload();
 			}
-		}]
-	});
-}
-
-function createAddBankPopup() {
-	makePopup({
-		bg : true,
-		bgClose : false,
-		width : size[0],
-		height : size[1],
-		title : "신규은행 추가",
-		contents : "",
-		buttons : [{
-			name : "추가",
-			func:function() {
-				var flag = false;
-				
-				if (checkEmpty("#add_lcns_name")) {
-					$("#add_lcns_name").css("outline", "2px solid #fe3a40");
-					$("#add_lcns_name").focus();
-				} else if (checkEmpty("#add_acqrmnt_date")) {
-					$("#add_acqrmnt_date").css("outline", "2px solid #fe3a40");
-					$("#add_acqrmnt_date").focus();
-				} else if (checkEmpty("#add_issue_orgnzt")) {
-					$("#add_issue_orgnzt").css("outline", "2px solid #fe3a40");
-					$("#add_issue_orgnzt").focus();
-				} else {
-					flag = true;
-				}
-				
-				if (flag) {
-					var params = $("#addForm").serialize();
-					
-					$.ajax({
-						type : "post",
-						url : "empInqryActionAjax/addBank",
-						dataType : "json",
-						data : params,
-						success : function(res) {
-							if (res.res == "success") {
-								var params = $("#bottomTabForm").serialize();
-								reloadTab(params);
-								closePopup();
-								makeAlert("작업 완료", "추가되었습니다.");
-							} else {
-								makeAlert("작업 실패", "작업 중 문제가 발생했습니다.<br/>관리자에게 문의하세요.");
-							}
-						},
-						error : function(request, status, error) {
-							console.log(request.responseText);
-						}
-					});
-				}
-			}
-		}, {
-			name : "취소"
 		}]
 	});
 }
@@ -1454,7 +1379,6 @@ function createDeletePopup(el, cr, qlfctn) {
 					data : params,
 					success : function(res) {
 						if (res.res == "success") {
-							console.log("삭제~~");
 							closePopup();
 							makeAlert("작업 완료", "삭제되었습니다.", function() {
 								location.reload();

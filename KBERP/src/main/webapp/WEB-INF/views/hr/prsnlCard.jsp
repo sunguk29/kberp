@@ -367,12 +367,6 @@ td:nth-child(even) {
 	margin-top: 2px;
 }
 
-#btm_del_btn:hover {
-	background-color: #ff1016;
-	cursor: pointer;
-}
-
-
 .admnstr_btn {
 	display: inline-block;
 	vertical-align: top;
@@ -1187,8 +1181,7 @@ function createAddPopup(pId) {
 								// 물리파일명 보관
 								if (res.fileName.length > 0) {
 									$(".upld_file_name").val(res.fileName[0]);
-									console.log("test : " + $(".upld_file_name").val());
-
+									
 									addFormAjaxFunction();
 								}
 							},
@@ -1212,8 +1205,6 @@ function createAddPopup(pId) {
 function addFormAjaxFunction() {
 	var params = $("#addForm").serialize();
 	
-	console.log("test2 : " + $(".upld_file_name").val());
-	
 	$.ajax({
 		type : "post",
 		url : "prsnlCardActionAjax/insert",
@@ -1236,7 +1227,7 @@ function addFormAjaxFunction() {
 }
 
 function numMaxLimit(e) {
-	if (e.value.length == 4) {
+	if (e.value.length >= 4) {
 		if (e.className.indexOf("phone_num_1") != -1) {
 			$("#" + e.id).parent("div").children(".phone_num_2").focus();
 		}
@@ -1315,7 +1306,6 @@ function createEditPopup(pId, data, bankList) {
 		html += "				<label for=\"add_mbl_num\" class=\"popup_cont_name\">휴대폰번호* :</label>                                                                ";
 		html += "				<select class=\"popup_cont_text phone_num_sel_box\" id=\"mbl_num_sel\">";
 		var mbl_num = data.MBL_NUM.split("-");
-		console.log(mbl_num);
 		
 		html += "			<option value=\"-1\">---</option>";
 		for (var val of mbl_num_val) {
@@ -1344,12 +1334,10 @@ function createEditPopup(pId, data, bankList) {
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt3_e1\">                                                                                     ";
 		html += "			<label for=\"edit_bank_name\" class=\"popup_cont_name\">은행명* :</label>                                                  ";
 		html += "		<select class=\"popup_cont_text\" id=\"edit_bank_name\" name=\"edit_bank_name\">";
-		console.log("check 1");
 		var bankName = "";
 		if (data != null && data.BANK_NAME != null) {
 			bankName = data.BANK_NAME;
 		}
-		console.log("bankName : " + bankName);
 		for (var bl of bankList) {
 			if (bl.BANK_NAME == bankName) {
 				html += "			<option value=\"" + bl.BANK_NUM + "\" selected>" + bl.BANK_NAME + "</option>";
@@ -1423,7 +1411,6 @@ function createEditPopup(pId, data, bankList) {
 						$("#edit_dtl_adrs").focus();
 					} else if (($("#phone_num_sel").val() == "-1" || checkEmpty("#edit_phone_num_1") || checkEmpty("#edit_phone_num_2")) &&
 							!($("#phone_num_sel").val() == "-1" && checkEmpty("#edit_phone_num_1") && checkEmpty("#edit_phone_num_2"))){
-						console.log("check 1");
 						if ($("#phone_num_sel").val() == "-1") {
 							$("#phone_num_sel").css("outline", "2px solid #fe3a40");
 							$("#phone_num_sel").focus();
@@ -1435,7 +1422,6 @@ function createEditPopup(pId, data, bankList) {
 							$("#edit_phone_num_2").focus();
 						}
 					} else if ($("#mbl_num_sel").val() == "-1" || checkEmpty("#edit_mbl_num_1") || checkEmpty("#edit_mbl_num_2")){
-						console.log("check 2");
 						if ($("#mbl_num_sel").val() == "-1") {
 							$("#mbl_num_sel").css("outline", "2px solid #fe3a40");
 							$("#mbl_num_sel").focus();
@@ -1484,8 +1470,6 @@ function createEditPopup(pId, data, bankList) {
 								// 물리파일명 보관
 								if (res.fileName.length > 0) {
 									$(".upld_file_name").val(res.fileName[0]);
-									console.log("test33 : " + $(".upld_file_name").val());
-
 									editFormAjaxFunction();
 								}
 							},
@@ -1613,8 +1597,6 @@ function createAdmnstrEditPopup(data) {
 								// 물리파일명 보관
 								if (res.fileName.length > 0) {
 									$(".upld_file_name").val(res.fileName[0]);
-									console.log("test4 : " + $(".upld_file_name").val());
-
 									admnstrEditFormAjaxFunction();
 								}
 							},
@@ -1638,8 +1620,6 @@ function createAdmnstrEditPopup(data) {
 
 function admnstrEditFormAjaxFunction() {
 	var params = $("#editForm").serialize();
-	console.log("*************");
-	console.log(params);
 	
 	$.ajax({
 		type : "post",
@@ -1664,8 +1644,6 @@ function admnstrEditFormAjaxFunction() {
 
 function reloadBasicInfoArea() {
 	var params = $("#basicInfoForm").serialize();
-	console.log("***** reloadBasicInfoArea *****");
-	console.log(params);
 	
 	$.ajax({
 		type : "post",
@@ -1683,7 +1661,6 @@ function reloadBasicInfoArea() {
 
 function drawBasicInfoArea(params, filePath2) {
 	var html = "";
-	console.log(params);
 	html += "	<div class=\"cont_line_rt\">                                                                                                            ";
 	html += "	<div class=\"cont_element\">                                                                                                            ";
 	html += "		<div class=\"cont_name\">이름(한글)</div>                                                                                           ";
@@ -1752,7 +1729,6 @@ function createDelPopup(pId) {
 			name : "확인",
 			func:function() {
 				var params = $("#deleteForm").serialize();
-				console.log(params);
 				
 				$.ajax({
 					type : "post",
@@ -1824,7 +1800,6 @@ function btnSetting() {
 
 $(document).ready(function() {
 	$("#isAdmnstr").val(${is_admnstr});
-	console.log("체크 : " + $("#isAdmnstr").val());
 	
 	$("#human_info_btn").css("background-color", "#4B94F2");
 	$("#human_info_btn").css("color", "#FFF");
@@ -1888,7 +1863,6 @@ $(document).ready(function() {
 			if ($(this).parent("div").attr("id") == "left_top_tab") {
 				$("#selectedTopTab").val($(this).attr("id"));
 				console.log($(this).attr("id"));
-				console.log($(".isAdmnstr").val());
 				if ($("#isAdmnstr").val() == "1") {
 					$("#topTabAdmnstr").val($("#nEmpNum").val());
 				}
@@ -1898,11 +1872,9 @@ $(document).ready(function() {
 			else if ($(this).parent("div").attr("id") == "bottom_tab") {
 				$("#selectedBottomTab").val($(this).attr("id"));
 				console.log($(this).attr("id"));
-				console.log($(".isAdmnstr").val());
 				if ($("#isAdmnstr").val() == "1") {
 					$("#bottomTabAdmnstr").val($("#nEmpNum").val());
 				}
-				console.log($("#bottomTabAdmnstr").val());
 				var params = $("#bottomTabForm").serialize();
 				$("#selItemNum").val("-1");
 				if ($("#btm_del_btn").attr("da") == "false") {
@@ -1960,7 +1932,6 @@ $(document).ready(function() {
 
 	$("body").on("change", ".upld_file", function(){
 		var fileName = $(this).val().split("\\");
-		console.log(fileName[fileName.length-1]);
 		$(this).parent("div").parent("div").children("input[type=text]").val(fileName[fileName.length-1]);
 	});
 
