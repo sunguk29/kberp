@@ -292,7 +292,7 @@ thead {
 	color: #4B94F2;
 	font-size: 11pt;
 	height: 30px;
-	width: 455px;
+	width: 448px;
 	font-weight: 600;
 }
 
@@ -302,7 +302,7 @@ thead {
 	color: #222222;
 	font-size: 11pt;
 	height: 30px;
-	width: 455px;
+	width:373px;
 	font-weight: 600;
 }
 
@@ -314,24 +314,41 @@ thead {
 }
 
 .apntm_add_btn_2 {
-	background-color: #dadce1;
-	color: #000;
-	display: inline-block;
-	vertical-align: bottom;
-	width: 75px;
-	height: 28px;
-	border: 1px solid #dadce1;
-	border-radius: 4px;
-	font-size: 9pt;
-	font-weight: 600;
-	text-align: center;
-	line-height: 26px;
-	user-select: none;
-	cursor: pointer;
+	background-color: #F2B705;
+    color: #333333;
+    display: inline-block;
+    vertical-align: bottom;
+    width: 75px;
+    font-weight:600;
+    height: 28px;
+    border: 1px solid #dadce1;
+    border-radius: 4px;
+    font-size: 9pt;
+    text-align: center;
+    line-height: 26px;
+    user-select: none;
+    cursor: pointer;
+    margin-left: 7px;
+}
+
+.apntm_del_btn {
+	background-color: dadce1;
+    color: #000;
+    display: inline-block;
+    vertical-align: bottom;
+    width: 75px;
+    height: 28px;
+    border: 1px solid #dadce1;
+    border-radius: 4px;
+    font-size: 9pt;
+    text-align: center;
+    line-height: 26px;
+    user-select: none;
+    cursor: pointer;
 }
 
 .apntm_add_btn_2:active {
-	background-color: #EEEEEE;
+	background-color: #F2CB05;
 }
 
 .apnmt_add {
@@ -800,6 +817,7 @@ $(document).ready(function() {
    
    // 발령 상세보기 
    $("tbody").on("click", "tr", function() {
+      $("#delApntmNum").val($(this).attr("apntmNum"));
       $("#empNum").val($(this).attr("empNum"));
       $("#apntmNum").val($(this).attr("apntmNum"));
       $("#stsNum").val($(this).attr("stsNum"));
@@ -1073,6 +1091,43 @@ $(document).ready(function() {
 		
   	});// 발령추가 끝
   	
+  	
+  	//발령취소 버튼이벤트 
+  	$("body").on("click","#aprvlDelBtn", function() {
+  		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "삭제",
+			contents : "발령을 취소하시겠습니까?", 
+			draggable : true,
+			buttons : [{
+				name : "확인",
+				func:function() {
+					var params = $("#delForm").serialize();
+					$.ajax({
+					       type : "post",
+					       url : "apntmListAjax/deleteApntm",
+					       data : params,
+					       dataType : "json",
+					       success : function(res) {
+							   closePopup();
+							   makeAlert("알림", "발령이 취소되었습니다.", function(){
+								   location.reload();
+							   });
+					       }, 
+					       error : function(req) {
+					          console.log(req.responseText);
+					       }
+					    });
+					console.log("삭제!");
+				}
+			}, {
+				name : "취소"
+			}]
+		});
+  		
+  	}); 
+  	// 결재요청 버튼이벤트 
   	$("body").on("click","#aprvlBtn", function() {
 		var html = "";
 		
@@ -1338,7 +1393,7 @@ $(document).ready(function() {
 						   		rfrnc_num_arr.push(num);
 						   		rfrnc_txt_arr.push(txt);
 						   	   });
-						   	   console.log("결재권자 체크값 : " + rfrnc_num_arr, rfrnc_txt_arr)
+						   	   console.log("참조인 체크값 : " + rfrnc_num_arr, rfrnc_txt_arr)
 						   	   $("#rfrncInput").val(rfrnc_txt_arr);
 						   	   closePopup(2);
 							}
@@ -1442,7 +1497,7 @@ function drawList(list) {
    
    for(var data of list) {                                 
       html += "<tr id=\"tbodyTr\" stsNum=\"" + data.STS_NUM + "\" apntmNum=\"" + data.APNTM_NUM + "\"empNum=\"" + data.EMP_NUM + " \">" ;
-      html += "<td>" + data.APNTM_NUM + "</td>"           ;
+      html += "<td>" + data.ROWNUM + "</td>"           ;
       if(data.APNTM_DVSN_NUM == 0) {
      	 html += "<td>입사</td>"      ;
       } else if(data.APNTM_DVSN_NUM == 1) {
@@ -1477,9 +1532,10 @@ function drawCont(cont, emp){
    html += "<div class=\"apntm_cont_right_area\">                                                     ";
    html += "   <div class=\"apntm_add_title_area\">                                                   ";
    html += "      <div class=\"apntm_info_title\">발령상세</div>                                      ";
-   // STS_NUM 결재요청 전 상태일 경우 결재버튼 생성
+   // STS_NUM 결재요청 전 상태일 경우 결재버튼, 발령취소버튼 생성
    if($("#stsNum").val() == "NULL" || $("#stsNum").val() == "" || $("#stsNum").val() == "undefined"){
-   html += "      <input type=\"button\" class=\"apntm_add_btn_2\" id=\"aprvlBtn\" value=\"결재\" />                                      ";
+   html += "      <input type=\"button\" class=\"apntm_del_btn\" id=\"aprvlDelBtn\" value=\"발령취소\" />                                      ";
+   html += "      <input type=\"button\" class=\"apntm_add_btn_2\" id=\"aprvlBtn\" value=\"결재요청\" />                                      ";
    }
    html += "   </div>                                                                                 ";
    html += "   <div class=\"apnmt_add_area\">                                                         ";
@@ -1515,6 +1571,10 @@ function drawCont(cont, emp){
    html += "      </div>                                                                             ";
    html += "      <div class=\"apnmt_add_mid_area\">                                                 ";
    html += "         <div class=\"apnmt_info_wrap\">                                                ";
+   html += "            <div class=\"apnmt_info\">                                                 ";
+   html += "               <div class=\"apnmt_info_text\">발령번호</div>                           ";
+   html += "               <input type=\"text\" class=\"apnmt_info_input\" disabled value=\"" + cont.APNTM_NUM + "\" />                                        ";
+   html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_info\">                                                 ";
    html += "               <div class=\"apnmt_info_text\">발령구분</div>                         ";
    if(cont.APNTM_DVSN_NUM == 0) {
@@ -1717,6 +1777,9 @@ function drawAddApntm(dept,rank){
 			<input type="button" class="apntm_add_btn" id="apntm_add_btn"
 				value="발령추가" />
 		</div>
+		<form action="#" id="delForm" method="post">
+			<input type="hidden" id="delApntmNum" name="delApntmNum">
+		</form>
 		<!--------------------- 발령 조회 Form ------------------------->
 		<form action="#" id="actionForm" method="post">
 			<input type="hidden" name="top" value="${param.top}"> 

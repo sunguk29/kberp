@@ -90,6 +90,9 @@ public class HrController {
 		       case "updateApntm" :
 		    	   iCommonService.updateData("hr.updateApntm", params);
 		    	   break;
+		       case "deleteApntm" :
+		    	   iCommonService.deleteData("hr.deleteApntm", params);
+		    	   break;
 		       }
 		       modelMap.put("res", "success");
 		    } catch (Throwable e) {

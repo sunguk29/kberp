@@ -200,23 +200,42 @@ $(document).ready(function() {
 	console.log()
    $(".crtfct_list_cont").slimScroll({height: "280px"}); // 슬림스크롤
    $("#rqstBtn").on("click", function() {
-		var params = $("#addForm").serialize();	
-		console.log("발급신청버튼 클릭! 파람즈 값 : " + params)
- 		$.ajax({
-		      type : "post",
-		      url : "crtfctUserAjax",
-		      dataType : "json",
-		      data : params,
-		      success : function(res) {
-		    	  console.log(res);
-		    	  makeAlert("알림","발급요청이 완료되었습니다.", function(){
-			    	  location.reload();
-		    	  })
-		      }, 
-		      error : function(req) {
-		         console.log(req.responseText);
-		      }
-	   }); 
+	   if ($("#kind").val() == '선택') {
+			makeAlert("알림", "증명서 종류를 선택하세요.", function(){
+			$("#kind").focus();
+			});
+		} else if ($("#issueCount").val() == '선택') {
+			makeAlert("알림", "발급 매수를 선택하세요.", function(){
+			$("#issueCount").focus();
+			});
+		} else if ($("#issueType").val() == '선택') {
+			makeAlert("알림", "발급 유형을 선택하세요.", function(){
+			$("#issueType").focus();
+			});
+		} else if (checkEmpty("#use")) {
+			makeAlert("알림", "발급용도를 입력하세요.", function(){
+			$("#use").focus();
+			});
+		} else {
+			var params = $("#addForm").serialize();	
+			console.log("발급신청버튼 클릭! 파람즈 값 : " + params)
+	 		$.ajax({
+			      type : "post",
+			      url : "crtfctUserAjax",
+			      dataType : "json",
+			      data : params,
+			      success : function(res) {
+			    	  console.log(res);
+			    	  makeAlert("알림","발급요청이 완료되었습니다.", function(){
+				    	  location.reload();
+			    	  })
+			      }, 
+			      error : function(req) {
+			         console.log(req.responseText);
+			      }
+		   }); 
+			
+		}
 	   
    });
    
@@ -310,7 +329,14 @@ $(document).ready(function() {
 							<c:forEach var="data" items="${list}">
 						         <tr>
 						            <td>${data.ROWNUM}</td>
-						            <td >${data.CRTFCT_NUM}</td>
+						            <c:choose>
+							            <c:when test="${data.ISSUE_STS_NUM==1}">
+								            <td >${data.CRTFCT_NUM}</td>
+							            </c:when>
+							            <c:when test="${data.ISSUE_STS_NUM!=1}">
+								            <td >-</td>
+							            </c:when>
+						            </c:choose>
 						         	<c:choose>
 						         		<c:when test="${data.CRTFCT_KIND==0}">
 						         			<td>재직증명서</td> 
