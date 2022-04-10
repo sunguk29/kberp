@@ -169,7 +169,7 @@
 		FROM EMP
 		WHERE EMP_NUM = #{sEmpNum}
 	</select>
-	 <select id="getEmpRqstList" resultType="hashmap" parameterType="hashmap"><!-- (사용자) 발급요청목록 -->
+	 <select id="getUserRqstList" resultType="hashmap" parameterType="hashmap"><!-- (사용자) 발급요청목록 -->
 		SELECT ROWNUM, LPAD(C.CRTFCT_NUM,5,'0') AS CRTFCT_NUM, C.CRTFCT_KIND, C.USE, C.RQST_DATE, C.ISSUE_DATE, C.ISSUE_TYPE, C.ISSUE_STS_NUM, C.RSN
         FROM ( SELECT CRTFCT_NUM, CRTFCT_KIND, USE, TO_CHAR(RQST_DATE, 'YYYY-MM-DD') AS RQST_DATE, ISSUE_TYPE, 
     				  TO_CHAR(ISSUE_DATE, 'YYYY-MM-DD') AS ISSUE_DATE, ISSUE_STS_NUM, RSN
@@ -177,9 +177,41 @@
                 WHERE RQST_EMP_NUM = #{sEmpNum}
                 ORDER BY CRTFCT_NUM) C
        ORDER BY ROWNUM DESC
-       	
-        
 	</select>
+	 <select id="getAdminIssueList" resultType="hashmap" parameterType="hashmap"><!-- (관리자) 발급내역 -->
+		SELECT ROWNUM, LPAD(C.CRTFCT_NUM,5,'0') AS CRTFCT_NUM, C.RQST_EMP_NUM, E.EMP_NAME, C.CRTFCT_KIND, C.USE, C.RQST_DATE, C.ISSUE_DATE, C.ISSUE_TYPE, C.ISSUE_STS_NUM, C.RSN
+        FROM ( SELECT CRTFCT_NUM, CRTFCT_KIND, RQST_EMP_NUM, USE, TO_CHAR(RQST_DATE, 'YYYY-MM-DD') AS RQST_DATE, ISSUE_TYPE, 
+    				  TO_CHAR(ISSUE_DATE, 'YYYY-MM-DD') AS ISSUE_DATE, ISSUE_STS_NUM, RSN
+                 FROM CRTFCT
+                ORDER BY CRTFCT_NUM) C INNER JOIN EMP E
+                							   ON C.RQST_EMP_NUM = E.EMP_NUM
+	   WHERE ISSUE_STS_NUM != '0'
+       ORDER BY ROWNUM DESC
+	</select>
+	 <select id="getAdminRqstList" resultType="hashmap" parameterType="hashmap"><!-- (관리자) 신청목록 -->
+		SELECT ROWNUM, LPAD(C.CRTFCT_NUM,5,'0') AS CRTFCT_NUM, C.RQST_EMP_NUM, E.EMP_NAME, C.CRTFCT_KIND, C.USE, C.RQST_DATE, C.ISSUE_DATE, C.ISSUE_TYPE, C.ISSUE_STS_NUM, C.RSN
+        FROM ( SELECT CRTFCT_NUM, CRTFCT_KIND, RQST_EMP_NUM, USE, TO_CHAR(RQST_DATE, 'YYYY-MM-DD') AS RQST_DATE, ISSUE_TYPE, 
+    				  TO_CHAR(ISSUE_DATE, 'YYYY-MM-DD') AS ISSUE_DATE, ISSUE_STS_NUM, RSN
+                 FROM CRTFCT
+                ORDER BY CRTFCT_NUM) C INNER JOIN EMP E
+                							   ON C.RQST_EMP_NUM = E.EMP_NUM
+       WHERE ISSUE_STS_NUM = '0'         							   
+       ORDER BY ROWNUM DESC
+	</select>
+	 <select id="getAdminRqstCont" resultType="hashmap" parameterType="hashmap"><!-- (관리자) 발급신청 상세정보 -->
+		SELECT  CC.EMP_NUM, CC.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, CC.DEPT_NUM, CC.RANK_NUM, CC.START_DATE, CC.END_DATE, CC.STS_NUM, CC.CRTFCT_NUM, CC.RQST_EMP_NUM, CC.CRTFCT_KIND, CC.ISSUE_COUNT, CC.USE, CC.ISSUE_TYPE 
+		FROM( SELECT E.EMP_NUM, E.EMP_NAME, A.DEPT_NUM, A.RANK_NUM, A.START_DATE, A.END_DATE, A.STS_NUM,CRTFCT_NUM, RQST_EMP_NUM, CRTFCT_KIND, ISSUE_COUNT, USE, ISSUE_TYPE 
+			    FROM( SELECT CRTFCT_NUM, RQST_EMP_NUM, CRTFCT_KIND, ISSUE_COUNT, USE, ISSUE_TYPE   
+					    FROM CRTFCT
+					   WHERE CRTFCT_NUM= #{rCrtfctNum})C INNER JOIN EMP E 
+                                                       ON C.RQST_EMP_NUM = E.EMP_NUM
+                      						   INNER JOIN APNTM A
+                               						   ON C.RQST_EMP_NUM = A.EMP_NUM )CC INNER JOIN DEPT D 
+                                                                         					     ON CC.DEPT_NUM = D.DEPT_NUM
+                                                                  						 INNER JOIN RANK R 
+                                                            					                 ON CC.RANK_NUM = R.RANK_NUM  
+	</select>	
+	
 	<insert id="addCrtfct" parameterType="hashmap"><!-- (사용자) 증명서발급 산청 insert -->
 		INSERT INTO CRTFCT (CRTFCT_NUM, RQST_EMP_NUM, CRTFCT_KIND, ISSUE_COUNT, ISSUE_TYPE, USE)
 		VALUES (CRTFCT_SEQ.NEXTVAL, #{sEmpNum}, #{kind}, #{issueCount}, #{issueType}, #{use})

@@ -122,6 +122,10 @@
 	margin: 3px 7px 0px 10px;
 }
 
+.aprvl_radio_area input, label {
+	cursor: pointer;
+}
+
 .srch_prd_wrap {
 	display: inline-block;
 	vertical-align: top;

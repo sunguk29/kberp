@@ -104,6 +104,51 @@ public class HrController {
 	 }
 		
 	
+	// 증명서발급(관리자)
+	@RequestMapping(value = "/cmnCode")
+	public ModelAndView cmnCode(@RequestParam HashMap<String, String> params, HttpSession session, ModelAndView mav) throws Throwable {
+		try {
+			if(session.getAttribute("sEmpNum") != null) {
+				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
+				// HashMap<String, String> emp = iCommonService.getData("hr.getEmpInfo", params);
+				List<HashMap<String, String>> rList = iCommonService.getDataList("hr.getAdminRqstList", params);
+				List<HashMap<String, String>> iList = iCommonService.getDataList("hr.getAdminIssueList", params);
+				
+				mav.addObject("rList", rList);
+				mav.addObject("iList", iList);
+				mav.setViewName("hr/cmnCode");
+			} else {
+				mav.setViewName("redirect:login");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			mav.addObject("exception", e);
+			mav.setViewName("exception/EXCEPTION_INFO");
+		}
+		return mav;
+	}
+	// 증명서발급 ajax (관리자)
+	@RequestMapping(value = "/crtfctAdminAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+    @ResponseBody
+    public String crtfctAdminrAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			switch(gbn) {
+			case "cont" :
+				HashMap<String, String> cont = iCommonService.getData("hr.getAdminRqstCont", params);
+				modelMap.put("cont", cont);
+				break;
+			}
+			modelMap.put("res", "success");
+		} catch(Throwable e) {
+			e.printStackTrace();
+	       modelMap.put("res", "failed");
+		}
+		return mapper.writeValueAsString(modelMap); 	
+    }
+	
 	// 증명서발급(사용자)
 	@RequestMapping(value = "/crtft")
 	public ModelAndView crtft(@RequestParam HashMap<String, String> params, HttpSession session, ModelAndView mav) throws Throwable {
@@ -111,7 +156,7 @@ public class HrController {
 			if(session.getAttribute("sEmpNum") != null) {
 				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
 				// HashMap<String, String> emp = iCommonService.getData("hr.getEmpInfo", params);
-				List<HashMap<String, String>> list = iCommonService.getDataList("hr.getEmpRqstList", params);
+				List<HashMap<String, String>> list = iCommonService.getDataList("hr.getUserRqstList", params);
 				
 				mav.addObject("list", list);
 				mav.setViewName("hr/crtfct");

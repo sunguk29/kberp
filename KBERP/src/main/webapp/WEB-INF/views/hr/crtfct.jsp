@@ -186,9 +186,9 @@ height: 25px;
    font-size: 9.5pt;
 }
 
-.crtfct_table tbody tr:hover {
+/* .crtfct_table tbody tr:hover {
    background-color: rgb(200,218,248);
-}
+} */
 
 .crtfct_table thead tr{
 	color: #333333;
