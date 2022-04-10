@@ -5,12 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
-
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +32,7 @@ public class MdController {
 	
 	@Autowired
 	public IPagingService iPagingService;
-	
+
 	private final Logger log = LoggerFactory.getLogger(MdController.class);
 
 	
@@ -62,7 +60,6 @@ public class MdController {
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> modelMap = new HashMap<String, Object>() ;
 		
-		log.info("in mdListAjax");
 		log.info("requestParams : " + params);
 		
 		try {
@@ -70,8 +67,9 @@ public class MdController {
 			int rlsExpctdCnt = iCommonService.getIntData("md.getRlsExpctdCnt", params);
 			int onSaleCnt = iCommonService.getIntData("md.getOnSaleCnt", params);
 			int offSaleCnt = iCommonService.getIntData("md.getOffSaleCnt", params);
-			
+			System.err.println("totalCont : " + totalCnt);
 			PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), totalCnt);
+					
 			params.put("startCount", Integer.toString(pb.getStartCount()));
 			params.put("endCount", Integer.toString(pb.getEndCount()));
 			
@@ -105,9 +103,9 @@ public class MdController {
 		
 		return mav;
 	}
-	
+
 	//////작성
-	@RequestMapping (value = "/mdReg")
+	@RequestMapping (value = "/mdReg") 
 	public ModelAndView mdReg(@RequestParam HashMap<String, String> params, 
 							   ModelAndView mav) {
 		
@@ -135,7 +133,7 @@ public class MdController {
 	@RequestMapping(value = "/mdActionAjax/{gbn}", method = RequestMethod.POST,
 					produces = "text/json;charset=UTF-8")
 	@ResponseBody 
-	public String mdActionAjax(@RequestParam HashMap<String, String> params,
+	public String mdActionAjax(@RequestParam HashMap<String, String> params, 
 							   @PathVariable String gbn, HttpSession session) throws Throwable {
 	ObjectMapper mapper = new ObjectMapper();
 	
@@ -164,6 +162,7 @@ public class MdController {
 	}
 	
 	return mapper.writeValueAsString(modelMap);
-}
+	}
+	
 	
 }
