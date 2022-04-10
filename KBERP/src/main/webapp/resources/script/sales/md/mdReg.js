@@ -33,7 +33,6 @@ function insertMdData(){
 		if(checkEmpty("#md_name")){
 			alert("상품명을 입력하세요.");
 			$("#md_name").focus();
-			/*
 		}else if(checkSelect("#md_type")){
 			alert("상품 유형을 입력하세요.");
 			$("#md_type").focus();
@@ -75,7 +74,6 @@ function insertMdData(){
 		}else if(checkSelect("#loan_prd")){
 			alert("대출 기간을 입력하세요.");
 			$("#loan_prd").focus();
-			*/
 		}else{
 			makePopup({
 			depth : 1,

@@ -146,14 +146,25 @@ public class MdController {
 	try {
 		switch(gbn) {
 		case "insert" :
-			iCommonService.insertData("md.insertMdData", params);
+			
+			iCommonService.insertData("md.insertMdData", params);  // 게시판 DB Save
+			
+			int seq = iCommonService.getIntData("md.getMdSeqMAX"); // 위에 저장한 seq 값 출력 후 params에 저장 
+			params.put("mdNum", String.valueOf(seq));
+		
+			iCommonService.insertData("md.mdAddAttFile", params);  // 업로드된 파일데이터 DB 저장 
 			break;
+			
 		case "update" :
 			iCommonService.updateData("md.updateMdData", params);
 			break;
+			
+			
 		case "delete" :
 			iCommonService.deleteData("md.deleteMdData", params);
 			break;
+			
+			
 		}
 		modelMap.put("res", "success");
 	}catch (Throwable e) {
