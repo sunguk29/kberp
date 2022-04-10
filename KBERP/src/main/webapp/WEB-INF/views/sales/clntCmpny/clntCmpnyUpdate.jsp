@@ -15,7 +15,7 @@
 .cont_wrap {
 	width: 1013px;
 }
-
+/* 개인 작업 영역 */
 .body {
 	display: block;
 	background-color: white;
@@ -30,30 +30,28 @@
 	height: 100%;
 	margin: 20px auto;
 }
-
-/* 개인 작업 영역 */
-table{	
+table {	
 	border: 1px;
 	width: 927px;
 	margin: 40px auto;
 }
-td:nth-child(2), td:nth-child(4){
+td:nth-child(2), td:nth-child(4) {
 	border-bottom: 1px solid #d7d7d7;
 }
-tr:nth-child(11) > td:nth-child(1){
+tr:nth-child(11) > td:nth-child(1) {
 	border-bottom: 1px solid #d7d7d7;
 }
-/* tr:nth-child(9) > td:nth-child(2){
+/* tr:nth-child(9) > td:nth-child(2) {
 	background-color: #F2F2F2;
 } */
-td:nth-child(1), td:nth-child(3){
+td:nth-child(1), td:nth-child(3) {
 	text-align: center;
 }
-.btn{
+.btn {
 	width : 90px;
 	height: 40px;
 }
-.btn, .address{
+.btn, .address {
 	background-color: #fff;
 	border-radius: 3px;
 	font-weight: bold;
@@ -78,14 +76,12 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 33px;
 	border: none;
 }
-
-.btnImg{
+.btnImg {
 	width : 30px;
 	float: right;
 	margin-left: 10px;
 }
-
-.imgPos{
+.imgPos {
 	text-align: right;
 }
 .title_name {
@@ -149,10 +145,9 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 70px;
 	text-align: center;
 }
-.boldname{
+.boldname {
 	font-weight: bold;
 }
-/* 팝업 버튼 */
 .btn_pos {
 	text-align: center;
 }
@@ -163,7 +158,6 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 100px;
 	text-align: center;
 }
-/* 첨부자료 */
 .cntrct_box_in {
 	width: 885px;
 	height: 100px;
@@ -226,7 +220,7 @@ td:nth-child(1), td:nth-child(3){
 	border: hidden;
 	outline: none;
 }
-.text_center{
+.text_center {
 	width: 100%;
 	height: 100%;
 	line-height: 100px;
@@ -235,16 +229,13 @@ td:nth-child(1), td:nth-child(3){
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
+	// 목록버튼
 	$("#listBtn").on("click", function() {
 		makePopup({
 			bg : true,
 			bgClose : false,
 			title : "알림",
 			contents : "<div class=\"text_center\"><b>저장되지않았습니다, 나가시겠습니까?</b></div>",
-			contentsEvent : function() {
-				
-			},
 			buttons : [{
 				name : "나가기",
 				func:function() {
@@ -258,34 +249,36 @@ $(document).ready(function() {
 		});
 	});
 	
+	// 주소 아이콘
 	$("#search_icon").on("click", function() {
 		findAddr();
 	});
 	
+	// 파일업로드
 	$(".rvn_txt").on("click", ".aff_btn", function() {
 		$("#att").click();
 	});
 	
+	// 파일삭제
 	$("#fileDelete").on("click", function() {
 		$("#file_name").remove();
 		$(this).remove();
-
 		var html = "";
-		
 		html += "<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
-		
 		$("#uploadBtn").html(html);
 	});
 	
+	// 선택박스 초기값
 	$("#ccClsfy").val(${data.CLNT_CMPNY_CLSFY_NUM}).prop("selected", this.selected);
 	$("#ccGrade").val(${data.GRADE_NUM}).prop("selected", this.selected);
 	$("#rp").val(${data.RCGNTN_PATH_NUM}).prop("selected", this.selected);
 	
+	// 저장버튼
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#ccName")) {
 			makeAlert("필수 항목 알림", "고객사를 입력하세요", function() {
 				$("#ccName").focus();
-				});
+			});
 		} else if($("#ccClsfy").val() == 9) {
 			makeAlert("필수 항목 알림", "고객사 분류를 선택하세요", function() {
 				$("#ccClsfy").focus();
@@ -331,15 +324,12 @@ $(document).ready(function() {
 					name : "저장",
 					func:function() {
 						var updateForm = $("#updateForm");
-						
 						updateForm.ajaxForm({
 							success : function(res) {
 								if(res.fileName.length > 0) {
 									$("#attFile").val(res.fileName[0]);
 								}
-								
 								var params = $("#updateForm").serialize();
-								
 								$.ajax({
 									type : "post",
 									url : "clntCmpnyMngActionAjax/update",
@@ -357,32 +347,26 @@ $(document).ready(function() {
 										console.log(request.responseText);
 									}
 								});
-								
 							},
 							error : function(req) {
 								console.log(req.responseText);
 							}
 						});
-						
 						updateForm.submit();
-						console.log("One!");
 						closePopup();
 					}
 				}, {
 					name : "취소"
 				}]
 			});
-				
 		}
 	});
 });
 
+// 주소
 function findAddr(){
 	new daum.Postcode({
         oncomplete: function(data) {
-        	
-        	console.log(data);
-        	
             // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
             // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
             // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
@@ -399,6 +383,8 @@ function findAddr(){
         }
     }).open();
 }
+
+// 파일명
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
@@ -431,7 +417,17 @@ function uploadName(e) {
 			<img alt="목록버튼" src="resources/images/sales/back.png" class="btnImg" id="listBtn" />
 			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
 			<!-- 검색영역 선택적 사항 -->
-			
+			<!-- <div class="page_srch_area">
+				<select class="srch_sel">
+					<option>제목</option>
+					<option>내용</option>
+					<option>작성자</option>
+				</select>
+				<div class="srch_text_wrap">
+					<input type="text" />
+				</div>
+				<div class="cmn_btn_ml">검색</div>
+			</div> -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">

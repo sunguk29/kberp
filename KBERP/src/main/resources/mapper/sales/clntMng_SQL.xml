@@ -384,7 +384,7 @@
 		ORDER BY CCC.CMNT_NUM DESC
 	</select>
 	
-	<!-- 고객사 상세보기/고객 목록 -->
+	<!-- (고객사 상세보기) 고객 목록 -->
 	<select id="getClList" parameterType="hashmap" resultType="hashmap">
 		SELECT EC.CLNT_NAME, NVL(EC.DUTY, ' ') AS DUTY, NVL(EC.DEPT, ' ') AS DEPT, EC.MBL, NVL(EC.EMAIL, ' ') AS EMAIL
 		FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC

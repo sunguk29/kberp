@@ -40,7 +40,7 @@ td:nth-child(2), td:nth-child(4){
 td:nth-child(1), td:nth-child(3){
 	text-align: center;
 }
-.btn{ /* 내용 제목 영역 */
+.btn {
 	width : 90px;
 	height: 40px;
 }
@@ -69,13 +69,13 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 33px;
 	border: none;
 }
-.btnImg{
+.btnImg {
 	width: 30px;
 	float: right;
 	margin-left: 10px;
 }
 
-.imgPos{
+.imgPos {
 	position: relative;
 }
 .plus_btn:hover {
@@ -316,35 +316,32 @@ td:nth-child(1), td:nth-child(3){
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	//목록버튼
+	// 목록버튼
 	$("#listBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntList");
 		$("#actionForm").submit();
 	});
 	
-	//수정버튼
+	// 수정버튼
 	$("#updateBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntUpdate");
 		$("#actionForm").submit();
 	});
 	
-	//삭제버튼
+	// 삭제버튼
 	$("#deleteBtn").on("click", function() {
-		//팝업
 		makePopup({
 			bg : false,
 			bgClose : false,
 			title : "경고",
 			contents : "삭제하시겠습니까?",
 			contentsEvent : function() {
-				$("#popup1").draggable(); //팝업 드래그
+				$("#popup1").draggable();
 			},
 			buttons : [{
 				name : "삭제",
 				func:function() {
-					
 					var params = $("#actionForm").serialize();
-					
 					$.ajax({
 						type : "post",
 						url : "clntMngAjax/delete",
@@ -368,7 +365,7 @@ $(document).ready(function() {
 				name : "취소"
 			}]
 		});		
-	}); // 글 삭제 버튼 end
+	});
 	
 });
 </script>
@@ -398,7 +395,17 @@ $(document).ready(function() {
 			<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
 			<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" id="deleteBtn" />
 			<!-- 검색영역 선택적 사항 -->
-			
+			<!-- <div class="page_srch_area">
+				<select class="srch_sel">
+					<option>제목</option>
+					<option>내용</option>
+					<option>작성자</option>
+				</select>
+				<div class="srch_text_wrap">
+					<input type="text" />
+				</div>
+				<div class="cmn_btn_ml">검색</div>
+			</div> -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
