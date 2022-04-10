@@ -100,7 +100,7 @@ span {
 	margin-left: 100px;
 }
 
-#dcmnt_tlte_1 {
+#dcmnt_title {
 	height: 50px;
 	font-size: 14px;
 	margin-left : 40px;
@@ -449,9 +449,9 @@ $(document).ready(function() {
 	
 	$("#writeBtn").on("click", function(){
 		$("#tmplt_cont").val(CKEDITOR.instances['tmplt_cont'].getData());
-		if(checkEmpty("#dcmnt_tlte_1")){
+		if(checkEmpty("#dcmnt_title")){
 			alert("문서제목을 입력하세요.");
-			$("#dcmnt_tlte_1").focus();
+			$("#dcmnt_title").focus();
 		} else if(checkEmpty("#aprvl_line_emp_name")){
 			alert("결재라인을 입력하세요.");
 			$("#aprvl_line_emp_name").focus();
@@ -558,8 +558,6 @@ function removeAllValToArray(arr, val) {
 			<!-- 여기부터 쓰면 됨 -->
 			
 			<form action="#" id="writeForm" method="post">
-			<input type= "hidden" id="aprvl_num" name="aprvl_num" value="${cont.TMPLT_NUM}"> 
-			<input type= "hidden" >
 			<div class="board_a">
 				<input type="button" id="writeBtn" value="저장"> 
 				<input type="button" id="cancelBtn" value="취소">
@@ -568,7 +566,7 @@ function removeAllValToArray(arr, val) {
 			
 			<div class="dcmnt_tlte">
 				<span>문서제목</span>
-				<input type="text" id="dcmnt_tlte_1">
+				<input type="text" id="dcmnt_title" name="dcmnt_title">
 				<input style="display:none;" type="text" id="type" name="type" value="${type}">
 			</div>
 			<div class="aprvl_line">
