@@ -1,5 +1,5 @@
 <!-- 
-	견적 상세보기 : sales3QtnCont
+	계약 상세보기 : sales4CntrctCont
  -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>견적 상세보기</title>
+<title>계약 상세보기</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -304,7 +304,6 @@ textarea {
     border-radius: 7px;
     margin-bottom: 18px;
     margin-left: 45px;
-    font-size: 10pt;
 }
 .btnImg_in{
 	display: inline-block;
@@ -438,7 +437,6 @@ $(document).ready(function() {
 	console.log(${param.salesNum});
 	console.log(${param.qtnNum});
 	
-	reloadSgstnList();
 	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
@@ -447,8 +445,6 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-	// 인쇄 버튼
-	//$("#printBtn")
 	
 	// 견적서 추가(수정) 버튼
 	$("#updateBtn").on("click", function() {
@@ -471,12 +467,7 @@ $(document).ready(function() {
 
 	});
 	
-	// 다음 단계로 전환하기 버튼 : 계약 등록 페이지
-	$("#nextStageBtn").on("click", function() {
-		$("#actionForm").attr("action", "sales4CntrctReg");
-		$("#actionForm").submit();
-	});
-	
+	//
 	
 	// 영업 종료하기 버튼
 	$(".salesOver_btn").on("click", function() {
@@ -531,7 +522,7 @@ $(document).ready(function() {
 		
 		$.ajax({
 			type : "post",
-			url : "qtnBotActionAjax/insert",
+			url : "cntrctBotActionAjax/insert",
 			dataType : "json",
 			data : params,
 			success : function(res) {
@@ -596,6 +587,8 @@ $(document).ready(function() {
 	});
 	$(".salesCont").hide();
 	$(".sgstnCont").hide();
+	$(".qtnCont").hide();
+	
 	// 영업기회 탭 접기펼치기
 	$("#sales_btn").on("click", "#salesContBtn_h", function() {
 		$(".salesCont").hide();
@@ -622,7 +615,19 @@ $(document).ready(function() {
 		$("#sgstn_btn").html(html);
 	});
 	
+	// 견적 탭 접기펼치기
+	$("#qtn_btn").on("click", "#qtnContBtn_h", function() {
+		$(".qtnCont").hide();
+		html = "<div class=\"up_btn\" id=\"qtnContBtn_s\"></div>";
+		$("#qtn_btn").html(html);
+	});
+	$("#qtn_btn").on("click", "#qtnContBtn_s", function() {
+		$(".qtnCont").show();
+		html = "<div class=\"drop_btn\" id=\"qtnContBtn_h\"></div>";
+		$("#qtn_btn").html(html);
+	});
 	
+	$(".qtnDiv").hide();
 	
 	
  	//대출금액
@@ -671,7 +676,7 @@ function reloadOpList() {
 	
 	$.ajax({
 		type : "post",
-		url : "qtnOpBotListAjax",
+		url : "cntrctOpBotListAjax",
 		data : params,
 		dataType : "json",
 		success : function(res) {
@@ -712,54 +717,7 @@ function drawOpList(list) {
 	
 }
 
-//*************** 지난견적서 목록 Ajax *************** 
-function reloadSgstnList() {
-	var params = $("#pastQtnActionForm").serialize();
-	
-	$.ajax({
-		type : "post",
-		url : "PQListAjax",
-		dataType : "json",
-		data : params,
-		success : function(res) {
-			if(res.PQListCnt != 0) {
-				drawPQCnt(res.PQListCnt);
-				drawPQList(res.list);
-				$(".qtnDiv").show();
-			} else {
-				$(".qtnDiv").hide();
-			}
-		},
-		error : function(req) {
-			console.log(req.responseText);
-		}
-	});
-}
 
-/* 지난견적서 목록 개수 html */
-function drawPQCnt(PQListCnt) {
-	var html = "";
-	
-	html = "<h3>지난 견적서(" + PQListCnt + ")</h3><div class=\"drop_btn_bot\"></div>";
-	
-	$(".PQ_title").html(html);
-}
-
-/* 지난견적서 목록 html */
-function drawPQList(list) {
-	var html = "";
-	
-	for(var data of list) {
-		html +="<div class=\"qtnBox\">";
-		html +="<div class=\"name\">" + data.QTN_NAME + " (" + data.QTN_DATE +")</div>";
-		html +="<div class=\"txtOp\"><pre>" + data.MD_TYPE_NUM + "  " + data.MD_NAME + " " + data.INTRST_RATE + "%    " + data.LIMIT_AMNT + "원</pre></div>";
-		html +="</div>";
-	}
-	$(".qBox").html(html);
-}
-
-
-// *************** 지난견적서 목록 끝
 
 </script>
 </head>
@@ -968,15 +926,11 @@ function drawPQList(list) {
 					</table>
 					<br/>
 					<!-- 첨부자료  -->
-					<c:set var="salesFileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
-					<c:set var="salesFileName" value="${fn:substring(data.ATT_FILE_NAME, 20, salesFileLength)}"></c:set>
 					<div class="spc">
-						<div class="adc_txt">
-							첨부자료
+						<div class="adc_txt"> 첨부자료 (0)
+								<input type=file name='file1' style='display: none;'> 
 						</div>
-						<div class="cntrct_box_in">
-							<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${salesFileName}">${salesFileName}</a>
-						</div> 
+						<div class="cntrct_box_in"></div> 
 					</div>
 				</div>
 					
@@ -1143,23 +1097,26 @@ function drawPQList(list) {
 							</tbody>
 						</table>
 						<!-- 첨부자료  -->
-						<c:set var="sgstnFileLength" value="${fn:length(data2.ATT_FILE_NAME)}"></c:set>
-						<c:set var="sgstnFileName" value="${fn:substring(data2.ATT_FILE_NAME, 20, sgstnFileLength)}"></c:set>
+						<input type=file id="att" name="att" />
+						<input type="hidden" id="attFile" name="attFile" />
 						<div class="spc">
 							<div class="adc_txt">
 								첨부자료
 							</div>
 							<div class="cntrct_box_in">
-								<a href="resources/upload/${data2.ATT_FILE_NAME}"  download="${sgstnFileName}">${sgstnFileName}</a>
-							</div> 
+							
+							</div>
 						</div>
 					</div>
 <!-- *************************************** 견적 시작 *************************************** -->			
 	<hr class="hr_bot" color="#4B94F2" width="925px">
 	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
 					<input type="hidden" id= "mdNum" name="mdNum" /> <!-- 영업기회에서 가져온 영업번호 -->
-					<div class="bot_title"><h3>견적</h3></div>
-					 <hr class="hr_bot" color="white" width="925px"> 
+					<div class="bot_title">
+						<h3>견적<span id="qtn_btn"><div class="up_btn" id="qtnContBtn_s"></div></span></h3>
+					</div>
+					<div class="qtnCont">
+					<hr class="hr_bot" color="white" width="925px"> 
 					<div class="hr_bot"></div>
 					<table>
 						<colgroup>
@@ -1309,7 +1266,96 @@ function drawPQList(list) {
 						</tbody>
 					</table>
 					<!-- 첨부자료 -->
-					<c:set var="qtnFileLength" value="${fn:length(data3.ATT_FILE_NAME)}"></c:set>
+					<div class="spc">
+						<div class="adc_txt">
+							첨부자료
+						</div>
+						<div class="cntrct_box_in">
+							<input type="text" id="fileName" readonly="readonly" />
+						</div>
+					</div>
+				</div>
+			</form>			
+<!-- *************************************** 견적 끝 *************************************** -->						
+						
+<!-- ************************************************ 계약 시작 ************************************************ -->
+				<hr class="hr_bot" color="#4B94F2" width="925px">
+				<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
+					<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
+					<input type="hidden" id= "mdNum" name="mdNum" />
+					<div class="bot_title"><h3>계약<div class="drop_btn"></div></h3></div>
+					 <hr class="hr_bot" color="white" width="925px"> 
+					<div class="hr_bot"></div>
+					<table>
+						<colgroup>
+							<col width="200" />
+							<col width="250" />
+							<col width="200" />
+							<col width="250" />
+						</colgroup>
+						<tbody>
+							<tr height="40">
+								<td><input type="button" class="btn" value="계약일*" readonly="readonly" /></td>
+								<td colspan="3"><input type="date" class="txt" id="cntrctDt" name="cntrctDt" value="${data4.CNTRCT_DATE}" readonly="readonly" /></td>		
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="계약기간*" readonly="readonly"/></td>
+								<td><input type="date" class="txt" id="cntrctSdt" name="cntrctSdt" value="${data4.CNTRCT_START_DATE}" readonly="readonly"/></td>
+								<td>
+									<div class="wave"> ~ </div>
+								</td>
+								<td><input type="date" class="txt" id="cntrctEdt" name="cntrctEdt" value="${data4.CNTRCT_END_DATE}" readonly="readonly"/></td>
+							</tr>
+							<tr height="40">
+									<td><input type="button" class="btn" value="고객사" /></td>
+									<td><input type="text" class="txt" value="${data.CLNT_CMPNY_NAME}"/></td>
+									<td><input type="button" class="btn" value="고객" /></td>
+									<td><input type="text" class="txt"  value="${data.CLNT_NAME}"/></td>		
+							</tr> 
+							<tr height="40">
+									<td><input type="button" class="btn" value="입금계좌 소유주명*" readonly="readonly" /></td>
+									<td colspan="3"><input type="text" class="txt" id="daoName" name="daoName" value="${data4.DPST_TRSC_OWNER_NAME}" readonly="readonly"/></td>		
+							</tr> 
+							<tr height="40">
+									<td><input type="button" class="btn" value="입금 은행명*" /></td>
+									<td><select class="txt" id="dbNum" name="dbNum" disabled="disabled">
+											<optgroup>
+											<c:choose>
+												<c:when test="${data4.DPST_BANK_NUM  eq 0}">
+													<option value="0" selected="selected">카카오뱅크</option>												
+												</c:when>
+												<c:when test="${data4.DPST_BANK_NUM  eq 1}">
+													<option value="0" selected="selected">국민은행</option>												
+												</c:when>
+												<c:when test="${data4.DPST_BANK_NUM  eq 2}">
+													<option value="0" selected="selected">농협은행</option>												
+												</c:when>
+												<c:when test="${data4.DPST_BANK_NUM  eq 3}">
+													<option value="0" selected="selected">신한은행</option>												
+												</c:when>
+												<c:when test="${data4.DPST_BANK_NUM  eq 4}">
+													<option value="0" selected="selected">기업은행</option>												
+												</c:when>
+											</c:choose>												
+											</optgroup>
+										</select></td>
+									<td><input type="button" class="btn" value="입금 계좌번호*" /></td>
+									<td><input type="text" class="txt" id="daNum" name="daNum" value="${data4.DPST_ACNT_NUM}" readonly="readonly" /></td>
+							</tr>
+							<tr height="40">
+									<td><input type="button" class="btn" value="납입자명*" /></td>
+									<td><input type="text" class="txt" id="payerName" name="payerName" value="${data4.PAYER_NAME}" readonly="readonly"/></td>
+									<td><input type="button" class="btn" value="납입 계좌번호*" /></td>
+									<td><input type="text" class="txt" id="paNum" name="paNum" value="${data4.PYMT_ACNT_NUM}" readonly="readonly"/></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="갱신예정일*" /></td>
+								<td colspan="3"><input type="date" class="txt"  id="reDate" name="reDate" value="${data4.RNWL_EXPCTD_DATE}" readonly="readonly"/></td>
+							</tr>
+						</tbody>
+					</table>
+					<!-- 첨부자료 -->
+					<c:set var="cntrctFileLength" value="${fn:length(data3.ATT_FILE_NAME)}"></c:set>
 						<c:set var="qtnFileName" value="${fn:substring(data3.ATT_FILE_NAME, 20, qtnFileLength)}"></c:set>
 						<div class="spc">
 							<div class="adc_txt">
@@ -1318,26 +1364,10 @@ function drawPQList(list) {
 							<div class="cntrct_box_in">
 								<a href="resources/upload/${data3.ATT_FILE_NAME}"  download="${qtnFileName}">${qtnFileName}</a>
 							</div> 
-						</div>		
-<!-- *************************************** 견적 끝 *************************************** -->						
-					<div class="next_bot">
-						<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
-					</div>
-				</form>	
-				<div class="qtnDiv">
-				<form action="#" id="pastQtnActionForm" method="post">
-					<input type="hidden" name="salesNum" value="${param.salesNum}" />
-					<input type="hidden" name="qtnNum" value="${param.qtnNum}" />
-					<!-- 지난 견적서 -->
-					<div class="mgtop"></div>
-					<div class="PQ_title"></div>
-					<hr color="#F2B705" width="925px">
-					<div class="qBox"></div>
-				</form>		
-				</div>		
-					<!-- ********* 견적 끝 ********* -->
+						</div>	
+				</form>
 				<form action="#" id="botOpActionForm" method="post">
-					<input type="hidden" name="qtnNum" value="${data3.QTN_NUM}" />
+					<input type="hidden" name="cntrctNum" value="${data4.CNTRCT_NUM}" />
 					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
 					<input type="hidden" id="cmntNum" name="cmntNum" />
 					<!-- 의견 -->

@@ -625,7 +625,161 @@ thead {
 .page_title_bar_custom {
     height: 30px;
 }
-/* 개인 작업 영역 */
+
+/*       결재팝업              */
+
+.aprvl_popup_area {
+/*display: inline-block; */
+    /* vertical-align: top; */
+    width: 455px;
+    height: 280px;
+    /* border: 1px solid #d7d7d7; */
+    padding: 10px;
+}
+}
+
+.aprvl_title_wrap {
+	display: block;
+	width: 450px;
+    height: 50px;
+    border: 1px solid #d7d7d7;
+    text-align: left;
+}
+
+.aprvl_title_txt {
+display: inline-block;
+    vertical-align: top;
+    width: 62px;
+    height: 30px;
+    color: #444444;
+    text-align: right;
+    margin-right: 6px;
+    line-height: 26px;
+}
+
+.aprvl_title_input {
+    display: inline-block;
+    vertical-align: top;
+    width: 342px;
+    height: 25px;
+    border: 1px solid #d7d7d7;
+    margin-bottom: 9px;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+
+.aprvl_cont_wrap {
+display: block;
+    width: 458px;
+    height: 125px;
+    text-align: left;
+    border-bottom: solid 1px #d7d7d7;
+}
+
+.aprvl_cont_txt {
+    display: inline-block;
+    vertical-align: top;
+    width: 62px;
+    height: 30px;
+    color: #444444;
+    text-align: right;
+    margin-right: 6px;
+    line-height: 29px;
+}
+
+.aprvl_cont_input {
+display: inline-block;
+    vertical-align: top;
+    width: 342px;
+    height: 99px;
+    border: solid 1px #d7d7d7;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+
+.aprvler_wrap {
+    display: block;
+    width: 450px;
+    height: 40px;
+    text-align: left;
+    margin-top: 29px;
+}
+
+.aprvler_txt {
+    display: inline-block;
+    vertical-align: top;
+    width: 62px;
+    height: 30px;
+    color: #444444;
+    text-align: right;
+    margin-right: 6px;
+    line-height: 29px;
+}
+
+.aprvler_input {
+    display: inline-block;
+    vertical-align: top;
+    width: 308px;
+    height: 26px;
+    border: 1px solid #d7d7d7;
+    padding-left: 10px;
+    border-radius: 5px;
+}
+
+.aprvler_btn {
+    display: inline-block;
+    vertical-align: top;
+    height: 24px;
+    width: 24px;
+    margin-left: 7px;
+    background-image: url(resources/images/hr/srch_icon.png);
+    background-size: 100%;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.rfrnc_wrap {
+    display: block;
+    width: 450px;
+    height: 50px;
+    text-align: left;
+}
+
+.rfrnc_txt {
+display: inline-block;
+    vertical-align: top;
+    width: 62px;
+    height: 30px;
+    color: #444444;
+    text-align: right;
+    margin-right: 6px;
+    line-height: 29px;
+}
+
+.rfrnc_input {
+    display: inline-block;
+    vertical-align: top;
+    width: 308px;
+    height: 26px;
+    border: 1px solid #d7d7d7;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+
+.rfrnc_btn {
+display: inline-block;
+    vertical-align: top;
+    height: 24px;
+    width: 24px;
+    margin-left: 7px;
+    background-image: url(resources/images/hr/srch_icon.png);
+    background-size: 100%;
+    cursor: pointer;
+    line-height: 66px;
+    margin-top: 4px;
+}
+
+
 </style>
 
 <script type="text/javascript">
@@ -648,6 +802,7 @@ $(document).ready(function() {
    $("tbody").on("click", "tr", function() {
       $("#empNum").val($(this).attr("empNum"));
       $("#apntmNum").val($(this).attr("apntmNum"));
+      $("#stsNum").val($(this).attr("stsNum"));
       $("tbody").children("tr").css("background-color", "#ffffff");
       $(this).css("background-color", "rgb(200,218,248)");
 	   console.log("발령리스트 클릭! empnum : " + $("#empNum").val() + "apntmNum : " + $("#apntmNum").val())
@@ -717,8 +872,8 @@ $(document).ready(function() {
             html += "   <thead>                         ";
             html += "      <tr>                         ";
             html += "         <th>부서</th>             ";
-            html += "         <th>사원명</th>           ";
             html += "         <th>직급</th>             ";
+            html += "         <th>사원명</th>           ";
             html += "         <th>사원번호</th>         ";
             html += "      </tr>                        ";
             html += "   </thead>                        ";
@@ -767,8 +922,6 @@ $(document).ready(function() {
 			 	   });
 			   	   $("#inqryBtn").on("click", function() { 
 		   		      console.log("사원조회팝업 버튼클릭!")
-			   	      $("#oldInqryGbn").val($("#inqryGbn").val());
-			   	      $("#oldInqryTxt").val($("#inqryTxt").val());      
 				   	   var params = $("#inqryForm").serialize();	
 				   	   console.log("inqryGbn  : " + $("#inqryGbn").val())
 				 		$.ajax({
@@ -841,8 +994,8 @@ $(document).ready(function() {
 		
 		$("body").on("click", "#addApntmBtn", function() {
 			console.log("등록클릭!")
-			// 발령구분 퇴사 아닐 시 
-			if($('#addDvsnNum option:selected').val() != 1) {
+			// 발령등록 
+			if($('#addDvsnNum option:selected').val() != 1) { //발령구분 퇴사 아닐 시 
 				if ($("#addEmpNum").val() == '') {
 					makeAlert("알림", "돋보기를 눌러 발령사원을 선택하세요.", function(){
 					$("#prfl_srch_btn").focus();
@@ -865,9 +1018,9 @@ $(document).ready(function() {
 					});
 				} else {
 					$("#aprvlCont").val($("#addDvsnNum option:selected").attr("cont"))
-					console.log("등록완료! ")
 					console.log("결재요청내용 : " + $("#addDvsnNum option:selected").attr("cont"))
 					console.log("결재요청사원번호 : " + $("#sEmp").val())
+					// 발령 최종등록
 			   	   var params = $("#addApntmForm").serialize();	
 			 		$.ajax({
 					      type : "post",
@@ -875,9 +1028,13 @@ $(document).ready(function() {
 					      dataType : "json",
 					      data : params,
 					      success : function(res) {
-					    	  makeAlert("알림","발령이 등록되었습니다.", function(){
-				    		  	location.reload();
-					    	  });
+					    	  if(res.res == "success"){
+					    	 	 makeAlert("알림","발령이 등록되었습니다.", function(){
+				    		 	 	location.reload();
+					    	 	 });
+					    	  } else {
+					    		  makeAlert("알림", "작업중 문제가 발생하였습니다.");
+				    	 	 }
 					    	  console.log(res);
 					      }, 
 					      error : function(req) {
@@ -910,12 +1067,320 @@ $(document).ready(function() {
 				   }); 
 				}
 			}
+	
+
 		});
 		
   	});// 발령추가 끝
   	
+  	$("body").on("click","#aprvlBtn", function() {
+		var html = "";
+		
+		html += "<div class=\"aprvl_popup_area\">                          ";
+		html += "	<div class=\"aprvl_title_wrap\">                       ";
+		html += "		<div class=\"aprvl_title_txt\">제목</div>          ";
+		html += "		<input type=\"text\" class=\"aprvl_title_input\" id=\"aprvlTitle\" name=\"aprvlTitle\"/> ";
+		html += "	</div>			                                       ";
+		html += "	<div class=\"aprvl_cont_wrap\">                        ";
+		html += "		<div class=\"aprvl_cont_txt\">내용</div>           ";
+		html += "		<input type=\"text\" class=\"aprvl_cont_input\"id=\"aprvlCont\" name=\"aprvlCont\"/>  ";
+		html += "	</div>			                                       ";
+		html += "	<div class=\"aprvler_wrap\">                           ";
+		html += "		<div class=\"aprvler_txt\">결재권자</div>          ";
+		html += "		<input type=\"text\" readonly=\"readonly\" id=\"aprvlerInput\" class=\"aprvler_input\"/>     ";
+		html += "		<div class=\"aprvler_btn\" id=\"aprvlerBtn\"  ></div>                  ";
+		html += "	</div>			                                       ";
+		html += "	<div class=\"rfrnc_wrap\">                             ";
+		html += "		<div class=\"rfrnc_txt\">참조인</div>              ";
+		html += "		<input type=\"text\" readonly=\"readonly\" id=\"rfrncInput\" class=\"rfrnc_input\"/>       ";
+		html += "		<div class=\"rfrnc_btn\" id=\"rfrncBtn\"></div>                    ";
+		html += "	</div>			                                       ";
+		html += "</div>                                                    ";
+		
+		// 결재라인 지정
+		makePopup({
+			depth : 1,
+			bg : false,
+			bgClose : false,
+			width: 500,
+			height: 400,
+			title : "결재요청",
+			contents : html, 
+			contentsEvent : function() {
+				$("#aprvlerBtn").on("click", function() {
+					var html2 = "";
+					html2 += "<form action=\"#\" id=\"inqryForm\" method=\"post\">" ;
+					html2 += "<input type=\"hidden\" id=\"inqryNo\" name=\"inqryNo\"  />" ;
+					html2 += "<div class=\"popup_emp_srch_area\">         ";
+					html2 += "<select class=\"emp_srch_select\" id=\"inqryGbn\" name=\"inqryGbn\">          ";
+					html2 += "	<option value=\"0\" selected>전체</option>";
+					html2 += "	<option value=\"1\">부서명</option>      ";
+					html2 += "	<option value=\"2\">사원명</option>      ";
+					html2 += "	<option value=\"3\">직급명</option>      ";
+					html2 += "</select>                                   ";
+					html2 += "<div class=\"popup_srch_input\">	                 ";
+					html2 += "	<input type=\"text\" id=\"inqryTxt\" name=\"inqryTxt\"/>                  ";
+					html2 += "</div>                                      ";
+					html2 += "<div class=\"cmn_btn\" id=\"inqryBtn\">검색</div>           ";
+					html2 += "</div>                                      ";
+					html2 += "</form>";														
+					html2 += "<div class=\"empinqry_area\">        ";
+		            html2 += " <table class=\"empinqry_list\">   ";
+		            html2 += "   <colgroup>                      ";
+		            html2 += "      <col width=\"30\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "   </colgroup>                     ";
+		            html2 += "   <thead>                         ";
+		            html2 += "      <tr>                         ";
+		            html2 += "         <th>선택</th>             ";
+		            html2 += "         <th>부서</th>             ";
+		            html2 += "         <th>직급</th>             ";
+		            html2 += "         <th>사원명</th>           ";
+		            html2 += "         <th>사원번호</th>         ";
+		            html2 += "      </tr>                        ";
+		            html2 += "   </thead>                        ";
+		            html2 += "   <tbody id=\"aprvlerInqry_tbody\">   ";
+		            html2 += "   </tbody>                        ";
+		            html2 += "  </table>                         ";
+		            html2 += "</div>                             ";
+					//결재권자 선택 팝업
+					makePopup({
+						depth : 2,
+						bg : false,
+						bgClose : false,
+						width: 600,
+						height: 400,
+						title : "결재권자 선택",
+						contents : html2, 
+						contentsEvent : function() {
+							var params = $("#inqryForm").serialize();	
+							
+					 		$.ajax({
+							      type : "post",
+							      url : "apntmListAjax/inqryList",
+							      dataType : "json",
+							      data : params,
+							      success : function(res) {
+							    	  console.log(res);
+							    	  drawAprvlerInqryList(res.inqryList);
+							      }, 
+							      error : function(req) {
+							         console.log(req.responseText);
+							      }
+						   });
+					 		
+				   	   	   // 사원조회 버튼이벤트
+					 	   $("#inqryTxt").on("keypress", function(event) { // 엔터 시 클릭이벤트
+				 			  if(event.keyCode == 13) {
+				 				  $("#inqryBtn").click();
+				 				  return false;
+				 			  }
+					 	   });
+					   	   $("#inqryBtn").on("click", function() { 
+				   		      console.log("결재권자 선택팝업 버튼클릭!")
+						   	   var params = $("#inqryForm").serialize();	
+						   	   console.log("inqryGbn  : " + $("#inqryGbn").val())
+						 		$.ajax({
+								      type : "post",
+								      url : "apntmListAjax/inqryList",
+								      dataType : "json",
+								      data : params,
+								      success : function(res) {
+								    	  console.log(res);
+								    	  drawAprvlerInqryList(res.inqryList);
+								      }, 
+								      error : function(req) {
+								         console.log(req.responseText);
+								      }
+							   }); 
+					   	   });
+					   	   // tr 선택시 체크박스 선택처리
+					   	   $("#aprvlerInqry_tbody").on("click","tr",function(){
+					   		var checkbox = $(this).find("td:first-child :checkbox");
+					   		checkbox.attr("checked", !checkbox.is(":checked"));
+					   	   });
+					   	   
+						},
+						draggable : true,
+						buttons : [{
+							name : "확인",
+							func:function() { 
+							   // 결재권자 체크 된 값 가져오기
+						   	   var aprvler_num_arr = [];
+						   	   var aprvler_txt_arr = [];
+						   	   $("input[name=aprvlerChk]:checked").each(function() {
+						   		   var num = $(this).attr("aprvlerNum");
+						   		   var txt = $(this).attr("aprvlerName");
+						   		   aprvler_num_arr.push(num);
+						   		   aprvler_txt_arr.push(txt);
+						   	   });
+						   	   console.log("결재권자 체크값 : " + aprvler_num_arr, aprvler_txt_arr)
+						   	   $("#aprvlerInput").val(aprvler_txt_arr);
+						   	   closePopup(2);
+							}
+						}, {
+							name : "취소"
+						}]
+					});
+					$(".empinqry_area").slimScroll({height: "255px"},{width: "450px"}); // 슬림스크롤
+				}); // 결재권자선택버튼 클릭이벤트 끝
+				
+				// 참조자선택버튼 클릭이벤트
+				$("#rfrncBtn").on("click", function() {
+					var html2 = "";
+					html2 += "<form action=\"#\" id=\"inqryForm\" method=\"post\">" ;
+					html2 += "<input type=\"hidden\" id=\"inqryNo\" name=\"inqryNo\"  />" ;
+					html2 += "<div class=\"popup_emp_srch_area\">         ";
+					html2 += "<select class=\"emp_srch_select\" id=\"inqryGbn\" name=\"inqryGbn\">          ";
+					html2 += "	<option value=\"0\" selected>전체</option>";
+					html2 += "	<option value=\"1\">부서명</option>      ";
+					html2 += "	<option value=\"2\">사원명</option>      ";
+					html2 += "	<option value=\"3\">직급명</option>      ";
+					html2 += "</select>                                   ";
+					html2 += "<div class=\"popup_srch_input\">	                 ";
+					html2 += "	<input type=\"text\" id=\"inqryTxt\" name=\"inqryTxt\"/>                  ";
+					html2 += "</div>                                      ";
+					html2 += "<div class=\"cmn_btn\" id=\"inqryBtn\">검색</div>           ";
+					html2 += "</div>                                      ";
+					html2 += "</form>";														
+					html2 += "<div class=\"empinqry_area\">        ";
+		            html2 += " <table class=\"empinqry_list\">   ";
+		            html2 += "   <colgroup>                      ";
+		            html2 += "      <col width=\"30\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "   </colgroup>                     ";
+		            html2 += "   <thead>                         ";
+		            html2 += "      <tr>                         ";
+		            html2 += "         <th>선택</th>             ";
+		            html2 += "         <th>부서</th>             ";
+		            html2 += "         <th>직급</th>             ";
+		            html2 += "         <th>사원명</th>           ";
+		            html2 += "         <th>사원번호</th>         ";
+		            html2 += "      </tr>                        ";
+		            html2 += "   </thead>                        ";
+		            html2 += "   <tbody id=\"aprvlerInqry_tbody\">   ";
+		            html2 += "   </tbody>                        ";
+		            html2 += "  </table>                         ";
+		            html2 += "</div>                             ";
+					//참조자 선택 팝업
+					makePopup({
+						depth : 2,
+						bg : false,
+						bgClose : false,
+						width: 600,
+						height: 400,
+						title : "참조인 선택",
+						contents : html2, 
+						contentsEvent : function() {
+							var params = $("#inqryForm").serialize();	
+							
+					 		$.ajax({
+							      type : "post",
+							      url : "apntmListAjax/inqryList",
+							      dataType : "json",
+							      data : params,
+							      success : function(res) {
+							    	  console.log(res);
+							    	  drawAprvlerInqryList(res.inqryList);
+							      }, 
+							      error : function(req) {
+							         console.log(req.responseText);
+							      }
+						   });
+				   	   	   // 사원조회 버튼이벤트
+					 	   $("#inqryTxt").on("keypress", function(event) { // 엔터 시 클릭이벤트
+				 			  if(event.keyCode == 13) {
+				 				  $("#inqryBtn").click();
+				 				  return false;
+				 			  }
+					 	   });
+					   	   $("#inqryBtn").on("click", function() { 
+				   		      console.log("결재권자 선택팝업 버튼클릭!")
+						   	   var params = $("#inqryForm").serialize();	
+						   	   console.log("inqryGbn  : " + $("#inqryGbn").val())
+						 		$.ajax({
+								      type : "post",
+								      url : "apntmListAjax/inqryList",
+								      dataType : "json",
+								      data : params,
+								      success : function(res) {
+								    	  console.log(res);
+								    	  drawAprvlerInqryList(res.inqryList);
+								      }, 
+								      error : function(req) {
+								         console.log(req.responseText);
+								      }
+							   }); 
+					   	   });
+					   	   // tr 선택시 체크박스 선택처리
+					   	   $("#aprvlerInqry_tbody").on("click","tr",function(){
+					   		var checkbox = $(this).find("td:first-child :checkbox");
+					   		checkbox.attr("checked", !checkbox.is(":checked"));
+					   	   });
+					   	   
+						},
+						draggable : true,
+						buttons : [{
+							name : "확인",
+							func:function() { 
+							   // 결재권자 체크 된 값 가져오기
+						   	   var rfrnc_num_arr = [];
+						   	   var rfrnc_txt_arr = [];
+						   	   $("input[name=aprvlerChk]:checked").each(function() {
+						   		   var num = $(this).attr("aprvlerNum");
+						   		   var txt = $(this).attr("aprvlerName");
+						   		rfrnc_num_arr.push(num);
+						   		rfrnc_txt_arr.push(txt);
+						   	   });
+						   	   console.log("결재권자 체크값 : " + rfrnc_num_arr, rfrnc_txt_arr)
+						   	   $("#rfrncInput").val(rfrnc_txt_arr);
+						   	   closePopup(2);
+							}
+						}, {
+							name : "취소"
+						}]
+					});
+					$(".empinqry_area").slimScroll({height: "255px"},{width: "450px"}); // 슬림스크롤
+				}); // 결재권자선택버튼 클릭이벤트 끝
+				
+			},
+			draggable : true,
+			buttons : [{
+				name : "확인",
+				func:function() {	
+				}
+			}, {
+				name : "취소"
+			}]
+		});
+  		
+  	});
+  	
+  	
   	
 });
+
+// 사원조회 리스트 생성
+function drawAprvlerInqryList(inqryList) {
+	var html = "";
+	
+    for(var data of inqryList) {
+        html += "<tr no=\"" + data.EMP_NUM + "\">"   
+        html += " 	<td><input type=\"checkbox\" aprvlerNum=\""+data.EMP_NUM+"\" id=\"aprvlerChk\" name=\"aprvlerChk\" aprvlerName=\"" + data.EMP_NAME + "\"/></td> ";
+        html += " 	<td>" + data.DEPT_NAME + "</td> ";
+        html += " 	<td>" + data.RANK_NAME + "</td> ";
+        html += " 	<td>" + data.EMP_NAME + "</td> ";
+        html += " 	<td>" + data.EMP_NUM + "</td> ";
+        html += " </tr>                       ";
+    }
+	$("#aprvlerInqry_tbody").html(html);
+}
 
 // 사원조회 리스트 생성
 function drawInqryList(inqryList) {
@@ -924,8 +1389,8 @@ function drawInqryList(inqryList) {
     for(var data of inqryList) {
         html += "<tr no=\"" + data.EMP_NUM + "\">"   
         html += " 	<td>" + data.DEPT_NAME + "</td> ";
-        html += " 	<td>" + data.EMP_NAME + "</td> ";
         html += " 	<td>" + data.RANK_NAME + "</td> ";
+        html += " 	<td>" + data.EMP_NAME + "</td> ";
         html += " 	<td>" + data.EMP_NUM + "</td> ";
         html += " </tr>                       ";
     }
@@ -976,7 +1441,7 @@ function drawList(list) {
    var html = "";
    
    for(var data of list) {                                 
-      html += "<tr id=\"tbodyTr\" apntmNum=\"" + data.APNTM_NUM + "\"empNum=\"" + data.EMP_NUM + " \">" ;
+      html += "<tr id=\"tbodyTr\" stsNum=\"" + data.STS_NUM + "\" apntmNum=\"" + data.APNTM_NUM + "\"empNum=\"" + data.EMP_NUM + " \">" ;
       html += "<td>" + data.APNTM_NUM + "</td>"           ;
       if(data.APNTM_DVSN_NUM == 0) {
      	 html += "<td>입사</td>"      ;
@@ -991,12 +1456,14 @@ function drawList(list) {
       html += "<td>" + data.DEPT_NAME + "</td>"           ;
       html += "<td>" + data.RANK_NAME + "</td>"           ;
       html += "<td>" + data.START_DATE + "</td>"          ;
-      if(data.APRVL_STS == "결재진행중") {
-     	 html += "<td>" + data.APRVL_STS + "</td>"           ;
-      } else if(data.APRVL_STS == "결재완료") {
-     	 html += "<td style=\"color:#4B94F2;\">" + data.APRVL_STS + "</td>"           ;
+      if(data.STS_NUM == "0") {
+     	 html += "<td>결재진행중</td>"           ;
+      } else if(data.STS_NUM == "1") {
+     	 html += "<td style=\"color:#4B94F2;\">결재완료</td>"           ;
+      } else if(data.STS_NUM == "2") {
+     	 html += "<td style=\"color:#ff6f60;\">결재반려</td>"           ;
       } else {
-    	  html += "<td style=\"color:#ff6f60;\">" + data.APRVL_STS + "</td>"           ;
+    	  html += "<td> - </td>"           ;
       }
       html += "</tr>"                                     ;
    }
@@ -1010,6 +1477,10 @@ function drawCont(cont, emp){
    html += "<div class=\"apntm_cont_right_area\">                                                     ";
    html += "   <div class=\"apntm_add_title_area\">                                                   ";
    html += "      <div class=\"apntm_info_title\">발령상세</div>                                      ";
+   // STS_NUM 결재요청 전 상태일 경우 결재버튼 생성
+   if($("#stsNum").val() == "NULL" || $("#stsNum").val() == "" || $("#stsNum").val() == "undefined"){
+   html += "      <input type=\"button\" class=\"apntm_add_btn_2\" id=\"aprvlBtn\" value=\"결재\" />                                      ";
+   }
    html += "   </div>                                                                                 ";
    html += "   <div class=\"apnmt_add_area\">                                                         ";
    html += "      <div class=\"apnmt_add_top_area\">                                                 ";
@@ -1253,6 +1724,7 @@ function drawAddApntm(dept,rank){
 			<input type="hidden" name="menuType" value="${param.menuType}"> 
 			<input type="hidden" id="apntmNum" name="apntmNum" />
 			<input type="hidden" id="empNum" name="empNum" />
+			<input type="hidden" id="stsNum" name="stsNum" />
 			<div class="srch_wrap">
 				<div class="srch_top_area">
 					<select class="srch_select" id="searchGbn" name="searchGbn">

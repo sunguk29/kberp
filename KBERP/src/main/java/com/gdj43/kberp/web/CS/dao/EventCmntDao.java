@@ -31,9 +31,9 @@ public class EventCmntDao implements IEventCmntDao {
 	}
 	
 	@Override
-	public HashMap<String, String> getEventCmntAdd(HashMap<String, String> params) throws Throwable {
+	public void EventCmntAdd(HashMap<String, String> params) throws Throwable {
 		// TODO Auto-generated method stub
-		return sqlSession.selectOne("ev.getEventCmntAdd", params);
+		sqlSession.insert("ev.EventCmntAdd", params);
 	}
 	
 

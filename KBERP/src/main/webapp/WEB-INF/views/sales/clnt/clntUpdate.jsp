@@ -13,7 +13,6 @@
 .cont_wrap {
 	width: 1013px;
 }
-
 /* 개인 작업 영역 */
 .body {
 	display: block;
@@ -29,22 +28,16 @@
 	height: 100%;
 	margin: 20px auto;
 }
-table{
-	
+table {
 	border: 1px;
 	width: 927px;
 	margin: 40px auto;
 }
-td:nth-child(2), td:nth-child(4){
+td:nth-child(2), td:nth-child(4) {
 	border-bottom: 1px solid #d7d7d7;
 }
-
-td:nth-child(1), td:nth-child(3){
+td:nth-child(1), td:nth-child(3) {
 	text-align: center;
-}
-.btn{ /* 내용 제목 영역 */
-	width : 90px;
-	height: 40px;
 }
 .btn {
 	background-color: #fff;
@@ -52,10 +45,11 @@ td:nth-child(1), td:nth-child(3){
 	font-weight: bold;
 	font-size: 14px;
 	width: 150px;
+	height: 40px;
 	border: none;
 	text-align: center;
 }
-.btnImg:hover{
+.btnImg:hover {
 	cursor: pointer;
 }
 .txt{
@@ -71,21 +65,17 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 33px;
 	border: none;
 }
-
 .btnImg{
 	width: 30px;
 	float: right;
 	margin-left: 10px;
 }
-
-/* 목록, 수정, 삭제 영역 */
-.imgPos{
+.imgPos {
 	position: relative;
 }
 .plus_btn:hover {
 	cursor: pointer;
 }
-/* 첨부자료 */
 .cntrct_box_in {
 	width: 885px;
 	height: 100px;
@@ -140,7 +130,6 @@ td:nth-child(1), td:nth-child(3){
 .imgName {
 	padding-right: 30px;
 }
-/* 팝업 */
 .popup_title_mid {
 	width: calc(100% + 20px);
 	height: 70px;
@@ -235,7 +224,6 @@ td:nth-child(1), td:nth-child(3){
 	height: 32px;
 	text-align: center;
 }
-/* 팝업 내용 */
 .popup_box_left {
    display: inline-block;
    vertical-align: top;
@@ -272,7 +260,6 @@ td:nth-child(1), td:nth-child(3){
    background-color: #F2F2F2;
    margin-bottom: 5px;
 }
-
 .popup_mng_box_in:hover, .popup_cc_box_in:hover {
    cursor: pointer;
    border: 2px solid #2E83F2;
@@ -324,15 +311,13 @@ td:nth-child(1), td:nth-child(3){
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	// 목록버튼
 	$("#listBtn").on("click", function() {
 		makePopup({
 			bg : true,
 			bgClose : false,
 			title : "알림",
 			contents : "나가면 저장되지않습니다, 나가시겠습니까?",
-			contentsEvent : function() {
-				
-			},
 			buttons : [{
 				name : "나가기",
 				func:function() {
@@ -345,25 +330,23 @@ $(document).ready(function() {
 		});
 	});
 	
+	// 파일업로드
 	$(".rvn_txt").on("click", ".aff_btn", function() {
 		$("#att").click();
 	});
 	
+	// 파일삭제
 	$("#fileDelete").on("click", function() {
 		$("#file_name").remove();
 		$(this).remove();
-
 		var html = "";
-		
 		html += "<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
-		
 		$("#uploadBtn").html(html);
 	});
-	
-// ************** 고객사 팝업 **************
+
+	// 고객사아이콘
 	$("#ccPop").on("click", function() {
 		var html = "";
-        
 	 	html += "<form action=\"#\" id=\"popupForm\">";
 		html += " <div class=\"popup_title_mid\">                                                   ";
 	 	html += "<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
@@ -394,7 +377,6 @@ $(document).ready(function() {
 		html += "<div class=\"board_bottom\">     ";
 		html += "<div class=\"pgn_area\"></div>   ";
 		html += "</div>                         ";
-		
 		makePopup({
 			depth : 1,
 			bg : false,
@@ -403,9 +385,8 @@ $(document).ready(function() {
 			title : "고객사 조회",
 			contents : html,
 			contentsEvent : function() {
-				
 				drawCcList();
-				
+				// 항목클릭
 				$(".popup_box_cc").on("click", ".popup_cc_box_in", function() {
 					var cnn = $(this).children("#cnn").val(); 
 					var ccn = $(this).children("#ccn").val(); 
@@ -413,30 +394,24 @@ $(document).ready(function() {
 					document.getElementById("ccNum").value = ccn;
 					closePopup();
 				});
-				
+				// 페이지버튼
 				$(".pgn_area").on("click", "div", function() {
 					$("#page").val($(this).attr("page"));
-
 					drawCcList();
 				});
-				
 			},
 			buttons : {
 				name : "닫기",
 				func:function() {
-					console.log("One!");
 					closePopup();
 				}
 			}
 		});
 	});
-// ************** 고객사 팝업 END **************	
 
-// ************** 담당자 팝업 **************
+	// 담당자아이콘
 	$("#mngPop").on("click", function() {
-		
 		var html = "";
-		
 	 	html += "<div class=\"popup_title_mid\">"; 
 	 	html += "<form action=\"#\" id=\"popupMngForm\">";
 	 	html += "<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
@@ -477,9 +452,6 @@ $(document).ready(function() {
 		html += "<div class=\"board_bottom\">     ";
 		html += "<div class=\"pgn_area\"></div>   ";
 		html += "</div>                         ";
-		
-		
-		
 		makePopup({
 			depth : 1,
 			bg : false,
@@ -488,9 +460,9 @@ $(document).ready(function() {
 			title : "담당자 조회",
 			contents : html,
 			contentsEvent : function() {
-				
 				drawMngList();
 				
+				// 항목클릭
 				$(".popup_box_mng").on("click", ".popup_mng_box_in", function() {
 					var mng = $(this).children("#mng").val();
 					var mge = $(this).children("#mge").val();
@@ -499,39 +471,36 @@ $(document).ready(function() {
 					closePopup();
 				});
 				
+				// 검색버튼		
 				$("#meBtn").on("click", function () {
 					$("#page").val("1");
-					
 					drawMngList();
-					
 				});
 				
+				// 검색어 엔터처리
 				$("#searchT").on("keypress", function(event) {
 					if(event.keyCode == 13 ) {
 						$("#meBtn").click();
-						
 						return false;
 					}
 				});
 				
+				// 페이지버튼
 				$(".pgn_area").on("click", "div", function() {
 					$("#page").val($(this).attr("page"));
-
 					drawMngList();
 				});
 			},
 			buttons : {
 				name : "닫기",
 				func:function() {
-					console.log("One!");
 					closePopup();
 				}
 			}
 		});
-		
 	});
-// ************** 담당자 팝업 END **************
-
+	
+	// 저장버튼
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#cName")) {
 			makeAlert("필수 항목 알림", "고객을 입력하세요", function() {
@@ -561,17 +530,13 @@ $(document).ready(function() {
 				buttons : [{
 					name : "저장",
 					func:function() {
-						console.log($("#mngNum").val());
 						var updateForm = $("#updateForm");
-						
 						updateForm.ajaxForm({
 							success : function(res) {
 								if(res.fileName.length > 0) {
 									$("#attFile").val(res.fileName[0]);
 								}
-								
 								var params = $("#updateForm").serialize();
-								
 								$.ajax({
 									type : "post",
 									url : "clntMngAjax/update",
@@ -588,13 +553,11 @@ $(document).ready(function() {
 										console.log(request.responseText);
 									}
 								});
-								
 							},
 							error : function(req) {
 								console.log(req.responseText);
 							}
 						});
-						
 						updateForm.submit();
 						closePopup();
 					}
@@ -602,15 +565,14 @@ $(document).ready(function() {
 					name : "취소"
 				}]
 			});
-				
 		}
 	});
+	
 });
 
-// *********************************************** 고객사 팝업 ***********************************************
+// 고객사 content
 function drawCcList() {
 	var params = $("#popupForm").serialize();
-	
 	$.ajax({
 		type : "post",
 		url : "popupCcListAjax",
@@ -626,9 +588,9 @@ function drawCcList() {
 	});
 }
 
+// 고객사 목록
 function drawList(list) {
 	var html = "";
-
 	for(var data of list) {                                                                               
 		html += "<div class=\"popup_cc_box_in\" id=\"box\">                                                               ";
 		html += "<input type=\"hidden\" id=\"cnn\" value=\"" + data.CLNT_CMPNY_NAME + "\" />";
@@ -643,21 +605,18 @@ function drawList(list) {
 		html += "</span>                                                                                  ";
 		html += "</div>                                                                           ";
 	}                                                                                                     
-	                      
 	$(".popup_box_cc").html(html);
-	
 }
 
+// 고객사 페이징
 function drawPaging(pb) {
 	var html = "";
-	
 	html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
 	if($("#page").val() == "1") {
 		html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
 	} else {
 		html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
 	}
-	
 	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
 		if($("#page").val() == i) {
 			html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
@@ -665,7 +624,6 @@ function drawPaging(pb) {
 			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
 		}
 	}
-	
 	if($("#page").val() == pb.maxPcount) {
 		html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_next\">next</div>";
 	} else {
@@ -674,16 +632,11 @@ function drawPaging(pb) {
 	html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
 	
 	$(".pgn_area").html(html);
-
 }
-// *********************************************** 고객사 팝업 END ***********************************************
 
-
-
-// *********************************************** 담당자 팝업 ***********************************************
+// 담당자 content
 function drawMngList() {
 	var params = $("#popupMngForm").serialize();
-	
 	$.ajax({
 		type : "post",
 		url : "mngListAjax",
@@ -699,9 +652,9 @@ function drawMngList() {
 	});
 }
 
+// 담당자 목록
 function drawMngCont(mngList) {
 	var html = "";
-	
 	for(var data of mngList) {
 		html +=	"<div class=\"popup_mng_box_in\" id=\"mlb\">";
 		html += "<input type=\"hidden\" id=\"mng\" value=\"" + data.EMP_NAME + "\" />";
@@ -715,21 +668,18 @@ function drawMngCont(mngList) {
 		html +=	"</div>";
 		html +=	"</div>";                                                                      
 	}                                                                                                     
-	                      
 	$(".popup_box_mng").html(html);
-	
 }
 
+// 담당자 페이징
 function drawMngPaging(mngPb) {
 	var html = "";
-	
 	html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
 	if($("#page").val() == "1") {
 		html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
 	} else {
 		html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
 	}
-	
 	for(var i = mngPb.startPcount; i <= mngPb.endPcount; i++) {
 		if($("#page").val() == i) {
 			html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
@@ -737,18 +687,16 @@ function drawMngPaging(mngPb) {
 			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
 		}
 	}
-	
 	if($("#page").val() == mngPb.maxPcount) {
 		html += "<div page=\"" + mngPb.maxPcount + "\" class=\"page_btn page_next\">next</div>";
 	} else {
 		html += "<div page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</div>";
 	}
 	html += "<div page=\"" + mngPb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
-	
 	$(".pgn_area").html(html);
-
 }
-// *********************************************** 담당자 팝업 END ***********************************************
+
+// 파일명
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
@@ -780,7 +728,17 @@ function uploadName(e) {
 			<img alt="목록버튼" src="resources/images/sales/back.png" class="btnImg" id="listBtn" />
 			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
 			<!-- 검색영역 선택적 사항 -->
-			
+			<!-- <div class="page_srch_area">
+				<select class="srch_sel">
+					<option>제목</option>
+					<option>내용</option>
+					<option>작성자</option>
+				</select>
+				<div class="srch_text_wrap">
+					<input type="text" />
+				</div>
+				<div class="cmn_btn_ml">검색</div>
+			</div> -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
@@ -842,10 +800,13 @@ function uploadName(e) {
 							</tr>
 						</tbody>
 					</table>
+					<!-- 파일명 길이 -->
 					<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+					<!-- 파일명 재정의 -->
 					<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
 					<div class="rvn_txt"> 첨부파일
 						<span id="uploadBtn">
+							<!-- 파일명이 비어있으면 버튼 표시 -->
 							<c:if test="${empty data.ATT_FILE_NAME}">
 								<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" />
 							</c:if>
@@ -853,13 +814,14 @@ function uploadName(e) {
 					</div>
 					<div class="cntrct_box_in">
 						<span id="file_name">${fileName}</span>
-					<c:if test="${!empty data.ATT_FILE_NAME}">
-						<input type="button" id="fileDelete" value="삭제" />
-					</c:if>	
+						<!-- 파일명이 비어져있지 않으면 삭제버튼 표시 -->
+						<c:if test="${!empty data.ATT_FILE_NAME}">
+							<input type="button" id="fileDelete" value="삭제" />
+						</c:if>	
 						<input type="text" id="fileName" readonly="readonly" />
 					</div>
 					<input type="file" id="att" name="att" onchange="uploadName(this)" />
-					<input type="hidden" id="attFile" name="attFile" />
+					<input type="hidden" id="attFile" name="attFile" value="${data.ATT_FILE_NAME}" } /> <!-- 파일명 전송용 -->
 				</form>	
 			</div>
 		</div>

@@ -1,8 +1,10 @@
 package com.gdj43.kberp.web.sales.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
-
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.common.service.ICommonService;
+import com.gdj43.kberp.web.sales.service.IClntRprtService;
 import com.gdj43.kberp.web.sales.service.ISchdlService;
 
 
@@ -35,14 +38,66 @@ public class RprtController {
 	@Autowired
 	public ISchdlService iSchdlService; 
 	
+	@Autowired
+	public IClntRprtService iClntRprtService;
 	
 	
 	//고객 보고서
 	@RequestMapping(value = "/clntChart")
-	public ModelAndView clntList(ModelAndView mav) {
+	public ModelAndView clntList(@RequestParam HashMap<String, String> params, 
+								 ModelAndView mav) throws Throwable {
+		
+		// 고객사 개수
+		int AllCnt = iCommonService.getIntData("clntCmpnyMng.clntCmpnyListAllCnt", params);
+		int ccLastMonthCnt = iCommonService.getIntData("clntRprt.ccLastMonthCnt", params);
+		int ccThatMonthCnt = iCommonService.getIntData("clntRprt.ccThatMonthCnt", params);
+		double ccAvgCnt = iClntRprtService.ccAvgCnt(params);
+		// 고객 개수
+		int clntLastMonthCnt = iCommonService.getIntData("clntRprt.clntLastMonthCnt", params);
+		int clntThatMonthCnt = iCommonService.getIntData("clntRprt.clntThatMonthCnt", params);
+		double clntAvgCnt = iClntRprtService.clntAvgCnt(params);
+		int clntAllCnt = iCommonService.getIntData("clntRprt.clntAllCnt", params);
+		
+		Date dt = new Date();
+		Date mon = new Date();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat month = new SimpleDateFormat("yyyy-MM");
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dt);
+		cal.add(Calendar.DATE, -60);
+		
+		String startDate = sdf.format(cal.getTime());
+		String endDate = sdf.format(dt);
+		String  tMonth = month.format(mon);
+
+		
+		if(params.get("startDate") == null || params.get("startDate") == "") {
+			params.put("startDate", startDate); 
+			params.put("endDate", endDate); // 넘어오는게 없으면 현재날짜뽑아온거를 추가.
+		}
+		params.put("tMonth", tMonth);
+
+		System.out.println("tMonth");
+		
+		mav.addObject("AllCnt", AllCnt);
+		mav.addObject("ccLastMonthCnt", ccLastMonthCnt);
+		mav.addObject("ccThatMonthCnt", ccThatMonthCnt);
+		mav.addObject("ccAvgCnt", ccAvgCnt);
+		
+		mav.addObject("clntLastMonthCnt", clntLastMonthCnt);
+		mav.addObject("clntThatMonthCnt", clntThatMonthCnt);
+		mav.addObject("clntAvgCnt", clntAvgCnt);
+		mav.addObject("clntAllCnt", clntAllCnt);
+		
+		mav.addObject("tMonth", params.get("tMonth"));
+		mav.addObject("startDate", params.get("startDate"));
+		mav.addObject("endDate", params.get("endDate"));
 		mav.setViewName("sales/rprt/clntChart");
 		return mav;
-	}
+		
+	} 
 	
 	
 	/* 영업 차트 */

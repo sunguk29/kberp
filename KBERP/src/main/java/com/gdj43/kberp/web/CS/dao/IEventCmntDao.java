@@ -10,6 +10,6 @@ public interface IEventCmntDao {
 
 	public int getEventCmntCnt(HashMap<String, String> params) throws Throwable;
 
-	public HashMap<String, String> getEventCmntAdd(HashMap<String, String> params) throws Throwable;
+	public void EventCmntAdd(HashMap<String, String> params) throws Throwable;
 	
 }

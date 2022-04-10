@@ -15,7 +15,6 @@
 .cont_wrap {
 	width: 1013px;
 }
-
 /* 개인 작업 영역 */
 .body {
 	display: block;
@@ -31,19 +30,18 @@
 	height: 100%;
 	margin: 20px auto;
 }
-
-table{	
+table {	
 	border: 1px;
 	width: 927px;
 	margin: 40px auto;
 }
-td:nth-child(2), td:nth-child(4){
+td:nth-child(2), td:nth-child(4) {
 	border-bottom: 1px solid #d7d7d7;
 }
-tr:nth-child(11) > td:nth-child(1){
+tr:nth-child(11) > td:nth-child(1) {
 	border-bottom: 1px solid #d7d7d7;
 }
-td:nth-child(1), td:nth-child(3){
+td:nth-child(1), td:nth-child(3) {
 	text-align: center;
 }
 .btn{
@@ -62,7 +60,7 @@ td:nth-child(1), td:nth-child(3){
 .btnImg:hover, .plus_btn:hover {
 	cursor: pointer;
 }
-.txt{
+.txt {
 	height: 30px;
 	width: 100%;
 	padding: 0 5px;
@@ -75,14 +73,12 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 33px;
 	border: none;
 }
-
-.btnImg{
+.btnImg {
 	width : 30px;
 	float: right;
 	margin-left: 10px;
 }
-
-.imgPos{
+.imgPos {
 	text-align: right;
 }
 .title_name {
@@ -230,21 +226,17 @@ td:nth-child(1), td:nth-child(3){
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
+	// 목록버튼
 	$("#listBtn").on("click", function() {
 		makePopup({
 			bg : true,
 			bgClose : false,
 			title : "알림",
 			contents : "<div class=\"text_center\"><b>저장되지않았습니다, 나가시겠습니까?</b></div>",
-			contentsEvent : function() {
-				
-			},
 			buttons : [{
 				name : "나가기",
 				func:function() {
 					$("#listForm").submit();
-					console.log("One!");
 					closePopup();
 				}
 			}, {
@@ -253,19 +245,22 @@ $(document).ready(function() {
 		});
 	});
 	
+	// 주소 아이콘
 	$("#search_icon").on("click", function() {
 		findAddr();
 	});
 	
+	// 파일업로드
 	$(".aff_btn").on("click", function() {
 		$("#att").click();
 	});
 	
+	// 등록버튼
 	$("#addBtn").on("click", function() {
 		if(checkEmpty("#ccName")) {
 			makeAlert("필수 항목 알림", "고객사를 입력하세요", function() {
 				$("#ccName").focus();
-				});
+			});
 		} else if($("#ccClsfy").val() == 9) {
 			makeAlert("필수 항목 알림", "고객사 분류를 선택하세요", function() {
 				$("#ccClsfy").focus();
@@ -311,15 +306,12 @@ $(document).ready(function() {
 					name : "저장",
 					func:function() {
 						var addForm = $("#addForm");
-						
 						addForm.ajaxForm({
 							success : function(res) {
 								if(res.fileName.length > 0) {
 									$("#attFile").val(res.fileName[0]);
 								}
-								
 								var params = $("#addForm").serialize();
-								
 								$.ajax({
 									type : "post",
 									url : "clntCmpnyMngActionAjax/insert",
@@ -336,32 +328,26 @@ $(document).ready(function() {
 										console.log(request.responseText);
 									}
 								});
-								
 							},
 							error : function(req) {
 								console.log(req.responseText);
 							}
 						});
-						
 						addForm.submit();
-						console.log("One!");
 						closePopup();
 					}
 				}, {
 					name : "취소"
 				}]
 			});
-				
 		}
 	});
 });
 
+// 주소
 function findAddr(){
 	new daum.Postcode({
         oncomplete: function(data) {
-        	
-        	console.log(data);
-        	
             // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
             // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
             // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
@@ -379,6 +365,7 @@ function findAddr(){
     }).open();
 }
 
+// 파일명
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
@@ -407,7 +394,17 @@ function uploadName(e) {
 			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
 			<img alt="등록버튼" src="resources/images/sales/save.png" class="btnImg" id="addBtn" />
 			<!-- 검색영역 선택적 사항 -->
-			
+			<!-- <div class="page_srch_area">
+				<select class="srch_sel">
+					<option>제목</option>
+					<option>내용</option>
+					<option>작성자</option>
+				</select>
+				<div class="srch_text_wrap">
+					<input type="text" />
+				</div>
+				<div class="cmn_btn_ml">검색</div>
+			</div> -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
