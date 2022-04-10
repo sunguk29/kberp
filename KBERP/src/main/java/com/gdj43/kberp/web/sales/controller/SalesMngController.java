@@ -723,12 +723,12 @@ public class SalesMngController {
 
 			Map<String, Object> modelMap = new HashMap<String, Object>();
 
-			int cntrctListCnt = iCommonService.getIntData("salesMng.cntrctOpListCnt", params);
+			int cntrctOpListCnt = iCommonService.getIntData("salesMng.cntrctOpListCnt", params);
 
 			List<HashMap<String, String>> list = iCommonService.getDataList("salesMng.cntrctOpList", params);
 
 			modelMap.put("list", list);
-			modelMap.put("cntrctListCnt", cntrctListCnt);
+			modelMap.put("opListCnt", cntrctOpListCnt);
 
 			return mapper.writeValueAsString(modelMap);
 		}
