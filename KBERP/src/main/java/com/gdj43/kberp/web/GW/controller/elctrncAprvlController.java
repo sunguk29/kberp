@@ -1,8 +1,11 @@
 package com.gdj43.kberp.web.GW.controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gdj43.kberp.web.GW.service.IAprvlService;
 import com.gdj43.kberp.web.GW.service.IElctrncAprvlService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 
@@ -21,6 +25,8 @@ import com.gdj43.kberp.web.common.service.ICommonService;
 public class elctrncAprvlController {
 	
 	@Autowired ICommonService ics;
+	
+	@Autowired IAprvlService ias;
 	
 	@Autowired IElctrncAprvlService iElctrncAprvlService;
 	
@@ -57,9 +63,8 @@ public class elctrncAprvlController {
 	@RequestMapping(value = "/draftTmpltBoxWriteAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	
 	@ResponseBody
-	public String draftTmpltBoxWriteAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
-		
-		
+	
+	public String draftTmpltBoxWriteAjax(@RequestParam HashMap<String, String> params, HttpSession session, @PathVariable String gbn) throws Throwable {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -68,9 +73,17 @@ public class elctrncAprvlController {
 		try {
 			switch (gbn) {
 			case "insert":
-				System.out.println("@@@@@@@@@@@@@" + params);
-				String seq = ics.getStringData("elctrncAprvl.aprvlSeq");
-				params.put("al", seq);
+				
+				String[] temp = params.get("aprvl_line_emp_num").split(",");
+				
+				String[] temps = params.get("rfrnc_emp_num").split(",");
+				
+				List<String> aprvlEmpNum = Arrays.asList(temp);
+				
+				List<String> rfrncEmpNum = Arrays.asList(temps);
+				
+				String aprvlNum = ias.aprvlAdd(String.valueOf(session.getAttribute("sEmpNo")), params.get("dcmnt_title"), params.get("tmplt_cont"), aprvlEmpNum, rfrncEmpNum, null, gbn);
+				
 				
 			break;
 			} 

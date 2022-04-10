@@ -460,8 +460,11 @@ $(document).ready(function() {
 			alert("내용을 입력하세요.");
 			$("#cont_1").focus();
 		}
+		else{
 		
-		
+		$("#writeBtn").submit();
+		history.back();
+		}
 	})
 	
 function drawList(list) {
@@ -539,10 +542,9 @@ function removeAllValToArray(arr, val) {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
-	<form action="#" id="actionForm" method="post">
-		<%-- <input type= "hidden" id="tmplt_num" name="tmplt_num" value="${cont.TMPLT_NUM}"> --%>
+	<!-- <form action="#" id="actionForm" method="post">
 		
-	</form>
+	</form> -->
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
@@ -555,7 +557,9 @@ function removeAllValToArray(arr, val) {
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			
-			<form action="draftTmpltBox" id="writeForm" method="post">
+			<form action="#" id="writeForm" method="post">
+			<input type= "hidden" id="aprvl_num" name="aprvl_num" value="${cont.TMPLT_NUM}"> 
+			<input type= "hidden" >
 			<div class="board_a">
 				<input type="button" id="writeBtn" value="저장"> 
 				<input type="button" id="cancelBtn" value="취소">
