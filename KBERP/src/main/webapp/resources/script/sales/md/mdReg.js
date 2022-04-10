@@ -33,6 +33,7 @@ function insertMdData(){
 		if(checkEmpty("#md_name")){
 			alert("상품명을 입력하세요.");
 			$("#md_name").focus();
+			/*
 		}else if(checkSelect("#md_type")){
 			alert("상품 유형을 입력하세요.");
 			$("#md_type").focus();
@@ -74,6 +75,7 @@ function insertMdData(){
 		}else if(checkSelect("#loan_prd")){
 			alert("대출 기간을 입력하세요.");
 			$("#loan_prd").focus();
+			*/
 		}else{
 			makePopup({
 			depth : 1,
@@ -87,28 +89,47 @@ function insertMdData(){
 			buttons  : [{
 				name : "확인",
 				func : function() {
-					var params = $("#writeForm").serialize();
-					var callback=ajaxComm("mdActionAjax/insert", params,"");
-					callback.done(function(res){
-						alert("등ㄹ어옴");
-						if(res.res == "success"){
-							$("#actionForm").attr("action", "mdList");
-							$("#actionForm").submit();
-						}else{
-								alert("작성중 문제가 발생하였습니다.");						
-						}
-					});
-					callback.fail(function(request,status,error) {
-						console.log(request.requestText);
-					});
-			
-					closePopup();
+					var writeForm = $("#writeForm");
+					
+						writeForm.ajaxForm({
+							
+							success : function(res) {
+								
+								if(res.fileName.length > 0) {
+									$("#attFile").val(res.fileName[0]);
+								}
+								
+								var params = $("#writeForm").serialize();
+								var callback=ajaxComm("mdActionAjax/insert", params,"");
+								callback.done(function(res){
+									if(res.res == "success"){
+										$("#actionForm").attr("action", "mdList");
+										$("#actionForm").submit();
+									}else{
+										alert("작성중 문제가 발생하였습니다.");						
+									}
+								});
+								callback.fail(function(request,status,error) {
+									console.log(request.requestText);
+								});
+								
+							},
+							
+							error : function(req) {
+								console.log(req.responseText);
 							}
-						},{
-				name : "취소"
-						}]
-		});
+						});
+					
+					writeForm.submit();
+					closePopup();
+					
+						}
+					},{
+						name : "취소"
+					}]
+				});
 			
-		}
+			}
 	});
 }
+
