@@ -173,7 +173,8 @@
 .sales_text_bot{
 	width: 428px;
 	height: 200px;
-	border: 1px solid #000;
+	/* border: 1px solid #000; */
+	border: none;
 	margin-top: 10px;
 	font-size: 11pt;
 	position: relative;
@@ -184,7 +185,7 @@
 	vertical-align: top;	
 	width: 428px;
 	height: 30px;
-	margin-top: 10px;
+	margin-top: 5px;
 }
 .mhTxt {
 	display: inline-block;
@@ -198,13 +199,13 @@
 }
 .cc {
 	position: absolute;
-	top: 40px;
+	top: 35px;
 	left: 10px;
 	background-color: #F2B705;
 }
 .clnt {
 	position: absolute;
-	top: 95px;
+	top: 90px;
 	left: 10px;
 	background-color: #F2CB05;
 }
