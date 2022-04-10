@@ -1,9 +1,9 @@
 
 function reloadList() {
 	var params = $("#actionForm").serialize(); // name=val&name2=val2
+		
 	var callback = ajaxComm("mdListAjax", params, "");
 	callback.done(function(res){
-		console.log(res);
 		drawList(res.list);												//리스트 
 		drawPaging(res.pb);												//페이징
 		$("#sts_listA").text("전체 : "+ res.totalCnt + " 건");			//상단-전체
@@ -61,9 +61,12 @@ function GradeFormatter(gradeNum){
 /* 리스트 그리는 함수 */
 function drawList(list){
 	
+	
 	var html = "";
 	
 	for(var data of list){
+
+		var sales_sts = data.SALES_STS_NUM
 		
 		html += "<tr>";
 		html += "<td rowspan=\"3\" class='md_num'>" + data.MD_NUM + "</td>"; 	//글번호
@@ -74,7 +77,7 @@ function drawList(list){
 		html += "<tr>";
 		html += "<td>" + data.INTRST_RATE + "%" + "</td>";						//이자율
 		html += "<td class='md_name' no='" + data.MD_NUM + "'>" + data.MD_NAME + "</td>";				//상품명
-		html += "<td>" + data.SALES_STS_NUM + "</td>";							//판매상태
+		html += "<td><span class='sales_psbl_btn'>" + sales_sts + "</span></td>";							//판매상태
 		html += "</tr>";
 		html += "<tr class='thirdTr'>";
 		html += "<td>" + data.LIMIT_AMNT + "원" + "</td>";						//대출한도금액
