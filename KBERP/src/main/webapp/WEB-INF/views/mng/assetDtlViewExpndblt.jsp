@@ -76,7 +76,7 @@ $(document).ready(function() {
 </form>
 <div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">승인관리 상세보기</div>
+			<div class="page_title_text">자산 상세보기</div>
 		</div>
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->

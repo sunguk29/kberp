@@ -30,7 +30,7 @@
 	height: 50px;
 	text-indent: 35px;
 	line-height: 50px;
-	background-image: url('../images/note.png');
+	background-image: url('resources/images/GW/note.png');
 	background-size: 18px 18px;
 	background-repeat: no-repeat;
 	background-position: 10px 16px;
@@ -106,6 +106,7 @@ td:nth-child(5) {
 	width: 450px;
 	text-align: left;
 	color: blue;
+	text-align: center;
 }
 
 td:nth-child(6), th:nth-child(6) {
@@ -118,55 +119,148 @@ td:nth-child(5):hover {
 	cursor: pointer;
 	font-weight: bold;
 }
-
-.reply_btn {
-	margin-top: 10px;
-	margin-left: 800px;
-}
-
-.move_btn {
-	margin-top: 20px;
-	margin-left: 380px;
-	font-size: 10px;
-}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#replyBtn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
+	
+	if('${param.srch_sel}' !='') {
+		$('#srch_sel').val('${param.srch_sel}');
+	}
+	
+	reloadList();
+	
+	$("#searchTxt").on("keypress", function(event) {
+		if(event.keyCode == 13) {
+			$("#searchBtn").click();
+			
+			return false; // 이벤트를 동작 하지 않겠다
+		}
 	});
+	
+	$("#searchBtn").on("click", function() {
+		
+		$("#page").val("1");
+			
+		reloadList();
+	});
+
+	$("tbody").on("click", "td:nth-child(2), td:nth-child(3), td:nth-child(4), td:nth-child(5), td:nth-child(6)", function() {
+		$("#no").val($(this).parent().attr("no")); 
+		
+		$("#actionForm").attr("action", "rcvdNoteView");
+		$("#actionForm").submit();
+	});
+
+	$(".pgn_area").on("click", "div", function() {
+		$("#page").val($(this).attr("page"));
+		
+		reloadList();
+	}); 
+	
 	$("#dltBtn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
+		if($("[name='cb']").is(":checked")) { 
+			if(confirm("삭제하시겠습니까?")) {
+				
+				var params = $("#actForm").serialize();
+				console.log(params);
+					
+				$.ajax({
+					type : "post",
+					url : "NoteAction/delete",
+					dataType : "json",
+					data : params,
+					success : function(res) {
+						if(res.res == "success") {
+							$("#actionForm").attr("action", "rcvdNoteBox");
+							$("#actionForm").submit();
+							alert("삭제성공");
+						} else {
+							alert("삭제중 문제가 발생하였습니다.");
+						}
+					},
+					error : function(result, status, error) {
+						console.log(result, responseText);
+					}
+			   });
+			}
+		} else {	
+			alert("삭제할 목록을 선택해주세요.");
+		}
 	});
 });
+
+function reloadList() { // 목록 조회용 + 페이징 조회용
+	var params = $("#actionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "rcvdNoteBoxAjax",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			console.log(res);
+			drawList(res.list);
+			drawPaging(res.pb);
+		},
+		error : function(result, status, error) {
+			console.log(result, responseText);
+		}
+	});
+}
+
+function drawList(list) {
+	var html = "";
+	
+	for(var data of list) {
+		html += "<tr no=\"" + data.NOTE_NUM + "\">";
+		html += "<td>" + "<input type=\"checkbox\" id=\"cb\" name=\"cb\" value=\"" + data.NOTE_NUM + "\"/>" + "</td>";
+		html += "<td>" + data.NOTE_NUM + "</td>";
+		if(data.ATT_FILE != null) {
+			html += "<td>" + "<img src=\"resources/images/GW/attFile.png\" width=\"15\" height=\"15\"/>" + "</td>";
+		} else {
+			html += "<td>" + "</td>";
+		}
+		html += "<td>" + data.EMP_NAME + "</td>";
+		html += "<td>" + data.NOTE_CNT + "</td>";
+		html += "<td>" + data.VIEW_DATE + "</td>";
+		html += "</tr>";
+	}
+
+	$("tbody").html(html);
+	
+}
+
+function drawPaging(pb) {
+	var html = "";
+	
+	html += "<div page=\"1\"class=\"page_btn page_first\">first</div>";
+	
+	if($("#page").val() == "1") {
+		html += "<div page=\"1\"class=\"page_btn page_prev\">prev</div>";
+	} else {
+		html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\"class=\"page_btn page_prev\">prev</div>";
+	}
+	
+	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
+		if($("#page").val() == i) {
+			html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
+		} else {
+			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
+		}
+	}
+	
+	if($("#page").val() == pb.maxPcount) {
+		html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_next\">next</div>";
+	} else {
+		html += "<div page=\"" + ($("#page").val() *1 + 1) + "\" class=\"page_btn page_next\">next</div>";
+	}
+	
+	html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
+	
+	
+	$(".pgn_area").html(html);
+} 
+
 </script>
 </head>
 <body>
@@ -183,15 +277,22 @@ $(document).ready(function() {
 			<div class="page_title_text">받은쪽지함</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
-				<select class="srch_sel">
-					<option>제목</option>
-					<option>내용</option>
-					<option>작성자</option>
-				</select>
-				<div class="srch_text_wrap">
-					<input type="text" />
-				</div>
-				<div class="cmn_btn_ml">검색</div>
+				<form action="#" id="actionForm" method="post">
+					<input type="hidden" id="top" name="top" value="${param.top}" />
+					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+					<input type="hidden" id="no" name="no" />
+					<input type="hidden" id="page" name="page" value="${page}">
+					<input type="hidden" id="notesq" name="notesq" value="${param.no}"/>
+					<select id="srch_sel" name="srch_sel">
+						<option value="0">내용</option>
+						<option value="1">보낸사람</option>
+					</select>
+					<div class="srch_text_wrap">
+						<input type="text" id="searchTxt" name="searchTxt" value="${param.searchTxt}"/>
+					</div>
+					<div class="cmn_btn_ml" id="searchBtn" name="searchBtn">검색</div>
+				</form>
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -204,83 +305,25 @@ $(document).ready(function() {
 				<div class="guide">※ 받은 쪽지와 보낸 쪽지 모두 30일 이후에 자동 삭제됩니다.<br/>
 								  (단, 30일이 지난 쪽지라도 사용자가 열어보지 않으면 삭제되지 않습니다.)
 				</div>
-				<table class="board_table">
-					<thead>
-						<tr>
-							<th>선택</th>
-							<th>No.</th>
-							<th>파일</th>
-							<th>보낸사람</th>
-							<th>내용</th>
-							<th>받은시간</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>6</td>
-							<td></td>
-							<td>최현우[chw]</td>
-							<td>수신참조 된 결제 내역이 있습니다.<img src="../images/new.png" height="13" width="13"/></td>
-							<td>2022-01-30 18:00</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>5</td>
-							<td></td>
-							<td>최현우[chw]</td>
-							<td>올해 사내행사 총 결재금액 및 지출 내용입니다.<img src="../images/new.png" height="13" width="13"/></td>
-							<td>2022-01-30 18:00</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>4</td>
-							<td></td>
-							<td>최현우[chw]</td>
-							<td>수신참조 된 결제 내역이 있습니다.<img src="../images/new.png" height="13" width="13"/></td>
-							<td>2022-01-30 18:00</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>3</td>
-							<td></td>
-							<td>최현우[chw]</td>
-							<td>전자결재 문서가 종결(전결) 되었습니다.<img src="../images/new.png" height="13" width="13"/></td>
-							<td>2022-01-30 18:00</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>2</td>
-							<td></td>
-							<td>최현우[chw]</td>
-							<td>새로운 전자결재 문서가 상신되었습니다.<img src="../images/new.png" height="13" width="13"/></td>
-							<td>2022-01-30 18:00</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>1</td>
-							<td></td>
-							<td>최현우[chw]</td>
-							<td>수신참조 된 결제 내역이 있습니다.<img src="../images/new.png" height="13" width="13"/></td>
-							<td>2022-01-30 18:00</td>
-						</tr>
-					</tbody>
-				</table>
+				<form action="#" id="actForm" method="post">
+					<table class="board_table">
+						<thead>
+							<tr>
+								<th>선택</th>
+								<th>No</th>
+								<th>파일</th>
+								<th>보낸사람</th>
+								<th>내용</th>
+								<th>받은시간</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</form>
 			</div>
 			
 			<div class="board_bottom">
-				<div class="pgn_area">
-					<div class="page_btn page_first">first</div>
-					<div class="page_btn page_prev">prev</div>
-					<div class="page_btn_on">1</div>
-					<div class="page_btn">2</div>
-					<div class="page_btn">3</div>
-					<div class="page_btn">4</div>
-					<div class="page_btn">5</div>
-					<div class="page_btn page_next">next</div>
-					<div class="page_btn page_last">last</div>
-				</div>
-				<div class="cmn_btn_ml" id="replyBtn">답장</div>
+				<div class="pgn_area"></div>
 				<div class="cmn_btn_ml" id="dltBtn">삭제</div>
 			</div>
 		</div>

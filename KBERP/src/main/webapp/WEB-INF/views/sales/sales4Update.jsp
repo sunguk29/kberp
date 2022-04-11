@@ -1,5 +1,5 @@
 <!-- 
-	계약 상세보기 : sales4CntrctCont
+	계약 수정 : sales4Update
  -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>계약 상세보기</title>
+<title>계약 수정</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -443,142 +443,144 @@ pre {
 $(document).ready(function() {
 
 	console.log(${param.salesNum});
-	console.log(${param.qtnNum});
+	console.log(${param.cntrctNum});
 	
 	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
-		
-		$("#actionForm").attr("action", "salesList");
-		$("#actionForm").submit();
-	});
-	
-	
-	// 수정 버튼
-	$("#updateBtn").on("click", function() {
-		
-		$("#actionForm").attr("action", "sales4Update");
-		$("#actionForm").submit();
-	});
-	
-	//
-	
-	// 영업 종료하기 버튼
-	$(".salesOver_btn").on("click", function() {
-		// 수정이랑 같음, 상태를 종료로 변경, ajax로 failure로 보내기
 		makePopup({
-			bg : true,
+			bg : false,
 			bgClose : false,
-			title : "영업 종료하기",
-			contents : "영업을 종료하시겠습니까?",
+			title : "알림",
+			contents : "작성중인 내용이 저장되지 않습니다. 나가시겠습니까?",
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
-			buttons : [{
+			buttons : [ {
 				name : "확인",
-				func:function() {
-					/* 여기에 넣기 */
-					var params = $("#updateForm").serialize();
-					
-					$.ajax({
-						type : "post",
-						url : "salesMng4ActionAjax/failure",
-						dataType : "json",
-						data : params,
-						success : function(res) {
-							if(res.res == "success") {
-								$("#updateForm").attr("action", "salesList");
-								$("#updateForm").submit();
-							} else {
-								alert("영업 종료중 문제가 발생하였습니다.");
-							}
-						},
-						error : function(request, status, error) { // 문제 발생 시 실행 함수
-							console.log(request.responseText); // 결과텍스트
-						}
-					});
-					
+				func : function() {
+					$("#listForm").attr("action", "salesList");
+					$("#listForm").submit();
 					console.log("One!");
 					closePopup();
 				}
 			}, {
-				name : "닫기"
-			}]
+				name : "취소"
+			} ]
 		});
 	});
 	
-	/* 의견 목록 */
-	reloadOpList();
-	
-	/* 의견 등록 버튼 클릭시 */
-	$(".subm").on("click", function() {
-		var params = $("#botOpActionForm").serialize();
-		
-		$.ajax({
-			type : "post",
-			url : "cntrctBotActionAjax/insert",
-			dataType : "json",
-			data : params,
-			success : function(res) {
-				if(res.res == "success") {
-					$("#tatacont").val("");
-					reloadOpList();
-				} else {
-					alert("등록중 문제가 발생하였습니다.");
-				}
-			},
-			error : function(request, status, error) {
-				console.log(request.responseText);
-			}
-		});
+	// 견적 - 상세정보 - 첨부파일
+	$(".att_btn").on("click", function() {
+		$("#att").click();
 	});
 	
-	
-	/* 의견 삭제 버튼 클릭시 */
-	$(".opbx").on("click", ".del", function() {
-		var cmntNum = $(this).children("#cmntNum").val();
-		document.getElementById("cmntNum").value = cmntNum;
+	$("#fileDelete").on("click", function() {
+		$("#file_name").remove();
+		$(this).remove();
 		
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "경고",
-			contents : "삭제하시겠습니까?",
-			contentsEvent : function() {
-				$("#popup1").draggable();
-			},
-			buttons : [{
-				name : "예",
-				func:function() {
-					console.log($("#cmntNum").val());
-					var params = $("#botOpActionForm").serialize();
-					
-					$.ajax({
-						type : "post",
-						url : "cntrctBotActionAjax/update",
-						dataType : "json",
-						data : params,
-						success : function(res) {
-							if(res.res == "success") {
-								reloadOpList();
-							} else {
-								alert("삭제중 문제가 발생하였습니다.");
+		var html = "";
+		
+		html += "<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
+		
+		$("#uploadBtn").html(html);
+	});
+	
+	$(".adc_txt").on("click", ".aff_btn", function() {
+		$("#att").click();
+	});
+	
+	// 저장 버튼
+	$("#saveBtn").on("click", function() {
+		if(checkEmpty("#cntrctDt")) {
+			alert("계약일을 선택하세요.");
+			$("#cntrctDt").focus();
+		} else if($("#cntrctSdt").val() == 9) {
+			alert("계약기간 시작일을 선택하세요.");
+			$("#cntrctSdt").focus();
+		} else if(checkEmpty("#cntrctEdt")) {
+			alert("계약기간 종료일을 입력하세요.");
+			$("#cntrctEdt").focus();
+		} else if(checkEmpty("#daoName")) {
+			alert("입금계좌 소유주명을 입력하세요.");
+			$("#daoName").focus();
+		} else if($("#dbNum").val() == "9") {
+			alert("입금 은행명을 입력하세요.");
+			$("#dbName").focus();
+		} else if(checkEmpty("#daNum")) {
+			alert("입금 계좌번호를 입력하세요.");
+			$("#daNum").focus();
+		} else if(checkEmpty("#payerName")) {
+			alert("납입자명을 입력하세요.");
+			$("#payerName").focus();
+		} else if(checkEmpty("#paNum")) {
+			alert("납입 계좌번호를 입력하세요.");
+			$("#paNum").focus();
+		} else if(checkEmpty("#reDate")) {
+			alert("갱신 예정일을 입력하세요.");
+			$("#reDate").focus();
+		} 
+		else {
+			makePopup({
+				bg : false,
+				bgClose : false,
+				title : "알림",
+				contents : "저장하시겠습니까?",
+				contentsEvent : function() {
+					$("#popup1").draggable();
+				},
+				buttons : [{
+					name : "확인",
+					func:function() {
+						/* 여기에 넣기 */
+						var updateForm = $("#updateForm");
+						
+						updateForm.ajaxForm({
+							success : function(res) {
+								if(res.fileName.length > 0) {
+									$("#attFile").val(res.fileName[0]);
+								}
+								
+								var params = $("#updateForm").serialize();
+								
+								$.ajax({
+									type : "post",
+									url : "salesMng4ActionAjax/update",
+									dataType : "json",
+									data : params,
+									success : function(res) {
+										if(res.res == "success") {
+											$("#backForm").attr("action", "sales4CntrctCont");
+											$("#backForm").submit();
+										} else {
+											alert("등록중 문제가 발생하였습니다.");
+											console.log($("#dbNum").val());
+										}
+									},
+									error : function(request, status, error) {
+										console.log(request.responseText);
+									}
+								});
+							},
+							error : function(req) {
+								console.log(req.responseText);
 							}
-						},
-						error : function(request, status, error) {
-							console.log(request.responseText);
-						}
-					});
-					
-					closePopup();
-					
-				}
-			}, {
-				name : "아니오"
-			}]
-		});
-		
+						});
+						updateForm.submit();
+						console.log("One!");
+						closePopup();
+					}
+				}, {
+					name : "닫기"
+				}]
+			});
+		}
 	});
+	
+	
+	
+	
+	
 	$(".salesCont").hide();
 	$(".sgstnCont").hide();
 	$(".qtnCont").hide();
@@ -624,7 +626,6 @@ $(document).ready(function() {
 	$(".qtnDiv").hide();
 	
 	
-	
  	//대출금액
 	var loanAmnt = ${data3.LOAN_AMNT};
 	//대출기간
@@ -665,64 +666,29 @@ $(document).ready(function() {
 	
 }); // document.ready End
 
-/* 의견 목록 Ajax */
-function reloadOpList() {
-	var params = $("#botOpActionForm").serialize();
-	
-	$.ajax({
-		type : "post",
-		url : "cntrctOpBotListAjax",
-		data : params,
-		dataType : "json",
-		success : function(res) {
-			drawOpCnt(res.cntrctListCnt);
-			drawOpList(res.list);
-		},
-		error : function(req) {
-			console.log(req.responseText);
-		}
-	});
-}
 
-/* 의견 목록 개수 html */
-function drawOpCnt(cntrctListCnt) {
-	var html = "";
-	
-	html = "<h3>의견(" + cntrctListCnt + ")</h3>";
-	
-	$(".op_title").html(html);
-}
-
-/* 의견 목록 html */
-function drawOpList(list) {
-	var html = "";
-	
-	for(var data of list) {
-		html += "<div class=\"OpinionBox\">";
-		html += "<div class=\"name\">" + data.EMP_NAME + "(" + data.DEPT_NAME + " / " + data.RANK_NAME + ")" + "</div>";
-		html += "<div class=\"txtOp\">" + data.CONT + "</div>";
-		html += "<div class=\"dt\">" + data.RGSTRTN_DATE + "</div>";
-		html += "<div class=\"del\">삭제";
-		html += "<input type=\"hidden\" id=\"cmntNum\" name=\"cmntNum\" value=\"" + data.CMNT_NUM + "\" />";
-		html += "</div>";
-		html += "</div>";
+function checkEmpty(sel) {
+	if($.trim($(sel).val()) == "") {
+		return true;
+	} else {
+		return false;
 	}
-	
-	$(".opbx").html(html);
-	
 }
 
-
+function uploadName(e) {
+	var files = e.files;
+	var filename = files[0].name;
+	$("#fileName").val(filename);
+}
 </script>
 </head>
 <body>
-<form action="#" id="actionForm" method="post">
+<form action="#" id="backForm" method="post">
 	<input type="hidden" id="page" name="page" value="${page}" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업번호 -->
-	<input type="hidden" name="cntrctNum" value="${data4.CNTRCT_NUM}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -735,10 +701,10 @@ function drawOpList(list) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">영업관리 - 계약 상세보기</div>
+			<div class="page_title_text">영업관리 - 계약 수정</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
 				<!-- <img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" id="printBtn" /> -->
-				<img alt="수정버튼" src="resources/images/sales/newAdd.png" class="btnImg" id="updateBtn" data-toggle="tooltip" title="계약 수정하기" />
+				<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" data-toggle="tooltip" title="계약 수정" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -747,13 +713,6 @@ function drawOpList(list) {
 			<div class="body">
 				<div class="bodyWrap">
 				<!-- 시작 -->
-				<form action="#" id="updateForm" method="post">
-						<input type="hidden" id="page" name="page" value="${page}" />
-						<input type="hidden" name="top" value="${param.top}" />
-						<input type="hidden" name="menuNum" value="${param.menuNum}" />
-						<input type="hidden" name="menuType" value="${param.menuType}" />
-						<input type="text" name="prgrsStsNum" value="${data.PRGRS_STS_NUM}" />
-						<input type="text" id="salesNum" name="salesNum" value="${data.SALES_NUM}" />
 				
 					<div class="bot_title">
 						<h3>영업기회<span id="sales_btn"><div class="up_btn" id="salesContBtn_s"></div></span></h3>
@@ -1113,7 +1072,7 @@ function drawOpList(list) {
 						<h3>견적<span id="qtn_btn"><div class="up_btn" id="qtnContBtn_s"></div></span></h3>
 					</div>
 					<div class="qtnCont">
-					 <hr class="hr_bot" color="white" width="925px"> 
+					<hr class="hr_bot" color="white" width="925px"> 
 					<div class="hr_bot"></div>
 					<table>
 						<colgroup>
@@ -1137,10 +1096,10 @@ function drawOpList(list) {
 											 		<option value="0" selected="selected">개인사업</option>
 									 			</c:when>
 									 			<c:when test="${data3.MD_TYPE_NUM eq 1}">
-											 		<option value="0" selected="selected">법인사업</option>
+											 		<option value="1" selected="selected">법인사업</option>
 									 			</c:when>
 									 			<c:when test="${data3.MD_TYPE_NUM eq 2}">
-											 		<option value="0" selected="selected">공공사업</option>
+											 		<option value="2" selected="selected">공공사업</option>
 									 			</c:when>
 									 		</c:choose>
 									 	</optgroup>
@@ -1192,10 +1151,10 @@ function drawOpList(list) {
 										 				<option value="0" selected="selected">미포함</option>
 										 			</c:when>
 										 			<c:when test="${data3.SRTX eq 1}">
-										 				<option value="0" selected="selected">포함</option>
+										 				<option value="1" selected="selected">포함</option>
 										 			</c:when>
 										 			<c:when test="${data3.SRTX eq 2}">
-										 				<option value="0" selected="selected">면세</option>
+										 				<option value="2" selected="selected">면세</option>
 										 			</c:when>
 										 		</c:choose>
 										 	</optgroup>
@@ -1212,13 +1171,13 @@ function drawOpList(list) {
 													<option value="0" selected="selected">6개월</option>
 												</c:when>
 												<c:when test="${data3.LOAN_PRD eq 1}">
-													<option value="0" selected="selected">1년</option>
+													<option value="1" selected="selected">1년</option>
 												</c:when>
 												<c:when test="${data3.LOAN_PRD eq 2}">
-													<option value="0" selected="selected">3년</option>
+													<option value="2" selected="selected">3년</option>
 												</c:when>
-												<c:when test="${data3.LOAN_PRD eq 2}">
-													<option value="0" selected="selected">5년</option>
+												<c:when test="${data3.LOAN_PRD eq 3}">
+													<option value="3" selected="selected">5년</option>
 												</c:when>
 											</c:choose>
 										</optgroup>
@@ -1234,10 +1193,10 @@ function drawOpList(list) {
 													<option value="0" selected="selected">원금 균등 상환</option>
 												</c:when>
 												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 1}">
-													<option value="0" selected="selected">원리금 균등 상환</option>
+													<option value="1" selected="selected">원리금 균등 상환</option>
 												</c:when>
 												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 2}">
-													<option value="0" selected="selected">만기 일시 상환</option>
+													<option value="2" selected="selected">만기 일시 상환</option>
 												</c:when>
 											</c:choose>
 										</optgroup>
@@ -1249,6 +1208,12 @@ function drawOpList(list) {
 								<td><input type="text" class="txt" id="intrstRate" name="intrstRate" value="${data3.INTRST_RATE}" readonly="readonly" /></td>
 								<td><input type="button" class="btn" value="납부일" readonly="readonly" /></td>
 								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" value="${data3.PYMNT_DATE}" readonly="readonly" placeholder="매달    일" /></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
+								<td><input type="text" class="txt" id="monthPymntAmnt" name="monthPymntAmnt" readonly="readonly" /></td>
+								<td><input type="button" class="btn" value="월 이자액" readonly="readonly" /></td>
+								<td colspan="2"><input type="text" class="txt" id="monthIntrstAmnt" name="monthIntrstAmnt" readonly="readonly" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="비고" readonly="readonly"/></td>
@@ -1267,15 +1232,17 @@ function drawOpList(list) {
 								<a href="resources/upload/${data3.ATT_FILE_NAME}" download="${qtnSFileName}">${qtnSFileName}</a>
 							</div>
 						</div>
-				
-					<!-- ********* 견적 끝 ********* -->					
-			</div>							
+				</div>
+<!-- *************************************** 견적 끝 *************************************** -->						
 						
 <!-- ************************************************ 계약 시작 ************************************************ -->
 				<hr class="hr_bot" color="#4B94F2" width="925px">
-				<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
-					<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
-					<input type="hidden" id= "mdNum" name="mdNum" />
+				<form action="fileUploadAjax" id="updateForm" method="post" enctype="multipart/form-data">
+						<input type="hidden" id="page" name="page" value="${page}" />
+						<input type="hidden" name="top" value="${param.top}" />
+						<input type="hidden" name="menuNum" value="${param.menuNum}" />
+						<input type="hidden" name="menuType" value="${param.menuType}" />
+						<input type="hidden" id="cntrctNum" name="cntrctNum" value="${param.cntrctNum}" /> 
 					<div class="bot_title"><h3>계약<div class="drop_btn"></div></h3></div>
 					 <hr class="hr_bot" color="white" width="925px"> 
 					<div class="hr_bot"></div>
@@ -1289,15 +1256,15 @@ function drawOpList(list) {
 						<tbody>
 							<tr height="40">
 								<td><input type="button" class="btn" value="계약일*" readonly="readonly" /></td>
-								<td colspan="3"><input type="date" class="txt" id="cntrctDt" name="cntrctDt" value="${data4.CNTRCT_DATE}" readonly="readonly" /></td>		
+								<td colspan="3"><input type="date" class="txt" id="cntrctDt" name="cntrctDt" value="${data4.CNTRCT_DATE}"/></td>		
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="계약기간*" readonly="readonly"/></td>
-								<td><input type="date" class="txt" id="cntrctSdt" name="cntrctSdt" value="${data4.CNTRCT_START_DATE}" readonly="readonly"/></td>
+								<td><input type="date" class="txt" id="cntrctSdt" name="cntrctSdt" value="${data4.CNTRCT_START_DATE}"/></td>
 								<td>
 									<div class="wave"> ~ </div>
 								</td>
-								<td><input type="date" class="txt" id="cntrctEdt" name="cntrctEdt" value="${data4.CNTRCT_END_DATE}" readonly="readonly"/></td>
+								<td><input type="date" class="txt" id="cntrctEdt" name="cntrctEdt" value="${data4.CNTRCT_END_DATE}"/></td>
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="고객사" /></td>
@@ -1307,43 +1274,63 @@ function drawOpList(list) {
 							</tr> 
 							<tr height="40">
 									<td><input type="button" class="btn" value="입금계좌 소유주명*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" id="daoName" name="daoName" value="${data4.DPST_TRSC_OWNER_NAME}" readonly="readonly"/></td>		
+									<td colspan="3"><input type="text" class="txt" id="daoName" name="daoName" value="${data4.DPST_TRSC_OWNER_NAME}"/></td>		
 							</tr> 
 							<tr height="40">
 									<td><input type="button" class="btn" value="입금 은행명*" /></td>
-									<td><select class="txt" id="dbNum" name="dbNum" disabled="disabled">
+									<td><select class="txt" id="dbNum" name="dbNum" required>
 											<optgroup>
 											<c:choose>
 												<c:when test="${data4.DPST_BANK_NUM  eq 0}">
-													<option value="0" selected="selected">카카오뱅크</option>												
+													<option value="0" selected="selected">카카오뱅크</option>
+													<option value="1">국민은행</option>
+													<option value="2">농협은행</option>
+													<option value="3">신한은행</option>
+													<option value="4">기업은행</option>
 												</c:when>
 												<c:when test="${data4.DPST_BANK_NUM  eq 1}">
-													<option value="1" selected="selected">국민은행</option>												
+													<option value="0">카카오뱅크</option>
+													<option value="1" selected="selected">국민은행</option>
+													<option value="2">농협은행</option>
+													<option value="3">신한은행</option>
+													<option value="4">기업은행</option>												
 												</c:when>
 												<c:when test="${data4.DPST_BANK_NUM  eq 2}">
-													<option value="2" selected="selected">농협은행</option>												
+													<option value="0">카카오뱅크</option>
+													<option value="1">국민은행</option>
+													<option value="2" selected="selected">농협은행</option>
+													<option value="3">신한은행</option>
+													<option value="4">기업은행</option>												
 												</c:when>
 												<c:when test="${data4.DPST_BANK_NUM  eq 3}">
-													<option value="3" selected="selected">신한은행</option>												
+													<option value="0">카카오뱅크</option>
+													<option value="1">국민은행</option>
+													<option value="2">농협은행</option>
+													<option value="3" selected="selected">신한은행</option>
+													<option value="4">기업은행</option>												
 												</c:when>
 												<c:when test="${data4.DPST_BANK_NUM  eq 4}">
+													<option value="0">카카오뱅크</option>
+													<option value="1">국민은행</option>
+													<option value="2">농협은행</option>
+													<option value="3">신한은행</option>
 													<option value="4" selected="selected">기업은행</option>												
 												</c:when>
 											</c:choose>												
 											</optgroup>
 										</select></td>
 									<td><input type="button" class="btn" value="입금 계좌번호*" /></td>
-									<td><input type="text" class="txt" id="daNum" name="daNum" value="${data4.DPST_ACNT_NUM}" readonly="readonly" /></td>
+									<td><input type="text" class="txt" id="daNum" name="daNum" value="${data4.DPST_ACNT_NUM}"/></td>
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="납입자명*" /></td>
-									<td><input type="text" class="txt" id="payerName" name="payerName" value="${data4.PAYER_NAME}" readonly="readonly"/></td>
+									<td><input type="text" class="txt" id="payerName" name="payerName" value="${data4.PAYER_NAME}" /></td>
 									<td><input type="button" class="btn" value="납입 계좌번호*" /></td>
-									<td><input type="text" class="txt" id="paNum" name="paNum" value="${data4.PYMT_ACNT_NUM}" readonly="readonly"/></td>
+									<td><input type="text" class="txt" id="paNum" name="paNum" value="${data4.PYMT_ACNT_NUM}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="갱신예정일*" /></td>
-								<td colspan="3"><input type="date" class="txt"  id="reDate" name="reDate" value="${data4.RNWL_EXPCTD_DATE}" readonly="readonly"/></td>
+								<td colspan="3"><input type="date" class="txt"  id="reDate" name="reDate" value="${data4.RNWL_EXPCTD_DATE}" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
@@ -1359,30 +1346,23 @@ function drawOpList(list) {
 						<div class="spc">
 							<div class="adc_txt">
 								첨부자료
+								<span id="uploadBtn">
+									<c:if test="${empty data4.ATT_FILE_NAME}">
+										<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" />
+									</c:if>
+								</span>
 							</div>
 							<div class="cntrct_box_in">
-								<a href="resources/upload/${data4.ATT_FILE_NAME}"  download="${cntrctFileName}">${cntrctFileName}</a>
+								<span id="file_name">${cntrctFileName}</span>
+								<c:if test="${!empty data4.ATT_FILE_NAME}">
+									<input type="button" id="fileDelete" value="삭제" />
+								</c:if>
+									<input type="text" id="fileName" readonly="readonly" />
 							</div> 
-						</div>
-				</form>	
-				<form action="#" id="botOpActionForm" method="post">
-					<input type="hidden" name="cntrctNum" value="${data4.CNTRCT_NUM}" />
-					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
-					<input type="hidden" id="cmntNum" name="cmntNum" />
-					<!-- 의견 -->
-					<div class="mgtop"></div>
-					<div class="op_title"></div>
-					<hr color="#F2B705" width="925px">
-					<div class="opbx"></div>
-					<div class="opBox">
-						<textarea id="tatacont" name="tacont"></textarea>
-						<div class="cmn_btn subm">등록</div>
-					</div>
+							<input type=file id="att" name="att" onchange="uploadName(this)" />
+							<input type="hidden" id="attFile" name="attFile" value="${data4.ATT_FILE_NAME}" />
+						</div>	
 				</form>
-					<hr class="hr_bot" color="white" width="925px">
-					<hr class="hr_bot" color="white" width="925px">
-					<div class="salesOver_btn nb">영업 종료하기</div>
-					<!-- 끝 -->
 					</div>
 				</div>
 			</div>	
