@@ -204,7 +204,7 @@ $(document).ready(function() {
 			makeAlert("알림", "증명서 종류를 선택하세요.", function(){
 			$("#kind").focus();
 			});
-		} else if ($("#issueCount").val() == '선택') {
+		} else if ($("#issueCount").val() == '선택') {$
 			makeAlert("알림", "발급 매수를 선택하세요.", function(){
 			$("#issueCount").focus();
 			});

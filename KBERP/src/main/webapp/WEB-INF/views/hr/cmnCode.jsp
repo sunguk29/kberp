@@ -268,6 +268,33 @@ height: 25px;
     padding-left: 10px;
 }
 
+.crtfct_rsn_area {
+    margin-top: 23px;
+}
+
+.crtfct_rsn_txt {
+display: inline-block;
+    vertical-align: top;
+    width: 42px;
+    height: 30px;
+    margin-left: 9px;
+    font-size: 13px;
+    line-height: 24px;
+    color: #333333;
+}
+
+.crtfct_rsn_input{
+    display: inline-block;
+    vertical-align: top;
+    width: 265px;
+    height: 24px;
+    font-size: 13px;
+    border: solid 1px #d7d7d7;
+    padding-left: 10px;
+    color: #333333;
+    border-radius: 5px;
+}
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -277,7 +304,8 @@ $(document).ready(function() {
    
    // 신청목록 클릭 시 
    $(".crtfct_table tbody tr").on("click", function() {
-	   $("#rCrtfctNum").val($(this).attr("crtfctNum")); // 선택한 tr의 증명서번호 값 보관
+	   $("#rCrtfctNum").val($(this).attr("rCrtfctNum")); // 선택한 tr의 증명서번호 값 보관
+	   $("#rEmpNum").val($(this).attr("rEmpNum")); // 선택한 tr의 증명서번호 값 보관
 	   console.log("증명서번호 : " +  $("#rCrtfctNum").val())
 	  
 	   var params = $("#crtfctAdminForm").serialize(); // 해당 증명서발급 정보 가져오기
@@ -290,38 +318,41 @@ $(document).ready(function() {
 	    	   if(res.res == "success") {
 	    		   console.log(res)
 	    		   var html = '';
-	    		   $("#rcEmpNum").val(res.cont.EMP_NUM);
 	    		   
 	    			html += "	<div class=\"aprvl_popup_area\">                        ";
 	    			html += "	<div class=\"r_info_wrap\">                             ";
 	    			html += "		<div class=\"r_info_row\">                          ";
 	    			html += "			<div class=\"r_info\">                          ";
 	    			html += "				<div class=\"r_info_txt\">사원번호</div>    ";
-	    			html += "				<input type=\"text\" class=\"r_input\" id=\"rcEmpNum\" readonly=\"readonly\"/> ";
+	    			html += "				<input type=\"text\" class=\"r_input\" value=\"" + res.cont.EMP_NUM + "\" id=\"rcEmpNum\" readonly=\"readonly\"/> ";
 	    			html += "			</div>                                          ";
 	    			html += "			<div class=\"r_info\">                          ";
-	    			html += "				<div class=\"r_info_txt\">재직여부</div>    ";
-	    			html += "				<input type=\"text\" class=\"r_input\"/>    ";
+	    			html += "				<div class=\"r_info_txt\">사원명</div>    ";
+	    			html += "				<input type=\"text\" value=\"" + res.cont.EMP_NAME + "\"  class=\"r_input\"/>    ";
 	    			html += "			</div>                                          ";
 	    			html += "		</div>                                              ";
 	    			html += "		<div class=\"r_info_row\">                          ";
 	    			html += "			<div class=\"r_info\">                          ";
 	    			html += "				<div class=\"r_info_txt\">부서</div>        ";
-	    			html += "				<input type=\"text\" class=\"r_input\"/>    ";
+	    			html += "				<input type=\"text\" value=\"" + res.cont.DEPT_NAME + "\" class=\"r_input\"/>    ";
 	    			html += "			</div>                                          ";
 	    			html += "			<div class=\"r_info\">                          ";
 	    			html += "				<div class=\"r_info_txt\">직급</div>        ";
-	    			html += "				<input type=\"text\" class=\"r_input\"/>    ";
+	    			html += "				<input type=\"text\" value=\"" + res.cont.RANK_NAME + "\" class=\"r_input\"/>    ";
 	    			html += "			</div>                                          ";
 	    			html += "		</div>                                              ";
 	    			html += "		<div class=\"r_info_row\">                          ";
 	    			html += "			<div class=\"r_info\">                          ";
 	    			html += "				<div class=\"r_info_txt\">입사일</div>      ";
-	    			html += "				<input type=\"text\" class=\"r_input\"/>    ";
+	    			html += "				<input type=\"text\" value=\"" + res.cont.START_DATE + "\" class=\"r_input\"/>    ";
 	    			html += "			</div>                                          ";
 	    			html += "			<div class=\"r_info\">                          ";
 	    			html += "				<div class=\"r_info_txt\">퇴사일</div>      ";
-	    			html += "				<input type=\"text\" class=\"r_input\"/>    ";
+	    			if(res.cont.END_DATE == undefined) {
+	    			html += "				<input type=\"text\" value=\"-\" class=\"r_input\"/>    ";
+	    			} else {
+	    			html += "				<input type=\"text\" value=\"" + res.cont.END_DATE + "\" class=\"r_input\"/>    ";
+	    			}
 	    			html += "			</div>                                          ";
 	    			html += "		</div>                                              ";
 	    			html += "	</div>                                                  ";
@@ -329,33 +360,46 @@ $(document).ready(function() {
 	    			html += "		<div class=\"r_info_row\">                          ";
 	    			html += "			<div class=\"r_info\">                          ";
 	    			html += "				<div class=\"r_info_txt\">증명서종류</div>  ";
-	    			html += "				<input type=\"text\" class=\"r_input\"/>    ";
+	    			if(res.cont.CRTFCT_KIND == 0) {
+	    			html += "				<input type=\"text\" value=\"재직증명서\" class=\"r_input\"/>    ";
+	    			} else if(res.cont.CRTFCT_KIND == 1) {
+	    			html += "				<input type=\"text\" value=\"경력증명서\" class=\"r_input\"/>    ";
+	    			} else if(res.cont.CRTFCT_KIND == 2) {
+	    			html += "				<input type=\"text\" value=\"퇴직증명서\" class=\"r_input\"/>    ";
+	    			} else {
+	    			html += "				<input type=\"text\" value=\"기타\" class=\"r_input\"/>    ";
+	    			}
 	    			html += "			</div>                                          ";
 	    			html += "			<div class=\"r_info\">                          ";
 	    			html += "				<div class=\"r_info_txt\">발급유형</div>    ";
-	    			html += "				<input type=\"text\" class=\"r_input\"/>    ";
+	    			if(res.cont.ISSUE_TYPE == 0) {
+	    			html += "				<input type=\"text\" value=\"국문증명서\" class=\"r_input\"/>    ";
+	    			} else {
+	    			html += "				<input type=\"text\" value=\"영문증명서\"  class=\"r_input\"/>    ";
+	    			}
 	    			html += "			</div>                                          ";
 	    			html += "		</div>                                              ";
 	    			html += "		<div class=\"r_info_row\">                          ";
 	    			html += "			<div class=\"r_info\">                          ";
 	    			html += "				<div class=\"r_info_txt\">발급매수</div>    ";
-	    			html += "				<input type=\"text\" class=\"r_input\"/>    ";
+	    			html += "				<input type=\"text\" value=\"" + res.cont.ISSUE_COUNT + "\" class=\"r_input\"/>    ";
 	    			html += "			</div>                                          ";
 	    			html += "			<div class=\"r_info\">                          ";
 	    			html += "				<div class=\"r_info_txt\">발급요청일</div>  ";
-	    			html += "				<input type=\"text\" class=\"r_input\"/>    ";
+	    			html += "				<input type=\"text\"  value=\"" + res.cont.RQST_DATE + "\"  class=\"r_input\"/>    ";
 	    			html += "			</div>                                          ";
 	    			html += "		</div>                                              ";
 	    			html += "		<div class=\"r_info_row\">                          ";
 	    			html += "			<div class=\"r_use_info\">                      ";
 	    			html += "				<div class=\"r_info_txt\">용도</div>        ";
-	    			html += "			   	<input type=\"text\" class=\"use_input\"/>  ";
+	    			html += "			   	<input type=\"text\"  value=\"" + res.cont.USE + "\" class=\"use_input\"/>  ";
 	    			html += "			</div>                                          ";
 	    			html += "		</div>                                              ";
 	    			html += "	</div>                                                  ";
 	    			html += "</div>                                                     ";
 	    			   // 팝업
 	    				makePopup({
+	    					depth : 1,
 	    					bg : false,
 	    					bgClose : false,
 	    					title : "발급상세",
@@ -368,12 +412,12 @@ $(document).ready(function() {
 	    							var params = $("#crtfctAdminForm").serialize();
 	    							$.ajax({
 	    							       type : "post",
-	    							       url : "apntmListAjax/deleteApntm",
+	    							       url : "crtfctAdminAjax/update",
 	    							       data : params,
 	    							       dataType : "json",
 	    							       success : function(res) {
 	    									   closePopup();
-	    									   makeAlert("알림", "발령이 취소되었습니다.", function(){
+	    									   makeAlert("알림", "증명서발급이 승인되었습니다.", function(){
 	    										   location.reload();
 	    									   });
 	    							       }, 
@@ -385,7 +429,55 @@ $(document).ready(function() {
 	    							closePopup();
 	    						}
 	    					}, {
-	    						name : "반려"
+	    						name : "반려",
+	    						func : function(){
+	    							var html = '';
+	    							
+	    							html += "<div class=\"crtfct_rsn_area\">                      ";
+		    						html += "	<div class=\"crtfct_rsn_txt\"> 사유 :  </div>                   ";
+	    							html += "	<input type=\"text\" class=\"crtfct_rsn_input\" id=\"rjctRsnInput\"/>";
+	    							html += "</div>                                               ";
+	    							makePopup({
+	    								depth : 2,
+	    		    					bg : false,
+	    		    					bgClose : false,
+	    		    					title : "반려",
+	    		    					width: 380,
+	    		    					height: 180,
+	    		    					contents : html,
+	    		    					buttons : [{
+	    		    						name : "확인",
+	    		    						func:function() {
+	    		    							/* console.log("반려사유 : " + $("#rjctRsnInput").val())
+	    		    							if($("#rjctRsn").val() == ''){
+	    		    								makeAlert("알림", "사유를 입력해주세요.", function(){
+	    		    								$("#rsnInput").focus();
+	    		    								});
+	    		    							} 체크엠티 안됨 */
+	    		    							$("#rjctRsn").val($("#rjctRsnInput").val());
+	    		    							var params = $("#crtfctAdminForm").serialize();
+	    		    							$.ajax({
+	    		    							       type : "post",
+	    		    							       url : "crtfctAdminAjax/reject",
+	    		    							       data : params,
+	    		    							       dataType : "json",
+	    		    							       success : function(res) {
+	    		    									   closePopup();
+	    		    									   makeAlert("알림", "증명서발급이 반려되었습니다.", function(){
+	    		    										   location.reload();
+	    		    									   });
+	    		    							       }, 
+	    		    							       error : function(req) {
+	    		    							          console.log(req.responseText);
+	    		    							       }
+	    		    							    });
+	    		    							closePopup();
+	    		    						}
+	    		    					}, {
+	    		    						name : "닫기"
+	    		    					}]
+	    		    				}); // 팝업 끝
+	    						}
 	    					}, {
 	    						name : "닫기"
 	    					}]
@@ -418,7 +510,10 @@ $(document).ready(function() {
 	<div class="cont_wrap">
 <!-- 내용영역 -->
 		<form action="#" id="crtfctAdminForm" method="post">
-			<input type="hidden" id=rCrtfctNum name="rCrtfctNum"/>
+			<input type="hidden" id="rCrtfctNum" name="rCrtfctNum"/>
+			<input type="hidden" id="rEmpNum" name="rEmpNum"/>
+			<input type="hidden" id="sEmpNum" name="sEmpNum" value="${sEmpNum}"/>
+			<input type="hidden" id="rjctRsn" name="rjctRsn" />
 		</form>
 		<div class="page_title_bar">
 			<div class="page_title_text">증명서발급(관리자)</div>
@@ -451,7 +546,7 @@ $(document).ready(function() {
 						</thead>
 						<tbody>
 							<c:forEach var="data" items="${rList}">
-						         <tr crtfctNum="${data.CRTFCT_NUM}">
+						         <tr rCrtfctNum="${data.CRTFCT_NUM}" rEmpNum="${data.RQST_EMP_NUM}">
 						            <td>${data.ROWNUM}</td> <!-- no -->
 						            <td>${data.RQST_EMP_NUM}</td>
 						            <td>${data.EMP_NAME}</td>

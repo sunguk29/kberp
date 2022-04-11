@@ -140,6 +140,12 @@ public class HrController {
 				HashMap<String, String> cont = iCommonService.getData("hr.getAdminRqstCont", params);
 				modelMap.put("cont", cont);
 				break;
+			case "update" :
+				iCommonService.updateData("hr.updateCrtfct", params);
+				break;
+			case "reject" :
+				iCommonService.updateData("hr.rejectCrtfct", params);
+				break;
 			}
 			modelMap.put("res", "success");
 		} catch(Throwable e) {
