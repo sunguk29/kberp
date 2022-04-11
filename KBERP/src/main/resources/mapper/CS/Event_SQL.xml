@@ -62,5 +62,10 @@
 		VALUES(#{cmnt_num}, #{clnt_num}, #{no}, #{emp_num}, #{cmnt_cont})
 	</insert>
 	
+	<update id="updateHit" parameterType="hashmap">
+		UPDATE EVENT SET  EVENT_HITS= EVENT_HITS + 1
+		WHERE EVENT_NUM = #{no}
+	</update>
+	
 	
 </mapper>
