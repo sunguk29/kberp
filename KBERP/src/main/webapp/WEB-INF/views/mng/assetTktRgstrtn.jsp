@@ -266,14 +266,14 @@ $("#srchAsset").on("click", function() {
 				});
 				
 				$("#assetSrchBtn").on("click", function() {
-					$("#assetSrchForm #sendSrchTxt1").val($("#assetSrchTxt").val());
+					$("#sendSrchTxt1").val($("#assetSrchTxt").val());
 					reloadList1();
 				});
 				
-				$("#assetSrchForm #assetSrchTxt").on("keypress", function(event) {
+				$("#assetSrchTxt").on("keypress", function(event) {
 					if(event.keyCode == 13) {
 						
-						$("#assetSrchForm #assetSrchBtn").click();
+						$("#assetSrchBtn").click();
 						
 						return false;
 					}

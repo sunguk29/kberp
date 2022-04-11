@@ -41,7 +41,6 @@
 	text-align: left;
 	margin: 10px 0px 50px 0;
 }
-
 .srch_table tr {
 	height: 40px;
 }
@@ -228,6 +227,20 @@ select {
 .popup_box_mng {
 	height: 297px;
 	padding-top: 8px;
+}
+.cont_right {
+	display: inline-block;
+	vertical-align: top;
+	width: 430px;
+	height: 100%;
+	padding-right: 33.5px;	
+}
+.cont_left {
+	display: inline-block;
+	vertical-align: top;
+	width: 430px;
+	height: 100%;
+	padding-left: 33.5px;	
 }
 </style>
 <script type="text/javascript">

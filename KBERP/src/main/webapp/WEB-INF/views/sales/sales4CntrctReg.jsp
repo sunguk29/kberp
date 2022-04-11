@@ -268,6 +268,12 @@ hr { /* 구분선 */
 	border-radius: 7px;
 	margin-bottom: 18px;
 	margin-left: 45px;
+	font-size: 10pt;
+}
+
+[href] {
+	color: black;
+	text-decoration: none;
 }
 
 .txt_area {
@@ -992,8 +998,8 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
-											location.href = "salesList";
-											console.log("성공");
+											$("#contForm").attr("action", "sales4CntrctCont");
+											$("#contForm").submit();
 										} else {
 											alert("등록중 문제가 발생하였습니다.");
 										}
@@ -1612,13 +1618,6 @@ $(document).ready(function() {
 	});
 	
 	$(".qtnDiv").hide();
-	
- 	/* 지난 견적서 리스트 */
- 	if(${param.qtnNum ne null} && ${param.qtnNum ne ""}) {
- 		console.log('${param.qtnNum}');
- 		$(".qtnDiv").show();	
- 		reloadSgstnList();
- 	}
  	
  	//대출금액
 	var loanAmnt = ${data3.LOAN_AMNT};
@@ -1777,57 +1776,12 @@ function qtnMdList(list) {
 }
 // *************** 상품 목록 끝
 
-// *************** 지난견적서 목록 Ajax *************** 
-function reloadSgstnList() {
-	var params = $("#pastQtnActionForm").serialize();
-	
-	$.ajax({
-		type : "post",
-		url : "PQListAjax",
-		dataType : "json",
-		data : params,
-		success : function(res) {
-			drawPQCnt(res.PQListCnt);
-			drawPQList(res.list);
-		},
-		error : function(req) {
-			console.log(req.responseText);
-		}
-	});
-}
-
-/* 지난견적서 목록 개수 html */
-function drawPQCnt(PQListCnt) {
-	var html = "";
-	
-	html = "<h3>지난 견적서(" + PQListCnt + ")</h3><div class=\"drop_btn_bot\"></div>";
-	
-	$(".PQ_title").html(html);
-}
-
-/* 지난견적서 목록 html */
-function drawPQList(list) {
-	var html = "";
-	
-	for(var data of list) {
-		html +="<div class=\"qtnBox\">";
-		html +="<div class=\"name\">" + data.QTN_NAME + " (" + data.QTN_DATE +")</div>";
-		html +="<div class=\"txtOp\"><pre>" + data.MD_TYPE_NUM + "  " + data.MD_NAME + " " + data.INTRST_RATE + "%    " + data.LIMIT_AMNT + "원</pre></div>";
-		html +="</div>";
-	}
-	$(".qBox").html(html);
-}
-
-
-// *************** 지난견적서 목록 끝
-
 
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
 	$("#fileName").val(filename);
 }
-
 
 function test(t) {
 	//대출금액
@@ -1869,6 +1823,13 @@ function test(t) {
 		<input type="hidden" name="top" value="${param.top}" />
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
+	</form>
+	<form action="#" id="contForm" method="post">
+		<input type="hidden" id="page" name="page" value="${page}" />
+		<input type="hidden" name="top" value="${param.top}" />
+		<input type="hidden" name="menuNum" value="${param.menuNum}" />
+		<input type="hidden" name="menuType" value="${param.menuType}" />
+		<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -2128,18 +2089,17 @@ function test(t) {
 								</tr>
 							</tbody>
 						</table>
-						<br /> <br />
+						<br />
 						<!-- 첨부자료  -->
-						<!-- 첨부자료  -->
-						<c:set var="salesFileLength" value="${fn:length(bsns.ATT_FILE_NAME)}"></c:set>
-						<c:set var="salesFileName" value="${fn:substring(bsns.ATT_FILE_NAME, 20, salesFileLength)}"></c:set>
+						<c:set var="salesFileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+						<c:set var="salesFileName" value="${fn:substring(data.ATT_FILE_NAME, 20, salesFileLength)}"></c:set>
 						<div class="spc">
 							<div class="adc_txt">
-								첨부파일
+								첨부자료
 							</div>
 							<div class="cntrct_box_in">
-								<a href="resources/upload/${bsns.ATT_FILE_NAME}"  download="${salesFileName}">${salesFileName}</a>
-							</div>
+								<a href="resources/upload/${data.ATT_FILE_NAME}" download="${salesFileName}">${salesFileName}</a>
+							</div> 
 						</div>
 						<!-- 끝 -->
 					</div>
@@ -2319,15 +2279,14 @@ function test(t) {
 							</tbody>
 						</table>
 						<!-- 첨부자료  -->
-						<!-- 첨부자료  -->
-						<c:set var="dtlSFileLength" value="${fn:length(dtlS.ATT_FILE_NAME)}"></c:set>
-						<c:set var="dtlSFileName" value="${fn:substring(dtlS.ATT_FILE_NAME, 20, dtlSFileLength)}"></c:set>
+						<c:set var="dtlSFileLength" value="${fn:length(data2.ATT_FILE_NAME)}"></c:set>
+						<c:set var="dtlSFileName" value="${fn:substring(data2.ATT_FILE_NAME, 20, dtlSFileLength)}"></c:set>
 						<div class="spc">
 							<div class="adc_txt">
 								첨부파일
 							</div>
 							<div class="cntrct_box_in">
-								<a href="resources/upload/${dtlS.ATT_FILE_NAME}"  download="${dtlSFileName}">${dtlSFileName}</a>
+								<a href="resources/upload/${data2.ATT_FILE_NAME}"  download="${dtlSFileName}">${dtlSFileName}</a>
 							</div>
 						</div>
 					</div>
@@ -2477,26 +2436,20 @@ function test(t) {
 								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" value="${data3.PYMNT_DATE}" readonly="readonly" placeholder="매달    일" /></td>
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
-								<td><input type="text" class="txt" id="monthPymntAmnt" name="monthPymntAmnt" readonly="readonly" /></td>
-								<td><input type="button" class="btn" value="월 이자액" readonly="readonly" /></td>
-								<td colspan="2"><input type="text" class="txt" id="monthIntrstAmnt" name="monthIntrstAmnt" readonly="readonly" /></td>
-							</tr>
-							<tr height="40">
 								<td><input type="button" class="btn" value="비고" readonly="readonly"/></td>
 								<td colspan="3"><input type="text" class="rmks" name="rmksCont" value="${data3.RMKS}" readonly="readonly" /></td>
 							</tr>							
 						</tbody>
 					</table>
-					<!-- 첨부자료 -->
-					<c:set var="dtlSFileLength" value="${fn:length(dtlS.ATT_FILE_NAME)}"></c:set>
-						<c:set var="dtlSFileName" value="${fn:substring(dtlS.ATT_FILE_NAME, 20, dtlSFileLength)}"></c:set>
+					<!-- 첨부자료  -->
+						<c:set var="qtnSFileLength" value="${fn:length(data3.ATT_FILE_NAME)}"></c:set>
+						<c:set var="qtnSFileName" value="${fn:substring(data3.ATT_FILE_NAME, 20, qtnSFileLength)}"></c:set>
 						<div class="spc">
 							<div class="adc_txt">
 								첨부파일
 							</div>
 							<div class="cntrct_box_in">
-								<a href="resources/upload/${dtlS.ATT_FILE_NAME}"  download="${dtlSFileName}">${dtlSFileName}</a>
+								<a href="resources/upload/${data3.ATT_FILE_NAME}" download="${qtnSFileName}">${qtnSFileName}</a>
 							</div>
 						</div>
 				
@@ -2564,6 +2517,12 @@ function test(t) {
 							<tr height="40">
 								<td><input type="button" class="btn" value="갱신예정일*" /></td>
 								<td colspan="3"><input type="date" class="txt"  id="reDate" name="reDate"/></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
+								<td><input type="text" class="txt" id="monthPymntAmnt" name="monthPymntAmnt" readonly="readonly" /></td>
+								<td><input type="button" class="btn" value="월 이자액" readonly="readonly" /></td>
+								<td><input type="text" class="txt" id="monthIntrstAmnt" name="monthIntrstAmnt" readonly="readonly" /></td>
 							</tr>
 						</tbody>
 					</table>

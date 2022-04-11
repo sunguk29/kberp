@@ -539,7 +539,7 @@ textarea {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
+	console.log($("#attFile").val());
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
 		makePopup({

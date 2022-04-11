@@ -14,6 +14,7 @@
 .cont_wrap {
 	width: 1013px;
 }
+
 /* 개인 작업 영역 */
 .body {
 	display: block;
@@ -60,7 +61,7 @@
 	border-radius: 5px;
 	border: none;
 }
-.tLine {
+.tLine{
 	background-color: #4B94F2;
 	width: 927px;
 	height: 3px;
@@ -116,6 +117,7 @@ select {
 	text-align: left;
 	table-layout: fixed;
 }
+
 .list_table thead th {
 	font-weight: bold;
 }
@@ -125,12 +127,15 @@ select {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
 .list_table thead tr:nth-child(1) {
 	border-top: 2px solid gray;
 }
+
 .list_table thead tr:nth-child(3) {
 	border-bottom: 2px solid gray;
 }
+
 .list_table tbody tr:nth-child(3) {
 	border-bottom: 1px solid gray;
 }
@@ -147,7 +152,7 @@ select {
 	font-size: 10pt;
 	text-decoration: underline;
 }
-.deal_cnt {
+.deal_cnt{
 	padding-left: 15px;
 }
 .sales_psbl_btn {
@@ -188,24 +193,25 @@ select {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	// 고객사 분류 초기값
+	
+	/* 고객사 분류 초기값 */
 	if('${param.clntCmpnyClsfyNum}' != '') {
 		$("#clntCmpnyClsfyNum").val('${param.clntCmpnyClsfyNum}');
 	} else {
 		$("#oldClntCmpnyClsfyNum").val("9");
 	}
 	
-	// 검색어 분류 초기값
+	/* 검색어 분류 초기값 */
 	if('${param.searchType}' != '') {
 		$("#searchType").val('${param.searchType}');
 	} else {
 		$("#oldSearchType").val("0");
 	}
 	
-	// 고객사
+	/* 고객사 목록 */
 	reloadList();
 	
-	// 상단 고객사 분류버튼
+	/* 검색 상단 고객사분류버튼 클릭시 */
 	$(".sts").on("click", ".sts_list", function() {
 		if($(this).attr("num") != "9") {
 			$(".sts").children(".sts_list_on").attr("class", "sts_list");
@@ -214,57 +220,70 @@ $(document).ready(function() {
 		} else {
 			$(".sts").children(".sts_list_on").attr("class", "sts_list");
 		}
+		
 		$("#page").val("1");
+		
 		$("#clntCmpnyClsfyNum").val($(this).attr("num"));
-		if($("#searchTxt").val() != "") {
+		
+		if($("#searchTxt").val() != "") { // 검색어 txt가 비어있지 않으면 초기화
 			var txt = document.getElementById("searchTxt");
+			
 			txt.value = "";
 		}
+		
 		reloadList();
+		
 	});
 	
-	// 페이지버튼
+	/* 페이지버튼 클릭시 */
 	$(".pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
 		$("#listSort").val("9");
+		
 		$("#clntCmpnyClsfyNum").val($("#oldClntCmpnyClsfyNum").val());
 		$("#searchType").val($("#oldSearchType").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
+				
 		reloadList();
 	});
 	
-	// 등록버튼
+	/* 등록버튼 클릭시 */
 	$("#addBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntCmpnyReg");
 		$("#actionForm").submit();
 	});
 	
-	// 검색어 엔터처리
+	/* 검색칸에 엔터입력시 */
 	$("#searchTxt").on("keypress", function(event) {
 		if(event.keyCode == 13) {
 			$("#searchBtn").click(); 
+			
 			return false;
 		}
 	});
 	
-	// 검색버튼
+	/* 검색버튼 클릭시 */
 	$("#searchBtn").on("click", function() {
 		$("#page").val("1");
+		
 		$("#oldClntCmpnyClsfyNum").val($("#clntCmpnyClsfyNum").val());
 		$("#oldSearchType").val($("#searchType").val());
 		$("#oldSearchTxt").val($("#searchTxt").val());
+		
 		reloadList();
 	});
 	
-	// 정렬버튼
+	/* 정렬버튼 클릭시 */
 	$("#sortBtn").on("click", function() {
 		reloadList();
 	});
+	
 });
 
-// 고객사 content
+/* 고객사 목록 Ajax */
 function reloadList() {
 	var params = $("#actionForm").serialize();
+	
 	$.ajax({
 		type : "post",
 		url : "clntCmpnyListAjax",
@@ -279,20 +298,24 @@ function reloadList() {
 			console.log(req.responseText);
 		}
 	});
+	
 }
 
-// 고객사 개수
+/* 고객사 검색 개수 html */
 function drawSearchCnt(listCnt) {
 	var html = "";
 	html += "<h3>"; 
 	html += "고객사 (검색결과: " + listCnt + "건)";
 	html += "</h3>";
+	
 	$(".SearchResult").html(html);
+	
 }
 
-// 고객사 목록
+/* 고객사 목록 html */
 function drawList(list) {
 	var html = "";
+	
 	html += "<colgroup>";
  	html += "<col width=\"80\">";		
 	html += "<col width=\"130\">";		
@@ -317,6 +340,7 @@ function drawList(list) {
 	html += "<th></th>";			
 	html += "</tr>";		
 	html += "</thead>";
+	
  	for(var data of list) {
  		html += "<tbody>";
 		html += "<tr>";
@@ -337,24 +361,30 @@ function drawList(list) {
 		html += "</tr>";
 		html += "</tbody>";
 	}
+ 	
 	$(".list_table").html(html);
-	// 항목클릭
+	
+	/* 고객사이름 클릭시 */
 	$(".list_table tbody").on("click", "tr:nth-child(2) td:nth-child(2)", function() {
 		$("#ccn").val($(this).attr("ccn"));
+
 		$("#actionForm").attr("action", "clntCmpnyCont");
 		$("#actionForm").submit();
 	});
+	
 }
 
-// 고객사 페이징
+/* 고객사 목록 페이징 */
 function drawPaging(pb) {
 	var html = "";
+	
 	html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
 	if($("#page").val() == "1") {
 		html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
 	} else {
 		html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
 	}
+	
 	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
 		if($("#page").val() == i) {
 			html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
@@ -362,13 +392,16 @@ function drawPaging(pb) {
 			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
 		}
 	}
+	
 	if($("#page").val() == pb.maxPcount) {
 		html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_next\">next</div>";
 	} else {
 		html += "<div page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</div>";
 	}
 	html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
+	
 	$(".pgn_area").html(html);
+
 }
 </script>
 </head>
@@ -376,109 +409,100 @@ function drawPaging(pb) {
 <input type="hidden" id="oldClntCmpnyClsfyNum" value="${param.clntCmpnyClsfyNum}" />
 <input type="hidden" id="oldSearchType" value="${param.searchType}" />
 <input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
-	<!-- top & left -->
-	<c:import url="/topLeft">
-		<c:param name="top">${param.top}</c:param>
-		<c:param name="menuNum">${param.menuNum}</c:param>
-		<%-- board로 이동하는 경우 B 나머지는 M --%>
-		<c:param name="menuType">${param.menuType}</c:param>
-	</c:import>
-	<form action="#" id="actionForm" method="post">
-		<!-- 내용영역 -->
-		<div class="cont_wrap">
-			<div class="page_title_bar">
-				<div class="page_title_text">고객사 목록</div>
-				<!-- 검색영역 선택적 사항 -->
-				<!-- <div class="page_srch_area">
-				<select class="srch_sel">
-					<option>제목</option>
-					<option>내용</option>
-					<option>작성자</option>
-				</select>
-				<div class="srch_text_wrap">
-					<input type="text" />
-				</div>
-				<div class="cmn_btn_ml">검색</div>
-			</div> -->
-			</div>
-			<!-- 해당 내용에 작업을 진행하시오. -->
-			<div class="cont_area">
-				<!-- 여기부터 쓰면 됨 -->
-				<input type="hidden" id="ccn" name="ccn" />
-				<input type="hidden" id="page" name="page" value="${page}" />
-				<input type="hidden" name="top" value="${param.top}" />
-				<input type="hidden" name="menuNum" value="${param.menuNum}" />
-				<input type="hidden" name="menuType" value="${param.menuType}" />
-				<div class="bodyWrap">
-					<div class="sts">
-						<div class="sts_list" num="9">전체: ${AllCnt}건</div>
-						<div class="sts_list" num="0">거래고객사: ${CntrctCnt}건</div>
-						<div class="sts_list" num="1">파트너사: ${PartnerCnt}건</div>
-						<div class="sts_list" num="2">해지고객사: ${TmnCnt}건</div>
-						<div class="sts_list" num="3">정지고객사: ${SspsCnt}건</div>
-						<div class="sts_list" num="4">외국파트너사: ${ForeignCnt}건</div>
-						<div class="sts_list" num="5">기타: ${EtcCnt}건</div>
-					</div>
-					<div class="tLine"></div>
-					<table class="srch_table">
-						<colgroup>
-							<col width="130" />
-							<col width="130" />
-							<col width="320" />
-							<col width="220" />
-						</colgroup>
-						<tbody>
-							<tr>
-								<td><span class="srch_name">고객사분류</span></td>
-								<td><select id="clntCmpnyClsfyNum" name="clntCmpnyClsfyNum">
-										<option value="9">전체</option>
-										<option value="0">거래고객사</option>
-										<option value="1">파트너사</option>
-										<option value="2">해지고객사</option>
-										<option value="3">정지고객사</option>
-										<option value="4">외국파트너사</option>
-										<option value="5">기타</option>
-								</select></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td><span class="srch_name">검색어</span></td>
-								<td><select id="searchType" name="searchType">
-										<option value="0">고객사명</option>
-										<option value="1">고객사번호</option>
-								</select></td>
-								<td><input type="text" class="srch_msg" placeholder="검색어를 입력해주세요." id="searchTxt" name="searchTxt" value="${param.searchTxt}" /></td>
-								<td><span class="cmn_btn" id="searchBtn">검색</span></td>
-							</tr>
-							<tr>
-								<td><span class="srch_name">정렬</span></td>
-								<td><select id="listSort" name="listSort">
-										<option value="9">선택안함</option>
-										<option value="0">매출</option>
-										<option value="1">고객사명</option>
-								</select></td>
-								<td>
-									<img class="asc_btn cmn_btn" alt="정렬버튼" src="resources/images/sales/asc.png" id="sortBtn" />
-								</td>
-							</tr>
-						</tbody>
-					</table>
-	
-					<div class="SearchResult"></div>
-					<div class="cont_table">
-						<table class="list_table"></table>
-					</div>
-					<div class="body_bottom">
-						<div class="board_bottom">
-							<div class="pgn_area"></div>
-							<div class="cmn_btn" id="addBtn">등록</div>
-						</div>
-					</div>
-				</div>
-			</div> 
+
+<!-- top & left -->
+<c:import url="/topLeft">
+	<c:param name="top">${param.top}</c:param>
+	<c:param name="menuNum">${param.menuNum}</c:param>
+	<%-- board로 이동하는 경우 B 나머지는 M --%>
+	<c:param name="menuType">${param.menuType}</c:param>
+</c:import>
+<form action="#" id="actionForm" method="post">
+	<!-- 내용영역 -->
+	<div class="cont_wrap">
+		<div class="page_title_bar">
+			<div class="page_title_text">고객사 목록</div>
+			<!-- 검색영역 선택적 사항 -->
+			
 		</div>
-	</form>		
+		<!-- 해당 내용에 작업을 진행하시오. -->
+		<div class="cont_area">
+			<!-- 여기부터 쓰면 됨 -->
+	<input type="hidden" id="ccn" name="ccn" />
+	<input type="hidden" id="page" name="page" value="${page}" />
+	<input type="hidden" name="top" value="${param.top}" />
+	<input type="hidden" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />
+			<div class="bodyWrap">
+				<div class="sts">
+					<div class="sts_list" num="9">전체: ${AllCnt}건</div>
+					<div class="sts_list" num="0">거래고객사: ${CntrctCnt}건</div>
+					<div class="sts_list" num="1">파트너사: ${PartnerCnt}건</div>
+					<div class="sts_list" num="2">해지고객사: ${TmnCnt}건</div>
+					<div class="sts_list" num="3">정지고객사: ${SspsCnt}건</div>
+					<div class="sts_list" num="4">외국파트너사: ${ForeignCnt}건</div>
+					<div class="sts_list" num="5">기타: ${EtcCnt}건</div>
+				</div>
+				<div class="tLine"></div>
+				<table class="srch_table">
+					<colgroup>
+						<col width="130" />
+						<col width="130" />
+						<col width="320" />
+						<col width="220" />
+					</colgroup>
+					<tbody>
+						<tr>
+							<td><span class="srch_name">고객사분류</span></td>
+							<td><select id="clntCmpnyClsfyNum" name="clntCmpnyClsfyNum">
+									<option value="9">전체</option>
+									<option value="0">거래고객사</option>
+									<option value="1">파트너사</option>
+									<option value="2">해지고객사</option>
+									<option value="3">정지고객사</option>
+									<option value="4">외국파트너사</option>
+									<option value="5">기타</option>
+							</select></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><span class="srch_name">검색어</span></td>
+							<td><select id="searchType" name="searchType">
+									<option value="0">고객사명</option>
+									<option value="1">고객사번호</option>
+							</select></td>
+							<td><input type="text" class="srch_msg" placeholder="검색어를 입력해주세요." id="searchTxt" name="searchTxt" value="${param.searchTxt}" /></td>
+							<td><span class="cmn_btn" id="searchBtn">검색</span></td>
+						</tr>
+						<tr>
+							<td><span class="srch_name">정렬</span></td>
+							<td><select id="listSort" name="listSort">
+									<option value="9">선택안함</option>
+									<option value="0">매출</option>
+									<option value="1">고객사명</option>
+							</select></td>
+							<td>
+								<img class="asc_btn cmn_btn" alt="정렬버튼" src="resources/images/sales/asc.png" id="sortBtn" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div class="SearchResult"></div>
+				<div class="cont_table">
+					<table class="list_table"></table>
+				</div>
+				<div class="body_bottom">
+					<div class="board_bottom">
+						<div class="pgn_area"></div>
+						<div class="cmn_btn" id="addBtn">등록</div>
+					</div>
+				</div>
+			</div> <!-- bodyWrap end -->
+		</div> <!-- cont_area end -->
+	</div> <!--cont_wrap end -->
+</form>		
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

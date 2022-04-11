@@ -16,7 +16,7 @@ public interface IAprvlService {
 	 * @throws Throwable
 	 */
 	public String aprvlAdd(String emp_num, String title, 
-			String cont, List<String> aprvlerList, List<String> rfrncList, String att) throws Throwable;
+			String cont, List<String> aprvlerList, List<String> rfrncList, String att, String aprvl_turn) throws Throwable;
 	
 	/**
 	 *  결재 상태

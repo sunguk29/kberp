@@ -16,7 +16,7 @@
 .cont_wrap {
 	width: 1013px;
 }
-
+/* 개인 작업 영역 */
 .body {
 	display: block;
 	background-color: white;
@@ -24,7 +24,6 @@
 	height: 100%;
 	margin: auto;
 }
-
 .bodyWrap {
 	display: block;
 	background-color: white;
@@ -32,32 +31,25 @@
 	height: 100%;
 	margin: 40px auto;
 }
-
-/* 개인 작업 영역 */
 table {
 	border: 1px;
 	width: 927px;
 	margin: 40px auto;
 }
-
 td:nth-child(2), td:nth-child(4) {
 	border-bottom: 1px solid #d7d7d7;
 }
-
 tr:nth-child(9) td:nth-child(3) {
 	padding: none;
 }
-
 .btn {
 	width: 90px;
 	height: 40px;
 }
-
 .address {
 	width: 90px;
 	height: 100px;
 }
-
 .btn, .address {
 	background-color: #fff;
 	border-radius: 3px;
@@ -66,7 +58,6 @@ tr:nth-child(9) td:nth-child(3) {
 	width: 150px;
 	border: none;
 }
-
 .btnImg:hover {
 	cursor: pointer;
 }
@@ -908,27 +899,22 @@ $(document).ready(function() {
 			buttons : [ {
 				name : "확인",
 				func : function() {
-					if(${param.qtnNum eq ""} || ${param.qtnNum eq null}) {
-						$("#listForm").attr("action", "salesList");
-						$("#listForm").submit();
-					} else {
-						var params = $("#listForm").serialize();
-						
-						$.ajax({
-							type : "post",
-							url : "qtnBackAjax",
-							dataType : "json",
-							data : params,
-							success : function(res) {
-								closePopup();
-								$("#listForm").attr("action", "sales3QtnCont");
-								$("#listForm").submit();
-							},
-							error : function(req) {
-								console.log(req.responseText);
-							}
-						});
-					} // if End
+					var params = $("#listForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "qtnBackAjax",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							closePopup();
+							$("#listForm").attr("action", "sales3QtnCont");
+							$("#listForm").submit();
+						},
+						error : function(req) {
+							console.log(req.responseText);
+						}
+					});
 				}
 			}, {
 				name : "취소"
@@ -1805,7 +1791,7 @@ function test(t) {
 	<input type="hidden" id="no" name="no" /> <!-- 상품 번호 -->
 </form>
 <form action="#" id="mdListForm" method="post">
- <input type="hidden" name="ccn"  value="${data.CLNT_CMPNY_NUM}" /> <!-- 고객사 등급 번호 -->
+ <input type="hidden" name="ccn"  value="${lead.CLNT_CMPNY_NUM}" /> <!-- 고객사 등급 번호 -->
  <input type="hidden" id="getMdNum" name="no" /> <!-- 상품 번호 -->
 </form>
 	<form action="#" id="listForm" method="post">
@@ -1925,7 +1911,7 @@ function test(t) {
 										<input type="button" class="btn" value="대출 원인*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="loanCauseNum" name="loanCauseNum" value="${data.LOAN_CAUSE_NUM}" disabled="disabled">
+										<select class="txt" id="loanCauseNum" name="loanCauseNum" value="${loan.LOAN_CAUSE_NUM}" disabled="disabled">
 											<optgroup>
 												<c:choose>
 													<c:when test="${data.LOAN_CAUSE_NUM eq 0}">
@@ -1977,7 +1963,7 @@ function test(t) {
 														<option value="0" selected="selected">장기대출</option>
 														<option value="1">단기대출</option>
 													</c:when>
-													<c:when test="${data.LOAN_HOPE_TYPE eq 1}">
+													<c:when test="${loan.LOAN_HOPE_TYPE eq 1}">
 														<option value="0">장기대출</option>
 														<option value="1" selected="selected">단기대출</option>
 													</c:when>

@@ -297,14 +297,22 @@ textarea {
 .spc{
 	margin-bottom : 30px;
 }
+/* 첨부자료 */
 .cntrct_box_in {
-    width: 885px;
-    height: 100px;
-    border: 1px solid #d7d7d7;
-    border-radius: 7px;
-    margin-bottom: 18px;
-    margin-left: 45px;
+	width: 885px;
+	height: 100px;
+	border: 1px solid #d7d7d7;
+	border-radius: 7px;
+	margin-bottom: 18px;
+	margin-left: 45px;
+	font-size: 10pt;
 }
+
+[href] {
+	color: black;
+	text-decoration: none;
+}
+
 .btnImg_in{
 	display: inline-block;
 	vertical-align: middle;
@@ -446,25 +454,11 @@ $(document).ready(function() {
 	});
 	
 	
-	// 견적서 추가(수정) 버튼
+	// 수정 버튼
 	$("#updateBtn").on("click", function() {
-		var params = $("#actionForm").serialize();
 		
-		$.ajax({
-			type : "post",
-			url : "qtnAddAjax",
-			dataType : "json",
-			data : params,
-			success : function(res) {
-				$("#actionForm").attr("action", "sales3QtnReg");
-				$("#actionForm").submit();
-				console.log("여기도?");
-			},
-			error : function(req) {
-				console.log(req.responseText);
-			}
-		});
-
+		$("#actionForm").attr("action", "sales4Update");
+		$("#actionForm").submit();
 	});
 	
 	//
@@ -488,7 +482,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "salesMng3ActionAjax/failure",
+						url : "salesMng4ActionAjax/failure",
 						dataType : "json",
 						data : params,
 						success : function(res) {
@@ -561,7 +555,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "qtnBotActionAjax/update",
+						url : "cntrctBotActionAjax/update",
 						dataType : "json",
 						data : params,
 						success : function(res) {
@@ -630,6 +624,7 @@ $(document).ready(function() {
 	$(".qtnDiv").hide();
 	
 	
+	
  	//대출금액
 	var loanAmnt = ${data3.LOAN_AMNT};
 	//대출기간
@@ -680,7 +675,7 @@ function reloadOpList() {
 		data : params,
 		dataType : "json",
 		success : function(res) {
-			drawOpCnt(res.opListCnt);
+			drawOpCnt(res.cntrctListCnt);
 			drawOpList(res.list);
 		},
 		error : function(req) {
@@ -690,10 +685,10 @@ function reloadOpList() {
 }
 
 /* 의견 목록 개수 html */
-function drawOpCnt(opListCnt) {
+function drawOpCnt(cntrctListCnt) {
 	var html = "";
 	
-	html = "<h3>의견(" + opListCnt + ")</h3>";
+	html = "<h3>의견(" + cntrctListCnt + ")</h3>";
 	
 	$(".op_title").html(html);
 }
@@ -718,7 +713,6 @@ function drawOpList(list) {
 }
 
 
-
 </script>
 </head>
 <body>
@@ -728,8 +722,7 @@ function drawOpList(list) {
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업번호 -->
-	<input type="hidden" name="qtnNum" value="${param.qtnNum}" /> <!-- 견적 번호 -->
-	<input type="hidden" name="mdName" value="${param.mdName}" /> <!-- 상품 이름 -->
+	<input type="hidden" name="cntrctNum" value="${data4.CNTRCT_NUM}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -742,10 +735,10 @@ function drawOpList(list) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">영업관리 - 견적 상세보기</div>
+			<div class="page_title_text">영업관리 - 계약 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
 				<!-- <img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" id="printBtn" /> -->
-				<img alt="수정버튼" src="resources/images/sales/newAdd.png" class="btnImg" id="updateBtn" data-toggle="tooltip" title="견적서 추가하기" />
+				<img alt="수정버튼" src="resources/images/sales/newAdd.png" class="btnImg" id="updateBtn" data-toggle="tooltip" title="계약 수정하기" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -926,12 +919,16 @@ function drawOpList(list) {
 					</table>
 					<br/>
 					<!-- 첨부자료  -->
-					<div class="spc">
-						<div class="adc_txt"> 첨부자료 (0)
-								<input type=file name='file1' style='display: none;'> 
+						<c:set var="salesFileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+						<c:set var="salesFileName" value="${fn:substring(data.ATT_FILE_NAME, 20, salesFileLength)}"></c:set>
+						<div class="spc">
+							<div class="adc_txt">
+								첨부자료
+							</div>
+							<div class="cntrct_box_in">
+								<a href="resources/upload/${data.ATT_FILE_NAME}" download="${salesFileName}">${salesFileName}</a>
+							</div> 
 						</div>
-						<div class="cntrct_box_in"></div> 
-					</div>
 				</div>
 					
 					<!-- *************** 영업기회 끝 **************** -->
@@ -1097,14 +1094,14 @@ function drawOpList(list) {
 							</tbody>
 						</table>
 						<!-- 첨부자료  -->
-						<input type=file id="att" name="att" />
-						<input type="hidden" id="attFile" name="attFile" />
+						<c:set var="dtlSFileLength" value="${fn:length(data2.ATT_FILE_NAME)}"></c:set>
+						<c:set var="dtlSFileName" value="${fn:substring(data2.ATT_FILE_NAME, 20, dtlSFileLength)}"></c:set>
 						<div class="spc">
 							<div class="adc_txt">
-								첨부자료
+								첨부파일
 							</div>
 							<div class="cntrct_box_in">
-							
+								<a href="resources/upload/${data2.ATT_FILE_NAME}"  download="${dtlSFileName}">${dtlSFileName}</a>
 							</div>
 						</div>
 					</div>
@@ -1116,7 +1113,7 @@ function drawOpList(list) {
 						<h3>견적<span id="qtn_btn"><div class="up_btn" id="qtnContBtn_s"></div></span></h3>
 					</div>
 					<div class="qtnCont">
-					<hr class="hr_bot" color="white" width="925px"> 
+					 <hr class="hr_bot" color="white" width="925px"> 
 					<div class="hr_bot"></div>
 					<table>
 						<colgroup>
@@ -1140,10 +1137,10 @@ function drawOpList(list) {
 											 		<option value="0" selected="selected">개인사업</option>
 									 			</c:when>
 									 			<c:when test="${data3.MD_TYPE_NUM eq 1}">
-											 		<option value="1" selected="selected">법인사업</option>
+											 		<option value="0" selected="selected">법인사업</option>
 									 			</c:when>
 									 			<c:when test="${data3.MD_TYPE_NUM eq 2}">
-											 		<option value="2" selected="selected">공공사업</option>
+											 		<option value="0" selected="selected">공공사업</option>
 									 			</c:when>
 									 		</c:choose>
 									 	</optgroup>
@@ -1195,10 +1192,10 @@ function drawOpList(list) {
 										 				<option value="0" selected="selected">미포함</option>
 										 			</c:when>
 										 			<c:when test="${data3.SRTX eq 1}">
-										 				<option value="1" selected="selected">포함</option>
+										 				<option value="0" selected="selected">포함</option>
 										 			</c:when>
 										 			<c:when test="${data3.SRTX eq 2}">
-										 				<option value="2" selected="selected">면세</option>
+										 				<option value="0" selected="selected">면세</option>
 										 			</c:when>
 										 		</c:choose>
 										 	</optgroup>
@@ -1215,13 +1212,13 @@ function drawOpList(list) {
 													<option value="0" selected="selected">6개월</option>
 												</c:when>
 												<c:when test="${data3.LOAN_PRD eq 1}">
-													<option value="1" selected="selected">1년</option>
+													<option value="0" selected="selected">1년</option>
 												</c:when>
 												<c:when test="${data3.LOAN_PRD eq 2}">
-													<option value="2" selected="selected">3년</option>
+													<option value="0" selected="selected">3년</option>
 												</c:when>
-												<c:when test="${data3.LOAN_PRD eq 3}">
-													<option value="3" selected="selected">5년</option>
+												<c:when test="${data3.LOAN_PRD eq 2}">
+													<option value="0" selected="selected">5년</option>
 												</c:when>
 											</c:choose>
 										</optgroup>
@@ -1237,10 +1234,10 @@ function drawOpList(list) {
 													<option value="0" selected="selected">원금 균등 상환</option>
 												</c:when>
 												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 1}">
-													<option value="1" selected="selected">원리금 균등 상환</option>
+													<option value="0" selected="selected">원리금 균등 상환</option>
 												</c:when>
 												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 2}">
-													<option value="2" selected="selected">만기 일시 상환</option>
+													<option value="0" selected="selected">만기 일시 상환</option>
 												</c:when>
 											</c:choose>
 										</optgroup>
@@ -1254,29 +1251,25 @@ function drawOpList(list) {
 								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" value="${data3.PYMNT_DATE}" readonly="readonly" placeholder="매달    일" /></td>
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
-								<td><input type="text" class="txt" id="monthPymntAmnt" name="monthPymntAmnt" readonly="readonly" /></td>
-								<td><input type="button" class="btn" value="월 이자액" readonly="readonly" /></td>
-								<td colspan="2"><input type="text" class="txt" id="monthIntrstAmnt" name="monthIntrstAmnt" readonly="readonly" /></td>
-							</tr>
-							<tr height="40">
 								<td><input type="button" class="btn" value="비고" readonly="readonly"/></td>
 								<td colspan="3"><input type="text" class="rmks" name="rmksCont" value="${data3.RMKS}" readonly="readonly" /></td>
 							</tr>							
 						</tbody>
 					</table>
-					<!-- 첨부자료 -->
-					<div class="spc">
-						<div class="adc_txt">
-							첨부자료
+					<!-- 첨부자료  -->
+						<c:set var="qtnSFileLength" value="${fn:length(data3.ATT_FILE_NAME)}"></c:set>
+						<c:set var="qtnSFileName" value="${fn:substring(data3.ATT_FILE_NAME, 20, qtnSFileLength)}"></c:set>
+						<div class="spc">
+							<div class="adc_txt">
+								첨부파일
+							</div>
+							<div class="cntrct_box_in">
+								<a href="resources/upload/${data3.ATT_FILE_NAME}" download="${qtnSFileName}">${qtnSFileName}</a>
+							</div>
 						</div>
-						<div class="cntrct_box_in">
-							<input type="text" id="fileName" readonly="readonly" />
-						</div>
-					</div>
-				</div>
-			</form>			
-<!-- *************************************** 견적 끝 *************************************** -->						
+				
+					<!-- ********* 견적 끝 ********* -->					
+			</div>							
 						
 <!-- ************************************************ 계약 시작 ************************************************ -->
 				<hr class="hr_bot" color="#4B94F2" width="925px">
@@ -1325,16 +1318,16 @@ function drawOpList(list) {
 													<option value="0" selected="selected">카카오뱅크</option>												
 												</c:when>
 												<c:when test="${data4.DPST_BANK_NUM  eq 1}">
-													<option value="0" selected="selected">국민은행</option>												
+													<option value="1" selected="selected">국민은행</option>												
 												</c:when>
 												<c:when test="${data4.DPST_BANK_NUM  eq 2}">
-													<option value="0" selected="selected">농협은행</option>												
+													<option value="2" selected="selected">농협은행</option>												
 												</c:when>
 												<c:when test="${data4.DPST_BANK_NUM  eq 3}">
-													<option value="0" selected="selected">신한은행</option>												
+													<option value="3" selected="selected">신한은행</option>												
 												</c:when>
 												<c:when test="${data4.DPST_BANK_NUM  eq 4}">
-													<option value="0" selected="selected">기업은행</option>												
+													<option value="4" selected="selected">기업은행</option>												
 												</c:when>
 											</c:choose>												
 											</optgroup>
@@ -1352,20 +1345,26 @@ function drawOpList(list) {
 								<td><input type="button" class="btn" value="갱신예정일*" /></td>
 								<td colspan="3"><input type="date" class="txt"  id="reDate" name="reDate" value="${data4.RNWL_EXPCTD_DATE}" readonly="readonly"/></td>
 							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
+								<td><input type="text" class="txt" id="monthPymntAmnt" name="monthPymntAmnt" readonly="readonly"  value="${data4.MONTH_PYMNT_AMNT}" /></td>
+								<td><input type="button" class="btn" value="월 이자액" readonly="readonly" /></td>
+								<td colspan="2"><input type="text" class="txt" id="monthIntrstAmnt" name="monthIntrstAmnt" readonly="readonly" value="${data4.MONTH_INTRST_AMNT}" /></td>
+							</tr>
 						</tbody>
 					</table>
 					<!-- 첨부자료 -->
-					<c:set var="cntrctFileLength" value="${fn:length(data3.ATT_FILE_NAME)}"></c:set>
-						<c:set var="qtnFileName" value="${fn:substring(data3.ATT_FILE_NAME, 20, qtnFileLength)}"></c:set>
+					<c:set var="cntrctFileLength" value="${fn:length(data4.ATT_FILE_NAME)}"></c:set>
+						<c:set var="cntrctFileName" value="${fn:substring(data4.ATT_FILE_NAME, 20, cntrctFileLength)}"></c:set>
 						<div class="spc">
 							<div class="adc_txt">
 								첨부자료
 							</div>
 							<div class="cntrct_box_in">
-								<a href="resources/upload/${data3.ATT_FILE_NAME}"  download="${qtnFileName}">${qtnFileName}</a>
+								<a href="resources/upload/${data4.ATT_FILE_NAME}"  download="${cntrctFileName}">${cntrctFileName}</a>
 							</div> 
-						</div>	
-				</form>
+						</div>
+				</form>	
 				<form action="#" id="botOpActionForm" method="post">
 					<input type="hidden" name="cntrctNum" value="${data4.CNTRCT_NUM}" />
 					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
