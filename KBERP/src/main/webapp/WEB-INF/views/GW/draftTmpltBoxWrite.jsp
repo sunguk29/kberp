@@ -472,11 +472,14 @@ $(document).ready(function() {
 				data : params,
 				success : function(res) {
 					console.log(res);
+					$("#writeForm").attr("action", "aprvlTmpltBox");
+					$("#writenForm").submit();
 				},
 				error : function(req) {
 					console.log(req.responseText)	
 				}
 			});
+			
 		}
 	})
 	

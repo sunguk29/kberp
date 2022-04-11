@@ -19,6 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.common.CommonProperties;
+import com.gdj43.kberp.common.bean.PagingBean;
+import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.GW.service.IAprvlService;
 import com.gdj43.kberp.web.GW.service.IElctrncAprvlService;
 import com.gdj43.kberp.web.common.service.ICommonService;
@@ -31,6 +33,8 @@ public class elctrncAprvlController {
 	@Autowired IAprvlService ias;
 	
 	@Autowired IElctrncAprvlService iElctrncAprvlService;
+	
+	@Autowired IPagingService ips;
 	
 	@RequestMapping(value="/draftTmpltBox")
 	public ModelAndView draftTmpltBox(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
@@ -90,25 +94,18 @@ public class elctrncAprvlController {
 			System.out.println("@@@@@@@@@@@@@왔나" + params);
 			
 			String[] temp = null;
-			if(params.get("aprvl_line_emp_num") != null) {
-				temp = params.get("aprvl_line_emp_num").split(",");
-			}
-			
-			String[] temps = null;
-			
-			if(params.get("rfrnc_emp_num") != null) {
-				temps = params.get("rfrnc_emp_num").split(",");
-			}
-			
 			List<String> aprvlEmpNum = null;
 			
-			if(temp != null) {
+			if(params.get("aprvl_line_emp_num") != null && !params.get("aprvl_line_emp_num").equals("")) {
+				temp = params.get("aprvl_line_emp_num").split(",");
 				aprvlEmpNum = Arrays.asList(temp);
 			}
 			
+			String[] temps = null;
 			List<String> rfrncEmpNum = null;
 			
-			if(temps != null) {
+			if(params.get("rfrnc_emp_num") != null && !params.get("rfrnc_emp_num").equals("")) {
+				temps = params.get("rfrnc_emp_num").split(",");
 				rfrncEmpNum = Arrays.asList(temps);
 			}
 			
@@ -148,12 +145,38 @@ public class elctrncAprvlController {
 	@RequestMapping(value="/aprvlTmpltBox")
 	public ModelAndView aprvlTmpltBox(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
-		List<HashMap<String, String>> list = iElctrncAprvlService.getAprvlTmpltBox(params);
+				if(params.get("page") == null || params.get("page") == "") {
+			params.put("page", "1");
+		}
+
+		mav.addObject("page", params.get("page"));
 		
 		mav.setViewName("GW/aprvlTmpltBox");	
 		
 		return mav;	
 	}
 	
+	@RequestMapping(value = "/aprvlListAjax", method = RequestMethod.POST,
+			produces = "test/json;charset=UTF-8")
+	@ResponseBody 
+	public String aprvlListAjax(@RequestParam HashMap<String, String> params) throws Throwable{
+		System.out.println("@@@@@@@@@@@@@@2" + params);
+		ObjectMapper mapper = new ObjectMapper();
 	
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		// 총 게시글 수	
+		 int cnt = ics.getIntData("elctrncAprvl.getAprvlListCnt", params);
+		// 페이징 계산
+		PagingBean pb = ips.getPagingBean(Integer.parseInt(params.get("page")), cnt, 7, 10);
+		
+		params.put("startCount", Integer.toString(pb.getStartCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount()));
+		
+		List<HashMap<String, String>> list = ics.getDataList("elctrncAprvl.getAprvlList",params);
+		
+		modelMap.put("list", list);
+		modelMap.put("pb", pb);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 }
