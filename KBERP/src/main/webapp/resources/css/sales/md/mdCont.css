@@ -21,6 +21,12 @@
 	/* 숨김용 */
 	display: none;
 }
+#fileName {
+	border: hidden;
+	outline: none;
+	width:200px;
+	cursor:pointer;
+}
 .popup {
 	/* 숨김용 */
 	display: none;

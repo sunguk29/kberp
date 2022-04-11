@@ -1,9 +1,13 @@
 
+
 function reloadList() {
+	
+	$("#sales_sts").val(getSales_sts());       // 판매상태 hidden 데이터 입력
 	var params = $("#actionForm").serialize(); // name=val&name2=val2
-		
+			
 	var callback = ajaxComm("mdListAjax", params, "");
 	callback.done(function(res){
+		
 		drawList(res.list);												//리스트 
 		drawPaging(res.pb);												//페이징
 		$("#sts_listA").text("전체 : "+ res.totalCnt + " 건");			//상단-전체
@@ -77,7 +81,7 @@ function drawList(list){
 		html += "<tr>";
 		html += "<td>" + data.INTRST_RATE + "%" + "</td>";						//이자율
 		html += "<td class='md_name' no='" + data.MD_NUM + "'>" + data.MD_NAME + "</td>";				//상품명
-		html += "<td><span class='sales_psbl_btn'>" + sales_sts + "</span></td>";							//판매상태
+		html += "<td><span class='sales_psbl_btn'>" + sales_sts_converter(sales_sts) + "</span></td>";							//판매상태
 		html += "</tr>";
 		html += "<tr class='thirdTr'>";
 		html += "<td>" + data.LIMIT_AMNT + "원" + "</td>";						//대출한도금액
@@ -88,6 +92,17 @@ function drawList(list){
 	
 	$("#appand_path").html(html); //해당 id값을 가지는 태그에 html을 뿌린다.
 }
+
+
+/* 판매상태 한글 컨버터 */
+function sales_sts_converter(data){
+	switch(data){
+		case 0 : return "판매중"
+		case 1 : return "판매중단"
+		case 2 : return "출시예정"
+	}
+}
+
 
 /* 페이징 그리는 함수*/
 function drawPaging(pb) {
@@ -164,6 +179,55 @@ function checkboxFunc2(){
 	}	
 }
 
+/**
+   검색에 필요한 판매상태 처리 함수
+   전체선택 : -1
+   판매중 : 0, 판매중단 : 1, 출시예정 : 2 
+   판매중+판매중단 : 01
+   판매중+판매중단+출시예정 : 012...
+ */
+function getSales_sts(){
+	var returnData = "";
+	if($("#sales_sts0").is(":checked"))
+	{
+		returnData += "0";
+		
+		if($("#sales_sts1").is(":checked"))
+		{
+			returnData += "1";
+			if($("#sales_sts2").is(":checked"))
+			{
+				returnData += "2";
+			}
+
+		} 
+		else if($("#sales_sts2").is(":checked"))
+		{
+			returnData += "2";
+		}
+		
+	} 
+	else if ($("#sales_sts1").is(":checked")) 
+	{
+		returnData += "1";
+		if($("#sales_sts2").is(":checked"))
+		{
+			returnData += "2";
+		}
+	}
+	else if ($("#sales_sts2").is(":checked")) 
+	{
+		returnData += "2";
+	} 
+	else 
+	{
+		returnData = "-1";
+	}
+
+	return returnData;
+}
+
+
 /* 검색-기간 에서 오늘,어제.. 버튼 클릭시 해당 날짜를 출력하는 함수 */
 function dateChoiceFunc() {
 	$("#today_btn").on("click", function() {
@@ -208,7 +272,6 @@ function getDate(keyword) {
 	
 	// 포맷 yyyy-mm-dd로 변경, append
 	$("#sales_start_date").val(dateFormatter(targetDate));
-	$("#sales_end_date").val(dateFormatter(new Date()));
 }
 
 /* 판매상태 체크박스 체크 처리 */
