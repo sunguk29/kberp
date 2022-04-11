@@ -372,5 +372,4 @@ public class ClntMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	
 }

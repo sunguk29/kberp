@@ -28,16 +28,16 @@
 	height: 100%;
 	margin: 20px auto;
 }
-table{
+table {
 	border: 1px;
 	width: 927px;
 	margin: 40px auto;
 }
-td:nth-child(2), td:nth-child(4){
+td:nth-child(2), td:nth-child(4) {
 	border-bottom: 1px solid #d7d7d7;
 }
 
-td:nth-child(1), td:nth-child(3){
+td:nth-child(1), td:nth-child(3) {
 	text-align: center;
 }
 .btn {
@@ -53,10 +53,10 @@ td:nth-child(1), td:nth-child(3){
 	border: none;
 	text-align: center;
 }
-.btnImg:hover{
+.btnImg:hover {
 	cursor: pointer;
 }
-.txt{
+.txt {
 	height: 33px;
 	width: 100%;
 	padding: 0 5px;
@@ -315,7 +315,6 @@ td:nth-child(1), td:nth-child(3){
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
 	// 목록버튼
 	$("#listBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntList");
@@ -366,7 +365,6 @@ $(document).ready(function() {
 			}]
 		});		
 	});
-	
 });
 </script>
 </head>

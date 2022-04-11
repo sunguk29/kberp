@@ -310,7 +310,6 @@ td:nth-child(1), td:nth-child(3) {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
 	// 목록버튼
 	$("#listBtn").on("click", function() {
 		makePopup({
@@ -567,7 +566,6 @@ $(document).ready(function() {
 			});
 		}
 	});
-	
 });
 
 // 고객사 content

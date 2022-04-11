@@ -149,7 +149,6 @@ select {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
 	// 검색구분 초기값
 	if('${param.searchType}' != '') {
 		$("#searchType").val("${param.searchType}");
@@ -195,7 +194,6 @@ $(document).ready(function() {
 	$("#sortBtn").on("click", function() {
 		reloadList();
 	});
-	
 });
 
 // 고객 content
