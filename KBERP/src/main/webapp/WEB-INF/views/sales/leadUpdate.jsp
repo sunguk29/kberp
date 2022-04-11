@@ -1645,7 +1645,7 @@ function uploadName(e) {
 									<span id="attFileName">${leadFileName}</span>
 									<img class="minus_btn" src="resources/images/sales/minus5.png" border='0'"> 
 									<input type="file" id="att" name="att" style="display: none;" onchange="uploadName(this)" /> 
-									<input type="hidden" id="attFile" name="attFile" />
+									<input type="hidden" id="attFile" name="attFile" value="${data.ATT_FILE_NAME}" />
 									<input type="text" id="leadFileName" name="leadFileName" readonly="readonly" />
 								</div>				
 							</c:otherwise>
