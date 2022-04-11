@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.common.service.IPagingService;
+import com.gdj43.kberp.web.GW.service.IAprvlService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 import com.gdj43.kberp.web.hr.service.IHrService;
 
@@ -30,6 +31,8 @@ public class HrController {
 	public ICommonService iCommonService;
 	@Autowired
 	public IPagingService iPagingService;
+	@Autowired
+	public IAprvlService iAprvlService;
 	
 	// 인사발령
     @RequestMapping(value = "/apntm")
@@ -105,7 +108,7 @@ public class HrController {
 		
 	
 	// 증명서발급(관리자)
-	@RequestMapping(value = "/cmnCode")
+	@RequestMapping(value = "/crtfctAdmin")
 	public ModelAndView cmnCode(@RequestParam HashMap<String, String> params, HttpSession session, ModelAndView mav) throws Throwable {
 		try {
 			if(session.getAttribute("sEmpNum") != null) {
@@ -116,7 +119,7 @@ public class HrController {
 				
 				mav.addObject("rList", rList);
 				mav.addObject("iList", iList);
-				mav.setViewName("hr/cmnCode");
+				mav.setViewName("hr/crtfctAdmin");
 			} else {
 				mav.setViewName("redirect:login");
 			}
@@ -156,7 +159,7 @@ public class HrController {
     }
 	
 	// 증명서발급(사용자)
-	@RequestMapping(value = "/crtft")
+	@RequestMapping(value = "/crtfct")
 	public ModelAndView crtft(@RequestParam HashMap<String, String> params, HttpSession session, ModelAndView mav) throws Throwable {
 		try {
 			if(session.getAttribute("sEmpNum") != null) {

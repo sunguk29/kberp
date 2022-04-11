@@ -1791,7 +1791,7 @@ function test(t) {
 	<input type="hidden" id="no" name="no" /> <!-- 상품 번호 -->
 </form>
 <form action="#" id="mdListForm" method="post">
- <input type="hidden" name="ccn"  value="${lead.CLNT_CMPNY_NUM}" /> <!-- 고객사 등급 번호 -->
+ <input type="hidden" name="ccn"  value="${data.CLNT_CMPNY_NUM}" /> <!-- 고객사 등급 번호 -->
  <input type="hidden" id="getMdNum" name="no" /> <!-- 상품 번호 -->
 </form>
 	<form action="#" id="listForm" method="post">
