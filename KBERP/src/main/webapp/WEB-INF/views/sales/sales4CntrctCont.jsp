@@ -445,7 +445,6 @@ $(document).ready(function() {
 	console.log(${param.salesNum});
 	console.log(${param.qtnNum});
 	
-	reloadSgstnList();
 	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
@@ -556,7 +555,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "qtnBotActionAjax/update",
+						url : "cntrctBotActionAjax/update",
 						dataType : "json",
 						data : params,
 						success : function(res) {
@@ -582,6 +581,8 @@ $(document).ready(function() {
 	});
 	$(".salesCont").hide();
 	$(".sgstnCont").hide();
+	$(".qtnCont").hide();
+	
 	// 영업기회 탭 접기펼치기
 	$("#sales_btn").on("click", "#salesContBtn_h", function() {
 		$(".salesCont").hide();
@@ -608,6 +609,19 @@ $(document).ready(function() {
 		$("#sgstn_btn").html(html);
 	});
 	
+	// 견적 탭 접기펼치기
+	$("#qtn_btn").on("click", "#qtnContBtn_h", function() {
+		$(".qtnCont").hide();
+		html = "<div class=\"up_btn\" id=\"qtnContBtn_s\"></div>";
+		$("#qtn_btn").html(html);
+	});
+	$("#qtn_btn").on("click", "#qtnContBtn_s", function() {
+		$(".qtnCont").show();
+		html = "<div class=\"drop_btn\" id=\"qtnContBtn_h\"></div>";
+		$("#qtn_btn").html(html);
+	});
+	
+	$(".qtnDiv").hide();
 	
 	
 	
@@ -657,11 +671,11 @@ function reloadOpList() {
 	
 	$.ajax({
 		type : "post",
-		url : "qtnOpBotListAjax",
+		url : "cntrctOpBotListAjax",
 		data : params,
 		dataType : "json",
 		success : function(res) {
-			drawOpCnt(res.opListCnt);
+			drawOpCnt(res.cntrctListCnt);
 			drawOpList(res.list);
 		},
 		error : function(req) {
@@ -671,10 +685,10 @@ function reloadOpList() {
 }
 
 /* 의견 목록 개수 html */
-function drawOpCnt(opListCnt) {
+function drawOpCnt(cntrctListCnt) {
 	var html = "";
 	
-	html = "<h3>의견(" + opListCnt + ")</h3>";
+	html = "<h3>의견(" + cntrctListCnt + ")</h3>";
 	
 	$(".op_title").html(html);
 }
@@ -698,54 +712,6 @@ function drawOpList(list) {
 	
 }
 
-//*************** 지난견적서 목록 Ajax *************** 
-function reloadSgstnList() {
-	var params = $("#pastQtnActionForm").serialize();
-	
-	$.ajax({
-		type : "post",
-		url : "PQListAjax",
-		dataType : "json",
-		data : params,
-		success : function(res) {
-			if(res.PQListCnt != 0) {
-				drawPQCnt(res.PQListCnt);
-				drawPQList(res.list);
-				$(".qtnDiv").show();
-			} else {
-				$(".qtnDiv").hide();
-			}
-		},
-		error : function(req) {
-			console.log(req.responseText);
-		}
-	});
-}
-
-/* 지난견적서 목록 개수 html */
-function drawPQCnt(PQListCnt) {
-	var html = "";
-	
-	html = "<h3>지난 견적서(" + PQListCnt + ")</h3><div class=\"drop_btn_bot\"></div>";
-	
-	$(".PQ_title").html(html);
-}
-
-/* 지난견적서 목록 html */
-function drawPQList(list) {
-	var html = "";
-	
-	for(var data of list) {
-		html +="<div class=\"qtnBox\">";
-		html +="<div class=\"name\">" + data.QTN_NAME + " (" + data.QTN_DATE +")</div>";
-		html +="<div class=\"txtOp\"><pre>" + data.MD_TYPE_NUM + "  " + data.MD_NAME + " " + data.INTRST_RATE + "%    " + data.LIMIT_AMNT + "원</pre></div>";
-		html +="</div>";
-	}
-	$(".qBox").html(html);
-}
-
-
-// *************** 지난견적서 목록 끝
 
 </script>
 </head>
@@ -1143,7 +1109,10 @@ function drawPQList(list) {
 	<hr class="hr_bot" color="#4B94F2" width="925px">
 	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
 					<input type="hidden" id= "mdNum" name="mdNum" /> <!-- 영업기회에서 가져온 영업번호 -->
-					<div class="bot_title"><h3>견적</h3></div>
+					<div class="bot_title">
+						<h3>견적<span id="qtn_btn"><div class="up_btn" id="qtnContBtn_s"></div></span></h3>
+					</div>
+					<div class="qtnCont">
 					 <hr class="hr_bot" color="white" width="925px"> 
 					<div class="hr_bot"></div>
 					<table>
@@ -1168,10 +1137,10 @@ function drawPQList(list) {
 											 		<option value="0" selected="selected">개인사업</option>
 									 			</c:when>
 									 			<c:when test="${data3.MD_TYPE_NUM eq 1}">
-											 		<option value="1" selected="selected">법인사업</option>
+											 		<option value="0" selected="selected">법인사업</option>
 									 			</c:when>
 									 			<c:when test="${data3.MD_TYPE_NUM eq 2}">
-											 		<option value="2" selected="selected">공공사업</option>
+											 		<option value="0" selected="selected">공공사업</option>
 									 			</c:when>
 									 		</c:choose>
 									 	</optgroup>
@@ -1223,10 +1192,10 @@ function drawPQList(list) {
 										 				<option value="0" selected="selected">미포함</option>
 										 			</c:when>
 										 			<c:when test="${data3.SRTX eq 1}">
-										 				<option value="1" selected="selected">포함</option>
+										 				<option value="0" selected="selected">포함</option>
 										 			</c:when>
 										 			<c:when test="${data3.SRTX eq 2}">
-										 				<option value="2" selected="selected">면세</option>
+										 				<option value="0" selected="selected">면세</option>
 										 			</c:when>
 										 		</c:choose>
 										 	</optgroup>
@@ -1243,13 +1212,13 @@ function drawPQList(list) {
 													<option value="0" selected="selected">6개월</option>
 												</c:when>
 												<c:when test="${data3.LOAN_PRD eq 1}">
-													<option value="1" selected="selected">1년</option>
+													<option value="0" selected="selected">1년</option>
 												</c:when>
 												<c:when test="${data3.LOAN_PRD eq 2}">
-													<option value="2" selected="selected">3년</option>
+													<option value="0" selected="selected">3년</option>
 												</c:when>
-												<c:when test="${data3.LOAN_PRD eq 3}">
-													<option value="3" selected="selected">5년</option>
+												<c:when test="${data3.LOAN_PRD eq 2}">
+													<option value="0" selected="selected">5년</option>
 												</c:when>
 											</c:choose>
 										</optgroup>
@@ -1265,10 +1234,10 @@ function drawPQList(list) {
 													<option value="0" selected="selected">원금 균등 상환</option>
 												</c:when>
 												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 1}">
-													<option value="1" selected="selected">원리금 균등 상환</option>
+													<option value="0" selected="selected">원리금 균등 상환</option>
 												</c:when>
 												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 2}">
-													<option value="2" selected="selected">만기 일시 상환</option>
+													<option value="0" selected="selected">만기 일시 상환</option>
 												</c:when>
 											</c:choose>
 										</optgroup>
@@ -1298,16 +1267,9 @@ function drawPQList(list) {
 								<a href="resources/upload/${data3.ATT_FILE_NAME}" download="${qtnSFileName}">${qtnSFileName}</a>
 							</div>
 						</div>
-<<<<<<< HEAD
-				</div>
-=======
-						<div class="cntrct_box_in">
-							<input type="text" id="fileName" readonly="readonly" />
-						</div>
-					</div>		
->>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
-<!-- *************************************** 견적 끝 *************************************** -->						
-<<<<<<< HEAD
+				
+					<!-- ********* 견적 끝 ********* -->					
+			</div>							
 						
 <!-- ************************************************ 계약 시작 ************************************************ -->
 				<hr class="hr_bot" color="#4B94F2" width="925px">
@@ -1401,29 +1363,10 @@ function drawPQList(list) {
 							<div class="cntrct_box_in">
 								<a href="resources/upload/${data4.ATT_FILE_NAME}"  download="${cntrctFileName}">${cntrctFileName}</a>
 							</div> 
-						</div>	
-				</form>
+						</div>
 				</form>	
-=======
-					<div class="next_bot">
-						<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
-					</div>
-				</form>	
-				<div class="qtnDiv">
-				<form action="#" id="pastQtnActionForm" method="post">
-					<input type="hidden" name="salesNum" value="${param.salesNum}" />
-					<input type="hidden" name="qtnNum" value="${param.qtnNum}" />
-					<!-- 지난 견적서 -->
-					<div class="mgtop"></div>
-					<div class="PQ_title"></div>
-					<hr color="#F2B705" width="925px">
-					<div class="qBox"></div>
-				</form>		
-				</div>		
-					<!-- ********* 견적 끝 ********* -->
->>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 				<form action="#" id="botOpActionForm" method="post">
-					<input type="hidden" name="qtnNum" value="${data3.QTN_NUM}" />
+					<input type="hidden" name="cntrctNum" value="${data4.CNTRCT_NUM}" />
 					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
 					<input type="hidden" id="cmntNum" name="cmntNum" />
 					<!-- 의견 -->
