@@ -738,7 +738,7 @@ function drawOpList(list) {
 			<div class="page_title_text">영업관리 - 계약 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
 				<!-- <img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" id="printBtn" /> -->
-				<img alt="수정버튼" src="resources/images/sales/newAdd.png" class="btnImg" id="updateBtn" data-toggle="tooltip" title="계약 수정하기" />
+				<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" data-toggle="tooltip" title="계약 수정하기" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
