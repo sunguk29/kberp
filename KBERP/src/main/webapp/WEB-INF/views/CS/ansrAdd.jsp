@@ -311,6 +311,18 @@ tr:nth-child(2) input, tr:nth-child(4) input {
 	vertical-align: top;
 }
 
+#fileDelBtn {
+	width: 100px;
+	height: 26px;
+	vertical-align: top;
+	background-color: #747474;
+	color: #f6f6f6;
+	border: 1px solid #747474;
+	border-radius: 2px;
+	cursor: pointer;
+	
+}
+
 .ansr_btn {
 	float: right;
 	margin-top: 25px;
