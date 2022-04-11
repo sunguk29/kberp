@@ -79,7 +79,7 @@ $("#useHstry").on("click", function() {
 		html += "</tbody>";
 		html += "</table>";
 		html += "<div class=\"board_bottom\">";
-		html += "<div class=\"pgn_area\">";
+		html += "<div class=\"pgn_area\" id=\"pgn_area\">";
 		html += "</div>";
 		html += "</div>";
 		html += "</div>";
@@ -95,8 +95,9 @@ $("#useHstry").on("click", function() {
 						reloadList();
 				
 				
-				$(".pgn_area").on("click", "div", function() {
+				$("#pgn_area").on("click", "div", function() {
 					$("#page").val($(this).attr("page"));
+					
 					reloadList();
 				});		
 			},
@@ -151,32 +152,30 @@ $("#useHstry").on("click", function() {
 	function drawPaging(pb) {
 		var html = "";
 		
-		html += "<div class=\"page_btn page_first\" page=\"1\">first</div>";
-		
+		html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
 		if($("#page").val() == "1") {
-			html += "<div class=\"page_btn page_prev\" page=1>prev</div>";
+			html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
 		} else {
-			html += "<div class=\"page_btn page_prev\" page=\"" + ($("#page").val() * 1 - 1) + "\">prev</div>";		
+			html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
 		}
 		
 		for(var i = pb.startPcount; i <= pb.endPcount; i++) {
 			if($("#page").val() == i) {
-				html += "<div class=\"page_btn_on\" page=\"" + i + "\">" + i + "</div>";
+				html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
 			} else {
-				html += "<div class=\"page_btn\" page=\"" + i + "\">" + i + "</div>";
+				html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
 			}
 		}
 		
 		if($("#page").val() == pb.maxPcount) {
-			html += "<div class=\"page_btn page_next\" page=\"" + pb.maxPcount + "\">next</div>";		
+			html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_next\">next</div>";
 		} else {
-			html += "<div class=\"page_btn page_next\" page=\"" + ($("#page").val() * 1 + 1) + "\">next</div>";				
+			html += "<div page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</div>";
 		}
-		
-		html += "<div class=\"page_btn page_last\" page=\"" + pb.maxPcount + "\">last</div>";
+		html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
 		
 		$(".pgn_area").html(html);
-		
+
 	}
 
 </script>
@@ -200,7 +199,8 @@ $("#useHstry").on("click", function() {
 
 <form action="#" id="hstryForm" method="post">
 	<input type="hidden" name="num" value="${param.num}"/>
-	<input type="hidden" name="page" value="1"/>
+	<input type="hidden" id="page" name="page" value="1"/>
+	
 </form>
 <div class="cont_wrap">
 		<div class="page_title_bar">
