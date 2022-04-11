@@ -114,6 +114,10 @@ public class CardController {
 				break;
 			case "update":
 				ics.updateData("card.updateCard",params);
+				ics.updateData("card.updateCard2",params);
+				break;
+			case "insert2":
+				ics.insertData("card.writeUseCard",params);
 				break;
 			}
 				modelMap.put("res", "success");
@@ -173,4 +177,13 @@ public class CardController {
 			return mapper.writeValueAsString(modelMap);
 		}
 		
+		//카드 등록
+			@RequestMapping(value = "/cardUseWrite")
+			public ModelAndView cardUseWrite(@RequestParam HashMap<String, String> params, ModelAndView mav)
+						throws Throwable {
+
+			mav.setViewName("mng/cardUseWrite");
+
+				return mav;
+		}
 }

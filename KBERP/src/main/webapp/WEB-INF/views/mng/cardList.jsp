@@ -141,6 +141,7 @@ $(document).ready(function() {
 		$("#actionForm").attr("action","cardWrite");
 		$("#actionForm").submit();
 	});
+
 	$("#searchTxt").on("keypress", function(event){
 		if(event.keyCode == 13) {	
 			$("#searchBtn").click();

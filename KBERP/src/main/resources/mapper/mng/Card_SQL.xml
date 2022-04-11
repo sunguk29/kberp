@@ -71,6 +71,11 @@
 	     SET ISSUE_DT =#{issue_dt} ,END_DT = #{end_dt}, DSCRD_DT=#{del_dt}, RMRKS=#{rmrks}
 	 WHERE MNG_NUM =#{mng_num}
 	 </select>
+	 <select id="updateCard2" resultType="hashmap" parameterType="hashmap">
+	 UPDATE  CARD_USER
+	 	SET  USE_END_DT =#{use_end_dt}
+	  WHERE  MNG_NUM =#{mng_num}
+	 </select>
 	 <select id="getAllEmpCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
 		FROM(  SELECT A.EMP_NUM, EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM,DEPT_NAME,RANK_NAME
@@ -117,5 +122,9 @@
 		  FROM CARD_USER CU INNER JOIN EMP E
     						ON CU.EMP_NUM = E.EMP_NUM
 		  WHERE MNG_NUM = #{mng_num})
+	</select>
+	<select id="writeUseCard" parameterType="hashmap">
+	INSERT CARD_USER INTO (EMP_NUM,USE_START_DT,USE_END_DT)
+	VALUES #{use_name},#{use_start_dt},#{use_end_dt}
 	</select>
 </mapper>

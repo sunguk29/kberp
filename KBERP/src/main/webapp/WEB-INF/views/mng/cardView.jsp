@@ -134,6 +134,13 @@ $(document).ready(function() {
 		$("#actionForm").attr("action","cardUpdate");
 		$("#actionForm").submit();
 	});
+	$("#useAddBtn").on("click",function(){
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		$("#actionForm").attr("action","cardUseWrite");
+		$("#actionForm").submit();
+	});
 $("#useHstry").on("click", function() {
 		
 		var html = "";
@@ -144,7 +151,7 @@ $("#useHstry").on("click", function() {
 		html += "<col width=\"100\">";
 		html += "<col width=\"150\">";
 		html += "<col width=\"150\">";
-		html += "<col width=\"100\">";
+		html += "<col width=\"150\">";
 		html += "</colgroup>";
 		html += "<thead>";
 		html += "<tr>";
@@ -166,7 +173,7 @@ $("#useHstry").on("click", function() {
 		makePopup({
 			depth : 1,
 			bg : true,
-			width : 550,
+			width : 600,
 			height : 600,
 			title : "사용내역",
 			contents : html,
@@ -213,9 +220,12 @@ function drawList(list) {
 		html += "<td>" + data.EMP_NAME + "</td>";
 		html += "<td>" + data.USE_START_DT + "</td>";
 		if(data.USE_END_DT == null)
-		html +="<td>사용중<td>"
+		html +="<td>사용중<td>";
 		else
 		html += "<td>" + data.USE_END_DT + "</td>";
+		if(data.RMRKS == null)
+		html +="<td><td>";
+		else
 		html += "<td>" + data.RMRKS + "</td>";
 		html += "</tr>";
 	}
@@ -272,7 +282,8 @@ function drawPaging(pb) {
 		<!-- 해당 내용에 작업을 진행하시오. -->
 	<form action="#" id="hstryForm" method="post">
 		<input type="hidden" name="num" value="${param.num}"/>
-		<input type="hidden" name="page" value="1"/>
+		<input type="hidden" name="mng_num" value="${param.mng_num}" />
+		<input type="hidden" id="page" name=page value=1> 
 	</form>
 
 	<form action="cardList" id="actionForm" method="post">
@@ -353,7 +364,8 @@ function drawPaging(pb) {
 			<div class="board_bottom">
 				<div class="cmn_btn" id="listBtn">목록으로</div>
 				<div class="cmn_btn" id="useHstry">카드소유내역</div>
-				<c:if test="${data.USE_START_DT == null}">
+				<c:set var="today" value="Date()" />
+				<c:if test="${data.USE_START_DT == null || data.USE_END_DT <= today}">
 				<div class="cmn_btn" id="useAddBtn">카드소유등록</div>
 				</c:if>
 				<div class="cmn_btn" id="updateBtn">수정</div>
