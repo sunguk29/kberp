@@ -316,8 +316,12 @@ td:nth-child(1), td:nth-child(3){
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+<<<<<<< HEAD
+	// 목록버튼
+=======
 	
 	/* 목록버튼 클릭시 */
+>>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 	$("#listBtn").on("click", function() {
 		makePopup({
 			bg : true,

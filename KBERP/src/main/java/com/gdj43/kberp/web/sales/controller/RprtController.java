@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,6 +58,12 @@ public class RprtController {
 		int clntThatMonthCnt = iCommonService.getIntData("clntRprt.clntThatMonthCnt", params);
 		double clntAvgCnt = iClntRprtService.clntAvgCnt(params);
 		int clntAllCnt = iCommonService.getIntData("clntRprt.clntAllCnt", params);
+		//고객 등급
+		int clntGradeS = iCommonService.getIntData("clntRprt.clntGradeS", params);
+		int clntGradeA = iCommonService.getIntData("clntRprt.clntGradeA", params);
+		int clntGradeB = iCommonService.getIntData("clntRprt.clntGradeB", params);
+		int clntGradeC = iCommonService.getIntData("clntRprt.clntGradeC", params);
+		int clntGradeD = iCommonService.getIntData("clntRprt.clntGradeD", params);
 		
 		Date dt = new Date();
 		Date mon = new Date();
@@ -91,6 +98,12 @@ public class RprtController {
 		mav.addObject("clntAvgCnt", clntAvgCnt);
 		mav.addObject("clntAllCnt", clntAllCnt);
 		
+		mav.addObject("clntGradeS", clntGradeS);
+		mav.addObject("clntGradeA", clntGradeA);
+		mav.addObject("clntGradeB", clntGradeB);
+		mav.addObject("clntGradeC", clntGradeC);
+		mav.addObject("clntGradeD", clntGradeD);
+		
 		mav.addObject("tMonth", params.get("tMonth"));
 		mav.addObject("startDate", params.get("startDate"));
 		mav.addObject("endDate", params.get("endDate"));
@@ -108,7 +121,6 @@ public class RprtController {
 		return mav;
 	}
 	
-	
 	/* 실적 차트 */
 	@RequestMapping(value = "/pfmcChart")
 	public ModelAndView pfmcChart(ModelAndView mav) throws Throwable {
@@ -117,7 +129,6 @@ public class RprtController {
 		
 		return mav;
 	}
-	
 	
 	/* 담당자 팝업 띄우기 */
 	@RequestMapping(value = "/rprtmngListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8" )
@@ -151,15 +162,12 @@ public class RprtController {
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		
 		int size = Integer.parseInt(request.getParameter("size"));
 		
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		
 		HashMap<String, Object> bsnList = iSchdlService.getData("salesRprt.getSalesBsnChart");
 			
-		
-		
 		for(int i = 0 ; i < size ; i++) {
 			HashMap<String, Object> temp = new HashMap<String, Object>();
 			
@@ -174,11 +182,7 @@ public class RprtController {
 			
 			list.add(temp);
 		}
-		
-		
-		
-	
-		
+
 		modelMap.put("list", list);
 		
 		return mapper.writeValueAsString(modelMap);
@@ -198,6 +202,32 @@ public class RprtController {
 		 */
 		
 		return mapper.writeValueAsString(modelMap);
+	}
+	
+	@RequestMapping(value = "/totalChart")
+	public ModelAndView totalChart(ModelAndView mav) {
+		
+		mav.setViewName("sales/rprt/totalChart");
+		
+		return mav;
+	}
+	
+	// 신규 영업활동 순위
+	@RequestMapping(value = "/totalNewSalesRankAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String totalNewSalesRankAjax(HttpServletRequest request, ModelAndView modelAndView) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		int size = Integer.parseInt(request.getParameter("size"));
+//		int series = Integer.parseInt(request.getParameter("series"));
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		HashMap<String, Object> bsnList = iSchdlService.getData("totalRprt.getTotalNewSalesRank");
+		HashMap<String, Object> temp = new HashMap<String, Object>();
+		temp.put("name", "민수");
+		temp.put("y", Integer.parseInt(String.valueOf(bsnList.get("CNT"))));
+		list.add(temp);
+		modelMap.put("list", list);
+        return mapper.writeValueAsString(modelMap);
 	}
 	
 }

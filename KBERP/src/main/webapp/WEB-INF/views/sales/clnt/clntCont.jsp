@@ -28,16 +28,16 @@
 	height: 100%;
 	margin: 20px auto;
 }
-table{
+table {
 	border: 1px;
 	width: 927px;
 	margin: 40px auto;
 }
-td:nth-child(2), td:nth-child(4){
+td:nth-child(2), td:nth-child(4) {
 	border-bottom: 1px solid #d7d7d7;
 }
 
-td:nth-child(1), td:nth-child(3){
+td:nth-child(1), td:nth-child(3) {
 	text-align: center;
 }
 .btn{ /* 내용 제목 영역 */
@@ -53,10 +53,10 @@ td:nth-child(1), td:nth-child(3){
 	border: none;
 	text-align: center;
 }
-.btnImg:hover{
+.btnImg:hover {
 	cursor: pointer;
 }
-.txt{
+.txt {
 	height: 33px;
 	width: 100%;
 	padding: 0 5px;
@@ -315,8 +315,12 @@ td:nth-child(1), td:nth-child(3){
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+<<<<<<< HEAD
+	// 목록버튼
+=======
 	
 	//목록버튼
+>>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 	$("#listBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntList");
 		$("#actionForm").submit();
@@ -368,8 +372,12 @@ $(document).ready(function() {
 				name : "취소"
 			}]
 		});		
+<<<<<<< HEAD
+	});
+=======
 	}); // 글 삭제 버튼 end
 	
+>>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 });
 </script>
 </head>

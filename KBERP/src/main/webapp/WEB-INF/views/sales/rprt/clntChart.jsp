@@ -173,7 +173,8 @@
 .sales_text_bot{
 	width: 428px;
 	height: 200px;
-	border: 1px solid #000;
+	/* border: 1px solid #000; */
+	border: none;
 	margin-top: 10px;
 	font-size: 11pt;
 	position: relative;
@@ -184,7 +185,7 @@
 	vertical-align: top;	
 	width: 428px;
 	height: 30px;
-	margin-top: 10px;
+	margin-top: 5px;
 }
 .mhTxt {
 	display: inline-block;
@@ -198,13 +199,13 @@
 }
 .cc {
 	position: absolute;
-	top: 40px;
+	top: 35px;
 	left: 10px;
 	background-color: #F2B705;
 }
 .clnt {
 	position: absolute;
-	top: 95px;
+	top: 90px;
 	left: 10px;
 	background-color: #F2CB05;
 }
@@ -383,10 +384,44 @@ input:focus {
 	margin-right: 10px;
 	margin-left: 10px;
 }
+.pie-bot, #pie-chart {
+	width: 350px;
+	height: 250px;
+} 
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	var ctx = $("#pie-chart");
+
+	var pieLabels = ["S", "A", "B", "C", "D"];
+
+	var pieData = [${clntGradeS},${clntGradeA},${clntGradeB},${clntGradeC},${clntGradeD}];
+
+	var pieColors = ["#FF6384","#FFD950","#02BC77","#28C3D7","#4169E1"];
+
+	var myChart = new Chart(ctx, {
+	    type: 'pie',
+	    data: {
+	        labels: pieLabels,
+	        datasets: [{
+	            label: '고객등급',
+	            data: pieData,
+	            backgroundColor: pieColors
+	        }]
+	    },
+	    options : {
+	    	legend : {
+	    		display : false,
+	    		position : 'bottom'
+	    	}
+	    },
+	    plugins: [ChartDataLabels]
+	});
+
 	/* 담당자 팝업  */
 	$(".userIcon").on("click", function() {
  		var html = "";
@@ -550,6 +585,7 @@ function drawPaging(pb, sel) {
 	
 	$(sel).html(html);
 }
+
 </script>
 </head>
 <body>
@@ -565,6 +601,7 @@ function drawPaging(pb, sel) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
+</form>
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">고객 차트</div>
@@ -686,7 +723,9 @@ function drawPaging(pb, sel) {
 							</div>
 							<div class="actvty_tLine1"></div>
 						</div>
-						<div class="sales_text_bot"></div>
+						<div class="sales_text_bot">
+							
+						</div>
 					</div>
 				</div>
 				<div class="cont_left">
@@ -697,14 +736,17 @@ function drawPaging(pb, sel) {
 							</div>
 							<div class="actvty_tLine1"></div>
 						</div>
-						<div class="sales_text_bot"></div>
+						<div class="sales_text_bot">
+							<div class="pie-bot">
+								<canvas id="pie-chart"></canvas>
+							</div>	
+						</div>
 					</div> 
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-</form>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

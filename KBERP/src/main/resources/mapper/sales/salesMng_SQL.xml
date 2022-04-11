@@ -270,7 +270,7 @@
 	<!-- 영업기회 상세보기 -->
 	<select id="getSales1" resultType="hashmap" parameterType="hashmap">
 		SELECT S.SALES_NUM, L.LEAD_NUM, L.LEAD_NAME, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, S.MNGR_EMP_NUM, E.EMP_NAME,
-		       DECODE(CCG.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME,
+		       DECODE(CCG.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME, CC.CLNT_CMPNY_NUM,
 		       LDI.LOAN_CAUSE_NUM, LDI.EXPCTN_LOAN_SCALE, LDI.LOAN_HOPE_TYPE, LDI.LOAN_HOPE_TIME, S.PRGRS_STS_NUM,
 		       EBI.EXPCTD_BSNS_NAME, EBI.EXPCTD_BSNS_TYPE, EBI.RMKS, TO_CHAR(S.START_DATE, 'YYYY-MM-DD') AS START_DATE,
 		       EBAF.ATT_FILE_NUM, EBAF.ATT_FILE_NAME
@@ -289,7 +289,7 @@
 		             LEFT OUTER JOIN EXPCTD_BSNS_INFO EBI
 		                          ON EBI.SALES_NUM = S.SALES_NUM
 		             LEFT OUTER JOIN EXPCTD_BSNS_ATT_FILE EBAF
-                         		  ON EBAF.SALES_NUM = S.SALES_NUM
+		                          ON EBAF.SALES_NUM = S.SALES_NUM
 		WHERE S.SALES_NUM = #{salesNum}
 	</select>
 	
@@ -457,6 +457,12 @@
 	<!-- 견적 실패 -->
 	<update id="sales3Failure" parameterType="hashmap">
 		UPDATE SALES SET PRGRS_STS_NUM = '36'
+		WHERE SALES_NUM = #{salesNum}
+	</update>
+	
+	<!-- 계약 실패 -->
+	<update id="sales4Failure" parameterType="hashmap">
+		UPDATE SALES SET PRGRS_STS_NUM = '46'
 		WHERE SALES_NUM = #{salesNum}
 	</update>
 	
@@ -672,9 +678,9 @@
 	<!-- 계약 등록 -->
 	<insert id="sales4CntrctAdd" parameterType="hashmap">
 		INSERT INTO CNTRCT (CNTRCT_NUM, SALES_NUM, DPST_BANK_NUM, CNTRCT_DATE, CNTRCT_START_DATE, CNTRCT_END_DATE,
-                    DPST_ACNT_NUM, DPST_TRSC_OWNER_NAME, PYMT_ACNT_NUM, PAYER_NAME, RNWL_EXPCTD_DATE)
+                    DPST_ACNT_NUM, DPST_TRSC_OWNER_NAME, PYMT_ACNT_NUM, PAYER_NAME, RNWL_EXPCTD_DATE, MONTH_PYMNT_AMNT, MONTH_INTRST_AMNT)
 		VALUES(CNTRCT_SEQ.NEXTVAL,  #{salesNum}, #{dbNum}, #{cntrctDt}, #{cntrctSdt}, #{cntrctEdt}, #{daNum}, #{daoName},
-        		#{paNum}, #{payerName}, #{reDate})
+        		#{paNum}, #{payerName}, #{reDate}, #{monthPymntAmnt}, #{monthIntrstAmnt})
 	</insert>
 	
 	<!-- 계약 첨부파일 등록 -->
@@ -694,14 +700,17 @@
 	
 	<!--  계약 상세보기 -->
 	<select id="getSales4" resultType="hashmap" parameterType="hashmap">
-		SELECT SALES_NUM, CNTRCT_NUM, DPST_BANK_NUM, CNTRCT_DATE, CNTRCT_START_DATE, CNTRCT_END_DATE, DPST_ACNT_NUM, DPST_TRSC_OWNER_NAME, PYMT_ACNT_NUM, PAYER_NAME, RNWL_EXPCTD_DATE
-		FROM CNTRCT 
-		WHERE SALES_NUM = #{salesNum}
+		SELECT C.SALES_NUM, C.CNTRCT_NUM, C.DPST_BANK_NUM, TO_CHAR(C.CNTRCT_DATE, 'YYYY-MM-dd') AS CNTRCT_DATE, TO_CHAR(C.CNTRCT_START_DATE, 'YYYY-MM-dd') AS CNTRCT_START_DATE,
+			   TO_CHAR(C.CNTRCT_END_DATE, 'YYYY-MM-dd') AS CNTRCT_END_DATE, C.DPST_ACNT_NUM, C.DPST_TRSC_OWNER_NAME, C.PYMT_ACNT_NUM, C.PAYER_NAME, TO_CHAR(C.RNWL_EXPCTD_DATE, 'YYYY-MM-dd') AS RNWL_EXPCTD_DATE,
+               C.MONTH_PYMNT_AMNT, C.MONTH_INTRST_AMNT, CAF.ATT_FILE_NAME
+		FROM CNTRCT C INNER JOIN CNTRCT_ATT_FILE CAF
+                               ON C.CNTRCT_NUM = CAF.CNTRCT_NUM
+		WHERE C.SALES_NUM = #{salesNum}
 	</select> 
 	
 	<!-- 계약 의견목록 -->
 	<select id="cntrctOpList" parameterType="hashmap" resultType="hashmap">
-		SELECT CNC.CNTRCT_NUM, E.EMP_NUM, D.DEPT_NAME, R.RANK_NAME, CNC.CONT, TO_CHAR(CNC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
+		SELECT CNC.CNTRCT_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, CNC.CONT, TO_CHAR(CNC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
 		       CNC.CMNT_NUM
 		FROM CNTRCT_CMNT CNC INNER JOIN EMP E
 		                             ON CNC.EMP_NUM = E.EMP_NUM
@@ -736,6 +745,18 @@
 		WHERE CMNT_NUM = #{cmntNum}
 	</update>
 	
+	<!-- 계약 정보 업데이트  -->
+	<update id="sales4Update" parameterType="hashmap">
+		UPDATE CNTRCT SET DPST_BANK_NUM = #{dbNum}, CNTRCT_DATE = #{cntrctDt}, CNTRCT_START_DATE = #{cntrctSdt}, CNTRCT_END_DATE = #{cntrctEdt}, DPST_ACNT_NUM = #{daNum},
+						  DPST_TRSC_OWNER_NAME = #{daoName}, PYMT_ACNT_NUM = #{paNum}, PAYER_NAME = #{payerName}, RNWL_EXPCTD_DATE = #{reDate}
+		WHERE CNTRCT_NUM = #{cntrctNum}   
+	</update>
+	
+	<!-- 계약 첨부파일 업데이트 -->
+	<update id="sales4UpdateAttFile" parameterType="hashmap">
+		UPDATE CNTRCT_ATT_FILE SET ATT_FILE_NAME = #{attFile}
+		WHERE CNTRCT_NUM = #{cntrctNum}
+	</update>
 
 </mapper>
 

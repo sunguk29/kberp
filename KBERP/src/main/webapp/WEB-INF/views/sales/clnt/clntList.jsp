@@ -149,8 +149,7 @@ select {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
-	//검색 구분 설정
+	// 검색구분 초기값
 	if('${param.searchType}' != '') {
 		$("#searchType").val("${param.searchType}"); // 검색 구분 유지
 	} else {
@@ -200,7 +199,6 @@ $(document).ready(function() {
 	$("#sortBtn").on("click", function() {
 		reloadList();
 	});
-	
 });
 
 //고객 목록 Ajax

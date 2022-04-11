@@ -84,7 +84,7 @@
 .content_table {
 	border-collapse: collapse;
 	width: 900px;
-	height: 200px;
+	height: 400px;
 	font-size: 12px;
 	margin-top: 40px;
 	
@@ -109,46 +109,75 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
-	});
 	
+	reloadList();
 	
 });
+
+function reloadList() { // 목록 조회용 + 페이징 조회용
+	  var params = $("#actionForm").serialize();
+  
+  $.ajax({
+ 	 type : "post",
+ 	 url : "aprvlListAjax",
+ 	 dataType : "json",
+ 	 data : params,
+ 	 success : function(res) {
+ 		 	console.log(res);
+ 		 	console.log("옴?");
+ 		 	drawList(res.list);
+ 		 	drawPaging(res.pb);
+			},
+			error : function(request, status, error) {
+				console.log(request.responseText);
+			}
+  });
+	
+}
+function drawList(list) {
+	var html = "";
+	
+	for(var data of list){
+		html += "<tr no=\"" + data.APRVL_NUM + "\">";
+		html += "<td>" + data.APRVL_NUM + "</td>";
+		html += "<td></td>";
+		html += "<td>" + data.TITLE + "</td>";
+		html += "<td>" + data.EMP_NAME + "</td>";
+		html += "<td>" + data.DEPT_NAME + "</td>";
+		console.log(${APRVL_NUM});
+	}
+	$("tbody").html(html);
+}
+
+function drawPaging(pb) {
+	var html = "";
+	
+	html +="<div page=\"1\"class=\"page_btn page_first\">first</div>";
+	
+	if($("#page").val() == "1"){
+	html +="<div page=\"1\"class=\"page_btn page_prev\">prev</div>";
+	} else{
+	html +="<div page=\"" + ($("#page").val() * 1 - 1) + "\"class=\"page_btn page_prev\">prev</div>";
+	}
+	
+	for(var i = pb.startPcount ; i <= pb.endPcount ; i++) {
+		if($("#page").val() == i ){
+			html += "<div page=\"" + i +"\" class=\"page_btn_on\">" + i + "</div>";
+			
+		} else{
+			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i +"</div>";
+		}
+	}
+	if($("#page").val() == pb.maxPcount) {
+		html += "<div page=\"" + pb.maxPcount +"\" class=\"page_btn page_next\">next</div>";
+	} else {
+		html += "<div page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</div>";
+	}
+		
+	html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
+		
+	$(".pgn_area").html(html);
+}
 </script>
 </head>
 <body>
@@ -164,31 +193,34 @@ $(document).ready(function() {
 		<div class="page_title_bar">
 			<div class="page_title_text">프로젝트 관리</div>
 			<!-- 검색영역 선택적 사항 -->
-
+		<div class="page_srch_area">
+			<form action="#" id="actionForm" method="post">
+					<input type="hidden" id="top" name="top" value="${param.top}" />
+					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+					<input type="hidden" id="no" name="no" value = "${param.APRVL_NUM}"/>
+					<input type="hidden" id="page" name="page" value="${page}"/>
+					
+					<select id="searchGbn" name="searchGbn">
+						<option value="0">결재번호</option>
+						<option value="1">제목</option>
+					</select>
+				
+				<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
+				<div class="cmn_btn_ml" id="searchBtn">검색</div>
+			</form>
+			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
-			<div class="container">
-				<span>문서번호</span>
-				<input type="text" value = 자동채번 id= dcmnt_num>
-				<span>서식명</span>
-				<input type="text" id= form_name>
-				<img class= "srch" alt="srch_icon.png" src="resources/images/GW/cmn/srch_icon.png"/>
-				<div class="srch_2">검색</div>
-				<br/>
-				<span>문서제목</span>
-				<input type="text" id="dcmnt_tlte">
-				<span>완료일</span>
-				<input type="date" id="complete"> ~
-				<input type="date" id="complete">
-			</div>
+			
 				
 			</div>                                                                                     
 			<table class="content_table">
 				<thead>
 					<tr>
-						<th>문서번호</th>
+						<th>결재번호</th>
 						<th>서식명</th>
 						<th>문서제목</th>
 						<th>기안자</th>
@@ -200,57 +232,26 @@ $(document).ready(function() {
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>03</td>
-						<td>기안서</td>
-						<td>카카오뱅크OO기안서</td>
-						<td>홍길동</td>
-						<td>그룹웨어팀</td>
-						<td>2021.12.24</td>
-						<td>2021.12.25</td>
-						<td>결재완료</td>
-						<td>...</td>
-					</tr>
-					<tr>
-						<td>02</td>
-						<td>휴가기안서</td>
-						<td>카카오뱅크휴가기안서</td>
-						<td>홍길동</td>
-						<td>그룹웨어팀</td>
-						<td>2021.12.24</td>
-						<td>2021.12.25</td>
-						<td>결재반려</td>
-						<td>...</td>
-					</tr>
-					<tr>
-						<td>01</td>
-						<td>지출결의서</td>
-						<td>카카오뱅크 지출결의서</td>
-						<td>홍길동</td>
-						<td>그룹웨어팀</td>
-						<td>2021.12.24</td>
-						<td></td>
-						<td>결재진행중</td>
-						<td>...</td>
-					</tr>
+					<%-- <c:forEach var="data" items="${list}">
+						<tr no="${data.APRVL_NUM}">
+							<td>"${data.APRVL_NUM}"</td>
+							<td></td>
+							<td>"${data.TITLE}"</td>
+							<td>"${data.EMP_NAME}"</td>
+							<td>"${data.DEPT_NAME}"</td>
+							<td>"${data.DRAFT_DATE}"</td>
+						
+						</tr>
+						</c:forEach> --%>
+					
 				</tbody>
 			</table>
 			<div class="board_bottom">
-				<div class="pgn_area">
-					<div class="page_btn page_first">first</div>
-					<div class="page_btn page_prev">prev</div>
-					<div class="page_btn">1</div>
-					<div class="page_btn">2</div>
-					<div class="page_btn">3</div>
-					<div class="page_btn">4</div>
-					<div class="page_btn_on">5</div>
-					<div class="page_btn page_next">next</div>
-					<div class="page_btn page_last">last</div>
-				</div>
+				<div class="pgn_area"></div>
 			</div>
 		
 		</div>
-	</div>
+	
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 
