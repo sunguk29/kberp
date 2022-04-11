@@ -134,125 +134,25 @@ $(document).ready(function() {
 		$("#actionForm").attr("action","cardUpdate");
 		$("#actionForm").submit();
 	});
-$("#useHstry").on("click", function() {
-		
-		var html = "";
-		
-		html += "<div class=\"popup_cont\">";
-		html += "<table class=\"board_table\">";
-		html += "<colgroup>";
-		html += "<col width=\"100\">";
-		html += "<col width=\"150\">";
-		html += "<col width=\"150\">";
-		html += "<col width=\"100\">";
-		html += "</colgroup>";
-		html += "<thead>";
-		html += "<tr>";
-		html += "<th>소유자</th>";
-		html += "<th>사용시작일</th>";
-		html += "<th>사용종료일</th>";	
-		html += "<th>비고</th>";	
-		html += "</tr>";
-		html += "</thead>";
-		html += "<tbody id=\"useHstryList\">";
-		html += "</tbody>";
-		html += "</table>";
-		html += "<div class=\"board_bottom\">";
-		html += "<div class=\"pgn_area\">";
-		html += "</div>";
-		html += "</div>";
-		html += "</div>";
-		
+	$("#btn1Btn").on("click", function() {
 		makePopup({
 			depth : 1,
 			bg : true,
-			width : 550,
-			height : 600,
-			title : "사용내역",
-			contents : html,
-			contentsEvent : function() {
-						reloadList();
-				
-				
-				$(".pgn_area").on("click", "div", function() {
-					$("#page").val($(this).attr("page"));
-					reloadList();
-				});		
-			},
+			width : 400,
+			height : 300,
+			title : "버튼하나팝업",
+			contents : "내용임",
 			buttons : {
-				name : "닫기",
+				name : "하나",
 				func:function() {
-					closePopup(1);
+					console.log("One!");
+					closePopup();
 				}
 			}
 		});
-	});
-	function reloadList() {
-	var params = $("#hstryForm").serialize();
-	
-	$.ajax({
-		type : "post",
-		url : "cardUseHstryAjax", 
-		dataType : "json",
-		data : params, 
-		success : function(res) {
-			drawList(res.list);
-			drawPaging(res.pb);
-				},
-		error : function(request, status, error) {
-			console.log(request.responseText);
-		}
-	});
-}
+	});	
 });
-function drawList(list) {
-	var html = "";
-	
-	for(data of list) {
-		html += "<tr>";
-		html += "<td>" + data.EMP_NAME + "</td>";
-		html += "<td>" + data.USE_START_DT + "</td>";
-		if(data.USE_END_DT == null)
-		html +="<td>사용중<td>"
-		else
-		html += "<td>" + data.USE_END_DT + "</td>";
-		html += "<td>" + data.RMRKS + "</td>";
-		html += "</tr>";
-	}
-	
-	$("#useHstryList").html(html);
-}
 
-function drawPaging(pb) {
-	var html = "";
-	
-	html += "<div class=\"page_btn page_first\" page=\"1\">first</div>";
-	
-	if($("#page").val() == "1") {
-		html += "<div class=\"page_btn page_prev\" page=1>prev</div>";
-	} else {
-		html += "<div class=\"page_btn page_prev\" page=\"" + ($("#page").val() * 1 - 1) + "\">prev</div>";		
-	}
-	
-	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
-		if($("#page").val() == i) {
-			html += "<div class=\"page_btn_on\" page=\"" + i + "\">" + i + "</div>";
-		} else {
-			html += "<div class=\"page_btn\" page=\"" + i + "\">" + i + "</div>";
-		}
-	}
-	
-	if($("#page").val() == pb.maxPcount) {
-		html += "<div class=\"page_btn page_next\" page=\"" + pb.maxPcount + "\">next</div>";		
-	} else {
-		html += "<div class=\"page_btn page_next\" page=\"" + ($("#page").val() * 1 + 1) + "\">next</div>";				
-	}
-	
-	html += "<div class=\"page_btn page_last\" page=\"" + pb.maxPcount + "\">last</div>";
-	
-	$(".pgn_area").html(html);
-	
-}
 </script>
 </head>
 <body>
@@ -270,11 +170,6 @@ function drawPaging(pb) {
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
-	<form action="#" id="hstryForm" method="post">
-		<input type="hidden" name="num" value="${param.num}"/>
-		<input type="hidden" name="page" value="1"/>
-	</form>
-
 	<form action="cardList" id="actionForm" method="post">
 	<input type="hidden" id="top" name="top" value="${param.top}" />
 	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
@@ -338,24 +233,17 @@ function drawPaging(pb) {
             <td> 사용종료일자 </td>
             <td class = "use_date_cont">${data.USE_END_DT}</td>
          </tr>
-         <c:if test="${data.DSCRD_DT != null}">
  		<tr>
             <td> 폐기일자 </td>
-            <td class = "del_cont">${data.DSCRD_DT}</td>
-         </tr>
-         </c:if>
-         <tr>
-         <td>비고</td>
-         <td>${data.RMRKS}</td>
+               <td class = "del_cont">${data.DSCRD_DT}</td>
+
          </tr>
          </tbody>
 			</table>
 			<div class="board_bottom">
+				<div class="pgn_area">
+				</div>
 				<div class="cmn_btn" id="listBtn">목록으로</div>
-				<div class="cmn_btn" id="useHstry">카드소유내역</div>
-				<c:if test="${data.USE_START_DT == null}">
-				<div class="cmn_btn" id="useAddBtn">카드소유등록</div>
-				</c:if>
 				<div class="cmn_btn" id="updateBtn">수정</div>
 			</div>
 		</div>

@@ -55,7 +55,7 @@
 }
 
 #table_area {
-	width: 872px;
+	width: 862px;
 	height: 278px;
 	/* overflow-y: auto; */
 }
@@ -64,8 +64,8 @@
 	display: inline-block;
 	vertical-align: top;
 	width: 164px;
-	height: 222px;
-	margin: 8px 10px 8px 0px;
+	height: 200px;
+	margin: 5px 10px 10px 0px;
 	padding-left: 0px;
 }
 #basic_info_area_right {
@@ -120,57 +120,78 @@
 }
 
 #lt1_l1_e1 {
-	width: 248px;
+	width: 240px;
 }
 #lt1_l1_e2 {
-	width: 252px;
+	width: 240px;
 }
 #lt1_l1_e3 {
-	width: 45px;
+	width: 40px;
 }
 #lt1_l2_e1 {
-	width: 132px;
+	width: 240px;
 }
 #lt1_l2_e2 {
-	width: 413px;
+	width: 240px;
 }
 #lt1_l3_e1 {
-	width: 545px;
+	width: calc(100% - 14px);
 }
 #lt1_l4_e1 {
-	width: 150px;
+	width: 240px;
 }
 #lt1_l4_e2 {
-	width: 150px;
-}
-#lt1_l4_e3 {
-	width: 245px;
+	width: 240px;
 }
 
 #lt2_l1_e1 {
-	width: 181px;
+	width: 172px;
 }
 #lt2_l1_e2 {
-	width: 182px;
+	width: 172px;
 }
 #lt2_l1_e3 {
-	width: 182px;
+	width: 172px;
 }
 #lt2_l2_e1 {
-	width: 272px;
+	width: 172px;
 }
 #lt2_l2_e2 {
-	width: 273px;
+	width: 172px;
+}
+#lt2_l2_e3 {
+	width: 172px;
+}
+#lt2_l3_e1 {
+	width: 172px;
+}
+#lt2_l3_e2 {
+	width: 172px;
+}
+#lt2_l3_e3 {
+	width: 172px;
+}
+#lt2_l4_e1 {
+	width: 172px;
+}
+#lt2_l4_e2 {
+	width: 172px;
+}
+#lt2_l4_e3 {
+	width: 172px;
 }
 
 #lt3_l1_e1 {
-	width: 175px;
+	width: 160px;
 }
 #lt3_l1_e2 {
-	width: 370px;
+	width: 360px;
 }
 #lt3_l2_e1 {
-	width: 175px;
+	width: 260px;
+}
+#lt3_l2_e2 {
+	width: 260px;
 }
 
 #lt4_l1_e1 {
@@ -200,7 +221,7 @@
 
 .cont_line {
 	margin-top: 12px;
-	margin-left: 6px;
+	margin-left: 16px;
 }
 .cont_name {
 	display: block;
@@ -242,9 +263,9 @@
 }
 #bottom_cont {
 	display: block;
-	width: calc(100% - 6px);
+	width: calc(100% - 16px);
 	height: 278px;
-	padding: 8px 3px 8px 3px;
+	padding: 8px;
 }
 
 table {
@@ -367,6 +388,12 @@ td:nth-child(even) {
 	margin-top: 2px;
 }
 
+#btm_del_btn:hover {
+	background-color: #ff1016;
+	cursor: pointer;
+}
+
+
 .admnstr_btn {
 	display: inline-block;
 	vertical-align: top;
@@ -447,40 +474,6 @@ td:nth-child(even) {
 }
 #edit_lt3_e4 #edit_bnkbk_copy {
 	width: calc(100% - 186px);
-}
-
-.sub_text {
-	display: inline-block;
-	vertical-align: center;
-	font-size: 10pt;
-	color: #666666;
-}
-
-#edit_email {
-	width: 300px;
-}
-
-.phone_num_sel_box {
-	width: 91px;
-	font-size: 9pt;
-}
-
-#edit_phone_num_1 {
-	width: 128px;
-}
-#edit_phone_num_2 {
-	width: 128px;
-}
-#edit_mbl_num_1 {
-	width: 128px;
-}
-#edit_mbl_num_2 {
-	width: 128px;
-}
-
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
 }
 
 #add_grdtn_crtfct {
@@ -596,27 +589,25 @@ function tabContChange(tId, data, dataList) {
 		html += "<br/>                                                                                                                   ";
 		html += "<div class=\"cont_line\">                                                                                               ";
 		html += "	<div class=\"cont_element\" id=\"lt1_l2_e1\">                                                                         ";
-		html += "		<div class=\"cont_name\">우편번호</div>                                                                            ";
+		html += "		<div class=\"cont_name\">E-mail</div>                                                                            ";
 		html += "		<br/>                                                                                                            ";
-		html += "		<input type=\"text\" class=\"cont_text\" id=\"zip_code\" readonly=\"readonly\" value=\"";
-		html += data.ZIP_CODE;
+		html += "		<input type=\"text\" class=\"cont_text\" id=\"email\" readonly=\"readonly\" value=\"";
+		html += data.EMAIL;
 		html += "\" />       ";
 		html += "	</div>                                                                                                               ";
 		html += "	<div class=\"cont_element\" id=\"lt1_l2_e2\">                                                                         ";
-		html += "		<div class=\"cont_name\">주소</div>                                                                              ";
+		html += "		<div class=\"cont_name\">최종학력</div>                                                                          ";
 		html += "		<br/>                                                                                                            ";
-		html += "		<input type=\"text\" class=\"cont_text\" id=\"adrs\" readonly=\"readonly\" value=\"";
-		html += data.ADRS;
-		html += "\" />";
+		html += "		<input type=\"text\" class=\"cont_text\" id=\"final_edctn_level\" readonly=\"readonly\" value=\"\" /> ";
 		html += "	</div>                                                                                                               ";
 		html += "</div>                                                                                                                  ";
 		html += "<br/>                                                                                                                   ";
 		html += "<div class=\"cont_line\">                                                                                               ";
 		html += "	<div class=\"cont_element\" id=\"lt1_l3_e1\">                                                                         ";
-		html += "		<div class=\"cont_name\">상세주소</div>                                                                              ";
+		html += "		<div class=\"cont_name\">주소</div>                                                                              ";
 		html += "		<br/>                                                                                                            ";
-		html += "		<input type=\"text\" class=\"cont_text\" id=\"dtl_adrs\" readonly=\"readonly\" value=\"";
-		html += data.DTL_ADRS;
+		html += "		<input type=\"text\" class=\"cont_text\" id=\"adrs\" readonly=\"readonly\" value=\"";
+		html += data.ADRS + " " + data.DTL_ADRS;
 		html += "\" />";
 		html += "	</div>                                                                                                               ";
 		html += "</div>                                                                                                                  ";
@@ -639,13 +630,6 @@ function tabContChange(tId, data, dataList) {
 		html += "		<input type=\"text\" class=\"cont_text\" id=\"mbl_num\" readonly=\"readonly\" value=\"";
 		html += data.MBL_NUM;
 		html += "\" />         ";
-		html += "	</div>                                                                                                               ";
-		html += "	<div class=\"cont_element\" id=\"lt1_l4_e3\">                                                                         ";
-		html += "		<div class=\"cont_name\">E-mail</div>                                                                          ";
-		html += "		<br/>                                                                                                            ";
-		html += "		<input type=\"text\" class=\"cont_text\" id=\"email\" readonly=\"readonly\" value=\"";
-		html += data.EMAIL;
-		html +="\" /> ";
 		html += "	</div>                                                                                                               ";
 		html += "</div>                                                                                                                  ";
 		$("#lt_edit_btn").show();
@@ -672,6 +656,37 @@ function tabContChange(tId, data, dataList) {
 		html += "\" />  ";
 		html += "	</div>                                                                                                         ";
 		html += "	<div class=\"cont_element\" id=\"lt2_l1_e2\">                                                                  ";
+		html += "		<div class=\"cont_name\">직종</div>                                                                        ";
+		html += "		<br/>                                                                                                      ";
+		html += "		<input type=\"text\" class=\"cont_text\" id=\"brthdt\" readonly=\"readonly\" value=\"xxx\" />           ";
+		html += "	</div>                                                                                                         ";
+		html += "	<div class=\"cont_element\" id=\"lt2_l1_e3\">                                                                  ";
+		html += "		<div class=\"cont_name\">급여형태</div>                                                                    ";
+		html += "		<br/>                                                                                                      ";
+		html += "		<input type=\"text\" class=\"cont_text\" id=\"gndr\" readonly=\"readonly\" value=\"xxx\" />                   ";
+		html += "	</div>                                                                                                         ";
+		html += "</div>                                                                                                            ";
+		html += "<br/>                                                                                                             ";
+		html += "<div class=\"cont_line\">                                                                                         ";
+		html += "	<div class=\"cont_element\" id=\"lt2_l2_e1\">                                                                  ";
+		html += "		<div class=\"cont_name\">직급</div>                                                                        ";
+		html += "		<br/>                                                                                                      ";
+		html += "		<input type=\"text\" class=\"cont_text\" id=\"rsdnt_rgstn_num\" readonly=\"readonly\" value=\"xxx\" />        ";
+		html += "	</div>                                                                                                         ";
+		html += "	<div class=\"cont_element\" id=\"lt2_l2_e2\">                                                                  ";
+		html += "		<div class=\"cont_name\">직책</div>                                                                        ";
+		html += "		<br/>                                                                                                      ";
+		html += "		<input type=\"text\" class=\"cont_text\" id=\"brthdt\" readonly=\"readonly\" value=\"xxx\" />                 ";
+		html += "	</div>                                                                                                         ";
+		html += "	<div class=\"cont_element\" id=\"lt2_l2_e3\">                                                                  ";
+		html += "		<div class=\"cont_name\">직무</div>                                                                        ";
+		html += "		<br/>                                                                                                      ";
+		html += "		<input type=\"text\" class=\"cont_text\" id=\"gndr\" readonly=\"readonly\" value=\"xxx\" />                   ";
+		html += "	</div>                                                                                                         ";
+		html += "</div>                                                                                                            ";
+		html += "<br/>                                                                                                             ";
+		html += "<div class=\"cont_line\">                                                                                         ";
+		html += "	<div class=\"cont_element\" id=\"lt2_l3_e1\">                                                                  ";
 		html += "		<div class=\"cont_name\">재직구분</div>                                                                    ";
 		html += "		<br/>                                                                                                      ";
 		html += "		<input type=\"text\" class=\"cont_text\" id=\"rsdnt_rgstn_num\" readonly=\"readonly\" value=\"";
@@ -683,8 +698,25 @@ function tabContChange(tId, data, dataList) {
 			html += "발령 전";
 		}
 		html += "\" />    ";
-		html += "	</div>   ";
-		html += "	<div class=\"cont_element\" id=\"lt2_l1_e3\">                                                                  ";
+		html += "	</div>                                                                                                         ";
+		html += "	<div class=\"cont_element\" id=\"lt2_l3_e2\">                                                                  ";
+		html += "		<div class=\"cont_name\">입사일</div>                                                                      ";
+		html += "		<br/>                                                                                                      ";
+		html += "		<input type=\"text\" class=\"cont_text\" id=\"join_date\" readonly=\"readonly\" value=\"";
+		html += data.JOIN_DATE;
+		html += "\" />   ";
+		html += "	</div>                                                                                                         ";
+		html += "	<div class=\"cont_element\" id=\"lt2_l3_e3\">                                                                  ";
+		html += "		<div class=\"cont_name\">퇴사일</div>                                                                      ";
+		html += "		<br/>                                                                                                      ";
+		html += "		<input type=\"text\" class=\"cont_text\" id=\"rsgnt_date\" readonly=\"readonly\" value=\"";
+		html += data.RSGNT_DATE;
+		html += "\" />                   ";
+		html += "	</div>                                                                                                         ";
+		html += "</div>                                                                                                            ";
+		html += "<br/>                                                                                                             ";
+		html += "<div class=\"cont_line\">                                                                                         ";
+		html += "	<div class=\"cont_element\" id=\"lt2_l4_e1\">                                                                  ";
 		html += "		<div class=\"cont_name\">수습여부</div>                                                                    ";
 		html += "		<br/>                                                                                                      ";
 		html += "		<input type=\"text\" class=\"cont_text\" id=\"rsdnt_rgstn_num\" readonly=\"readonly\" value=\"";
@@ -695,22 +727,15 @@ function tabContChange(tId, data, dataList) {
 		}
 		html += "\" />       ";
 		html += "	</div>                                                                                                         ";
-		html += "</div>                                                                                                            ";
-		html += "<br/>                                                                                                             ";
-		html += "<div class=\"cont_line\">                                                                                         ";  
-		html += "	<div class=\"cont_element\" id=\"lt2_l2_e1\">                                                                  ";
-		html += "		<div class=\"cont_name\">입사일</div>                                                                      ";
+		html += "	<div class=\"cont_element\" id=\"lt2_l4_e2\">                                                                  ";
+		html += "		<div class=\"cont_name\">수습만료일</div>                                                                  ";
 		html += "		<br/>                                                                                                      ";
-		html += "		<input type=\"text\" class=\"cont_text\" id=\"join_date\" readonly=\"readonly\" value=\"";
-		html += data.JOIN_DATE;
-		html += "\" />   ";
+		html += "		<input type=\"text\" class=\"cont_text\" id=\"brthdt\" readonly=\"readonly\" value=\"xxx\" />                 ";
 		html += "	</div>                                                                                                         ";
-		html += "	<div class=\"cont_element\" id=\"lt2_l2_e2\">                                                                  ";
-		html += "		<div class=\"cont_name\">퇴사일</div>                                                                      ";
+		html += "	<div class=\"cont_element\" id=\"lt2_l4_e3\">                                                                  ";
+		html += "		<div class=\"cont_name\">퇴사사유</div>                                                                    ";
 		html += "		<br/>                                                                                                      ";
-		html += "		<input type=\"text\" class=\"cont_text\" id=\"rsgnt_date\" readonly=\"readonly\" value=\"";
-		html += data.RSGNT_DATE;
-		html += "\" />                   ";
+		html += "		<input type=\"text\" class=\"cont_text\" id=\"gndr\" readonly=\"readonly\" value=\"\" />                   ";
 		html += "	</div>                                                                                                         ";
 		html += "</div>                                                                                                            ";
 		$("#lt_edit_btn").hide();
@@ -770,17 +795,15 @@ function tabContChange(tId, data, dataList) {
 		html += "<table id=\"btm1_table\">                                   ";
 		html += "<colgroup>                                                  ";
 		html += "<col width=\"25%\" />                                       ";
-		html += "<col width=\"24%\" />                                       ";
-		html += "<col width=\"24%\" />                                       ";
+		html += "<col width=\"30%\" />                                       ";
+		html += "<col width=\"30%\" />                                       ";
 		html += "<col width=\"15%\" />                                       ";
-		html += "<col width=\"12%\" />                                       ";
 		html += "	<thead>                                                  ";
 		html += "		<tr>                                                 ";
 		html += "			<th>학교명</th>                                  ";
 		html += "			<th>입학일</th>                                  ";
 		html += "			<th>졸업일</th>                                  ";
 		html += "			<th>학점</th>                                    ";
-		html += "			<th>학적구분</th>                                    ";
 		html += "		</tr>                                                ";
 		html += "	</thead>                                                 ";
 		html += "	<tbody>                                                  ";
@@ -798,18 +821,7 @@ function tabContChange(tId, data, dataList) {
 			html += "</div></td> ";
 			html += "			<td><div class=\"td_cont\">";
 			if (dl.GRADE != null) {
-				html += dl.GRADE;
-			}
-			html += "</div></td>  ";
-			html += "			<td><div class=\"td_cont\">";
-			if (dl.SCHL_REGSTR_DVSN == "0") {
-				html += "졸업";
-			} else if (dl.SCHL_REGSTR_DVSN == "1") {
-				html += "수료";
-			} else if (dl.SCHL_REGSTR_DVSN == "2") {
-				html += "휴학";
-			} else if (dl.SCHL_REGSTR_DVSN == "3") {
-				html += "퇴학";
+				html += dl.GRADE + " / 4.5";
 			}
 			html += "</div></td>  ";
 			html += "		</tr>                                                ";
@@ -822,7 +834,6 @@ function tabContChange(tId, data, dataList) {
 				html += "			<td><div class=\"td_cont\"></div></td> ";
 				html += "			<td><div class=\"td_cont\"></div></td> ";
 				html += "			<td><div class=\"td_cont\"></div></td> ";
-				html += "			<td><div class=\"td_cont\"></div></td>           ";
 				html += "			<td><div class=\"td_cont\"></div></td>           ";
 				html += "		</tr>                                                ";
 			}
@@ -1004,7 +1015,7 @@ function createAddPopup(pId) {
 		html += "		</div>                                                                                                                                        ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm1_e4\">                                                                                        ";
 		html += "			<label for=\"add_grade\" class=\"popup_cont_name\">학점 :</label>                                                                         ";
-		html += "			<input type=\"number\" class=\"popup_cont_text\" id=\"add_grade\" name=\"grade\" placeholder=\"학점\" />                                                   ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"add_grade\" name=\"grade\" placeholder=\"학점\" />                                                   ";
 		html += "		</div>                                                                                                                                        ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_btm1_e5\">                                                                                        ";
 		html += "			<label for=\"add_clsftn\" class=\"popup_cont_name\">학적구분* :</label>                                                                    ";
@@ -1181,7 +1192,8 @@ function createAddPopup(pId) {
 								// 물리파일명 보관
 								if (res.fileName.length > 0) {
 									$(".upld_file_name").val(res.fileName[0]);
-									
+									console.log("test : " + $(".upld_file_name").val());
+
 									addFormAjaxFunction();
 								}
 							},
@@ -1205,6 +1217,8 @@ function createAddPopup(pId) {
 function addFormAjaxFunction() {
 	var params = $("#addForm").serialize();
 	
+	console.log("test2 : " + $(".upld_file_name").val());
+	
 	$.ajax({
 		type : "post",
 		url : "prsnlCardActionAjax/insert",
@@ -1226,34 +1240,15 @@ function addFormAjaxFunction() {
 	});
 }
 
-function numMaxLimit(e) {
-	if (e.value.length >= 4) {
-		if (e.className.indexOf("phone_num_1") != -1) {
-			$("#" + e.id).parent("div").children(".phone_num_2").focus();
-		}
-	}
-	if (e.value.length > 4) {
-		e.value = e.value.slice(0, 4);
-	}
-}
-
 function createEditPopup(pId, data, bankList) {
 	console.log(pId);
 	var title = "";
 	var html = "";
 	var size = [0, 0]; // [width, height]
 	
-	var phone_num_val = ["02", "031", "032", "033", "041", "042", "043", "044", 
-		"051", "052", "053", "054", "055", "061", "062", "063", "064"];
-	var mbl_num_val = ["010", "011", "016", "017", "018", "019"];
-	
 	html += "<form action=\"#\" id=\"editForm\" method=\"post\">";
 	html += "<input type=\"hidden\" class=\"popup_id\" name=\"popup_id\" value=\"" + pId + "\" />";
 	html += "<input type=\"hidden\" name=\"empNum\" value=\"" + $("#nEmpNum").val() + "\" />";
-	
-	html += "<input type=\"hidden\" class=\"merge_value\" id=\"merge_email\" name=\"edit_email\" value=\"\" />";
-	html += "<input type=\"hidden\" class=\"merge_value\" id=\"merge_phone_num\" name=\"edit_phone_num\" value=\"\" />";
-	html += "<input type=\"hidden\" class=\"merge_value\" id=\"merge_mbl_num\" name=\"edit_mbl_num\" value=\"\" />";
 	
 	switch (pId) {
 	case "human_info_btn" :
@@ -1262,10 +1257,8 @@ function createEditPopup(pId, data, bankList) {
 		
 		html += "	<div id=\"human_info_edit_popup\" >                                                                                                ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt1_e1\">                                                                 ";
-		var email = data.EMAIL.split("@");
 		html += "			<label for=\"edit_email\" class=\"popup_cont_name\">E-mail* :</label>                                              ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_email\" value=\"" + email[0] + "\" />             ";
-		html += "				<div class=\"sub_text\">@kakao.com</div>              ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_email\" name=\"edit_email\" value=\"" + data.EMAIL + "\" />             ";
 		html += "		</div>                                                                                                                ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt1_e2\">                                                                 ";
 		html += "			<label for=\"edit_zip_code\" class=\"popup_cont_name\">우편번호* :</label>                                               ";
@@ -1279,49 +1272,21 @@ function createEditPopup(pId, data, bankList) {
 		html += "			<label for=\"edit_dtl_adrs\" class=\"popup_cont_name\">상세주소* :</label>                                           ";
 		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_dtl_adrs\" name=\"edit_dtl_adrs\" value=\"" + data.DTL_ADRS + "\" />          ";
 		html += "		</div>                                                                                                                ";
-		
-
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt1_e5\">                                                                 ";
-		html += "			<label for=\"edit_phone_num\" class=\"popup_cont_name\">전화번호 : </label>                                       ";
-		html += "				<select class=\"popup_cont_text phone_num_sel_box\" id=\"phone_num_sel\">";
-		var phone_num = ["-1", "", ""];
+		html += "			<label for=\"edit_tlphn_num\" class=\"popup_cont_name\">전화번호 : </label>                                       ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_phone_num\" name=\"edit_phone_num\" ";
 		if (data.PHONE_NUM != null) {
-			phone_num = data.PHONE_NUM.split("-");
+			html += "value=\"" + data.PHONE_NUM;
+		} else {
+			html += "placeholder=\"전화번호를 입력하세요.";
 		}
-		html += "			<option value=\"-1\">---</option>";
-		for (var val of phone_num_val) {
-			if (val == phone_num[0]) {
-				html += "			<option value=\"" + val + "\" selected>" + val + "</option>";
-			} else {
-				html += "			<option value=\"" + val + "\">" + val + "</option>";
-			}
-		}
-		html += "				</select>";
-		html += "				<div class=\"sub_text\">-</div>              ";
-		html += "				<input type=\"number\" class=\"popup_cont_text phone_num_1\" id=\"edit_phone_num_1\" oninput=\"numMaxLimit(this)\" value=\"" + phone_num[1] + "\" />              ";
-		html += "				<div class=\"sub_text\">-</div>              ";
-		html += "				<input type=\"number\" class=\"popup_cont_text phone_num_2\" id=\"edit_phone_num_2\" oninput=\"numMaxLimit(this)\" value=\"" + phone_num[2] + "\" />              ";
-		html += "			</div>                                                                                                                                    ";
-		html += "		<div class=\"popup_cont_element\" id=\"edit_lt1_e6\">                                                                 ";
-		html += "				<label for=\"add_mbl_num\" class=\"popup_cont_name\">휴대폰번호* :</label>                                                                ";
-		html += "				<select class=\"popup_cont_text phone_num_sel_box\" id=\"mbl_num_sel\">";
-		var mbl_num = data.MBL_NUM.split("-");
-		
-		html += "			<option value=\"-1\">---</option>";
-		for (var val of mbl_num_val) {
-			if (val == mbl_num[0]) {
-				html += "			<option value=\"" + val + "\" selected>" + val + "</option>";
-			} else {
-				html += "			<option value=\"" + val + "\">" + val + "</option>";
-			}
-		}
-		html += "				</select>";
-		html += "				<div class=\"sub_text\">-</div>              ";
-		html += "				<input type=\"number\" class=\"popup_cont_text phone_num_1\" id=\"edit_mbl_num_1\" oninput=\"numMaxLimit(this)\" value=\"" + mbl_num[1] + "\" />              ";
-		html += "				<div class=\"sub_text\">-</div>              ";
-		html += "				<input type=\"number\" class=\"popup_cont_text phone_num_2\" id=\"edit_mbl_num_2\" oninput=\"numMaxLimit(this)\" value=\"" + mbl_num[2] + "\" />              ";
-		html += "			</div>                                                                                                                                    ";
+		html += "\" />                                           ";
 		html += "		</div>                                                                                                                ";
+		html += "		<div class=\"popup_cont_element\" id=\"edit_lt1_e5\">                                                                 ";
+		html += "			<label for=\"edit_mbl_num\" class=\"popup_cont_name\">휴대폰번호* :</label>                                        ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_mbl_num\" name=\"edit_mbl_num\" value=\"" + data.MBL_NUM + "\" />               ";
+		html += "		</div>                                                                                                                ";
+		html += "	</div>                                                                                                                    ";
 		break;
 		
 	case "slry_info_btn" :
@@ -1334,10 +1299,12 @@ function createEditPopup(pId, data, bankList) {
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt3_e1\">                                                                                     ";
 		html += "			<label for=\"edit_bank_name\" class=\"popup_cont_name\">은행명* :</label>                                                  ";
 		html += "		<select class=\"popup_cont_text\" id=\"edit_bank_name\" name=\"edit_bank_name\">";
+		console.log("check 1");
 		var bankName = "";
 		if (data != null && data.BANK_NAME != null) {
 			bankName = data.BANK_NAME;
 		}
+		console.log("bankName : " + bankName);
 		for (var bl of bankList) {
 			if (bl.BANK_NAME == bankName) {
 				html += "			<option value=\"" + bl.BANK_NUM + "\" selected>" + bl.BANK_NAME + "</option>";
@@ -1350,7 +1317,7 @@ function createEditPopup(pId, data, bankList) {
 		html += "		</div>                                                                                                                                    ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt3_e2\">                                                                                     ";
 		html += "			<label for=\"edit_slry_trnsf_acnt\" class=\"popup_cont_name\">계좌번호* :</label>                                              ";
-		html += "			<input type=\"number\" class=\"popup_cont_text\" id=\"edit_acnt_num\" name=\"edit_acnt_num\" value=\"";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_acnt_num\" name=\"edit_acnt_num\" value=\"";
 		if (data != null && data.ACNT_NUM != null) {
 			html += data.ACNT_NUM;
 		}
@@ -1394,7 +1361,6 @@ function createEditPopup(pId, data, bankList) {
 				var file_exist = false;
 
 				$(".popup_cont_element input").css("outline", "1px solid #00000033");
-				$(".popup_cont_element select").css("outline", "1px solid #00000033");
 				switch (pId) {
 				case "human_info_btn" :
 					if (checkEmpty("#edit_email")) {
@@ -1409,36 +1375,11 @@ function createEditPopup(pId, data, bankList) {
 					} else if (checkEmpty("#edit_dtl_adrs")) {
 						$("#edit_dtl_adrs").css("outline", "2px solid #fe3a40");
 						$("#edit_dtl_adrs").focus();
-					} else if (($("#phone_num_sel").val() == "-1" || checkEmpty("#edit_phone_num_1") || checkEmpty("#edit_phone_num_2")) &&
-							!($("#phone_num_sel").val() == "-1" && checkEmpty("#edit_phone_num_1") && checkEmpty("#edit_phone_num_2"))){
-						if ($("#phone_num_sel").val() == "-1") {
-							$("#phone_num_sel").css("outline", "2px solid #fe3a40");
-							$("#phone_num_sel").focus();
-						} else if (checkEmpty("#edit_phone_num_1")) {
-							$("#edit_phone_num_1").css("outline", "2px solid #fe3a40");
-							$("#edit_phone_num_1").focus();
-						} else if (checkEmpty("#edit_phone_num_2")) {
-							$("#edit_phone_num_2").css("outline", "2px solid #fe3a40");
-							$("#edit_phone_num_2").focus();
-						}
-					} else if ($("#mbl_num_sel").val() == "-1" || checkEmpty("#edit_mbl_num_1") || checkEmpty("#edit_mbl_num_2")){
-						if ($("#mbl_num_sel").val() == "-1") {
-							$("#mbl_num_sel").css("outline", "2px solid #fe3a40");
-							$("#mbl_num_sel").focus();
-						} else if (checkEmpty("#edit_mbl_num_1")) {
-							$("#edit_mbl_num_1").css("outline", "2px solid #fe3a40");
-							$("#edit_mbl_num_1").focus();
-						} else if (checkEmpty("#edit_mbl_num_2")) {
-							$("#edit_mbl_num_2").css("outline", "2px solid #fe3a40");
-							$("#edit_mbl_num_2").focus();
-						}
+					} else if (checkEmpty("#edit_mbl_num")) {
+						$("#edit_mbl_num").css("outline", "2px solid #fe3a40");
+						$("#edit_mbl_num").focus();
 					} else {
 						flag = true;
-						$("#merge_email").val($("#edit_email").val() + "@kakao.com");
-						if ($("#phone_num_sel").val() != "-1") {
-							$("#merge_phone_num").val($("#phone_num_sel").val() + "-" + $("#edit_phone_num_1").val() + "-" +$("#edit_phone_num_2").val());
-						}
-						$("#merge_mbl_num").val($("#mbl_num_sel").val() + "-" + $("#edit_mbl_num_1").val() + "-" +$("#edit_mbl_num_2").val());
 					}
 					break;
 					
@@ -1470,6 +1411,8 @@ function createEditPopup(pId, data, bankList) {
 								// 물리파일명 보관
 								if (res.fileName.length > 0) {
 									$(".upld_file_name").val(res.fileName[0]);
+									console.log("test33 : " + $(".upld_file_name").val());
+
 									editFormAjaxFunction();
 								}
 							},
@@ -1597,6 +1540,8 @@ function createAdmnstrEditPopup(data) {
 								// 물리파일명 보관
 								if (res.fileName.length > 0) {
 									$(".upld_file_name").val(res.fileName[0]);
+									console.log("test4 : " + $(".upld_file_name").val());
+
 									admnstrEditFormAjaxFunction();
 								}
 							},
@@ -1620,6 +1565,8 @@ function createAdmnstrEditPopup(data) {
 
 function admnstrEditFormAjaxFunction() {
 	var params = $("#editForm").serialize();
+	console.log("*************");
+	console.log(params);
 	
 	$.ajax({
 		type : "post",
@@ -1644,6 +1591,8 @@ function admnstrEditFormAjaxFunction() {
 
 function reloadBasicInfoArea() {
 	var params = $("#basicInfoForm").serialize();
+	console.log("***** reloadBasicInfoArea *****");
+	console.log(params);
 	
 	$.ajax({
 		type : "post",
@@ -1661,6 +1610,7 @@ function reloadBasicInfoArea() {
 
 function drawBasicInfoArea(params, filePath2) {
 	var html = "";
+	console.log(params);
 	html += "	<div class=\"cont_line_rt\">                                                                                                            ";
 	html += "	<div class=\"cont_element\">                                                                                                            ";
 	html += "		<div class=\"cont_name\">이름(한글)</div>                                                                                           ";
@@ -1729,6 +1679,7 @@ function createDelPopup(pId) {
 			name : "확인",
 			func:function() {
 				var params = $("#deleteForm").serialize();
+				console.log(params);
 				
 				$.ajax({
 					type : "post",
@@ -1800,6 +1751,7 @@ function btnSetting() {
 
 $(document).ready(function() {
 	$("#isAdmnstr").val(${is_admnstr});
+	console.log("체크 : " + $("#isAdmnstr").val());
 	
 	$("#human_info_btn").css("background-color", "#4B94F2");
 	$("#human_info_btn").css("color", "#FFF");
@@ -1863,6 +1815,7 @@ $(document).ready(function() {
 			if ($(this).parent("div").attr("id") == "left_top_tab") {
 				$("#selectedTopTab").val($(this).attr("id"));
 				console.log($(this).attr("id"));
+				console.log($(".isAdmnstr").val());
 				if ($("#isAdmnstr").val() == "1") {
 					$("#topTabAdmnstr").val($("#nEmpNum").val());
 				}
@@ -1872,9 +1825,11 @@ $(document).ready(function() {
 			else if ($(this).parent("div").attr("id") == "bottom_tab") {
 				$("#selectedBottomTab").val($(this).attr("id"));
 				console.log($(this).attr("id"));
+				console.log($(".isAdmnstr").val());
 				if ($("#isAdmnstr").val() == "1") {
 					$("#bottomTabAdmnstr").val($("#nEmpNum").val());
 				}
+				console.log($("#bottomTabAdmnstr").val());
 				var params = $("#bottomTabForm").serialize();
 				$("#selItemNum").val("-1");
 				if ($("#btm_del_btn").attr("da") == "false") {
@@ -1932,6 +1887,7 @@ $(document).ready(function() {
 
 	$("body").on("change", ".upld_file", function(){
 		var fileName = $(this).val().split("\\");
+		console.log(fileName[fileName.length-1]);
 		$(this).parent("div").parent("div").children("input[type=text]").val(fileName[fileName.length-1]);
 	});
 
@@ -2066,7 +2022,7 @@ $(document).ready(function() {
 						<input type="hidden" id="i_top" name="top" value="${param.top}" />
 						<input type="hidden" id="i_menuNum" name="menuNum" value="${param.menuNum}" />
 						<input type="hidden" id="i_menuType" name="menuType" value="${param.menuType}" />
-						<input type="hidden" id="page" name="page" value="${param.page}" />
+						<input type="hidden" id="page" name="page" value="${page}" />
 					</form>
 				</c:when>
 			</c:choose>

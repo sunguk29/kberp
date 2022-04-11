@@ -565,7 +565,11 @@ $(document).ready(function() {
 	});
 
 	
-	//파일삭제
+	// 첨부파일
+	$(".att_btn").on("click", function() {
+		$("#att").click();
+	});
+	
 	$("#fileDelete").on("click", function() {
 		$("#file_name").remove();
 		$(this).remove();
@@ -577,7 +581,6 @@ $(document).ready(function() {
 		$("#uploadBtn").html(html);
 	});
 	
-	//첨부파일 버튼
 	$(".adc_txt").on("click", ".aff_btn", function() {
 		$("#att").click();
 	});
@@ -1123,7 +1126,7 @@ function uploadName(e) {
 									<input type="text" id="fileName" readonly="readonly" />
 							</div>
 						<input type=file id="att" name="att" onchange="uploadName(this)" />
-						<input type="hidden" id="attFile" name="attFile" value="${data.ATT_FILE_NAME}" />
+						<input type="hidden" id="attFile" name="attFile" />
 						</div>
 					</form>
 					<!-- 끝 -->

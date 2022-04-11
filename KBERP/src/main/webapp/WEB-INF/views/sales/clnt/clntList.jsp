@@ -87,7 +87,7 @@ select {
 .list_table thead th {
 	font-weight: bold;
 }
-.list_table th, .list_table td {
+.list_table th, .list_table td  {
 	height: auto;
 	overflow: hidden;
     white-space: nowrap;
@@ -115,10 +115,10 @@ select {
 	font-size: 10pt;
 	text-decoration: underline;
 }
-.deal {
+.deal{
 	height: 40px;
 }
-.deal_cnt {
+.deal_cnt{
 	position:relative;
 	top: -15px;
 	right: -5px;
@@ -144,72 +144,81 @@ select {
 }
 .cont_table {
 	width: 927px;
-	height: 328px;
+	height: 250px;
 }
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
+<<<<<<< HEAD
 	// 검색구분 초기값
+=======
+	
+	//검색 구분 설정
+>>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 	if('${param.searchType}' != '') {
-		$("#searchType").val("${param.searchType}");
+		$("#searchType").val("${param.searchType}"); // 검색 구분 유지
 	} else {
-		$("#oldSearchType").val("0");
+		$("#oldSearchType").val("0"); // 검색 구분 초기값
 	}
 	
-	// 목록
+	// 목록 실행
 	reloadList();
 	
-	// 페이지버튼
+	// 페이지 클릭 이벤트
 	$(".pgn_area").on("click", "div", function() {
-		$("#page").val($(this).attr("page"));
-		$("#listSort").val("9");
-		$("#searchType").val($("#oldSearchType").val());
-		$("#searchTxt").val($("#oldSearchTxt").val());
-		reloadList();
+		$("#page").val($(this).attr("page")); // 현재 페이지를 누른 페이지로 변경
+		$("#listSort").val("9"); // 정렬 초기화
+
+		$("#searchType").val($("#oldSearchType").val()); // 검색 구분 유지
+		$("#searchTxt").val($("#oldSearchTxt").val()); // 검색어 유지
+		
+		reloadList(); // 목록 실행
 	});
 	
-	// 등록버튼
+	// 등록 버튼
 	$("#addBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntReg");
 		$("#actionForm").submit();
 	});
 	
-	// 검색어 엔터입력시
+	// 검색어 엔터 처리
 	$("#searchTxt").on("keypress", function(event) {
 		if(event.keyCode == 13) {
 			$("#searchBtn").click(); 
+			
 			return false; // event를 실행하지 않겠다.
 		}
 	});
 	
-	// 검색버튼 
+	//검색버튼 
 	$("#searchBtn").on("click", function() {
 		$("#page").val("1");
-		$("#oldSearchType").val($("#searchType").val()); 
-		$("#oldSearchTxt").val($("#searchTxt").val());
+		
+		$("#oldSearchType").val($("#searchType").val()); //검색 구분 유지
+		$("#oldSearchTxt").val($("#searchTxt").val()); //검색어 유지
+		
 		reloadList();
 	});
 	
-	// 정렬버튼
+	//정렬버튼
 	$("#sortBtn").on("click", function() {
 		reloadList();
 	});
-	
 });
 
-// 고객 content
+//고객 목록 Ajax
 function reloadList() {
 	var params = $("#actionForm").serialize();
+	
 	$.ajax({
 		type : "post",
 		url : "clntListAjax",
 		data : params,
 		dataType : "json",
 		success : function(res) {
-			drawSearchCnt(res.listCnt);
-			drawList(res.list);
-			drawPaging(res.pb);
+			drawSearchCnt(res.listCnt); //검색개수
+			drawList(res.list); //목록
+			drawPaging(res.pb); //페이징
 		},
 		error : function(req) {
 			console.log(req.responseText);
@@ -217,18 +226,21 @@ function reloadList() {
 	});
 }
 
-// 고객 개수
+//검색 개수 html
 function drawSearchCnt(listCnt) {
 	var html = "";
+	
 	html += "<h3>"; 
 	html += "고객 (검색결과: " + listCnt + "건)";
 	html += "</h3>";
+	
 	$(".SearchResult").html(html);
 }
 
-// 고객 목록
+//목록 html
 function drawList(list) {
 	var html = "";
+		
 	html += "<colgroup>";
 	html += "<col width=\"70\">";		
 	html += "<col width=\"90\">";		
@@ -248,6 +260,7 @@ function drawList(list) {
 	html += "<th>전화번호</th>";			
 	html += "</tr>";		
 	html += "</thead>";
+	
  	for(var data of list) {
  		html += "<tbody>";
 		html += "<tr>";
@@ -263,24 +276,29 @@ function drawList(list) {
 		html += "</tr>";
 		html += "</tbody>";
 	}
+	
 	$(".list_table").html(html);
-	// 항목클릭
+	
 	$(".list_table tbody").on("click", "tr:nth-child(2) td:nth-child(2)", function() {
 		$("#cn").val($(this).attr("cn"));
+
 		$("#actionForm").attr("action", "clntCont");
 		$("#actionForm").submit();
 	});
+
 }
 
-// 고객 페이징
+//페이징
 function drawPaging(pb) {
 	var html = "";
+	
 	html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
 	if($("#page").val() == "1") {
 		html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
 	} else {
 		html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
 	}
+	
 	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
 		if($("#page").val() == i) {
 			html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
@@ -288,14 +306,18 @@ function drawPaging(pb) {
 			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
 		}
 	}
+	
 	if($("#page").val() == pb.maxPcount) {
 		html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_next\">next</div>";
 	} else {
 		html += "<div page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</div>";
 	}
 	html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
+	
 	$(".pgn_area").html(html);
+
 }
+
 </script>
 </head>
 <body>
@@ -314,17 +336,7 @@ function drawPaging(pb) {
 			<div class="page_title_bar">
 				<div class="page_title_text">고객 목록</div>
 				<!-- 검색영역 선택적 사항 -->
-				<!-- <div class="page_srch_area">
-					<select class="srch_sel">
-						<option>제목</option>
-						<option>내용</option>
-						<option>작성자</option>
-					</select>
-					<div class="srch_text_wrap">
-						<input type="text" />
-					</div>
-					<div class="cmn_btn_ml">검색</div>
-				</div> -->
+				
 			</div>
 			<!-- 해당 내용에 작업을 진행하시오. -->
 			<div class="cont_area">
@@ -396,9 +408,9 @@ function drawPaging(pb) {
 							<div class="cmn_btn" id="addBtn">등록</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
+				</div> <!-- bodyWrap end -->
+			</div> <!-- cont_area end -->
+		</div> <!--cont_wrap end -->
 	</form>		
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
