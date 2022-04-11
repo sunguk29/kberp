@@ -641,16 +641,17 @@ public class SalesMngController {
 		try {
 			switch (gbn) {
 			case "insert":
-				iCommonService.insertData("salesMng.sales4CntrctAdd", params); // 견적
-				iCommonService.insertData("salesMng.sales4CntrctAttAdd", params); // 견적 첨부파일
-				iCommonService.updateData("salesMng.sales3to4", params); // 진행 단계 전환
+				iCommonService.insertData("salesMng.sales4CntrctAdd", params); // 계약
+				iCommonService.insertData("salesMng.sales4CntrctAttAdd", params); // 계약 첨부파일
+				iCommonService.updateData("salesMng.sales3to4", params); // 계약 단계 전환
 				break;
-//			case "update" :
-//				iCommonService.updateData("salesMng.sales1UpdateSales", params); // 제안 담당자 수정
-//				break;
-//			case "failure" :
-//				iCommonService.updateData("salesMng.sales3Failure", params);
-//				break;
+			case "update" :
+				iCommonService.updateData("salesMng.sales4Update", params); // 계약 정보 수정
+				iCommonService.updateData("salesMng.sales4UpdateAttFile", params); // 계약 첨부파일 수정
+				break;
+			case "failure" :
+				iCommonService.updateData("salesMng.sales4Failure", params);
+				break;
 			}
 			modelMap.put("res", "success");
 		} catch (Throwable e) {
@@ -662,7 +663,7 @@ public class SalesMngController {
 	}
 
 	
-	  // sales4CntrctCont : 계약 상세보기
+	  // 계약 상세보기
 	  @RequestMapping(value = "/sales4CntrctCont")
 	  public ModelAndView sales4CntrctCont(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		  /*견적까지 내용 가져오는 부분*/
@@ -732,6 +733,25 @@ public class SalesMngController {
 
 			return mapper.writeValueAsString(modelMap);
 		}
+		
+		// 계약 수정
+		  @RequestMapping(value = "/sales4Update")
+		  public ModelAndView sales4Update(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+			  /* 내용 가져오는 부분*/
+			 HashMap<String, String> data = iCommonService.getData("salesMng.getSales1", params);
+			 HashMap<String, String> data2 = iCommonService.getData("salesMng.getSales2", params);
+			 HashMap<String,String> data3 = iCommonService.getData("salesMng.getSales3", params); 
+			 HashMap<String, String> data4 = iCommonService.getData("salesMng.getSales4", params);
+			 
+			  /*내용 가져온 거 보내는 작업*/
+			  mav.addObject("data", data);
+			  mav.addObject("data2",data2);
+			  mav.addObject("data3", data3);
+			  mav.addObject("data4", data4);
+			  
+			  mav.setViewName("sales/sales4Update");
+			  return mav; 
+		  }
 
 
 }
