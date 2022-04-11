@@ -58,6 +58,12 @@ public class RprtController {
 		int clntThatMonthCnt = iCommonService.getIntData("clntRprt.clntThatMonthCnt", params);
 		double clntAvgCnt = iClntRprtService.clntAvgCnt(params);
 		int clntAllCnt = iCommonService.getIntData("clntRprt.clntAllCnt", params);
+		//고객 등급
+		int clntGradeS = iCommonService.getIntData("clntRprt.clntGradeS", params);
+		int clntGradeA = iCommonService.getIntData("clntRprt.clntGradeA", params);
+		int clntGradeB = iCommonService.getIntData("clntRprt.clntGradeB", params);
+		int clntGradeC = iCommonService.getIntData("clntRprt.clntGradeC", params);
+		int clntGradeD = iCommonService.getIntData("clntRprt.clntGradeD", params);
 		
 		Date dt = new Date();
 		Date mon = new Date();
@@ -91,6 +97,12 @@ public class RprtController {
 		mav.addObject("clntThatMonthCnt", clntThatMonthCnt);
 		mav.addObject("clntAvgCnt", clntAvgCnt);
 		mav.addObject("clntAllCnt", clntAllCnt);
+		
+		mav.addObject("clntGradeS", clntGradeS);
+		mav.addObject("clntGradeA", clntGradeA);
+		mav.addObject("clntGradeB", clntGradeB);
+		mav.addObject("clntGradeC", clntGradeC);
+		mav.addObject("clntGradeD", clntGradeD);
 		
 		mav.addObject("tMonth", params.get("tMonth"));
 		mav.addObject("startDate", params.get("startDate"));

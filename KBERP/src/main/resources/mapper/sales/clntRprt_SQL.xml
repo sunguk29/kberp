@@ -18,9 +18,10 @@
 <!-- 신규고객사 평균3개월 개수 -->		
 	<select id="ccAvgCnt" resultType="Double" parameterType="hashmap">
 		SELECT ROUND((CNT / 3), 1) 
-		FROM (SELECT  COUNT(*) AS CNT
+		FROM (SELECT COUNT(*) AS CNT
 		      FROM CLNT_CMPNY
-		      WHERE DEL_CHECK IS NULL)
+		      WHERE RGSTRTN_DATE BETWEEN ADD_MONTHS(SYSDATE,-3) AND SYSDATE
+      		  AND DEL_CHECK IS NULL)
 	</select>
 <!-- 신규고객 전월 개수 -->
 	<select id="clntLastMonthCnt" resultType="Integer" parameterType="hashmap">
@@ -39,9 +40,10 @@
 <!-- 신규고객 평균3개월 개수 -->		
 	<select id="clntAvgCnt" resultType="Double" parameterType="hashmap">
 		SELECT ROUND((CNT / 3), 1) 
-		FROM (SELECT  COUNT(*) AS CNT
+		FROM (SELECT COUNT(*) AS CNT
 		      FROM ENTRPRS_CLNT
-		      WHERE DEL_CHECK IS NULL)
+		      WHERE RGSTRTN_DATE BETWEEN ADD_MONTHS(SYSDATE,-3) AND SYSDATE
+		      AND DEL_CHECK IS NULL)
 	</select>
 <!-- 신규고객 전체 개수 -->
 	<select id="clntAllCnt" resultType="Integer" parameterType="hashmap">
@@ -49,5 +51,31 @@
 		FROM ENTRPRS_CLNT
 		WHERE 1 = 1
 		AND DEL_CHECK IS NULL
+	</select>
+	
+	<select id="clntGradeS" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM CLNT_CMPNY
+		WHERE GRADE_NUM = 0
+	</select>
+	<select id="clntGradeA" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM CLNT_CMPNY
+		WHERE GRADE_NUM = 1
+	</select>
+	<select id="clntGradeB" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM CLNT_CMPNY
+		WHERE GRADE_NUM = 2
+	</select>
+	<select id="clntGradeC" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM CLNT_CMPNY
+		WHERE GRADE_NUM = 3
+	</select>
+	<select id="clntGradeD" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM CLNT_CMPNY
+		WHERE GRADE_NUM = 4
 	</select>
 </mapper>
