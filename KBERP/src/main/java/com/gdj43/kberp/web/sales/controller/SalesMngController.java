@@ -57,6 +57,10 @@ public class SalesMngController {
 
 		return mav;
 	}
+
+	//숨은 주석 찾기@@@@@@@@@@@@
+	
+	
 	
 	// 영업관리 목록
 	@RequestMapping(value = "/salesListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
@@ -115,6 +119,7 @@ public class SalesMngController {
 
 	// salesMng1ActionAjax : 영업기회 등록, 수정, 삭제
 	@RequestMapping(value = "/salesMng1ActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+
 	@ResponseBody
 	public String salesMng1ActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn)
 			throws Throwable {
@@ -274,11 +279,35 @@ public class SalesMngController {
 	@RequestMapping(value = "/sales3QtnReg")
 	public ModelAndView sales3QtnReg(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 
-		// 조회	
+		// 조회
+		HashMap<String, String> sales1DataLead = iCommonService.getData("salesMng.getSales2BringLead", params);
+		HashMap<String, String> sales1DataLoan = iCommonService.getData("salesMng.getSales2BringLoan", params);
+		HashMap<String, String> sales1DataBsns = iCommonService.getData("salesMng.getSales2BringBsns", params);
+
+		HashMap<String, String> sales2DataLoan = iCommonService.getData("salesMng.getSales3BringLoan", params);
+		HashMap<String, String> sales2DataClntCmpny = iCommonService.getData("salesMng.getSales3BringClntCmpny",
+				params);
+		HashMap<String, String> sales2DataDtlInfo = iCommonService.getData("salesMng.getSales3BringDtlInfo", params);
+
+
+
+		
 		HashMap<String, String> data = iCommonService.getData("salesMng.getSales1", params);
 		HashMap<String, String> data2 = iCommonService.getData("salesMng.getSales2", params);
 		HashMap<String, String> data3 = iCommonService.getData("salesMng.getSales3", params);
-	
+		
+
+		mav.addObject("lead", sales1DataLead);
+		mav.addObject("loan", sales1DataLoan);
+		mav.addObject("bsns", sales1DataBsns);
+
+		mav.addObject("loanS", sales2DataLoan);
+		mav.addObject("ccS", sales2DataClntCmpny);
+		mav.addObject("dtlS", sales2DataDtlInfo);
+
+		
+		
+		
 		mav.addObject("data", data);
 		mav.addObject("data2", data2);
 		mav.addObject("data3", data3);
@@ -287,6 +316,43 @@ public class SalesMngController {
 		 
 		return mav;
 	 }
+	 
+		/*
+		 * // sales3QtnReg : 견적 추가 등록
+		 * 
+		 * @RequestMapping(value = "/sales3QtnAdd") public ModelAndView
+		 * sales3QtnAdd(@RequestParam HashMap<String, String> params, ModelAndView mav)
+		 * throws Throwable {
+		 * 
+		 * //조회 HashMap<String, String> sales1DataLead =
+		 * iCommonService.getData("salesMng.getSales2BringLead", params);
+		 * HashMap<String, String> sales1DataLoan =
+		 * iCommonService.getData("salesMng.getSales2BringLoan", params);
+		 * HashMap<String, String> sales1DataBsns =
+		 * iCommonService.getData("salesMng.getSales2BringBsns", params);
+		 * 
+		 * HashMap<String, String> sales2DataLoan =
+		 * iCommonService.getData("salesMng.getSales3BringLoan", params);
+		 * HashMap<String, String> sales2DataClntCmpny =
+		 * iCommonService.getData("salesMng.getSales3BringClntCmpny", params);
+		 * HashMap<String, String> sales2DataDtlInfo =
+		 * iCommonService.getData("salesMng.getSales3BringDtlInfo", params);
+		 * 
+		 * mav.addObject("lead", sales1DataLead); mav.addObject("loan", sales1DataLoan);
+		 * mav.addObject("bsns", sales1DataBsns);
+		 * 
+		 * mav.addObject("loanS", sales2DataLoan); mav.addObject("ccS",
+		 * sales2DataClntCmpny); mav.addObject("dtlS", sales2DataDtlInfo); // 제안 첨부파일은X
+		 * 
+		 * mav.setViewName("sales/sales3QtnAdd");
+		 * 
+		 * return mav; }
+		 * 
+		 * 
+		 * mav.setViewName("sales/sales3QtnReg");
+		 * 
+		 * return mav; }
+		 */
 
 	// (팝업) 상품 상세보기 Ajax
 	@RequestMapping(value = "/popupMdContAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
@@ -724,12 +790,12 @@ public class SalesMngController {
 
 			Map<String, Object> modelMap = new HashMap<String, Object>();
 
-			int cntrctOpListCnt = iCommonService.getIntData("salesMng.cntrctOpListCnt", params);
+			int cntrctListCnt = iCommonService.getIntData("salesMng.cntrctOpListCnt", params);
 
 			List<HashMap<String, String>> list = iCommonService.getDataList("salesMng.cntrctOpList", params);
 
 			modelMap.put("list", list);
-			modelMap.put("opListCnt", cntrctOpListCnt);
+			modelMap.put("cntrctListCnt", cntrctListCnt);
 
 			return mapper.writeValueAsString(modelMap);
 		}
