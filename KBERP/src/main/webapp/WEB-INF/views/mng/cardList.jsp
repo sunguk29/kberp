@@ -202,14 +202,10 @@ function drawList(list) {
 		 else
 	            html += "<td></td>";
 		if(data.USE_START_DT!=null)
-			html += "<td>" + data.USE_START_DT +"</td><td>~</td>";
+			html += "<td>" + data.USE_START_DT + " ~ " + data.USE_END_DT + "</td>";   
         else
-        	html += "<td></td>";
-        if(data.USE_END_DT!=null)
-    			html += "<td>" + data.USE_END_DT+"</td>";   
-        else
-            	html += "<td></td>";
-            	html += "</tr>";
+            html += "<td></td>";
+		html += "</tr>";
 	}
 	$("tbody").html(html);
 }
@@ -289,16 +285,14 @@ function drawPaging(pb) {
 					<col width="100"/>
 					<col width="400"/>
 					<col width="150"/>
-					<col width="120"/>
-					<col width="10"/>
-					<col width="120"/>
+					<col width="250"/>
 				</colgroup>
 				<thead>
 					<tr>
 						<th>카드번호</th>
 						<th>카드명</th>
 						<th>카드소유자</th>
-						<th colspan=3>카드소유기간</th>
+						<th>카드소유기간</th>
 					</tr>
 				</thead>
 				<tbody>

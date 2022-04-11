@@ -26,7 +26,7 @@ public class ClntMngController {
 	@Autowired
 	public IPagingService iPagingService;
 	
-	// 고객사 목록화면
+	//고객사 목록
 	@RequestMapping(value = "/clntCmpnyList")
 	public ModelAndView clntCmpnyList(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
@@ -56,7 +56,7 @@ public class ClntMngController {
 		return mav;
 	}
 	
-	// 고객사 상세화면
+	//고객사 상세보기
 	@RequestMapping(value = "/clntCmpnyCont")
 	public ModelAndView clntCmpnyCont(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
@@ -72,7 +72,7 @@ public class ClntMngController {
 		return mav;
 	}
 	
-	// 고객사 수정화면
+	//고객사 수정
 	@RequestMapping(value = "/clntCmpnyUpdate")
 	public ModelAndView clntCmpnyUpdate(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
@@ -84,7 +84,7 @@ public class ClntMngController {
 		return mav;
 	}
 	
-	// 고객사 등록화면
+	//고객사 등록
 	@RequestMapping(value = "/clntCmpnyReg")
 	public ModelAndView clntCmpnyReg(ModelAndView mav) {
 		
@@ -93,7 +93,7 @@ public class ClntMngController {
 		return mav;
 	}
 	
-	// 고객사 content
+	//고객사 목록 비동기
 	@RequestMapping(value = "/clntCmpnyListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody 
 	public String clntCmpnyListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
@@ -118,7 +118,7 @@ public class ClntMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	// 고객사 등록,수정,삭제
+	//고객사 등록,수정,삭제 비동기
 	@RequestMapping(value = "/clntCmpnyMngActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String clntCmpnyMngActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
@@ -150,7 +150,7 @@ public class ClntMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	// 고객 목록화면
+	//고객 목록
 	@RequestMapping(value = "/clntList")
 	public ModelAndView clntList(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
@@ -164,7 +164,7 @@ public class ClntMngController {
 		return mav;
 	}
 	
-	// 고객 상세화면
+	//고객 상세보기
 	@RequestMapping(value = "/clntCont")
 	public ModelAndView clntCont(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
@@ -177,7 +177,7 @@ public class ClntMngController {
 		return mav;
 	}
 	
-	// 고객 content
+	//고객 목록 비동기
 	@RequestMapping(value = "/clntListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String clntListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
@@ -188,7 +188,7 @@ public class ClntMngController {
 		
 		int listCnt = iCommonService.getIntData("clntCmpnyMng.clntListCnt", params);
 		
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), listCnt, 7, 5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), listCnt, 5, 5);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
@@ -202,7 +202,7 @@ public class ClntMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	// 고객 수정화면
+	//고객 수정
 	@RequestMapping(value = "/clntUpdate")
 	public ModelAndView clntUpdate(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
@@ -215,7 +215,7 @@ public class ClntMngController {
 		return mav;
 	}
 	
-	// 고객 등록화면
+	//고객 등록
 	@RequestMapping(value = "/clntReg")
 	public ModelAndView clntReg(ModelAndView mav) {
 		
@@ -224,7 +224,7 @@ public class ClntMngController {
 		return mav;
 	}
 	
-	// 고객 등록,수정,삭제
+	//고객 등록,수정,삭제 비동기
 	@RequestMapping(value = "/clntMngAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String clntMngAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
@@ -257,7 +257,7 @@ public class ClntMngController {
 		
 	}
 	
-	//(팝업) 고객 content
+	//(팝업) 고객 목록 비동기 
 	@RequestMapping(value = "/popupCcListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String popupCcListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
@@ -281,7 +281,7 @@ public class ClntMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	//(팝업) 담당자 content
+	//(팝업) 담당자 목록 비동기
 	@RequestMapping(value = "/mngListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String mngListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
@@ -306,7 +306,7 @@ public class ClntMngController {
 	}
 	
 	
-	// 의견 content
+	//의견 목록 비동기
 	@RequestMapping(value = "/opBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String opBotListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
@@ -325,7 +325,7 @@ public class ClntMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	// 의견 등록,삭제
+	//의견 등록,삭제 비동기
 	@RequestMapping(value = "/opBotActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String ccBotActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
@@ -353,7 +353,7 @@ public class ClntMngController {
 		
 	}
 	
-	//(고객사 상세보기) 고객 content
+	//(고객사 상세보기) 고객 목록 비동기
 	@RequestMapping(value = "/clBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String clBotListAjax(@RequestParam HashMap<String, String> params) throws Throwable {

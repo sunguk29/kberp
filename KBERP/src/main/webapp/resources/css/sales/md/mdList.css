@@ -178,8 +178,7 @@ select {
 	background-color: #4b94f2;
 	border-radius: 2px;
 	color: #f2f2f2;
-	cursor: pointer;
 }
-.sales_psbl_btn:active {
+/* .sales_psbl_btn:active {
 	background-color: #2e83f2;
-}
+} */

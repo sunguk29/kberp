@@ -64,7 +64,10 @@ public class PrsnlController {
 			
 			if (menuAthrty != 0) { // 읽기, 쓰기 권한이 있을 때
 				mav.addObject("menuAthrty", menuAthrty);
-
+				
+				//HashMap<String, String> basicInfoData = iCommonService.getData("prsnl.getBasicInfo", params);
+				
+				//mav.addObject("basicInfoData", basicInfoData);
 				mav.setViewName("hr/prsnlCard");
 			} else { // 권한 없을 때
 				mav.setViewName("exception/PAGE_NOT_FOUND");
@@ -97,17 +100,21 @@ public class PrsnlController {
 		
 		// 탭 내부 데이터 DB에서 가져오기
 		try {
+			System.out.println("**test : " + params.get("admnstrNum"));
 			if (params.get("admnstrNum").equals("-1")) {
 				System.out.println("check 1");
 				if (params.get("sEmpNum") == null) {
+					System.out.println("check 1-1");
 					params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
 				} else {
 					new Exception();
 				}
 			} 
 			else if (params.get("admnstrNum") == null){
+				System.out.println("check 2");
 				new Exception();
 			} else {
+				System.out.println("check 3");
 				params.put("sEmpNum", String.valueOf(params.get("admnstrNum")));
 			}
 			
@@ -135,7 +142,11 @@ public class PrsnlController {
 				tabDataList = iCommonService.getDataList("prsnl.getQlfctn", params);
 				break;
 			}
-
+			
+			/*
+			 * if (tabData == null) { new Exception(); }
+			 */
+			System.out.println("check 66");
 			modelMap.put("tabName", tabName);
 			modelMap.put("tabData", tabData);
 			modelMap.put("bankList", bankList);
@@ -232,6 +243,7 @@ public class PrsnlController {
 				data = iCommonService.getData("prsnl.getBasicInfo", params);
 				String filePath = CommonProperties.FILE_UPLOAD_PATH;
 				modelMap.put("filePath", filePath);
+				System.out.println("check 55");
 				break;
 			}
 			modelMap.put("data", data);

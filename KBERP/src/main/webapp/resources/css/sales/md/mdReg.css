@@ -36,6 +36,13 @@
 	font-size: 10.5pt;
 }
 	/* 개인 작업 영역 */
+#att {
+	display: none;
+}
+#fileName {
+	border: hidden;
+	outline: none;
+}
 table{
 	
 	border: 1px;
