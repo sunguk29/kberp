@@ -58,10 +58,6 @@ public class SalesMngController {
 		return mav;
 	}
 
-	//숨은 주석 찾기@@@@@@@@@@@@
-	
-	
-	
 	// 영업관리 목록
 	@RequestMapping(value = "/salesListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 
