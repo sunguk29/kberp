@@ -27,8 +27,16 @@
 	FROM DUAL
 </select>
 <insert id="aprvlAdd" parameterType="hashmap">
-	INSERT INTO APRVL (APRVL_NUM, EMP_NUM, TITLE, CONT)
-	VALUES(#{aprvl_num}, #{emp_num}, #{title}, #{cont})
+	INSERT INTO APRVL (APRVL_NUM, EMP_NUM, TITLE, CONT
+	<if test="att_file != null and att_file != ''">
+	, ATT_FILE
+	</if>
+	)
+	VALUES(#{aprvl_num}, #{emp_num}, #{title}, #{cont} 
+	<if test="att_file != null and att_file != ''">
+	, #{att_file}
+	</if>
+	)
 </insert>
 <insert id="aprvlerAdd" parameterType="hashmap">
 	INSERT INTO APRVL_LINE (APRVL_NUM, EMP_NUM, APRVL_TURN)
@@ -36,10 +44,10 @@
 </insert>
 <insert id="rfrncAdd" parameterType="hashmap">
 	INSERT INTO APRVL_RFRNC (APRVL_NUM, EMP_NUM)
-	VALUES(#{aprvl_num}, #{rfrnc}) 
+	VALUES(#{aprvl_num}, #{emp_num}) 
 </insert>
 
-<select id = "addListChat" parameterType = "hashmap" resultType="hashmap">
+<select id = "addList" parameterType = "hashmap" resultType="hashmap">
 SELECT *
 FROM (SELECT E.EMP_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, AL.APRVL_STS
 FROM  EMP E INNER JOIN APNTM A

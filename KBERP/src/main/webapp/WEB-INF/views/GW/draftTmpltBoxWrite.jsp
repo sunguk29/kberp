@@ -296,7 +296,7 @@ $(document).ready(function() {
 				// list받아서 팝업 테이블에 내용 추가 id추가
 				$.ajax({
 					type : "post",
-					url : "addListChatAjax",
+					url : "addListAjax",
 					dataType : "json",
 					success : function(res) {
 						drawList(res.list);
@@ -398,7 +398,7 @@ $(document).ready(function() {
 				// list받아서 팝업 테이블에 내용 추가 id추가
 				$.ajax({
 					type : "post",
-					url : "addListChatAjax",
+					url : "addListAjax",
 					dataType : "json",
 					success : function(res) {
 						drawEmp(res.list);
@@ -458,12 +458,25 @@ $(document).ready(function() {
 		}
 		else if(checkEmpty("#tmplt_cont")){
 			alert("내용을 입력하세요.");
-			$("#cont_1").focus();
+			$("#tmplt_cont").focus();
 		}
 		else{
 		
-		$("#writeBtn").submit();
-		history.back();
+		var params = $("#writeForm").serialize();
+		console.log(params);
+		
+			$.ajax({
+				type : "post",
+				url : "draftTmpltBoxWriteAjax",
+				dataType : "json",
+				data : params,
+				success : function(res) {
+					console.log(res);
+				},
+				error : function(req) {
+					console.log(req.responseText)	
+				}
+			});
 		}
 	})
 	
@@ -567,7 +580,7 @@ function removeAllValToArray(arr, val) {
 			<div class="dcmnt_tlte">
 				<span>문서제목</span>
 				<input type="text" id="dcmnt_title" name="dcmnt_title">
-				<input style="display:none;" type="text" id="type" name="type" value="${type}">
+				
 			</div>
 			<div class="aprvl_line">
 				<span>결재라인</span>
@@ -589,7 +602,7 @@ function removeAllValToArray(arr, val) {
 			</div>
 			<div class="atchd_file">
 				<span>첨부파일</span>
-				<input type="file" id="atchd_file_1">
+				<input type="file" id="att_file" name="att_file">
 			</div>
 			</form>
 		</div>

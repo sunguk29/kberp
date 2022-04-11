@@ -48,7 +48,7 @@ public class AprvlService implements IAprvlService{
 		}
 
 		// 참조 리스트 사이즈만큼 반복문돌기 
-		for (int i = 0; i < aprvlerList.size(); i++) {
+		for (int i = 0; i < rfrncList.size(); i++) {
 			// 해쉬맵 만들기
 			HashMap<String, String> rfrnc = new HashMap<String, String>();
 			rfrnc.put("aprvl_num",aprvl_num); // 해쉬맵에 결재번호 담기
