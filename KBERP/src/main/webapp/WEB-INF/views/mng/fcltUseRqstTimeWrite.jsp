@@ -89,6 +89,7 @@ $(document).ready(function() {
 		$("#actionForm").attr("action","fcltUseRqstWrite");
 		$("#actionForm").submit();
 	});
+	$("#timeListbody").attr("placeholder","되나");
 	
 	$("#timeSel").on("click", function() {
 		var html = "";
@@ -125,6 +126,7 @@ $(document).ready(function() {
 				reloadList();
 				
 				$("#timeListbody").on("click", "#fcltyTime", function() {
+					
 					$("input[name='fcltyTimeNum']").val($(this).attr("fcltyTimeNum"));
 					
 					var html="";

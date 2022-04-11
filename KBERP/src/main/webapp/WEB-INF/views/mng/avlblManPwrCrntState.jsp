@@ -42,6 +42,9 @@
 .title{
 	display: inline-block;
 }
+#titleLine{
+	background-color: #F2F2F2;
+}
 </style>
 <!-- Moment Script -->
 <script type="text/javascript" src="resources/script/jquery/moment.js"></script>
@@ -169,7 +172,7 @@ function cnt(cnt){
 					<div id="fullCalendarArea"></div>
 				</div>
 			<div id="emp_box">
-			<div> 
+			<div id="titleLine"> 
 				<div class="title" id = "selectDateView"></div>
 				투입 가능 인력 :
 				<div class="title" id = "empCnt"></div>명
