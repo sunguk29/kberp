@@ -203,28 +203,19 @@ public class RprtController {
 	// 신규 영업활동 순위
 	@RequestMapping(value = "/totalNewSalesRankAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String totalNewSalesRankAjax(HttpServletRequest request) throws Throwable{
+	public String totalNewSalesRankAjax(HttpServletRequest request, ModelAndView modelAndView) throws Throwable {
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		int size = Integer.parseInt(request.getParameter("size"));
+//		int series = Integer.parseInt(request.getParameter("series"));
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
-		List<HashMap<String, Object>> bsnList = iSchdlService.getDataList("totalRprt.gettotalNewSalesRank");
-		for(int i = 0 ; i < size ; i++) {
-			HashMap<String, Object> temp = new HashMap<String, Object>();
-			if(i == 0) {
-				temp.put("name", "윤부장");
-			} else if(i == 1) {
-				temp.put("name", "하대리");
-			} else if(i == 2) {
-				temp.put("name", "천과장");
-			} else {
-				temp.put("name", "이부장");
-			}
-			temp.put("y", Integer.parseInt(String.valueOf(bsnList.get(0).get("BSNTYPE"+i))));
-			list.add(temp);
-		}
+		HashMap<String, Object> bsnList = iSchdlService.getData("totalRprt.getTotalNewSalesRank");
+		HashMap<String, Object> temp = new HashMap<String, Object>();
+		temp.put("name", "민수");
+		temp.put("y", Integer.parseInt(String.valueOf(bsnList.get("CNT"))));
+		list.add(temp);
 		modelMap.put("list", list);
-		return mapper.writeValueAsString(modelMap);
+        return mapper.writeValueAsString(modelMap);
 	}
 	
 }

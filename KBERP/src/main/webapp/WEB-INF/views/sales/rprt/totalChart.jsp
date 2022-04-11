@@ -9,6 +9,9 @@
 <title>카카오뱅크 ERP - 보고서</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
+<!-- highcharts Script -->
+<script src="resources/script/highcharts/highcharts.js"></script>
+<script src="resources/script/highcharts/modules/exporting.js"></script>
 <style type="text/css">
 /* 가로 사이즈 조정용 */
 .cont_wrap {
@@ -155,12 +158,13 @@ function getData() {
 
 // 차트 그래프
 function makeChart(list) {
+	console.log(list);
 	$('.sales_text_bot').highcharts({
 		chart: {
-			type: 'bar',
+			type: 'pie',
 			zoomType: 'x'
 		},
-		colors: ['#5CB3FF', '#D462FF', '#FBB917', '#FBB917'],
+		colors: ['#5CB3FF'],
         series : [{
         	name: '개수',
         	data : list
@@ -172,6 +176,7 @@ function makeChart(list) {
 <body>
 <form action="#" id="getForm" method="post">
 	<input type="hidden" name="size" value="4" />
+	<input type="hidden" name="series" value="1" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">

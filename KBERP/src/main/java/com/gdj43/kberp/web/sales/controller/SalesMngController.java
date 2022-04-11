@@ -765,23 +765,23 @@ public class SalesMngController {
 		}
 		
 		// 계약 수정
-		  @RequestMapping(value = "/sales4Update")
-		  public ModelAndView sales4Update(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
-			  /* 내용 가져오는 부분*/
-			 HashMap<String, String> data = iCommonService.getData("salesMng.getSales1", params);
-			 HashMap<String, String> data2 = iCommonService.getData("salesMng.getSales2", params);
-			 HashMap<String,String> data3 = iCommonService.getData("salesMng.getSales3", params); 
-			 HashMap<String, String> data4 = iCommonService.getData("salesMng.getSales4", params);
+		@RequestMapping(value = "/sales4Update")
+		public ModelAndView sales4Update(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+			/* 내용 가져오는 부분*/
+			HashMap<String, String> data = iCommonService.getData("salesMng.getSales1", params);
+			HashMap<String, String> data2 = iCommonService.getData("salesMng.getSales2", params);
+			HashMap<String,String> data3 = iCommonService.getData("salesMng.getSales3", params); 
+			HashMap<String, String> data4 = iCommonService.getData("salesMng.getSales4", params);
 			 
-			  /*내용 가져온 거 보내는 작업*/
-			  mav.addObject("data", data);
-			  mav.addObject("data2",data2);
-			  mav.addObject("data3", data3);
-			  mav.addObject("data4", data4);
+			/*내용 가져온 거 보내는 작업*/
+			mav.addObject("data", data);
+			mav.addObject("data2",data2);
+			mav.addObject("data3", data3);
+			mav.addObject("data4", data4);
 			  
-			  mav.setViewName("sales/sales4Update");
-			  return mav; 
-		  }
+			mav.setViewName("sales/sales4Update");
+			return mav; 
+		}
 
 
 }
