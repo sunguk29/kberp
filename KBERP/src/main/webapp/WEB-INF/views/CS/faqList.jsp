@@ -66,7 +66,7 @@ $(document).ready(function() {
 		
 	});
 	
-	$("#pgn_area").on("click", "div", function() {
+	$(".pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
 		
 		$("#searchGbn").val($("#oldSearchGbn").val());
@@ -75,19 +75,8 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
-	$("#paging_wrap").on("click", "span", function() {
-		$("#page").val($(this).attr("page"));
-
-		$("#searchGbn").val($("#oldSearchGbn").val());
-		$("#searchTxt").val($("#oldSearchTxt").val());
-		
-		reloadList();
-	});
 	
 	$("#writeBtn").on("click", function() {
-		$("#searchGbn").val($("#oldSearchGbn").val());
-		$("#searchTxt").val($("#oldSearchTxt").val());
-		
 		$("#actionForm").attr("action", "faqAdd");
 		$("#actionForm").submit();
 	});	
