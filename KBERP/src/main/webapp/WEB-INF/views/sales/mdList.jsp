@@ -113,6 +113,7 @@ $(document).ready(function() {
 		<input type="hidden" name="top" 		   value="${params.top}"> 		<!-- top정보 -->
 		<input type="hidden" name="menuNum" 	   value="${params.menuNum}"> 	<!-- 메뉴정보 -->
 		<input type="hidden" name="menuType" 	   value="${params.menuType}"> 	<!-- 메뉴정보 -->
+		<input type="hidden" name="sales_sts" id="sales_sts"> 	                <!-- 판매상태 -->
 	
 		<div class="cont_area">
 			<div class="body">

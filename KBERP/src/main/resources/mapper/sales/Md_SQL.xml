@@ -13,30 +13,26 @@
 	</if>
 	
 	<!-- 판매상태 --> 
-	<!-- 
-	AND ( SALES_STS_NUM = '0'　OR　SALES_STS_NUM = '1') 의 형태가 되어야한다 
-	View에서 넘겨주는 값의 타입을 바꿔준다. 
-	1,2 선택시 : 12 
-	1,3 선택시 : 13.... 
-	-->
-	<if test="sales_stsA == null" >	
-	 AND
-	(
 	<choose>
-		<when test= "sales_sts0 != null and sales_sts0 !=''"> <!-- 판매상태 0:판매중 -->
-			OR SALES_STS_NUM = '0'
+		<when test= 'sales_sts == "1"'> <!-- 판매상태 0:판매중 -->
+			AND SALES_STS_NUM = '0'
 		</when>
-		<when test= "sales_sts1 != null and sales_sts1 !=''"> <!-- 판매상태 1:판매중단 -->
-			OR SALES_STS_NUM = '1'
+		<when test= 'sales_sts == "2"'> <!-- 판매상태 1:판매중단 -->
+			AND SALES_STS_NUM = '1'
 		</when>
-		<when test= "sales_sts2 != null and sales_sts2 !=''"> <!-- 판매상태 2:출시예정 -->
-			OR SALES_STS_NUM = '2'
+		<when test= 'sales_sts == "3"'> <!-- 판매상태 2:출시예정 -->
+			AND SALES_STS_NUM = '2'
+		</when>
+		<when test= 'sales_sts == "12"'>
+			AND (SALES_STS_NUM = '0' OR SALES_STS_NUM = '1')
+		</when>
+		<when test= 'sales_sts == "13"'> 
+			AND (SALES_STS_NUM = '0' OR SALES_STS_NUM = '2')
+		</when>
+		<when test= 'sales_sts == "23"'> 
+			AND (SALES_STS_NUM = '1' OR SALES_STS_NUM = '2')
 		</when>
 	</choose> 
-	)
-	</if>
-	
-	
 	
 	<!-- 판매 시작일 -->
 	<if test="sales_start_date != null and sales_start_date !=''"> 
@@ -127,23 +123,30 @@ FROM (SELECT MD_NUM
 		</choose>
 	</if>
 	
+
 	
-	<!-- 판매상태 -->
-	<if test="sales_stsA == null" >	
-		AND ( 
-		<choose>
-			<when test= "sales_sts0 != null and sales_sts0 !=''"> <!-- 판매상태 0:판매중 -->
-				SALES_STS_NUM = '0'
-			</when>
-			<when test= "sales_sts1 != null and sales_sts1 !=''"> <!-- 판매상태 1:판매중단 -->
-				OR SALES_STS_NUM = '1'
-			</when>
-			<when test= "sales_sts2 != null and sales_sts2 !=''"> <!-- 판매상태 2:출시예정 -->
-				OR SALES_STS_NUM = '2'
-			</when>
-		</choose> 
-		  )
-	</if>
+	<!-- 판매상태 --> 
+	<choose>
+		<when test= 'sales_sts == "1"'> <!-- 판매상태 0:판매중 -->
+			AND SALES_STS_NUM = '0'
+		</when>
+		<when test= 'sales_sts == "2"'> <!-- 판매상태 1:판매중단 -->
+			AND SALES_STS_NUM = '1'
+		</when>
+		<when test= 'sales_sts == "3"'> <!-- 판매상태 2:출시예정 -->
+			AND SALES_STS_NUM = '2'
+		</when>
+		<when test= 'sales_sts == "12"'>
+			AND (SALES_STS_NUM = '0' OR SALES_STS_NUM = '1')
+		</when>
+		<when test= 'sales_sts == "13"'> 
+			AND (SALES_STS_NUM = '0' OR SALES_STS_NUM = '2')
+		</when>
+		<when test= 'sales_sts == "23"'> 
+			AND (SALES_STS_NUM = '1' OR SALES_STS_NUM = '2')
+		</when>
+	</choose> 
+
 	
 	
 	<!-- 판매 시작일 -->
@@ -173,21 +176,21 @@ WHERE R.RNUM BETWEEN #{startCount} AND #{endCount}
 
 <!--============================= 상세보기  ====================================-->
 <select id="getMdContData" resultType="hashmap" parameterType="hashmap">
-	SELECT MD_NUM 
-	        ,MD_NAME
-	        ,MD_TYPE_NUM
-	        ,MD_GRADE_NUM
-	        ,SALES_STS_NUM
-	        ,LIMIT_AMNT
+	SELECT  MD_NUM                                  
+	        ,MD_NAME                                 
+	        ,MD_TYPE_NUM                            
+	        ,MD_GRADE_NUM                           
+	        ,SALES_STS_NUM                           
+	        ,LIMIT_AMNT                              
 	        ,TO_CHAR(SALES_START_DATE, 'YYYY-MM-DD') AS SALES_START_DATE
-	        ,TO_CHAR(SALES_END_DATE, 'YYYY-MM-DD') AS SALES_END_DATE
-	        ,INTRST_RATE
-	        ,INTRST_PYMNT_MTHD_NUM
-	        ,PRNCPL_PYMNT_MTHD_NUM
-	        ,MID_RDMPTN_PSBL_CHECK
-	        ,LOAN_PRD
-	        ,MD_DSCRPTN
-	FROM MD
+	        ,TO_CHAR(SALES_END_DATE, 'YYYY-MM-DD')   AS SALES_END_DATE
+	        ,INTRST_RATE                            
+	        ,INTRST_PYMNT_MTHD_NUM                  
+	        ,PRNCPL_PYMNT_MTHD_NUM                   
+	        ,MID_RDMPTN_PSBL_CHECK                  
+	        ,LOAN_PRD                               
+	        ,MD_DSCRPTN                            
+	FROM MD 
 	WHERE MD_NUM = #{no}
 </select>
 
@@ -251,4 +254,31 @@ WHERE R.RNUM BETWEEN #{startCount} AND #{endCount}
 	UPDATE MD SET DEL_CHECK = SYSDATE
 	WHERE MD_NUM = #{no}
 </update>
+
+
+<!--============================= MD_NUM 최대값 출력 ==========================-->
+<select id="getMdSeqMAX" resultType='int'>
+	SELECT MAX(MD_NUM)
+	FROM MD
+</select>
+
+<!--============================= 첨부파일 DB 저장 ==============================-->
+<select id="mdAddAttFile" parameterType='hashmap'  resultType='hashmap'>
+	INSERT INTO MD_ATT_FILE (ATT_FILE_NUM, MD_NUM, ATT_FILE_NAME)
+	VALUES (MD_ATT_FILE_SEQ.NEXTVAL, #{no}, #{attFile})
+</select>
+
+<!--============================= 첨부파일 DB 삭제 ==============================-->
+<delete id="mdDelAttFile" parameterType='hashmap'>
+	DELETE FROM MD_ATT_FILE
+	WHERE MD_NUM = #{no}
+</delete>
+
+<!--============================= 첨부파일 select ==============================-->
+<select id="getMdAttFile" parameterType='hashmap'  resultType='hashmap'>
+	SELECT  ATT_FILE_NUM, MD_NUM, ATT_FILE_NAME                                                           
+	FROM MD_ATT_FILE 
+	WHERE MD_NUM = #{no}
+</select>
+
 </mapper>

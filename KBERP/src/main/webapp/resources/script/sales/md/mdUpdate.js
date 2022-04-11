@@ -87,21 +87,38 @@ function updateMdData(){
 			buttons  : [{
 				name : "확인",
 				func : function() {
-					var params = $("#writeForm").serialize();
-					var callback = ajaxComm("mdActionAjax/update", params,"");
-					callback.done(function(obj){
-						$("#actionForm").attr("action", "mdList");
-						$("#actionForm").submit();
-					});
-					callback.fail(function(request,status,error) {
-						console.log(request.requestText);
-					});
-			
-					closePopup();
+					var writeForm = $("#writeForm");
+					
+						writeForm.ajaxForm({
+							
+							success : function(res) {
+								
+								if(res.fileName) {
+									$("#attFile").val(res.fileName[0]);
+								}
+								var params = $("#writeForm").serialize();
+								var callback = ajaxComm("mdActionAjax/update", params,"");
+								callback.done(function(obj){
+									$("#actionForm").attr("action", "mdList");
+									$("#actionForm").submit();
+								});
+								callback.fail(function(request,status,error) {
+									console.log(request.requestText);
+								});
+							},
+							
+							error : function(req) {
+								console.log(req.responseText);
 							}
-						},{
-				name : "취소"
-						}]
+						});
+					
+					writeForm.submit();
+					closePopup();
+					
+						}
+					},{
+						name : "취소"
+				}]
 		});
 			
 		}
