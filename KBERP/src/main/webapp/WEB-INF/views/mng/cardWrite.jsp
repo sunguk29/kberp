@@ -107,7 +107,6 @@
 }
 .card_co_cont{
 	text-align:left;
-
 	margin-left: 25px;
 }
 .card_code_cont,.card_name_cont,.use_name_cont{
@@ -116,6 +115,10 @@
 }
 .del_cont{
 	width:485px;
+}
+.use_name{
+    margin-top: 4px;
+    margin-left: 61px;
 }
 </style>
 <script type="text/javascript">
@@ -390,7 +393,7 @@ function reloadList() {
          </tr>
          <tr>
             <td> 카드명의 </td>
-               <td><input type = "text" class = "use_name_cont"  id = "use_name" name ="use_name">
+               <td><input type = "text" class = "use_name"  id = "use_name" name ="use_name">
                	  <input type = "button" class = "cmn_btn"  id = "btn" value="검색"></td>
             <td></td>
                <td></td>

@@ -769,7 +769,8 @@ $(document).ready(function() {
 							data : params,
 							success : function(res) {
 								if(res.res == "success") {
-									location.reload();
+									closePopup();
+									$("#guide_btn").click();
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
 								}
@@ -829,7 +830,8 @@ $(document).ready(function() {
 							data : params,
 							success : function(res) {
 								if(res.res == "success") {
-									location.reload();
+									closePopup();
+									$("#guide_btn").click();
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
 								}
@@ -860,7 +862,8 @@ $(document).ready(function() {
 							data : params,
 							success : function(res) {
 								if(res.res == "success") {
-									location.reload();
+									closePopup();
+									$("#guide_btn").click();
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
 								}

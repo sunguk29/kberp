@@ -281,6 +281,10 @@ $(document).ready(function() {
             <td> 폐기일자 </td>
                <td class = "del_cont"><input type ="date" class ="use_date_cont" id ="del_dt" name ="del_dt" value="${data.DSCRD_DT}"></td>
          </tr>
+         <tr>
+         	<td>비고</td>
+         	<td><input type="text" id="rmrks" name="rmrks" value="${data.RMRKS}"></td>
+         </tr>
          </tbody>
 			</table>
 			<div class="board_bottom">

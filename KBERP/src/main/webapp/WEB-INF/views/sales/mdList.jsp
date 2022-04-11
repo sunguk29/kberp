@@ -45,16 +45,33 @@ $(document).ready(function() {
 	
 	//상단 박스
 	$("#sts_listA").on("click", function() {
+		$("#sales_stsA").prop("checked", true);
+		$("#sales_sts0").prop("checked", false);
+		$("#sales_sts1").prop("checked", false);
+		$("#sales_sts2").prop("checked", false);
+		$("#srch_btn").click();
 		
 	});
 	$("#sts_list0").on("click", function() {
-		
+		$("#sales_sts0").prop("checked", true);
+		$("#sales_stsA").prop("checked", false);
+		$("#sales_sts1").prop("checked", false);
+		$("#sales_sts2").prop("checked", false);
+		$("#srch_btn").click();
 	});
 	$("#sts_list1").on("click", function() {
-		
+		$("#sales_sts1").prop("checked", true);
+		$("#sales_stsA").prop("checked", false);
+		$("#sales_sts0").prop("checked", false);
+		$("#sales_sts2").prop("checked", false);
+		$("#srch_btn").click();
 	});
 	$("#sts_list2").on("click", function() {
-		
+		$("#sales_sts2").prop("checked", true);
+		$("#sales_sts0").prop("checked", false);
+		$("#sales_sts1").prop("checked", false);
+		$("#sales_stsA").prop("checked", false);
+		$("#srch_btn").click();
 	});
 	
 	
@@ -113,6 +130,7 @@ $(document).ready(function() {
 		<input type="hidden" name="top" 		   value="${params.top}"> 		<!-- top정보 -->
 		<input type="hidden" name="menuNum" 	   value="${params.menuNum}"> 	<!-- 메뉴정보 -->
 		<input type="hidden" name="menuType" 	   value="${params.menuType}"> 	<!-- 메뉴정보 -->
+		<input type="hidden" name="sales_sts" id="sales_sts"> 	                <!-- 판매상태 -->
 	
 		<div class="cont_area">
 			<div class="body">
