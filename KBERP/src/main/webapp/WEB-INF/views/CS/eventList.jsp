@@ -11,8 +11,23 @@
 <style type="text/css">
 /* 가로 사이즈 조정용 */
 .cont_wrap {
-	width: 1000px;
+	width: 900px;
 }
+
+td:nth-child(2) {
+	
+	color: #222222;
+	font-weight: bold;
+	cursor: pointer;
+	
+}
+
+td:nth-child(2):hover {
+
+	color: #4B94F2;
+	text-decoration: underline;
+}
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -189,9 +204,9 @@ function drawPaging(pb) {
 				<colgroup>
 					<col width="50"/>
 					<col width="150"/>
-					<col width="100"/>
-					<col width="100"/>
-					<col width="100"/>
+					<col width="50"/>
+					<col width="50"/>
+					<col width="50"/>
 				</colgroup>
 				<thead>
 					<tr>
