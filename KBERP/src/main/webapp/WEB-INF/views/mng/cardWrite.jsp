@@ -102,32 +102,21 @@
 	margin-left: 25px;
 }
 .card_sep_cont{
-	margin-left: -56px;
-	height: 20px;
+	text-align:left;
+	margin-left: 25px;
 }
 .card_co_cont{
-	margin-left: -18px;
-    height: 20px;
+	text-align:left;
+
+	margin-left: 25px;
 }
-.card_code_cont,.card_name_cont {
+.card_code_cont,.card_name_cont,.use_name_cont{
 	margin-left: 25px;
 	margin-right: 25px;
-}
-.use_name_cont{
-    margin-left: 62px;
-    margin-top: 4px;
-	
 }
 .del_cont{
 	width:485px;
 }
-#empSrchBtn {
-    margin-top: 8px;
-}
-.name_srch_wrap{
-    margin-left: 35px;
-}
-
 </style>
 <script type="text/javascript">
 
@@ -192,7 +181,7 @@ $(document).ready(function() {
 		var html = "";
 		
 		html += "<div class=\"popup_cont\">";
-		html += "<div class=\"name_srch_wrap\" >";
+		html += "<div class=\"name_srch_wrap\">";
 		html += "<table class=\"name_srch_table\">";
 		html += "<tbody>";
 		html += "<tr>";
@@ -229,7 +218,7 @@ $(document).ready(function() {
 			depth : 1,
 			bg : true,
 			width : 400,
-			height : 500,
+			height : 450,
 			title : "사원검색",
 			contents : html,
 			contentsEvent : function() {
@@ -256,8 +245,8 @@ $(document).ready(function() {
 					}
 				});
 				$("#empAllListTbody").on("click", "#empName", function() {
-					$("#use_num").val($(this).attr("use_num"));
-					$("#use_name").val($(this).attr("use_name"));
+					$("#useEmpNum").val($(this).attr("useEmpNum"));
+					$("#useEmpName").val($(this).attr("useEmpName"));
 					closePopup(1);
 				});
 			},
@@ -416,6 +405,8 @@ function reloadList() {
          </tbody>
 			</table>
 			<div class="board_bottom">
+				<div class="pgn_area">
+				</div>
 				<div class="cmn_btn" id="addBtn">등록</div>
 				<div class="cmn_btn" id="listBtn">취소</div>
 			</div>

@@ -37,8 +37,18 @@ $(document).ready(function() {
 	// 저장 버튼(#saveBtn) 클릭시, 필수항목 체크 후 mdActionAjax/insert 로 이동 
 	// insert 성공시 mdList로 이동하는 함수
 	insertMdData();
+	
+	/* 파일업로드(+) 클릭시 */
+	$(".aff_btn").on("click", function() {
+		$("#att").click();
+	});
 
 });
+function uploadName(e) {
+	var files = e.files;
+	var filename = files[0].name;
+	$("#fileName").val(filename);
+}
 </script>
 </head>
 <body>
@@ -81,11 +91,13 @@ $(document).ready(function() {
 		</div>
 		
 		<!-- 해당 내용에 작업을 진행하시오. -->	
-		<!--============= write Form ==============-->
-		<form action="#" id="writeForm" method="post">
 			<div class="cont_area">
-				<div class="body">
-					<div class="bodyWrap">
+			<div class="body">
+				<div class="bodyWrap">
+					<!--============= write Form ==============-->
+					
+					
+					<form action="fileUploadAjax" id="writeForm" method="post" enctype="multipart/form-data">
 						<table>
 							<colgroup>
 								<col width="200" />
@@ -198,17 +210,20 @@ $(document).ready(function() {
 								</tr>
 							</tbody>
 						</table>
-						<!-- 끝 -->
-						<!-- 첨부자료 부분 -->
-						<div class="rvn_txt"> 첨부자료 (0)
-							<input type=file name='file1' style='display: none;'> 
-							<img class="plus_btn" alt="더하기버튼" src="resources/images/sales/plus.png" border='0' onclick="document.all.file1.click();" > 
+						
+						<!-- 첨부 파일 -->
+						<input type="file" id="att" name="att" onchange="uploadName(this)" />
+						<input type="hidden" id="attFile" name="attFile" />
+						<div class="rvn_txt"> 첨부파일
+							<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" />
 						</div>
-						<div class="cntrct_box_in"></div> 
-					</div>
-				</div>	
-			</div>
-		</form>
+						<div class="cntrct_box_in">
+							<input type="text" id="fileName" name="fileName" readonly="readonly" />
+						</div>
+					</form>
+				</div>
+			</div>	
+		</div>
 	</div>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
