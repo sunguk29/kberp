@@ -108,7 +108,7 @@ function drawList(list) {
 		html += "<tr no=\"" + data.EVENT_NUM + "\">";
 		html += "<td>" + data.EVENT_NUM + "</td>";
 		html += "<td>" + data.EVENT_TITLE + "</td>";
-		html += "<td>" + data.EMP_NUM + "</td>";
+		html += "<td>" + data.EMP_NAME + "</td>";
 		html += "<td>" + data.WRITE_DATE + "</td>";
 		html += "<td>" + data.EVENT_HITS + "</td>";
 		html += "</tr>";

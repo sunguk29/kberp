@@ -3,10 +3,15 @@
 <mapper namespace="ev">
 
 	<select id="getEventList" resultType="hashmap" parameterType="hashmap">
-		SELECT EVENT.EVENT_NUM, EVENT.EMP_NUM, event_title, event_cont, write_date, event_hits, del_check
-		FROM EVENT
-		ORDER BY EVENT.EVENT_NUM DESC
-<!-- 		WHERE SELL.RNUM BETWEEN #{startCount} AND #{endCount} -->
+	  SELECT EV.EVENT_NUM, EV.EMP_NUM, EV.EMP_NAME, EV.EVENT_TITLE, EV.WRITE_DATE, EV.EVENT_HITS
+        FROM (  SELECT EV.EVENT_NUM, EV.EMP_NUM, E.EMP_NAME, EV.EVENT_TITLE,
+                      TO_CHAR(EV.WRITE_DATE, 'YYYY-MM-DD') AS WRITE_DATE, EV.EVENT_HITS,
+                      ROW_NUMBER() OVER(ORDER BY EV.EVENT_NUM DESC) AS RNUM
+                FROM EVENT EV LEFT OUTER JOIN EMP E
+                                                ON EV.EMP_NUM=E.EMP_NUM
+                WHERE 1 = 1
+                ) EV
+        WHERE EV.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
 	<select id="getEvent" resultType="hashmap" parameterType="hashmap">
