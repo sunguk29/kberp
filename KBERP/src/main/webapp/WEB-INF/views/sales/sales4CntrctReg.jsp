@@ -268,6 +268,12 @@ hr { /* 구분선 */
 	border-radius: 7px;
 	margin-bottom: 18px;
 	margin-left: 45px;
+	font-size: 10pt;
+}
+
+[href] {
+	color: black;
+	text-decoration: none;
 }
 
 .txt_area {
@@ -992,8 +998,8 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
-											location.href = "salesList";
-											console.log("성공");
+											$("#contForm").attr("action", "sales4CntrctCont");
+											$("#contForm").submit();
 										} else {
 											alert("등록중 문제가 발생하였습니다.");
 										}
@@ -1771,6 +1777,12 @@ function qtnMdList(list) {
 // *************** 상품 목록 끝
 
 
+function uploadName(e) {
+	var files = e.files;
+	var filename = files[0].name;
+	$("#fileName").val(filename);
+}
+
 function test(t) {
 	//대출금액
 	var price = $("#LoanAmnt").val();
@@ -1811,6 +1823,13 @@ function test(t) {
 		<input type="hidden" name="top" value="${param.top}" />
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
+	</form>
+	<form action="#" id="contForm" method="post">
+		<input type="hidden" id="page" name="page" value="${page}" />
+		<input type="hidden" name="top" value="${param.top}" />
+		<input type="hidden" name="menuNum" value="${param.menuNum}" />
+		<input type="hidden" name="menuType" value="${param.menuType}" />
+		<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -2417,26 +2436,20 @@ function test(t) {
 								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" value="${data3.PYMNT_DATE}" readonly="readonly" placeholder="매달    일" /></td>
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
-								<td><input type="text" class="txt" id="monthPymntAmnt" name="monthPymntAmnt" readonly="readonly" /></td>
-								<td><input type="button" class="btn" value="월 이자액" readonly="readonly" /></td>
-								<td colspan="2"><input type="text" class="txt" id="monthIntrstAmnt" name="monthIntrstAmnt" readonly="readonly" /></td>
-							</tr>
-							<tr height="40">
 								<td><input type="button" class="btn" value="비고" readonly="readonly"/></td>
 								<td colspan="3"><input type="text" class="rmks" name="rmksCont" value="${data3.RMKS}" readonly="readonly" /></td>
 							</tr>							
 						</tbody>
 					</table>
-					<!-- 첨부자료 -->
-					<c:set var="dtlSFileLength" value="${fn:length(data3.ATT_FILE_NAME)}"></c:set>
-						<c:set var="dtlSFileName" value="${fn:substring(data3.ATT_FILE_NAME, 20, qtnSFileLength)}"></c:set>
+					<!-- 첨부자료  -->
+						<c:set var="qtnSFileLength" value="${fn:length(data3.ATT_FILE_NAME)}"></c:set>
+						<c:set var="qtnSFileName" value="${fn:substring(data3.ATT_FILE_NAME, 20, qtnSFileLength)}"></c:set>
 						<div class="spc">
 							<div class="adc_txt">
 								첨부파일
 							</div>
 							<div class="cntrct_box_in">
-								<a href="resources/upload/${qtnS.ATT_FILE_NAME}"  download="${qtnSFileName}">${qtnSFileName}</a>
+								<a href="resources/upload/${data3.ATT_FILE_NAME}" download="${qtnSFileName}">${qtnSFileName}</a>
 							</div>
 						</div>
 				
@@ -2504,6 +2517,12 @@ function test(t) {
 							<tr height="40">
 								<td><input type="button" class="btn" value="갱신예정일*" /></td>
 								<td colspan="3"><input type="date" class="txt"  id="reDate" name="reDate"/></td>
+							</tr>
+							<tr height="40">
+								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
+								<td><input type="text" class="txt" id="monthPymntAmnt" name="monthPymntAmnt" readonly="readonly" /></td>
+								<td><input type="button" class="btn" value="월 이자액" readonly="readonly" /></td>
+								<td><input type="text" class="txt" id="monthIntrstAmnt" name="monthIntrstAmnt" readonly="readonly" /></td>
 							</tr>
 						</tbody>
 					</table>

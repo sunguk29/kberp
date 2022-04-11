@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="totalRprt">
+
+	<select id="getTotalNewSalesRank" parameterType="hashmap" resultType="hashmap">
+		SELECT COUNT(*) CNT
+		FROM SALES S INNER JOIN EMP E
+		                     ON S.MNGR_EMP_NUM = E.EMP_NUM           
+		WHERE TO_CHAR(START_DATE, 'YY-MM') =  TO_CHAR(SYSDATE, 'YY-MM')
+		GROUP BY E.EMP_NAME
+	</select>
+
+</mapper>
