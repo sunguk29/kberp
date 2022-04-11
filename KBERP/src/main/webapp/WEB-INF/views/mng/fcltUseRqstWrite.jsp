@@ -114,6 +114,12 @@
 
 
 $(document).ready(function() {
+	if('${param.fSearchGbn}' != "") {
+		$("#fSearchGbn").val(${param.fSearchGbn});
+		reloadList();
+	}else {
+		$("#searchGbn").val("0");
+	}
 	
 	$("#fSearchBtn").on("click",function(){	
 		$("#page").val("1");
@@ -137,9 +143,6 @@ $(document).ready(function() {
 		$("#no").val($(this).attr("no"));
 		$("#fcltyName").val($(this).attr("fcltyName"));
 		$("#fcltyPlace").val($(this).attr("fcltyPlace"));
-		
-		$("#fSearchGbn").val($("#fOldSearchGbn").val());
-		$("#fSearchTxt").val($("#fOldSearchTxt").val());
 		
 		$("#actionForm").attr("action","fcltUseRqstTimeWrite");
 		$("#actionForm").submit();
@@ -187,14 +190,19 @@ $(document).ready(function() {
 	        center: 'title',
 	      },
 	      locale: "ko",
-	      editable: false,
 	      height: 600,
 	      events: data,
 	      selectable: true,
+	      unselectAuto: false,
+	      selectAllow: function (selectInfo) {
+			    return selectInfo.end.diff(selectInfo.start, 'days') == 1;
+		  },
 	      dayClick: function(date, js, view) { // 일자 클릭
 	    	  console.log(date.format('YYYY-MM-DD'));
 	    	  //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
 	    	  //alert('Current view: ' + view.name);
+	    	  $("#fSearchGbn").val("0");
+			  $("#fSearchTxt").val("");
 	    	  reloadList();
 	    	  $("#rsvtnDate").val(date.format('YYYY-MM-DD'));
 	      }
@@ -263,9 +271,6 @@ function drawList(list){
 			<!-- 여기부터 쓰면 됨 -->
 			<div id = "cont_top">
 			<div id = calendar>
-					<input type="hidden" id="stdt" name="stdt" value="${stdt}" />
-					<input type="hidden" id="eddt" name="eddt" value="${eddt}" />
-					
 					<div id="fullCalendarArea"></div>
 				</div>
 				<div id="fclt_list">
@@ -282,9 +287,11 @@ function drawList(list){
 							<input type="hidden" id="top" name="top" value="${param.top}" />
 							<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 							<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
+							
 							<!-- 시설물예약시 예약가능한 시설물 목록의 검색어유지 -->							
 							<input type="hidden" id="fOldSearchGbn" value="${param.fSearchGbn}"/>
 							<input type="hidden" id="fOldSearchTxt" value="${param.fSearchTxt}"/>
+							
 							<!-- 시설물번호, 이름, 예약일 -->
 							<input type="hidden" id="no" name="no" value="${param.no}"/>
 							<input type="hidden" id="rsvtnDate" name="rsvtnDate" value="${param.rsvtnDate}"/>
@@ -295,7 +302,7 @@ function drawList(list){
 										<option value = "1">위치</option>
 									</select>
 									<div class="srch_text_wrap">
-										<input type="text" id="fSearchTxt" name="fSearchTxt"/>
+										<input type="text" id="fSearchTxt" name="fSearchTxt" value="${param.fSearchTxt}"/>
 									</div>
 									<div class="cmn_btn_ml" id="fSearchBtn">검색</div>
 						</form>
