@@ -662,27 +662,9 @@ public class SalesMngController {
 			throws Throwable {
 
 		// 조회
-		HashMap<String, String> sales1DataLead = iCommonService.getData("salesMng.getSales2BringLead", params);
-		HashMap<String, String> sales1DataLoan = iCommonService.getData("salesMng.getSales2BringLoan", params);
-		HashMap<String, String> sales1DataBsns = iCommonService.getData("salesMng.getSales2BringBsns", params);
-
-		HashMap<String, String> sales2DataLoan = iCommonService.getData("salesMng.getSales3BringLoan", params);
-		HashMap<String, String> sales2DataClntCmpny = iCommonService.getData("salesMng.getSales3BringClntCmpny",
-				params);
-		HashMap<String, String> sales2DataDtlInfo = iCommonService.getData("salesMng.getSales3BringDtlInfo", params);
-
 		HashMap<String, String> data = iCommonService.getData("salesMng.getSales1", params);
 		HashMap<String, String> data2 = iCommonService.getData("salesMng.getSales2", params);
 		HashMap<String, String> data3 = iCommonService.getData("salesMng.getSales3", params);
-
-		mav.addObject("lead", sales1DataLead);
-		mav.addObject("loan", sales1DataLoan);
-		mav.addObject("bsns", sales1DataBsns);
-
-		mav.addObject("loanS", sales2DataLoan);
-		mav.addObject("ccS", sales2DataClntCmpny);
-		mav.addObject("dtlS", sales2DataDtlInfo);
-		// 제안 첨부파일은X
 
 		mav.addObject("data", data);
 		mav.addObject("data2", data2);
@@ -729,7 +711,6 @@ public class SalesMngController {
 
 	
 	  // sales4CntrctCont : 계약 상세보기
-	  
 	  @RequestMapping(value = "/sales4CntrctCont")
 	  public ModelAndView sales4CntrctCont(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		  /*견적까지 내용 가져오는 부분*/
