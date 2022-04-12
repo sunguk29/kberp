@@ -381,6 +381,10 @@ function reloadList() {
             <td class="title"> 사용종료일 </td>
                <td class="cont"><input type = "date" class = "text_cont"  id = "use_end_dt" name = "use_end_dt" ></td> 
          </tr>
+         <tr>
+            <td class="title"> 비고 </td>
+               <td class="cont"><input type = "text" class = "text_cont"  id = "rmrks" name = "rmrks" ></td> 
+         </tr>
 
          </tbody>
 	</table>
