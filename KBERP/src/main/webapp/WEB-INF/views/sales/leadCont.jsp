@@ -673,6 +673,10 @@ $(document).ready(function () {
 	/* 리드 상세보기 실행될 시 비동기로 의견 목록 그리기 위해 선언  */
 	reloadOpList();
 	
+	if($("#psNum").val() == 2) {
+		$("#updateBtn").hide();	
+		$("#deleteBtn").hide();	
+	} 
 	/* 진행중일때만 전환하기 버튼 생성  */
 	if($("#psNum").val() == 1) {
 		$(".nb").show();		

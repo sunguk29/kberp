@@ -52,7 +52,7 @@
 		WHERE 1 = 1
 		AND DEL_CHECK IS NULL
 	</select>
-	
+<!-- 고객등급 개수 -->	
 	<select id="clntGradeS" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
@@ -77,5 +77,39 @@
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE GRADE_NUM = 4
+	</select>
+<!-- 영업 고객수 -->
+	<select id="salesCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM ENTRPRS_CLNT EC INNER JOIN EMP E
+		                          ON EC.MNGR_EMP_NUM = E.EMP_NUM
+		                     INNER JOIN APNTM A
+		                             ON E.EMP_NUM = A.EMP_NUM
+		                     INNER JOIN DEPT D
+		                             ON A.DEPT_NUM = D.DEPT_NUM
+		WHERE D.DEPT_NAME = '영업부'
+		AND EC.DEL_CHECK IS NULL
+	</select>
+	<select id="salesCnt1" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM ENTRPRS_CLNT EC INNER JOIN EMP E
+		                          ON EC.MNGR_EMP_NUM = E.EMP_NUM
+		                     INNER JOIN APNTM A
+		                             ON E.EMP_NUM = A.EMP_NUM
+		                     INNER JOIN DEPT D
+		                             ON A.DEPT_NUM = D.DEPT_NUM
+		WHERE D.DEPT_NAME = '영업1팀'
+		AND EC.DEL_CHECK IS NULL
+	</select>
+	<select id="salesCnt2" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM ENTRPRS_CLNT EC INNER JOIN EMP E
+		                          ON EC.MNGR_EMP_NUM = E.EMP_NUM
+		                     INNER JOIN APNTM A
+		                             ON E.EMP_NUM = A.EMP_NUM
+		                     INNER JOIN DEPT D
+		                             ON A.DEPT_NUM = D.DEPT_NUM
+		WHERE D.DEPT_NAME = '영업2팀'
+		AND EC.DEL_CHECK IS NULL
 	</select>
 </mapper>

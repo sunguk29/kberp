@@ -342,7 +342,7 @@ function reloadList() {
 			<input type="hidden" id="sendSrchTxt" name="sendSrchTxt">
 			<input type="hidden" id="page" name="page" value="1">
 		</form>
-<form action="cardList" id="WriteForm" method="post" enctype="multipart/form-data">
+<form action="cardList" id="WriteForm" method="post">
 	<input type="hidden" name="no" value="${param.no}" />
 	<input type="hidden" name="use_num" id="use_num"  />
 	<input type="hidden" name="mng_num" value="${param.mng_num}" />
@@ -380,6 +380,10 @@ function reloadList() {
          <tr>
             <td class="title"> 사용종료일 </td>
                <td class="cont"><input type = "date" class = "text_cont"  id = "use_end_dt" name = "use_end_dt" ></td> 
+         </tr>
+         <tr>
+            <td class="title"> 비고 </td>
+               <td class="cont"><input type = "text" class = "text_cont"  id = "rmrks" name = "rmrks" ></td> 
          </tr>
 
          </tbody>

@@ -387,43 +387,69 @@ td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 
 .chat_rcpnt {
 	display: block;
-	height: 40px;
-	width: 120px;
-	border : 1px solid;
-	font-size: 14pt;
 	text-indent: 5pt;
-	border-radius: 8px;
-	position: relative;
-	top: 425px;
 	background-color: white;
+	margin-top: 5pt;
+	margin-bottom: 5pt;
 }
+
+
+#chat_rcpnt_name {
+	height: 30px;
+	font-size: 13pt;
+}
+
+#chat_rcpnt_cont {
+	border-radius: 8px;
+	border : 1px solid;
+	font-size: 15pt;
+	height: auto;
+	width: auto;
+	float: left;
+	padding: 3px;
+}
+
+#chat_rcpnt_time {
+	display: inline-block;
+	height: auto;
+	width: auto;
+	font-size: 11pt;
+	margin-top: 9pt;
+}
+
+
 .chat_user {
 	display: block;
-	height: 40px;
-	width: 80px;
-	border : 1px solid;
-	font-size: 14pt;
-	text-align : center;
-	border-radius: 8px;
-	position: relative;
-	top: 440px;
-	left : 465px;
 	background-color: white;
+	margin-top: 5pt;
+	margin-bottom: 5pt;
+	float: right;
 }
 
-.chat_time_rcpnt {
-	display: inline-block;
-	position: relative;
-	left: 120px;
-	bottom : 5px;
+#chat_user_name {
+	display: block;
+	height: 30px;
+	font-size: 13pt;
 }
 
-.chat_time_user {
-	width : 150;
+#chat_user_cont {
+	border-radius: 8px;
+	border : 1px solid;
+	font-size: 15pt;
+	height: auto;
+	width: auto;
+	float: right;
+	padding: 3px;
+}
+
+#chat_user_time {
 	display: inline-block;
-	position: relative;
-	right: 90px;
-	bottom : 10px;
+	height: auto;
+	width: auto;
+	font-size: 11pt;
+	float: right;
+	margin-top: 9pt;
+	margin-right: 5pt;
 }
 
 .cmn_btn_ml {
@@ -444,6 +470,7 @@ td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 
 </style>
 <script type="text/javascript">
+var refreshInterval = null;
 
 $(document).ready(function() {
 	
@@ -532,7 +559,7 @@ $(document).ready(function() {
 								console.log(request.responseText);
 							}
 						}); 
-						
+						 
 						}
 				}
 			}, { 
@@ -550,43 +577,36 @@ $(document).ready(function() {
 		
 		var html = "";
 		
-		html += "			<div class = \"right_box\">                                                      ";
+		html += "		<div class = \"right_box\">                                                      ";
 		html += "			<div class = \"rcpnt_rank_box\">                                                 ";
-		html += "				<div id = \"rcpnt_rank\"> ${DeptName} ${RankName} ${EmpName} 외  </div>         ";
+		html += "				<div id = \"rcpnt_rank\"> ${empNum} ${data.RankName} ${EmpName} </div>";
 		html += "			</div>		                                                                  	 ";
 		html += "			                                                                              	 ";
 		html += "			<div class = \"chat_room\">                                                      ";
 		html += "				<div class = \"chat_dtl\">                                                   ";
-		html += "					<div class = \"chat_rcpnt\">${cont}.&nbsp;                          	  	 ";
-		html += "						<div class= \"chat_time_rcpnt\"><small>오전 11:20</small></div>        ";
-		html += "					</div>                                                                	 ";
-		html += "					<div class = \"chat_user\">저도요.&nbsp;                                   ";
-		html += "						<div class= \"chat_time_user\"><small>오후 12:13</small></div>         ";
-		html += "					</div>					                                              	 ";
+		
 		html += "				</div>                                                                    	 ";
 		html += "				<div class = \"chat_input\">                                            	 ";
 		
 		html += "					<form action = \"#\" id = \"insertForm\" method = \"post\">";
-		html += "						<input type = \"hidden\" name = \"EMP_NUM\" value = \"${sEmpNum}\"/> ";
-		html += "						<input type = \"hidden\" name = \"CONT_NUM\" value = \"${contsq}\"/>";
-		html += "						<input type = \"hidden\" name = \"CHAT_NUM\" value = \"${chatsq}\"/>";
-		html += "						<input type = \"hidden\" name = \"CONT\" value = \"${cont}\"/>";
+		html += "						<input type = \"hidden\" name = \"chatNum\" value = \"" + $(this).attr("chatNum") + "\">";
 		html += "						<div class= \"cmn_btn_ml\" id = \"insertBtn\" style=\"float: left;\">보내기</div>";
 		html += "						<div class = \"chat_img_file\"></div>                                ";
 		html += "						<div class = \"chat_img_plus\"></div>                                ";
-		html += "						<input type= \"text\" placeholder = \"메시지 입력..\" name = \"cont\"  id = \"cont\" onkeydown= \"enterCheck();\" style = \"float: right;\"/>";
+		html += "						<input type= \"text\" placeholder = \"메시지 입력..\" name = \"cont\"  id = \"cont\" onkeydown= \"enterCheck();\" style = \"float: right;  \">";
+		html += "						<input type= \"text\" style = \"display:none\">";
 		html += "					</form>																	 ";
 		
 		html += "				</div>                                                                     	 ";
 		html += "			</div>	                                                                         ";
-		html += "			</div>	                                                                         ";
+		html += "		</div>	                                                                         ";
 		
 		$(".msgr_main").remove();
 		$(".right_box").html(html);
 		
 		
 		$("#insertBtn").on("click", function() {
-			if($.trim($("#chat_write").val()) == null) {
+			if($.trim($("#cont").val()) == null) {
 				alert("내용을 입력하세요.");
 			} else {
 				insertCont();
@@ -599,7 +619,7 @@ $(document).ready(function() {
 
 function enterCheck() {
 	if(event.keyCode == 13) {
-		if($.trim($("#chat_write").val()) == "") {
+		if($.trim($("#cont").val()) == null) {
 			alert("내용을 입력해 주세요.");
 		} else {
 			insertCont();
@@ -630,6 +650,67 @@ function insertCont() {
 			}
 		}); 
 	}
+	
+/* function chatDelete() {
+	var params = "";
+	
+	$.ajax({
+		type : "post",
+		
+	})
+}	 */
+	
+	
+
+function readCont() {
+//	clearInterval(refreshInterval);
+	// 채팅 인서트는 성공했지만, 리스트띄우는건 실패. 오류명 undefined 'parsererror' 
+	var params = $("#readForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "getContListAjax",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			console.log("성공?")
+			console.log(res)
+			if(res.list != 0) {
+				console.log("성공2?")
+				
+				var html = "";
+				for(var i = 0 ; i < res.list.length; i++) {
+					if(res.list[i].EMP_NUM ==  '${sEmpNum}') {
+							html += "<div class = \"chat_user\">";
+							html += "<div id = \"chat_user_name\"></div>";
+							html += "<div id = \"chat_user_cont\">" + res.list[i].CONT + "&nbsp;</div>";
+							html += "<div id = \"chat_user_time\">" + res.list[i].RGSTRTN_DT +"</div>";
+							html += "</div>";
+						} else {
+							html += "<div class = \"chat_rcpnt\">";
+							html += "<div id = \"chat_rcpnt_name\">" + res.list[i].EMP_NAME + "</div>";
+							html += "<div id = \"chat_rcpnt_cont\">" + res.list[i].CONT + "&nbsp;</div>";
+							html += "<div id = \"chat_rcpnt_time\">" + res.list[i].RGSTRTN_DT + "</div>";
+							html += "</div>";
+						}
+					}
+				
+					$(".chatdtl").append(html);
+					$("#lastChatNo").val(res.list[res.list.length -1].data.CHAT_NUM);
+				}
+			//	refreshInterval = setInterval(readCont, 1000);
+			},
+			error : function(res, error) {
+				console.log(res.responseText);
+				console.log(res);
+				console.log("실패")
+			//	alert(res.errorMessage);
+				
+			//	refreshInterval = setInterval(readCont, 1000);
+			}
+	}); 
+}
+
 
 function checkInput() {
 	if($("input:checkbox[name=srch_check]").is(":checked") == true) {
@@ -652,7 +733,7 @@ function reloadList() {
 	
 	$.ajax({
 		type : "post",
-		url : "addDrawRoomAjax",
+		url : "DrawRoomAjax",
 		dataType : "json",
 		data : params,
 		success : function(res) {
@@ -663,7 +744,10 @@ function reloadList() {
 			console.log(request.responseText);
 		}
 	});
+	
 }
+
+
 
 
 function drawList(list) {
@@ -688,7 +772,7 @@ function drawRoom(list) {
 	var html = "";
 		
 		for(var data of list) { 
-			html += "		<div class = \"chat_list1\" no = \"" + data.CHAT_NUM + "\">";
+			html += "		<div class = \"chat_list1\" chatNum = \"" + data.CHAT_NUM + "\">";
 			html += "			<input type=\"text\" value = \"" + data.EMP_NAME + "\" id = \"chat_group\" readonly=\"readonly\" />";
 			html += "			<input type=\"text\" value = \"" + data.CNT + "\" id = \"head_count\" readonly=\"readonly\"/>";
 			if(data.CONT != null) {
@@ -699,6 +783,7 @@ function drawRoom(list) {
 			html += "			<div class = \"chat_list1_1\"></div>";
 			html += "		</div>";
 		}
+	/* $(".chat_box").slimScroll({height: "610px"}); */
 	$(".chat_box").html(html); 
 }
 
@@ -727,6 +812,10 @@ function drawRoom(list) {
 				<input type= "hidden" name="EMP_NUM" value="${sEmpNum}"/>
 				<input type= "hidden" name="CHAT_NUM" value="${chatsq}"/>
 				<input type = "hidden" id = "srch_check" name = "srch_check" value = "checked"/>
+			</form>
+			
+			<form action = "#" id = "readForm">
+				<input type="hidden" id = "lastChatNo" name = "lastChatNo" value = "${maxNo}">
 			</form>
 			
 				<div class = "main_box">

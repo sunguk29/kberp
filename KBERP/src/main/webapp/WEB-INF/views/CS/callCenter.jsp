@@ -1196,12 +1196,15 @@ $(document).ready(function() {
 					if(checkEmpty("#clnt_name")) {
 						alert("고객명을 입력하세요.");
 						$("#clnt_name").focus();
+						closePopup();
 					} else if(checkEmpty("#clnt_grade")) {
 						alert("고객등급을 입력하세요.");
 						$("#clnt_grade").focus();
+						closePopup();
 					} else if(checkEmpty("#phon_num_1")) {
 						alert("전화번호를 입력하세요.");
 						$("#phon_num_1").focus();
+						closePopup();
 					} else {
 						// 저장
 						var params = $("#saveForm").serialize();
@@ -1254,15 +1257,19 @@ $(document).ready(function() {
 					if(checkEmpty("#cnsl_type_num")) {
 						alert("분류를 입력하세요.");
 						$("#cnsl_type_num").focus();
+						closePopup();
 					} else if(checkEmpty("#write_date")) {
 						alert("상담일을 입력하세요.");
 						$("#write_date").focus();
+						closePopup();
 					} else if(checkEmpty("#cont")) {
 						alert("상담내용을 입력하세요.");
 						$("#cont").focus();
+						closePopup();
 					} else if(checkEmpty("#cnsl_rslt_num")) {
 						alert("상담결과를 입력하세요.");
 						$("#cnsl_rslt_num").focus();
+						closePopup();
 					} else {
 						// 저장
 						var params = $("#noteSaveForm").serialize();

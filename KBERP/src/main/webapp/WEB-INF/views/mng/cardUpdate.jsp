@@ -206,6 +206,9 @@ $(document).ready(function() {
 	<input type="hidden" name="searchMon" value="${param.searchMon}" />
 	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+	<input type="hidden" id="top" name="top" value="${param.top}" />
+	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 </form>
 	<div class="cont_wrap">
 		<div class="page_title_bar">
