@@ -18,12 +18,12 @@
 .mh{      
 	margin-right:5px;
 }
-textarea{
-	width:894px;
-	height:500px;
-	resize : none;
-	margin-bottom: 5px;
-	background-color: white;
+.cont{
+	overflow: auto;
+	width: 898px;
+	height: 500px;
+	border: 1px solid #F0F0F0;
+	font-size: 15px;
 }
 .inf_title{
 	display: inline-block;
@@ -32,7 +32,7 @@ textarea{
 	text-align: center;
 	border : 0.1px solid;
 	border-bottom: 0px;
-	border-color:rgba(118, 118, 118, 0.3);
+	border-color:#F0F0F0;
 	font-size: 2pt;
 	background-color: white;
 	line-height: 30px;
@@ -45,7 +45,7 @@ textarea{
 	text-align: center;
 	border : 0.1px solid;
 	border-bottom: 0px;
-	border-color:rgba(118, 118, 118, 0.3);
+	border-color:#F0F0F0;
 	float: right;
 	font-size: 2pt;
 	background-color: white;
@@ -164,7 +164,7 @@ $(document).ready(function() {
 		<div class="inf_title">${data.CMBN_TITLE}</div>
 		<div class="inf_wrtr">${data.EMP_NAME}</div>
 		<br/>
-		<textarea readonly="readonly" disabled="disabled">${data.CMBN_CONT}</textarea>
+		<div class="cont">${data.CMBN_CONT}</div>
 		<div class="board_bottom">
 		
 <c:choose>

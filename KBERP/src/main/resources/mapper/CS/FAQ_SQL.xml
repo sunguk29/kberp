@@ -28,9 +28,11 @@
 
 <select id="getfaqCnt" resultType="Integer" parameterType="hashmap">
 	SELECT COUNT(*) AS CNT
-	FROM FAQ F INNER JOIN EMP E
-                        ON F.EMP_NUM = E.EMP_NUM
-                        WHERE DEL_CHECK =0
+	FROM FAQ F INNER JOIN INQRY_CTGRY ICT
+	                            ON F.CTGRY_NUM=ICT.CTGRY_NUM
+	                    LEFT OUTER JOIN EMP E
+	                            ON F.EMP_NUM=E.EMP_NUM
+    WHERE 1=1
 	<if test="searchTxt != null and searchTxt != ''">
 		<choose>
 		<!-- searchGbn: 제목, 작성자 -->
