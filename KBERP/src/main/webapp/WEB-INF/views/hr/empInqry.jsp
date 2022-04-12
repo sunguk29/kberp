@@ -350,6 +350,10 @@ td:nth-child(even) {
 	outline: 1px solid #00000033;
 }
 
+#add_hire_type, #add_bank_name {
+	width: calc(100% - 94px);
+}
+
 .read_popup_cont_text {
 	display: inline-block;
 	vertical-align: center;
@@ -406,14 +410,14 @@ td:nth-child(even) {
 	display: inline-block;
 	vertical-align: top;
 	width: 385px;
-	height: 355px;
+	height: 350px;
 }
 
 #popup_right {
 	display: inline-block;
 	vertical-align: top;
 	width: 385px;
-	height: 355px;
+	height: 350px;
 	margin-left: 5px;
 }
 
@@ -422,7 +426,7 @@ td:nth-child(even) {
 }
 
 #popup_right_top {
-	height: 140px;
+	height: 135px;
 }
 
 #popup_right_bottom {
@@ -450,6 +454,39 @@ td:nth-child(even) {
 	width: calc(100% - 166px);
 }
 
+#edit_left_e5 input {
+	width: 200px;
+}
+
+.add_popup_radio_wrap {
+	display: inline-block;
+	vertical-align: top;
+	width: 120px;
+	height: 26px;
+}
+
+#edit_left_e4 input[type=radio] {
+	display: inline-block;
+	vertical-align: top;
+	height: 26px;
+	margin: 0px 5px 0px 0px;
+}
+
+.add_popup_radio_item_name {
+	display: inline-block;
+	vertical-align: top;
+	padding-top: 3px;
+	font-size: 10pt;
+	color: #333333;
+}
+
+.sub_text {
+	display: inline-block;
+	vertical-align: center;
+	font-size: 10pt;
+	color: #666666;
+}
+
 #add_pctr_wrap {
 	display: inline-block;
 	vertical-align: top;
@@ -464,7 +501,8 @@ td:nth-child(even) {
 	height: 152px;
 	width: 114px;
 	outline: 1px solid #e2e2e2;
-	padding: 4px 3px 4px 3px;
+	padding: 3px;
+	margin-top: 3px;
 }
 
 #emp_pctr_area {
@@ -512,6 +550,29 @@ td:nth-child(even) {
 	margin-left: 10px;
 	font-weight: 700;
 	color: #fe3a40;
+}
+
+.phone_num_sel_box {
+	width: 60px;
+	font-size: 9pt;
+}
+
+#add_phone_num_1 {
+	width: 96px;
+}
+#add_phone_num_2 {
+	width: 96px;
+}
+#add_mbl_num_1 {
+	width: 96px;
+}
+#add_mbl_num_2 {
+	width: 96px;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 </style>
@@ -660,8 +721,6 @@ $(document).ready(function() {
 	
 	$("#inqry_btn").on("click", function() {
 		if ($("#empNum").val() != "-1") {
-			console.log($("#empNum").val());
-			
 			$("#i_menuNum").val("5");
 			
  			$("#inqryForm").attr("action", "prsnlCard");
@@ -684,12 +743,6 @@ $(document).ready(function() {
 				console.log(request.responseText);
 			}
 		});
-	});
-	
-	$("body").on("change", "#add_bank_name", function() {
-		if ($(this).val() == "addBank") {
-			console.log("은행 추가하기");
-		}
 	});
 	
 	$("#del_btn").click(function() {
@@ -741,6 +794,10 @@ $(document).ready(function() {
 			$("#add_emp_pctr_file").val(fileName[fileName.length-1]);
 			break;
 		}
+	});
+	
+	$("body").on("change", ".phone_num_sel_box", function() {
+		$(this).parent("div").children(".phone_num_1").focus();
 	});
 });
 
@@ -880,10 +937,25 @@ function btnSetting() {
 	}
 }
 
+function numMaxLimit(e) {
+	if (e.value.length >= 4) {
+		if (e.className.indexOf("phone_num_1") != -1) {
+			$("#" + e.id).parent("div").children(".phone_num_2").focus();
+		}
+	}
+	if (e.value.length > 4) {
+		e.value = e.value.slice(0, 4);
+	}
+}
+
 function createAddPopup(bankList) {
 	var title = "신규사원 추가";
 	var html = "";
-	var size = [820, 475]; // [width, height]
+	var size = [820, 470]; // [width, height]
+	
+	var phone_num_val = ["02", "031", "032", "033", "041", "042", "043", "044", 
+			"051", "052", "053", "054", "055", "061", "062", "063", "064"];
+	var mbl_num_val = ["010", "011", "016", "017", "018", "019"];
 	
 	/* 	추가할 내용
 	
@@ -898,6 +970,9 @@ function createAddPopup(bankList) {
 	html += "\" />";
 	html += "<input type=\"hidden\" class=\"upld_file_name\" id=\"bnkbk_copy_file_name\" name=\"bnkbk_copy_file\" value=\"";
 	html += "\" />";
+	html += "<input type=\"hidden\" class=\"merge_value\" id=\"merge_email\" name=\"email\" value=\"\" />";
+	html += "<input type=\"hidden\" class=\"merge_value\" id=\"merge_phone_num\" name=\"phone_num\" value=\"\" />";
+	html += "<input type=\"hidden\" class=\"merge_value\" id=\"merge_mbl_num\" name=\"mbl_num\" value=\"\" />";
 	
 	html += "	<div id=\"emp_add_popup\" >                                                                     ";
 	html += "		<div class=\"add_popup_area\" id=\"popup_left\" >";
@@ -915,16 +990,21 @@ function createAddPopup(bankList) {
 	html += "			</div>                                                                                                                                    ";
 	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e4\">                                                                                     ";
 	html += "				<label for=\"add_emp_name_eng\" class=\"popup_cont_name\">성별* :</label>                                                                ";
-	html += "				<input type=\"radio\" id=\"add_gndr_man\" name=\"gndr\" value=\"0\" /><label class=\"radio_item_name\" for=\"add_gndr_man\">남성</label> ";
-	html += "				<input type=\"radio\" id=\"add_gndr_woman\" name=\"gndr\" value=\"1\" /><label class=\"radio_item_name\" for=\"add_gndr_woman\">여성</label> ";
+	html += "				<label class=\"add_popup_radio_wrap\" for=\"add_gndr_man\" >";
+	html += "				<input type=\"radio\" id=\"add_gndr_man\" name=\"gndr\" value=\"0\" checked=\"checked\" /><div class=\"add_popup_radio_item_name\">남성</div> ";
+	html += "				</label>";
+	html += "				<label class=\"add_popup_radio_wrap\" for=\"add_gndr_woman\" >";
+	html += "				<input type=\"radio\" id=\"add_gndr_woman\" name=\"gndr\" value=\"1\" /><div class=\"add_popup_radio_item_name\">여성</div> ";
+	html += "				</label>";
 	html += "			</div>                                                                                                                                    ";
 	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e5\">                                                                                     ";
 	html += "				<label for=\"add_email\" class=\"popup_cont_name\">이메일* :</label>                                                                ";
-	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_email\" name=\"email\" placeholder=\"이메일\" />              ";
+	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_email\" placeholder=\"이메일\" />              ";
+	html += "				<div class=\"sub_text\">@kakao.com</div>              ";
 	html += "			</div>                                                                                                                                    ";
 	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e6\">                                                                                     ";
 	html += "				<label for=\"add_zip_code\" class=\"popup_cont_name\">주소* :</label>                                                                ";
-	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_zip_code\" name=\"zip_code\" placeholder=\"우편번호\" />              ";
+	html += "				<input type=\"number\" class=\"popup_cont_text\" id=\"add_zip_code\" name=\"zip_code\" placeholder=\"우편번호\" />              ";
 	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_adrs\" name=\"adrs\" placeholder=\"주소\" />              ";
 	html += "			</div>                                                                                                                                    ";
 	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e7\">                                                                                     ";
@@ -933,11 +1013,29 @@ function createAddPopup(bankList) {
 	html += "			</div>                                                                                                                                    ";
 	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e8\">                                                                                     ";
 	html += "				<label for=\"add_phone_num\" class=\"popup_cont_name\">전화번호 :</label>                                                                ";
-	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_phone_num\" name=\"phone_num\" placeholder=\"\" />              ";
+	html += "				<select class=\"popup_cont_text phone_num_sel_box\" id=\"phone_num_sel\">";
+	html += "			<option value=\"-1\" selected>---</option>";
+	for (var val of phone_num_val) {
+		html += "			<option value=\"" + val + "\">" + val + "</option>";
+	}
+	html += "				</select>";
+	html += "				<div class=\"sub_text\">-</div>              ";
+	html += "				<input type=\"number\" class=\"popup_cont_text phone_num_1\" id=\"add_phone_num_1\" oninput=\"numMaxLimit(this)\" />              ";
+	html += "				<div class=\"sub_text\">-</div>              ";
+	html += "				<input type=\"number\" class=\"popup_cont_text phone_num_2\" id=\"add_phone_num_2\" oninput=\"numMaxLimit(this)\" />              ";
 	html += "			</div>                                                                                                                                    ";
 	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e9\">                                                                                     ";
 	html += "				<label for=\"add_mbl_num\" class=\"popup_cont_name\">휴대폰번호* :</label>                                                                ";
-	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_mbl_num\" name=\"mbl_num\" placeholder=\"\" />              ";
+	html += "				<select class=\"popup_cont_text phone_num_sel_box\" id=\"mbl_num_sel\">";
+	html += "			<option value=\"-1\" selected>---</option>";
+	for (var val of mbl_num_val) {
+		html += "			<option value=\"" + val + "\">" + val + "</option>";
+	}
+	html += "				</select>";
+	html += "				<div class=\"sub_text\">-</div>              ";
+	html += "				<input type=\"number\" class=\"popup_cont_text phone_num_1\" id=\"add_mbl_num_1\" oninput=\"numMaxLimit(this)\" />              ";
+	html += "				<div class=\"sub_text\">-</div>              ";
+	html += "				<input type=\"number\" class=\"popup_cont_text phone_num_2\" id=\"add_mbl_num_2\" oninput=\"numMaxLimit(this)\" />              ";
 	html += "			</div>                                                                                                                                    ";
 	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e10\">                                                                                     ";
 	html += "				<label for=\"add_adrs\" class=\"popup_cont_name\">고용형태* :</label>                                                                ";
@@ -960,13 +1058,12 @@ function createAddPopup(bankList) {
 	for (var bl of bankList) {
 		html += "			<option value=\"" + bl.BANK_NUM + "\">" + bl.BANK_NAME + "</option>";
 	}
-	html += "				<option value=\"addBank\">+ 추가</option>";
 	html += "				</select>";
 	
 	html += "			</div>                                                                                                                                    ";
 	html += "			<div class=\"popup_cont_element\" id=\"edit_right_e2\">                                                                                     ";
 	html += "				<label for=\"add_acnt_num\" class=\"popup_cont_name\">계좌번호* :</label>                                                                ";
-	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_acnt_num\" name=\"acnt_num\" value=\"\" />              ";
+	html += "				<input type=\"number\" class=\"popup_cont_text\" id=\"add_acnt_num\" name=\"acnt_num\" value=\"\" />              ";
 	html += "			</div>                                                                                                                                    ";
 	html += "			<div class=\"popup_cont_element\" id=\"edit_right_e3\">                                                                                     ";
 	html += "				<label for=\"add_dpstr\" class=\"popup_cont_name\">예금주명* :</label>                                                                ";
@@ -1029,7 +1126,8 @@ function createAddPopup(bankList) {
 				var flag = false;
 				var file_exist = 0;
 
-				$(".popup_cont_element input").css("outline", "1px solid #00000033");
+				$(".popup_cont_element input[type=text]").css("outline", "1px solid #00000033");
+				$(".popup_cont_element input[type=date]").css("outline", "1px solid #00000033");
 				$(".popup_cont_element select").css("outline", "1px solid #00000033");
 				if (checkEmpty("#add_emp_name")) {
 					$("#add_emp_name").css("outline", "2px solid #fe3a40");
@@ -1054,9 +1152,31 @@ function createAddPopup(bankList) {
 				} else if (checkEmpty("#add_dtl_adrs")) {
 					$("#add_dtl_adrs").css("outline", "2px solid #fe3a40");
 					$("#add_dtl_adrs").focus();
-				} else if (checkEmpty("#add_mbl_num")) {
-					$("#add_mbl_num").css("outline", "2px solid #fe3a40");
-					$("#add_mbl_num").focus();
+				} else if (($("#phone_num_sel").val() == "-1" || checkEmpty("#add_phone_num_1") || checkEmpty("#add_phone_num_2")) &&
+						!($("#phone_num_sel").val() == "-1" && checkEmpty("#add_phone_num_1") && checkEmpty("#add_phone_num_2"))){
+					console.log("check 1");
+					if ($("#phone_num_sel").val() == "-1") {
+						$("#phone_num_sel").css("outline", "2px solid #fe3a40");
+						$("#phone_num_sel").focus();
+					} else if (checkEmpty("#add_phone_num_1")) {
+						$("#add_phone_num_1").css("outline", "2px solid #fe3a40");
+						$("#add_phone_num_1").focus();
+					} else if (checkEmpty("#add_phone_num_2")) {
+						$("#add_phone_num_2").css("outline", "2px solid #fe3a40");
+						$("#add_phone_num_2").focus();
+					}
+				} else if ($("#mbl_num_sel").val() == "-1" || checkEmpty("#add_mbl_num_1") || checkEmpty("#add_mbl_num_2")){
+					console.log("check 2");
+					if ($("#mbl_num_sel").val() == "-1") {
+						$("#mbl_num_sel").css("outline", "2px solid #fe3a40");
+						$("#mbl_num_sel").focus();
+					} else if (checkEmpty("#add_mbl_num_1")) {
+						$("#add_mbl_num_1").css("outline", "2px solid #fe3a40");
+						$("#add_mbl_num_1").focus();
+					} else if (checkEmpty("#add_mbl_num_2")) {
+						$("#add_mbl_num_2").css("outline", "2px solid #fe3a40");
+						$("#add_mbl_num_2").focus();
+					}
 				} else if ($("#add_bank_name").val() == "-1") {
 					$("#add_bank_name").css("outline", "2px solid #fe3a40");
 					$("#add_bank_name").focus();
@@ -1067,6 +1187,7 @@ function createAddPopup(bankList) {
 					$("#add_dpstr").css("outline", "2px solid #fe3a40");
 					$("#add_dpstr").focus();
 				} else {
+					console.log("check 3");
 					flag = true;
 				}
 				if (!checkEmpty("#add_bnkbk_copy_file")) {
@@ -1076,6 +1197,12 @@ function createAddPopup(bankList) {
 					file_exist++;
 				}
 				if (flag) {
+					$("#merge_email").val($("#add_email").val() + "@kakao.com");
+					if ($("#phone_num_sel").val() != "-1") {
+						$("#merge_phone_num").val($("#phone_num_sel").val() + "-" + $("#add_phone_num_1").val() + "-" +$("#add_phone_num_2").val());
+					}
+					$("#merge_mbl_num").val($("#mbl_num_sel").val() + "-" + $("#add_mbl_num_1").val() + "-" +$("#add_mbl_num_2").val());
+					
 					if (file_exist > 0) {
 						var editForm = $("#empAddForm");
 						
@@ -1177,7 +1304,6 @@ function createAddSuccessPopup(params) {
 	html += "		</div>                          ";
 	html += "	</div>";
 
-	
 	makePopup({
 		bg : true,
 		bgClose : false,
@@ -1191,62 +1317,6 @@ function createAddSuccessPopup(params) {
 				closePopup();
 				location.reload();
 			}
-		}]
-	});
-}
-
-function createAddBankPopup() {
-	makePopup({
-		bg : true,
-		bgClose : false,
-		width : size[0],
-		height : size[1],
-		title : "신규은행 추가",
-		contents : "",
-		buttons : [{
-			name : "추가",
-			func:function() {
-				var flag = false;
-				
-				if (checkEmpty("#add_lcns_name")) {
-					$("#add_lcns_name").css("outline", "2px solid #fe3a40");
-					$("#add_lcns_name").focus();
-				} else if (checkEmpty("#add_acqrmnt_date")) {
-					$("#add_acqrmnt_date").css("outline", "2px solid #fe3a40");
-					$("#add_acqrmnt_date").focus();
-				} else if (checkEmpty("#add_issue_orgnzt")) {
-					$("#add_issue_orgnzt").css("outline", "2px solid #fe3a40");
-					$("#add_issue_orgnzt").focus();
-				} else {
-					flag = true;
-				}
-				
-				if (flag) {
-					var params = $("#addForm").serialize();
-					
-					$.ajax({
-						type : "post",
-						url : "empInqryActionAjax/addBank",
-						dataType : "json",
-						data : params,
-						success : function(res) {
-							if (res.res == "success") {
-								var params = $("#bottomTabForm").serialize();
-								reloadTab(params);
-								closePopup();
-								makeAlert("작업 완료", "추가되었습니다.");
-							} else {
-								makeAlert("작업 실패", "작업 중 문제가 발생했습니다.<br/>관리자에게 문의하세요.");
-							}
-						},
-						error : function(request, status, error) {
-							console.log(request.responseText);
-						}
-					});
-				}
-			}
-		}, {
-			name : "취소"
 		}]
 	});
 }
@@ -1319,7 +1389,6 @@ function createDeletePopup(el, cr, qlfctn) {
 					data : params,
 					success : function(res) {
 						if (res.res == "success") {
-							console.log("삭제~~");
 							closePopup();
 							makeAlert("작업 완료", "삭제되었습니다.", function() {
 								location.reload();

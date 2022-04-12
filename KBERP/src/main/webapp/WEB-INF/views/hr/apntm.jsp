@@ -1268,16 +1268,25 @@ $(document).ready(function() {
 							name : "확인",
 							func:function() { 
 							   // 결재권자 체크 된 값 가져오기
-						   	   var aprvler_num_arr = [];
-						   	   var aprvler_txt_arr = [];
+						   	   var aprvler_emp_num_arr = [];
+						   	   var aprvler_emp_name_arr = [];
+						   	   var aprvler_rank_num_arr = [];
 						   	   $("input[name=aprvlerChk]:checked").each(function() {
-						   		   var num = $(this).attr("aprvlerNum");
-						   		   var txt = $(this).attr("aprvlerName");
-						   		   aprvler_num_arr.push(num);
-						   		   aprvler_txt_arr.push(txt);
+						   		   var empNum = $(this).attr("aprvlerNum");
+						   		   var empName = $(this).attr("aprvlerName");
+						   		   var rankNum = $(this).attr("aprvlerRankNum");
+							   	   aprvler_emp_num_arr.push(empNum);
+							   	   aprvler_emp_name_arr.push(empName);
+							   	   aprvler_rank_num_arr.push(rankNum);
+							   	   aprvler_rank_num_arr.sort(function(a,b){
+							   		   return b-a; // 결재순번 rank_num 내림차순 정렬
+							   	   }) ; 
+							   	  
 						   	   });
-						   	   console.log("결재권자 체크값 : " + aprvler_num_arr, aprvler_txt_arr)
-						   	   $("#aprvlerInput").val(aprvler_txt_arr);
+						   	   console.log("결재권자 체크값 : " + aprvler_emp_num_arr, aprvler_emp_name_arr, aprvler_rank_num_arr)
+						   	   $("#aprvlerInput").val(aprvler_emp_name_arr);
+						   	   $("#aprvlerList").val(aprvler_emp_num_arr);
+						   	   $("#aprvlTurn").val(aprvler_rank_num_arr);
 						   	   closePopup(2);
 							}
 						}, {
@@ -1388,17 +1397,19 @@ $(document).ready(function() {
 						buttons : [{
 							name : "확인",
 							func:function() { 
-							   // 결재권자 체크 된 값 가져오기
-						   	   var rfrnc_num_arr = [];
-						   	   var rfrnc_txt_arr = [];
+							   // 참조인 체크 된 값 가져오기
+						  	   var rfrnc_emp_num_arr = [];
+						   	   var rfrnc_emp_name_arr = [];
 						   	   $("input[name=aprvlerChk]:checked").each(function() {
-						   		   var num = $(this).attr("aprvlerNum");
-						   		   var txt = $(this).attr("aprvlerName");
-						   		rfrnc_num_arr.push(num);
-						   		rfrnc_txt_arr.push(txt);
+						   		   var empNum = $(this).attr("aprvlerNum");
+						   		   var empName = $(this).attr("aprvlerName");
+						   			rfrnc_emp_num_arr.push(empNum);
+						   			rfrnc_emp_name_arr.push(empName);
 						   	   });
-						   	   console.log("참조인 체크값 : " + rfrnc_num_arr, rfrnc_txt_arr)
-						   	   $("#rfrncInput").val(rfrnc_txt_arr);
+						   	   console.log("참조인 체크값 : " + rfrnc_emp_num_arr, rfrnc_emp_name_arr)
+						   	   $("#rfrncInput").val(rfrnc_emp_name_arr);
+						   	   $("#rfrncList").val(rfrnc_emp_num_arr);
+						   	   
 						   	   closePopup(2);
 							}
 						}, {
@@ -1406,13 +1417,41 @@ $(document).ready(function() {
 						}]
 					});
 					$(".empinqry_area").slimScroll({height: "255px"},{width: "450px"}); // 슬림스크롤
-				}); // 결재권자선택버튼 클릭이벤트 끝
+				}); // 참조인 선택버튼 클릭이벤트 끝
 				
 			},
 			draggable : true,
 			buttons : [{
 				name : "확인",
 				func:function() {	
+					$("#title").val($("#aprvlTitle").val());
+					$("#cont").val($("#aprvlCont").val());
+					//$("#aprvlerList").val($("#aprvlerInput").val());
+					//$("#rfrncList").val($("#aprvlTitle").val());
+					$("#aprvlTurn").val($("#aprvlTitle").val());
+					
+					var params = $("#aprvlForm").serialize();
+					console.log("결재폼값" + params)
+					
+					$.ajax({
+					      type : "post",
+					      url : "apntmListAjax/aprvl",
+					      dataType : "json",
+					      data : params,
+					      success : function(res) {		
+				    	 			 if(res.res=="success"){
+							    		  makeAlert("알림", "결재가 요청되었습니다.", function(){		
+													location.reload();
+		    	 									 console.log(res);
+   															});
+				    	 			 }
+					      },
+					      error : function(req) {
+					         		console.log(req.responseText);
+					      		}
+ 					 	
+  					     
+					}); // 아작스 끝
 				}
 			}, {
 				name : "취소"
@@ -1431,7 +1470,7 @@ function drawAprvlerInqryList(inqryList) {
 	
     for(var data of inqryList) {
         html += "<tr no=\"" + data.EMP_NUM + "\">"   
-        html += " 	<td><input type=\"checkbox\" aprvlerNum=\""+data.EMP_NUM+"\" id=\"aprvlerChk\" name=\"aprvlerChk\" aprvlerName=\"" + data.EMP_NAME + "\"/></td> ";
+        html += " 	<td><input type=\"checkbox\" aprvlerNum=\""+data.EMP_NUM+"\" aprvlerRankNum=\""+data.RANK_NUM+"\" id=\"aprvlerChk\" name=\"aprvlerChk\" aprvlerName=\"" + data.EMP_NAME + "\"/></td> ";
         html += " 	<td>" + data.DEPT_NAME + "</td> ";
         html += " 	<td>" + data.RANK_NAME + "</td> ";
         html += " 	<td>" + data.EMP_NAME + "</td> ";
@@ -1550,7 +1589,7 @@ function drawCont(cont, emp){
    html += "               <div class=\"prfl_info_emp_num\">                                      ";
    html += "                  <div class=\"prfl_info_text\">사원번호</div>                       ";
    html += "                  <input type=\"text\" class=\"prfl_info_input\" disabled value=\"" + emp.EMP_NUM + "\" />  ";
-  // html += "                  <div class=\"prfl_srch_btn\"></div>                                ";
+  // html += "                  <div class=\"prfl_srch_btn\"></div>                            "; 돋보기버튼 - 나중에 시간나면 사원조회로 이동하게끔 만들기
    html += "               </div>                                                                 ";
    html += "            </div>                                                                     ";
    html += "            <div class=\"apnmt_prfl_info\">                                            ";
@@ -1752,11 +1791,20 @@ function drawAddApntm(dept,rank){
 </script>
 </head>
 <body>
-	<!-- <form id="inqryForm">
-	<input type="hidden" id="inqryGbn" name="inqryGbn"  />
-	<input type="hidden" id="inqryTxt" name="inqryTxt"  />
-</form> -->
-	
+	<!-- 발령결재 성공시 결재진행중 상태로 변경하는 폼 -->
+	<form action="#" id="aprvlSuccessForm" method="post">
+		<input type="hidden" id="aApntmNum" name="aApntmNum" />
+	</form>
+	<!-- 결재 데이터 넘기는 폼 -->
+	<form action="#" id="aprvlForm" method="post">
+		<input type="hidden" id="emp_num" name="emp_num" value="${sEmpNum}" />
+		<input type="hidden" id="title" name="title" />
+		<input type="hidden" id="cont" name="cont" />
+		<input type="hidden" id="aprvlerList" name="aprvlerList" />
+		<input type="hidden" id="rfrncList" name="rfrncList" />
+		<input type="hidden" id="att" name="att" />
+		<input type="hidden" id="aprvlTurn" name="aprvlTurn" />
+	</form>
 	<!-- <input type="hidden" id="sEmpNum" value="${sEmpNum}" /> -->
 	<input type="hidden" id="oldInqryGbn" value="${param.inqryGbn}" />
 	<input type="hidden" id="oldInqryTxt" value="${param.inqryTxt}" />

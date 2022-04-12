@@ -107,7 +107,6 @@
 }
 .card_co_cont{
 	text-align:left;
-
 	margin-left: 25px;
 }
 .card_code_cont,.card_name_cont,.use_name_cont{
@@ -116,6 +115,10 @@
 }
 .del_cont{
 	width:485px;
+}
+.use_name{
+    margin-top: 4px;
+    margin-left: 61px;
 }
 </style>
 <script type="text/javascript">
@@ -245,8 +248,8 @@ $(document).ready(function() {
 					}
 				});
 				$("#empAllListTbody").on("click", "#empName", function() {
-					$("#useEmpNum").val($(this).attr("useEmpNum"));
-					$("#useEmpName").val($(this).attr("useEmpName"));
+					$("#use_num").val($(this).attr("use_num"));
+					$("#use_name").val($(this).attr("use_name"));
 					closePopup(1);
 				});
 			},
@@ -348,7 +351,10 @@ function reloadList() {
 			<input type="hidden" id="sendSrchTxt" name="sendSrchTxt">
 			<input type="hidden" id="page" name="page" value="1">
 		</form>
-<form action="cardList" id="WriteForm" method="post" enctype="multipart/form-data">
+<form action="cardList" id="WriteForm" method="post">
+	<input type="hidden" id="top" name="top" value="${param.top}" />
+	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="no" value="${param.no}" />
 	<input type="hidden" name="use_num" id="use_num"  />
 	<input type="hidden" name="mng_num" value="${param.mng_num}" />
@@ -390,7 +396,7 @@ function reloadList() {
          </tr>
          <tr>
             <td> 카드명의 </td>
-               <td><input type = "text" class = "use_name_cont"  id = "use_name" name ="use_name">
+               <td><input type = "text" class = "use_name"  id = "use_name" name ="use_name">
                	  <input type = "button" class = "cmn_btn"  id = "btn" value="검색"></td>
             <td></td>
                <td></td>

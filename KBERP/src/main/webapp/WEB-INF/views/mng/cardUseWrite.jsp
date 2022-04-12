@@ -88,14 +88,7 @@
 .popup_table td {
    border-top: 1px solid #222222;
 }
-.check{
-	width: 189px;
-   height: 40px;
-   vertical-align: top;
-   margin: 15px 0 0 5px;
-   padding: 3px;
-   text-align: center;
-}
+
 
 #empSrchBtn {
     margin-top: 8px;
@@ -103,7 +96,19 @@
 .name_srch_wrap{
     margin-left: 35px;
 }
-
+.use_name{
+margin-left: 59px;
+margin-top: 4px;
+}
+.text_cont{
+margin-left: 59px;
+}
+.title{
+ text-align: right;
+}
+.cont{
+ text-align: left;
+}
 </style>
 <script type="text/javascript">
 
@@ -270,9 +275,9 @@ function reloadList() {
 		
 		for(data of list) {
 			html += "<tr>";
-			html += "<td dept_name=\""+ data.DEPT_NAME +"\">" + data.DEPT_NAME + "</td>";
-			html += "<td rank_name=\""+ data.RANK_NAME +"\">" + data.RANK_NAME + "</td>";
-			html += "<td class=\"board_table_hover\" id=\"empName\" use_num=\"" + data.EMP_NUM + "\" use_name=\"" + data.EMP_NAME + "\">" + data.EMP_NAME + "</td>";
+			html += "<td>" + data.DEPT_NAME + "</td>";
+			html += "<td>" + data.RANK_NAME + "</td>";
+			html += "<td class=\"board_table_hover\" id=\"empName\" use_num=\"" + data.EMP_NUM + "\" rank_name=\""+ data.RANK_NAME +"\" dept_name=\""+ data.DEPT_NAME +"\" use_name=\"" + data.EMP_NAME + "\">" + data.EMP_NAME + "</td>";
 			html += "</tr>";
 		}
 		
@@ -321,7 +326,7 @@ function reloadList() {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">카드 관리</div>
+			<div class="page_title_text">카드 관리 > 카드 소유 등록</div>
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -337,7 +342,7 @@ function reloadList() {
 			<input type="hidden" id="sendSrchTxt" name="sendSrchTxt">
 			<input type="hidden" id="page" name="page" value="1">
 		</form>
-<form action="cardList" id="WriteForm" method="post" enctype="multipart/form-data">
+<form action="cardList" id="WriteForm" method="post">
 	<input type="hidden" name="no" value="${param.no}" />
 	<input type="hidden" name="use_num" id="use_num"  />
 	<input type="hidden" name="mng_num" value="${param.mng_num}" />
@@ -350,30 +355,31 @@ function reloadList() {
 			<table class="board_table">
 
     		  <colgroup>
-               <col width="110"/>
-               <col width="220"/>
+               <col width="200"/>
+               <col width="250"/>
 
              </colgroup>
       <tbody>
       <tr>
-            <td> 부서명 </td>
-               <td><input type = "text" class = "rsrv_code_cont" id="dept_name" name="dept_name"></td>         
+            <td class="title"> 부서명 </td>
+               <td class="cont"><input type = "text" class = "text_cont" id="dept_name" name="dept_name"></td>         
          </tr>
          <tr>
-            <td> 직급 </td>
-               <td><input type = "text" class = "emp_name_cont" id = "rank_name" name="rank_name" ></td>
+            <td class="title"> 직급 </td>
+               <td class="cont"><input type = "text" class = "text_cont" id = "rank_name" name="rank_name" ></td>
          </tr>
          <tr>
-            <td> 소유자 </td>
-               <td><input type = "text" class = "use_name" id = "use_name" name="use_name"></td> 
+            <td class="title"> 소유자 </td>
+               <td class="cont"><input type = "text" class = "use_name" id = "use_name" name="use_name"><input type = "button" class = "cmn_btn"  id = "btn" value="검색"></td> 
+
          </tr>
          <tr>
-            <td> 사용시작일 </td>
-               <td><input type = "date" class = "use_start_dt" id = "use_start_dt" name = "use_start_dt" ></td> 
+            <td class="title"> 사용시작일 </td>
+               <td class="cont"><input type = "date" class = "text_cont" id = "use_start_dt" name = "use_start_dt" ></td> 
          </tr>
          <tr>
-            <td> 사용종료일 </td>
-               <td><input type = "date" class = "use_end_dt"  id = "use_end_dt" name = "use_end_dt" ></td> 
+            <td class="title"> 사용종료일 </td>
+               <td class="cont"><input type = "date" class = "text_cont"  id = "use_end_dt" name = "use_end_dt" ></td> 
          </tr>
 
          </tbody>
