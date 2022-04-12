@@ -112,6 +112,8 @@ $(document).ready(function() {
 	
 	reloadList();
 	
+	
+	
 });
 
 function reloadList() { // 목록 조회용 + 페이징 조회용
@@ -178,6 +180,9 @@ function drawPaging(pb) {
 		
 	$(".pgn_area").html(html);
 }
+
+
+
 </script>
 </head>
 <body>
@@ -194,7 +199,7 @@ function drawPaging(pb) {
 			<div class="page_title_text">프로젝트 관리</div>
 			<!-- 검색영역 선택적 사항 -->
 		<div class="page_srch_area">
-			<form action="#" id="actionForm" method="post">
+			<form action="aprvlTmpltBoxAdd" id="actionForm" method="post">
 					<input type="hidden" id="top" name="top" value="${param.top}" />
 					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
@@ -205,7 +210,7 @@ function drawPaging(pb) {
 						<option value="0">결재번호</option>
 						<option value="1">제목</option>
 					</select>
-				
+				<input type="button" id="nextgo" name="nextgo" value="버튼">
 				<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
 				<div class="cmn_btn_ml" id="searchBtn">검색</div>
 			</form>
@@ -254,6 +259,13 @@ function drawPaging(pb) {
 	
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
+	<script>
+	$("#nextgo").on("click", function(){
+		
+		$("#actionForm").attr("action","aprvlTmpltBoxAdd");
+		$("#actionForm").submit();
+	});
+	</script>
 
 </body>
 </html>
