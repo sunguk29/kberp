@@ -13,7 +13,6 @@
 .cont_wrap {
 	width: 1013px;
 }
-
 /* 개인 작업 영역 */
 .body {
 	display: block;
@@ -29,20 +28,18 @@
 	height: 100%;
 	margin: 20px auto;
 }
-table{
-	
+table {
 	border: 1px;
 	width: 927px;
 	margin: 40px auto;
 }
-td:nth-child(2), td:nth-child(4){
+td:nth-child(2), td:nth-child(4) {
 	border-bottom: 1px solid #d7d7d7;
 }
-
-td:nth-child(1), td:nth-child(3){
+td:nth-child(1), td:nth-child(3) {
 	text-align: center;
 }
-.btn{
+.btn {
 	width : 90px;
 	height: 40px;
 }
@@ -55,10 +52,10 @@ td:nth-child(1), td:nth-child(3){
 	border: none;
 	text-align: center;
 }
-.btnImg:hover{
+.btnImg:hover {
 	cursor: pointer;
 }
-.txt{
+.txt {
 	height: 33px;
 	width: 100%;
 	padding: 0 5px;
@@ -71,12 +68,12 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 33px;
 	border: none;
 }
-.btnImg{
+.btnImg {
 	width: 30px;
 	float: right;
 	margin-left: 10px;
 }
-.imgPos{
+.imgPos {
 	position: relative;
 }
 .plus_btn:hover {
@@ -151,7 +148,7 @@ td:nth-child(1), td:nth-child(3){
 	width: 100px;
 	height: 70px;
 }
-.ptm_left_top, .ptm_left_bot  {
+.ptm_left_top, .ptm_left_bot {
 	width: 100px;
 	height: 35px;
 	line-height: 35px;
@@ -316,38 +313,32 @@ td:nth-child(1), td:nth-child(3){
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-<<<<<<< HEAD
-	// 목록버튼
-=======
 	
-	/* 목록버튼 클릭시 */
->>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
+	// 목록
 	$("#listBtn").on("click", function() {
+		
 		makePopup({
 			bg : true,
 			bgClose : false,
 			title : "알림",
 			contents : "나가면 저장되지않습니다, 나가시겠습니까?",
-			contentsEvent : function() {
-				
-			},
 			buttons : [{
 				name : "나가기",
 				func:function() {
 					$("#listForm").submit();
-					console.log("One!");
 					closePopup();
 				}
 			}, {
 				name : "취소"
 			}]
 		});
+		
 	});
 	
-	/* 고객사아이콘 클릭시 */
+	// (팝업)고객사
 	$("#ccPop").on("click", function() {
 		var html = "";
-        
+		
 	 	html += "<form action=\"#\" id=\"popupForm\">";
 		html += " <div class=\"popup_title_mid\">                                                   ";
 	 	html += "<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
@@ -400,7 +391,6 @@ $(document).ready(function() {
 				
 				$(".pgn_area").on("click", "div", function() {
 					$("#page").val($(this).attr("page"));
-
 					drawCcList();
 				});
 				
@@ -408,16 +398,14 @@ $(document).ready(function() {
 			buttons : {
 				name : "닫기",
 				func:function() {
-					console.log("One!");
 					closePopup();
 				}
 			}
 		});
 	});	
 
-	/* 담당자아이콘 클릭시 */
+	// (팝업)담당자
 	$("#mngPop").on("click", function() {
-		
 		var html = "";
 		
 	 	html += "<div class=\"popup_title_mid\">"; 
@@ -461,8 +449,6 @@ $(document).ready(function() {
 		html += "<div class=\"pgn_area\"></div>   ";
 		html += "</div>                         ";
 		
-		
-		
 		makePopup({
 			depth : 1,
 			bg : false,
@@ -484,29 +470,25 @@ $(document).ready(function() {
 				
 				$("#meBtn").on("click", function () {
 					$("#page").val("1");
-					
 					drawMngList();
-					
 				});
 				
 				$("#searchT").on("keypress", function(event) {
 					if(event.keyCode == 13 ) {
 						$("#meBtn").click();
-						
 						return false;
 					}
 				});
 				
 				$(".pgn_area").on("click", "div", function() {
 					$("#page").val($(this).attr("page"));
-
 					drawMngList();
 				});
+				
 			},
 			buttons : {
 				name : "닫기",
 				func:function() {
-					console.log("One!");
 					closePopup();
 				}
 			}
@@ -514,11 +496,12 @@ $(document).ready(function() {
 		
 	});
 
-	/* 파일업로드(+) 클릭시 */
+	// 파일업로드
 	$(".aff_btn").on("click", function() {
 		$("#att").click();
 	});
 	
+	// 등록
 	$("#addBtn").on("click", function() {
 		if(checkEmpty("#cName")) {
 			makeAlert("필수 항목 알림", "고객을 입력하세요", function() {
@@ -573,16 +556,15 @@ $(document).ready(function() {
 									error : function(request, status, error) {
 										console.log(request.responseText);
 									}
-								});
+								}); // ajax End
 								
 							},
 							error : function(req) {
 								console.log(req.responseText);
 							}
-						});
+						}); // ajaxForm End
 						
 						addForm.submit();
-						console.log("One!");
 						closePopup();
 					}
 				}, {
@@ -594,7 +576,7 @@ $(document).ready(function() {
 	});
 });
 
-// *********************************************** 고객사 팝업 ***********************************************
+// (팝업)고객사 ajax
 function drawCcList() {
 	var params = $("#popupForm").serialize();
 	
@@ -613,6 +595,7 @@ function drawCcList() {
 	});
 }
 
+// (팝업)고객사 목록
 function drawList(list) {
 	var html = "";
 
@@ -635,6 +618,7 @@ function drawList(list) {
 	
 }
 
+// (팝업)고객사 페이징
 function drawPaging(pb) {
 	var html = "";
 	
@@ -663,11 +647,8 @@ function drawPaging(pb) {
 	$(".pgn_area").html(html);
 
 }
-// *********************************************** 고객사 팝업 END ***********************************************
 
-
-
-// *********************************************** 담당자 팝업 ***********************************************
+// (팝업)담당자 ajax
 function drawMngList() {
 	var params = $("#popupMngForm").serialize();
 	
@@ -686,6 +667,7 @@ function drawMngList() {
 	});
 }
 
+// (팝업)담당자 목록
 function drawMngCont(mngList) {
 	var html = "";
 	
@@ -707,6 +689,7 @@ function drawMngCont(mngList) {
 	
 }
 
+// (팝업)담당자 페이징
 function drawMngPaging(mngPb) {
 	var html = "";
 	
@@ -735,7 +718,8 @@ function drawMngPaging(mngPb) {
 	$(".pgn_area").html(html);
 
 }
-// *********************************************** 담당자 팝업 END ***********************************************
+
+// 파일명
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
@@ -764,7 +748,17 @@ function uploadName(e) {
 			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
 			<img alt="등록버튼" src="resources/images/sales/save.png" class="btnImg" id="addBtn" />
 			<!-- 검색영역 선택적 사항 -->
-			
+			<!-- <div class="page_srch_area">
+				<select class="srch_sel">
+					<option>제목</option>
+					<option>내용</option>
+					<option>작성자</option>
+				</select>
+				<div class="srch_text_wrap">
+					<input type="text" />
+				</div>
+				<div class="cmn_btn_ml">검색</div>
+			</div> -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
