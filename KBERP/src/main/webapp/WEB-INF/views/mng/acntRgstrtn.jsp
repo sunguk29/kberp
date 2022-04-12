@@ -392,7 +392,7 @@ $(document).ready(function() {
 										if(res.res == "success"){
 											location.href = "acntRgstrtn";
 										}else{
-											alert("수정중 문제가 발생하였습니다.");
+											alert("삭제중 문제가 발생하였습니다.");
 										}
 									},
 									error : function(request, status, error){ 
