@@ -24,6 +24,7 @@
 	height: 500px;
 	border: 1px solid #F0F0F0;
 	font-size: 15px;
+	margin-bottom: 5px;
 }
 .inf_title{
 	display: inline-block;
@@ -155,7 +156,7 @@ $(document).ready(function() {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">상세보기</div>
+			<div class="page_title_text">안내글</div>
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
