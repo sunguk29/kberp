@@ -460,9 +460,9 @@
 		WHERE SALES_NUM = #{salesNum}
 	</update>
 	
-	<!-- 계약 실패 -->
+	<!-- 계약 완료 -->
 	<update id="sales4Failure" parameterType="hashmap">
-		UPDATE SALES SET PRGRS_STS_NUM = '46'
+		UPDATE SALES SET PRGRS_STS_NUM = '45'
 		WHERE SALES_NUM = #{salesNum}
 	</update>
 	

@@ -344,13 +344,13 @@ input {
    margin-top : 8px;
    width: 558px;
    height: 50px;
-   margin-left : 100px;
+   margin-left : 10px;
 }
 .popup_lead_box{
    display: inline-block;
    width: 558px;
    height: 50px;
-   margin-left : 135px;
+   margin-left : 10px;
 }
 
 .prgrs {

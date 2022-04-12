@@ -64,7 +64,10 @@ public class RprtController {
 		int clntGradeB = iCommonService.getIntData("clntRprt.clntGradeB", params);
 		int clntGradeC = iCommonService.getIntData("clntRprt.clntGradeC", params);
 		int clntGradeD = iCommonService.getIntData("clntRprt.clntGradeD", params);
-		
+		// 영업팀별 고객수
+		int salesCnt = iCommonService.getIntData("clntRprt.salesCnt", params);
+		int salesCnt1 = iCommonService.getIntData("clntRprt.salesCnt1", params);
+		int salesCnt2 = iCommonService.getIntData("clntRprt.salesCnt2", params);
 		Date dt = new Date();
 		Date mon = new Date();
 		
@@ -103,6 +106,10 @@ public class RprtController {
 		mav.addObject("clntGradeB", clntGradeB);
 		mav.addObject("clntGradeC", clntGradeC);
 		mav.addObject("clntGradeD", clntGradeD);
+		
+		mav.addObject("salesCnt", salesCnt);
+		mav.addObject("salesCnt1", salesCnt1);
+		mav.addObject("salesCnt2", salesCnt2);
 		
 		mav.addObject("tMonth", params.get("tMonth"));
 		mav.addObject("startDate", params.get("startDate"));

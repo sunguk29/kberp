@@ -97,6 +97,25 @@
 					AND PRGRS_STS_NUM = #{psNum}
 				</when>
 			</choose>
+		    <if test="sales_sts != 0">
+		      	<choose>
+		       		<when test="sales_sts == 1">
+		       			AND PSBL_CHECK BETWEEN 0 AND 20
+		       		</when>
+		       		<when test="sales_sts == 2">
+		       			AND PSBL_CHECK BETWEEN 21 AND 40
+		       		</when>
+		       		<when test="sales_sts == 3">
+		       			AND PSBL_CHECK BETWEEN 41 AND 60
+		       		</when>
+		       		<when test="sales_sts == 4">
+		       			AND PSBL_CHECK BETWEEN 61 AND 80
+		       		</when>
+		       		<when test="sales_sts == 5">
+		       			AND PSBL_CHECK BETWEEN 81 AND 100
+		       		</when>
+		       	</choose>
+		    </if>
 			<choose>
 				<when test="mngEmp != null and mngEmp != ''">
 					AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'

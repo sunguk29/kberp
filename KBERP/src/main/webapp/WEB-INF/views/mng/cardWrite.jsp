@@ -248,8 +248,8 @@ $(document).ready(function() {
 					}
 				});
 				$("#empAllListTbody").on("click", "#empName", function() {
-					$("#useEmpNum").val($(this).attr("useEmpNum"));
-					$("#useEmpName").val($(this).attr("useEmpName"));
+					$("#use_num").val($(this).attr("use_num"));
+					$("#use_name").val($(this).attr("use_name"));
 					closePopup(1);
 				});
 			},
@@ -351,7 +351,10 @@ function reloadList() {
 			<input type="hidden" id="sendSrchTxt" name="sendSrchTxt">
 			<input type="hidden" id="page" name="page" value="1">
 		</form>
-<form action="cardList" id="WriteForm" method="post" enctype="multipart/form-data">
+<form action="cardList" id="WriteForm" method="post">
+	<input type="hidden" id="top" name="top" value="${param.top}" />
+	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="no" value="${param.no}" />
 	<input type="hidden" name="use_num" id="use_num"  />
 	<input type="hidden" name="mng_num" value="${param.mng_num}" />
