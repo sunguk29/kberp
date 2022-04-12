@@ -239,6 +239,7 @@ textarea {
 .nb {
 	font-size: 14px;
 	float: right;
+	display: none;
 }
 /* 첨부자료 */
 .cntrct_box_in {
@@ -672,52 +673,56 @@ $(document).ready(function () {
 	/* 리드 상세보기 실행될 시 비동기로 의견 목록 그리기 위해 선언  */
 	reloadOpList();
 	
-	/* 영업기회 전환 버튼 */
-	$("#leadToSales_btn").on("click", function() {
-		var html = "";
-		
-		html += "<div class=\"popup_cont2\">";
-		html += "<span class=\"next_stage\">영업기회</span>로 전환하시겠습니까?</div>";
-		
-		makePopup({
-			depth : 1,
-			bg : false,
-			bgClose : false,
-			title : "영업기회로 전환",
-			contents : html,
-			draggable : false,
-			buttons : [{
-				name : "확인",
-				func:function() {
-					var ltshtml = "";
-					
-					ltshtml += "<div class=\"popup_cont2\">해당 리드가 영업기회로 전환되었습니다.</div>";
-					
-					makePopup({
-						depth : 2,
-						bg : true,
-						width : 400,
-						height : 180,
-						title : "전환 완료",
-						draggable : true,
-						contents : ltshtml,
-						buttons : {
-							name : "확인",
-							func:function() {
-								$("#salesForm").attr("action", "sales1SalesChncReg");
-								$("#salesForm").submit(); 
-								console.log("One!");
-								closePopup(2);
+	/* 진행중일때만 전환하기 버튼 생성  */
+	if($("#psNum").val() == 1) {
+		$(".nb").show();		
+		/* 영업기회 전환 버튼 */
+		$("#leadToSales_btn").on("click", function() {
+			var html = "";
+			
+			html += "<div class=\"popup_cont2\">";
+			html += "<span class=\"next_stage\">영업기회</span>로 전환하시겠습니까?</div>";
+			
+			makePopup({
+				depth : 1,
+				bg : false,
+				bgClose : false,
+				title : "영업기회로 전환",
+				contents : html,
+				draggable : false,
+				buttons : [{
+					name : "확인",
+					func:function() {
+						var ltshtml = "";
+						
+						ltshtml += "<div class=\"popup_cont2\">해당 리드가 영업기회로 전환되었습니다.</div>";
+						
+						makePopup({
+							depth : 2,
+							bg : true,
+							width : 400,
+							height : 180,
+							title : "전환 완료",
+							draggable : true,
+							contents : ltshtml,
+							buttons : {
+								name : "확인",
+								func:function() {
+									$("#salesForm").attr("action", "sales1SalesChncReg");
+									$("#salesForm").submit(); 
+									console.log("One!");
+									closePopup(2);
+								}
 							}
-						}
-					});
-					closePopup(1);
-				}
-			}, {
-				name : "취소"
-			}]
-		});
-	});
+						});
+						closePopup(1);
+					}
+				}, {
+					name : "취소"
+				}]
+			});
+		});	
+	}
 	/* 의견등록 start */
 	$(".subm").on("click", function() {
 		var params = $("#botOpActionForm").serialize();

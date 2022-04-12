@@ -93,7 +93,7 @@ function insertMdData(){
 							
 							success : function(res) {
 								
-								if(res.fileName.length > 0) {
+								if(res.fileName) {
 									$("#attFile").val(res.fileName[0]);
 								}
 								

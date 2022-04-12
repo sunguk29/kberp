@@ -88,37 +88,26 @@
 .popup_table td {
    border-top: 1px solid #222222;
 }
-.check{
-	width: 189px;
-   height: 40px;
-   vertical-align: top;
-   margin: 15px 0 0 5px;
-   padding: 3px;
-   text-align: center;
-}
 
-.use_issue_cont{
-	text-align:left;
-	margin-left: 25px;
+
+#empSrchBtn {
+    margin-top: 8px;
 }
-.card_sep_cont{
-	text-align:left;
-	margin-left: 25px;
-}
-.card_co_cont{
-	text-align:left;
-	margin-left: 25px;
-}
-.card_code_cont,.card_name_cont,.use_name_cont{
-	margin-left: 25px;
-	margin-right: 25px;
-}
-.del_cont{
-	width:485px;
+.name_srch_wrap{
+    margin-left: 35px;
 }
 .use_name{
-    margin-top: 4px;
-    margin-left: 61px;
+margin-left: 59px;
+margin-top: 4px;
+}
+.text_cont{
+margin-left: 59px;
+}
+.title{
+ text-align: right;
+}
+.cont{
+ text-align: left;
 }
 </style>
 <script type="text/javascript">
@@ -130,21 +119,21 @@ $(document).ready(function() {
 	});
 	
 	$("#addBtn").on("click", function() {
-		if(checkEmpty("#issue_dt")) {
-			alert("발급일자를 입력하세요.")
-			$("#issue_dt").focus();
-		} else if(checkEmpty("#end_dt")) {
-			alert("종료일자를 입력하세요.")
-			$("#end_dt").focus();
-		} else if(checkEmpty("#card_code")) {
-			alert("카드번호를 입력하세요.")
-			$("#card_code").focus();
-		} else if(checkEmpty("#end_dt")) {
-			alert("카드명을 입력하세요.")
-			$("#card_name").focus();
-		} else if(checkEmpty("#end_dt")) {
-			alert("카드명의를 입력하세요.")
+		if(checkEmpty("#dept_name")) {
+			alert("부서명을 입력하세요.")
+			$("#dept_num").focus();
+		} else if(checkEmpty("#rank_name")) {
+			alert("직급을 입력하세요.")
+			$("#rank_name").focus();
+		} else if(checkEmpty("#use_name")) {
+			alert("사용자를 입력하세요.")
 			$("#use_name").focus();
+		} else if(checkEmpty("#use_start_dt")) {
+			alert("사용시작일을 입력하세요.")
+			$("#use_start_dt").focus();
+		} else if(checkEmpty("#use_end_dt")) {
+			alert("사용종료일을 입력하세요.")
+			$("#use_end_dt").focus();
 		} else {
 			var writeForm = $("#WriteForm");
 			
@@ -156,7 +145,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post", // 전송 형태
-						url : "cardMngAction/insert", // 통신 주소
+						url : "cardMngAction/insert2", // 통신 주소
 						dataType : "json", // 받을 데이터 형태
 						data : params, // 보낼 데이터. 보낼 것이 없으면 안 씀
 						success : function(res) { // 성공 시 실행 함수. 인자는 받아온 데이터
@@ -184,7 +173,7 @@ $(document).ready(function() {
 		var html = "";
 		
 		html += "<div class=\"popup_cont\">";
-		html += "<div class=\"name_srch_wrap\">";
+		html += "<div class=\"name_srch_wrap\" >";
 		html += "<table class=\"name_srch_table\">";
 		html += "<tbody>";
 		html += "<tr>";
@@ -221,7 +210,7 @@ $(document).ready(function() {
 			depth : 1,
 			bg : true,
 			width : 400,
-			height : 450,
+			height : 500,
 			title : "사원검색",
 			contents : html,
 			contentsEvent : function() {
@@ -248,8 +237,10 @@ $(document).ready(function() {
 					}
 				});
 				$("#empAllListTbody").on("click", "#empName", function() {
-					$("#useEmpNum").val($(this).attr("useEmpNum"));
-					$("#useEmpName").val($(this).attr("useEmpName"));
+					$("#use_num").val($(this).attr("use_num"));
+					$("#use_name").val($(this).attr("use_name"));
+					$("#dept_name").val($(this).attr("dept_name"));
+					$("#rank_name").val($(this).attr("rank_name"));
 					closePopup(1);
 				});
 			},
@@ -286,7 +277,7 @@ function reloadList() {
 			html += "<tr>";
 			html += "<td>" + data.DEPT_NAME + "</td>";
 			html += "<td>" + data.RANK_NAME + "</td>";
-			html += "<td class=\"board_table_hover\" id=\"empName\" use_num=\"" + data.EMP_NUM + "\" use_name=\"" + data.EMP_NAME + "\">" + data.EMP_NAME + "</td>";
+			html += "<td class=\"board_table_hover\" id=\"empName\" use_num=\"" + data.EMP_NUM + "\" rank_name=\""+ data.RANK_NAME +"\" dept_name=\""+ data.DEPT_NAME +"\" use_name=\"" + data.EMP_NAME + "\">" + data.EMP_NAME + "</td>";
 			html += "</tr>";
 		}
 		
@@ -335,7 +326,7 @@ function reloadList() {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">카드 관리</div>
+			<div class="page_title_text">카드 관리 > 카드 소유 등록</div>
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -362,54 +353,38 @@ function reloadList() {
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<table class="board_table">
-				<colgroup>
-               <col width="110"/>
-               <col width="220"/>
-               <col width="110"/>
-               <col width="220"/>
-            </colgroup>
+
+    		  <colgroup>
+               <col width="200"/>
+               <col width="250"/>
+
+             </colgroup>
       <tbody>
-      	<tr>
-            <td> 카드 번호 </td>
-               <td><input type = "text" id ="card_code" name ="card_code" class = "card_code_cont" ></td>   
-            <td> 카드구분 </td>
-           <td><select class="card_sep_cont" id ="card_sep" name ="card_sep">
-				<option value="0">신용</option>
-				<option value="1">체크</option>
-			   </select></td>
-    
-        </tr>
-         <tr>
-            <td> 카드명 </td>
-               <td><input type = "text" class = "card_name_cont" id ="card_name" name ="card_name" ></td>
-            <td> 카드사 </td>
-               <td><select id ="card_co" name ="card_co" class="card_co_cont">
-					<option value="1">농협</option>
-					<option value="2">기업</option>
-					<option value="3">신한</option>
-					<option value="4">현대</option>
-					<option value="5">카카오뱅크</option>
-					</select></td>
+      <tr>
+            <td class="title"> 부서명 </td>
+               <td class="cont"><input type = "text" class = "text_cont" id="dept_name" name="dept_name"></td>         
          </tr>
          <tr>
-            <td> 카드명의 </td>
-               <td><input type = "text" class = "use_name"  id = "use_name" name ="use_name">
-               	  <input type = "button" class = "cmn_btn"  id = "btn" value="검색"></td>
-            <td></td>
-               <td></td>
+            <td class="title"> 직급 </td>
+               <td class="cont"><input type = "text" class = "text_cont" id = "rank_name" name="rank_name" ></td>
+         </tr>
+         <tr>
+            <td class="title"> 소유자 </td>
+               <td class="cont"><input type = "text" class = "use_name" id = "use_name" name="use_name"><input type = "button" class = "cmn_btn"  id = "btn" value="검색"></td> 
 
          </tr>
          <tr>
-            <td> 발급일자 </td>
-            <td class = "use_date_cont"><input type = "date" class = "use_date_cont" id ="issue_dt" name ="issue_dt"></td>
-            <td> 종료일자 </td>
-            <td class = "use_date_cont"><input type = "date" class = "use_date_cont" id ="end_dt" name ="end_dt"></td>
+            <td class="title"> 사용시작일 </td>
+               <td class="cont"><input type = "date" class = "text_cont" id = "use_start_dt" name = "use_start_dt" ></td> 
          </tr>
+         <tr>
+            <td class="title"> 사용종료일 </td>
+               <td class="cont"><input type = "date" class = "text_cont"  id = "use_end_dt" name = "use_end_dt" ></td> 
+         </tr>
+
          </tbody>
-			</table>
+	</table>
 			<div class="board_bottom">
-				<div class="pgn_area">
-				</div>
 				<div class="cmn_btn" id="addBtn">등록</div>
 				<div class="cmn_btn" id="listBtn">취소</div>
 			</div>

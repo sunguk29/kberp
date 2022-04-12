@@ -69,7 +69,7 @@ public class RprtController {
 		Date mon = new Date();
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		SimpleDateFormat month = new SimpleDateFormat("yyyy-MM");
+		SimpleDateFormat month = new SimpleDateFormat("yyyy.MM");
 		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(dt);
