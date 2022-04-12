@@ -20,13 +20,18 @@ public class MsgrService implements IMsgrService {
 	}
 
 	@Override
-	public List<HashMap<String, String>> readChat(HashMap<String, String> params) throws Throwable {
-		return imsDao.readChat(params);
+	public List<HashMap<String, String>> getContList(int lastChatNo) throws Throwable {
+		return imsDao.getContList(lastChatNo);
 	}
 
 	@Override
 	public void insertChat(HashMap<String, String> params) throws Throwable {
 		imsDao.insertChat(params);
+	}
+
+	@Override
+	public int getMaxNo() throws Throwable {
+		return imsDao.getMaxNo();
 	}
 	
 	
