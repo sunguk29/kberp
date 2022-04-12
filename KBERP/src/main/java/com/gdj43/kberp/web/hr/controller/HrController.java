@@ -1,5 +1,7 @@
 package com.gdj43.kberp.web.hr.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +43,6 @@ public class HrController {
 			if(session.getAttribute("sEmpNum") != null) {
 				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
 				mav.setViewName("hr/apntm");
-				System.out.println("sEmpNum : " + params.get("sEmpNum"));
 			} else {
 				mav.setViewName("redirect:login");
 			}
@@ -96,6 +97,25 @@ public class HrController {
 		       case "deleteApntm" :
 		    	   iCommonService.deleteData("hr.deleteApntm", params);
 		    	   break;
+		       case "aprvl" :
+		    	   String[] aprvler = null;
+		    	   String[] rfrnc = null;
+		    	   List<String> aprvlerList = null;
+		    	   List<String> rfrncList = null;
+		    	   if(params.get("aprvlerList") != null && !params.get("aprvlerList").equals("") ) {
+		    		   aprvler = params.get("aprvlerList").split(",");
+		    		   aprvlerList = Arrays.asList(aprvler);
+		    	   }
+		    	   if(params.get("rfrncList") != null && !params.get("rfrncList").equals("") ) {
+		    		   rfrnc = params.get("rfrncList").split(",");
+		    		   rfrncList = Arrays.asList(rfrnc);
+		    	   }
+		    	   iAprvlService.aprvlAdd(params.get("emp_num"), params.get("title"), params.get("cont"), aprvlerList, rfrncList, null );
+		    	   break;
+		       case "aprvlSuccess" :
+		    	   iCommonService.updateData("hr.aprvlSuccess", params);
+		    	   break;
+		    	   
 		       }
 		       modelMap.put("res", "success");
 		    } catch (Throwable e) {
@@ -193,10 +213,25 @@ public class HrController {
 	
 	// 조직도
     @RequestMapping(value = "/orgnztChart")
-    public ModelAndView orgnzt(@RequestParam HashMap<String,String> params, 
+    public ModelAndView orgnzt(@RequestParam HashMap<String,String> params,  HttpSession session,
     							ModelAndView mav) throws Throwable {
-    	
-    	mav.setViewName("hr/orgnztChart");
+    	try {
+			if(session.getAttribute("sEmpNum") != null) {
+				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
+				mav.setViewName("hr/orgnztChart");
+			} else {
+				mav.setViewName("redirect:login");
+			}
+
+			params.put("menuNum", "4");
+			int menuAthrty = iCommonService.getIntData("prsnl.getMenuAthrty", params);
+			mav.addObject("menuAthrty", menuAthrty);
+    
+    	} catch (Exception e) {
+			e.printStackTrace();
+			mav.addObject("exception", e);
+			mav.setViewName("exception/EXCEPTION_INFO");
+		}
       
     	return mav;
     }

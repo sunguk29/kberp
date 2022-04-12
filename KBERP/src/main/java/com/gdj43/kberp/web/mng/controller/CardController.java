@@ -114,6 +114,10 @@ public class CardController {
 				break;
 			case "update":
 				ics.updateData("card.updateCard",params);
+				ics.updateData("card.updateCard2",params);
+				break;
+			case "insert2":
+				ics.insertData("card.writeUseCard",params);
 				break;
 			}
 				modelMap.put("res", "success");
@@ -149,6 +153,37 @@ public class CardController {
 			
 			return mapper.writeValueAsString(modelMap);
 		}
+		@RequestMapping(value = "/cardUseHstryAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+		@ResponseBody
+		public String cardUseHstryAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+			ObjectMapper mapper = new ObjectMapper();
+			
+			Map<String, Object> modelMap = new HashMap<String, Object>();
+			
+			// 총 게시글 수
+			int cnt = ics.getIntData("card.cardUseHistoryCnt",params);
+			
+			// 페이징 계산
+			PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
+			
+			params.put("startCount", Integer.toString(pb.getStartCount()));
+			params.put("endCount", Integer.toString(pb.getEndCount()));
+			
+			List<HashMap<String, String>> list = ics.getDataList("card.cardUseHistory", params);
+			
+			modelMap.put("list", list); 
+			modelMap.put("pb", pb);
+			
+			return mapper.writeValueAsString(modelMap);
+		}
 		
-		
+		//카드 등록
+			@RequestMapping(value = "/cardUseWrite")
+			public ModelAndView cardUseWrite(@RequestParam HashMap<String, String> params, ModelAndView mav)
+						throws Throwable {
+
+			mav.setViewName("mng/cardUseWrite");
+
+				return mav;
+		}
 }

@@ -44,6 +44,8 @@ $(document).ready(function() {
 	});
 
 });
+
+//첨부자료 수정 시 사용되는 함수
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
