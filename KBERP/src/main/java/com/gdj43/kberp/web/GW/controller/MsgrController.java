@@ -37,10 +37,10 @@ public class MsgrController {
 	public IPagingService ips;
 	
 	@RequestMapping(value = "/msgr")
-	public ModelAndView msgr(ModelAndView mav) {
+	public ModelAndView msgr(ModelAndView mav) throws Throwable {
+		
 		
 		mav.setViewName("GW/msgr");
-		
 		
 		return mav;
 	}
@@ -58,6 +58,8 @@ public class MsgrController {
 	
 	Map<String, Object> modelMap = new HashMap<String, Object>();	
 	
+	
+	
 	params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
 	
 	if(srch_check != null) {
@@ -71,6 +73,8 @@ public class MsgrController {
 				params.put("chatsq", seq); // 채팅방 번호 넣어주기
 				ics.insertData("msgr.insertChat", params);
 				
+				int maxNo = ims.getMaxNo();
+				modelMap.put("maxNo", maxNo);
 				//반복문으로 하거나 srch_check를 인서트해서 hashmap put 계속추가?
 				for(String num : srch_check) {
 					HashMap<String, String>data = new HashMap<String, String>();
@@ -122,11 +126,11 @@ public class MsgrController {
 	
 	
 	// 채팅방리스트
-	@RequestMapping(value = "/addDrawRoomAjax", method = RequestMethod.POST,
+	@RequestMapping(value = "/DrawRoomAjax", method = RequestMethod.POST,
 			produces = "text/json;charset=UTF-8")
 	
 	@ResponseBody
-	public String addDrawRoomAjax(@RequestParam HashMap<String, String> params, 
+	public String DrawRoomAjax(@RequestParam HashMap<String, String> params, 
 								  HttpSession session) throws Throwable {
 		
 		ObjectMapper mapper = new ObjectMapper();
@@ -137,12 +141,13 @@ public class MsgrController {
 		
 		int chatCnt = ics.getIntData("msgr.chatCnt", params);
 		
-		List<HashMap<String, String>> list = ics.getDataList("msgr.addDrawRoom", params) ;
+		List<HashMap<String, String>> list = ics.getDataList("msgr.DrawRoom", params);
 
 		modelMap.put("list", list);
 		
 		return mapper.writeValueAsString(modelMap);
 	}
+	
 	
 	
 	@RequestMapping(value = "/addListRoomAjax", method = RequestMethod.POST,
@@ -171,23 +176,15 @@ public class MsgrController {
 											   HttpSession session,
 											   ModelAndView modelAndView) throws Throwable {
 		
-		System.out.println("######################"+params);
-		
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> modelMap = new HashMap<String, Object>();	
 		
 		params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
 		
-		
-		// #{chatNum}, #{empNum}, #{cont},
+		ics.getDataList("msgr.addListChat", params);
 		
 		try {
-			String conSeq = ics.getStringData("msgr.contSeq");
-			String chatSeq = ics.getStringData("msgr.chatSeq");
-			params.put("contsq", conSeq);
-			params.put("chatsq", chatSeq);
 			System.out.println("!!!!!!!!!!!!!!!" + params);
-			
 			
 			ics.insertData("msgr.insertCont", params);
 			
@@ -200,40 +197,35 @@ public class MsgrController {
 	}
 	
 	
-	
-	/*
-	 * @RequestMapping(value = "/insertHCAjax", method = RequestMethod.POST,
-	 * produces = "text/json;charset=UTF-8")
-	 * 
-	 * @ResponseBody public String insertHC(@RequestParam HashMap<String, String>
-	 * params, HttpServletRequest request, ModelAndView modelAndView) throws
-	 * Throwable {
-	 * 
-	 * ObjectMapper mapper = new ObjectMapper();
-	 * 
-	 * Map<String, Object> modelMap = new HashMap<String, Object>();
-	 * 
-	 * try { ics.insertData("msgr.insertHC", params);
-	 * 
-	 * modelMap.put("messege", CommonProperties.RESULT_SUCCESS); } catch (Exception
-	 * e) { modelMap.put("message", CommonProperties.RESULT_ERROR);
-	 * modelMap.put("errorMessage", e.getMessage()); } return
-	 * mapper.writeValueAsString(modelMap); }
-	 */
-	
-	
-	@RequestMapping(value = "/readCont")
-	public ModelAndView insertChat(@RequestParam HashMap<String, String> params,
-									ModelAndView mav) throws Throwable {
+	@RequestMapping(value = "/getContListAjax", method = RequestMethod.POST, 
+			produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String getContListAjax(@RequestParam HashMap<String, String> params,
+												HttpServletRequest request,
+												ModelAndView mav) throws Throwable {
 		
-		List<HashMap<String, String>> list = ims.readChat(params);
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		mav.addObject("list", list);
+		int lastChatNo = Integer.parseInt(request.getParameter("lastChatNo"));
 		
-		mav.setViewName("GW/msgr");
+		System.out.println("555555555555" + lastChatNo + request);
+		System.out.println("333333333333" + params);
 		
-		return mav;
-	}
+		
+		try {
+			List<HashMap<String, String>> list = ims.getContList(lastChatNo);
+		//	List<HashMap<String, String>> list = ics.getDataList("msgr.DrawRoom", params);
+			
+			modelMap.put("list", list);
+			modelMap.put("message", CommonProperties.RESULT_SUCCESS);
+		} catch (Exception e) {
+			modelMap.put("message", CommonProperties.RESULT_ERROR);
+			modelMap.put("errorMessage", e.getMessage());
+		}
+		
+		return mapper.writeValueAsString(modelMap);
+	} 
 		
 	
 }
