@@ -342,7 +342,7 @@ function reloadList() {
 			<input type="hidden" id="sendSrchTxt" name="sendSrchTxt">
 			<input type="hidden" id="page" name="page" value="1">
 		</form>
-<form action="cardList" id="WriteForm" method="post" enctype="multipart/form-data">
+<form action="cardList" id="WriteForm" method="post">
 	<input type="hidden" name="no" value="${param.no}" />
 	<input type="hidden" name="use_num" id="use_num"  />
 	<input type="hidden" name="mng_num" value="${param.mng_num}" />
