@@ -130,8 +130,8 @@
 		  WHERE MNG_NUM = #{mng_num})
 	</select>
 	
-	<select id="writeUseCard" parameterType="hashmap">
-	INSERT CARD_USER INTO (EMP_NUM,USE_START_DT,USE_END_DT)
-	VALUES #{use_name},#{use_start_dt},#{use_end_dt}
-	</select>
+	<insert id="writeUseCard" parameterType="hashmap">
+	INSERT INTO CARD_USER (CARD_USER_MNG_NUM,MNG_NUM,EMP_NUM,USE_START_DT,USE_END_DT)
+	VALUES (CARD_USER_SEQ.NEXTVAL,#{mng_num},#{use_num},#{use_start_dt},#{use_end_dt})
+	</insert>
 </mapper>
