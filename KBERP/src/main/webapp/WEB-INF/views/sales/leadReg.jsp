@@ -1469,7 +1469,7 @@ function uploadName(e) {
 								<tr>
 									<td><input type="button" class="btn" value="고객사 *" readonly="readonly"/></td>
 									<td colspan="3">
-										<input type="text" class="txt" id="ccName" name="ccName" />
+										<input type="text" class="txt" id="ccName" name="ccName" readonly="readonly" />
 										<input type="hidden" id="ccNum" name="ccNum" />
 									</td>
 								</tr>

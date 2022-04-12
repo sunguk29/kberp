@@ -350,7 +350,6 @@ function drawList(list) {
 							<td>
 							<input type="text" class="mngrName" id="mngrName"  readonly="readonly">			
 							<input class="cmn_btn" type="button" id="srchEmp" value="검색">
-							
 							</td>
 						</tr>
 					</tbody>
