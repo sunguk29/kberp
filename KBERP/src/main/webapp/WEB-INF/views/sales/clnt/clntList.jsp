@@ -400,7 +400,7 @@ function drawPaging(pb) {
 							</tr>
 						</tbody>
 					</table>
-					<div class="SearchResult"><h3>고객 (검색결과: 83건)</h3></div>
+					<div class="SearchResult"></div>
 					<div class="cont_table">
 						<table class="list_table"></table>
 					</div>

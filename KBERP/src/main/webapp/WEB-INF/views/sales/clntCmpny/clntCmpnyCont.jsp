@@ -685,25 +685,29 @@ $(document).ready(function() {
 	
 	// 의견 등록
 	$(".subm").on("click", function() {
-		var params = $("#botOpActionForm").serialize();
+		if($("#tatacont").val() != '' && $("#tatacont").val() != null) {
+			var params = $("#botOpActionForm").serialize();
 		
-		$.ajax({
-			type : "post",
-			url : "opBotActionAjax/insert",
-			dataType : "json",
-			data : params,
-			success : function(res) {
-				if(res.res == "success") {
-					$("#tatacont").val("");
-					reloadOpList();
-				} else {
-					alert("등록중 문제가 발생하였습니다.");
+			$.ajax({
+				type : "post",
+				url : "opBotActionAjax/insert",
+				dataType : "json",
+				data : params,
+				success : function(res) {
+					if(res.res == "success") {
+						$("#tatacont").val("");
+						reloadOpList();
+					} else {
+						alert("등록중 문제가 발생하였습니다.");
+					}
+				},
+				error : function(request, status, error) {
+					console.log(request.responseText);
 				}
-			},
-			error : function(request, status, error) {
-				console.log(request.responseText);
-			}
-		});
+			});
+		} else {
+			makeAlert("알림", "내용을 입력해주세요.");
+		}
 	});
 	
 	
@@ -723,7 +727,6 @@ $(document).ready(function() {
 			buttons : [{
 				name : "예",
 				func:function() {
-					console.log($("#cmntNum").val());
 					var params = $("#botOpActionForm").serialize();
 					
 					$.ajax({
@@ -742,9 +745,7 @@ $(document).ready(function() {
 							console.log(request.responseText);
 						}
 					});
-					
 					closePopup();
-					
 				}
 			}, {
 				name : "아니오"
@@ -772,9 +773,8 @@ $(document).ready(function() {
 		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객사 *\" /></td>                                       ";
 		html += "			<td>                                                                                                      ";
 		html += "				<div class=\"imgPos\">                                                                                ";
-		html += "					<input type=\"text\" class=\"pop_txt imgName\" id=\"ccName\" name=\"ccName\" readonly=\"readonly\" />                       ";
-		html += "					<input type=\"hidden\" id=\"ccNum\" name=\"ccNum\" />                                             ";
-		html += "					<img class=\"btnImg_in\" id=\"ccPop\" alt=\"팝업\" src=\"resources/images/sales/popup.png\">      ";
+		html += "					<input type=\"text\" class=\"pop_txt imgName\" id=\"ccName\" name=\"ccName\" value=\"${data.CLNT_CMPNY_NAME}\" readonly=\"readonly\" />                       ";
+		html += "					<input type=\"hidden\" id=\"ccNum\" name=\"ccNum\" value=\"${data.CLNT_CMPNY_NUM}\" />                                             ";
 		html += "				</div>                                                                                                ";
 		html += "			</td>                                                                                                     ";
 		html += "		</tr>                                                                                                         ";
@@ -943,8 +943,6 @@ $(document).ready(function() {
 					html += "<div class=\"board_bottom\">     ";
 					html += "<div class=\"pgn_area\"></div>   ";
 					html += "</div>                         ";
-					
-					
 					
 					makePopup({
 						depth : 2,
