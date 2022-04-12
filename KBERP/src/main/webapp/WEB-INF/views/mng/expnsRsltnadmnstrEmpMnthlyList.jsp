@@ -97,6 +97,8 @@ $(document).ready(function() {
 	$("#previousBtn").on("click", function() {
 		$("#actionForm").attr("action", "expnsRsltnadmnstr");
 		$("#actionForm").submit();
+		
+		
 	});
 	
 	$("#mnthly_slct").on("change", function() {
