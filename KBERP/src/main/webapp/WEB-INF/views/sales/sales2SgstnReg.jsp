@@ -374,6 +374,32 @@ hr { /* 구분선 */
 	width: 927px;
 	height: 1138px;
 }
+/* **** 저장 팝업 **** */
+.popup_cont2 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+	font-weight: 600;
+	text-align: center;
+	line-height: 100px;
+}
+.popup_cont3 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+    font-weight: 600;
+    text-align: center;
+    height: 40px;
+    line-height: 50px;
+    padding-top: 10px;
+}
+.popup_cont4 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+    font-weight: 600;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    padding-bottom: 10px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -381,11 +407,17 @@ $(document).ready(function() {
 	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
+		
+		var html = "";
+		
+		html += "<div class=\"popup_cont3\">작성중인 내용이 저장되지 않습니다.</div>";
+		html += "<div class=\"popup_cont4\">나가시겠습니까?</div>";
+		
 		makePopup({
 			bg : false,
 			bgClose : false,
 			title : "알림",
-			contents : "작성중인 내용이 저장되지 않습니다. 나가시겠습니까?",
+			contents : html,
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
@@ -435,59 +467,84 @@ $(document).ready(function() {
 			alert("상세내용을 입력하세요.");
 			$("#dtlCont").focus();
 		} else {
+			var html = "";
+			
+			html += "<div class=\"popup_cont2\">저장하시겠습니까?</div>";
+			
 			makePopup({
+				depth : 1,
 				bg : false,
 				bgClose : false,
 				title : "알림",
-				contents : "저장하시겠습니까?",
+				withd : 400,
+				height : 200,
+				contents : html,
 				contentsEvent : function() {
 					$("#popup1").draggable();
 				},
 				buttons : [{
 					name : "확인",
 					func:function() {
-						/* 여기에 넣기 */
-						var addForm = $("#addForm");
+						var html = "";
 						
-						addForm.ajaxForm({
-							success : function(res) {
-								if(res.fileName.length > 0) {
-									$("#attFile").val(res.fileName[0]);
-								}
-								
-								var params = $("#addForm").serialize();
-								
-								$.ajax({
-									type : "post",
-									url : "salesMng2ActionAjax/insert",
-									dataType : "json",
-									data : params,
-									success : function(res) {
-										if(res.res == "success") {
-											$("#listForm").attr("action", "sales2SgstnCont");
-											$("#listForm").submit();
-										} else {
-											alert("등록중 문제가 발생하였습니다.");
+						html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
+						
+						makePopup({
+							depth : 2,
+							bg : true,
+							bgClose : false,
+							width : 400,
+							height : 200,
+							title : "저장 완료",
+							contents : html,
+							buttons : {
+								name : "확인",
+								func:function() {
+									
+									var addForm = $("#addForm");
+									
+									addForm.ajaxForm({
+										success : function(res) {
+											if(res.fileName.length > 0) {
+												$("#attFile").val(res.fileName[0]);
+											}
+											
+											var params = $("#addForm").serialize();
+											
+											$.ajax({
+												type : "post",
+												url : "salesMng2ActionAjax/insert",
+												dataType : "json",
+												data : params,
+												success : function(res) {
+													if(res.res == "success") {
+														$("#listForm").attr("action", "sales2SgstnCont");
+														$("#listForm").submit();
+													} else {
+														alert("등록중 문제가 발생하였습니다.");
+													}
+												},
+												error : function(request, status, error) {
+													console.log(request.responseText);
+												}
+											});
+										},
+										error : function(req) {
+											console.log(request.responseText);
 										}
-									},
-									error : function(request, status, error) {
-										console.log(request.responseText);
-									}
-								});
-							},
-							error : function(req) {
-								console.log(request.responseText);
+									});
+									addForm.submit();
+								}
 							}
 						});
-						addForm.submit();
 						console.log("One!");
 						closePopup();
 					}
 				}, {
-					name : "닫기"
+					name : "취소"
 				}]
 			});
-		}
+		} // else end
 	});
 	
 	$(".salesCont").hide();

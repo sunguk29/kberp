@@ -814,11 +814,14 @@ function drawEmpInfo(empInfo){
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="cont_left">
-				<div class="orgnzt_btn_area">
-					<input type="button" class="orgnzt_btn" id="orgnzt_add_btn" value="부서등록" />
-					<input type="button" class="orgnzt_btn" id="orgnzt_mdfy_btn" value="부서수정" />
-				    <input type="button" class="orgnzt_btn" id="orgnzt_del_btn" value="부서삭제" />
-				</div>
+				<!-- 읽기권한 있는 경우 버튼생성 -->
+				<c:if test="${menuAthrty == 2}">
+					<div class="orgnzt_btn_area">
+						<input type="button" class="orgnzt_btn" id="orgnzt_add_btn" value="부서등록" />
+						<input type="button" class="orgnzt_btn" id="orgnzt_mdfy_btn" value="부서수정" />
+					    <input type="button" class="orgnzt_btn" id="orgnzt_del_btn" value="부서삭제" />
+					</div>
+				</c:if>
 				<div class="orgnzt_area">
 					<div class="scroll_area">
 						<div class="orgnzt_depth1_wrap">

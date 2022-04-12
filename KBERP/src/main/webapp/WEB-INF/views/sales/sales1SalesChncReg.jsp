@@ -164,7 +164,8 @@
 	padding: 5px 0px;
 	margin-top: -20px;
 }
-/* 팝업 끝 */
+/* 담당자 팝업 끝 */
+
 .body {
 	display: block;
 	background-color: white;
@@ -444,8 +445,35 @@ tr:nth-child(9) td:nth-child(3) {
 #fileName {
 	border: hidden;
 	outline: none;
+	text-indent: 12px;
+    line-height: 40px;
 }
-
+/* **** 저장 팝업 **** */
+.popup_cont2 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+	font-weight: 600;
+	text-align: center;
+	line-height: 100px;
+}
+.popup_cont3 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+    font-weight: 600;
+    text-align: center;
+    height: 40px;
+    line-height: 50px;
+    padding-top: 10px;
+}
+.popup_cont4 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+    font-weight: 600;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    padding-bottom: 10px;
+}
 /* 끝 */
 </style>
 <script type="text/javascript">
@@ -454,11 +482,18 @@ $(document).ready(function() {
 	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
+		
+
+		var html = "";
+		
+		html += "<div class=\"popup_cont3\">작성중인 내용이 저장되지 않습니다.</div>";
+		html += "<div class=\"popup_cont4\">나가시겠습니까?</div>";
+		
 		makePopup({
 			bg : false,
 			bgClose : false,
 			title : "알림",
-			contents : "작성중인 내용이 저장되지 않습니다. 나가시겠습니까?",
+			contents : html,
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
@@ -494,62 +529,88 @@ $(document).ready(function() {
 			alert("예정 사업 형태를 입력하세요.");
 			$("#expctdBsnsType").focus();
 		} else {
+			var html = "";
+			
+			html += "<div class=\"popup_cont2\">저장하시겠습니까?</div>";
+			
 			makePopup({
-				bg : true,
+				depth : 1,
+				bg : false,
 				bgClose : false,
 				title : "알림",
-				contents : "저장하시겠습니까?",
+				width : 400,
+				height : 200,
+				contents : html,
 				contentsEvent : function() {
 					$("#popup1").draggable();
 				},
 				buttons : [{
 					name : "확인",
 					func:function() {
-						/* 여기에 넣기 */
-						var addForm = $("#addForm");
-			
-						addForm.ajaxForm({
-							success : function(res) {
-								// 물리파일명 보관
-								if(res.fileName.length > 0) {
-									$("#attFile").val(res.fileName[0]);
-								}
-								
-								// 글 수정
-								var params = $("#addForm").serialize();
-								
-								$.ajax({
-									type : "post",
-									url : "salesMng1ActionAjax/insert",
-									dataType : "json",
-									data : params,
-									success : function(res) {
-										if(res.res == "success") {
-											$("#salesNum").val(res.seq); // 영업기회 등록 후 영업기회 상세보기로 이동할 때 필요.
+						var html = "";
+						
+						html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
+						
+						makePopup({
+							depth : 2,
+							bg : true,
+							bgClose : false,
+							width : 400,
+							height : 200,
+							title : "저장 완료",
+							contents : html,
+							buttons : {
+								name : "확인",
+								func:function() {
+									var addForm = $("#addForm");
+									
+									addForm.ajaxForm({
+										success : function(res) {
+											// 물리파일명 보관
+											if(res.fileName.length > 0) {
+												$("#attFile").val(res.fileName[0]);
+											}
 											
-											$("#listForm").attr("action", "sales1SalesChncCont");
-											$("#listForm").submit();
-										} else {
-											alert("등록중 문제가 발생하였습니다.");
+											// 글 수정
+											var params = $("#addForm").serialize();
+											
+											$.ajax({
+												type : "post",
+												url : "salesMng1ActionAjax/insert",
+												dataType : "json",
+												data : params,
+												success : function(res) {
+													if(res.res == "success") {
+														$("#salesNum").val(res.seq); // 영업기회 등록 후 영업기회 상세보기로 이동할 때 필요.
+														
+														$("#listForm").attr("action", "sales1SalesChncCont");
+														$("#listForm").submit();
+													} else {
+														alert("등록중 문제가 발생하였습니다.");
+													}
+												},
+												error : function(request, status, error) {
+													console.log(request.responseText);
+												}
+											});
+										},
+										error : function(req) {
+											console.log(req.responseText);
 										}
-									},
-									error : function(request, status, error) {
-										console.log(request.responseText);
-									}
-								});
-							},
-							error : function(req) {
-								console.log(req.responseText);
+									}); // ajaxForm end
+									addForm.submit();
+									
+								}
 							}
-						}); // ajaxForm end
-						addForm.submit();
+						}); // makePopup depth2 end
 						console.log("One!");
+						console.log(lpsNum);
 						closePopup();
 					}
 				}, {
-					name : "닫기"
+					name : "취소"
 				}]
-			});
+			}); // makePopup depth1 end
 		} // else end
 	});
 	
@@ -611,12 +672,14 @@ function uploadName(e) {
 						</div>
 						<hr class="hr_bot" color="white" width="925px">
 						<div class="page_cont_title_text">기본정보</div>
+						<input type="hidden" name="leadNum" value="${param.leadNum}" />	
 						<input type="hidden" name="lcn" value="${ln.CLNT_NAME}" />
 						<input type="hidden" name="lccn" value="${ln.CLNT_CMPNY_NAME}" />
 						<input type="hidden" name="llnum" value="${ln.LEAD_NUM}" />
 						<input type="hidden" name="llname" value="${ln.LEAD_NAME}" />
 						<input type="hidden" name="len" value="${ln.EMP_NUM}" />
 						<input type="hidden" name="lren" value="${ln.RGSTRTN_EMP_NUM}" />
+						<input type="hidden" name="lpsNum" value="${ln.PRGRS_STS_NUM}" />
 						<hr class="hr_width">
 						<table>
 							<colgroup>

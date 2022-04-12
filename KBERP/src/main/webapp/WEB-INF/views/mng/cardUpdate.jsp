@@ -275,11 +275,15 @@ $(document).ready(function() {
             <td> 사용시작일자 </td>
             <td class = "use_date_cont">${data.USE_START_DT}</td>
             <td> 사용종료일자 </td>
-             <td class = "use_date_cont">${data.USE_END_DT}</td>
+             <td class = "use_date_cont"><input type ="date" class ="use_date_cont" id ="use_end_dt" name ="use_end_dt" value="${data.USE_END_DT}">
          </tr>
  		<tr>
             <td> 폐기일자 </td>
                <td class = "del_cont"><input type ="date" class ="use_date_cont" id ="del_dt" name ="del_dt" value="${data.DSCRD_DT}"></td>
+         </tr>
+         <tr>
+         	<td>비고</td>
+         	<td><input type="text" id="rmrks" name="rmrks" value="${data.RMRKS}"></td>
          </tr>
          </tbody>
 			</table>

@@ -192,7 +192,7 @@ function drawPaging(pb) {
 					
 					<select id="searchGbn" name="searchGbn">
 						<option value="0">자산명</option>
-						<option value="1">담당자명</option>
+						<option value="1">사용자명</option>
 					</select>
 						<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
 						<input class="cmn_btn" type="button" value="검색" id="searchBtn"/>

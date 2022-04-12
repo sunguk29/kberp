@@ -28,9 +28,22 @@
 
 <select id="getfaqCnt" resultType="Integer" parameterType="hashmap">
 	SELECT COUNT(*) AS CNT
-	FROM FAQ
-	WHERE 1 = 1
-	
+	FROM FAQ F INNER JOIN INQRY_CTGRY ICT
+	                            ON F.CTGRY_NUM=ICT.CTGRY_NUM
+	                    LEFT OUTER JOIN EMP E
+	                            ON F.EMP_NUM=E.EMP_NUM
+    WHERE 1=1
+	<if test="searchTxt != null and searchTxt != ''">
+		<choose>
+		<!-- searchGbn: 제목, 작성자 -->
+			<when test="searchGbn == 0">
+				AND F.WRTNG_TITLE LIKE '%' || #{searchTxt} || '%'
+			</when>
+			<when test="searchGbn == 1">
+				AND E.EMP_NAME LIKE '%' || #{searchTxt} || '%'
+			</when>
+		</choose>
+	</if>
 </select>
 
 <select id="getfaqdt" resultType="hashmap" parameterType="hashmap">

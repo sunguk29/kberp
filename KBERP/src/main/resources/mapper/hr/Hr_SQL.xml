@@ -2,11 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hr">
 	<!--    인사발령 쿼리    -->
-	<select id="getApntmList" resultType="hashmap" parameterType="hashmap"><!-- 발령조회 -->
-		SELECT AAA.APNTM_NUM, AAA.EMP_NAME, AAA.EMP_NUM, AAA.APNTM_DVSN_NUM, AAA.DEPT_NAME, AAA.RANK_NAME, AAA.START_DATE, AAA.APRVL_STS 
-		FROM( SELECT AA.APNTM_NUM, AA.EMP_NAME, AA.EMP_NUM, AA.APNTM_DVSN_NUM, AA.DEPT_NAME, AA.RANK_NAME, AA.START_DATE, AA.APRVL_STS
-				FROM( SELECT A.APNTM_NUM, E.EMP_NUM, E.EMP_NAME, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, A.START_DATE, AP.APRVL_STS
-						FROM ( SELECT APNTM_NUM, APNTM_DVSN_NUM, EMP_NUM, DEPT_NUM, RANK_NUM, 
+	<select id="getApntmList" resultType="hashmap" parameterType="hashmap"><!-- 발령목록 -->
+		SELECT ROWNUM, A4.APNTM_NUM, A4.EMP_NAME, A4.EMP_NUM, A4.APNTM_DVSN_NUM, A4.DEPT_NAME, A4.RANK_NAME, A4.STS_NUM, A4.START_DATE, A4.APRVL_STS 
+		FROM(SELECT AAA.APNTM_NUM, AAA.EMP_NAME, AAA.EMP_NUM, AAA.APNTM_DVSN_NUM, AAA.DEPT_NAME, AAA.RANK_NAME, AAA.STS_NUM, AAA.START_DATE, AAA.APRVL_STS 
+		FROM( SELECT AA.APNTM_NUM, AA.EMP_NAME, AA.EMP_NUM, AA.APNTM_DVSN_NUM, AA.DEPT_NAME, AA.RANK_NAME, AA.STS_NUM, AA.START_DATE, AA.APRVL_STS
+				FROM( SELECT A.APNTM_NUM, E.EMP_NUM, E.EMP_NAME, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, A.STS_NUM, A.START_DATE, AP.APRVL_STS
+						FROM ( SELECT APNTM_NUM, APNTM_DVSN_NUM, EMP_NUM, DEPT_NUM, RANK_NUM, STS_NUM,
 						              TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE , APRVL_NUM
 						       FROM APNTM )  A INNER JOIN EMP E
 						                        	 ON A.EMP_NUM = E.EMP_NUM
@@ -41,23 +42,24 @@
 									        <if test="aprvl != 0"><!--  발령구분 조회 필터링 	-->
 												<choose>
 													<when test="aprvl == 1">
-												 		WHERE AA.APRVL_STS LIKE '결재완료' 
+												 		WHERE AA.STS_NUM = '1' 
 													</when>
 													<when test="aprvl == 2">
-												 		WHERE AA.APRVL_STS LIKE '결재반려' 
+												 		WHERE AA.STS_NUM = '2' 
 													</when>
 													<when test="aprvl == 3">
-												 		WHERE AA.APRVL_STS LIKE '결재진행중' 
+												 		WHERE AA.STS_NUM = '0'
 													</when>
 												</choose>
 											</if> ) AAA
 											<if test="prd == 1"><!--  기간 조회 필터링 	-->
 												WHERE AAA.START_DATE BETWEEN  #{startPrd} AND #{endPrd}
 											</if>
-		ORDER BY APNTM_NUM DESC          
+		ORDER BY AAA.APNTM_NUM ) A4
+		ORDER BY ROWNUM DESC    
 	 </select>
-	 <select id="getApntmCont" resultType="hashmap" parameterType="hashmap"><!-- 발령목록 상세정보(발령정보) -->
-	 	 SELECT A.APNTM_NUM, E.EMP_NAME, E.EMP_PCTR_FILE, E.EMP_NUM, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, A.START_DATE, A.END_DATE, A.DTL_CONT 
+	 <select id="getApntmCont" resultType="hashmap" parameterType="hashmap"><!-- 발령 상세정보(발령정보) -->
+	 	 SELECT LPAD(A.APNTM_NUM, 5, '0') AS APNTM_NUM, E.EMP_NAME, E.EMP_PCTR_FILE, E.EMP_NUM, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, A.START_DATE, A.END_DATE, A.DTL_CONT 
 		 FROM ( SELECT APNTM_NUM, APNTM_DVSN_NUM, EMP_NUM, DEPT_NUM, RANK_NUM, 
 	                   TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE , TO_CHAR(END_DATE,'YYYY-MM-DD') AS END_DATE ,DTL_CONT
 	       	    FROM APNTM )A INNER JOIN EMP E
@@ -68,7 +70,7 @@
 	                        		ON A.RANK_NUM = R.RANK_NUM
 		 WHERE APNTM_NUM = #{apntmNum}
 	</select>
-	<select id="getEmpCont" resultType="hashmap" parameterType="hashmap"><!-- 발령목록 상세정보(사원정보) -->
+	<select id="getEmpCont" resultType="hashmap" parameterType="hashmap"><!-- 발령 상세정보(사원정보) -->
 		SELECT  AA.EMP_NUM, AA.EMP_NAME, AA.EMP_PCTR_FILE, D.DEPT_NAME, R.RANK_NAME
 		FROM( SELECT E.EMP_NUM, E.EMP_NAME, E.EMP_PCTR_FILE, A.DEPT_NUM, A.RANK_NUM
 		        FROM( SELECT EMP_NUM, RANK_NUM, DEPT_NUM
@@ -82,7 +84,7 @@
 		                                                                                                            ON AA.RANK_NUM = R.RANK_NUM  
         WHERE AA.EMP_NUM = #{empNum}                                                                        
 	</select>
-	<select id="getInqryList" resultType="hashmap" parameterType="hashmap"><!-- 발령등록 사원조회 리스트 -->
+	<select id="getInqryList" resultType="hashmap" parameterType="hashmap"><!-- 발령등록, 결재권자, 참조인 사원조회 리스트 -->
 		SELECT EE.EMP_NUM, EE.EMP_NAME, AA.RANK_NUM, AA.RANK_NAME, AA.DEPT_NUM, AA.DEPT_NAME
     	FROM ( SELECT A.EMP_NUM, E.EMP_NAME, A.RANK_NUM, R.RANK_NAME, A.DEPT_NUM, D.DEPT_NAME
 				 FROM (  SELECT EMP_NUM, RANK_NUM, DEPT_NUM, START_DATE, END_DATE, STS_NUM
@@ -156,6 +158,15 @@
 	                    WHERE STS_NUM ='1'
 	                    AND EMP_NUM = #{addEmpNum})
 	</update>
+	<update id="aprvlSuccess" parameterType="hashmap" ><!-- 발령 결제상태 변경(결재진행중) UPDATE -->
+		UPDATE APNTM SET STS_NUM = '0'
+		WHERE APNTM_NUM = #{apntmNum}
+	</update>
+	<delete  id="deleteApntm" parameterType="hashmap"><!-- 발령취소(삭제)  -->
+		DELETE FROM APNTM
+		WHERE APNTM_NUM = #{delApntmNum}
+	</delete>
+	
 	
 	<!--    증명서발급 쿼리    -->
 	 <select id="getEmpInfo" resultType="hashmap" parameterType="hashmap"><!-- (관리자) 요청사원정보 가져오기 -->
@@ -163,19 +174,65 @@
 		FROM EMP
 		WHERE EMP_NUM = #{sEmpNum}
 	</select>
-	 <select id="getEmpRqstList" resultType="hashmap" parameterType="hashmap"><!-- (사용자) 발급요청목록 -->
-		SELECT ROWNUM, C.CRTFCT_NUM, C.CRTFCT_KIND, C.USE, C.RQST_DATE, C.ISSUE_DATE, C.ISSUE_TYPE, C.ISSUE_STS_NUM, C.RSN
+	 <select id="getUserRqstList" resultType="hashmap" parameterType="hashmap"><!-- (사용자) 발급요청목록 -->
+		SELECT ROWNUM, LPAD(C.CRTFCT_NUM,5,'0') AS CRTFCT_NUM, C.CRTFCT_KIND, C.USE, C.RQST_DATE, C.ISSUE_DATE, C.ISSUE_TYPE, C.ISSUE_STS_NUM, C.RSN
         FROM ( SELECT CRTFCT_NUM, CRTFCT_KIND, USE, TO_CHAR(RQST_DATE, 'YYYY-MM-DD') AS RQST_DATE, ISSUE_TYPE, 
     				  TO_CHAR(ISSUE_DATE, 'YYYY-MM-DD') AS ISSUE_DATE, ISSUE_STS_NUM, RSN
                  FROM CRTFCT
                 WHERE RQST_EMP_NUM = #{sEmpNum}
-                ORDER BY CRTFCT_NUM DESC) C
-        
+                ORDER BY CRTFCT_NUM) C
+       ORDER BY ROWNUM DESC
 	</select>
-	<insert id="addCrtfct" parameterType="hashmap"><!-- (사용자) 증명서발급 산청 insert -->
+	 <select id="getAdminIssueList" resultType="hashmap" parameterType="hashmap"><!-- (관리자) 발급내역 -->
+		SELECT ROWNUM, LPAD(C.CRTFCT_NUM,5,'0') AS CRTFCT_NUM, C.RQST_EMP_NUM, E.EMP_NAME, C.CRTFCT_KIND, C.USE, C.RQST_DATE, C.ISSUE_DATE, C.ISSUE_TYPE, C.ISSUE_STS_NUM, C.RSN
+        FROM ( SELECT CRTFCT_NUM, CRTFCT_KIND, RQST_EMP_NUM, USE, TO_CHAR(RQST_DATE, 'YYYY-MM-DD') AS RQST_DATE, ISSUE_TYPE, 
+    				  TO_CHAR(ISSUE_DATE, 'YYYY-MM-DD') AS ISSUE_DATE, ISSUE_STS_NUM, RSN
+                 FROM CRTFCT
+                ORDER BY CRTFCT_NUM) C INNER JOIN EMP E
+                							   ON C.RQST_EMP_NUM = E.EMP_NUM
+	   WHERE ISSUE_STS_NUM != '0'
+       ORDER BY ROWNUM DESC
+	</select>
+	 <select id="getAdminRqstList" resultType="hashmap" parameterType="hashmap"><!-- (관리자) 신청목록 -->
+		SELECT ROWNUM, LPAD(C.CRTFCT_NUM,5,'0') AS CRTFCT_NUM, C.RQST_EMP_NUM, E.EMP_NAME, C.CRTFCT_KIND, C.USE, C.RQST_DATE, C.ISSUE_DATE, C.ISSUE_TYPE, C.ISSUE_STS_NUM, C.RSN
+        FROM ( SELECT CRTFCT_NUM, CRTFCT_KIND, RQST_EMP_NUM, USE, TO_CHAR(RQST_DATE, 'YYYY-MM-DD') AS RQST_DATE, ISSUE_TYPE, 
+    				  TO_CHAR(ISSUE_DATE, 'YYYY-MM-DD') AS ISSUE_DATE, ISSUE_STS_NUM, RSN
+                 FROM CRTFCT
+                ORDER BY CRTFCT_NUM) C INNER JOIN EMP E
+                							   ON C.RQST_EMP_NUM = E.EMP_NUM
+       WHERE ISSUE_STS_NUM = '0'         							   
+       ORDER BY ROWNUM DESC
+	</select>
+	 <select id="getAdminRqstCont" resultType="hashmap" parameterType="hashmap"><!--  증명서(관리자) 상세정보 -->
+		SELECT  CC.EMP_NUM, CC.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, CC.DEPT_NUM, CC.RANK_NUM, TO_CHAR(CC.START_DATE,'YYYY-MM-DD') AS START_DATE, CC.END_DATE, CC.STS_NUM, CC.CRTFCT_NUM, CC.RQST_EMP_NUM, CC.CRTFCT_KIND, CC.ISSUE_COUNT, CC.USE, CC.ISSUE_TYPE, TO_CHAR(CC.RQST_DATE ,'YYYY-MM-DD') AS RQST_DATE
+		FROM( SELECT E.EMP_NUM, E.EMP_NAME, A.DEPT_NUM, A.RANK_NUM, A.START_DATE, A.END_DATE, A.STS_NUM,CRTFCT_NUM, RQST_EMP_NUM, CRTFCT_KIND, ISSUE_COUNT, USE, ISSUE_TYPE, RQST_DATE 
+			    FROM( SELECT CRTFCT_NUM, RQST_EMP_NUM, CRTFCT_KIND, ISSUE_COUNT, USE, ISSUE_TYPE, RQST_DATE   
+					    FROM CRTFCT
+					   WHERE CRTFCT_NUM= #{rCrtfctNum})C INNER JOIN EMP E 
+                                                           ON C.RQST_EMP_NUM = E.EMP_NUM
+                      						       INNER JOIN APNTM A
+                               						       ON C.RQST_EMP_NUM = A.EMP_NUM 
+               WHERE APNTM_NUM IN (SELECT MAX(APNTM_NUM) AS APNTM_NUM
+                                     FROM APNTM 
+                                    WHERE STS_NUM ='1'
+                                      AND EMP_NUM = #{rEmpNum})  )CC INNER JOIN DEPT D 
+                                                   					    	   ON CC.DEPT_NUM = D.DEPT_NUM
+                                              						   INNER JOIN RANK R 
+                                        					                   ON CC.RANK_NUM = R.RANK_NUM 
+	</select>	
+	
+	<insert id="addCrtfct" parameterType="hashmap"><!--  증명서발급(사용자) 산청 insert -->
 		INSERT INTO CRTFCT (CRTFCT_NUM, RQST_EMP_NUM, CRTFCT_KIND, ISSUE_COUNT, ISSUE_TYPE, USE)
 		VALUES (CRTFCT_SEQ.NEXTVAL, #{sEmpNum}, #{kind}, #{issueCount}, #{issueType}, #{use})
 	</insert>
+	<update id="updateCrtfct" parameterType="hashmap"><!--  증명서발급(관리자) 승인 update -->
+		UPDATE CRTFCT SET ISSUE_STS_NUM = '1', ISSUE_EMP_NUM = #{sEmpNum}, ISSUE_DATE = SYSDATE
+		WHERE CRTFCT_NUM = #{rCrtfctNum}
+	</update>
+	<update id="rejectCrtfct" parameterType="hashmap"><!--  증명서발급(관리자) 반려 update -->
+		UPDATE CRTFCT SET ISSUE_STS_NUM = '2', ISSUE_EMP_NUM = #{sEmpNum}, ISSUE_DATE = SYSDATE, RSN = #{rjctRsn}
+		WHERE CRTFCT_NUM = #{rCrtfctNum}
+	</update>
 	
 	<!-- 조직도 쿼리 -->
 	 <select id="getOrgnztDeptList" resultType="hashmap" parameterType="hashmap">

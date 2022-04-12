@@ -1,5 +1,7 @@
 package com.gdj43.kberp.web.hr.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.common.service.IPagingService;
+import com.gdj43.kberp.web.GW.service.IAprvlService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 import com.gdj43.kberp.web.hr.service.IHrService;
 
@@ -30,6 +33,8 @@ public class HrController {
 	public ICommonService iCommonService;
 	@Autowired
 	public IPagingService iPagingService;
+	@Autowired
+	public IAprvlService iAprvlService;
 	
 	// 인사발령
     @RequestMapping(value = "/apntm")
@@ -38,7 +43,6 @@ public class HrController {
 			if(session.getAttribute("sEmpNum") != null) {
 				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
 				mav.setViewName("hr/apntm");
-				System.out.println("sEmpNum : " + params.get("sEmpNum"));
 			} else {
 				mav.setViewName("redirect:login");
 			}
@@ -90,6 +94,28 @@ public class HrController {
 		       case "updateApntm" :
 		    	   iCommonService.updateData("hr.updateApntm", params);
 		    	   break;
+		       case "deleteApntm" :
+		    	   iCommonService.deleteData("hr.deleteApntm", params);
+		    	   break;
+		       case "aprvl" :
+		    	   String[] aprvler = null;
+		    	   String[] rfrnc = null;
+		    	   List<String> aprvlerList = null;
+		    	   List<String> rfrncList = null;
+		    	   if(params.get("aprvlerList") != null && !params.get("aprvlerList").equals("") ) {
+		    		   aprvler = params.get("aprvlerList").split(",");
+		    		   aprvlerList = Arrays.asList(aprvler);
+		    	   }
+		    	   if(params.get("rfrncList") != null && !params.get("rfrncList").equals("") ) {
+		    		   rfrnc = params.get("rfrncList").split(",");
+		    		   rfrncList = Arrays.asList(rfrnc);
+		    	   }
+		    	   iAprvlService.aprvlAdd(params.get("emp_num"), params.get("title"), params.get("cont"), aprvlerList, rfrncList, null );
+		    	   break;
+		       case "aprvlSuccess" :
+		    	   iCommonService.updateData("hr.aprvlSuccess", params);
+		    	   break;
+		    	   
 		       }
 		       modelMap.put("res", "success");
 		    } catch (Throwable e) {
@@ -101,14 +127,65 @@ public class HrController {
 	 }
 		
 	
+	// 증명서발급(관리자)
+	@RequestMapping(value = "/crtfctAdmin")
+	public ModelAndView cmnCode(@RequestParam HashMap<String, String> params, HttpSession session, ModelAndView mav) throws Throwable {
+		try {
+			if(session.getAttribute("sEmpNum") != null) {
+				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
+				// HashMap<String, String> emp = iCommonService.getData("hr.getEmpInfo", params);
+				List<HashMap<String, String>> rList = iCommonService.getDataList("hr.getAdminRqstList", params);
+				List<HashMap<String, String>> iList = iCommonService.getDataList("hr.getAdminIssueList", params);
+				
+				mav.addObject("rList", rList);
+				mav.addObject("iList", iList);
+				mav.setViewName("hr/crtfctAdmin");
+			} else {
+				mav.setViewName("redirect:login");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			mav.addObject("exception", e);
+			mav.setViewName("exception/EXCEPTION_INFO");
+		}
+		return mav;
+	}
+	// 증명서발급 ajax (관리자)
+	@RequestMapping(value = "/crtfctAdminAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+    @ResponseBody
+    public String crtfctAdminrAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			switch(gbn) {
+			case "cont" :
+				HashMap<String, String> cont = iCommonService.getData("hr.getAdminRqstCont", params);
+				modelMap.put("cont", cont);
+				break;
+			case "update" :
+				iCommonService.updateData("hr.updateCrtfct", params);
+				break;
+			case "reject" :
+				iCommonService.updateData("hr.rejectCrtfct", params);
+				break;
+			}
+			modelMap.put("res", "success");
+		} catch(Throwable e) {
+			e.printStackTrace();
+	       modelMap.put("res", "failed");
+		}
+		return mapper.writeValueAsString(modelMap); 	
+    }
+	
 	// 증명서발급(사용자)
-	@RequestMapping(value = "/crtft")
+	@RequestMapping(value = "/crtfct")
 	public ModelAndView crtft(@RequestParam HashMap<String, String> params, HttpSession session, ModelAndView mav) throws Throwable {
 		try {
 			if(session.getAttribute("sEmpNum") != null) {
 				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
 				// HashMap<String, String> emp = iCommonService.getData("hr.getEmpInfo", params);
-				List<HashMap<String, String>> list = iCommonService.getDataList("hr.getEmpRqstList", params);
+				List<HashMap<String, String>> list = iCommonService.getDataList("hr.getUserRqstList", params);
 				
 				mav.addObject("list", list);
 				mav.setViewName("hr/crtfct");
@@ -136,10 +213,25 @@ public class HrController {
 	
 	// 조직도
     @RequestMapping(value = "/orgnztChart")
-    public ModelAndView orgnzt(@RequestParam HashMap<String,String> params, 
+    public ModelAndView orgnzt(@RequestParam HashMap<String,String> params,  HttpSession session,
     							ModelAndView mav) throws Throwable {
-    	
-    	mav.setViewName("hr/orgnztChart");
+    	try {
+			if(session.getAttribute("sEmpNum") != null) {
+				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
+				mav.setViewName("hr/orgnztChart");
+			} else {
+				mav.setViewName("redirect:login");
+			}
+
+			params.put("menuNum", "4");
+			int menuAthrty = iCommonService.getIntData("prsnl.getMenuAthrty", params);
+			mav.addObject("menuAthrty", menuAthrty);
+    
+    	} catch (Exception e) {
+			e.printStackTrace();
+			mav.addObject("exception", e);
+			mav.setViewName("exception/EXCEPTION_INFO");
+		}
       
     	return mav;
     }

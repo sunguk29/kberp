@@ -19,15 +19,17 @@
 	</select>
 	 <select id="cardList" resultType="hashmap" parameterType="hashmap">
 		SELECT *
-		FROM (SELECT C.MNG_NUM,C.CARD_NUM, C.CARD_NAME,E.EMP_NAME AS EMP_NAME ,
-		             TO_CHAR(USE_START_DT,'YYYY-MM-DD')AS USE_START_DT,
-        			 TO_CHAR(USE_END_DT,'YYYY-MM-DD')AS USE_END_DT,
-        			 ROW_NUMBER()OVER(ORDER BY C.CARD_NUM DESC) AS RNUM
-			  FROM CARD C INNER JOIN EMP E
-                                  ON C.EMP_NUM = E.EMP_NUM
-                          LEFT OUTER JOIN CARD_USER CU
-                                  ON C.MNG_NUM = CU.MNG_NUM
-		WHERE 1=1
+		 FROM ( SELECT CARD_NUM, CARD_NAME,EMP_NAME,TO_CHAR(USE_START_DT,'YYYY-MM-DD')AS USE_START_DT,
+        			 TO_CHAR(USE_END_DT,'YYYY-MM-DD')AS USE_END_DT,C.MNG_NUM, ROW_NUMBER() OVER(ORDER BY CARD_NUM ASC) AS RNUM
+       		   FROM CARD C LEFT JOIN 
+        	     (SELECT *
+                  FROM (SELECT MNG_NUM,EMP_NAME, USE_START_DT, USE_END_DT,ROW_NUMBER()OVER(PARTITION BY MNG_NUM ORDER BY CARD_USER_MNG_NUM DESC) AS CUMN
+                        FROM CARD_USER CU INNER JOIN EMP E
+                       		 ON CU.EMP_NUM = E.EMP_NUM
+                        WHERE 1=1)A
+                              WHERE CUMN=1) A
+                              ON C.MNG_NUM = A.MNG_NUM
+        WHERE 1=1
 		<if test="searchTxt != null and searchTxt != ''"> 
 					<choose>
 						<when test="searchGbn == 0">
@@ -43,24 +45,21 @@
 	</select>
 	
 	 <select id="cardView" resultType="hashmap" parameterType="hashmap">
-		SELECT A.MNG_NUM,B.MNG_NUM
-			 , A.EMP_NUM
-    		 , (SELECT EMP_NAME FROM EMP Z WHERE Z.EMP_NUM =  A.EMP_NUM) AS MNG_EMP_NM
-     		 , B.EMP_NUM
-     		 , (SELECT EMP_NAME FROM EMP Z WHERE Z.EMP_NUM =  B.EMP_NUM) AS USE_EMP_NM
-      		 , A.CARD_NUM 
-     	     , A.CARD_NAME
-     		 , A.CARD_DVSN
-     		 , C.CARD_CMPNY_NAME
-     		 , TO_CHAR(A.ISSUE_DT,'YYYY-MM-DD')AS ISSUE_DT
-     		 , TO_CHAR(A.END_DT,'YYYY-MM-DD')AS END_DT
-    		 ,TO_CHAR(A.DSCRD_DT,'YYYY-MM-DD')AS DSCRD_DT
- 	   FROM CARD A
-                LEFT JOIN CARD_USER B
-                       ON A.MNG_NUM = B.MNG_NUM
-                LEFT JOIN CARD_CMPNY C
-                       ON A.CARD_CMPNY_NUM = C.CARD_CMPNY_NUM
-       WHERE CARD_NUM = #{no}
+		SELECT C.MNG_NUM,CARD_NUM,CARD_DVSN,CARD_NAME,CARD_CMPNY_NAME, NAME,EMP_NAME,TO_CHAR(ISSUE_DT,'YYYY-MM-DD') AS ISSUE_DT
+			,TO_CHAR(END_DT,'YYYY-MM-DD') AS END_DT
+			,TO_CHAR(USE_START_DT,'YYYY-MM-DD') AS USE_START_DT
+			,TO_CHAR(USE_END_DT,'YYYY-MM-DD')AS USE_END_DT
+			,TO_CHAR(DSCRD_DT,'YYYY-MM-DD') AS DSCRD_DT
+    FROM CARD C INNER JOIN CARD_CMPNY CC
+                    ON C.CARD_CMPNY_NUM = CC.CARD_CMPNY_NUM
+                    LEFT OUTER JOIN ( SELECT *
+                        FROM (SELECT MNG_NUM,EMP_NAME, USE_START_DT, USE_END_DT,ROW_NUMBER()OVER(PARTITION BY MNG_NUM ORDER BY CARD_USER_MNG_NUM DESC) AS CUMN
+                        FROM CARD_USER CU INNER JOIN EMP E
+                        ON CU.EMP_NUM = E.EMP_NUM
+                        WHERE 1=1)A
+                        WHERE CUMN=1) A
+                        ON  C.MNG_NUM = A.MNG_NUM
+                        WHERE C.CARD_NUM = #{no}
 	</select>
 	
 	<insert id="writeCard" parameterType="hashmap"> 
@@ -69,8 +68,13 @@
 	</insert>
 	 <select id="updateCard" resultType="hashmap" parameterType="hashmap">
 	  UPDATE CARD
-	     SET ISSUE_DT =#{issue_dt} ,END_DT = #{end_dt}, DSCRD_DT=#{del_dt}
+	     SET ISSUE_DT =#{issue_dt} ,END_DT = #{end_dt}, DSCRD_DT=#{del_dt}, RMRKS=#{rmrks}
 	 WHERE MNG_NUM =#{mng_num}
+	 </select>
+	 <select id="updateCard2" resultType="hashmap" parameterType="hashmap">
+	 UPDATE  CARD_USER
+	 	SET  USE_END_DT =#{use_end_dt}
+	  WHERE  MNG_NUM =#{mng_num}
 	 </select>
 	 <select id="getAllEmpCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
@@ -103,6 +107,31 @@
 		             </if>
 		            )A
 		WHERE RNUM BETWEEN #{startCount} AND #{endCount}
-		
+		</select>
+		<select id="cardUseHistory" resultType="hashmap" parameterType="hashmap">
+	SELECT * 
+	FROM (SELECT EMP_NAME
+				,TO_CHAR(USE_START_DT,'YYYY-MM-DD') AS USE_START_DT
+				,TO_CHAR(USE_END_DT,'YYYY-MM-DD') AS USE_END_DT
+				,RMRKS,ROW_NUMBER() OVER(ORDER BY CARD_USER_MNG_NUM DESC) AS RNUM
+		  FROM CARD_USER CU INNER JOIN EMP E
+    						ON CU.EMP_NUM = E.EMP_NUM
+		  WHERE MNG_NUM = #{mng_num})A
+		WHERE RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
+	<select id="cardUseHistoryCnt" resultType="Integer" parameterType="hashmap">
+	SELECT COUNT(*) AS CNT
+	FROM (SELECT EMP_NAME
+				,TO_CHAR(USE_START_DT,'YYYY-MM-DD') AS USE_START_DT
+				,TO_CHAR(USE_END_DT,'YYYY-MM-DD') AS USE_END_DT
+				,RMRKS,ROW_NUMBER() OVER(ORDER BY CARD_USER_MNG_NUM DESC) AS RNUM
+		  FROM CARD_USER CU INNER JOIN EMP E
+    						ON CU.EMP_NUM = E.EMP_NUM
+		  WHERE MNG_NUM = #{mng_num})
+	</select>
+	
+	<insert id="writeUseCard" parameterType="hashmap">
+	INSERT INTO CARD_USER (CARD_USER_MNG_NUM,MNG_NUM,EMP_NUM,USE_START_DT,USE_END_DT)
+	VALUES (CARD_USER_SEQ.NEXTVAL,#{mng_num},#{use_num},#{use_start_dt},#{use_end_dt})
+	</insert>
 </mapper>

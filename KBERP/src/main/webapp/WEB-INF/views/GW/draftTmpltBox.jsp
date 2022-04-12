@@ -73,12 +73,13 @@ $(document).ready(function() {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
+	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">프로젝트 관리</div>
 			<!-- 검색영역 선택적 사항 -->
-
+		
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
@@ -87,7 +88,7 @@ $(document).ready(function() {
 			<input type="hidden" id="top" name="top" value="${param.top}"/>
 			<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
 			<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
-			<input type="hidden" id="no" name="no">
+			<input type="hidden" id="no" name="no" value="${data.TMPLT_NUM}">
 		</form>
 			<table class="board_table">
 				<colgroup>
@@ -126,7 +127,11 @@ $(document).ready(function() {
 				$("#actionForm").attr("action","draftTmpltBoxWrite");
 				$("#actionForm").submit();
 			});
+			
+			
 		});
+		
+		
 	</script>
 </body>
 </html>

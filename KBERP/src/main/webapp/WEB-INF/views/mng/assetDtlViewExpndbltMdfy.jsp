@@ -113,7 +113,7 @@ $(document).ready(function() {
 <div class="cont_wrap">
 <input type="hidden" name="num" value="${param.num}" />
 		<div class="page_title_bar">
-			<div class="page_title_text">소모성자산 수정</div>
+			<div class="page_title_text">소모성자산 내용수정</div>
 		</div>
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->

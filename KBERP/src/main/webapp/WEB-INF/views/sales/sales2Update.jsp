@@ -535,18 +535,49 @@ textarea {
 	color: black;
 	text-decoration: none;
 }
+.popup_cont2 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+	font-weight: 600;
+	text-align: center;
+	line-height: 100px;
+}
+.popup_cont3 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+    font-weight: 600;
+    text-align: center;
+    height: 40px;
+    line-height: 50px;
+    padding-top: 10px;
+}
+.popup_cont4 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+    font-weight: 600;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    padding-bottom: 10px;
+}
 /* 끝 */
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
+	console.log($("#attFile").val());
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
+		
+		var html = "";
+		
+		html += "<div class=\"popup_cont3\">작성중인 내용이 저장되지 않습니다.</div>";
+		html += "<div class=\"popup_cont4\">나가시겠습니까?</div>";
+		
 		makePopup({
 			bg : false,
 			bgClose : false,
 			title : "알림",
-			contents : "작성중인 내용이 저장되지 않습니다. 나가시겠습니까?",
+			contents : html,
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
@@ -605,11 +636,17 @@ $(document).ready(function() {
 			alert("상세내을 입력하세요.");
 			$("#dtlCont").focus();
 		} else {
+			
+
+			var html = "";
+			
+			html += "<div class=\"popup_cont2\">저장하시겠습니까?</div>";
+			
 			makePopup({
 				bg : true,
 				bgClose : false,
 				title : "알림",
-				contents : "저장하시겠습니까?",
+				contents : html,
 				contentsEvent : function() {
 					$("#popup1").draggable();
 				},
@@ -767,6 +804,8 @@ $(document).ready(function() {
 		});
 	});
 	
+	$(".salesCont").hide();
+	
 	$("#sales_btn").on("click", "#salesContBtn_h", function() {
 		$(".salesCont").hide();
 		html = "<div class=\"up_btn\" id=\"salesContBtn_s\"></div>";
@@ -905,7 +944,7 @@ function uploadName(e) {
 						<input type="hidden" name="menuType" value="${param.menuType}" />
 						<input type="hidden" id="salesNum" name="salesNum" value="${data.SALES_NUM}" /> <!-- 영업번호 -->
 						<div class="bot_title">
-							<h3>영업기회<span id="sales_btn"><div class="drop_btn" id="salesContBtn_h"></div></span></h3>
+							<h3>영업기회<span id="sales_btn"><div class="up_btn" id="salesContBtn_s"></div></span></h3>
 						</div>
 						<div class="salesCont">
 						<div class="page_cont_title_text">기본정보</div>

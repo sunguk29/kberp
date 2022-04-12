@@ -29,10 +29,11 @@
 
 <!-- mdList javaScript파일 -->
 <script type="text/javascript" src="resources/script/sales/md/mdList.js?version=${version}"></script>
+
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	/* old_ 의 값, 검색 데이터가 있으면 검색된 데이터로, 검색 데이터가 없으면 기본값으로 하는 함수  */
+	//old_ 의 값, 검색 데이터가 있으면 검색된 데이터로, 검색 데이터가 없으면 기본값으로 하는 함수  
 	keepSrchData();
 
 	
@@ -44,18 +45,7 @@ $(document).ready(function() {
 	
 	
 	//상단 박스
-	$("#sts_listA").on("click", function() {
-		
-	});
-	$("#sts_list0").on("click", function() {
-		
-	});
-	$("#sts_list1").on("click", function() {
-		
-	});
-	$("#sts_list2").on("click", function() {
-		
-	});
+	clickBoxFunc();
 	
 	
 	//검색 테이블
@@ -76,7 +66,6 @@ $(document).ready(function() {
 	goRegView();
 	
 }); //documentReady end
-
 </script>
 </head>
 <body>
@@ -113,6 +102,7 @@ $(document).ready(function() {
 		<input type="hidden" name="top" 		   value="${params.top}"> 		<!-- top정보 -->
 		<input type="hidden" name="menuNum" 	   value="${params.menuNum}"> 	<!-- 메뉴정보 -->
 		<input type="hidden" name="menuType" 	   value="${params.menuType}"> 	<!-- 메뉴정보 -->
+		<input type="hidden" name="sales_sts" id="sales_sts"> 	                <!-- 판매상태 -->
 	
 		<div class="cont_area">
 			<div class="body">

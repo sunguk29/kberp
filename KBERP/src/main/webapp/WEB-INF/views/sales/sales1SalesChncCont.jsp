@@ -315,6 +315,8 @@ textarea {
     margin-bottom: 18px;
     margin-left: 45px;
     font-size: 10pt;
+    text-indent: 12px;
+    line-height: 40px;
 }
 .btnImg_in{
 	display: inline-block;
@@ -379,6 +381,13 @@ textarea {
 	margin-left: 47.5px;
 	overflow-y: auto;
 }
+.popup_cont2 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+	font-weight: 600;
+	text-align: center;
+	line-height: 100px;
+}
 /* 끝 */
 </style>
 <script type="text/javascript">
@@ -407,11 +416,16 @@ $(document).ready(function() {
 	// 영업 종료하기 버튼
 	$(".salesOver_btn").on("click", function() {
 		// 수정이랑 같음, 상태를 종료로 변경, ajax로 failure로 보내기
+		
+		var html = "";
+		
+		html += "<div class=\"popup_cont2\">영업을 종료하시겠습니까?</div>";
+		
 		makePopup({
 			bg : true,
 			bgClose : false,
 			title : "영업 종료하기",
-			contents : "영업을 종료하시겠습니까?",
+			contents : html,
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
@@ -480,16 +494,20 @@ $(document).ready(function() {
 		var cmntNum = $(this).children("#cmntNum").val();
 		document.getElementById("cmntNum").value = cmntNum;
 		
+		var html = "";
+		
+		html += "<div class=\"popup_cont2\">삭제하시겠습니까?</div>";
+		
 		makePopup({
 			bg : false,
 			bgClose : false,
 			title : "경고",
-			contents : "삭제하시겠습니까?",
+			contents : html,
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
 			buttons : [{
-				name : "예",
+				name : "확인",
 				func:function() {
 					console.log($("#cmntNum").val());
 					var params = $("#botOpActionForm").serialize();
@@ -515,7 +533,7 @@ $(document).ready(function() {
 					
 				}
 			}, {
-				name : "아니오"
+				name : "취소"
 			}]
 		});
 		
@@ -578,7 +596,7 @@ function drawOpList(list) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
-	<input type="hidden" id="salesNum" name="salesNum" value="${data.SALES_NUM}" /> <!-- 영업번호 -->
+	<input type="hidden" id="salesNum" name="salesNum" value="${param.salesNum}" /> <!-- 영업번호 -->
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">

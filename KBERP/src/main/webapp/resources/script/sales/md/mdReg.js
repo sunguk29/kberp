@@ -87,28 +87,47 @@ function insertMdData(){
 			buttons  : [{
 				name : "확인",
 				func : function() {
-					var params = $("#writeForm").serialize();
-					var callback=ajaxComm("mdActionAjax/insert", params,"");
-					callback.done(function(res){
-						alert("등ㄹ어옴");
-						if(res.res == "success"){
-							$("#actionForm").attr("action", "mdList");
-							$("#actionForm").submit();
-						}else{
-								alert("작성중 문제가 발생하였습니다.");						
-						}
-					});
-					callback.fail(function(request,status,error) {
-						console.log(request.requestText);
-					});
-			
-					closePopup();
+					var writeForm = $("#writeForm");
+					
+						writeForm.ajaxForm({
+							
+							success : function(res) {
+								
+								if(res.fileName) {
+									$("#attFile").val(res.fileName[0]);
+								}
+								
+								var params = $("#writeForm").serialize();
+								var callback=ajaxComm("mdActionAjax/insert", params,"");
+								callback.done(function(res){
+									if(res.res == "success"){
+										$("#actionForm").attr("action", "mdList");
+										$("#actionForm").submit();
+									}else{
+										alert("작성중 문제가 발생하였습니다.");						
+									}
+								});
+								callback.fail(function(request,status,error) {
+									console.log(request.requestText);
+								});
+								
+							},
+							
+							error : function(req) {
+								console.log(req.responseText);
 							}
-						},{
-				name : "취소"
-						}]
-		});
+						});
+					
+					writeForm.submit();
+					closePopup();
+					
+						}
+					},{
+						name : "취소"
+					}]
+				});
 			
-		}
+			}
 	});
 }
+
