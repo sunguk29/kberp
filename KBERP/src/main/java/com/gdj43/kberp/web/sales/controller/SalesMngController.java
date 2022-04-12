@@ -134,6 +134,7 @@ public class SalesMngController {
 				iCommonService.insertData("salesMng.sales1AddLoan", params); // 영업기회 대출상세정보tab
 				iCommonService.insertData("salesMng.sales1AddBsns", params); // 영업기회 예정사업 상세정보tab
 				iCommonService.insertData("salesMng.sales1AddBsnsAtt", params); // 영업기회 예정사업 첨부파일tab
+				iCommonService.updateData("lead.psNumUpdate", params); // 리드 진행상태 변경
 				break;
 			case "update":
 				iCommonService.updateData("salesMng.sales1UpdateSales", params);
