@@ -348,10 +348,10 @@ $(document).ready(function() {
 		html += " </div>                                                                          ";
 		html += " <div class=\"ptm_mid\">                                                           ";
 		html += " 	<div class=\"ptm_mid_top\">                                                     ";
-		html += " 		<input type=\"text\"  class=\"text_size2\" placeholder=\"검색어를 입력해주세요\" /> ";
+		html += " 		<input type=\"text\"  class=\"text_size2\" id=\"searchTxt\" name=\"searchTxt\" placeholder=\"검색어를 입력해주세요\" /> ";
 		html += " 	</div>		                                                                  ";
 		html += " 	<div class=\"ptm_mid_bot\">                                                     ";
-		html += " 		<select class=\"sel_size\">                                                 ";
+		html += " 		<select class=\"sel_size\" name=\"searchType\">                                                 ";
 		html += " 			<option value=\"9\">선택안함</option>                                             ";
 		html += " 			<option value=\"0\">거래고객사</option>                                           ";
 		html += " 			<option value=\"1\">파트너사</option>                                             ";
@@ -380,6 +380,18 @@ $(document).ready(function() {
 			contentsEvent : function() {
 				
 				drawCcList();
+				
+				$("#searchTxt").on("keypress", function(event) {
+					if(event.keyCode == 13) {
+						$(".popCmnBtn").click(); 
+						return false; // event를 실행하지 않겠다.
+					}
+				});
+				
+				$(".popCmnBtn").on("click", function() {
+					$("#page").val("1");
+					drawCcList();
+				});
 				
 				$(".popup_box_cc").on("click", ".popup_cc_box_in", function() {
 					var cnn = $(this).children("#cnn").val(); 
@@ -607,7 +619,7 @@ function drawList(list) {
 		html += "	<span class=\"company\"></span>                                                         ";
 		html += "</div>                                                                                   ";
 		html += "<span class=\"popup_cc_box_right\">                                                        ";
-		html += "	<span class=\"boldname\">" + data.CLNT_CMPNY_NAME + " / " +  data.CLNT_CMPNY_CLSFY_NUM + " / " + data.GRADE_NUM + "</span><br/>                 ";
+		html += "	<span class=\"boldname\">" + data.CLNT_CMPNY_NAME + " / " +  data.CLNT_CMPNY_CLSFY_NAME + " / " + data.GRADE_NAME + "</span><br/>                 ";
 		html += "	<span class=\"adrs_name\">" + data.ADRS + "</span><br/>                                              ";
 		html += "	<span class=\"clntCmpny_dt\">" + data.RGSTRTN_DATE + "</span>                                  ";
 		html += "</span>                                                                                  ";

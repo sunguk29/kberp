@@ -294,6 +294,14 @@
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE 1 = 1
+        <choose>
+			<when test="searchType != 9" > <!-- 선택안함 : 0 이 아니면 해당 번호 목록으로 검색 -->
+				AND CLNT_CMPNY_CLSFY_NUM = #{searchType}
+			</when>
+		</choose> 
+		<if test="searchTxt != null and searchTxt != ''">
+			AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+		</if>
 		AND DEL_CHECK IS NULL
 	</select>
 	
@@ -332,7 +340,16 @@
 		FROM (  SELECT CLNT_CMPNY_NAME, CLNT_CMPNY_CLSFY_NUM, GRADE_NUM, ADRS, RGSTRTN_DATE, CLNT_CMPNY_NUM,
 		               ROW_NUMBER() OVER(ORDER BY CLNT_CMPNY_NUM DESC) AS RNUM    
 		        FROM CLNT_CMPNY
-		        WHERE DEL_CHECK IS NULL) CC
+		        WHERE 1 = 1
+		        <choose>
+					<when test="searchType != 9" > <!-- 선택안함 : 0 이 아니면 해당 번호 목록으로 검색 -->
+						AND CLNT_CMPNY_CLSFY_NUM = #{searchType}
+					</when>
+				</choose> 
+				<if test="searchTxt != null and searchTxt != ''">
+					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</if>
+				AND DEL_CHECK IS NULL ) CC
 		WHERE CC.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
