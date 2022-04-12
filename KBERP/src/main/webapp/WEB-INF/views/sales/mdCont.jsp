@@ -37,6 +37,15 @@ $(document).ready(function() {
 	$('#mid_prdmptn_psbl_check').val(${data.MID_RDMPTN_PSBL_CHECK}).prop("selected", true);
 	$('#loan_prd').val(${data.LOAN_PRD}).prop("selected", true);
 	
+	
+	// 파일 데이터가 있다면 View에 출력
+	var uploadFileName = "${fileData.ATT_FILE_NAME}";
+	if(uploadFileName != null) {
+		$('#fileName').val(uploadFileName.substring(20));
+		$("#attCnt").text("(1)");
+	}
+
+	
 	//목록으로 버튼 클릭시, mdList로 이동
 	goMdList();
 	
@@ -47,6 +56,15 @@ $(document).ready(function() {
 	deleteMdData();
 	
 });
+
+// 파일 다운로드 함수 
+function fileDownLoad(){
+	var fileName =  "${fileData.ATT_FILE_NAME}";
+	location.href = "mdFileDown?fileName="+fileName;
+}
+
+
+
 </script>
 </head>
 <body>
@@ -242,10 +260,12 @@ $(document).ready(function() {
 					</table>
 					<!-- 끝 -->
 					<!-- 첨부자료 부분 -->
-					<div class="rvn_txt"> 첨부자료 (0)
+					<div class="rvn_txt"> 첨부자료 <span id=attCnt>(0)</span>
 						<input type=file name='file1' style='display: none;'> 
 					</div>
-					<div class="cntrct_box_in"></div> 
+					<div class="cntrct_box_in">
+						<input type="text" id="fileName" name="fileName" readonly="readonly" onclick="fileDownLoad()" />
+					</div> 
 				</div>
 			</div>	
 		</div>

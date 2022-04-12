@@ -72,4 +72,15 @@
 		                                                WHERE EXPCTD_BSNS_TYPE = 2) C
 		                                             ON 1 = 1
 	</select>
+	
+	<!-- 종합차트 영업순위 -->
+	<select id="getTotalNewSalesRank" parameterType="hashmap" resultType="hashmap">
+		SELECT COUNT(*) CNT
+		FROM SALES S INNER JOIN EMP E
+		                     ON S.MNGR_EMP_NUM = E.EMP_NUM           
+		WHERE TO_CHAR(START_DATE, 'YY-MM') =  TO_CHAR(SYSDATE, 'YY-MM')
+		GROUP BY E.EMP_NAME
+		HAVING COUNT(*) = 6
+	</select>
+	
 </mapper>

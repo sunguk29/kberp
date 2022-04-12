@@ -298,13 +298,13 @@
 	</select>
 	
 	<select id="assetTktList" resultType="hashmap" parameterType="hashmap">
-		SELECT TKT_NUM, ASSET_NUM, A.ASSET_NAME,MNGR_NAME, QUNTY, QUNTY_DVSN_NUM,TKT_DATE
-		FROM ( SELECT TKT_NUM, AT.ASSET_NUM, A.ASSET_NAME, EMP_NAME AS MNGR_NAME, AT.QUNTY,
+		SELECT TKT_NUM, ASSET_NUM, A.ASSET_NAME, EMP_NAME, QUNTY, QUNTY_DVSN_NUM,TKT_DATE
+		FROM ( SELECT TKT_NUM, AT.ASSET_NUM, A.ASSET_NAME, EMP_NAME, AT.QUNTY,
 			 AT.QUNTY_DVSN_NUM,TO_CHAR(TKT_DATE, 'YYYY-MM-DD')AS TKT_DATE,ROW_NUMBER() OVER(ORDER BY TKT_NUM DESC) AS RNUM
 			FROM ASSET A INNER JOIN ASSET_TKT AT
 			                    ON A.ASSET_NUM = AT.ASSET_NUM
 			                   INNER JOIN EMP E
-			                   	ON A.MNGR_NUM = E.EMP_NUM
+			                   	ON TKT_EMP_NUM = E.EMP_NUM
 			WHERE 1=1
 		<if test="searchTxt != null and searchTxt != ''"> 
 					<choose>
@@ -333,24 +333,25 @@
                 WHERE ASSET_NUM=#{num}) B
                 ON 1=1
 	</select>
+
+	<select id="psblTktAssetListCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM ASSET 
+		WHERE ASSET_TYPE_NUM = 1 AND QUNTY > 0 AND DSCRD_DATE IS NULL
+		<if test="sendSrchTxt1 != null and sendSrchTxt1 != ''">
+					AND ASSET_NAME LIKE '%' || #{sendSrchTxt1} || '%'	
+		</if>
+	</select>
 	
 	<select id="psblTktAssetList" resultType="hashmap" parameterType="hashmap">
 		SELECT ASSET_NUM, ASSET_NAME, QUNTY, QUNTY_DVSN_NUM
 		FROM ASSET 
 		WHERE ASSET_TYPE_NUM = 1 AND QUNTY > 0 AND DSCRD_DATE IS NULL
-		<if test="assetSrchTxt != null and assetSrchTxt != ''">
-					AND ASSET_NAME LIKE '%' || #{assetSrchTxt} || '%'	
+		<if test="sendSrchTxt1 != null and sendSrchTxt1 != ''">
+					AND ASSET_NAME LIKE '%' || #{sendSrchTxt1} || '%'	
 		</if>
 	</select>
 	
-	<select id="psblTktAssetListCnt" resultType="Integer" parameterType="hashmap">
-		SELECT COUNT(*) AS CNT
-		FROM ASSET 
-		WHERE ASSET_TYPE_NUM = 1 AND QUNTY > 0 AND DSCRD_DATE IS NULL
-		<if test="assetSrchTxt != null and assetSrchTxt != ''">
-					AND ASSET_NAME LIKE '%' || #{assetSrchTxt} || '%'	
-		</if>
-	</select>
 	
 	<insert id="assetTktRgstrtn" parameterType="hashmap">
 		INSERT INTO ASSET_TKT(TKT_NUM, RGSTRTN_EMP_NUM, ASSET_NUM, TKT_EMP_NUM, RMRKS, TKT_DATE, QUNTY, QUNTY_DVSN_NUM)

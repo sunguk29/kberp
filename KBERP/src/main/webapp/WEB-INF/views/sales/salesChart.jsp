@@ -285,6 +285,20 @@ select {
 	height: 195px;
 	margin : 0 auto;
 }
+.cont_right {
+	display: inline-block;
+	vertical-align: top;
+	width: 430px;
+	height: 100%;
+	padding-right: 33.5px;	
+}
+.cont_left {
+	display: inline-block;
+	vertical-align: top;
+	width: 430px;
+	height: 100%;
+	padding-left: 33.5px;	
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {

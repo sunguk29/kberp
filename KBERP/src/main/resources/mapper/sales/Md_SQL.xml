@@ -11,22 +11,29 @@
 	<if test="md_grade != '-1'"> 			 
 		AND MD_GRADE_NUM = #{md_grade} 	<!-- 0 : S 1 : A 2 : B 3 : C 4 : D 5 : E -->
 	</if>
-	<!-- 판매상태 -->
- 	<if test="sales_stsA != '-1'" >
-		AND ( 1 = 1 
-		<choose>
-			<when test= "sales_sts0 != null and sales_sts0 !=''"> <!-- 판매상태 0:판매중 -->
-				OR SALES_STS_NUM = '0'
-			</when>
-			<when test= "sales_sts1 != null and sales_sts1 !=''"> <!-- 판매상태 1:판매중단 -->
-				OR SALES_STS_NUM = '1'
-			</when>
-			<when test= "sales_sts2 != null and sales_sts2 !=''"> <!-- 판매상태 2:출시예정 -->
-				OR SALES_STS_NUM = '2'
-			</when>
-		</choose> 
-		  )
-	</if> 
+	
+	<!-- 판매상태 --> 
+	<choose>
+		<when test= 'sales_sts == "1"'> <!-- 판매상태 0:판매중 -->
+			AND SALES_STS_NUM = '0'
+		</when>
+		<when test= 'sales_sts == "2"'> <!-- 판매상태 1:판매중단 -->
+			AND SALES_STS_NUM = '1'
+		</when>
+		<when test= 'sales_sts == "3"'> <!-- 판매상태 2:출시예정 -->
+			AND SALES_STS_NUM = '2'
+		</when>
+		<when test= 'sales_sts == "12"'>
+			AND (SALES_STS_NUM = '0' OR SALES_STS_NUM = '1')
+		</when>
+		<when test= 'sales_sts == "13"'> 
+			AND (SALES_STS_NUM = '0' OR SALES_STS_NUM = '2')
+		</when>
+		<when test= 'sales_sts == "23"'> 
+			AND (SALES_STS_NUM = '1' OR SALES_STS_NUM = '2')
+		</when>
+	</choose> 
+	
 	<!-- 판매 시작일 -->
 	<if test="sales_start_date != null and sales_start_date !=''"> 
 		AND SALES_START_DATE <![CDATA[ >= ]]> #{sales_start_date}
@@ -35,6 +42,8 @@
 	<if test="sales_end_date != null and sales_end_date !=''"> 
 		AND SALES_END_DATE  <![CDATA[ <= ]]>  #{sales_end_date}
 	</if>
+	
+	
 	<!-- 검색어 구분 -->
 	<if test="srch_txt != '-1' "> <!-- 검색어가 있을 때에만 -->
 		<choose>
@@ -82,7 +91,7 @@
       ,R.SALES_START_DATE
       ,R.SALES_END_DATE
       ,R.SALES_STS_NUM
-      ,ROW_NUMBER() OVER (ORDER BY MD_NUM DESC) AS RNUM
+      ,ROWNUM AS RNUM
 FROM (SELECT MD_NUM
 			,MD_GRADE_NUM
 			,INTRST_RATE
@@ -94,34 +103,13 @@ FROM (SELECT MD_NUM
             ,ROW_NUMBER() OVER (ORDER BY MD_NUM DESC) AS RNUM
      FROM MD
      WHERE DEL_CHECK IS NULL
+
+     
 	 <!-- 상품등급 -->
 	<if test="md_grade != '-1'"> 			
 		AND MD_GRADE_NUM = #{md_grade} 	<!-- 0 : S 1 : A 2 : B 3 : C 4 : D 5 : E -->
 	</if>
-	<!-- 판매상태 -->
-	<if test="sales_stsA != '-1'" >
-		AND ( 1 = 1 
-		<choose>
-			<when test= "sales_sts0 != null and sales_sts0 !=''"> <!-- 판매상태 0:판매중 -->
-				OR SALES_STS_NUM = '0'
-			</when>
-			<when test= "sales_sts1 != null and sales_sts1 !=''"> <!-- 판매상태 1:판매중단 -->
-				OR SALES_STS_NUM = '1'
-			</when>
-			<when test= "sales_sts2 != null and sales_sts2 !=''"> <!-- 판매상태 2:출시예정 -->
-				OR SALES_STS_NUM = '2'
-			</when>
-		</choose> 
-		  )
-	</if>
-	<!-- 판매 시작일 -->
-	<if test="sales_start_date != null and sales_start_date !=''"> 
-		AND SALES_START_DATE <![CDATA[ >= ]]> #{sales_start_date}
-	</if>
-	<!-- 판매 종료일 -->
-	<if test="sales_end_date != null and sales_end_date !=''"> 
-		AND SALES_END_DATE  <![CDATA[ <= ]]>  #{sales_end_date}
-	</if>
+	
 	<!-- 검색어 구분 -->
 	<if test="srch_txt != '-1' "> <!-- 검색어가 있을 때에만 -->
 		<choose>
@@ -134,40 +122,73 @@ FROM (SELECT MD_NUM
 		</choose>
 	</if>
 	
-	<if test="sort_gbn != null and sort_gbn !=''">
-		<choose>
-			<when test="sort_gbn == 0 "> <!--등록일 기준 -->
-				ORDER BY RGSTRTN_DATE DESC
-			</when>
-			<when test="sort_gbn == 1"> <!-- 상품이름 기준 -->
-				ORDER BY MD_NAME DESC
-			</when>
-			<when test="sort_gbn == 2"> <!-- 상품등급 기준 -->
-				ORDER BY MD_GRADE_NUM
-			</when>
-		</choose>
+	
+	<!-- 판매상태 --> 
+	<choose>
+		<when test= 'sales_sts == "1"'> <!-- 판매상태 0:판매중 -->
+			AND SALES_STS_NUM = '0'
+		</when>
+		<when test= 'sales_sts == "2"'> <!-- 판매상태 1:판매중단 -->
+			AND SALES_STS_NUM = '1'
+		</when>
+		<when test= 'sales_sts == "3"'> <!-- 판매상태 2:출시예정 -->
+			AND SALES_STS_NUM = '2'
+		</when>
+		<when test= 'sales_sts == "12"'>
+			AND (SALES_STS_NUM = '0' OR SALES_STS_NUM = '1')
+		</when>
+		<when test= 'sales_sts == "13"'> 
+			AND (SALES_STS_NUM = '0' OR SALES_STS_NUM = '2')
+		</when>
+		<when test= 'sales_sts == "23"'> 
+			AND (SALES_STS_NUM = '1' OR SALES_STS_NUM = '2')
+		</when>
+	</choose> 
+
+	
+	<!-- 판매 시작일 -->
+	<if test="sales_start_date != null and sales_start_date !=''"> 
+		AND SALES_START_DATE <![CDATA[ >= ]]> #{sales_start_date}
 	</if>
+	<!-- 판매 종료일 -->
+	<if test="sales_end_date != null and sales_end_date !=''"> 
+		AND SALES_END_DATE  <![CDATA[ <= ]]>  #{sales_end_date}
+	</if>
+
+
+	<!-- 정렬 -->
+	<choose>
+		<when test="sort_gbn == 0 "> <!--등록일 기준 -->
+			ORDER BY RGSTRTN_DATE DESC
+		</when>
+		<when test="sort_gbn == 1"> <!-- 상품이름 기준 -->
+			ORDER BY MD_NAME DESC
+		</when>
+		<when test="sort_gbn == 2"> <!-- 상품등급 기준 -->
+			ORDER BY MD_GRADE_NUM
+		</when>
+	</choose>
      ) R
 WHERE R.RNUM BETWEEN #{startCount} AND #{endCount}   
 </select>
 
 <!--============================= 상세보기  ====================================-->
 <select id="getMdContData" resultType="hashmap" parameterType="hashmap">
-	SELECT MD_NUM 
-	        ,MD_NAME
-	        ,MD_TYPE_NUM
-	        ,MD_GRADE_NUM
-	        ,SALES_STS_NUM
-	        ,LIMIT_AMNT
+	SELECT  MD_NUM                                  
+	        ,MD_NAME                                 
+	        ,MD_TYPE_NUM                            
+	        ,MD_GRADE_NUM                           
+	        ,SALES_STS_NUM                           
+	        ,LIMIT_AMNT                              
 	        ,TO_CHAR(SALES_START_DATE, 'YYYY-MM-DD') AS SALES_START_DATE
-	        ,TO_CHAR(SALES_END_DATE, 'YYYY-MM-DD') AS SALES_END_DATE
-	        ,INTRST_RATE
-	        ,INTRST_PYMNT_MTHD_NUM
-	        ,PRNCPL_PYMNT_MTHD_NUM
-	        ,MID_RDMPTN_PSBL_CHECK
-	        ,LOAN_PRD
-	        ,MD_DSCRPTN
-	FROM MD
+	        ,TO_CHAR(SALES_END_DATE, 'YYYY-MM-DD')   AS SALES_END_DATE
+	        ,INTRST_RATE                            
+	        ,INTRST_PYMNT_MTHD_NUM                  
+	        ,PRNCPL_PYMNT_MTHD_NUM                   
+	        ,MID_RDMPTN_PSBL_CHECK                  
+	        ,LOAN_PRD                               
+	        ,MD_DSCRPTN                            
+	FROM MD 
 	WHERE MD_NUM = #{no}
 </select>
 
@@ -231,4 +252,31 @@ WHERE R.RNUM BETWEEN #{startCount} AND #{endCount}
 	UPDATE MD SET DEL_CHECK = SYSDATE
 	WHERE MD_NUM = #{no}
 </update>
+
+
+<!--============================= MD_NUM 최대값 출력 ==========================-->
+<select id="getMdSeqMAX" resultType='int'>
+	SELECT MAX(MD_NUM)
+	FROM MD
+</select>
+
+<!--============================= 첨부파일 DB 저장 ==============================-->
+<select id="mdAddAttFile" parameterType='hashmap'  resultType='hashmap'>
+	INSERT INTO MD_ATT_FILE (ATT_FILE_NUM, MD_NUM, ATT_FILE_NAME)
+	VALUES (MD_ATT_FILE_SEQ.NEXTVAL, #{no}, #{attFile})
+</select>
+
+<!--============================= 첨부파일 DB 삭제 ==============================-->
+<delete id="mdDelAttFile" parameterType='hashmap'>
+	DELETE FROM MD_ATT_FILE
+	WHERE MD_NUM = #{no}
+</delete>
+
+<!--============================= 첨부파일 select ==============================-->
+<select id="getMdAttFile" parameterType='hashmap'  resultType='hashmap'>
+	SELECT  ATT_FILE_NUM, MD_NUM, ATT_FILE_NAME                                                           
+	FROM MD_ATT_FILE 
+	WHERE MD_NUM = #{no}
+</select>
+
 </mapper>

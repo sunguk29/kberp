@@ -27,8 +27,16 @@
 	FROM DUAL
 </select>
 <insert id="aprvlAdd" parameterType="hashmap">
-	INSERT INTO APRVL (APRVL_NUM, EMP_NUM, TITLE, CONT)
-	VALUES(#{aprvl_num}, #{emp_num}, #{title}, #{cont})
+	INSERT INTO APRVL (APRVL_NUM, EMP_NUM, TITLE, CONT
+	<if test="att_file != null and att_file != ''">
+	, ATT_FILE
+	</if>
+	)
+	VALUES(#{aprvl_num}, #{emp_num}, #{title}, #{cont} 
+	<if test="att_file != null and att_file != ''">
+	, #{att_file}
+	</if>
+	)
 </insert>
 <insert id="aprvlerAdd" parameterType="hashmap">
 	INSERT INTO APRVL_LINE (APRVL_NUM, EMP_NUM, APRVL_TURN)
@@ -39,6 +47,49 @@
 	VALUES(#{aprvl_num}, #{rfrnc}) 
 </insert>
 
+<select id = "addList" parameterType = "hashmap" resultType="hashmap">
+SELECT *
+FROM (SELECT E.EMP_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, AL.APRVL_STS
+FROM  EMP E INNER JOIN APNTM A
+                        ON E.EMP_NUM = A.EMP_NUM
+            INNER JOIN DEPT D
+                        ON A.DEPT_NUM = D.DEPT_NUM
+            INNER JOIN RANK R
+                        ON A.RANK_NUM = R.RANK_NUM 
+            INNER JOIN APRVL_LINE AL
+                        ON A.EMP_NUM = AL.EMP_NUM
+     )
+WHERE 1 = 1
+
+</select>
+
+<select id="getAprvlList" parameterType="hashmap" resultType="hashmap">
+SELECT *
+FROM(
+SELECT AL.APRVL_NUM, AL.APRVL_STS, AL.STS_CHNG_DATE, AL.CMNT, AL.APRVL_TURN, E.EMP_NAME, A.EMP_NUM, AR.DRAFT_DATE, A.DEPT_NUM, D.DEPT_NAME, AR.TITLE, AR.CONT, ROW_NUMBER() OVER(ORDER BY AL.APRVL_NUM DESC) AS RNUM
+FROM APRVL_LINE AL INNER JOIN APNTM A
+                   			 	ON AL.EMP_NUM = A.EMP_NUM
+                    INNER JOIN DEPT D
+                    			ON A.DEPT_NUM = D.DEPT_NUM 
+                    INNER JOIN APRVL AR
+                    			ON AL.APRVL_NUM = AR.APRVL_NUM
+                    INNER JOIN EMP E
+                    			ON AL.EMP_NUM = E.EMP_NUM
+WHERE 1=1
+		<if test="searchTxt != null and searchTxt != ''"> 
+					<choose>
+						<when test="searchGbn == 0">
+							AND AL.APRVL_NUM LIKE '%' || #{searchTxt} || '%'
+						</when>
+						<when test="searchGbn == 1">
+							AND AR.TITLE LIKE '%' || #{searchTxt} || '%'
+						</when>
+					</choose>
+				</if>
+				) AB
+				WHERE AB.RNUM BETWEEN #{startCount} AND #{endCount}
+</select>
+
 <select id = "aprvlResult" resultType="String">
 	SELECT  DISTINCT CASE WHEN APRVL_STS = 0 THEN '대기'
         				  WHEN APRVL_STS = 1 THEN '승인'
@@ -47,5 +98,28 @@
 	FROM APRVL_LINE
 	WHERE APRVL_NUM = #{aprvl_num} 
 </select>
+
+<select id="tmpltCont" parameterType="hashmap" resultType="hashmap">
+SELECT *
+FROM DRAFT_TMPLT
+WHERE TMPLT_NUM = #{no}
+</select>
+
+<select id="getAprvlListCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM APRVL 
+		WHERE 1=1
+		<if test="searchTxt != null and searchTxt != ''">
+			<choose>
+				<when test="searchGbn == 0">
+					 AND APRVL_NUM LIKE '%' || #{searchTxt} || '%'
+				</when>
+				<when test="searchGbn == 1">
+					 AND TITLE LIKE '%' || #{searchTxt} || '%'
+				</when>
+			</choose>
+		</if>
+		
+	</select>
 
 </mapper>

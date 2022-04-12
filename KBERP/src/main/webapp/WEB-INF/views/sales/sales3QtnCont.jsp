@@ -304,6 +304,7 @@ textarea {
     border-radius: 7px;
     margin-bottom: 18px;
     margin-left: 45px;
+    font-size: 10pt;
 }
 .btnImg_in{
 	display: inline-block;
@@ -621,47 +622,6 @@ $(document).ready(function() {
 		$("#sgstn_btn").html(html);
 	});
 	
-	
-	
-	
- 	//대출금액
-	var loanAmnt = ${data3.LOAN_AMNT};
-	//대출기간
-	var loanPrd
-	if(${data3.LOAN_PRD eq 0}) {
-		loanPrd = 6;
-	} else if(${data3.LOAN_PRD eq 1}) {
-		loanPrd = 12;
-	} else if(${data3.LOAN_PRD eq 2}) {
-		loanPrd = 36;
-	} else if(${data3.LOAN_PRD eq 3}) {
-		loanPrd = 60;
-	}
-	//이자율
-	var intrstRate = ${data3.INTRST_RATE} * 0.01;
-	//이자율(월)
-	var mIntrstRate = (intrstRate / 12);
-	
-	//월 납부액
-	if(${data3.PRNCPL_PYMNT_MTHD_NUM eq 0}) { // 원금 균등 상환
-		$("#monthPymntAmnt").val(Math.round(loanAmnt / loanPrd));
-		$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
-	}
-	if(${data3.PRNCPL_PYMNT_MTHD_NUM eq 1}) { // 원리금 균등 상환
-		var temp1 = Math.pow(1 + mIntrstRate, loanPrd) - 1;
-		var temp2 = loanAmnt * mIntrstRate * Math.pow(1 + mIntrstRate, loanPrd);
-		$("#monthPymntAmnt").val(Math.round(temp2 / temp1));
-		$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
-	}
-	if(${data3.PRNCPL_PYMNT_MTHD_NUM eq 2}) { // 만기 일시 상환
-		if(${data3.INTRST_PYMNT_MTHD_NUM ne 2}) {
-			$("#monthPymntAmnt").val("0");
-			$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
-		}
-	
-	}
-	
-	
 }); // document.ready End
 
 /* 의견 목록 Ajax */
@@ -967,11 +927,15 @@ function drawPQList(list) {
 					</table>
 					<br/>
 					<!-- 첨부자료  -->
+					<c:set var="salesFileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+					<c:set var="salesFileName" value="${fn:substring(data.ATT_FILE_NAME, 20, salesFileLength)}"></c:set>
 					<div class="spc">
-						<div class="adc_txt"> 첨부자료 (0)
-								<input type=file name='file1' style='display: none;'> 
+						<div class="adc_txt">
+							첨부자료
 						</div>
-						<div class="cntrct_box_in"></div> 
+						<div class="cntrct_box_in">
+							<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${salesFileName}">${salesFileName}</a>
+						</div> 
 					</div>
 				</div>
 					
@@ -1138,15 +1102,15 @@ function drawPQList(list) {
 							</tbody>
 						</table>
 						<!-- 첨부자료  -->
-						<input type=file id="att" name="att" />
-						<input type="hidden" id="attFile" name="attFile" />
+						<c:set var="sgstnFileLength" value="${fn:length(data2.ATT_FILE_NAME)}"></c:set>
+						<c:set var="sgstnFileName" value="${fn:substring(data2.ATT_FILE_NAME, 20, sgstnFileLength)}"></c:set>
 						<div class="spc">
 							<div class="adc_txt">
 								첨부자료
 							</div>
 							<div class="cntrct_box_in">
-							
-							</div>
+								<a href="resources/upload/${data2.ATT_FILE_NAME}"  download="${sgstnFileName}">${sgstnFileName}</a>
+							</div> 
 						</div>
 					</div>
 <!-- *************************************** 견적 시작 *************************************** -->			
@@ -1292,26 +1256,22 @@ function drawPQList(list) {
 								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" value="${data3.PYMNT_DATE}" readonly="readonly" placeholder="매달    일" /></td>
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
-								<td><input type="text" class="txt" id="monthPymntAmnt" name="monthPymntAmnt" readonly="readonly" /></td>
-								<td><input type="button" class="btn" value="월 이자액" readonly="readonly" /></td>
-								<td colspan="2"><input type="text" class="txt" id="monthIntrstAmnt" name="monthIntrstAmnt" readonly="readonly" /></td>
-							</tr>
-							<tr height="40">
 								<td><input type="button" class="btn" value="비고" readonly="readonly"/></td>
 								<td colspan="3"><input type="text" class="rmks" name="rmksCont" value="${data3.RMKS}" readonly="readonly" /></td>
 							</tr>							
 						</tbody>
 					</table>
 					<!-- 첨부자료 -->
-					<div class="spc">
-						<div class="adc_txt">
-							첨부자료
-						</div>
-						<div class="cntrct_box_in">
-							<input type="text" id="fileName" readonly="readonly" />
-						</div>
-					</div>		
+					<c:set var="qtnFileLength" value="${fn:length(data3.ATT_FILE_NAME)}"></c:set>
+						<c:set var="qtnFileName" value="${fn:substring(data3.ATT_FILE_NAME, 20, qtnFileLength)}"></c:set>
+						<div class="spc">
+							<div class="adc_txt">
+								첨부자료
+							</div>
+							<div class="cntrct_box_in">
+								<a href="resources/upload/${data3.ATT_FILE_NAME}"  download="${qtnFileName}">${qtnFileName}</a>
+							</div> 
+						</div>		
 <!-- *************************************** 견적 끝 *************************************** -->						
 					<div class="next_bot">
 						<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>

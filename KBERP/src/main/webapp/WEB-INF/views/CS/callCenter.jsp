@@ -769,7 +769,8 @@ $(document).ready(function() {
 							data : params,
 							success : function(res) {
 								if(res.res == "success") {
-									location.reload();
+									closePopup();
+									$("#guide_btn").click();
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
 								}
@@ -829,7 +830,8 @@ $(document).ready(function() {
 							data : params,
 							success : function(res) {
 								if(res.res == "success") {
-									location.reload();
+									closePopup();
+									$("#guide_btn").click();
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
 								}
@@ -860,7 +862,8 @@ $(document).ready(function() {
 							data : params,
 							success : function(res) {
 								if(res.res == "success") {
-									location.reload();
+									closePopup();
+									$("#guide_btn").click();
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
 								}
@@ -1073,6 +1076,7 @@ $(document).ready(function() {
 		});	
 	}); // 상담이력 tr 클릭 끝
 	
+	// 대응가이드 리로드
 	function rspndRe() {
 		var params = $("#rspndActionForm").serialize();
 		
@@ -1093,7 +1097,7 @@ $(document).ready(function() {
 			
 		});
 	}
-	
+	// 대응가이드 리스트
 	function drawRspndList(list) {
 		var html = "";
 		
@@ -1110,7 +1114,7 @@ $(document).ready(function() {
 		}
 		$("#guide_table_tbody").html(html);
 	}
-	
+	// 페이지 리스트
 	function drawPaging(pb) {
 		var html = "";
 		
@@ -1140,7 +1144,7 @@ $(document).ready(function() {
 		
 		$("#paging_wrap").html(html);
 	}
-	
+	// 상담이력 리스트
 	function drawCnslList(list) {
 		var html = "";
 		
@@ -1157,6 +1161,7 @@ $(document).ready(function() {
 		$("#cnslList").html(html);
 	}
 	
+	// 고객 팝업 리스트
 	function drawList(list) {
 		var html = "";
 		
@@ -1208,7 +1213,7 @@ $(document).ready(function() {
 							data : params,
 							success : function(res) {
 								if(res.res == "success") {
-									location.reload();
+									console.log(res);
 									closePopup();
 								} else {
 									alert("작성중 문제가 발생하였습니다.");

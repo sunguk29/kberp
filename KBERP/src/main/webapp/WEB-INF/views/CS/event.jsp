@@ -475,7 +475,7 @@ $(document).ready(function() {
 				<div class="title">${data.EVENT_TITLE}</div>
 				<div class="writer_area">
 					<div class="write_info">
-						<div class="writer">${data.EMP_NUM}</div>
+						<div class="writer">${EMP_NAME}</div>
 						<div class="date">${data.WRITE_DATE}</div>
 					</div>
 				</div>
