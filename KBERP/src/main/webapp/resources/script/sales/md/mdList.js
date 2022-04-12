@@ -73,19 +73,19 @@ function drawList(list){
 		var sales_sts = data.SALES_STS_NUM
 		
 		html += "<tr>";
-		html += "<td rowspan=\"3\" class='md_num'>" + data.MD_NUM + "</td>"; 	//글번호
-		html += "<td>" + data.MD_NUM + "</td>";									//상품번호
-		html += "<td>" + GradeFormatter(data.MD_GRADE_NUM) + "</td>";			//등급
+		html += "<td rowspan=\"3\" class='md_num'>" + data.MD_NUM + "</td>"; 							//글번호
+		html += "<td>" + data.MD_NUM + "</td>";															//상품번호
+		html += "<td>" + GradeFormatter(data.MD_GRADE_NUM) + "</td>";									//등급
 		html += "<td></td>";
 		html += "</tr>";
 		html += "<tr>";
-		html += "<td>" + data.INTRST_RATE + "%" + "</td>";						//이자율
+		html += "<td>" + data.INTRST_RATE + "%" + "</td>";												//이자율
 		html += "<td class='md_name' no='" + data.MD_NUM + "'>" + data.MD_NAME + "</td>";				//상품명
-		html += "<td><span class='sales_psbl_btn'>" + sales_sts_converter(sales_sts) + "</span></td>";							//판매상태
+		html += "<td><span class='sales_psbl_btn'>" + sales_sts_converter(sales_sts) + "</span></td>";	//판매상태
 		html += "</tr>";
 		html += "<tr class='thirdTr'>";
-		html += "<td>" + data.LIMIT_AMNT + "원" + "</td>";						//대출한도금액
-		html += "<td>" + data.SALES_START_DATE + "~" + nullCheckFunc(data.SALES_END_DATE, 'aaa') + "</td>";				//계약기간
+		html += "<td>" + data.LIMIT_AMNT + "원" + "</td>";												//대출한도금액
+		html += "<td>" + data.SALES_START_DATE + "~" + nullCheckFunc(data.SALES_END_DATE, 'aaa') + "</td>";	//계약기간
 		html += "<td></td>";
 		html += "</tr>";
 	}
@@ -134,6 +134,7 @@ function drawPaging(pb) {
 	
 	$("#pgn_area").html(html);
 }
+
 /* old_data 의 값을 검색 데이터가 있으면 검색된 데이터로, 검색 데이터가 없으면 기본값으로 하는 함수  */
 function keepSrchData() {
 	if($("#old_md_grade").val() != ''){
@@ -179,7 +180,7 @@ function checkboxFunc2(){
 	}	
 }
 
-/**
+/*
    검색에 필요한 판매상태 처리 함수
    전체선택 : -1
    판매중 : 0, 판매중단 : 1, 출시예정 : 2 
@@ -320,13 +321,35 @@ function goSrch() {
 	});
 }
 
-
-
-
-
-
-
-
-
-
+/*클릭하면 상단 박스 작동*/
+function clickBoxFunc() {
+	$("#sts_listA").on("click", function() {
+		$("#sales_stsA").prop("checked", true);
+		$("#sales_sts0").prop("checked", false);
+		$("#sales_sts1").prop("checked", false);
+		$("#sales_sts2").prop("checked", false);
+		$("#srch_btn").click();
+	});
+	$("#sts_list0").on("click", function() {
+		$("#sales_sts0").prop("checked", true);
+		$("#sales_stsA").prop("checked", false);
+		$("#sales_sts1").prop("checked", false);
+		$("#sales_sts2").prop("checked", false);
+		$("#srch_btn").click();
+	});
+	$("#sts_list1").on("click", function() {
+		$("#sales_sts1").prop("checked", true);
+		$("#sales_stsA").prop("checked", false);
+		$("#sales_sts0").prop("checked", false);
+		$("#sales_sts2").prop("checked", false);
+		$("#srch_btn").click();
+	});
+	$("#sts_list2").on("click", function() {
+		$("#sales_sts2").prop("checked", true);
+		$("#sales_sts0").prop("checked", false);
+		$("#sales_sts1").prop("checked", false);
+		$("#sales_stsA").prop("checked", false);
+		$("#srch_btn").click();
+	});
+}
 

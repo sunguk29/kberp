@@ -39,7 +39,7 @@ $(document).ready(function() {
 	
 	
 	// 파일 데이터가 있다면 View에 출력
-	let uploadFileName = "${fileData.ATT_FILE_NAME}";
+	var uploadFileName = "${fileData.ATT_FILE_NAME}";
 	if(uploadFileName != null) {
 		$('#fileName').val(uploadFileName.substring(20));
 		$("#attCnt").text("(1)");
