@@ -438,6 +438,31 @@ pre {
 	width: 100%;
 	height: 100%;
 }
+.popup_cont2 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+	font-weight: 600;
+	text-align: center;
+	line-height: 100px;
+}
+.popup_cont3 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+    font-weight: 600;
+    text-align: center;
+    height: 40px;
+    line-height: 50px;
+    padding-top: 10px;
+}
+.popup_cont4 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+    font-weight: 600;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    padding-bottom: 10px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -448,11 +473,17 @@ $(document).ready(function() {
 	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
+
+		var html = "";
+		
+		html += "<div class=\"popup_cont3\">작성중인 내용이 저장되지 않습니다.</div>";
+		html += "<div class=\"popup_cont4\">나가시겠습니까?</div>";
+		
 		makePopup({
 			bg : false,
 			bgClose : false,
 			title : "알림",
-			contents : "작성중인 내용이 저장되지 않습니다. 나가시겠습니까?",
+			contents : html,
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
@@ -521,11 +552,16 @@ $(document).ready(function() {
 			$("#reDate").focus();
 		} 
 		else {
+			
+			var html = "";
+			
+			html += "<div class=\"popup_cont2\">저장하시겠습니까?</div>";
+			
 			makePopup({
-				bg : false,
+				bg : true,
 				bgClose : false,
 				title : "알림",
-				contents : "저장하시겠습니까?",
+				contents : html,
 				contentsEvent : function() {
 					$("#popup1").draggable();
 				},
