@@ -29,10 +29,11 @@
 
 <!-- mdList javaScript파일 -->
 <script type="text/javascript" src="resources/script/sales/md/mdList.js?version=${version}"></script>
+
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	/* old_ 의 값, 검색 데이터가 있으면 검색된 데이터로, 검색 데이터가 없으면 기본값으로 하는 함수  */
+	//old_ 의 값, 검색 데이터가 있으면 검색된 데이터로, 검색 데이터가 없으면 기본값으로 하는 함수  
 	keepSrchData();
 
 	
@@ -44,35 +45,7 @@ $(document).ready(function() {
 	
 	
 	//상단 박스
-	$("#sts_listA").on("click", function() {
-		$("#sales_stsA").prop("checked", true);
-		$("#sales_sts0").prop("checked", false);
-		$("#sales_sts1").prop("checked", false);
-		$("#sales_sts2").prop("checked", false);
-		$("#srch_btn").click();
-		
-	});
-	$("#sts_list0").on("click", function() {
-		$("#sales_sts0").prop("checked", true);
-		$("#sales_stsA").prop("checked", false);
-		$("#sales_sts1").prop("checked", false);
-		$("#sales_sts2").prop("checked", false);
-		$("#srch_btn").click();
-	});
-	$("#sts_list1").on("click", function() {
-		$("#sales_sts1").prop("checked", true);
-		$("#sales_stsA").prop("checked", false);
-		$("#sales_sts0").prop("checked", false);
-		$("#sales_sts2").prop("checked", false);
-		$("#srch_btn").click();
-	});
-	$("#sts_list2").on("click", function() {
-		$("#sales_sts2").prop("checked", true);
-		$("#sales_sts0").prop("checked", false);
-		$("#sales_sts1").prop("checked", false);
-		$("#sales_stsA").prop("checked", false);
-		$("#srch_btn").click();
-	});
+	clickBoxFunc();
 	
 	
 	//검색 테이블
@@ -93,7 +66,6 @@ $(document).ready(function() {
 	goRegView();
 	
 }); //documentReady end
-
 </script>
 </head>
 <body>
