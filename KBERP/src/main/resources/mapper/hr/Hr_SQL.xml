@@ -84,7 +84,7 @@
 		                                                                                                            ON AA.RANK_NUM = R.RANK_NUM  
         WHERE AA.EMP_NUM = #{empNum}                                                                        
 	</select>
-	<select id="getInqryList" resultType="hashmap" parameterType="hashmap"><!-- 발령등록 사원조회 리스트 -->
+	<select id="getInqryList" resultType="hashmap" parameterType="hashmap"><!-- 발령등록, 결재권자, 참조인 사원조회 리스트 -->
 		SELECT EE.EMP_NUM, EE.EMP_NAME, AA.RANK_NUM, AA.RANK_NAME, AA.DEPT_NUM, AA.DEPT_NAME
     	FROM ( SELECT A.EMP_NUM, E.EMP_NAME, A.RANK_NUM, R.RANK_NAME, A.DEPT_NUM, D.DEPT_NAME
 				 FROM (  SELECT EMP_NUM, RANK_NUM, DEPT_NUM, START_DATE, END_DATE, STS_NUM
@@ -158,10 +158,15 @@
 	                    WHERE STS_NUM ='1'
 	                    AND EMP_NUM = #{addEmpNum})
 	</update>
-	<delete  id="deleteApntm" parameterType="hashmap"  >
+	<update id="aprvlSuccess" parameterType="hashmap" ><!-- 발령 결제상태 변경(결재진행중) UPDATE -->
+		UPDATE APNTM SET STS_NUM = '0'
+		WHERE APNTM_NUM = #{apntmNum}
+	</update>
+	<delete  id="deleteApntm" parameterType="hashmap"><!-- 발령취소(삭제)  -->
 		DELETE FROM APNTM
 		WHERE APNTM_NUM = #{delApntmNum}
 	</delete>
+	
 	
 	<!--    증명서발급 쿼리    -->
 	 <select id="getEmpInfo" resultType="hashmap" parameterType="hashmap"><!-- (관리자) 요청사원정보 가져오기 -->
