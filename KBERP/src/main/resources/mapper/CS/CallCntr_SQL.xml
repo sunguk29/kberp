@@ -20,6 +20,7 @@ WHERE 1=1
 		</when>
 	</choose>
 </if>
+ORDER BY CLNT_NAME ASC
 </select>
 
 <!-- 상담이력 -->
@@ -97,6 +98,7 @@ FROM(SELECT CTGRY_NUM, CTGRY_NAME
                               INNER JOIN EMP E
                                       ON R.EMP_NUM = E.EMP_NUM
 WHERE R.DEL_CHECK = 1 AND R.CTGRY_NUM = 2 AND R.RNUM BETWEEN #{startCnt} AND #{endCnt}
+ORDER BY R.GUIDE_NUM DESC
 </select>
 
 <insert id="rspndAdd" parameterType="hashmap">

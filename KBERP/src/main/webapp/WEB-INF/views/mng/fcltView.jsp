@@ -28,14 +28,14 @@
 #file_preview{
 	width: 350px;
 	height: 350px;
-	margin-left: 100px;
+	margin-left: 90px;
 	vertical-align:top;
 	display:inline-block;
 }
 #file_preview img{
 	min-height: 350px;
 	min-width : 350px;
-	max-width:400px;
+	max-width:350px;
 	max-height: 350px;
 }
 #fclty_input_area{

@@ -438,6 +438,13 @@ pre {
 	width: 100%;
 	height: 100%;
 }
+.popup_cont2 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+	font-weight: 600;
+	text-align: center;
+	line-height: 100px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -466,11 +473,16 @@ $(document).ready(function() {
 	// 영업 종료하기 버튼
 	$(".salesOver_btn").on("click", function() {
 		// 수정이랑 같음, 상태를 종료로 변경, ajax로 failure로 보내기
+		
+		var html = "";
+		
+		html += "<div class=\"popup_cont2\">영업을 종료하시겠습니까?</div>";
+		
 		makePopup({
 			bg : true,
 			bgClose : false,
 			title : "영업 종료하기",
-			contents : "영업을 종료하시겠습니까?",
+			contents : html,
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
@@ -502,7 +514,7 @@ $(document).ready(function() {
 					closePopup();
 				}
 			}, {
-				name : "닫기"
+				name : "취소"
 			}]
 		});
 	});
@@ -538,17 +550,21 @@ $(document).ready(function() {
 	$(".opbx").on("click", ".del", function() {
 		var cmntNum = $(this).children("#cmntNum").val();
 		document.getElementById("cmntNum").value = cmntNum;
+
+		var html = "";
+		
+		html += "<div class=\"popup_cont2\">삭제하시겠습니까?</div>";
 		
 		makePopup({
 			bg : false,
 			bgClose : false,
 			title : "경고",
-			contents : "삭제하시겠습니까?",
+			contents : html,
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
 			buttons : [{
-				name : "예",
+				name : "확인",
 				func:function() {
 					console.log($("#cmntNum").val());
 					var params = $("#botOpActionForm").serialize();
@@ -574,7 +590,7 @@ $(document).ready(function() {
 					
 				}
 			}, {
-				name : "아니오"
+				name : "취소"
 			}]
 		});
 		
@@ -738,7 +754,7 @@ function drawOpList(list) {
 			<div class="page_title_text">영업관리 - 계약 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
 				<!-- <img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" id="printBtn" /> -->
-				<img alt="수정버튼" src="resources/images/sales/newAdd.png" class="btnImg" id="updateBtn" data-toggle="tooltip" title="계약 수정하기" />
+				<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" data-toggle="tooltip" title="계약 수정하기" />
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->

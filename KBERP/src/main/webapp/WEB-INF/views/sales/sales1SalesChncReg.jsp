@@ -166,15 +166,6 @@
 }
 /* 담당자 팝업 끝 */
 
-/* **** 저장 팝업 **** */
-.popup_cont2 {
-	/* 내용 변경용 */
-	font-size: 13pt;
-	font-weight: 600;
-	text-align: center;
-	line-height: 100px;
-}
-
 .body {
 	display: block;
 	background-color: white;
@@ -457,7 +448,32 @@ tr:nth-child(9) td:nth-child(3) {
 	text-indent: 12px;
     line-height: 40px;
 }
-
+/* **** 저장 팝업 **** */
+.popup_cont2 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+	font-weight: 600;
+	text-align: center;
+	line-height: 100px;
+}
+.popup_cont3 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+    font-weight: 600;
+    text-align: center;
+    height: 40px;
+    line-height: 50px;
+    padding-top: 10px;
+}
+.popup_cont4 {
+	/* 내용 변경용 */
+	font-size: 13pt;
+    font-weight: 600;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    padding-bottom: 10px;
+}
 /* 끝 */
 </style>
 <script type="text/javascript">
@@ -466,11 +482,18 @@ $(document).ready(function() {
 	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
+		
+
+		var html = "";
+		
+		html += "<div class=\"popup_cont3\">작성중인 내용이 저장되지 않습니다.</div>";
+		html += "<div class=\"popup_cont4\">나가시겠습니까?</div>";
+		
 		makePopup({
 			bg : false,
 			bgClose : false,
 			title : "알림",
-			contents : "작성중인 내용이 저장되지 않습니다. 나가시겠습니까?",
+			contents : html,
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
@@ -581,6 +604,7 @@ $(document).ready(function() {
 							}
 						}); // makePopup depth2 end
 						console.log("One!");
+						console.log(lpsNum);
 						closePopup();
 					}
 				}, {
@@ -648,12 +672,14 @@ function uploadName(e) {
 						</div>
 						<hr class="hr_bot" color="white" width="925px">
 						<div class="page_cont_title_text">기본정보</div>
+						<input type="hidden" name="leadNum" value="${param.leadNum}" />	
 						<input type="hidden" name="lcn" value="${ln.CLNT_NAME}" />
 						<input type="hidden" name="lccn" value="${ln.CLNT_CMPNY_NAME}" />
 						<input type="hidden" name="llnum" value="${ln.LEAD_NUM}" />
 						<input type="hidden" name="llname" value="${ln.LEAD_NAME}" />
 						<input type="hidden" name="len" value="${ln.EMP_NUM}" />
 						<input type="hidden" name="lren" value="${ln.RGSTRTN_EMP_NUM}" />
+						<input type="hidden" name="lpsNum" value="${ln.PRGRS_STS_NUM}" />
 						<hr class="hr_width">
 						<table>
 							<colgroup>

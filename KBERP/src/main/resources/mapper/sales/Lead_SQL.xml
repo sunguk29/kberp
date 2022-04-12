@@ -338,4 +338,9 @@
 		UPDATE LEAD SET DEL_CHECK = SYSDATE
 		WHERE LEAD_NUM = #{leadNum}
 	</update>	
+<!-- ******************************* 영업기회 저장시 리드 진행상태 수정 ******************************* -->	
+	<update id="psNumUpdate" parameterType="hashmap">
+		UPDATE LEAD SET PRGRS_STS_NUM = 2
+		WHERE LEAD_NUM = #{leadNum}
+	</update>	
 </mapper>

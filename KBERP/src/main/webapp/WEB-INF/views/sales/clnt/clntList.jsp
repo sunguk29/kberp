@@ -149,12 +149,7 @@ select {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-<<<<<<< HEAD
 	// 검색구분 초기값
-=======
-	
-	//검색 구분 설정
->>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 	if('${param.searchType}' != '') {
 		$("#searchType").val("${param.searchType}"); // 검색 구분 유지
 	} else {

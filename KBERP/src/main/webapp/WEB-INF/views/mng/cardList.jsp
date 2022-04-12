@@ -141,6 +141,11 @@ $(document).ready(function() {
 		$("#actionForm").attr("action","cardWrite");
 		$("#actionForm").submit();
 	});
+	
+	if('${param.searchGbn}' != '') {
+		$("#searchGbn").val('${param.searchGbn}');
+	}
+	
 	$("#searchTxt").on("keypress", function(event){
 		if(event.keyCode == 13) {	
 			$("#searchBtn").click();
@@ -202,10 +207,14 @@ function drawList(list) {
 		 else
 	            html += "<td></td>";
 		if(data.USE_START_DT!=null)
-			html += "<td>" + data.USE_START_DT + " ~ " + data.USE_END_DT + "</td>";   
+			html += "<td>" + data.USE_START_DT +"</td><td>~</td>";
         else
-            html += "<td></td>";
-		html += "</tr>";
+        	html += "<td></td>";
+        if(data.USE_END_DT!=null)
+    			html += "<td>" + data.USE_END_DT+"</td>";   
+        else
+            	html += "<td></td>";
+            	html += "</tr>";
 	}
 	$("tbody").html(html);
 }
@@ -257,18 +266,18 @@ function drawPaging(pb) {
 			<div class="page_srch_area">
 
 		<form action="#" id="actionForm" method="post">
+	      	<input type="hidden" id="gbn" name="gbn"/>
+			<input type="hidden" id="top" name="top" value="${param.top}" />
+			<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+			<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 			<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
 			<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
 			<input type="hidden" id="no" name="no"/>
 			<input type="hidden" id="mng_num" name="mng_num"/>
 			<input type="hidden" id="page" name="page" value="${page}" />
-				<select class="srch_sel">
-					<option>카드번호</option>
-					<option>카드명</option>
-				</select>
-				<select class="srch_sel">
-					<option>폐기구분</option>
-					<option>폐기</option>
+				<select class="srch_sel" name="searchGbn">
+					<option value="0">카드번호</option>
+					<option value="1">카드명</option>
 				</select>
 				<div class="srch_text_wrap">
 					<input type="text" id="searchTxt" name="searchTxt" value="${param.searchTxt}"/>
@@ -285,14 +294,16 @@ function drawPaging(pb) {
 					<col width="100"/>
 					<col width="400"/>
 					<col width="150"/>
-					<col width="250"/>
+					<col width="120"/>
+					<col width="10"/>
+					<col width="120"/>
 				</colgroup>
 				<thead>
 					<tr>
 						<th>카드번호</th>
 						<th>카드명</th>
 						<th>카드소유자</th>
-						<th>카드소유기간</th>
+						<th colspan=3>카드소유기간</th>
 					</tr>
 				</thead>
 				<tbody>

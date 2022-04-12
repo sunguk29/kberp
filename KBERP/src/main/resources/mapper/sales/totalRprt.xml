@@ -8,6 +8,7 @@
 		                     ON S.MNGR_EMP_NUM = E.EMP_NUM           
 		WHERE TO_CHAR(START_DATE, 'YY-MM') =  TO_CHAR(SYSDATE, 'YY-MM')
 		GROUP BY E.EMP_NAME
+		HAVING COUNT(*) = 6
 	</select>
 
 </mapper>

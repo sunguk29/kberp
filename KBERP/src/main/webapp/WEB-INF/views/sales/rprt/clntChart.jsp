@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP Sample</title>
+<title>카카오뱅크 ERP - 보고서</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -172,6 +172,15 @@
 }
 .sales_text_bot{
 	width: 428px;
+	height: 200px;
+	/* border: 1px solid #000; */
+	border: none;
+	margin-top: 10px;
+	font-size: 11pt;
+	position: relative;
+}
+.sales_text_bot2{
+	width: 927px;
 	height: 200px;
 	/* border: 1px solid #000; */
 	border: none;
@@ -375,7 +384,11 @@ input:focus {
 	width: 100%;
 	height: 2px;
 }
-
+.actvty_tLine2 {
+	background-color: #4B94F2;
+	width: 927px;
+	height: 2px;
+}
 /* 네모 이미지 */
 .img_rect {
 	width: 12px;
@@ -384,9 +397,60 @@ input:focus {
 	margin-right: 10px;
 	margin-left: 10px;
 }
+#pie-chart {
+	margin-left: 39px;
+	margin-right: 39px;
+}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+	
+	var pie = $("#pie-chart");
+	var bar = $("#bar-chart");
+
+	var pieLabels = ["S", "A", "B", "C", "D"];
+	var barLabels = ["영업부", "영업1팀", "영업2팀", "영업3팀"];
+
+	var pieData = [${clntGradeS},${clntGradeA},${clntGradeB},${clntGradeC},${clntGradeD}];
+	var barData = [10, 5, 50, 30];
+	
+	var pieColors = ["#FFAB00","#FFC107","#FFD740","#FFEB3B","#FFF59D"];
+	var barColors = ["#FFAB00","#FFC107","#FFD740","#FFEB3B","#FFF59D"];
+
+	var pieChart = new Chart(pie, {
+	    type: 'pie',
+	    data: {
+	        labels: pieLabels,
+	        datasets: [{
+	            label: '고객등급',
+	            data: pieData,
+	            backgroundColor: pieColors
+	        }]
+	    },
+	    options: {
+	    	responsive: false
+	    },
+	    plugins: [ChartDataLabels]
+	});
+
+	var barChart = new Chart(bar, {
+	    type: 'bar',
+	    data: {
+	        labels: barLabels,
+	        datasets: [{
+	            label: '부서',
+	            data: barData,
+	            backgroundColor: barColors
+	        }]
+	    },
+	    options: {
+	    	responsive: false
+	    },
+	    plugins: [ChartDataLabels]
+	});
 	
 	/* 담당자 팝업  */
 	$(".userIcon").on("click", function() {
@@ -551,6 +615,7 @@ function drawPaging(pb, sel) {
 	
 	$(sel).html(html);
 }
+
 </script>
 </head>
 <body>
@@ -566,6 +631,7 @@ function drawPaging(pb, sel) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
+</form>
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">고객 차트</div>
@@ -685,9 +751,13 @@ function drawPaging(pb, sel) {
 							<div class="sales_text_top">
 								<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />부서
 							</div>
-							<div class="actvty_tLine1"></div>
+							<div class="actvty_tLine2"></div>
 						</div>
-						<div class="sales_text_bot"></div>
+						<div class="sales_text_bot2">
+							<div class="pie-bot">
+								<canvas id="bar-chart" width="927" height="240"></canvas>
+							</div>							
+						</div>
 					</div>
 				</div>
 				<div class="cont_left">
@@ -698,14 +768,17 @@ function drawPaging(pb, sel) {
 							</div>
 							<div class="actvty_tLine1"></div>
 						</div>
-						<div class="sales_text_bot"></div>
+						<div class="sales_text_bot">
+							<div class="pie-bot">
+								<canvas id="pie-chart" width="350" height="240"></canvas>
+							</div>	
+						</div>
 					</div> 
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-</form>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

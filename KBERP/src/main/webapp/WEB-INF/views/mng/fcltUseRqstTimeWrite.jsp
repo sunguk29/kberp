@@ -16,12 +16,6 @@
 	width: 900px;
 }
 /* 개인 작업 영역 */
-.fclt_use_rsrv:focus{
-	outline: none;
-}
-.int:focus{
-	outline: none;
-}
 #fclt_use_rsrv_wrap{
 	width:900px;
 	font-size: 10.5pt;
@@ -33,8 +27,8 @@
 #cncl_rqst{
 	margin-left: 503px;
 }
-#use_prps:focus{
-	outline: none;
+input:focus{
+	outline-color: #F2CB05;
 }
 #use_prps{
 	width:755px;
@@ -42,6 +36,7 @@
 	resize: none;
 	font-size: 10.5pt;
 	padding: 5px 0px 0px 5px;
+	outline-color: #F2CB05;
 }
 .int{
 	width: 200px;
@@ -85,6 +80,7 @@
 $(document).ready(function() {
 	
 	$("#cncl").on("click",function(){
+		
 		$("#actionForm").attr("action","fcltUseRqst");
 		$("#actionForm").submit();
 	}); 
@@ -93,6 +89,7 @@ $(document).ready(function() {
 		$("#actionForm").attr("action","fcltUseRqstWrite");
 		$("#actionForm").submit();
 	});
+	$("#timeListbody").attr("placeholder","되나");
 	
 	$("#timeSel").on("click", function() {
 		var html = "";
@@ -129,7 +126,8 @@ $(document).ready(function() {
 				reloadList();
 				
 				$("#timeListbody").on("click", "#fcltyTime", function() {
-					$("input[name='fcltyTimeNum'").val($(this).attr("fcltyTimeNum"));
+					
+					$("input[name='fcltyTimeNum']").val($(this).attr("fcltyTimeNum"));
 					
 					var html="";
 					
@@ -234,18 +232,18 @@ function drawList(list) {
 </script>
 </head>
 <body>
+<form action="#" id="backForm" method="post">
+	
+</form>
+
 <form action="#" id="actionForm" method="post">
 		<input type="hidden" id="top" name="top" value="${param.top}" />
 		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
 		
-		<!-- 시설물예약목록의 검색유지 -->
-		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
-		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
-		
 		<!-- 시설물예약시 예약가능한 시설물 목록의 검색어유지 -->							
-		<input type="hidden" id="fOldSearchGbn" value="${param.fSearchGbn}"/>
-		<input type="hidden" id="fOldSearchTxt" value="${param.fSearchTxt}"/>
+		<input type="hidden" name ="fSearchGbn" value="${param.fSearchGbn}"/>
+		<input type="hidden" name="fSearchTxt" value="${param.fSearchTxt}"/>
 		
 		<!-- 캘린더 date값, 시설물명, 시설물번호  -->
 		<input type="hidden" id="rsvtnDate" name="rsvtnDate" value="${param.rsvtnDate}"/>
@@ -268,13 +266,13 @@ function drawList(list) {
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		
 <form action="#" id="writeForm" method="post">
-<input type="hidden" id="top" name="top" value="${param.top}" />
-<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
-<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
-<input type="hidden" id="rsvtnDate" name="rsvtnDate" value="${param.rsvtnDate}"/>
-<input type="hidden" id="fcltyName" name="fcltyName" value="${param.fcltyName}" />
-<input type="hidden" id="no" name="no" value="${param.no}"/> <!-- 시설물번호 -->
-<input type="hidden" id="fcltyTimeNum" name="fcltyTimeNum" value="${param.fcltyTimeNum}"/>
+	<input type="hidden" id="top" name="top" value="${param.top}" />
+	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+	<input type="hidden" id="rsvtnDate" name="rsvtnDate" value="${param.rsvtnDate}"/>
+	<input type="hidden" id="fcltyName" name="fcltyName" value="${param.fcltyName}" />
+	<input type="hidden" id="no" name="no" value="${param.no}"/> <!-- 시설물번호 -->
+	<input type="hidden" id="fcltyTimeNum" name="fcltyTimeNum" value="${param.fcltyTimeNum}"/>
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 				<div id="cont_top">
@@ -290,7 +288,7 @@ function drawList(list) {
 					<div class="fclt_use_rsrv_txt">사용 시간대 :</div>
 					<input type="text" class="fclt_use_rsrv" id="timeSel" readonly="readonly">
 					<div class="fclt_use_rsrv_txt">사용 인원 :</div>
-					<input type="text" class="fclt_use_rsrv" id="useNumOfPl" name="useNumOfPl">
+					<input type="text" class="fclt_use_rsrv" id="useNumOfPl" name="useNumOfPl" placeholder="숫자만 입력해주세요">
 				</div>
 			</div>		
 				<div id="cont_bottom">

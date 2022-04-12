@@ -1,12 +1,17 @@
 package com.gdj43.kberp.web.sales.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.common.service.ICommonService;
+import com.gdj43.kberp.common.CommonProperties;
 
 
 @Controller
@@ -67,7 +73,7 @@ public class MdController {
 			int rlsExpctdCnt = iCommonService.getIntData("md.getRlsExpctdCnt", params);
 			int onSaleCnt = iCommonService.getIntData("md.getOnSaleCnt", params);
 			int offSaleCnt = iCommonService.getIntData("md.getOffSaleCnt", params);
-			System.err.println("totalCont : " + totalCnt);
+			
 			PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), totalCnt);
 					
 			params.put("startCount", Integer.toString(pb.getStartCount()));
@@ -77,7 +83,7 @@ public class MdController {
 			
 			modelMap.put("list", list);
 			modelMap.put("pb", pb);
-			modelMap.put("totalCnt",totalCnt);
+			modelMap.put("totalCnt",rlsExpctdCnt + onSaleCnt + offSaleCnt);
 			modelMap.put("onSaleCnt",onSaleCnt);
 			modelMap.put("rlsExpctdCnt",rlsExpctdCnt);
 			modelMap.put("offSaleCnt",offSaleCnt);
@@ -96,8 +102,15 @@ public class MdController {
 							ModelAndView mav) throws Throwable {
 		
 		HashMap<String, String> data = iCommonService.getData("md.getMdContData", params);
+		HashMap<String, String> fileData = null;
+		Object fileDataObj = iCommonService.getData("md.getMdAttFile", params);
+		
+		if(fileDataObj != null) {
+			fileData = (HashMap<String, String>)fileDataObj;
+		}
 		
 		mav.addObject("data", data);
+		mav.addObject("fileData", fileData);
 		mav.addObject("params", params);
 		mav.setViewName("sales/mdCont");
 		
@@ -109,7 +122,6 @@ public class MdController {
 	public ModelAndView mdReg(@RequestParam HashMap<String, String> params, 
 							   ModelAndView mav) {
 		
-		
 		System.err.println("mdReg controller" + params);
 		mav.addObject("params", params);
 		mav.setViewName("sales/mdReg");
@@ -120,9 +132,19 @@ public class MdController {
 	@RequestMapping(value="/mdUpdate")
 	public ModelAndView mdUpdate(@RequestParam HashMap<String, String> params,
 								 ModelAndView mav) throws Throwable {
+		
+		
 		HashMap<String, String> data = iCommonService.getData("md.getMdContData", params);
+		HashMap<String, String> fileData = null;
+		Object fileDataObj = iCommonService.getData("md.getMdAttFile", params);
+		
+		if(fileDataObj != null) {
+			fileData = (HashMap<String, String>)fileDataObj;
+		}
 		
 		mav.addObject("data", data);
+		mav.addObject("fileData", fileData);
+				
 		mav.addObject("params", params);
 		mav.setViewName("sales/mdUpdate");
 		
@@ -143,28 +165,47 @@ public class MdController {
 	BigDecimal sEmpNum = (BigDecimal)session.getAttribute("sEmpNum");
 	params.put("sEmpNum", sEmpNum.toString());
 	
+	
 	try {
 		switch(gbn) {
 		case "insert" :
 			
-			iCommonService.insertData("md.insertMdData", params);  // 게시판 DB Save
+			 // 게시판 데이터 저장
+			iCommonService.insertData("md.insertMdData", params); 
 			
-			int seq = iCommonService.getIntData("md.getMdSeqMAX"); // 위에 저장한 seq 값 출력 후 params에 저장 
-			params.put("mdNum", String.valueOf(seq));
-		
-			iCommonService.insertData("md.mdAddAttFile", params);  // 업로드된 파일데이터 DB 저장 
+			// 첨부파일이 있다면
+			if( params.get("attFile") != "" ) {
+				// 저장한 게시판 seq 추출
+				int seq = iCommonService.getIntData("md.getMdSeqMAX");
+				params.put("no", String.valueOf(seq));
+				// 첨부파일 데이터 DB 저장 
+				iCommonService.insertData("md.mdAddAttFile", params); 
+			}
 			break;
 			
 		case "update" :
+			
+			// 새로 업로드한 파일이 있다면 
+			if( params.get("attFile") != "" ) {
+				// 기존 첨부파일 DB 데이터 삭제 
+				iCommonService.deleteData("md.mdDelAttFile", params);
+				// 새로운 첨부파일 DB 저장 
+				iCommonService.insertData("md.mdAddAttFile", params);  
+			}
+
+			// 게시판 데이터 업데이트 
 			iCommonService.updateData("md.updateMdData", params);
 			break;
 			
 			
 		case "delete" :
+			
+			// 게시판 DB 데이터 삭제 
 			iCommonService.deleteData("md.deleteMdData", params);
+			// 첨부파일 DB 데이터 삭제
+			iCommonService.deleteData("md.mdDelAttFile", params);
 			break;
-			
-			
+				
 		}
 		modelMap.put("res", "success");
 	}catch (Throwable e) {
@@ -175,5 +216,20 @@ public class MdController {
 	return mapper.writeValueAsString(modelMap);
 	}
 	
+	
+	////////// 파일 다운로드 함수
+	@RequestMapping(value = "/mdFileDown", method = RequestMethod.GET)
+	public void download(HttpServletResponse response, String fileName) throws IOException {
+		
+		byte[] fileByte = FileUtils.readFileToByteArray(new File(CommonProperties.FILE_UPLOAD_PATH + "/" + fileName));
+		
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; fileName=\"" + URLEncoder.encode(fileName.substring(20), "UTF-8")+"\";");
+		response.setHeader("Content-Transfer-Encoding", "binary");
+		
+		response.getOutputStream().write(fileByte);
+		response.getOutputStream().flush();
+		response.getOutputStream().close();
+	} 
 	
 }

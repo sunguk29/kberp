@@ -39,6 +39,13 @@ $(document).ready(function() {
 	$('#mid_prdmptn_psbl_check').val(${data.MID_RDMPTN_PSBL_CHECK}).prop("selected", true);
 	$('#loan_prd').val(${data.LOAN_PRD}).prop("selected", true);
 	
+	// 파일 데이터가 있다면 View에 출력 
+	let uploadFileName = "${fileData.ATT_FILE_NAME}";
+	if(uploadFileName != null) {
+		$('#fileName').val(uploadFileName.substring(20));
+		$("#attCnt").text("(1)");
+	}
+	
 	//목록으로 버튼(#listBtn) 클릭시, mdList(#actionForm)로 이동 하는 함수
 	goMdList();
 	
@@ -47,6 +54,24 @@ $(document).ready(function() {
 	updateMdData();
 
 });
+
+
+
+// 첨부자료 업데이트 버튼 클릭시 
+function fileUpdate(){
+	var cfm = confirm('첨부자료를 수정하면 이전 파일은 삭제됩니다. 수정하겠습니까');
+	if(cfm){
+		$("#file1").click();
+	}
+}
+
+//첨부자료 수정 시 사용되는 함수
+function uploadName(e) {
+	var files = e.files;
+	var filename = files[0].name;
+	$("#fileName").val(filename);
+}
+
 </script>
 </head>
 <body>
@@ -92,7 +117,7 @@ $(document).ready(function() {
 		
 		<!-- 해당 내용에 작업을 진행하시오. -->	
 		<!--============= write Form ==============-->
-		<form action="#" id="writeForm" method="post">
+		<form action="fileUploadAjax" id="writeForm" method="post">
 			<input type="hidden" name="no" value="${param.no}" />
 			<div class="cont_area">
 				<div class="body">
@@ -211,11 +236,14 @@ $(document).ready(function() {
 						</table>
 						<!-- 끝 -->
 						<!-- 첨부자료 부분 -->
-						<div class="rvn_txt"> 첨부자료 (0)
-							<input type=file name='file1' style='display: none;'> 
-							<img class="plus_btn" alt="더하기버튼" src="resources/images/sales/plus.png" border='0' onclick="document.all.file1.click();" > 
+					   <div class="rvn_txt"> 첨부자료 <span id=attCnt>(0)</span>
+							<input type=file name='file1' id='file1' style='display: none;' onchange="uploadName(this)"> 
+							<img class="plus_btn" alt="더하기버튼" src="resources/images/sales/plus.png" border='0' onclick="fileUpdate()" > 
 						</div>
-						<div class="cntrct_box_in"></div> 
+						<input type="hidden" id="attFile" name="attFile" />
+						<div class="cntrct_box_in">
+							<input type="text" id="fileName" name="fileName" readonly="readonly" />
+						</div> 
 					</div>
 				</div>	
 			</div>
