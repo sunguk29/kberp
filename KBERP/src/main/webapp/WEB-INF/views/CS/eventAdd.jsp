@@ -81,14 +81,14 @@ p {
 
 	padding-bottom: -5px;
 	
-	margin-top: 10px;
+	margin-top: 15px;
 
 }
 		
 .eventAdd_btn {
 	float: right;
-	margin-top: -30px;
-	margin-right: 37px;
+	margin-top: 15px;
+	margin-right: 80px;
 }
 
 #cont{
@@ -238,11 +238,11 @@ function checkEmpty(sel) {
 				<input type="text" name="title" id="title" placeholder="제목을 입력하세요">
 				<p id="content_line">글내용</p>
 				<textarea name="cont" id="cont" placeholder="내용을 입력하세요" ></textarea>
-				<div class="add_file">
+				<!-- <div class="add_file">
 						<input type="file" name="event_file" />
 						<input type="text" id="event_att" name="event_att" readonly="readonly"/>
 						<input type="hidden" id="event_attFile" name="event_attFile"/>
-				</div>
+				</div> -->
 				<!--<div><input type="file" value="첨부파일" id="btn_file"></div>-->
 				<div class="eventAdd_btn">
 					<div class="cmn_btn_mr" id="writeBtn">등록</div>
