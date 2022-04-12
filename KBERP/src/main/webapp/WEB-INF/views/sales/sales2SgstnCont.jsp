@@ -510,7 +510,7 @@ $(document).ready(function() {
 				$("#popup1").draggable();
 			},
 			buttons : [{
-				name : "예",
+				name : "확인",
 				func:function() {
 					console.log($("#cmntNum").val());
 					var params = $("#botOpActionForm").serialize();
@@ -536,7 +536,7 @@ $(document).ready(function() {
 					
 				}
 			}, {
-				name : "아니오"
+				name : "취소"
 			}]
 		});
 		
