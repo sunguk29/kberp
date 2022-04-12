@@ -412,13 +412,12 @@ $(document).ready(function() {
 	var bar = $("#bar-chart");
 
 	var pieLabels = ["S", "A", "B", "C", "D"];
-	var barLabels = ["영업부", "영업1팀", "영업2팀", "영업3팀"];
+	var barLabels = ["영업부", "영업1팀", "영업2팀"];
 
 	var pieData = [${clntGradeS},${clntGradeA},${clntGradeB},${clntGradeC},${clntGradeD}];
-	var barData = [10, 5, 50, 30];
+	var barData = [${salesCnt},${salesCnt1},${salesCnt2}];
 	
 	var pieColors = ["#FFAB00","#FFC107","#FFD740","#FFEB3B","#FFF59D"];
-	var barColors = ["#FFAB00","#FFC107","#FFD740","#FFEB3B","#FFF59D"];
 
 	var pieChart = new Chart(pie, {
 	    type: 'pie',
@@ -441,9 +440,9 @@ $(document).ready(function() {
 	    data: {
 	        labels: barLabels,
 	        datasets: [{
-	            label: '부서',
+	            label: '고객',
 	            data: barData,
-	            backgroundColor: barColors
+	            backgroundColor: "#F2CB05"
 	        }]
 	    },
 	    options: {
@@ -764,7 +763,7 @@ function drawPaging(pb, sel) {
 					<div class="new_sales_actvty">
 						<div class="sales_text">
 							<div class="sales_text_top">
-								<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />고객 등급
+								<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />고객사 등급
 							</div>
 							<div class="actvty_tLine1"></div>
 						</div>
