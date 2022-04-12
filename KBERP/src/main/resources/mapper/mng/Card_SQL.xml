@@ -131,7 +131,7 @@
 	</select>
 	
 	<select id="writeUseCard" parameterType="hashmap">
-	INSERT CARD_USER INTO (EMP_NUM,USE_START_DT,USE_END_DT)
+	INSERT INTO CARD_USER (EMP_NUM,USE_START_DT,USE_END_DT)
 	VALUES #{use_name},#{use_start_dt},#{use_end_dt}
 	</select>
 </mapper>

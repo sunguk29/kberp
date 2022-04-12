@@ -276,7 +276,7 @@ function drawPaging(pb) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">카드 관리</div>
+			<div class="page_title_text">카드 관리 > 상세보기</div>
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->

@@ -180,7 +180,7 @@
 	<!-- 영업기회 기본정보tab 리드에서 가져오기 -->
 	<select id="getSales1BringLead" parameterType="hashmap" resultType="hashmap">
 		SELECT L.LEAD_NUM, L.LEAD_NAME, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NUM, E.EMP_NAME,
-		       DECODE(CCG.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME
+		       DECODE(CCG.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME, PRGRS_STS_NUM
 		FROM LEAD L INNER JOIN EMP E
 		                    ON E.EMP_NUM = L.MNGR_EMP_NUM
 		            INNER JOIN ENTRPRS_CLNT EC

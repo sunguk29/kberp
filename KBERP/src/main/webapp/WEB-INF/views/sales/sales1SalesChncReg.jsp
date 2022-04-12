@@ -604,6 +604,7 @@ $(document).ready(function() {
 							}
 						}); // makePopup depth2 end
 						console.log("One!");
+						console.log(lpsNum);
 						closePopup();
 					}
 				}, {
@@ -671,12 +672,14 @@ function uploadName(e) {
 						</div>
 						<hr class="hr_bot" color="white" width="925px">
 						<div class="page_cont_title_text">기본정보</div>
+						<input type="hidden" name="leadNum" value="${param.leadNum}" />	
 						<input type="hidden" name="lcn" value="${ln.CLNT_NAME}" />
 						<input type="hidden" name="lccn" value="${ln.CLNT_CMPNY_NAME}" />
 						<input type="hidden" name="llnum" value="${ln.LEAD_NUM}" />
 						<input type="hidden" name="llname" value="${ln.LEAD_NAME}" />
 						<input type="hidden" name="len" value="${ln.EMP_NUM}" />
 						<input type="hidden" name="lren" value="${ln.RGSTRTN_EMP_NUM}" />
+						<input type="hidden" name="lpsNum" value="${ln.PRGRS_STS_NUM}" />
 						<hr class="hr_width">
 						<table>
 							<colgroup>

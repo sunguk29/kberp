@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="prjctMng">
+
+	<select id="getCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM PRJCT
+		WHERE 1=1
+	
+	</select>
+	 <select id="prjctMngList" resultType="hashmap" parameterType="hashmap">
+		SELECT *
+		FROM ( SELECT PRJCT_NUM, PRJCT_NAME,EMP_NAME,
+       			      TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE,
+                      TO_CHAR(END_DATE,'YYYY-MM-DD') AS END_DATE,
+                      RMRKS,
+                      ROW_NUMBER () OVER(ORDER BY P.PRJCT_NUM DESC) AS RNUM
+			   FROM PRJCT P INNER JOIN EMP E
+                                    ON P.EMP_NUM = E.EMP_NUM
+			   WHERE 1=1) A
+		WHERE A.RNUM BETWEEN #{startCount} AND #{endCount}
+	</select>
+</mapper>

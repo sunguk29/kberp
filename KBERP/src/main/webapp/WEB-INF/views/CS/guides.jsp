@@ -23,7 +23,7 @@ textarea{
 	height:500px;
 	resize : none;
 	margin-bottom: 5px;
-	background-color: #f4f4f4;
+	background-color: white;
 }
 .inf_title{
 	display: inline-block;
@@ -34,9 +34,9 @@ textarea{
 	border-bottom: 0px;
 	border-color:rgba(118, 118, 118, 0.3);
 	font-size: 2pt;
-	background-color: #f4f4f4;
+	background-color: white;
 	line-height: 30px;
-	font-size: 15pt;
+	font-size: 13pt;
 	}
 .inf_wrtr{
 	display: inline-block;
@@ -48,9 +48,9 @@ textarea{
 	border-color:rgba(118, 118, 118, 0.3);
 	float: right;
 	font-size: 2pt;
-	background-color: #f4f4f4;
+	background-color: white;
 	line-height: 30px;
-	font-size: 10pt;
+	font-size: 11pt;
 }
 </style>
 <script type="text/javascript">

@@ -103,8 +103,7 @@ FROM (SELECT MD_NUM
             ,ROW_NUMBER() OVER (ORDER BY MD_NUM DESC) AS RNUM
      FROM MD
      WHERE DEL_CHECK IS NULL
-     
-     
+
      
 	 <!-- 상품등급 -->
 	<if test="md_grade != '-1'"> 			
@@ -123,7 +122,6 @@ FROM (SELECT MD_NUM
 		</choose>
 	</if>
 	
-
 	
 	<!-- 판매상태 --> 
 	<choose>
@@ -148,7 +146,6 @@ FROM (SELECT MD_NUM
 	</choose> 
 
 	
-	
 	<!-- 판매 시작일 -->
 	<if test="sales_start_date != null and sales_start_date !=''"> 
 		AND SALES_START_DATE <![CDATA[ >= ]]> #{sales_start_date}
@@ -157,6 +154,7 @@ FROM (SELECT MD_NUM
 	<if test="sales_end_date != null and sales_end_date !=''"> 
 		AND SALES_END_DATE  <![CDATA[ <= ]]>  #{sales_end_date}
 	</if>
+
 
 	<!-- 정렬 -->
 	<choose>

@@ -855,75 +855,6 @@ $(document).ready(function() {
 			}]
 		});			
 	});
-	// 고객사 조회 팝업
-	$("#ccIcon").on("click", function() {
-		var html = "";
-		
-		html += "<div class=\"popup_title_mid\" id=\"ccS\">"; 
-		html += "</div>";
-		html += "<div class=\"popup_cont pc_back\">";
-		html +=		"<div class=\"popup_box\" id=\"ccBox\"></div>";
-		html += 	"<div class=\"board_bottom2\">";
-		html +=			"<div class=\"pgn_area\" id=\"ccpb\"></div>";
-		html +=		"</div>"; 
-		html += "</div>";
-		
-		makePopup({
-			bg : true,
-			bgClose : false,
-			title : "고객사 조회",
-			contents : html,
-			contentsEvent : function() {
-				ccSearchBox();
-				ccList();
-				
-				$("#ccBox").on("click", ".popup_box_in", function() {
-					
-					var cnn = $(this).children("#cnn").val();
-					var ccn = $(this).children("#ccn").val();
-					var ccgNum = $(this).children("#ccgNum").val();
-					document.getElementById("ccName").value = cnn;
-					document.getElementById("ccNum").value = ccn;
-					document.getElementById("ccGrade").value = ccgNum;
-
-					closePopup();
-				});
-				
-				//페이징 
-				$("#ccpb").on("click", "div", function() {
-					$("#page").val($(this).attr("page"));
-					
-					ccList();
-				});
-				
-				// 검색버튼
-				$("#ccBtn").on("click", function () {
-					$("#page").val("1");
-					
-					ccList();
-					
-				});
-				
-				$("#ccSearchTxt").on("keypress", function(event) {
-					if(event.keyCode == 13 ) {
-						$("#page").val("1");
-						
-						ccList();
-						return false;
-					}
-				});	
-			},
-			width : 600,
-			height : 500,
-			buttons : {
-				name : "닫기",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});		
-	});
 	// 담당자 조회 팝업
 	$("#userIcon").on("click", function() {
 		var html = "";
@@ -1013,7 +944,7 @@ function ecAddPopup() {
 	html += 		"<div class=\"txt2\">";
 	html += 			"<input type=\"text\" class=\"txt3\" id=\"mngName\" name=\"mngName\" />";
 	html +=				"<input type=\"hidden\" id=\"mngNumber\" name=\"mngNumber\" />";
-	html += 			"<span class=\"imgPos2\"><img class=\"btnImg2\" id=\"userImg\" alt=\"담당자\" src=\"resources/images/sales/.png\" /></span>";
+	html += 			"<span class=\"imgPos2\"><img class=\"btnImg2\" id=\"userImg\" alt=\"담당자\" src=\"resources/images/sales/usericon.png\" /></span>";
 	html += 		"</div>";
 	html += 	"</div>";
 	html += "</form>";
@@ -1540,7 +1471,6 @@ function uploadName(e) {
 									<td colspan="3">
 										<input type="text" class="txt" id="ccName" name="ccName" />
 										<input type="hidden" id="ccNum" name="ccNum" />
-										<img class="btnImg_in" id="ccIcon" alt="팝업" src="resources/images/sales/popup.png" />
 									</td>
 								</tr>
 								<tr>
@@ -1581,7 +1511,6 @@ function uploadName(e) {
 									<td><input type="button" class="btn" value="가능여부 *" readonly="readonly"/></td>
 									<td>
 										<input type="text" class="txt" id="psblCheck" name="psblCheck" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" style="text-align: right;"/>
-										<!-- <input type="number" class="txt" id="psblCheck" name="psblCheck" min="0" max="100" placeholder="0" style="text-align: right;"/> -->
 										<div id="percent">%</div>
 									</td>
 								</tr>													
