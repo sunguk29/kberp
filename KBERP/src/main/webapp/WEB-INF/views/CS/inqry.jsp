@@ -209,8 +209,6 @@ $(document).ready(function() {
 			}]
 		}); // makePopup end
 	}); // deleteBtn end
-	
-	
 }); // document ready end
 </script>
 </head>
