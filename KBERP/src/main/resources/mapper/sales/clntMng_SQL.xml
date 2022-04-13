@@ -252,7 +252,7 @@
 		SELECT CC.CLNT_CMPNY_NAME, CC.CLNT_CMPNY_CLSFY_NUM, CC.GRADE_NUM, CC.BSNSMN_RGSTRTN_NUM, CC.CLNT_NAME,
 		       CC.PHONE_NUM, CC.FAX, CC.HMPG, CC.ZIP_CODE_NUM, CC.ADRS, CC.DTL_ADRS, 
 		       TRIM(TO_CHAR(CC.RVN, '999999999999999')) AS RVN, CC.RCGNTN_PATH_NUM,
-		       CCA.ATT_FILE_NAME
+		       CCA.ATT_FILE_NAME, CC.CLNT_CMPNY_NUM
 		FROM CLNT_CMPNY CC LEFT OUTER JOIN CLNT_CMPNY_ATT_FILE CCA
 		                           ON CC.CLNT_CMPNY_NUM = CCA.CLNT_CMPNY_NUM
 		WHERE CC.CLNT_CMPNY_NUM = #{ccn}
@@ -294,6 +294,14 @@
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE 1 = 1
+        <choose>
+			<when test="searchType != 9" > <!-- 선택안함 : 0 이 아니면 해당 번호 목록으로 검색 -->
+				AND CLNT_CMPNY_CLSFY_NUM = #{searchType}
+			</when>
+		</choose> 
+		<if test="searchTxt != null and searchTxt != ''">
+			AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+		</if>
 		AND DEL_CHECK IS NULL
 	</select>
 	
@@ -326,12 +334,22 @@
 	
 	<!-- (팝업) 고객사 목록 -->
 	<select id="popupCcList" parameterType="hashmap" resultType="hashmap">
-		SELECT CC.CLNT_CMPNY_NAME, CC.CLNT_CMPNY_CLSFY_NUM, CC.GRADE_NUM, CC.ADRS, TO_CHAR(CC.RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE,
-		       CC.CLNT_CMPNY_NUM
+		SELECT CC.CLNT_CMPNY_NAME, DECODE(CC.CLNT_CMPNY_CLSFY_NUM, 0, '거래고객사', 1, '파트너사', 2, '해지고객사', 3, '정지고객사', 4, '외국파트너사', 5, '기타') AS CLNT_CMPNY_CLSFY_NAME, 
+		       DECODE(CC.GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D') AS GRADE_NAME, 
+		       CC.ADRS, TO_CHAR(CC.RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE, CC.CLNT_CMPNY_NUM
 		FROM (  SELECT CLNT_CMPNY_NAME, CLNT_CMPNY_CLSFY_NUM, GRADE_NUM, ADRS, RGSTRTN_DATE, CLNT_CMPNY_NUM,
 		               ROW_NUMBER() OVER(ORDER BY CLNT_CMPNY_NUM DESC) AS RNUM    
 		        FROM CLNT_CMPNY
-		        WHERE DEL_CHECK IS NULL) CC
+		        WHERE 1 = 1
+		        <choose>
+					<when test="searchType != 9" > <!-- 선택안함 : 0 이 아니면 해당 번호 목록으로 검색 -->
+						AND CLNT_CMPNY_CLSFY_NUM = #{searchType}
+					</when>
+				</choose> 
+				<if test="searchTxt != null and searchTxt != ''">
+					AND CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
+				</if>
+				AND DEL_CHECK IS NULL ) CC
 		WHERE CC.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	

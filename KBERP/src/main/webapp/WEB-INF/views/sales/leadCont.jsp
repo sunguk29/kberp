@@ -673,6 +673,10 @@ $(document).ready(function () {
 	/* 리드 상세보기 실행될 시 비동기로 의견 목록 그리기 위해 선언  */
 	reloadOpList();
 	
+	if($("#psNum").val() == 2) {
+		$("#updateBtn").hide();	
+		$("#deleteBtn").hide();	
+	} 
 	/* 진행중일때만 전환하기 버튼 생성  */
 	if($("#psNum").val() == 1) {
 		$(".nb").show();		
@@ -725,24 +729,48 @@ $(document).ready(function () {
 	}
 	/* 의견등록 start */
 	$(".subm").on("click", function() {
-		var params = $("#botOpActionForm").serialize();
-		
-		$.ajax({
-			type : "post",
-			url : "llBotActionAjax/insert",
-			dataType : "json",
-			data : params,
-			success : function(res) {
-				if(res.res == "success"){
-					$("#tatacont").val("");
-					reloadOpList();
-				} else {
-					alert("등록중 문제가 발생하였습니다.");
+
+		if(checkEmpty("#tatacont")) {
+			var html = "";
+			
+			html += "<div class=\"popup_cont2\">의견 내용 입력 후, 등록버튼을 눌러주세요.</div>";
+			
+			makePopup({
+				depth : 1,
+				bg : true,
+				width : 400,
+				height : 200,
+				title : "알림",
+				contents : html,
+				buttons : {
+					name : "확인",
+					func:function() {
+						console.log("One!");
+						closePopup();
+					}
 				}
-			}, error : function(request,status, error) {
-				console.log(request.responseText);
-			}
-		});
+			});
+			("#tatacont").focus();
+		} else {
+			var params = $("#botOpActionForm").serialize();
+			
+			$.ajax({
+				type : "post",
+				url : "llBotActionAjax/insert",
+				dataType : "json",
+				data : params,
+				success : function(res) {
+					if(res.res == "success"){
+						$("#tatacont").val("");
+						reloadOpList();
+					} else {
+						alert("등록중 문제가 발생하였습니다.");
+					}
+				}, error : function(request,status, error) {
+					console.log(request.responseText);
+				}
+			});
+		}
 	});
 	/* 의견등록 end */
 	

@@ -444,6 +444,9 @@ td:nth-child(even) {
 #add_zip_code {
 	width: 80px;
 }
+#add_zip_code:hover {
+	cursor: pointer;
+}
 
 #add_adrs {
 	width: 194px;
@@ -576,6 +579,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 </style>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	if ("${param.srch_sel}" != "") {
@@ -685,6 +689,21 @@ $(document).ready(function() {
 				$(this).children("td:nth-child(odd)").css("background-color", "#fafafa");
 				$(this).children("td:nth-child(even)").css("background-color", "#f6f6f6");
 			}
+		}
+	});
+	
+	$("#srch_rslt").on("dblclick", "tr", function() {
+		var flag = $(this).find(".val_existed").val();
+		if (flag == "true") {
+			$(this).parent("tbody").find(".table_item .item_selected").val("false");
+			$(this).find(".item_selected").val("true");
+			
+			$("#empNum").val($(this).attr("num"));
+			$("#inqry_btn").attr("da", "false");
+			$("#del_btn").attr("da", "false");
+			btnSetting();
+			
+			$("#inqry_btn").click();
 		}
 	});
 	
@@ -798,6 +817,16 @@ $(document).ready(function() {
 	
 	$("body").on("change", ".phone_num_sel_box", function() {
 		$(this).parent("div").children(".phone_num_1").focus();
+	});
+	
+	$("body").on("click", "#add_zip_code", function() {
+		new daum.Postcode({
+	        oncomplete: function(data) {
+	        	$("#add_zip_code").val(data.zonecode);
+	        	$("#add_adrs").val(data.address);
+	        	$("#add_dtl_adrs").focus();
+	        }
+	    }).open({popupKey:"popup1"});
 	});
 });
 
@@ -1004,8 +1033,8 @@ function createAddPopup(bankList) {
 	html += "			</div>                                                                                                                                    ";
 	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e6\">                                                                                     ";
 	html += "				<label for=\"add_zip_code\" class=\"popup_cont_name\">주소* :</label>                                                                ";
-	html += "				<input type=\"number\" class=\"popup_cont_text\" id=\"add_zip_code\" name=\"zip_code\" placeholder=\"우편번호\" />              ";
-	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_adrs\" name=\"adrs\" placeholder=\"주소\" />              ";
+	html += "				<input type=\"number\" class=\"popup_cont_text\" id=\"add_zip_code\" name=\"zip_code\" placeholder=\"우편번호 검색\" readonly=\"readonly\" />              ";
+	html += "				<input type=\"text\" class=\"popup_cont_text\" id=\"add_adrs\" name=\"adrs\" readonly=\"readonly\" />              ";
 	html += "			</div>                                                                                                                                    ";
 	html += "			<div class=\"popup_cont_element\" id=\"edit_left_e7\">                                                                                     ";
 	html += "				<label for=\"add_dtl_adrs\" class=\"popup_cont_name\">상세주소* :</label>                                                                ";

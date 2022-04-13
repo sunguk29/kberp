@@ -1,6 +1,5 @@
 package com.gdj43.kberp.web.GW.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.util.Utils;
 import com.gdj43.kberp.web.GW.service.IAprvlService;
 import com.gdj43.kberp.web.GW.service.IClndrService;
-import com.gdj43.kberp.web.common.dao.ICommonDao;
 
 @Controller
 public class ClndrController {
@@ -82,6 +80,8 @@ public class ClndrController {
 	return mapper.writeValueAsString(modelMap);
 	}
 	
+	
+
 	@RequestMapping(value = "/dtlSchdl", method = RequestMethod.POST,
 			produces = "text/json;charset=UTF-8")
 	@ResponseBody

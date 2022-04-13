@@ -7,6 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>카카오뱅크 ERP - 고객사</title>
+<!-- 카카오 주소 API -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
@@ -15,7 +16,7 @@
 .cont_wrap {
 	width: 1013px;
 }
-
+/* 개인 작업 영역 */
 .body {
 	display: block;
 	background-color: white;
@@ -30,30 +31,25 @@
 	height: 100%;
 	margin: 20px auto;
 }
-
-/* 개인 작업 영역 */
-table{	
+table {	
 	border: 1px;
 	width: 927px;
 	margin: 40px auto;
 }
-td:nth-child(2), td:nth-child(4){
+td:nth-child(2), td:nth-child(4) {
 	border-bottom: 1px solid #d7d7d7;
 }
-tr:nth-child(11) > td:nth-child(1){
+tr:nth-child(11) > td:nth-child(1) {
 	border-bottom: 1px solid #d7d7d7;
 }
-/* tr:nth-child(9) > td:nth-child(2){
-	background-color: #F2F2F2;
-} */
-td:nth-child(1), td:nth-child(3){
+td:nth-child(1), td:nth-child(3) {
 	text-align: center;
 }
-.btn{
+.btn {
 	width : 90px;
 	height: 40px;
 }
-.btn, .address{
+.btn, .address {
 	background-color: #fff;
 	border-radius: 3px;
 	font-weight: bold;
@@ -65,7 +61,7 @@ td:nth-child(1), td:nth-child(3){
 .btnImg:hover, .plus_btn:hover {
 	cursor: pointer;
 }
-.txt{
+.txt {
 	height: 30px;
 	width: 100%;
 	padding: 0 5px;
@@ -78,14 +74,13 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 33px;
 	border: none;
 }
-
-.btnImg{
+.btnImg {
 	width : 30px;
 	float: right;
 	margin-left: 10px;
 }
 
-.imgPos{
+.imgPos {
 	text-align: right;
 }
 .title_name {
@@ -152,7 +147,6 @@ td:nth-child(1), td:nth-child(3){
 .boldname{
 	font-weight: bold;
 }
-/* 팝업 버튼 */
 .btn_pos {
 	text-align: center;
 }
@@ -163,7 +157,6 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 100px;
 	text-align: center;
 }
-/* 첨부자료 */
 .cntrct_box_in {
 	width: 885px;
 	height: 100px;
@@ -236,15 +229,13 @@ td:nth-child(1), td:nth-child(3){
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	// 목록
 	$("#listBtn").on("click", function() {
 		makePopup({
 			bg : true,
 			bgClose : false,
 			title : "알림",
 			contents : "<div class=\"text_center\"><b>저장되지않았습니다, 나가시겠습니까?</b></div>",
-			contentsEvent : function() {
-				
-			},
 			buttons : [{
 				name : "나가기",
 				func:function() {
@@ -258,14 +249,17 @@ $(document).ready(function() {
 		});
 	});
 	
+	// 주소
 	$("#search_icon").on("click", function() {
 		findAddr();
 	});
 	
+	// 파일업로드
 	$(".rvn_txt").on("click", ".aff_btn", function() {
 		$("#att").click();
 	});
 	
+	// 파일삭제
 	$("#fileDelete").on("click", function() {
 		$("#file_name").remove();
 		$(this).remove();
@@ -277,10 +271,12 @@ $(document).ready(function() {
 		$("#uploadBtn").html(html);
 	});
 	
+	// 선택박스 초기값
 	$("#ccClsfy").val(${data.CLNT_CMPNY_CLSFY_NUM}).prop("selected", this.selected);
 	$("#ccGrade").val(${data.GRADE_NUM}).prop("selected", this.selected);
 	$("#rp").val(${data.RCGNTN_PATH_NUM}).prop("selected", this.selected);
 	
+	// 저장
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#ccName")) {
 			makeAlert("필수 항목 알림", "고객사를 입력하세요", function() {
@@ -356,16 +352,15 @@ $(document).ready(function() {
 									error : function(request, status, error) {
 										console.log(request.responseText);
 									}
-								});
+								}); // ajax End
 								
 							},
 							error : function(req) {
 								console.log(req.responseText);
 							}
-						});
+						}); // ajaxForm End
 						
 						updateForm.submit();
-						console.log("One!");
 						closePopup();
 					}
 				}, {
@@ -373,10 +368,12 @@ $(document).ready(function() {
 				}]
 			});
 				
-		}
+		} // if End
 	});
+	
 });
 
+// 카카오 주소
 function findAddr(){
 	new daum.Postcode({
         oncomplete: function(data) {
@@ -399,6 +396,8 @@ function findAddr(){
         }
     }).open();
 }
+
+// 파일명
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
@@ -431,7 +430,17 @@ function uploadName(e) {
 			<img alt="목록버튼" src="resources/images/sales/back.png" class="btnImg" id="listBtn" />
 			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
 			<!-- 검색영역 선택적 사항 -->
-			
+			<!-- <div class="page_srch_area">
+				<select class="srch_sel">
+					<option>제목</option>
+					<option>내용</option>
+					<option>작성자</option>
+				</select>
+				<div class="srch_text_wrap">
+					<input type="text" />
+				</div>
+				<div class="cmn_btn_ml">검색</div>
+			</div> -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
