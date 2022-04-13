@@ -85,9 +85,18 @@
 	</select>
 	
 	<insert id="writeIntrnlCostMng" parameterType="hashmap">
+		<selectKey order="BEFORE" keyProperty="CHIT_NUM" resultType="int">
+			SELECT TO_NUMBER(TO_CHAR(SYSDATE, 'YYMMDD') || NVL(TO_CHAR(MAX(SUBSTR(CHIT_NUM, 7))), '00')) + 1
+			FROM (  SELECT CHIT_NUM, RGSTRTN_DATE_HR
+			        FROM INTRNL_COST_MNG
+			        UNION
+			        SELECT CHIT_NUM, RGSTRTN_DATE_HR
+			        FROM EXPNS_RSLTN  )
+			WHERE TO_CHAR(RGSTRTN_DATE_HR, 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD')
+		</selectKey>
 		INSERT INTO INTRNL_COST_MNG(CHIT_NUM, EMP_NUM, ACNT_NUM, CRSPNDNT, BSNSMN_NUM, ITEM, QUNTY, UNIT_PRICE,
 		            SPLY_PRICE, SRTX, AMNT, DATE_HR, RMRKS, ATT_FILE)
-		VALUES(CHIT_NUM.NEXTVAL, #{empNum}, #{sendAcntCode}, #{expns}, #{bsnsmnNum}, #{item}, #{qunty}, #{unitPrice},
+		VALUES(#{CHIT_NUM}, #{empNum}, #{sendAcntCode}, #{expns}, #{bsnsmnNum}, #{item}, #{qunty}, #{unitPrice},
 			   #{splyPrice}, #{srtx}, #{amnt}, #{spendDate}, #{rmrks}, #{attFile})
 	</insert>
 	
