@@ -198,6 +198,10 @@
 	width: 260px;
 }
 
+#edit_zip_code {
+	width: 180px;
+}
+
 .cont_line {
 	margin-top: 12px;
 	margin-left: 6px;
@@ -466,6 +470,22 @@ td:nth-child(even) {
 	width: 300px;
 }
 
+
+#edit_zip_code {
+	width: 100px;
+}
+#edit_zip_code:hover {
+	cursor: pointer;
+}
+
+#edit_adrs {
+	width: 270px;
+	margin-left: 4px;
+}
+#edit_adrs:hover {
+	cursor: pointer;
+}
+
 .phone_num_sel_box {
 	width: 91px;
 	font-size: 9pt;
@@ -540,6 +560,7 @@ input[type="number"]::-webkit-inner-spin-button {
 	cursor: pointer;
 }
 </style>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
 function tabBtnSelected(obj) {
 	$(obj).parents(".tab_bar").children(".tab_btn").css("background-color", "#FFF");
@@ -1264,7 +1285,7 @@ function createEditPopup(pId, data, bankList) {
 	switch (pId) {
 	case "human_info_btn" :
 		title = "인적정보 수정";
-		size = [500, 306];
+		size = [500, 272];
 		
 		html += "	<div id=\"human_info_edit_popup\" >                                                                                                ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt1_e1\">                                                                 ";
@@ -1274,12 +1295,9 @@ function createEditPopup(pId, data, bankList) {
 		html += "				<div class=\"sub_text\">@kakao.com</div>              ";
 		html += "		</div>                                                                                                                ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt1_e2\">                                                                 ";
-		html += "			<label for=\"edit_zip_code\" class=\"popup_cont_name\">우편번호* :</label>                                               ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_zip_code\" name=\"edit_zip_code\" value=\"" + data.ZIP_CODE + "\" /> ";
-		html += "		</div>                                                                                                                ";
-		html += "		<div class=\"popup_cont_element\" id=\"edit_lt1_e3\">                                                                 ";
-		html += "			<label for=\"edit_adrs\" class=\"popup_cont_name\">주소* :</label>                                               ";
-		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_adrs\" name=\"edit_adrs\" value=\"" + data.ADRS + "\" /> ";
+		html += "			<label for=\"edit_zip_code\" class=\"popup_cont_name\">주소* :</label>                                               ";
+		html += "			<input type=\"number\" class=\"popup_cont_text\" id=\"edit_zip_code\" name=\"edit_zip_code\" value=\"" + data.ZIP_CODE + "\" readonly=\"readonly\" />              ";
+		html += "			<input type=\"text\" class=\"popup_cont_text\" id=\"edit_adrs\" name=\"edit_adrs\" value=\"" + data.ADRS + "\" readonly=\"readonly\" />              ";		
 		html += "		</div>                                                                                                                ";
 		html += "		<div class=\"popup_cont_element\" id=\"edit_lt1_e4\">                                                                 ";
 		html += "			<label for=\"edit_dtl_adrs\" class=\"popup_cont_name\">상세주소* :</label>                                           ";
@@ -2039,6 +2057,17 @@ $(document).ready(function() {
 				console.log(request.responseText);
 			}
 		});
+	});
+	
+	$("body").on("click", "#edit_zip_code, #edit_adrs", function() {
+		new daum.Postcode({
+	        oncomplete: function(data) {
+	        	$("#edit_zip_code").val(data.zonecode);
+	        	$("#edit_adrs").val(data.address);
+	        	$("#edit_dtl_adrs").focus();
+	        	$("#edit_dtl_adrs").select();
+	        }
+	    }).open({popupKey:"popup1"});
 	});
 });
 </script>

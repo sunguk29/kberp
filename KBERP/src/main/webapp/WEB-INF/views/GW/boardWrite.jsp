@@ -100,7 +100,8 @@ $("#writeBtn").on("click", function () {
 		        	 data : params,
 		        	 success : function(res) {
 		        		 if(res.res == "success"){
-		        			 location.href = "board";
+		        			 $("#locationForm").attr("action", "board");
+		        			 $("#locationForm").submit();
 		        		 } else{
 		        			 alert("작성중 문제가 발생하였습니다.");
 		        		 }
