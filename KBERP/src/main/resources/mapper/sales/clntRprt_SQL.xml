@@ -57,31 +57,31 @@
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE GRADE_NUM = 0
-		AND EC.DEL_CHECK IS NULL
+		AND DEL_CHECK IS NULL
 	</select>
 	<select id="clntGradeA" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE GRADE_NUM = 1
-		AND EC.DEL_CHECK IS NULL
+		AND DEL_CHECK IS NULL
 	</select>
 	<select id="clntGradeB" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE GRADE_NUM = 2
-		AND EC.DEL_CHECK IS NULL
+		AND DEL_CHECK IS NULL
 	</select>
 	<select id="clntGradeC" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE GRADE_NUM = 3
-		AND EC.DEL_CHECK IS NULL
+		AND DEL_CHECK IS NULL
 	</select>
 	<select id="clntGradeD" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
 		FROM CLNT_CMPNY
 		WHERE GRADE_NUM = 4
-		AND EC.DEL_CHECK IS NULL
+		AND DEL_CHECK IS NULL
 	</select>
 <!-- 영업 고객수 -->
 	<select id="salesCnt" resultType="Integer" parameterType="hashmap">
