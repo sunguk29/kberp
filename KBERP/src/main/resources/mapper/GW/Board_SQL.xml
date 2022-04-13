@@ -63,12 +63,14 @@
 	<insert id="boardWrite" parameterType="hashmap">
 			INSERT INTO BOARD(WRTNG_NUM, BOARD_TITLE, EMP_NUM, BOARD_CONT, BOARD_ADMNSTRTN_NUM, 
 			ATCHD_FILE )
-			VALUES(BOARD_SEQ.NEXTVAL, #{title}, #{writer}, #{con} , #{menuNum},  #{attFile})
+			VALUES(BOARD_SEQ.NEXTVAL, #{title}, #{writer}, #{con} , '2' ,  #{attFile})
 	</insert>
 	<update id="boardUpdate" parameterType="hashmap">
-		UPDATE BOARD SET BOARD_TITLE = #{title},
-             	 	    BOARD_CONT = #{con},
-             	 	   
+		UPDATE BOARD SET BOARD_TITLE = #{title}, 
+			   			 BOARD_CONT = #{con}
+			   		
+            
+               	 	   
 		WHERE WRTNG_NUM = #{no}
 	</update>
 	

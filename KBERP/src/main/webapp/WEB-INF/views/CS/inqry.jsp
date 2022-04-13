@@ -179,7 +179,7 @@ $(document).ready(function() {
 			bg : false,
 			bgClose : false,
 			title : "삭제",
-			contents : "게시글을 삭제하시겠습니까?",
+			contents : "답변을 삭제하시겠습니까?",
 			draggable : true,
 			buttons : [{
 				name : "예",
@@ -355,7 +355,7 @@ $(document).ready(function() {
 									<div class="wrtng_cont">${data.WRTNG_CONT}</div>
 								</td>
 							</tr>
-							<c:choose>
+							<%-- <c:choose>
 								<c:when test="${!empty data.ATT_FILE}">
 									<c:set var="fileLength" value="${fn:length(data.ATT_FILE)}"></c:set>
 									<c:set var="fileName" value="${fn:substring(data.ATT_FILE, 20, fileLength)}"></c:set>
@@ -376,7 +376,19 @@ $(document).ready(function() {
 										</td>
 									</tr>
 								</c:otherwise>
-							</c:choose>
+							</c:choose> --%>
+							<c:if test="${!empty data.ATT_FILE}">
+							<c:set var="fileLength" value="${fn:length(data.ATT_FILE)}"></c:set>
+							<c:set var="fileName" value="${fn:substring(data.ATT_FILE, 20, fileLength)}"></c:set>
+								<tr>
+									<th scope="row">첨부파일</th>
+									<td>
+										<a href="resources/upload/${data.ATT_FILE}" download="${fileName}">
+										${data.ATT_FILE}
+										</a>
+									</td>
+								</tr>
+							</c:if>
 						</tbody>
 						</table>
 					<div class="cnsl_page">답변글</div>

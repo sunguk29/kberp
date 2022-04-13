@@ -522,6 +522,7 @@ $(document).ready(function() {
 	/* 의견 목록 */
 	reloadOpList();
 	
+	
 	/* 의견 등록 버튼 클릭시 */
 	$(".subm").on("click", function() {
 		

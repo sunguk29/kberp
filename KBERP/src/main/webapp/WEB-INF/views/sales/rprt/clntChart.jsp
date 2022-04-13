@@ -763,7 +763,7 @@ function drawPaging(pb, sel) {
 					<div class="new_sales_actvty">
 						<div class="sales_text">
 							<div class="sales_text_top">
-								<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />고객사 등급
+								<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />고객 등급
 							</div>
 							<div class="actvty_tLine1"></div>
 						</div>
