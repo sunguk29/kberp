@@ -392,9 +392,12 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	if('${param.usrsrchTxt}' != ''){
+		$("#usrsrchTxt").val('${param.usrsrchTxt}');
+		$("#deptS").val(${param.deptS});
+	}
+	
 	drawDayCalc();
-	
-	
 	
 	/* 엔터 입력 시  */
 	$("#usrsrchTxt").on("keypress", function(event) {
@@ -407,6 +410,10 @@ $(document).ready(function() {
 	
 	/* 검색버튼 누를 시  */
 	$("#searchBtn").on("click", function() {
+		
+		//검색어 유지
+		$("#oldSearchTeam").val($("#deptS").val());
+		$("#oldSearchMngrTxt").val($("#usrsrchTxt").val());
 		
 		
 		//기존 이벤트 제거
@@ -448,6 +455,7 @@ $(document).ready(function() {
 	$(".calendar_text").on("click", ".cal_text1", function() {
 		var tempSnum = $(this).children("#schln").val();
 		document.getElementById("schdlnum").value = tempSnum;
+		
 		
 		$("#actionForm").attr("action", "salesSchdlCont");
 		$("#actionForm").submit();
@@ -652,7 +660,7 @@ $(document).ready(function() {
 			url : "salesSchdlAjax",
 			dataType : "json",
 			data : params,
-			success : function(res){					
+			success : function(res){		
 					
 					var oldEvents = $("#fullCalendarArea").fullCalendar("getEventSources");
 					document.getElementById("oldEvent").value = oldEvents;
@@ -680,7 +688,7 @@ $(document).ready(function() {
 	      height: 400,
 	      events: data,
 	      eventClick: function(event) { // 이벤트 클릭
-	    	  
+	   
 	      },
 	      dayClick: function(date, js, view) { // 일자 클릭
 	    	   
@@ -721,6 +729,7 @@ $(document).ready(function() {
 	
 	
 	$("#regBtn").on("click", function() {
+		
 		$("#actionForm").attr("action", "salesSchdlReg");
 		$("#actionForm").submit();
 	});
@@ -765,7 +774,7 @@ $(document).ready(function(){
 						<div class="sc_title">
 						<span class="marg">
 						팀분류
-						<select class="boxsize" name="deptS">
+						<select class="boxsize" id="deptS" name="deptS">
 							<option value="6">영업부</option>
 							<option value="7">영업1팀</option>
 							<option value="8">영업2팀</option>
