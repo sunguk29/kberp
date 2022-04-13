@@ -536,7 +536,7 @@ $(document).ready(function() {
 					$("#tatacont").val("");
 					reloadOpList();
 				} else {
-					alert("등록중 문제가 발생하였습니다.");
+					alert("의견 내용 입력 후, 등록버튼을 눌러주세요.");
 				}
 			},
 			error : function(request, status, error) {
