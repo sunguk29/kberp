@@ -175,7 +175,7 @@
 }
 
 .schdl_ctgry label:hover, #new_schdl:hover,
-.schdl_type label:hover, .fc-content {
+.schdl_type label:hover, .fc-content, .today_schdl {
 	
 	cursor: pointer;
 }
@@ -386,7 +386,6 @@ $(document).ready(function() {
 	      height: 600,
 	      events: data,
 	      eventClick: function(event) { // 이벤트 클릭
-	    	  var params = $("#dtlForm").serialize();
 	    	 
 	    	  $.ajax({
 					type: "post", 
@@ -406,11 +405,7 @@ $(document).ready(function() {
 	    	  
 	      },
 	      dayClick: function(date, js, view) { // 일자 클릭
-	    	 // alert('Clicked on: ' + date.format());
-	    	  
-	    	  //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
 
-	    	 //alert('Current view: ' + view.name);
 	    	  var html = "";
 	  		
 	  		html += "<form action=\"#\" id=\"addForm\" method=\"post\">";
@@ -653,12 +648,28 @@ $(document).ready(function() {
 			reloadList();
 		}
 	});
+	$(".today_schdl").on("click", "div", function() {
+		var select = $(this);
+		var id = select.attr('name');
+		$.ajax({
+			type: "post", 
+			url : "dtlSchdl",
+			dataType : "json",
+			data : {id : id}, 
+			success : function(res) { 
+				 drawList(res.dtl);
+				 
+			},
+			error : function(request, status, error) { 
+				console.log(request.responseText); 
+			}
+		});
+	});
 	/* 상세일정 */
 	function drawList(dtl) {
 		var schdl_type_name = "";
 		var schdl_ctgry_name = "";
 		for(var data of dtl){
-			console.log(data)
 			switch(data.schdl_cont){
 			case "":
 				data.schdl_cont = " "					
@@ -742,6 +753,7 @@ $(document).ready(function() {
   				width : 540,
   				height : 520,
   				buttons : [{
+  					
   					name : "수정",
   					func:function() {
   						if(${sEmpNum} != data.emp_num){
@@ -960,9 +972,6 @@ function schdlUpdate(data){
 					 if(checkEmpty("#schdl_place")){
 							$("#schdl_place").val(" ");
 						}
-					 /* if($("#aldy_dvsn").is(":checked")){
-						 $("#hidden_end_time").val("23:59"); // 종일일정 시 하루씩 짧아져서 시간 할당
-					 } */
 					 
 					var params = $("#updateForm").serialize();
 					console.log(params);
@@ -1040,11 +1049,10 @@ function drawToDayList(schdl){
 			if(date == data.startDate){
 				dataCnt ++;
 				$("#side_bar").css('height', document.getElementById('side_bar').style.height = 450 + (dataCnt*35));
-				html += "<input type=\"hidden\" id=\"today_schdl_num\" name=\"today_schdl_num\" value=\"" + data.id + "\" >";
 				if(data.startTime == "00:00"){
-					html +=	"<div class=\"today_schdl\" id=\"" + data.schdlCtgryName +"\">" + "종일 - "  + data.title + "</div>";
+					html +=	"<div class=\"today_schdl\" id=\"" + data.schdlCtgryName +"\" name=\"" + data.id +"\">" + "종일 - "  + data.title + "</div>";
 				}else{
-					html +=	"<div class=\"today_schdl\" id=\"" + data.schdlCtgryName +"\">" + data.startTime + " - " + data.title + "</div>";
+					html +=	"<div class=\"today_schdl\" id=\"" + data.schdlCtgryName +"\" name=\"" + data.id +"\">" + data.startTime + " - " + data.title + "</div>";
 				}
 				
 			}
@@ -1135,6 +1143,7 @@ $(document).ready(function() {
 			
             if (startDate > endDate) {
             	alert("조회 기간은 과거로 설정하세요.");
+            	
             	//달력에 종료 날짜 넣어주기
         		$("#date_end").val($("#eddt").val());
 			} else {
