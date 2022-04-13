@@ -315,33 +315,29 @@ td:nth-child(1), td:nth-child(3) {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-<<<<<<< HEAD
-	// 목록버튼
-=======
 	
-	//목록버튼
->>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
+	// 목록
 	$("#listBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntList");
 		$("#actionForm").submit();
 	});
 	
-	//수정버튼
+	// 수정
 	$("#updateBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntUpdate");
 		$("#actionForm").submit();
 	});
 	
-	//삭제버튼
+	// 삭제
 	$("#deleteBtn").on("click", function() {
-		//팝업
+		
 		makePopup({
 			bg : false,
 			bgClose : false,
 			title : "경고",
 			contents : "삭제하시겠습니까?",
 			contentsEvent : function() {
-				$("#popup1").draggable(); //팝업 드래그
+				$("#popup1").draggable();
 			},
 			buttons : [{
 				name : "삭제",
@@ -371,13 +367,10 @@ $(document).ready(function() {
 			}, {
 				name : "취소"
 			}]
-		});		
-<<<<<<< HEAD
+		});	
+		
 	});
-=======
-	}); // 글 삭제 버튼 end
 	
->>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 });
 </script>
 </head>
@@ -406,67 +399,76 @@ $(document).ready(function() {
 			<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
 			<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" id="deleteBtn" />
 			<!-- 검색영역 선택적 사항 -->
-			
+			<!-- <div class="page_srch_area">
+				<select class="srch_sel">
+					<option>제목</option>
+					<option>내용</option>
+					<option>작성자</option>
+				</select>
+				<div class="srch_text_wrap">
+					<input type="text" />
+				</div>
+				<div class="cmn_btn_ml">검색</div>
+			</div> -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="bodyWrap">
-					<table>
-						<colgroup>
-							<col width="200" />
-							<col width="auto" />
-						</colgroup>
-						<tbody>
-							<tr>
-								<td><input type="button" class="btn" value="고객 *" readonly="readonly"/></td>
-								<td><input type="text" class="txt" id="cName" name="cName" value="${data.CLNT_NAME}" readonly="readonly" /></td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="고객사 *" /></td>
-								<td>
-									<div class="imgPos">
-										<input type="text" class="txt imgName" id="ccName" name="ccName" value="${data.CLNT_CMPNY_NAME}" readonly="readonly" />
-										<input type="hidden" id="ccNum" name="ccNum" />
-										<!-- <img class="btnImg_in" id="ccPop" alt="팝업" src="resources/images/sales/popup.png"> -->
-									</div>
-								</td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="부서" /></td>
-								<td><input type="text" class="txt" id="dept" name="dept" value="${data.DEPT}" readonly="readonly" /></td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="직책" /></td>
-								<td><input type="text" class="txt" id="duty" name="duty" value="${data.DUTY}" readonly="readonly" /></td>								
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="휴대폰 번호*" /></td>
-								<td><input type="text" class="txt" id="mbl" name="mbl" placeholder="'-' 를 포함하지 않은 숫자만 입력해주세요." value="${data.MBL}" readonly="readonly" /></td>																
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="메일" /></td>
-								<td><input type="text" class="txt" id="email" name="email" value="${data.EMAIL}" readonly="readonly" /></td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="담당자 *" /></td>
-								<td>
-									<div class="imgPos">
-										<input type="text" class="txt imgName" id="mngEmp" name="mngEmp" value="${data.EMP_NAME}" readonly="readonly" />
-										<input type="hidden"id="mngNum" name="mngNum"/>
-										<!-- <img class="btnImg_in" id="mngPop" alt="팝업" src="resources/images/sales/usericon.png"> -->
-									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<!-- 첨부파일 -->
-					<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
-					<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
-					<div class="rvn_txt"> 첨부파일</div>
-					<div class="cntrct_box_in">
-						<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
-					</div>
+				<table>
+					<colgroup>
+						<col width="200" />
+						<col width="auto" />
+					</colgroup>
+					<tbody>
+						<tr>
+							<td><input type="button" class="btn" value="고객 *" readonly="readonly"/></td>
+							<td><input type="text" class="txt" id="cName" name="cName" value="${data.CLNT_NAME}" readonly="readonly" /></td>
+						</tr>
+						<tr height="40">
+							<td><input type="button" class="btn" value="고객사 *" /></td>
+							<td>
+								<div class="imgPos">
+									<input type="text" class="txt imgName" id="ccName" name="ccName" value="${data.CLNT_CMPNY_NAME}" readonly="readonly" />
+									<input type="hidden" id="ccNum" name="ccNum" />
+								</div>
+							</td>
+						</tr>
+						<tr height="40">
+							<td><input type="button" class="btn" value="부서" /></td>
+							<td><input type="text" class="txt" id="dept" name="dept" value="${data.DEPT}" readonly="readonly" /></td>
+						</tr>
+						<tr height="40">
+							<td><input type="button" class="btn" value="직책" /></td>
+							<td><input type="text" class="txt" id="duty" name="duty" value="${data.DUTY}" readonly="readonly" /></td>								
+						</tr>
+						<tr height="40">
+							<td><input type="button" class="btn" value="휴대폰 번호*" /></td>
+							<td><input type="text" class="txt" id="mbl" name="mbl" placeholder="'-' 를 포함하지 않은 숫자만 입력해주세요." value="${data.MBL}" readonly="readonly" /></td>																
+						</tr>
+						<tr height="40">
+							<td><input type="button" class="btn" value="메일" /></td>
+							<td><input type="text" class="txt" id="email" name="email" value="${data.EMAIL}" readonly="readonly" /></td>
+						</tr>
+						<tr height="40">
+							<td><input type="button" class="btn" value="담당자 *" /></td>
+							<td>
+								<div class="imgPos">
+									<input type="text" class="txt imgName" id="mngEmp" name="mngEmp" value="${data.EMP_NAME}" readonly="readonly" />
+									<input type="hidden"id="mngNum" name="mngNum"/>
+									<!-- <img class="btnImg_in" id="mngPop" alt="팝업" src="resources/images/sales/usericon.png"> -->
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<!-- 첨부파일 -->
+				<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+				<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
+				<div class="rvn_txt"> 첨부파일</div>
+				<div class="cntrct_box_in">
+					<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
+				</div>
 			</div>
 		</div>
 	</div>
