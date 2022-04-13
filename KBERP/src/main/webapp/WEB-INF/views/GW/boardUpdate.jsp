@@ -162,6 +162,7 @@ function checkEmpty(sel) {
 </form>
 <form action="fileUploadAjax" id="updateForm" method="post"
 	  enctype="multipart/form-data">
+<input type="hidden" name="no" value="${param.no}">
 <input type="text" id="title" name="title" class="tltle_input_box" placeholder="제목을 입력하세요">
 <textarea rows="20" cols="60" id="con" name="con" class="cont_input_box" placeholder="내용을 입력하세요"></textarea>
 첨부파일 :
