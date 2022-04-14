@@ -831,7 +831,7 @@ $(document).ready(function() {
 		html += "<div class=\"pop_cntrct_box_in\">";
 		html += "	<input type=\"text\" id=\"popFileName\" name=\"fileName\" readonly=\"readonly\">";
 		html += "</div>";
-		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />";
+		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"popuploadName(this)\" />";
 		html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />";	
 		html += "</form>";
 		
@@ -845,12 +845,6 @@ $(document).ready(function() {
 				$(".aff_btn").on("click", function() {
 					$("#att").click();
 				});
-				
-				function uploadName(e) {
-					var files = e.files;
-					var filename = files[0].name;
-					$("#popFileName").val(filename);
-				}
 				
 			},
 			width : 600,
@@ -906,11 +900,7 @@ $(document).ready(function() {
 								
 							RegForm.submit();
 							closePopup(1);
-<<<<<<< HEAD
-							reloadSScList();	
-=======
 							reloadSScList();
->>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 							} //if else문 end
 						}
 					}, {
@@ -1056,11 +1046,7 @@ $(document).ready(function() {
 						$("#uploadBtn").html(html);
 					});
 					
-					function uploadName(e) {
-						var files = e.files;
-						var filename = files[0].name;
-						$("#fileName").val(filename);
-					}
+					
 					
 					$(".pop_rvn_txt").on("click", ".aff_btn", function() {
 						$("#att").click();
@@ -1280,6 +1266,18 @@ function drawSScList(list) {
 	}
 	
 	$(".sBox").html(html);
+}
+
+function popuploadName(e) {
+	var files = e.files;
+	var filename = files[0].name;
+	$("#popFileName").val(filename);
+}
+
+function uploadName(e) {
+	var files = e.files;
+	var filename = files[0].name;
+	$("#fileName").val(filename);
 }
 </script>
 </head>
