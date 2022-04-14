@@ -1012,13 +1012,13 @@ $(document).ready(function() {
 					html += "</span>";
 					html += "</div>";
 					html += "<div class=\"pop_cntrct_box_in\">";
-					if(data.ATT_FILE_NAME != null) {
-						html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
+					if(data.ATT_FILE_NAME != "" && data.ATT_FILE_NAME != null) {
 						html += "	<input type=\"button\" id=\"fileDelete\" value=\"삭제\" />";
 					}
+						html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
 					html += "	<input type=\"text\" id=\"popFileName\" readonly=\"readonly\" />                 ";
 					html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />   ";
-					html += "	<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />           ";
+					html += "	<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" value=\"" + data.ATT_FILE_NAME + "\"  />           ";
 					html += "	<input type=\"hidden\" id=\"schdlnum\" name=\"schdlnum\" />           ";
 					html += "</div>                                                                     ";
 					html += "</form>";
@@ -1109,7 +1109,7 @@ $(document).ready(function() {
 									
 								RegForm.submit();
 								closePopup(1);
-								reloadSCList();
+								reloadSScList();
 								} //if else문 end
 							}
 						}, {
