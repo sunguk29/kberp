@@ -1012,14 +1012,13 @@ $(document).ready(function() {
 					html += "</span>";
 					html += "</div>";
 					html += "<div class=\"pop_cntrct_box_in\">";
-					if(data.ATT_FILE_NAME != "" && data.ATT_FILE_NAME != null) {
+					if(data.ATT_FILE_NAME != "") {
+						html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
 						html += "	<input type=\"button\" id=\"fileDelete\" value=\"삭제\" />";
 					}
-						html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
-					html += "	<input type=\"text\" id=\"popFileName\" readonly=\"readonly\" />                 ";
 					html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />   ";
-					html += "	<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" value=\"" + data.ATT_FILE_NAME + "\"  />           ";
 					html += "	<input type=\"hidden\" id=\"schdlnum\" name=\"schdlnum\" />           ";
+					html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" value=\"" + data.ATT_FILE_NAME + "\" />";	
 					html += "</div>                                                                     ";
 					html += "</form>";
 				}); // each end
@@ -1034,6 +1033,7 @@ $(document).ready(function() {
 					
 					$("#fileDelete").on("click", function() {
 						$("#file_name").remove();
+						$("#schdlAttFile").remove();
 						$(this).remove();
 						
 						var html = "";
@@ -1046,7 +1046,7 @@ $(document).ready(function() {
 					function uploadName(e) {
 						var files = e.files;
 						var filename = files[0].name;
-						$("#fileName").val(filename);
+						$("#schdlAttFile").val(filename);
 					}
 					
 					$(".pop_rvn_txt").on("click", ".aff_btn", function() {
@@ -1073,8 +1073,6 @@ $(document).ready(function() {
 								makeAlert("필수입력", "활동내용을 입력하세요");
 								$("#ssactvtycont").focus();
 							} else {					
-									
-									console.log(${sEmpNum});
 									var RegForm = $("#RegForm");
 											
 									RegForm.ajaxForm({
