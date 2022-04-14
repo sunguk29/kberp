@@ -676,9 +676,9 @@ $(document).ready(function() {
 	});
 
 	// 선택박스 초기값
-	$("#ccClsfy").val(${data.CLNT_CMPNY_CLSFY_NUM}).prop("selected", this.selected);
-	$("#ccGrade").val(${data.GRADE_NUM}).prop("selected", this.selected);
-	$("#rp").val(${data.RCGNTN_PATH_NUM}).prop("selected", this.selected);
+	$("#ccClsfy").val(${data.CLNT_CMPNY_CLSFY_NUM}).prop("selected", true);
+	$("#ccGrade").val(${data.GRADE_NUM}).prop("selected", true);
+	$("#rp").val(${data.RCGNTN_PATH_NUM}).prop("selected", true);
 	
 	// 의견
 	reloadOpList();
