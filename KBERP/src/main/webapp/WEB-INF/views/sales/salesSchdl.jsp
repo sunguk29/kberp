@@ -392,6 +392,19 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	var now = new Date();
+	var clndrYear = now.getFullYear();	// 연도
+	var clndrMonth = now.getMonth()+1;	// 월
+	var Cdate = "";
+	if(clndrMonth >= 10){
+		Cdate = ""+clndrYear+"-"+clndrMonth;
+	}else{
+		Cdate = ""+clndrYear+"-0"+clndrMonth;
+	}
+	$('input[name=clndrDate]').attr('value',Cdate);
+	
+	console.log($("#clndrDate").val());
+	
 	if('${param.usrsrchTxt}' != ''){
 		$("#usrsrchTxt").val('${param.usrsrchTxt}');
 		$("#deptS").val(${param.deptS});
@@ -661,7 +674,7 @@ $(document).ready(function() {
 			dataType : "json",
 			data : params,
 			success : function(res){		
-					
+				
 					var oldEvents = $("#fullCalendarArea").fullCalendar("getEventSources");
 					document.getElementById("oldEvent").value = oldEvents;
 					//신규이벤트 추가
@@ -675,6 +688,47 @@ $(document).ready(function() {
 		});
 	}
 	
+	$("body").on("click", ".fc-month-button", function() {
+		clndrDvsn
+		$("#clndrDvsn").attr('value',"month");
+		history.go(0);
+	});
+	
+	
+	// 달력에서 이후 버튼 누를 시
+	$("body").on("click", ".fc-next-button", function() {
+		
+			clndrMonth = clndrMonth+1;
+			if(clndrMonth >= 13){
+				clndrMonth = 1;
+				clndrYear = clndrYear + 1;
+			}
+			if(clndrMonth >= 10){
+				Cdate = ""+clndrYear+"-"+clndrMonth;
+			}else{
+				Cdate = ""+clndrYear+"-0"+clndrMonth;
+			}
+			$('input[name=clndrDate]').attr('value',Cdate);
+			drawDayCalc();
+		
+	});
+	
+	// 달력에서 이전 버튼 누를 시
+	$("body").on("click", ".fc-prev-button", function() {
+		clndrMonth = clndrMonth-1;
+		
+		if(clndrMonth < 1){
+			clndrMonth = 12;
+			clndrYear = clndrYear - 1;
+		}
+		if(clndrMonth >= 10){
+			Cdate = ""+clndrYear+"-"+clndrMonth;
+		}else{
+			Cdate = ""+clndrYear+"-0"+clndrMonth;
+		}
+		$('input[name=clndrDate]').attr('value',Cdate);
+		drawDayCalc();
+	});
 	
 	
 	$("#fullCalendarArea").fullCalendar({
@@ -688,10 +742,10 @@ $(document).ready(function() {
 	      height: 400,
 	      events: data,
 	      eventClick: function(event) { // 이벤트 클릭
-	   
+			
 	      },
 	      dayClick: function(date, js, view) { // 일자 클릭
-	    	   
+	    	  
 			var tdv = date.format();
 			document.getElementById("ctt").value = "      " + tdv;
 		
@@ -721,9 +775,6 @@ $(document).ready(function() {
 	    	  //alert('Current view: ' + view.name);
 	      }
 	});
-	
-	
-	
 	
 	/* 캘린더 이벤트 관련 끝 */
 	
@@ -760,6 +811,7 @@ $(document).ready(function(){
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" id="schdlnum" name="schdlnum" value="${param.schdlnum}" />
 	<input type="hidden" id="oldEvent" />
+	<input type="hidden" id="clndrDate" name="clndrDate" />
 	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">

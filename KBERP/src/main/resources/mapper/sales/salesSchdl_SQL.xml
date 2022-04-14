@@ -194,7 +194,7 @@
          		            		ON E.EMP_NUM = A.EMP_NUM
          		            INNER JOIN DEPT D
          		            		ON A.DEPT_NUM = D.DEPT_NUM 
-		WHERE SUBSTR(SS.START_DATE_HR, 1, 7) = #{month}
+		WHERE SUBSTR(SS.START_DATE_HR, 1, 7) = #{clndrDate}
 		AND SS.DEL_CHECK IS NULL 
 		<choose>
 			<when test="deptS != 6">
