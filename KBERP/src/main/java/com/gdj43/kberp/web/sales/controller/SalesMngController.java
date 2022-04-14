@@ -627,13 +627,11 @@ public class SalesMngController {
 				iCommonService.insertData("salesMng.sales4CntrctAdd", params); // 계약
 				iCommonService.insertData("salesMng.sales4CntrctAttAdd", params); // 계약 첨부파일
 				iCommonService.updateData("salesMng.sales3to4", params); // 계약 단계 전환
+				iCommonService.updateData("salesMng.sales4Failure", params); // 종료(성공)
 				break;
 			case "update" :
 				iCommonService.updateData("salesMng.sales4Update", params); // 계약 정보 수정
 				iCommonService.updateData("salesMng.sales4UpdateAttFile", params); // 계약 첨부파일 수정
-				break;
-			case "failure" :
-				iCommonService.updateData("salesMng.sales4Failure", params);
 				break;
 			}
 			modelMap.put("res", "success");
