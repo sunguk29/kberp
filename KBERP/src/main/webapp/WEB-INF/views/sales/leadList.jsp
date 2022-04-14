@@ -539,7 +539,7 @@ $(document).ready(function() {
 /* 리드 리스트 */
 function reloadList() {
 	var params = $("#actionForm").serialize();
-	console.log(params);
+	
 	$.ajax({
 		type : "post",
 		url : "leadListAjax",
@@ -549,7 +549,6 @@ function reloadList() {
 			drawTotal(res.cnt);
 			drawList(res.list);
 			drawPaging(res.pb, ".pgn_area");
-			console.log(res.list);
 		},
 		error : function(req) {
 			console.log(req.responseText);
