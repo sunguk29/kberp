@@ -388,7 +388,7 @@ textarea {
 	text-align: center;
 	line-height: 100px;
 }
-/* 예정된 일정 */
+/* ******** 예정된 일정 ******** */
 .schdl_title {
 	position: relative;
 	font-size: 11pt;
@@ -644,6 +644,14 @@ $(document).ready(function() {
 			}]
 		});
 	});
+	
+	
+	// 선택박스 초기값
+	$("#loanCauseNum").val(${data.LOAN_CAUSE_NUM}).prop("selected", true);
+	$("#loanHopeType").val(${data.LOAN_HOPE_TYPE}).prop("selected", true);
+	$("#loanHopeTime").val(${data.LOAN_HOPE_TIME}).prop("selected", true);
+	$("#expctdBsnsType").val(${data.EXPCTD_BSNS_TYPE}).prop("selected", true);
+	
 	
 	/* 의견 목록 */
 	reloadOpList();
@@ -1004,13 +1012,13 @@ $(document).ready(function() {
 					html += "</span>";
 					html += "</div>";
 					html += "<div class=\"pop_cntrct_box_in\">";
-					if(data.ATT_FILE_NAME != null) {
-						html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
+					if(data.ATT_FILE_NAME != "" && data.ATT_FILE_NAME != null) {
 						html += "	<input type=\"button\" id=\"fileDelete\" value=\"삭제\" />";
 					}
+						html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
 					html += "	<input type=\"text\" id=\"popFileName\" readonly=\"readonly\" />                 ";
 					html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />   ";
-					html += "	<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />           ";
+					html += "	<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" value=\"" + data.ATT_FILE_NAME + "\"  />           ";
 					html += "	<input type=\"hidden\" id=\"schdlnum\" name=\"schdlnum\" />           ";
 					html += "</div>                                                                     ";
 					html += "</form>";
@@ -1101,7 +1109,7 @@ $(document).ready(function() {
 									
 								RegForm.submit();
 								closePopup(1);
-								reloadSCList();
+								reloadSScList();
 								} //if else문 end
 							}
 						}, {
@@ -1119,65 +1127,54 @@ $(document).ready(function() {
 	
 	/* 예정된 일정 삭제 */
 	$(".sBox").on("click", ".sch_del", function() {
-		var snum = $(this).children("#schdlListNumber").val();
-		console.log(snum);
-		document.getElementById("schdldeletenum").value = snum;
-		
+		var slNum = $(this).children("#schdlListNumber").val();
+		console.log(slNum);
+		document.getElementById("schdldeletenum").value = slNum;
+
 		var html = "";
 		
 		html += "<div class=\"popup_cont2\">삭제하시겠습니까?</div>";
-		
 
-		$(".sBox").on("click", ".sch_del", function() {
-			var slNum = $(this).children("#schdlListNumber").val();
-			console.log(slNum);
-			document.getElementById("schdldeletenum").value = slNum;
-
-			var html = "";
-			
-			html += "<div class=\"popup_cont2\">삭제하시겠습니까?</div>";
-
-			makePopup({
-				bg : false,
-				bgClose : false,
-				title : "경고",
-				contents : html,
-				contentsEvent : function() {
-					$("#popup1").draggable();
-				},
-				draggable : true,
-				width : 400,
-				height: 200,
-				buttons : [{
-					name : "확인",
-					func:function() {
-						
-						var params = $("#SSchdlActionForm").serialize();
-						
-						$.ajax({
-							type : "post",
-							url : "salesSchdlAction/delete",
-							dataType : "json",
-							data : params,
-							success : function(res) {
-								if(res.res == "success") {
-									reloadSScList();
-								} else {
-									alert("삭제중 문제가 발생하였습니다.");
-								}
-							},
-							error : function(request, status, error) {
-								console.log(request.responseTxt);
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "경고",
+			contents : html,
+			contentsEvent : function() {
+				$("#popup1").draggable();
+			},
+			draggable : true,
+			width : 400,
+			height: 200,
+			buttons : [{
+				name : "확인",
+				func:function() {
+					
+					var params = $("#SSchdlActionForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "salesSchdlAction/delete",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							if(res.res == "success") {
+								reloadSScList();
+							} else {
+								alert("삭제중 문제가 발생하였습니다.");
 							}
-						});
-						closePopup();
-					}
-				}, {
-					name : "취소"
-				}]
-			});
-		}); // 일정 삭제 function end
-	});
+						},
+						error : function(request, status, error) {
+							console.log(request.responseTxt);
+						}
+					});
+					closePopup();
+				}
+			}, {
+				name : "취소"
+			}]
+		});
+	}); // 일정 삭제 function end
 	
 	
 }); // document.ready end
@@ -1381,24 +1378,12 @@ function uploadName(e) {
 							<tr>
 								<td><input type="button" class="btn" value="대출 원인*" /></td>
 								<td colspan="3">
-									<select class="txt" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${data.LOAN_CAUSE_NUM eq 0}">													
-														<option value="0" selected="selected">사업확장</option>
-													</c:when>
-													<c:when test="${data.LOAN_CAUSE_NUM eq 1}">													
-														<option value="0" selected="selected">제품개발</option>
-													</c:when>
-													<c:when test="${data.LOAN_CAUSE_NUM eq 2}">													
-														<option value="0" selected="selected">토지매매</option>
-													</c:when>
-													<c:when test="${data.LOAN_CAUSE_NUM eq 3}">													
-														<option value="0" selected="selected">기타</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
-										</select>
+									<select class="txt" id="loanCauseNum" name="loanCauseNum" disabled="disabled">
+										<option value="0">사업확장</option>
+										<option value="1">제품개발</option>
+										<option value="2">토지매매</option>
+										<option value="3">기타</option>
+									</select>
 								</td>
 							</tr>
 							<tr height="40">
@@ -1408,40 +1393,20 @@ function uploadName(e) {
 							<tr height="40">
 									<td><input type="button" class="btn" value="대출 희망 유형*" /></td>
 									<td colspan="3">
-										<select class="txt" disabled="disabled">
-											<optgroup>
-											<c:choose>
-													<c:when test="${data.LOAN_HOPE_TYPE eq 0}">													
-														<option value="0" selected="selected">장기대출</option>
-													</c:when>
-													<c:when test="${data.LOAN_HOPE_TYPE eq 1}">													
-														<option value="0" selected="selected">단기대출</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+										<select class="txt" id="loanHopeType" name="loanHopeType" disabled="disabled">
+											<option value="0">장기대출</option>
+											<option value="1">단기대출</option>
 										</select>
 									</td>
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="대출 희망 시기*"/></td>
 									<td colspan="3">
-										<select class="txt" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${data.LOAN_HOPE_TIME eq 0}">													
-														<option value="0" selected="selected">근시일 내</option>
-													</c:when>
-													<c:when test="${data.LOAN_HOPE_TIME eq 1}">													
-														<option value="0" selected="selected">3개월 이후</option>
-													</c:when>
-													<c:when test="${data.LOAN_HOPE_TIME eq 2}">													
-														<option value="0" selected="selected">6개월 이후</option>
-													</c:when>
-													<c:when test="${data.LOAN_HOPE_TIME eq 3}">													
-														<option value="0" selected="selected">1년 이후</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+										<select class="txt" id="loanHopeTime" name="loanHopeTime" disabled="disabled">
+											<option value="0">근시일 내</option>
+											<option value="1">3개월 이후</option>
+											<option value="2">6개월 이후</option>
+											<option value="3">1년 이후</option>
 										</select>
 									</td>	
 							</tr>
@@ -1464,20 +1429,10 @@ function uploadName(e) {
 							<tr height="40">
 									<td><input type="button" class="btn" value="예정 사업 형태" /></td>
 									<td colspan="3">
-										<select class="txt" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${data.EXPCTD_BSNS_TYPE eq 0}">													
-														<option value="0" selected="selected">민수 사업</option>
-													</c:when>
-													<c:when test="${data.EXPCTD_BSNS_TYPE eq 1}">													
-														<option value="0" selected="selected">관공 사업</option>
-													</c:when>
-													<c:when test="${data.EXPCTD_BSNS_TYPE eq 2}">													
-														<option value="0" selected="selected">기타</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+										<select class="txt" id="expctdBsnsType" name="expctdBsnsType" disabled="disabled">
+											<option value="0">민수 사업</option>
+											<option value="1">관공 사업</option>
+											<option value="2">기타</option>
 										</select>
 									</td>
 							</tr>

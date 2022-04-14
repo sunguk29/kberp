@@ -2421,36 +2421,6 @@ function test(t) {
 									</td>
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="이자납부방식" readonly="readonly" /></td>
-								<td>
-									<select class="txt" id="intrst_pymnt" name="intrstPymnt">
-										<optgroup>
-											<option value="-1">선택 하세요</option>
-											<option value="0">원금 균등 상환</option>
-											<option value="1">원리금 균등 상환</option>
-											<option value="2">만기 일시 상환</option>
-										</optgroup>
-									</select>
-								</td>
-								<td><input type="button" class="btn" value="원금상환방식" readonly="readonly" /></td>
-								<td colspan="2">
-									<select class="txt" id="prncpl_pymnt" name="prncplPymnt">
-										<optgroup>
-											<option value="-1">선택 하세요</option>
-											<option value="0">원금 균등 상환</option>
-											<option value="1">원리금 균등 상환</option>
-											<option value="2">만기 일시 상환</option>
-										</optgroup>
-									</select>
-								</td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="이자율(%)" readonly="readonly" /></td>
-								<td><input type="text" class="txt" id="intrstRate" name="intrstRate" /></td>
-								<td><input type="button" class="btn" value="납부일" readonly="readonly" /></td>
-								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" placeholder="매달    일" /></td>
-							</tr>
-							<tr height="40">
 								<td><input type="button" class="btn" value="대출기간" readonly="readonly" /></td>
 								<td>
 									<select class="txt" id="loanPrd" name="loanPrd">
@@ -2463,8 +2433,37 @@ function test(t) {
 										</optgroup>
 									</select>	
 								</td>
-								<td></td>
+								<td><input type="button" class="btn" value="원금상환방식" readonly="readonly" /></td>
+								<td colspan="2">
+									<select class="txt" id="prncpl_pymnt" name="prncplPymnt">
+										<optgroup>
+											<option value="-1">선택 하세요</option>
+											<option value="0">원금 균등 상환</option>
+											<option value="1">원리금 균등 상환</option>
+											<option value="2">만기 일시 상환</option>
+										</optgroup>
+									</select>
+								</td>
 								<td colspan="2" style="border:none;"></td>
+							</tr>
+							<!-- <tr height="40"> -->
+<!-- 								<td><input type="button" class="btn" value="이자납부방식" readonly="readonly" /></td>
+								<td>
+									<select class="txt" id="intrst_pymnt" name="intrstPymnt">
+										<optgroup>
+											<option value="-1">선택 하세요</option>
+											<option value="0">원금 균등 상환</option>
+											<option value="1">원리금 균등 상환</option>
+											<option value="2">만기 일시 상환</option>
+										</optgroup>
+									</select>
+								</td> -->
+							<!-- </tr> -->
+							<tr height="40">
+								<td><input type="button" class="btn" value="이자율(%)" readonly="readonly" /></td>
+								<td><input type="text" class="txt" id="intrstRate" name="intrstRate" /></td>
+								<td><input type="button" class="btn" value="납부일" readonly="readonly" /></td>
+								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" placeholder="매달    일" /></td>
 							</tr>
 							<!-- <tr height="40">
 								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
