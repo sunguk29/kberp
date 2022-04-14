@@ -290,10 +290,10 @@ function drawPaging(pb) {
 	<input type="hidden" id="top" name="top" value="${param.top}" />
 	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
-	<input type="hidden" name="page" value="${param.page}" />
+	<input type="hidden"  name="page" value="${param.page}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
-	<input type="hidden" name="no" value="${param.no}" />
-	<input type="hidden" name="mng_num" value="${param.mng_num}" />
+	<input type="hidden" id ="no" name="no" value="${param.no}" />
+	<input type="hidden" id ="mng_num" name="mng_num" value="${param.mng_num}" />
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<table class="board_table">
@@ -332,9 +332,9 @@ function drawPaging(pb) {
          </tr>
          <tr>
             <td> 카드명의 </td>
-               <td>${data.MNG_EMP_NM}</td>
+               <td>${data.NAME}</td>
             <td> 사용자 </td>
-               <td>${data.USE_EMP_NM}</td>
+               <td>${data.EMP_NAME}</td>
 
          </tr>
          <tr>

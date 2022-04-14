@@ -13,7 +13,9 @@
 #assetName{
 	width:130px;
 }
-
+#assetNum, #useEmpName{
+	margin-top: 5px;
+}
 #qunty{
 	width:50px;
 }
@@ -90,9 +92,7 @@ $(document).ready(function() {
 			rgstrtnForm.ajaxForm({
 				success : function(res) {
 					// 글 저장
-					console.log("@@@")
 					var params = $("#rgstrtnForm").serialize();
-					console.log("@@")
 					$.ajax({
 						type : "post", 
 						url : "assetAction/insertRntl", 
@@ -100,7 +100,8 @@ $(document).ready(function() {
 						data : params, 
 						success : function(res) { 
 							if(res.res == "success") {
-								location.href ="assetRntl";
+								$("#actionForm").attr("action","assetRntl");
+								$("#actionForm").submit();
 							} else {
 								alert("작성중 문제가 발생하였습니다.");
 							}
@@ -435,8 +436,6 @@ function checkEmpty(sel) {
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
 <form action="#" id="actionForm" method="post">
-	<input type="hidden" name="num" value="${param.num}"/>
-	<input type="hidden" name="unum" value="${param.unum}"/>
 	<input type="hidden" name="page" value="${param.page}"/>
 	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />

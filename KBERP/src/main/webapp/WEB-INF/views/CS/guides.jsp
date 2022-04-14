@@ -11,6 +11,13 @@
 <c:import url="/header"></c:import>
 <style type="text/css">
 /* 가로 사이즈 조정용 */
+.save_cont{
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	line-height: 110px;
+}
+
 .cont_wrap {
 	width: 900px;
 }
@@ -72,11 +79,15 @@ $(document).ready(function() {
 	});
 	
 	$("#strgBtn").on("click", function() {
+		var html = "";
+		
+		html += "<div class=\"save_cont\">복원 하시겠습니까?</div>";
+		
 		makePopup({
 			bg : true,
 			bgClose : false,
 			title : "복원",
-			contents : "복원하시겠습니까?",
+			contents : html,
 			buttons : [{
 				name : "복원",
 				func:function() {
@@ -108,11 +119,15 @@ $(document).ready(function() {
 	});
 	
 	$("#deleteBtn").on("click", function() {
+		var html = "";
+		
+		html += "<div class=\"save_cont\">삭제 하시겠습니까?</div>";
+		
 		makePopup({
 			bg : false,
 			bgClose : false,
 			title : "삭제",
-			contents : "삭제하시겠습니까?",
+			contents : html,
 			buttons : [{
 				name : "삭제",
 				func:function() {

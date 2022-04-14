@@ -175,7 +175,7 @@
 }
 
 .schdl_ctgry label:hover, #new_schdl:hover,
-.schdl_type label:hover, .fc-content {
+.schdl_type label:hover, .fc-content, .today_schdl {
 	
 	cursor: pointer;
 }
@@ -339,10 +339,10 @@
 <script type="text/javascript" src="resources/script/fullcalendar/locale-all.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+	
 	var now = new Date();
 	var clndrYear = now.getFullYear();	// 연도
-	var clndrMonth =now.getMonth()+1;	// 월
-	
+	var clndrMonth = now.getMonth()+1;	// 월
 	var Cdate = "";
 	if(clndrMonth >= 10){
 		Cdate = ""+clndrYear+ clndrMonth;
@@ -386,7 +386,6 @@ $(document).ready(function() {
 	      height: 600,
 	      events: data,
 	      eventClick: function(event) { // 이벤트 클릭
-	    	  var params = $("#dtlForm").serialize();
 	    	 
 	    	  $.ajax({
 					type: "post", 
@@ -406,13 +405,14 @@ $(document).ready(function() {
 	    	  
 	      },
 	      dayClick: function(date, js, view) { // 일자 클릭
-	    	 // alert('Clicked on: ' + date.format());
-	    	  
-	    	  //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
 
-	    	 //alert('Current view: ' + view.name);
 	    	  var html = "";
-	  		
+	    	  // getTimezoneOffset()은 현재 시간과의 차이를 분 단위로 반환한다.
+	    	  // 분 단위로 반환하기 때문에 기존 밀리초 단위로 인자를 받는 new Date() 함수에 넣기 위해서 1000(밀리초)*60(초) 를 곱해 밀리초 단위로 만든다.
+	    	  const Soffset = new Date().getTimezoneOffset() * 60000; // UTC시간을 기준이기 때문에 9시간 offset
+	    	  var start = new Date(Date.now() - Soffset);
+	    	  const Eoffset = new Date().getTimezoneOffset() * 60000 - 7200000 ;
+	    	  var end = new Date(Date.now() - Eoffset);
 	  		html += "<form action=\"#\" id=\"addForm\" method=\"post\">";
 	  		html += "<input type=\"hidden\" id=\"emp_num\" name=\"emp_num\" value=\"${sEmpNum}\">";
 	  		html += "<input type=\"hidden\" id=\"dept_num\" name=\"dept_num\" value=\"${sDeptNum}\">";
@@ -421,7 +421,9 @@ $(document).ready(function() {
 	  		html += "<select class=\"slct_type\" id=\"schdl_type\" name=\"schdl_type\">";
 	  		html += "<option value=\"0\">개인</option>";
 	  		html += "<option value=\"1\">부서</option>";
-	  		html += "<option value=\"2\">전사</option>";
+	  		if(${sDeptNum} == "1" || ${sDeptNum} == "4"){
+	  			html += "<option value=\"2\">전사</option>";
+	  			}
 	  		html += "</select>";
 	  		html += "</div>";
 	  		html += "<div class=\"popup_style\">";
@@ -435,13 +437,13 @@ $(document).ready(function() {
 	  		html += "<div class=\"popup_style\">";
 	  		html += "<span>시작 시간</span>";
 	  		html += "<input type=\"date\" value=\"" + date.format() + "\"  id=\"schdl_start_date\" name=\"schdl_start_date\">";
-	  		html += "<input type=\"time\" id=\"schdl_start_time\" name=\"schdl_start_time\">";
+	  		html += "<input type=\"time\" id=\"schdl_start_time\" name=\"schdl_start_time\" value=\""+ start.toISOString().slice(11, 16) +"\">";
 	  		html += "<input type=\"hidden\" id=\"hidden_start_time\" name=\"schdl_start_time\">";
 	  		html += "</div>";	
 	  		html += "<div class=\"popup_style\">";
 	  		html += "<span>종료 시간</span>";
 	  		html += "<input type=\"date\" value=\"" + date.format() + "\"  id=\"schdl_end_date\" name=\"schdl_end_date\">";			
-	  		html += "<input type=\"time\" id=\"schdl_end_time\" name=\"schdl_end_time\">";
+	  		html += "<input type=\"time\" id=\"schdl_end_time\" name=\"schdl_end_time\" value=\""+ end.toISOString().slice(11, 16) +"\">";
 	  		html += "<input type=\"hidden\" id=\"hidden_end_time\" name=\"schdl_end_time\">";
 	  		html += "</div>";
 	  		html += "<div class=\"popup_dtl_cont\">";
@@ -526,6 +528,11 @@ $(document).ready(function() {
 	  						 if(checkEmpty("#schdl_place")){
 	  								$("#schdl_place").val(" "); // 내용을 비워두면 undefined 출력돼서 추가
 	  							}
+							$("#asd").val($("#schdl_start_time").val());
+							 if($("#schdl_start_time").val() == "12:00"){
+									alert($("#schdl_start_time").val());
+									$("#schdl_start_time").val(now.toLocaleTimeString().slice(0, 8)); 
+								}
 	  						var params = $("#addForm").serialize();
 	  						console.log(params);
 	  						$.ajax({
@@ -653,12 +660,28 @@ $(document).ready(function() {
 			reloadList();
 		}
 	});
+	$(".today_schdl").on("click", "div", function() {
+		var select = $(this);
+		var id = select.attr('name');
+		$.ajax({
+			type: "post", 
+			url : "dtlSchdl",
+			dataType : "json",
+			data : {id : id}, 
+			success : function(res) { 
+				 drawList(res.dtl);
+				 
+			},
+			error : function(request, status, error) { 
+				console.log(request.responseText); 
+			}
+		});
+	});
 	/* 상세일정 */
 	function drawList(dtl) {
 		var schdl_type_name = "";
 		var schdl_ctgry_name = "";
 		for(var data of dtl){
-			console.log(data)
 			switch(data.schdl_cont){
 			case "":
 				data.schdl_cont = " "					
@@ -732,7 +755,8 @@ $(document).ready(function() {
   	  html += "<textarea rows=\"10\" cols=\"57\" class=\"dtl_cont\" readonly>" + data.schdl_cont + "</textarea>";			
   	  html += "</div>";
   	  html += "</form>";
-  	  
+  	if(${sEmpNum} == data.emp_num){
+  		
   			makePopup({
   				bg : true,
   				bgClose : false,
@@ -742,20 +766,10 @@ $(document).ready(function() {
   				width : 540,
   				height : 520,
   				buttons : [{
+  					
   					name : "수정",
   					func:function() {
-  						if(${sEmpNum} != data.emp_num){
-  							makePopup({
-	  							bg : true,
-	  							bgClose : false,
-	  							title : "경고",
-	  							contents : "본인의 일정만 수정할 수 있습니다.",
-	  							draggable : true,
-	  							buttons : [{
-	  								name : "확인"
-	  							}]
-	  						});
-  						} else{
+  						
   						schdlUpdate(data);
   						if(data.aldy_dvsn == "1"){
   							$('input[name=schdl_start_time]').attr('style', "display:none;");
@@ -763,23 +777,12 @@ $(document).ready(function() {
   							$('input[name=schdl_end_time]').attr('style', "display:none;");
   							$('#schdl_end_time').attr('disabled',true);
   						 }
-  						}
+  						
   					}
   				}, {
   					name : "삭제",
   					func:function(){
-  						if(${sEmpNum} != data.emp_num){
-  							makePopup({
-	  							bg : true,
-	  							bgClose : false,
-	  							title : "경고",
-	  							contents : "본인의 일정만 삭제할 수 있습니다.",
-	  							draggable : true,
-	  							buttons : [{
-	  								name : "확인"
-	  							}]
-	  						});
-  						} else{
+  						
 	  						makePopup({
 	  							bg : true,
 	  							bgClose : false,
@@ -795,13 +798,28 @@ $(document).ready(function() {
 	  								name : "취소"
 	  							}]
 	  						});
-  						}
+  						
   					}
   					
   				},{
   					name : "닫기"
   				}]
   			});
+  		} else {
+  			makePopup({
+  				bg : true,
+  				bgClose : false,
+  				title : "상세일정",
+  				contents : html,
+  				draggable : true,
+  				width : 540,
+  				height : 520,
+  				buttons : [{
+  					name : "닫기"
+  					}]
+  				});
+  		}
+  		
 	}
 	$("#eventChangeBtn").on("click", function() {
 		var newEvents = [ {
@@ -841,7 +859,9 @@ function schdlUpdate(data){
 	html += "<select class=\"slct_type\" id=\"schdl_type\" name=\"schdl_type\">";
 	html += "<option value=\"0\">개인</option>";
 	html += "<option value=\"1\">부서</option>";
-	html += "<option value=\"2\">전사</option>";
+	if(${sDeptNum} == "1" || ${sDeptNum} == "4"){
+		html += "<option value=\"2\">전사</option>";
+		}
 	html += "</select>";
 	html += "</div>";
 	html += "<div class=\"popup_style\">";
@@ -960,9 +980,6 @@ function schdlUpdate(data){
 					 if(checkEmpty("#schdl_place")){
 							$("#schdl_place").val(" ");
 						}
-					 /* if($("#aldy_dvsn").is(":checked")){
-						 $("#hidden_end_time").val("23:59"); // 종일일정 시 하루씩 짧아져서 시간 할당
-					 } */
 					 
 					var params = $("#updateForm").serialize();
 					console.log(params);
@@ -1040,11 +1057,10 @@ function drawToDayList(schdl){
 			if(date == data.startDate){
 				dataCnt ++;
 				$("#side_bar").css('height', document.getElementById('side_bar').style.height = 450 + (dataCnt*35));
-				html += "<input type=\"hidden\" id=\"today_schdl_num\" name=\"today_schdl_num\" value=\"" + data.id + "\" >";
 				if(data.startTime == "00:00"){
-					html +=	"<div class=\"today_schdl\" id=\"" + data.schdlCtgryName +"\">" + "종일 - "  + data.title + "</div>";
+					html +=	"<div class=\"today_schdl\" id=\"" + data.schdlCtgryName +"\" name=\"" + data.id +"\">" + "종일 - "  + data.title + "</div>";
 				}else{
-					html +=	"<div class=\"today_schdl\" id=\"" + data.schdlCtgryName +"\">" + data.startTime + " - " + data.title + "</div>";
+					html +=	"<div class=\"today_schdl\" id=\"" + data.schdlCtgryName +"\" name=\"" + data.id +"\">" + data.startTime + " - " + data.title + "</div>";
 				}
 				
 			}
@@ -1135,6 +1151,7 @@ $(document).ready(function() {
 			
             if (startDate > endDate) {
             	alert("조회 기간은 과거로 설정하세요.");
+            	
             	//달력에 종료 날짜 넣어주기
         		$("#date_end").val($("#eddt").val());
 			} else {
@@ -1145,6 +1162,11 @@ $(document).ready(function() {
 	
 	$("#new_schdl").on("click", function () {
 		var html = "";
+		var now = new Date();
+		const Soffset = new Date().getTimezoneOffset() * 60000; // UTC시간을 기준이기 때문에 9시간 offset
+  	    var start = new Date(Date.now() - Soffset);
+  	    const Eoffset = new Date().getTimezoneOffset() * 60000 - 7200000 ;
+  	    var end = new Date(Date.now() - Eoffset);
 		
 		html += "<form action=\"#\" id=\"addForm\" method=\"post\">";
 		html += "<input type=\"hidden\" id=\"emp_num\" name=\"emp_num\" value=\"${sEmpNum}\">";
@@ -1154,7 +1176,9 @@ $(document).ready(function() {
 		html += "<select class=\"slct_type\" id=\"schdl_type\" name=\"schdl_type\">";
 		html += "<option value=\"0\">개인</option>";
 		html += "<option value=\"1\">부서</option>";
+		if(${sDeptNum} == "1" || ${sDeptNum} == "4"){
 		html += "<option value=\"2\">전사</option>";
+		}
 		html += "</select>";
 		html += "</div>";
 		html += "<div class=\"popup_style\">";
@@ -1168,13 +1192,13 @@ $(document).ready(function() {
 		html += "<div class=\"popup_style\">";
 		html += "<span>시작 시간</span>";
 		html += "<input type=\"date\" id=\"schdl_start_date\" name=\"schdl_start_date\">";
-		html += "<input type=\"time\" id=\"schdl_start_time\" name=\"schdl_start_time\">";
+		html += "<input type=\"time\" id=\"schdl_start_time\" name=\"schdl_start_time\"  value=\""+ start.toISOString().slice(11, 16) +"\">";
 		html += "<input type=\"hidden\" id=\"hidden_start_time\" name=\"schdl_start_time\">";
 		html += "</div>";	
 		html += "<div class=\"popup_style\">";
 		html += "<span>종료 시간</span>";
 		html += "<input type=\"date\" id=\"schdl_end_date\" name=\"schdl_end_date\">";			
-		html += "<input type=\"time\" id=\"schdl_end_time\" name=\"schdl_end_time\">";
+		html += "<input type=\"time\" id=\"schdl_end_time\" name=\"schdl_end_time\" value=\""+ end.toISOString().slice(11, 16) +"\">";
 		html += "<input type=\"hidden\" id=\"hidden_end_time\" name=\"schdl_end_time\">";
 		html += "</div>";
 		html += "<div class=\"popup_dtl_cont\">";
@@ -1259,6 +1283,7 @@ $(document).ready(function() {
 						 if(checkEmpty("#schdl_place")){
 								$("#schdl_place").val(" "); // 내용을 비워두면 undefined 출력돼서 추가
 							}
+							
 						var params = $("#addForm").serialize();
 						console.log(params);
 						$.ajax({
@@ -1357,6 +1382,7 @@ $(document).ready(function() {
 		<div class="today">		
 			<h5 class="side_bar_title">오늘 일정</h5>
 			<div class="today_schdl">
+			
 			</div>
 		</div>
 		

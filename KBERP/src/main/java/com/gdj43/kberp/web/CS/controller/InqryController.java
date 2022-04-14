@@ -136,5 +136,75 @@ public class InqryController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/inqryRspndList")
+	public ModelAndView inqryRspndList(@RequestParam HashMap<String, String> params, 
+			  						ModelAndView mav) {
+		
+		if(params.get("page") == null || params.get("page") == "") {
+			params.put("page", "1");
+		}
+		
+		mav.addObject("page", params.get("page"));
+		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/inqryRspndListAjax", method = RequestMethod.POST, 
+			produces = "text/json;charset=UTF-8")
+		@ResponseBody
+		public String inqryRspndListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+			ObjectMapper mapper = new ObjectMapper();
+			
+			Map<String, Object> modelMap = new HashMap<String, Object>();
+			
+			// 총 게시글 수
+			int cnt = iCommonService.getIntData("in.inqryRspndCnt", params);
+			
+			// 페이징 계산
+			PagingBean pb = ips.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
+			
+			params.put("startCnt", Integer.toString(pb.getStartCount()));
+			params.put("endCnt", Integer.toString(pb.getEndCount()));
+			
+			List<HashMap<String, String>> list = iCommonService.getDataList("in.inqryRspndList", params);
+			
+			modelMap.put("list", list);
+			modelMap.put("pb", pb);
+			
+			return mapper.writeValueAsString(modelMap); 
+		}
+	
+	// 대응가이드 등록, 수정, 삭제
+	@RequestMapping(value="/inqryRspndListAction/{gbn}", method = RequestMethod.POST,
+			produces = "text/json;charset=UTF-8")
+			@ResponseBody
+			public String inqryRspndListAction(@RequestParam HashMap<String, String> params,
+										   	   @PathVariable String gbn) throws Throwable {
+				ObjectMapper mapper = new ObjectMapper();
+		
+				Map<String, Object> modelMap = new HashMap<String, Object>();
+				
+				try {
+					switch(gbn) {
+					case "i":
+						iCommonService.insertData("in.inqryRspndAdd", params);
+						break;
+					case "u":
+						iCommonService.updateData("in.inqryRspndUp", params);
+						break;
+					case "d":
+						iCommonService.updateData("in.inqryRspndDel", params);
+						break;
+					}
+					modelMap.put("res", "success");
+					
+				} catch(Throwable e) {
+					e.printStackTrace();
+					modelMap.put("res", "failed");
+				}
+				
+				return mapper.writeValueAsString(modelMap);
+			}
+	
 	
 }

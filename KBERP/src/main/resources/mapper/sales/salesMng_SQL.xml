@@ -460,9 +460,9 @@
 		WHERE SALES_NUM = #{salesNum}
 	</update>
 	
-	<!-- 계약 실패 -->
+	<!-- 계약 완료 -->
 	<update id="sales4Failure" parameterType="hashmap">
-		UPDATE SALES SET PRGRS_STS_NUM = '46'
+		UPDATE SALES SET PRGRS_STS_NUM = '45'
 		WHERE SALES_NUM = #{salesNum}
 	</update>
 	
@@ -758,6 +758,55 @@
 		WHERE CNTRCT_NUM = #{cntrctNum}
 	</update>
 
+
+	<!-- 영업관리 예정된 일정 개수 구하기-->
+    <select id="SScListCnt" parameterType="hashmap" resultType="Integer">
+       SELECT COUNT(*) AS CNT
+       FROM SALES_SCHDL
+       WHERE DEL_CHECK IS NULL
+       AND SALES_NUM = #{salesNum}
+    </select>
+		
+	<!-- 영업관리 예정된 일정 목록 띄우기 -->
+    <select id="salesMng.getSScList" parameterType="hashmap" resultType="hashmap">
+       SELECT SUBSTR(START_DATE_HR, 6, 5) || ' ' || SUBSTR(START_DATE_HR, 12, 16) AS START_DATE_HR, DECODE(END_DATE_HR, NULL, '미정', SUBSTR(END_DATE_HR, 6, 5) || ' ' || SUBSTR(END_DATE_HR, 12, 16)) AS END_DATE_HR,
+              SCHDL_NAME, E.EMP_NAME, SS.SCHDL_NUM
+       FROM SALES_SCHDL SS INNER JOIN EMP E
+                                   ON SS.EMP_NUM = E.EMP_NUM
+       WHERE DEL_CHECK IS NULL
+       AND SALES_NUM = #{salesNum}
+   </select>
+	
+	<!-- 예정된 일정 상세보기  -->
+	<select id="SSchdlCont" parameterType="hashmap" resultType="hashmap">
+		SELECT A.SCHDL_NUM, A.SCHDL_NAME, A.SALES_NUM, A.LEAD_NUM, L.LEAD_NAME AS SALES_NAME, A.LEAD_NAME AS LEAD_NAME, CC.CLNT_CMPNY_NAME AS SALES_CLNT_CMPNY_NAME, A.CLNT_CMPNY_NAME AS LEAD_CLNT_CMPNY_NAME, 
+			   A.CLNT_NAME AS LEAD_CLNT_NAME, CL.CLNT_NAME AS SALES_CLNT_NAME, A.ACTVTY_CLSFY_NUM, A.START_DATE_HR, A.END_DATE_HR, A.ACTVTY_CONT, A.ATT_FILE_NAME
+		FROM ( SELECT  SS.START_DATE_HR, SS.END_DATE_HR, SS.SCHDL_NUM, SS.ACTVTY_CLSFY_NUM,CC.CLNT_CMPNY_NAME,L.LEAD_NAME, L.LEAD_NUM,
+					   S.SALES_NUM, SS.SCHDL_NAME, CL.CLNT_NAME, SS.ACTVTY_CONT, AT.ATT_FILE_NAME
+	    	   FROM SALES_SCHDL SS LEFT OUTER JOIN LEAD L
+	           		                            ON SS.LEAD_NUM = L.LEAD_NUM
+	                   		       LEFT OUTER JOIN SALES S
+	                       	   	                ON SS.SALES_NUM = S.SALES_NUM
+	                       		   LEFT OUTER JOIN ENTRPRS_CLNT CL
+	                              	    	    ON L.CLNT_NUM = CL.CLNT_NUM
+	                    		   LEFT OUTER JOIN CLNT_CMPNY CC
+	                                   	        ON CL.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
+	                               INNER JOIN EMP E
+	                                       ON E.EMP_NUM = SS.EMP_NUM
+	                               INNER JOIN SALES_SCHDL_ATT_FILE AT
+	                                       ON SS.SCHDL_NUM = AT.SCHDL_NUM) A LEFT OUTER JOIN SALES S 
+	                                                                                      ON A.SALES_NUM = S.SALES_NUM
+	                                                                         LEFT OUTER JOIN LEAD L 
+	                                                                                      ON S.LEAD_NUM = L.LEAD_NUM
+	                                                                         LEFT OUTER JOIN ENTRPRS_CLNT CL
+	                                                                                      ON CL.CLNT_NUM = L.CLNT_NUM
+	                                                                         LEFT OUTER JOIN CLNT_CMPNY CC
+	                                                                                      ON CC.CLNT_CMPNY_NUM = CL.CLNT_CMPNY_NUM
+		WHERE 1 = 1
+		AND A.SCHDL_NUM = #{schdlNum}
+		AND A.SALES_NUM = #{salesNum}
+	</select>
+	
 </mapper>
 
 

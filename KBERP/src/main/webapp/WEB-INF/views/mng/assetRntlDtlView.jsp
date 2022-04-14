@@ -74,8 +74,10 @@ $(document).ready(function() {
 	<input type="hidden" id="top" name="top" value="${param.top}" />
 	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+	<input type="hidden" id="mngrNum" name="mngrNum" value="${data.EMP_NUM}" />
 </form>
 <div class="cont_wrap">
+<input type="hidden" id="mngrNum" name="mngrNum" value="${data.EMP_NUM}" />
 		<div class="page_title_bar">
 			<div class="page_title_text">자산대여 상세보기</div>
 		</div>

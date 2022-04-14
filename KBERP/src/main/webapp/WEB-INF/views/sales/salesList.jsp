@@ -1210,7 +1210,7 @@ function drawMngPaging(mngPb) {
 									<select id="searchGbn" name="searchGbn">
 										<option value="0">고객사명</option>
 										<option value="1">영업명</option>
-										<option value="2">영업기회번호</option>
+										<option value="2">영업번호</option>
 									</select>
 								</td>
 								<td colspan="2">

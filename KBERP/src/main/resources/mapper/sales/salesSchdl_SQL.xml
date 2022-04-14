@@ -3,8 +3,12 @@
 <mapper namespace="salesSchdl">
 	<!-- 영업 일정 등록 시 첨부파일 뺴고 저장 -->
 	<insert id="salesSchdlAdd" parameterType="hashmap">
-		INSERT INTO  SALES_SCHDL(SCHDL_NUM, EMP_NUM, SALES_NUM, LEAD_NUM, ACTVTY_CLSFY_NUM, START_DATE_HR, END_DATE_HR, ACTVTY_CONT, SCHDL_NAME)
-		VALUES (SALES_SCHDL_SEQ.NEXTVAL, #{sEmpNum}, #{sNum}, #{lNum}, #{ssactvtyclsfy}, #{sdt}, #{edt}, #{ssactvtycont}, #{ssname})
+		INSERT INTO  SALES_SCHDL(SCHDL_NUM, EMP_NUM, SALES_NUM
+		, LEAD_NUM
+		, ACTVTY_CLSFY_NUM, START_DATE_HR, END_DATE_HR, ACTVTY_CONT, SCHDL_NAME)
+		VALUES (SALES_SCHDL_SEQ.NEXTVAL, #{sEmpNum}, #{sNum, jdbcType=VARCHAR}
+		, #{lNum, jdbcType=VARCHAR}
+		, #{ssactvtyclsfy}, #{sdt}, #{edt}, #{ssactvtycont}, #{ssname})
 	</insert>
 	<!-- 영업 일정 등록 시 첨부파일 저장 -->
 	<insert id="salesSchdlAttFile" parameterType="hashmap">
@@ -53,9 +57,9 @@
 	<!-- 영업 상세보기  -->
 	<select id="salesSchdlCont" parameterType="hashmap" resultType="hashmap">
 		SELECT A.SCHDL_NAME, A.SALES_NUM, A.LEAD_NUM, L.LEAD_NAME AS SALES_NAME, A.LEAD_NAME AS LEAD_NAME, CC.CLNT_CMPNY_NAME AS SALES_CLNT_CMPNY_NAME, A.CLNT_CMPNY_NAME AS LEAD_CLNT_CMPNY_NAME, 
-			   A.CLNT_NAME AS LEAD_CLNT_NAME, CL.CLNT_NAME AS SALES_CLNT_NAME, A.ACTVTY_CLSFY_NUM, A.START_DATE_HR, A.END_DATE_HR, A.ACTVTY_CONT, A.ATT_FILE_NAME
+			   A.CLNT_NAME AS LEAD_CLNT_NAME, CL.CLNT_NAME AS SALES_CLNT_NAME, A.ACTVTY_CLSFY_NUM, A.START_DATE_HR, A.END_DATE_HR, A.ACTVTY_CONT, A.ATT_FILE_NAME, A.EMP_NUM
 		FROM ( SELECT  SS.START_DATE_HR, SS.END_DATE_HR, SS.SCHDL_NUM, SS.ACTVTY_CLSFY_NUM,CC.CLNT_CMPNY_NAME,L.LEAD_NAME, L.LEAD_NUM,
-					   S.SALES_NUM, SS.SCHDL_NAME, CL.CLNT_NAME, SS.ACTVTY_CONT, AT.ATT_FILE_NAME
+					   S.SALES_NUM, SS.SCHDL_NAME, CL.CLNT_NAME, SS.ACTVTY_CONT, AT.ATT_FILE_NAME, SS.EMP_NUM
        		   FROM SALES_SCHDL SS LEFT OUTER JOIN LEAD L
               		                           ON SS.LEAD_NUM = L.LEAD_NUM
                      		       LEFT OUTER JOIN SALES S
@@ -109,7 +113,7 @@
 	</select>
 	<!-- 영업 일정 전체데이터 수정(첨부파일 제외) -->
 	<update id="salesSchdlUpdate" parameterType="hashmap">
-		UPDATE SALES_SCHDL SET SCHDL_NAME = #{ssname}, SALES_NUM = #{sNum}, LEAD_NUM = #{lNum}, ACTVTY_CLSFY_NUM = #{ssactvtyclsfy} , START_DATE_HR = #{sdt} , END_DATE_HR = #{edt}, ACTVTY_CONT = #{ssactvtycont}
+		UPDATE SALES_SCHDL SET SCHDL_NAME = #{ssname}, SALES_NUM = #{sNum, jdbcType=VARCHAR}, LEAD_NUM = #{lNum, jdbcType=VARCHAR}, ACTVTY_CLSFY_NUM = #{ssactvtyclsfy} , START_DATE_HR = #{sdt} , END_DATE_HR = #{edt}, ACTVTY_CONT = #{ssactvtycont}
 		WHERE SCHDL_NUM = #{schdlnum}
 	</update>
 	<!-- 영업 일정 첨부파일 수정  -->
@@ -190,7 +194,7 @@
          		            		ON E.EMP_NUM = A.EMP_NUM
          		            INNER JOIN DEPT D
          		            		ON A.DEPT_NUM = D.DEPT_NUM 
-		WHERE SUBSTR(SS.START_DATE_HR, 1, 7) = #{month}
+		WHERE SUBSTR(SS.START_DATE_HR, 1, 7) = #{clndrDate}
 		AND SS.DEL_CHECK IS NULL 
 		<choose>
 			<when test="deptS != 6">

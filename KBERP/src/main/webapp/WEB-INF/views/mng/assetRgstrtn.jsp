@@ -15,8 +15,10 @@
 	font-size: 10pt;
 	margin-top : 2px;
 }
+
 #assetName{
 	width:130px;
+	margin-top: 5px;
 }
 .mngrName{
 	width:130px;
@@ -208,7 +210,8 @@ $("#srchEmp").on("click", function() {
 						data : params, 
 						success : function(res) { 
 							if(res.res == "success") {
-								location.href ="assetList";
+								$("#actionForm").attr("action","assetList");
+								$("#actionForm").submit();
 							} else {
 								alert("작성중 문제가 발생하였습니다.");
 							}
@@ -290,7 +293,6 @@ function drawList(list) {
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
 <form action="#" id="actionForm" method="post">
-	<input type="hidden" name="num" value="${param.num}"/>
 	<input type="hidden" name="page" value="${param.page}"/>
 	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
@@ -350,7 +352,6 @@ function drawList(list) {
 							<td>
 							<input type="text" class="mngrName" id="mngrName"  readonly="readonly">			
 							<input class="cmn_btn" type="button" id="srchEmp" value="검색">
-							
 							</td>
 						</tr>
 					</tbody>

@@ -100,7 +100,8 @@ $("#writeBtn").on("click", function () {
 		        	 data : params,
 		        	 success : function(res) {
 		        		 if(res.res == "success"){
-		        			 location.href = "board";
+		        			 $("#locationForm").attr("action", "board");
+		        			 $("#locationForm").submit();
 		        		 } else{
 		        			 alert("작성중 문제가 발생하였습니다.");
 		        		 }
@@ -155,6 +156,7 @@ function checkEmpty(sel) {
 	<input type="hidden" name="page" value="${param.page}">
 	<input type="hidden" name="searchGbn" value="${param.searchGbn}">
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}">
+	<input type="hidden" name="admnstrtn" value="${param.admnstrtn_num}">
 </form>
 <form action="fileUploadAjax" id="writeForm" method="post"
 	  enctype="multipart/form-data">
@@ -163,7 +165,7 @@ function checkEmpty(sel) {
 <input type= "file" name="att" /><br/>
 <input type="hidden" id="attFile" name="attFile" /><br/>
 <input type="hidden" id="writer" name="writer" value="${sEmpNum}" />
-<input type="hidden" id="admnstrtn" name="admnstrtn" value="${data.BOARD_ADMNSTRTN_NUM}">
+<input type="hidden" name="admnstrtn_num" value="${param.menuNum}">
 	<div class="cmn_btn_box">
 		<div class="cmn_btn" id="writeBtn">등록</div>	
 		<div class="cmn_btn" id="cancelBtn">취소</div>		

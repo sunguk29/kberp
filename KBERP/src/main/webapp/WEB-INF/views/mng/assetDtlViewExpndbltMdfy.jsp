@@ -21,7 +21,9 @@
 .sixth_row td:nth-child(1), .rmrks{
 	margin-left: 20px;
 }
-
+#mngrName{
+	width:80px;
+}
 #qunty{
 	width: 50px;
 }
@@ -55,7 +57,93 @@ $(document).ready(function() {
 		$("#cnclForm").submit();
 	});
 	
+$("#srchEmp").on("click", function() {
+		
+		var html = "";
+		
+		html += "<div class=\"popup_cont\">";
+		html += "<div class=\"name_srch_wrap\">";
+		html += "<table class=\"name_srch_table\">";
+		html += "<tbody>";
+		html += "<tr>";
+		html += "<td>사원명</td>";
+		html += "<td><input type=\"text\" id=\"empSrchTxt\"></td>";
+		html += "<td><div class=\"cmn_btn\" id=\"empSrchBtn\">검색</div></td>";
+		html += "</tr>";
+		html += "</tbody>";
+		html += "</table>";
+		html += "</div>";
+		html += "<table class=\"board_table\">";
+		html += "<colgroup>";
+		html += "<col width=\"130\">";
+		html += "<col width=\"130\">";
+		html += "</colgroup>";
+		html += "<thead>";
+		html += "<tr>";
+		html += "<th>사원 코드</th>";
+		html += "<th>사원명</th>";
+		html += "</tr>";
+		html += "</thead>";
+		html += "<tbody id=\"empListTbody\">";
+		html += "</tbody>";
+		html += "</table>";
+		html += "<div class=\"board_bottom\">";
+		html += "<div class=\"pgn_area\" id=\"pgn_area\">";
+		html += "</div>";
+		html += "</div>";
+		html += "</div>";
+		
+		makePopup({
+			depth : 1,
+			bg : true,
+			width : 400,
+			height : 500,
+			title : "사원검색",
+			contents : html,
+			contentsEvent : function() {
+				$("#sendSrchTxt").val("");
+				
+				reloadList();
+				
+				$("#pgn_area").on("click", "div", function() {
+					$("#page").val($(this).attr("page"));
+					reloadList();
+				});
+				
+				$("#empSrchBtn").on("click", function() {
+					$("#sendSrchTxt").val($("#empSrchTxt").val());
+					reloadList();
+				});
+				
+				$("#empSrchTxt").on("keypress", function(event) {
+					if(event.keyCode == 13) {
+						
+						$("#empSrchBtn").click();
+						
+						return false;
+					}
+				});
+				$("#empListTbody").on("click", "#empName", function() {
+					$("#mngrName").val($(this).attr("mngrName"));
+					$("#mngrNum").val($(this).attr("mngrNum"));
+					closePopup(1);
+				});
+			},
+			buttons : {
+				name : "닫기",
+				func:function() {
+					closePopup(1);
+				}
+			}
+		});
+	});
+	
 	$("#mdfyBtn").on("click", function() {
+		
+		if(checkEmpty("#mngrNum")) {
+			alert("담당자를 선택하세요.");
+			$("#mngrNum").focus();
+		} else
 			var mdfyForm = $("#mdfyForm");
 			
 			mdfyForm.ajaxForm({
@@ -90,6 +178,76 @@ $(document).ready(function() {
 	});
 });
 
+function checkEmpty(sel) {
+	if($.trim($(sel).val()) == "") {
+		return true;
+	} else { 
+		return false;
+	}
+}
+
+function drawPaging(pb) {
+	var html = "";
+	
+	html += "<div class=\"page_btn page_first\" page=\"1\">first</div>";
+	
+	if($("#page").val() == "1") {
+		html += "<div class=\"page_btn page_prev\" page=1>prev</div>";
+	} else {
+		html += "<div class=\"page_btn page_prev\" page=\"" + ($("#page").val() * 1 - 1) + "\">prev</div>";		
+	}
+	
+	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
+		if($("#page").val() == i) {
+			html += "<div class=\"page_btn_on\" page=\"" + i + "\">" + i + "</div>";
+		} else {
+			html += "<div class=\"page_btn\" page=\"" + i + "\">" + i + "</div>";
+		}
+	}
+	
+	if($("#page").val() == pb.maxPcount) {
+		html += "<div class=\"page_btn page_next\" page=\"" + pb.maxPcount + "\">next</div>";		
+	} else {
+		html += "<div class=\"page_btn page_next\" page=\"" + ($("#page").val() * 1 + 1) + "\">next</div>";				
+	}
+	
+	html += "<div class=\"page_btn page_last\" page=\"" + pb.maxPcount + "\">last</div>";
+	
+	$("#pgn_area").html(html);
+	
+}
+
+function drawList(list) {
+	var html = "";
+	
+	for(data of list) {
+		html += "<tr>";
+		html += "<td>" + data.EMP_NUM + "</td>";
+		html += "<td class=\"board_table_hover\" id=\"empName\" mngrNum=\"" + data.EMP_NUM + "\" mngrName=\"" + data.EMP_NAME + "\">" + data.EMP_NAME + "</td>";
+		html += "</tr>";
+	}
+	
+	$("#empListTbody").html(html);
+}
+
+function reloadList() {
+	var params = $("#mngmntEmpSrchForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "mngmntEmpSrchAjax", 
+		dataType : "json",
+		data : params, 
+		success : function(res) {
+			drawList(res.list);
+			drawPaging(res.pb);
+		},
+		error : function(request, status, error) {
+			console.log(request.responseText);
+		}
+	});
+}
+
 
 </script>
 </head>
@@ -109,9 +267,15 @@ $(document).ready(function() {
 	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 </form>
+
+<form action="#" id="mngmntEmpSrchForm" method="post">
+			<input type="hidden" id="sendSrchTxt" name="sendSrchTxt">
+			<input type="hidden" id="page" name="page" value="1">
+</form>
 <form action="#" id="mdfyForm" method="post">
 <div class="cont_wrap">
 <input type="hidden" name="num" value="${param.num}" />
+<input type="hidden" name="mngrNum" id="mngrNum" value="${data.MNGR_NUM}"/>
 		<div class="page_title_bar">
 			<div class="page_title_text">소모성자산 내용수정</div>
 		</div>
@@ -139,12 +303,11 @@ $(document).ready(function() {
 								${data.ACQRMNT_DATE}	
 							</td>
 							<td>담당자</td>
-							<td >
-								<select id="mngrNum" name="mngrNum">
-									<option value="2022000006">강부장</option>
-									<option value="2022000007">백대리</option>
-									<option value="2">box</option>
-								</select>
+							<td>
+								<input type="text" class="mngrName" id="mngrName"  readonly="readonly" value="${data.EMP_NAME}">
+							</td>
+							<td>			
+								<input class="cmn_btn" type="button" id="srchEmp" value="검색">
 							</td>
 							<td>수량</td>
 							<td>

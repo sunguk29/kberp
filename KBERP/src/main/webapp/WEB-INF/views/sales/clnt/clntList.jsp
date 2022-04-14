@@ -144,64 +144,61 @@ select {
 }
 .cont_table {
 	width: 927px;
-	height: 250px;
+	height: 328px;
 }
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	// 검색구분 초기값
+	
+	// 검색구분
 	if('${param.searchType}' != '') {
-		$("#searchType").val("${param.searchType}"); // 검색 구분 유지
+		$("#searchType").val("${param.searchType}");
 	} else {
-		$("#oldSearchType").val("0"); // 검색 구분 초기값
+		$("#oldSearchType").val("0");
 	}
 	
-	// 목록 실행
+	// 목록
 	reloadList();
 	
-	// 페이지 클릭 이벤트
+	// 페이지
 	$(".pgn_area").on("click", "div", function() {
-		$("#page").val($(this).attr("page")); // 현재 페이지를 누른 페이지로 변경
-		$("#listSort").val("9"); // 정렬 초기화
-
-		$("#searchType").val($("#oldSearchType").val()); // 검색 구분 유지
-		$("#searchTxt").val($("#oldSearchTxt").val()); // 검색어 유지
-		
-		reloadList(); // 목록 실행
+		$("#page").val($(this).attr("page"));
+		$("#listSort").val("9");
+		$("#searchType").val($("#oldSearchType").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		reloadList();
 	});
 	
-	// 등록 버튼
+	// 등록
 	$("#addBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntReg");
 		$("#actionForm").submit();
 	});
 	
-	// 검색어 엔터 처리
+	// 검색어
 	$("#searchTxt").on("keypress", function(event) {
 		if(event.keyCode == 13) {
 			$("#searchBtn").click(); 
-			
 			return false; // event를 실행하지 않겠다.
 		}
 	});
 	
-	//검색버튼 
+	// 검색
 	$("#searchBtn").on("click", function() {
 		$("#page").val("1");
-		
-		$("#oldSearchType").val($("#searchType").val()); //검색 구분 유지
-		$("#oldSearchTxt").val($("#searchTxt").val()); //검색어 유지
-		
+		$("#oldSearchType").val($("#searchType").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
 		reloadList();
 	});
 	
-	//정렬버튼
+	// 정렬
 	$("#sortBtn").on("click", function() {
 		reloadList();
 	});
+	
 });
 
-//고객 목록 Ajax
+// 고객 목록 Ajax
 function reloadList() {
 	var params = $("#actionForm").serialize();
 	
@@ -211,9 +208,9 @@ function reloadList() {
 		data : params,
 		dataType : "json",
 		success : function(res) {
-			drawSearchCnt(res.listCnt); //검색개수
-			drawList(res.list); //목록
-			drawPaging(res.pb); //페이징
+			drawSearchCnt(res.listCnt);
+			drawList(res.list);
+			drawPaging(res.pb);
 		},
 		error : function(req) {
 			console.log(req.responseText);
@@ -221,7 +218,7 @@ function reloadList() {
 	});
 }
 
-//검색 개수 html
+// 검색 개수 html
 function drawSearchCnt(listCnt) {
 	var html = "";
 	
@@ -232,7 +229,7 @@ function drawSearchCnt(listCnt) {
 	$(".SearchResult").html(html);
 }
 
-//목록 html
+// 목록 html
 function drawList(list) {
 	var html = "";
 		
@@ -252,7 +249,7 @@ function drawList(list) {
 	html += "<tr>";		
 	html += "<th>고객사명</th>";			
 	html += "<th>고객명</th>";			
-	html += "<th>전화번호</th>";			
+	html += "<th>휴대폰 번호</th>";			
 	html += "</tr>";		
 	html += "</thead>";
 	
@@ -274,6 +271,7 @@ function drawList(list) {
 	
 	$(".list_table").html(html);
 	
+	// 상세보기
 	$(".list_table tbody").on("click", "tr:nth-child(2) td:nth-child(2)", function() {
 		$("#cn").val($(this).attr("cn"));
 
@@ -283,7 +281,7 @@ function drawList(list) {
 
 }
 
-//페이징
+// 페이징
 function drawPaging(pb) {
 	var html = "";
 	
@@ -331,7 +329,17 @@ function drawPaging(pb) {
 			<div class="page_title_bar">
 				<div class="page_title_text">고객 목록</div>
 				<!-- 검색영역 선택적 사항 -->
-				
+				<!-- <div class="page_srch_area">
+					<select class="srch_sel">
+						<option>제목</option>
+						<option>내용</option>
+						<option>작성자</option>
+					</select>
+					<div class="srch_text_wrap">
+						<input type="text" />
+					</div>
+					<div class="cmn_btn_ml">검색</div>
+				</div> -->
 			</div>
 			<!-- 해당 내용에 작업을 진행하시오. -->
 			<div class="cont_area">
@@ -342,7 +350,6 @@ function drawPaging(pb) {
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
 				<div class="bodyWrap">
-					<!-- <div class="tLine"></div> -->
 					<table class="srch_table">
 						<colgroup>
 							<col width="90" />
@@ -393,7 +400,7 @@ function drawPaging(pb) {
 							</tr>
 						</tbody>
 					</table>
-					<div class="SearchResult"><h3>고객 (검색결과: 83건)</h3></div>
+					<div class="SearchResult"></div>
 					<div class="cont_table">
 						<table class="list_table"></table>
 					</div>

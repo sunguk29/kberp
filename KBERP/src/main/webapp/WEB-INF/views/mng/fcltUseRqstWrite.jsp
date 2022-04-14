@@ -118,7 +118,7 @@ $(document).ready(function() {
 		$("#fSearchGbn").val(${param.fSearchGbn});
 		reloadList();
 	}else {
-		$("#searchGbn").val("0");
+		$("#fSearchGbn").val("0");
 	}
 	
 	$("#fSearchBtn").on("click",function(){	
@@ -150,11 +150,8 @@ $(document).ready(function() {
 	});	
 	
 	$("#listBtn").on("click",function(){
-		$("#searchGbn").val($("#oldSearchGbn").val());
-		$("#searchTxt").val($("#oldSearchTxt").val());
-		
-		$("#backForm").attr("action","fcltUseRqst");
-		$("#backForm").submit();
+		$("#actionForm").attr("action","fcltUseRqst");
+		$("#actionForm").submit();
 	});
 	
 	var data = [
@@ -201,8 +198,6 @@ $(document).ready(function() {
 	    	  console.log(date.format('YYYY-MM-DD'));
 	    	  //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
 	    	  //alert('Current view: ' + view.name);
-	    	  $("#fSearchGbn").val("0");
-			  $("#fSearchTxt").val("");
 	    	  reloadList();
 	    	  $("#rsvtnDate").val(date.format('YYYY-MM-DD'));
 	      }
@@ -253,18 +248,6 @@ function drawList(list){
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">시설물 사용 신청</div>
-<form action="#" id="backForm" method="post">
-	<input type="hidden" id="gbn" name="gbn"/>
-	<input type="hidden" id="top" name="top" value="${param.top}" />
-	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
-	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
-	<input type="hidden" name="page" value="${param.page}" />
-	<!-- 시설물예약목록의 검색유지 -->
-	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
-	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
-	
-</form>
-			
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
@@ -287,6 +270,9 @@ function drawList(list){
 							<input type="hidden" id="top" name="top" value="${param.top}" />
 							<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 							<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
+							
+							<input type="hidden" id="page"	name="page" value="${param.page}" />
+							<input type="hidden" id="searchTxt" name="searchTxt" value="${param.searchTxt}" />
 							
 							<!-- 시설물예약시 예약가능한 시설물 목록의 검색어유지 -->							
 							<input type="hidden" id="fOldSearchGbn" value="${param.fSearchGbn}"/>

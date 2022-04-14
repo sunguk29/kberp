@@ -248,8 +248,8 @@ $(document).ready(function() {
 					}
 				});
 				$("#empAllListTbody").on("click", "#empName", function() {
-					$("#useEmpNum").val($(this).attr("useEmpNum"));
-					$("#useEmpName").val($(this).attr("useEmpName"));
+					$("#use_num").val($(this).attr("use_num"));
+					$("#use_name").val($(this).attr("use_name"));
 					closePopup(1);
 				});
 			},

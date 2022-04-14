@@ -404,6 +404,11 @@ input {
 	outline : none;
 }
 
+[href] {
+	color: black;
+	text-decoration: none;
+}
+
 /* 첨부파일명 공간 크기 */
 
 </style>
@@ -957,7 +962,7 @@ function updatePop() {
 	
 	
 	/* 활동분류 선택되게 */
-	$("#ssactvtyclsfy").val(${data.ACTVTY_CLSFY_NUM}).prop("selected", this.selected);
+	$("#ssactvtyclsfy").val(${data.ACTVTY_CLSFY_NUM}).prop("selected", true);
 	
 });
 /* 첨부파일 업로드 관련 */
@@ -973,6 +978,8 @@ function uploadName(e) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" name="deptS" value="${param.deptS}" />
+	<input type="hidden" name="usrsrchTxt" value="${param.usrsrchTxt}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -985,9 +992,11 @@ function uploadName(e) {
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">영업일정 상세보기</div>
-			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg"  id="listBtn"/> 
-			<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
-			<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" id="deleteBtn" />
+			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg"  id="listBtn"/>
+			<c:if test="${sEmpNum eq data.EMP_NUM}">
+				<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
+				<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" id="deleteBtn" />			
+			</c:if> 
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
