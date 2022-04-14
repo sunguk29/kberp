@@ -367,12 +367,15 @@ function checkEmpty(sel) {
 				<input type="hidden" name="page" value="${param.page}" />
 				<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 				<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+				<input type="hidden" name="title" value="${data.BOARD_TITLE}" />
+				<input type="hidden" name="cont" value="${data.BOARD_CONT}" />
+				<input type="hidden" id="admnstrtn" name="admnstrtn" value="${data.BOARD_ADMNSTRTN_NUM}">
 			</form>
 			번호 : ${data.WRTNG_NUM} <br/>
 			제목 : ${data.BOARD_TITLE}<br/>
 			작성일 : ${data.BOARD_WRTNG_DATE}<br/>
 			<input type="hidden" id="delcheck" name="delcheck" value="${data.DEL_CHECK}">
-			<input type="hidden" id="admnstrtn" name="admnstrtn" value="${data.BOARD_ADMNSTRTN_NUM}">
+			
 		
 			<!-- 첨부파일 존재시  -->
 			<c:if test="${!empty data.ATCHD_FILE}">
