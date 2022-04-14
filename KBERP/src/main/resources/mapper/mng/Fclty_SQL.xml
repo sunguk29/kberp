@@ -90,7 +90,7 @@ VALUES(FCLT_RSRV_SEQ.NEXTVAL, #{sesEmpNum},#{no},#{fcltyTimeNum},#{rsvtnDate},#{
 
 <!-- 시설물예약취소 -->
 <select id="fcltUseRqstCncl" parameterType="hashmap">
-	UPDATE FCLTY_RSVTN SET STS_NUM = 1
+	DELETE FROM FCLTY_RSVTN
 	WHERE RSVTN_NUM = #{no}
 </select>
 
@@ -169,7 +169,7 @@ VALUES(FCLT_RSRV_SEQ.NEXTVAL, #{sesEmpNum},#{no},#{fcltyTimeNum},#{rsvtnDate},#{
 	INSERT INTO FCLTY(FCLTY_NUM, EMP_NUM, MNG_EMP_NUM, FCLTY_NAME, ATT_PCTR, 
 					  PLACE, ACPT_NUM_OF_PL, RMRKS)
 	VALUES(FCLT_SEQ.NEXTVAL, #{mngEmpNum},#{empNum},#{fcltyName},
-		   #{attFile},#{place},#{acptNum},#{rmrks})
+		   #{attName},#{place},#{acptNum},#{rmrks})
 </select>
 
 <!-- 시설물상세보기 -->
