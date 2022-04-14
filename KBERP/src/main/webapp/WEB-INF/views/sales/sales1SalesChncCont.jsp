@@ -906,7 +906,11 @@ $(document).ready(function() {
 								
 							RegForm.submit();
 							closePopup(1);
+<<<<<<< HEAD
 							reloadSScList();	
+=======
+							reloadSScList();
+>>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 							} //if else문 end
 						}
 					}, {
