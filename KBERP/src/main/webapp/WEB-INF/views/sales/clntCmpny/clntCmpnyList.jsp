@@ -233,7 +233,6 @@ $(document).ready(function() {
 	// 페이지
 	$(".pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
-		$("#listSort").val("9");
 		$("#clntCmpnyClsfyNum").val($("#oldClntCmpnyClsfyNum").val());
 		$("#searchType").val($("#oldSearchType").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
