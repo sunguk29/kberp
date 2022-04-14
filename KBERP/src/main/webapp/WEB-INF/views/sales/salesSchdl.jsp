@@ -688,10 +688,10 @@ $(document).ready(function() {
 	      height: 400,
 	      events: data,
 	      eventClick: function(event) { // 이벤트 클릭
-	   
+			
 	      },
 	      dayClick: function(date, js, view) { // 일자 클릭
-	    	   
+	    	  
 			var tdv = date.format();
 			document.getElementById("ctt").value = "      " + tdv;
 		
@@ -723,7 +723,10 @@ $(document).ready(function() {
 	});
 	
 	
-	
+	$("body").on("click", ".fc-next-button, .fc-prev-button", function() {
+		var test = $(".fc-center").children("h2.innerText");
+		console.log(test);
+	});
 	
 	/* 캘린더 이벤트 관련 끝 */
 	
