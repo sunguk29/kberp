@@ -1039,7 +1039,6 @@ $(document).ready(function() {
 					
 					html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
 					html += "<input type=\"hidden\" name=\"sEmpNum\" value=\"${sEmpNum}\" />";
-					html += "<input type=\"hidden\" name=\"lNum\" value=\"\"/>";
 					html += "<table class=\"popup_table\">";
 					html += "	<tbody>";
 					html += "		<tr height=\"10\">                                                                                                          ";
