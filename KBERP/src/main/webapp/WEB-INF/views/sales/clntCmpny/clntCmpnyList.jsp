@@ -255,6 +255,16 @@ $(document).ready(function() {
 	
 	// 검색
 	$("#searchBtn").on("click", function() {
+		var clsfyNum = $("#clntCmpnyClsfyNum").val();
+		
+		if(clsfyNum != "9") {
+			$(".sts").children(".sts_list_on").attr("class", "sts_list");
+			$("#sts" + clsfyNum + "").removeClass();
+			$("#sts" + clsfyNum + "").addClass("sts_list_on");
+		} else {
+			$(".sts").children(".sts_list_on").attr("class", "sts_list");
+		}
+		
 		$("#page").val("1");
 		$("#oldClntCmpnyClsfyNum").val($("#clntCmpnyClsfyNum").val());
 		$("#oldSearchType").val($("#searchType").val());
@@ -433,13 +443,13 @@ function drawPaging(pb) {
 			<input type="hidden" name="menuType" value="${param.menuType}" />
 			<div class="bodyWrap">
 				<div class="sts">
-					<div class="sts_list" num="9">전체: ${AllCnt}건</div>
-					<div class="sts_list" num="0">거래고객사: ${CntrctCnt}건</div>
-					<div class="sts_list" num="1">파트너사: ${PartnerCnt}건</div>
-					<div class="sts_list" num="2">해지고객사: ${TmnCnt}건</div>
-					<div class="sts_list" num="3">정지고객사: ${SspsCnt}건</div>
-					<div class="sts_list" num="4">외국파트너사: ${ForeignCnt}건</div>
-					<div class="sts_list" num="5">기타: ${EtcCnt}건</div>
+					<div class="sts_list" id="sts9" num="9">전체: ${AllCnt}건</div>
+					<div class="sts_list" id="sts0" num="0">거래고객사: ${CntrctCnt}건</div>
+					<div class="sts_list" id="sts1" num="1">파트너사: ${PartnerCnt}건</div>
+					<div class="sts_list" id="sts2" num="2">해지고객사: ${TmnCnt}건</div>
+					<div class="sts_list" id="sts3" num="3">정지고객사: ${SspsCnt}건</div>
+					<div class="sts_list" id="sts4" num="4">외국파트너사: ${ForeignCnt}건</div>
+					<div class="sts_list" id="sts5" num="5">기타: ${EtcCnt}건</div>
 				</div>
 				<div class="tLine"></div>
 				<table class="srch_table">
