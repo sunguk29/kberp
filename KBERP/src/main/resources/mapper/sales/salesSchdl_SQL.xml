@@ -3,8 +3,12 @@
 <mapper namespace="salesSchdl">
 	<!-- 영업 일정 등록 시 첨부파일 뺴고 저장 -->
 	<insert id="salesSchdlAdd" parameterType="hashmap">
-		INSERT INTO  SALES_SCHDL(SCHDL_NUM, EMP_NUM, SALES_NUM, LEAD_NUM, ACTVTY_CLSFY_NUM, START_DATE_HR, END_DATE_HR, ACTVTY_CONT, SCHDL_NAME)
-		VALUES (SALES_SCHDL_SEQ.NEXTVAL, #{sEmpNum}, #{sNum}, #{lNum}, #{ssactvtyclsfy}, #{sdt}, #{edt}, #{ssactvtycont}, #{ssname})
+		INSERT INTO  SALES_SCHDL(SCHDL_NUM, EMP_NUM, SALES_NUM
+		, LEAD_NUM
+		, ACTVTY_CLSFY_NUM, START_DATE_HR, END_DATE_HR, ACTVTY_CONT, SCHDL_NAME)
+		VALUES (SALES_SCHDL_SEQ.NEXTVAL, #{sEmpNum}, #{sNum, jdbcType=VARCHAR}
+		, #{lNum, jdbcType=VARCHAR}
+		, #{ssactvtyclsfy}, #{sdt}, #{edt}, #{ssactvtycont}, #{ssname})
 	</insert>
 	<!-- 영업 일정 등록 시 첨부파일 저장 -->
 	<insert id="salesSchdlAttFile" parameterType="hashmap">

@@ -193,7 +193,7 @@ public class SchdlController {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
-		
+		System.out.println(params);
 		try {
 			switch (gbn) {
 			case "insert":

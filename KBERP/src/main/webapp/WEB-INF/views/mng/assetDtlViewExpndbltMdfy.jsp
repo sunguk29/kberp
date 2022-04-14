@@ -21,11 +21,9 @@
 .sixth_row td:nth-child(1), .rmrks{
 	margin-left: 20px;
 }
-
 #mngrName{
-	width:100px;
+	width:80px;
 }
-
 #qunty{
 	width: 50px;
 }
@@ -277,7 +275,7 @@ function reloadList() {
 <form action="#" id="mdfyForm" method="post">
 <div class="cont_wrap">
 <input type="hidden" name="num" value="${param.num}" />
-<input type="hidden" name="mngrNum" id="mngrNum"/>
+<input type="hidden" name="mngrNum" id="mngrNum" value="${data.MNGR_NUM}"/>
 		<div class="page_title_bar">
 			<div class="page_title_text">소모성자산 내용수정</div>
 		</div>
@@ -306,7 +304,7 @@ function reloadList() {
 							</td>
 							<td>담당자</td>
 							<td>
-								<input type="text" class="mngrName" id="mngrName"  readonly="readonly">
+								<input type="text" class="mngrName" id="mngrName"  readonly="readonly" value="${data.EMP_NAME}">
 							</td>
 							<td>			
 								<input class="cmn_btn" type="button" id="srchEmp" value="검색">
