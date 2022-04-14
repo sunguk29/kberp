@@ -845,6 +845,13 @@ $(document).ready(function() {
 				$(".aff_btn").on("click", function() {
 					$("#att").click();
 				});
+				
+				function uploadName(e) {
+					var files = e.files;
+					var filename = files[0].name;
+					$("#popFileName").val(filename);
+				}
+				
 			},
 			width : 600,
 			height : 520,
@@ -865,7 +872,6 @@ $(document).ready(function() {
 							$("#ssactvtycont").focus();
 						} else {					
 								
-								console.log(${sEmpNum});
 								var RegForm = $("#RegForm");
 										
 								RegForm.ajaxForm({
@@ -1178,8 +1184,6 @@ $(document).ready(function() {
 	
 }); // document.ready end
 
-
-/* ******************** 의견 영역 ******************** */
 /* 의견 목록 Ajax */
 function reloadOpList() {
 	var params = $("#botOpActionForm").serialize();
