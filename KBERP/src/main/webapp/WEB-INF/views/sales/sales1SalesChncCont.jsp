@@ -906,7 +906,7 @@ $(document).ready(function() {
 								
 							RegForm.submit();
 							closePopup(1);
-							reloadSCList();
+							reloadSScList();
 							} //if else문 end
 						}
 					}, {
