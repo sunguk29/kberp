@@ -69,6 +69,50 @@
 		WHERE I.INQRY_NUM = #{no}
 	</select>
 	
+	<!-- 대응가이드 게시글 수 -->
+	<select id="inqryRspndCnt" resultType="Integer">
+		SELECT COUNT(*) CNT
+		FROM RSPND_GUIDE
+		WHERE DEL_CHECK = 1 AND CTGRY_NUM = 1
+	</select>
+	
+	<!-- 대응가이드 목록 -->
+	<select id="inqryRspndList" parameterType="hashmap" resultType="hashmap">
+		SELECT R.GUIDE_NUM, C.CTGRY_NAME, E.EMP_NAME, R.CLNT_TYPE, R.TYPE_CASE, R.RSPNS_PLAN, TO_CHAR(R.WRITE_DATE, 'YYYY-MM-DD')AS WRITE_DATE
+		FROM( SELECT CTGRY_NUM, CTGRY_NAME
+		     FROM RSPND_GUIDE_CTGRY ) C INNER JOIN ( SELECT GUIDE_NUM, CTGRY_NUM, EMP_NUM, CLNT_TYPE, TYPE_CASE, RSPNS_PLAN, WRITE_DATE, DEL_CHECK,
+		                                                 ROW_NUMBER() OVER(ORDER BY GUIDE_NUM DESC ) AS RNUM
+		                                             FROM RSPND_GUIDE ) R
+		                                      ON C.CTGRY_NUM = R.CTGRY_NUM
+		                                INNER JOIN EMP E
+		                                        ON R.EMP_NUM = E.EMP_NUM
+		WHERE R.DEL_CHECK = 1 
+		AND R.CTGRY_NUM = 1 
+		AND R.RNUM BETWEEN #{startCnt} AND #{endCnt}
+		ORDER BY R.GUIDE_NUM DESC
+	</select>
+	
+	<!-- 대응가이드 등록 -->
+	<insert id="inqryRspndAdd" parameterType="hashmap">
+		INSERT INTO RSPND_GUIDE(GUIDE_NUM, CTGRY_NUM, EMP_NUM, CLNT_TYPE, TYPE_CASE, RSPNS_PLAN)
+		VALUES(RSPND_GUIDE_SEQ.NEXTVAL, 1, #{emp_num}, #{clnt_type}, #{type_case}, #{rspns_plan})
+	</insert>
+	
+	<!-- 대응가이드 수정 -->
+	<update id="inqryRspndUp" parameterType="hashmap">
+		UPDATE RSPND_GUIDE SET CLNT_TYPE = #{clnt_type},
+		                       TYPE_CASE = #{type_case},
+		                       RSPNS_PLAN = #{rspns_plan}
+		WHERE GUIDE_NUM = #{guide_num}
+	</update>
+	
+	<!-- 대응가이드 삭제 -->
+	<update id="inqryRspndDel" parameterType="hashmap">
+		UPDATE RSPND_GUIDE SET DEL_CHECK = 0
+		WHERE GUIDE_NUM = #{guide_num}
+	</update>
+	
+	
 	<!-- 답변등록 -->
 	<update id="ansrAdd" parameterType="hashmap">
 		UPDATE INQRY SET EMP_NUM = #{emp_num},

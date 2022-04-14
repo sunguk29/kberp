@@ -405,6 +405,8 @@ input {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+
+	
 	$("#alertBtn").on("click", function() {
 		makeAlert("하이", "내용임");
 	});
@@ -620,6 +622,7 @@ function savePop() {
 					}
 				});
 				
+				
 				$("#salesBox").on("click", ".popup_sales_box ", function() {
 					//변수에 값 넣어줌
 					var snm = $(this).children("#snm").val();
@@ -632,8 +635,14 @@ function savePop() {
 					document.getElementById("sName").value = sna;
 					document.getElementById("ccName").value = ccnm;
 					document.getElementById("clName").value = clnm;
+					
+					if($("#lName").val() != ""){ // 리드명이 비워져있지 않을때, 리드 선택했을 경우 동시 입력 방지
+						$("#lName").val("");
+					}
+					
 					closePopup();
-				});
+				});					
+				
 			},
 			width : 600,
 			height : 500,
@@ -799,6 +808,11 @@ function savePop() {
 					document.getElementById("lName").value = lna;
 					document.getElementById("ccName").value = ccnm;
 					document.getElementById("clName").value = clnm;
+					
+					if($("#sName").val() != ""){ // 영업명이 비워져있지 않을때, 영업 선택했을 경우 동시 입력 방지
+						$("#sName").val("");
+					}
+					
 					closePopup();
 				});
 			},
@@ -891,6 +905,8 @@ function uploadName(e) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" name="deptS" value="${param.deptS}" />
+	<input type="hidden" name="usrsrchTxt" value="${param.usrsrchTxt}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -913,7 +929,9 @@ function uploadName(e) {
 				<div class="bodyWrap">
 				<!-- 시작 -->
 					<form action="fileUploadAjax" id="RegForm" method="post" enctype="multipart/form-data">
-					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />					
+					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
+					<input type="hidden" name="deptS" value="${param.deptS}" />
+					<input type="hidden" name="usrsrchTxt" value="${param.usrsrchTxt}" />					
 					<table>
 						<colgroup>
 							<col width="200" />

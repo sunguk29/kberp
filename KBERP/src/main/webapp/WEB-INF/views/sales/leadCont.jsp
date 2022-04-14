@@ -729,24 +729,48 @@ $(document).ready(function () {
 	}
 	/* 의견등록 start */
 	$(".subm").on("click", function() {
-		var params = $("#botOpActionForm").serialize();
-		
-		$.ajax({
-			type : "post",
-			url : "llBotActionAjax/insert",
-			dataType : "json",
-			data : params,
-			success : function(res) {
-				if(res.res == "success"){
-					$("#tatacont").val("");
-					reloadOpList();
-				} else {
-					alert("등록중 문제가 발생하였습니다.");
+
+		if(checkEmpty("#tatacont")) {
+			var html = "";
+			
+			html += "<div class=\"popup_cont2\">의견 내용 입력 후, 등록버튼을 눌러주세요.</div>";
+			
+			makePopup({
+				depth : 1,
+				bg : true,
+				width : 400,
+				height : 200,
+				title : "알림",
+				contents : html,
+				buttons : {
+					name : "확인",
+					func:function() {
+						console.log("One!");
+						closePopup();
+					}
 				}
-			}, error : function(request,status, error) {
-				console.log(request.responseText);
-			}
-		});
+			});
+			("#tatacont").focus();
+		} else {
+			var params = $("#botOpActionForm").serialize();
+			
+			$.ajax({
+				type : "post",
+				url : "llBotActionAjax/insert",
+				dataType : "json",
+				data : params,
+				success : function(res) {
+					if(res.res == "success"){
+						$("#tatacont").val("");
+						reloadOpList();
+					} else {
+						alert("등록중 문제가 발생하였습니다.");
+					}
+				}, error : function(request,status, error) {
+					console.log(request.responseText);
+				}
+			});
+		}
 	});
 	/* 의견등록 end */
 	
@@ -812,10 +836,12 @@ $(document).ready(function () {
 	reloadSCList();
 	
 	/* 예정된 일정 등록 팝업 */
+	$(".plus_btn_bot").show();
+	
 	$(".schdl_title").on("click", ".plus_btn_bot", function() {
-
+	
 		var html = "";
-		
+			
 		html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
 		html += "<input type=\"hidden\" name=\"sEmpNum\" value=\"${sEmpNum}\" />";
 		html += "<input type=\"hidden\" name=\"sNum\" value=\"\"/>";
@@ -875,7 +901,7 @@ $(document).ready(function () {
 		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\"/>";
 		html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />";	
 		html += "</form>";
-
+	
 		makePopup({
 			depth : 1,
 			bg : false,
@@ -904,53 +930,48 @@ $(document).ready(function () {
 						} else if(checkEmpty("#ssactvtycont")){
 							makeAlert("필수입력", "활동내용을 입력하세요");
 							$("#ssactvtycont").focus();
-						} else {					
-								
-								console.log(${sEmpNum});
-								var RegForm = $("#RegForm");
+						} else {							
+							console.log(${sEmpNum});
+							var RegForm = $("#RegForm");
 										
-								RegForm.ajaxForm({
-								success: function(res) {
-										if(res.fileName.length > 0) {
-											$("#schdlAttFile").val(res.fileName[0]);
-										}
-										
-										var params = $("#RegForm").serialize();
+							RegForm.ajaxForm({
+							success: function(res) {
+									if(res.fileName.length > 0) {
+										$("#schdlAttFile").val(res.fileName[0]);
+									}		
+									var params = $("#RegForm").serialize();
 												
-										$.ajax({
-										type  : "post",
-										url : "salesSchdlAction/insert",
-										dataType : "json",
-										data : params,
-										success : function(res) {
-											if(res.res == "success"){
-												reloadSCList();								
-											} else {
-													alert("등록중 문제가 발생하였습니다.");
-													}
-											},
-											error : function(request, status, error) {
-												console.log(request.responseTxt);
-											}
-										});
-									},
-								error : function(req) {
-										console.log(req.responseTxt);
-								}
-							});
-								
-							RegForm.submit();
-							closePopup(1);
-							reloadSCList();
-							} //if else문 end
-						}
-					}, {
-						name : "취소"
-					}]// button 함수 end
-										
-				});
-		});	
-	
+									$.ajax({
+									type  : "post",
+									url : "salesSchdlAction/insert",
+									dataType : "json",
+									data : params,
+									success : function(res) {
+										if(res.res == "success"){
+											reloadSCList();								
+										} else {
+												alert("등록중 문제가 발생하였습니다.");
+												}
+										},
+										error : function(request, status, error) {
+											console.log(request.responseTxt);
+										}
+									});
+								},
+							error : function(req) {
+									console.log(req.responseTxt);
+							}
+						});				
+						RegForm.submit();
+						closePopup(1);
+						reloadSCList();
+						} //if else문 end
+					}
+				}, {
+					name : "취소"
+				}]// button 함수 end						
+			});
+		});		
 	
 	/* 예정된 일정 수정 팝업 */
 	$(".sbx").on("click", ".sch_re", function() {
@@ -1291,8 +1312,12 @@ function reloadSCList(){
 function drawScCnt(scListCnt) {
 	var html = "";
 	
-	html = "<h3>예정된 일정(" + scListCnt + ")</h3><div id=\"scListCnt_right\"><div class=\"drop_btn_bot\"></div><div class=\"plus_btn_bot\"></div>";
-	
+	html += "<h3>예정된 일정(" + scListCnt + ")</h3><div id=\"scListCnt_right\"><div class=\"drop_btn_bot\">";
+	if($("#psNum").val() == 1) {
+		html += "</div><div class=\"plus_btn_bot\" id=\"plus_btn_bot\"></div>";
+	} else {
+		$("#plus_btn_bot").hide();
+	}
 	$(".schdl_title").html(html);
 }
 
