@@ -403,8 +403,6 @@ $(document).ready(function() {
 	}
 	$('input[name=clndrDate]').attr('value',Cdate);
 	
-	console.log($("#clndrDate").val());
-	
 	if('${param.usrsrchTxt}' != ''){
 		$("#usrsrchTxt").val('${param.usrsrchTxt}');
 		$("#deptS").val(${param.deptS});
