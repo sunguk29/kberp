@@ -15,24 +15,17 @@
 	width: 900px;
 }
 /* 개인 작업 영역 */
-tbody tr{
-	cursor: pointer;	
-}
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	if('${param.searchGbn}' != '') {
-		$("#searchGbn").val('${param.searchGbn}');
-	} else {
-		$("#searchGbn").val("0");
-	}
 	
 	reloadList();
+	
 	
 	$("tbody").on("click",".board_table_hover",function(){
 		$("#no").val($(this).attr("no"));
 		
-		$("#searchGbn").val($("#oldSearchGbn").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
 		
 		$("#actionForm").attr("action","fcltUseRqstView");
@@ -50,22 +43,21 @@ $(document).ready(function() {
 	$("#searchBtn").on("click",function(){	
 		$("#page").val("1");
 		
-		$("#oldSearchGbn").val($("#searchGbn").val());
 		$("#oldSearchTxt").val($("#searchTxt").val());
 		
 		reloadList();
 		
 	});
+	
 	$(".pgn_area").on("click","div",function(){
 		$("#page").val($(this).attr("page"));
 		
-		$("#searchGbn").val($("#oldSearchGbn").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
 		
 		reloadList();
 	});
+	
 	$("#rsvtn_btn").on("click",function(){
-		$("#searchGbn").val($("#oldSearchGbn").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
 		
 		$("#actionForm").attr("action","fcltUseRqstWrite");
@@ -157,9 +149,8 @@ function drawPaging(pb) {
 	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 	<input type="hidden" id="page" name="page" value="${page}" />
 	<input type="hidden" id="no" name="no" value="${no}" />
-	<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
-	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
-				<select class="srch_sel" name="searchGbn">
+	<input type="hidden" id="oldSearchTxt" name="oldSearchTxt" value="${param.searchTxt}"/>
+				<select class="srch_sel" id="searchGbn" name="searchGbn">
 					<option value="0">시설물명</option>
 				</select>
 				<div class="srch_text_wrap">

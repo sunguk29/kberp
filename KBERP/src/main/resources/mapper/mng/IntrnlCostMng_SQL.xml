@@ -7,10 +7,10 @@
 		FROM ( SELECT ROW_NUMBER() OVER(ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
 			   FROM INTRNL_COST_MNG
 			   WHERE 1 = 1
-			   <if test="mon != null and mon != ''">
-				   AND TO_CHAR(DATE_HR, 'YYYY-MM') = #{mon}
+			   <if test="year != null and year != ''">
+				   AND TO_CHAR(DATE_HR, 'YYYY') = #{year}
 			   </if>
-			   GROUP BY TO_CHAR(DATE_HR, 'YYYY-MM') )
+			   GROUP BY TO_CHAR(DATE_HR, 'YYYY') )
 	</select>
 	
 	<select id="getIntrnlCostMngList" resultType="hashmap" parameterType="hashmap">
@@ -19,8 +19,8 @@
 					   ROW_NUMBER() OVER(ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
 				FROM INTRNL_COST_MNG
 				WHERE 1 = 1
-				<if test="mon != null and mon != ''">
-					AND TO_CHAR(DATE_HR, 'YYYY-MM') = #{mon}
+				<if test="year != null and year != ''">
+					AND TO_CHAR(DATE_HR, 'YYYY') = #{year}
 				</if>
 				GROUP BY TO_CHAR(DATE_HR, 'YYYY-MM')  ) I
 		WHERE I.RNUM BETWEEN #{startCount} AND #{endCount}
@@ -35,7 +35,7 @@
 	<select id="intrnlCostMngMnthlyList" resultType="hashmap" parameterType="hashmap">
 		SELECT INTRNL_DATE, CHIT_NUM, CRSPNDNT, TO_CHAR(AMNT, '999,999,999,999') AS AMNT, ACNT_NAME, RMRKS
 		FROM (  SELECT TO_CHAR(DATE_HR, 'YYYY-MM-DD') AS INTRNL_DATE, CHIT_NUM, CRSPNDNT, AMNT, AC.ACNT_NAME, RMRKS,
-					   ROW_NUMBER() OVER(ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM-DD') DESC) AS RNUM
+					   ROW_NUMBER() OVER(ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM-DD') DESC, CHIT_NUM DESC) AS RNUM
 				FROM INTRNL_COST_MNG ICM INNER JOIN ACNT_CODE AC
 				                             ON ICM.ACNT_NUM = AC.SUB_CTGR_ACNT_CODE
 				                            AND AC.MAIN_CTGR_ACNT_CODE = 1
