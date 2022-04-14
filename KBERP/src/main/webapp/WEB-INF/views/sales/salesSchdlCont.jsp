@@ -404,6 +404,11 @@ input {
 	outline : none;
 }
 
+[href] {
+	color: black;
+	text-decoration: none;
+}
+
 /* 첨부파일명 공간 크기 */
 
 </style>
