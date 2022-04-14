@@ -49,6 +49,13 @@
  .cmn_btn_ml{
  	float:right;
  }
+ 
+ .save_cont{
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	line-height: 110px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -65,11 +72,15 @@ $(document).ready(function() {
 		history.back();
 	});
 	$("#updateBtn").on("click", function() {
+		var html = "";
+		
+		html += "<div class=\"save_cont\">수정 하시겠습니까?</div>";
+		
 		makePopup({
 			bg : false,
 			bgClose : false,
 			title : "수정",
-			contents : "수정하시겠습니까?",
+			contents : html,
 			buttons : [{
 				name : "수정",
 				func:function() {
