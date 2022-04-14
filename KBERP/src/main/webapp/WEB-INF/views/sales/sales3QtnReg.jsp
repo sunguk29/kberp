@@ -962,17 +962,21 @@ $(document).ready(function() {
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#qtnName")) {
-			alert("견적명을 선택하세요.");
-			$("#qtnName").focus();
+			makeAlert("견적명을 선택하세요.", function name() {				
+				$("#qtnName").focus();
+			});
 		} else if($("#mdType").val() == 9) {
-			alert("상품을 선택하세요.");
-			$("#mdType").focus();
+			MakeAlert("상품을 선택하세요.", function() {
+				$("#mdType").focus();			
+			});
 		} else if(checkEmpty("#qtnDate")) {
-			alert("견적일을 입력하세요.");
-			$("#qtnDate").focus();
+			MakeAlert("견적일을 입력하세요.", function() {
+				$("#qtnDate").focus();				
+			});
 		} else if(checkEmpty("#pymntDate")) {
-			alert("납부일을 입력하세요.");
-			$("#pymntDate").focus();
+			MakeAlert("납부일을 입력하세요.", function() {
+				$("#pymntDate").focus();			
+			});
 		} else {
 			var html = "";
 			

@@ -844,7 +844,6 @@ $(document).ready(function () {
 			
 		html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
 		html += "<input type=\"hidden\" name=\"sEmpNum\" value=\"${sEmpNum}\" />";
-		html += "<input type=\"hidden\" name=\"sNum\" value=\"\"/>";
 		html += "<table class=\"popup_table\">";
 		html += "	<tbody>";
 		html += "		<tr height=\"10\">                                                                                                          ";
@@ -898,7 +897,7 @@ $(document).ready(function () {
 		html += "<div class=\"pop_cntrct_box_in\">";
 		html += "	<input type=\"text\" id=\"popFileName\" name=\"fileName\" readonly=\"readonly\">";
 		html += "</div>";
-		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\"/>";
+		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadpopName(this)\"/>";
 		html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />";	
 		html += "</form>";
 	
@@ -995,7 +994,6 @@ $(document).ready(function () {
 					
 					html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
 					html += "<input type=\"hidden\" name=\"sEmpNum\" value=\"${sEmpNum}\" />";
-					html += "<input type=\"hidden\" name=\"sNum\" value=\"\"/>";
 					html += "<table class=\"popup_table\">";
 					html += "	<tbody>";
 					html += "		<tr height=\"10\">                                                                                                          ";
@@ -1343,6 +1341,11 @@ function uploadName(e) {
 	var files = e.files;
 	var leadfilename = files[0].name;
 	$("#leadFileName").val(leadfilename);
+}
+
+function uploadpopName(e) {
+	var files = e.files;
+	var filename = files[0].name;
 	$("#popFileName").val(filename);
 }
 
