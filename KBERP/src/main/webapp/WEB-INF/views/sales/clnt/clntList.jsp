@@ -144,7 +144,7 @@ select {
 }
 .cont_table {
 	width: 927px;
-	height: 250px;
+	height: 328px;
 }
 </style>
 <script type="text/javascript">
@@ -249,7 +249,7 @@ function drawList(list) {
 	html += "<tr>";		
 	html += "<th>고객사명</th>";			
 	html += "<th>고객명</th>";			
-	html += "<th>전화번호</th>";			
+	html += "<th>휴대폰 번호</th>";			
 	html += "</tr>";		
 	html += "</thead>";
 	

@@ -188,7 +188,7 @@ public class ClntMngController {
 		
 		int listCnt = iCommonService.getIntData("clntCmpnyMng.clntListCnt", params);
 		
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), listCnt, 5, 5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), listCnt, 7, 5);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
@@ -304,7 +304,6 @@ public class ClntMngController {
 		
 		return mapper.writeValueAsString(modelMap);
 	}
-	
 	
 	//의견 목록 비동기
 	@RequestMapping(value = "/opBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
