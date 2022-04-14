@@ -845,6 +845,13 @@ $(document).ready(function() {
 				$(".aff_btn").on("click", function() {
 					$("#att").click();
 				});
+				
+				function uploadName(e) {
+					var files = e.files;
+					var filename = files[0].name;
+					$("#popFileName").val(filename);
+				}
+				
 			},
 			width : 600,
 			height : 520,
@@ -865,7 +872,6 @@ $(document).ready(function() {
 							$("#ssactvtycont").focus();
 						} else {					
 								
-								console.log(${sEmpNum});
 								var RegForm = $("#RegForm");
 										
 								RegForm.ajaxForm({
@@ -1013,13 +1019,13 @@ $(document).ready(function() {
 					html += "</div>";
 					html += "<div class=\"pop_cntrct_box_in\">";
 					if(data.ATT_FILE_NAME != "" && data.ATT_FILE_NAME != null) {
+						html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
 						html += "	<input type=\"button\" id=\"fileDelete\" value=\"삭제\" />";
 					}
-						html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
-					html += "	<input type=\"text\" id=\"popFileName\" readonly=\"readonly\" />                 ";
+					html += "<input type=\"text\" id=\"fileName\" readonly=\"readonly\" />";
 					html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />   ";
-					html += "	<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" value=\"" + data.ATT_FILE_NAME + "\"  />           ";
 					html += "	<input type=\"hidden\" id=\"schdlnum\" name=\"schdlnum\" />           ";
+					html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" value=\"" + data.ATT_FILE_NAME + "\" />";	
 					html += "</div>                                                                     ";
 					html += "</form>";
 				}); // each end
@@ -1034,6 +1040,7 @@ $(document).ready(function() {
 					
 					$("#fileDelete").on("click", function() {
 						$("#file_name").remove();
+						$("#schdlAttFile").val("");
 						$(this).remove();
 						
 						var html = "";
@@ -1073,8 +1080,6 @@ $(document).ready(function() {
 								makeAlert("필수입력", "활동내용을 입력하세요");
 								$("#ssactvtycont").focus();
 							} else {					
-									
-									console.log(${sEmpNum});
 									var RegForm = $("#RegForm");
 											
 									RegForm.ajaxForm({
@@ -1179,8 +1184,6 @@ $(document).ready(function() {
 	
 }); // document.ready end
 
-
-/* ******************** 의견 영역 ******************** */
 /* 의견 목록 Ajax */
 function reloadOpList() {
 	var params = $("#botOpActionForm").serialize();
@@ -1272,14 +1275,6 @@ function drawSScList(list) {
 	
 	$(".sBox").html(html);
 }
-
-function uploadName(e) {
-	var files = e.files;
-	var filename = files[0].name;
-	$("#popFileName").val(filename);
-}
- 
- 
 </script>
 </head>
 <body>

@@ -440,17 +440,21 @@ $(document).ready(function() {
 	/* 저장 이동 및 알림 이벤트 */
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#ssname")){
-			makeAlert("필수입력", "일정명을 입력하세요");
-			$("#ssname").focus();
+			makeAlert("필수기재사항", "일정명을 입력하세요", function() {
+				$("#ssname").focus();			
+			});
 		} else if($("#ssactvtyclsfy").val() == 9){
-			makeAlert("필수입력", "활동분류를 입력하세요");
-			$("#ssactvtyclsfy").focus();
+			makeAlert("필수기재사항", "활동분류를 입력하세요", function() {
+				$("#ssactvtyclsfy").focus();			
+			});
 		} else if(checkEmpty("#sdt")){
-			makeAlert("필수입력", "시작일을 입력하세요");
-			$("#sdt").focus();
+			makeAlert("필수기재사항", "시작일을 입력하세요", function() {
+				$("#sdt").focus();				
+			});
 		} else if(checkEmpty("#ssactvtycont")){
-			makeAlert("필수입력", "활동내용을 입력하세요");
-			$("#ssactvtycont").focus();
+			makeAlert("필수입력", "활동내용을 입력하세요", function() {
+				$("#ssactvtycont").focus();			
+			});
 		} else {
 			makePopup({
 				bg : false,

@@ -79,12 +79,14 @@ $("#fileDelBtn").on("click", function() {
 });
 
 $("#updateBtn").on("click", function () {
+	
+	 
      if(checkEmpty("#title")){
         alert("제목을 입력하세요.");
         $("#title").focus();
      }else if(checkEmpty("#con")){
         alert("내용을 입력하세요.");
-        $("#con").focus();
+        $("#cont").focus();
      }else{
       	var updateForm = $("#updateForm");
       	
@@ -163,8 +165,8 @@ function checkEmpty(sel) {
 <form action="fileUploadAjax" id="updateForm" method="post"
 	  enctype="multipart/form-data">
 <input type="hidden" name="no" value="${param.no}">
-<input type="text" id="title" name="title" class="tltle_input_box" placeholder="제목을 입력하세요">
-<textarea rows="20" cols="60" id="con" name="con" class="cont_input_box" placeholder="내용을 입력하세요"></textarea>
+<input type="text" id="title" name="title" class="tltle_input_box" placeholder="제목을 입력하세요" value="${param.title}">
+<textarea rows="20" cols="60" id="cont" name="cont" class="cont_input_box" placeholder="내용을 입력하세요">${param.cont}</textarea>
 첨부파일 :
 <c:choose>
 	<c:when test="${empty data.ATCHD_FILE}">

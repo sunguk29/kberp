@@ -128,11 +128,9 @@ select {
 .list_table thead tr:nth-child(1) {
 	border-top: 2px solid gray;
 }
-
 .list_table thead tr:nth-child(3) {
 	border-bottom: 2px solid gray;
 }
-
 .list_table tbody tr:nth-child(3) {
 	border-bottom: 1px solid gray;
 }
