@@ -403,8 +403,6 @@ $(document).ready(function() {
 	}
 	$('input[name=clndrDate]').attr('value',Cdate);
 	
-	console.log($("#clndrDate").val());
-	
 	if('${param.usrsrchTxt}' != ''){
 		$("#usrsrchTxt").val('${param.usrsrchTxt}');
 		$("#deptS").val(${param.deptS});
@@ -725,7 +723,6 @@ $(document).ready(function() {
 		if(clndrMonth < 1){
 			clndrMonth = 12;
 			clndrYear = clndrYear - 1;
-			
 		}
 		if(clndrMonth >= 10){
 			Cdate = ""+clndrYear+"-"+clndrMonth;
@@ -742,7 +739,6 @@ $(document).ready(function() {
 			left: '',
 	        center: 'prev, title, next',
 	        right: ''
-	        
 	      },
 	      locale: "ko",
 	      editable: false,
@@ -781,11 +777,6 @@ $(document).ready(function() {
 
 	    	  //alert('Current view: ' + view.name);
 	      }
-	});
-	
-	$("body").on("click", ".fc-next-button, .fc-prev-button", function() {
-		var test = $(".fc-center").children("h2.innerText");
-		console.log(test);
 	});
 	
 	/* 캘린더 이벤트 관련 끝 */
