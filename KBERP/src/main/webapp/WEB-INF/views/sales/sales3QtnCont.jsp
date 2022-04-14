@@ -356,14 +356,7 @@ textarea {
 	width: 680px; 
 }
 
-#att {
-	display: none;
-}
 
-#fileName {
-	border: hidden;
-	outline: none;
-}
 [href] {
 	color: black;
 	text-decoration: none;
@@ -437,6 +430,189 @@ pre {
 	font-weight: 600;
 	text-align: center;
 	line-height: 100px;
+}
+/* ******** 예정된 일정 ******** */
+.schdl_title {
+	position: relative;
+	font-size: 11pt;
+}
+.sBox {
+	width: 860px;
+	height: 305px;
+	margin-left: 47.5px;
+	overflow-y: auto;
+}
+.drop_btn_bot {
+	position: absolute;
+	top: 7px;
+	left: 909px;
+	width: 18px;
+	height: 18px;
+	background-image: url("resources/images/sales/downarrow.png");
+	background-size: 18px 18px;
+	float: right;
+}
+.up_btn_bot {
+	position: absolute;
+	top: 7px;
+	left: 909px;
+	width: 18px;
+	height: 18px;
+	background-image: url("resources/images/sales/up_arrow.png");
+	background-size: 18px 18px;
+	float: right;
+}
+.drop_btn_bot:hover, .up_btn_bot:hover {
+	cursor: pointer;
+}
+.plus_btn {
+	display:inline-block;
+	vertical-align: middle;
+	width: 18px;
+	height: 18px;
+	background-image: url("resources/images/sales/plus.png");
+	background-size: 18px 18px;
+	float: right;
+	margin-right: 5px;
+	margin-top: 5.5px;
+}
+.plus_btn_bot {
+	position: absolute;
+	top: 7px;
+	left: 884px;
+	width: 18px;
+	height: 18px;
+	background-image: url("resources/images/sales/plus.png");
+	background-size: 18px 18px;
+	float: right;
+}
+.plus_btn_bot:hover {
+	cursor: pointer;
+}
+.sche {
+	display: inline-block;
+	width: 696.5px;
+}
+.sch_re, .sch_del {
+	font-size: 9pt;
+	color: gray;
+}
+.sch_re:hover, .sch_del:hover {
+	cursor: pointer;
+	color: #F2CB05;
+}
+.popBtn{
+	width: 80px;
+	height: 40px;
+	background-color: #fff;
+	border-radius: 3px;
+	font-weight: bold;
+	font-size: 14px;
+	border: none;
+	text-align: center;
+}
+.pop_txt{
+	height: 30px;
+	width: 420px;
+	padding: 0 5px;
+	padding-right: 25px;
+	font-size: 10.5px;
+	color: black;
+	vertical-align: middle;
+	box-sizing: border-box;
+	outline: none;
+	border-radius: 3px;
+	line-height: 33px;
+	border: none;
+}
+.pop_txt_in{
+	height: 30px;
+	width: 420px;
+	padding: 0 5px;
+	padding-right: 25px;
+	font-size: 10.5px;
+	color: black;
+	vertical-align: middle;
+	box-sizing: border-box;
+	outline: none;
+	border-radius: 3px;
+	line-height: 33px;
+	border: none;
+}
+.pop_dt_txt{
+	height: 30px;
+	width: 195px;
+	padding: 0 5px;
+	padding-right: 25px;
+	font-size: 10.5px;
+	color: black;
+	vertical-align: middle;
+	box-sizing: border-box;
+	outline: none;
+	border-radius: 3px;
+	line-height: 33px;
+	border: none;
+}
+.imgP{
+	position: relative;
+}
+.ta_box {
+    width: 450px;
+    height: 52px;
+    font-size: 10.5pt;
+    white-space: pre-wrap;
+    resize: none;
+    font-family: "맑은 고딕";
+    display: inline-block;
+    vertical-align: top;
+    outline: none;
+    border-color: #d7d7d7;
+}
+.wave {
+	display: inline-block;
+	padding-left: 20px;
+	padding-right: 27px;
+}
+.popup_table {
+	border-collapse: collapse;
+	display: table-cell;
+	margin: 0px;
+	table-layout: fixed;
+}
+.pop_cntrct_box_in {
+    width: 538px;
+    height: 50px;
+    border: 1px solid #d7d7d7;
+    border-radius: 7px;
+    font-size: 10pt;
+}
+.pop_rvn_txt {
+    height: 25px;
+    width: 538px;
+    padding: 0 15px;
+    font-size: 14px;
+    color: black;
+    box-sizing: border-box;
+    outline: none;
+    border-radius: 3px;
+    line-height: 25px;
+    border: 1px solid #d7d7d7;
+    background-color: #F2F2F2;
+    text-align: left;
+    font-weight: bold;
+	margin-top: 10px;
+    margin-bottom: 5px;
+}
+#fileName, #popFileName {
+	border: hidden;
+	outline: none;
+	font-size: 10pt;
+}
+#attFileName {
+	font-size: 10pt;
+}
+#att{
+	display: none;
 }
 </style>
 <script type="text/javascript">
