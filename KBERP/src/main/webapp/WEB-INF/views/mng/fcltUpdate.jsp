@@ -57,7 +57,7 @@ input:focus {
 #previews img{
 	min-height: 350px;
 	min-width : 350px;
-	max-width:400px;
+	max-width:350px;
 	max-height: 350px;
 }
 #atchmn_row{

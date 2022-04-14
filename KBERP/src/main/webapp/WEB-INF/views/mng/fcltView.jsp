@@ -297,7 +297,7 @@ function drawPaging(pb) {
 		<input type="hidden" id="no" name="no" value="${param.no}" />
 		<input type="hidden" id="fOldSearchGbn" value="${param.fSearchGbn}"/>
 		<input type="hidden" id="fOldSearchTxt" value="${param.fSearchTxt}"/>
-		<select class="srch_sel" name="fSearchGbn">
+		<select class="srch_sel" id="fSearchGbn" name="fSearchGbn">
 			<option value="0">신청자명</option>
 		</select>
 		<div class="srch_text_wrap">
