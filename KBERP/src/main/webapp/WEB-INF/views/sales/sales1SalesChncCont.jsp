@@ -831,7 +831,7 @@ $(document).ready(function() {
 		html += "<div class=\"pop_cntrct_box_in\">";
 		html += "	<input type=\"text\" id=\"popFileName\" name=\"fileName\" readonly=\"readonly\">";
 		html += "</div>";
-		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />";
+		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"popuploadName(this)\" />";
 		html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />";	
 		html += "</form>";
 		
@@ -845,6 +845,7 @@ $(document).ready(function() {
 				$(".aff_btn").on("click", function() {
 					$("#att").click();
 				});
+				
 			},
 			width : 600,
 			height : 520,
@@ -865,7 +866,6 @@ $(document).ready(function() {
 							$("#ssactvtycont").focus();
 						} else {					
 								
-								console.log(${sEmpNum});
 								var RegForm = $("#RegForm");
 										
 								RegForm.ajaxForm({
@@ -900,7 +900,7 @@ $(document).ready(function() {
 								
 							RegForm.submit();
 							closePopup(1);
-							reloadSCList();
+							reloadSScList();
 							} //if else문 end
 						}
 					}, {
@@ -1012,14 +1012,15 @@ $(document).ready(function() {
 					html += "</span>";
 					html += "</div>";
 					html += "<div class=\"pop_cntrct_box_in\">";
-					if(data.ATT_FILE_NAME != null) {
+					if(data.ATT_FILE_NAME != "" && data.ATT_FILE_NAME != null) {
 						html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
 						html += "	<input type=\"button\" id=\"fileDelete\" value=\"삭제\" />";
 					}
-					html += "	<input type=\"text\" id=\"popFileName\" readonly=\"readonly\" />                 ";
+					/* 파일 등록시 파일명이 들어갈곳 */				
+					html += "<input type=\"text\" id=\"fileName\" readonly=\"readonly\" />";
 					html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />   ";
-					html += "	<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />           ";
 					html += "	<input type=\"hidden\" id=\"schdlnum\" name=\"schdlnum\" />           ";
+					html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" value=\"" + data.ATT_FILE_NAME + "\" />";	
 					html += "</div>                                                                     ";
 					html += "</form>";
 				}); // each end
@@ -1033,7 +1034,9 @@ $(document).ready(function() {
 				contentsEvent : function() {
 					
 					$("#fileDelete").on("click", function() {
-						$("#file_name").remove();
+						/* 파일삭제시 기존에 있던 파일명을 지움 */
+						$("#file_name").remove(); // 기존 파일명
+						$("#schdlAttFile").val(""); // 올릴 파일명
 						$(this).remove();
 						
 						var html = "";
@@ -1043,11 +1046,7 @@ $(document).ready(function() {
 						$("#uploadBtn").html(html);
 					});
 					
-					function uploadName(e) {
-						var files = e.files;
-						var filename = files[0].name;
-						$("#fileName").val(filename);
-					}
+					
 					
 					$(".pop_rvn_txt").on("click", ".aff_btn", function() {
 						$("#att").click();
@@ -1073,8 +1072,6 @@ $(document).ready(function() {
 								makeAlert("필수입력", "활동내용을 입력하세요");
 								$("#ssactvtycont").focus();
 							} else {					
-									
-									console.log(${sEmpNum});
 									var RegForm = $("#RegForm");
 											
 									RegForm.ajaxForm({
@@ -1109,7 +1106,7 @@ $(document).ready(function() {
 									
 								RegForm.submit();
 								closePopup(1);
-								reloadSCList();
+								reloadSScList();
 								} //if else문 end
 							}
 						}, {
@@ -1179,8 +1176,6 @@ $(document).ready(function() {
 	
 }); // document.ready end
 
-
-/* ******************** 의견 영역 ******************** */
 /* 의견 목록 Ajax */
 function reloadOpList() {
 	var params = $("#botOpActionForm").serialize();
@@ -1273,13 +1268,17 @@ function drawSScList(list) {
 	$(".sBox").html(html);
 }
 
-function uploadName(e) {
+function popuploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
 	$("#popFileName").val(filename);
 }
- 
- 
+
+function uploadName(e) {
+	var files = e.files;
+	var filename = files[0].name;
+	$("#fileName").val(filename);
+}
 </script>
 </head>
 <body>

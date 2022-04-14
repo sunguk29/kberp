@@ -372,6 +372,7 @@ textarea {
 #fileName, #popFileName {
 	border: hidden;
 	outline: none;
+	font-size: 10pt;
 }
 #attFileName {
 	font-size: 10pt;
@@ -578,6 +579,11 @@ input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+[href] {
+	color: black;
+	text-decoration: none;
 }
 </style>
 <script type="text/javascript">
@@ -844,7 +850,6 @@ $(document).ready(function () {
 			
 		html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
 		html += "<input type=\"hidden\" name=\"sEmpNum\" value=\"${sEmpNum}\" />";
-		html += "<input type=\"hidden\" name=\"sNum\" value=\"\"/>";
 		html += "<table class=\"popup_table\">";
 		html += "	<tbody>";
 		html += "		<tr height=\"10\">                                                                                                          ";
@@ -912,6 +917,7 @@ $(document).ready(function () {
 				$(".aff_btn").on("click", function() {
 					$("#att").click();
 				});
+				
 			},
 			width : 600,
 			height : 520,
@@ -995,7 +1001,6 @@ $(document).ready(function () {
 					
 					html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
 					html += "<input type=\"hidden\" name=\"sEmpNum\" value=\"${sEmpNum}\" />";
-					html += "<input type=\"hidden\" name=\"sNum\" value=\"\"/>";
 					html += "<table class=\"popup_table\">";
 					html += "	<tbody>";
 					html += "		<tr height=\"10\">                                                                                                          ";
@@ -1080,9 +1085,10 @@ $(document).ready(function () {
 						html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
 						html += "	<input type=\"button\" id=\"fileDelete\" value=\"삭제\" />";
 					}
+					html += "<input type=\"text\" id=\"fileName\" readonly=\"readonly\" />";
 					html += "	<input type=\"text\" id=\"popFileName\" readonly=\"readonly\" />                 ";
-					html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />   ";
-					html += "	<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />           ";
+					html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadPopName(this)\" />   ";
+					html += "	<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" value=\"" + data.ATT_FILE_NAME +"\"/>           ";
 					html += "	<input type=\"hidden\" id=\"schdlnum\" name=\"schdlnum\" />           ";
 					html += "</div>                                                                     ";
 					html += "</form>";
@@ -1100,6 +1106,7 @@ $(document).ready(function () {
 				$("#fileDelete").on("click", function() {
 					$("#file_name").remove();
 					$(this).remove();
+					$("#schdlAttFile").val("");
 					
 					var html = "";
 					
@@ -1108,11 +1115,6 @@ $(document).ready(function () {
 					$("#uploadBtn").html(html);
 				});
 				
-				function uploadName(e) {
-					var files = e.files;
-					var filename = files[0].name;
-					$("#fileName").val(filename);
-				}
 				
 				$(".pop_rvn_txt").on("click", ".aff_btn", function() {
 					$("#att").click();
@@ -1341,9 +1343,14 @@ function drawScList(list) {
 
 function uploadName(e) {
 	var files = e.files;
-	var leadfilename = files[0].name;
-	$("#leadFileName").val(leadfilename);
+	var filename = files[0].name;
 	$("#popFileName").val(filename);
+}
+
+function uploadPopName(e) {
+	var files = e.files;
+	var filename = files[0].name;
+	$("#fileName").val(filename);
 }
 
 </script>

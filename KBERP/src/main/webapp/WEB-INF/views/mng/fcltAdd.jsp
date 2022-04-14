@@ -185,7 +185,7 @@ $(document).ready(function() {
 		}else if(checkEmpty("#fcltyCnt")){
 			makeAlert("확인","수용인원을 입력하세요");
 			$("#fcltyCnt").focus();
-		}else if(checkEmpty("#attFile")){
+		}else if(checkEmpty("#files")){
 			makeAlert("확인","시설물 사진을 첨부하세요");
 		}else{
 			var writeForm = $("#writeForm");
@@ -195,11 +195,11 @@ $(document).ready(function() {
 					console.log(res);
 					// 물리파일명 보관
 					if(res.fileName.length > 0){
-						$("#attFile").val(res.fileName[0]);						
+						$("#fileName").val(res.fileName[0]);						
 					}
 					// 글 저장
 					var params = $("#writeForm").serialize();
-					
+					console.log(params);
 					$.ajax({
 						type : "post",
 						url : "fcltAction/insert",
@@ -400,8 +400,8 @@ function drawPaging(pb) {
 					</div>
 				</div>
 				<div id="atchmn_row">
+					<input type="hidden" id="fileName" name="attName"/>
 					<input type="file" id="files" name="att"/>
-					<input type="hidden" id="attFile" name="attFile">
 					<div class="cmn_btn_ml" id="fileUpload" >첨부파일</div>
 				</div>	
 </form>

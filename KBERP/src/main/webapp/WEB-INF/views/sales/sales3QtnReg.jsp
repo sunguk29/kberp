@@ -1,5 +1,5 @@
 <!-- 
-	견적 상세보기 : sales3QtnCont
+	견적 등록 : sales3QtnReg
  -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -907,6 +907,7 @@ pre {
     line-height: 40px;
     padding-bottom: 10px;
 }
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -962,17 +963,21 @@ $(document).ready(function() {
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#qtnName")) {
-			alert("견적명을 선택하세요.");
-			$("#qtnName").focus();
+			makeAlert("필수 기재 사항", "견적명을 선택하세요.", function() {				
+				$("#qtnName").focus();
+			});
 		} else if($("#mdType").val() == 9) {
-			alert("상품을 선택하세요.");
-			$("#mdType").focus();
+			makeAlert("필수 기재 사항", "상품을 선택하세요.", function() {
+				$("#mdType").focus();			
+			});
 		} else if(checkEmpty("#qtnDate")) {
-			alert("견적일을 입력하세요.");
-			$("#qtnDate").focus();
+			makeAlert("필수 기재 사항", "견적일을 입력하세요.", function() {
+				$("#qtnDate").focus();				
+			});
 		} else if(checkEmpty("#pymntDate")) {
-			alert("납부일을 입력하세요.");
-			$("#pymntDate").focus();
+			makeAlert("필수 기재 사항", "납부일을 입력하세요.", function() {
+				$("#pymntDate").focus();			
+			});
 		} else {
 			var html = "";
 			
@@ -1233,40 +1238,6 @@ $(document).ready(function() {
 								html += "				<input type=\"text\" class=\"txt\" readonly=\"readonly\" disabled=\"disabled\" id=\"intrst_rate\" value=\"" + data.INTRST_RATE + "\" />                           ";
 								html += "			</td>				                                                                                                                                             ";
 								html += "			<td>                                                                                                                                                             ";
-								html += "				<input type=\"button\" class=\"btn\" value=\"이자 납부 방식 *\" />                                                                                           ";
-								html += "			</td>                                                                                                                                                            ";
-								html += "			<td>                                                                                                                                                             ";
-								html += "				<select class=\"txt\" disabled=\"disabled\" id=\"intrst_pymnt_mthd\">										                                                 ";
-								if(data.INTRST_PYMNT_MTHD_NUM == 0) {
-									html += "					<option value=\"0\">원금 균등</option>                                                                                                                   ";
-								}
-								if(data.INTRST_PYMNT_MTHD_NUM == 1) {
-									html += "					<option value=\"1\">원리금 균등</option>                                                                                                                 ";
-								}
-								if(data.INTRST_PYMNT_MTHD_NUM == 2) {
-									html += "					<option value=\"2\">만기 일시상환</option>                                                                                                               ";
-								}
-								html += "				</select>                                                                                                                                                    ";
-								html += "			</td>                                                                                                                                                            ";
-								html += "		</tr>                                                                                                                                                                ";
-								html += "		<tr height=\"40\">                                                                                                                                                   ";
-								html += "			<td>                                                                                                                                                             ";
-								html += "				<input type=\"button\" class=\"btn\" value=\"원금 납부 방식 *\" />                                                                                           ";
-								html += "			</td>                                                                                                                                                            ";
-								html += "			<td>                                                                                                                                                             ";
-								html += "				<select class=\"txt\" disabled=\"disabled\" id=\"prncpl_pymnt_mthd\">								                                                         ";
-								if(data.PRNCPL_PYMNT_MTHD_NUM == 0) {
-									html += "					<option value=\"0\">원금 균등</option>                                                                                                                   ";
-								}
-								if(data.PRNCPL_PYMNT_MTHD_NUM == 1) {
-									html += "					<option value=\"1\">원리금 균등</option>                                                                                                                 ";
-								}
-								if(data.PRNCPL_PYMNT_MTHD_NUM == 2) {
-									html += "					<option value=\"2\">만기 일시상환</option>                                                                                                               ";
-								}
-								html += "				</select>                                                                                                                                                    ";
-								html += "			</td>                                                                                                                                                            ";
-								html += "			<td>                                                                                                                                                             ";
 								html += "				<input type=\"button\" class=\"btn\" value=\"중도상환 가능 여부 *\" />                                                                                       ";
 								html += "			</td>                                                                                                                                                            ";
 								html += "			<td>                                                                                                                                                             ";
@@ -1305,7 +1276,7 @@ $(document).ready(function() {
 								html += "			<td rowspan=\"2\">                                                                                                                                               ";
 								html += "				<input type=\"button\" class=\"btn\" value=\"상품 설명 \" readonly=\"readonly\"/>                                                                            ";
 								html += "			</td>                                                                                                                                                            ";
-								html += "			<td colspan=\"3\">                                                                                                                                               ";
+								html += "			<td colspan=\"3\" style=\"border-bottom:none;\">                                                                                                                                               ";
 								if(data.MD_DSCRPTN == null) {
 									html += "				<textarea rows=\"100\" cols=\"50\" class=\"txt_area\" readonly=\"readonly\" disabled=\"disabled\" ></textarea>                             ";
 								} else {
@@ -1328,8 +1299,6 @@ $(document).ready(function() {
 										func:function() {
 											$("#mdName").val(data.MD_NAME);
 											$("#prdmptn_psbl_check").val(data.MID_RDMPTN_PSBL_CHECK).prop("selected", this.selected);
-											$("#intrst_pymnt").val(data.INTRST_PYMNT_MTHD_NUM).prop("selected", this.selected);
-											$("#prncpl_pymnt").val(data.PRNCPL_PYMNT_MTHD_NUM).prop("selected", this.selected);
 											$("#intrstRate").val(data.INTRST_RATE);
 											$("#loanPrd").val(data.LOAN_PRD).prop("selected", this.selected);
 											closePopup(2);
@@ -1489,40 +1458,6 @@ $(document).ready(function() {
 					html += "				<input type=\"text\" class=\"txt\" readonly=\"readonly\" disabled=\"disabled\" id=\"intrst_rate\" value=\"" + data.INTRST_RATE + "\" />                           ";
 					html += "			</td>				                                                                                                                                             ";
 					html += "			<td>                                                                                                                                                             ";
-					html += "				<input type=\"button\" class=\"btn\" value=\"이자 납부 방식 *\" />                                                                                           ";
-					html += "			</td>                                                                                                                                                            ";
-					html += "			<td>                                                                                                                                                             ";
-					html += "				<select class=\"txt\" disabled=\"disabled\" id=\"intrst_pymnt_mthd\">										                                                 ";
-					if(data.INTRST_PYMNT_MTHD_NUM == 0) {
-						html += "					<option value=\"0\">원금 균등</option>                                                                                                                   ";
-					}
-					if(data.INTRST_PYMNT_MTHD_NUM == 1) {
-						html += "					<option value=\"1\">원리금 균등</option>                                                                                                                 ";
-					}
-					if(data.INTRST_PYMNT_MTHD_NUM == 2) {
-						html += "					<option value=\"2\">만기 일시상환</option>                                                                                                               ";
-					}
-					html += "				</select>                                                                                                                                                    ";
-					html += "			</td>                                                                                                                                                            ";
-					html += "		</tr>                                                                                                                                                                ";
-					html += "		<tr height=\"40\">                                                                                                                                                   ";
-					html += "			<td>                                                                                                                                                             ";
-					html += "				<input type=\"button\" class=\"btn\" value=\"원금 납부 방식 *\" />                                                                                           ";
-					html += "			</td>                                                                                                                                                            ";
-					html += "			<td>                                                                                                                                                             ";
-					html += "				<select class=\"txt\" disabled=\"disabled\" id=\"prncpl_pymnt_mthd\">								                                                         ";
-					if(data.PRNCPL_PYMNT_MTHD_NUM == 0) {
-						html += "					<option value=\"0\">원금 균등</option>                                                                                                                   ";
-					}
-					if(data.PRNCPL_PYMNT_MTHD_NUM == 1) {
-						html += "					<option value=\"1\">원리금 균등</option>                                                                                                                 ";
-					}
-					if(data.PRNCPL_PYMNT_MTHD_NUM == 2) {
-						html += "					<option value=\"2\">만기 일시상환</option>                                                                                                               ";
-					}
-					html += "				</select>                                                                                                                                                    ";
-					html += "			</td>                                                                                                                                                            ";
-					html += "			<td>                                                                                                                                                             ";
 					html += "				<input type=\"button\" class=\"btn\" value=\"중도상환 가능 여부 *\" />                                                                                       ";
 					html += "			</td>                                                                                                                                                            ";
 					html += "			<td>                                                                                                                                                             ";
@@ -1561,7 +1496,7 @@ $(document).ready(function() {
 					html += "			<td rowspan=\"2\">                                                                                                                                               ";
 					html += "				<input type=\"button\" class=\"btn\" value=\"상품 설명 \" readonly=\"readonly\"/>                                                                            ";
 					html += "			</td>                                                                                                                                                            ";
-					html += "			<td colspan=\"3\">                                                                                                                                               ";
+					html += "			<td colspan=\"3\" style=\"border-bottom:none;\">                                                                                                                                               ";
 					if(data.MD_DSCRPTN == null) {
 						html += "				<textarea rows=\"100\" cols=\"50\" class=\"txt_area\" readonly=\"readonly\" disabled=\"disabled\" ></textarea>                             ";
 					} else {
@@ -1585,8 +1520,6 @@ $(document).ready(function() {
 								$("#mdName").val(data.MD_NAME);
 								$("#mdType").val(data.MD_TYPE_NUM).prop("selected", this.selected);
 								$("#prdmptn_psbl_check").val(data.MID_RDMPTN_PSBL_CHECK).prop("selected", this.selected);
-								$("#intrst_pymnt").val(data.INTRST_PYMNT_MTHD_NUM).prop("selected", this.selected);
-								$("#prncpl_pymnt").val(data.PRNCPL_PYMNT_MTHD_NUM).prop("selected", this.selected);
 								$("#intrstRate").val(data.INTRST_RATE);
 								$("#loanPrd").val(data.LOAN_PRD).prop("selected", this.selected);
 								closePopup();
@@ -1968,7 +1901,7 @@ function test(t) {
 										<input type="button" class="btn" value="대출 원인*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="loanCauseNum" name="loanCauseNum" value="${loan.LOAN_CAUSE_NUM}" disabled="disabled">
+										<select class="txt" id="loanCauseNum" name="loanCauseNum" value="${data.LOAN_CAUSE_NUM}" disabled="disabled">
 											<optgroup>
 												<c:choose>
 													<c:when test="${data.LOAN_CAUSE_NUM eq 0}">
@@ -2020,7 +1953,7 @@ function test(t) {
 														<option value="0" selected="selected">장기대출</option>
 														<option value="1">단기대출</option>
 													</c:when>
-													<c:when test="${loan.LOAN_HOPE_TYPE eq 1}">
+													<c:when test="${data.LOAN_HOPE_TYPE eq 1}">
 														<option value="0">장기대출</option>
 														<option value="1" selected="selected">단기대출</option>
 													</c:when>
@@ -2417,36 +2350,6 @@ function test(t) {
 									</td>
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="이자납부방식" readonly="readonly" /></td>
-								<td>
-									<select class="txt" id="intrst_pymnt" name="intrstPymnt">
-										<optgroup>
-											<option value="-1">선택 하세요</option>
-											<option value="0">원금 균등 상환</option>
-											<option value="1">원리금 균등 상환</option>
-											<option value="2">만기 일시 상환</option>
-										</optgroup>
-									</select>
-								</td>
-								<td><input type="button" class="btn" value="원금상환방식" readonly="readonly" /></td>
-								<td colspan="2">
-									<select class="txt" id="prncpl_pymnt" name="prncplPymnt">
-										<optgroup>
-											<option value="-1">선택 하세요</option>
-											<option value="0">원금 균등 상환</option>
-											<option value="1">원리금 균등 상환</option>
-											<option value="2">만기 일시 상환</option>
-										</optgroup>
-									</select>
-								</td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="이자율(%)" readonly="readonly" /></td>
-								<td><input type="text" class="txt" id="intrstRate" name="intrstRate" /></td>
-								<td><input type="button" class="btn" value="납부일" readonly="readonly" /></td>
-								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" placeholder="매달    일" /></td>
-							</tr>
-							<tr height="40">
 								<td><input type="button" class="btn" value="대출기간" readonly="readonly" /></td>
 								<td>
 									<select class="txt" id="loanPrd" name="loanPrd">
@@ -2459,8 +2362,37 @@ function test(t) {
 										</optgroup>
 									</select>	
 								</td>
-								<td></td>
+								<td><input type="button" class="btn" value="원금상환방식" readonly="readonly" /></td>
+								<td colspan="2">
+									<select class="txt" id="prncpl_pymnt" name="prncplPymnt">
+										<optgroup>
+											<option value="-1">선택 하세요</option>
+											<option value="0">원금 균등 상환</option>
+											<option value="1">원리금 균등 상환</option>
+											<option value="2">만기 일시 상환</option>
+										</optgroup>
+									</select>
+								</td>
 								<td colspan="2" style="border:none;"></td>
+							</tr>
+							<!-- <tr height="40"> -->
+<!-- 								<td><input type="button" class="btn" value="이자납부방식" readonly="readonly" /></td>
+								<td>
+									<select class="txt" id="intrst_pymnt" name="intrstPymnt">
+										<optgroup>
+											<option value="-1">선택 하세요</option>
+											<option value="0">원금 균등 상환</option>
+											<option value="1">원리금 균등 상환</option>
+											<option value="2">만기 일시 상환</option>
+										</optgroup>
+									</select>
+								</td> -->
+							<!-- </tr> -->
+							<tr height="40">
+								<td><input type="button" class="btn" value="이자율(%)" readonly="readonly" /></td>
+								<td><input type="text" class="txt" id="intrstRate" name="intrstRate" /></td>
+								<td><input type="button" class="btn" value="납부일" readonly="readonly" /></td>
+								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" placeholder="매달    일" /></td>
 							</tr>
 							<!-- <tr height="40">
 								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>

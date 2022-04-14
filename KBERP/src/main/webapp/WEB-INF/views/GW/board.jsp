@@ -28,6 +28,17 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	
+	console.log($("#admnstrtn").val());
+	console.log($("#admnstrtn").val());
+	console.log($("#admnstrtn").val());
+	console.log($("#admnstrtn").val());
+	
+	console.log(${param.menuNum});
+
+
+	
+	
 	if('${param.searchGbn}' !='') {
 		$('#searchGbn').val('${param.searchGbn}');
 		
@@ -175,6 +186,7 @@ function drawPaging(pb) {
 				<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
 				<div class="cmn_btn_ml" id="searchBtn">검색</div>
 				<input type="hidden" name="boardCont" id="boardCont" value="${data.BOARD_CONT}"/>
+				<input type="hidden" id="admnstrtn" name="admnstrtn" value="${data.BOARD_ADMNSTRTN_NUM}">
 			</form>
 			</div>
 		</div>

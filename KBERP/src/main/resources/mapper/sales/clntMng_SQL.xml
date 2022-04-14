@@ -27,17 +27,17 @@
 		                                                         ON CC.GRADE_NUM = CCG.GRADE_NUM
 		                                                 INNER JOIN CLNT_CMPNY_CLSFY CCC
 		                                                         ON CC.CLNT_CMPNY_CLSFY_NUM = CCC.CLNT_CMPNY_CLSFY_NUM ) A 
-		                                                 LEFT OUTER JOIN ( SELECT CC.CLNT_CMPNY_NAME, COUNT(*) AS CNT
-		                                                                   FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
-		                                                                                              ON CC.CLNT_NAME = EC.CLNT_NAME
-		                                                                                      INNER JOIN LEAD L
-		                                                                                              ON L.CLNT_NUM = EC.CLNT_NUM 
-		                                                                                      INNER JOIN SALES S
-		                                                                                              ON S.LEAD_NUM = L.LEAD_NUM
-		                                                                                      INNER JOIN CNTRCT C
-		                                                                                              ON C.SALES_NUM = S.SALES_NUM                        
-		                                                                   GROUP BY CC.CLNT_CMPNY_NAME ) B
-		                                                              ON A.CLNT_CMPNY_NAME = B.CLNT_CMPNY_NAME ) A
+                                                    LEFT OUTER JOIN (	SELECT CC.CLNT_CMPNY_NAME, COUNT(*) AS CNT
+																		FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
+																		                           ON CC.CLNT_NAME = EC.CLNT_NAME
+																		                   INNER JOIN LEAD L
+																		                           ON L.CLNT_NUM = EC.CLNT_NUM 
+																		                   LEFT OUTER JOIN SALES S
+																		                           ON S.LEAD_NUM = L.LEAD_NUM
+																		                   LEFT OUTER JOIN CNTRCT C
+																		                           ON C.SALES_NUM = S.SALES_NUM                        
+																		GROUP BY CC.CLNT_CMPNY_NAME  ) B
+		                                                           ON A.CLNT_CMPNY_NAME = B.CLNT_CMPNY_NAME ) A
 		                WHERE A.DEL_CHECK IS NULL ) A
 		WHERE 1 = 1
 		<choose>
