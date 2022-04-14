@@ -897,7 +897,7 @@ $(document).ready(function () {
 		html += "<div class=\"pop_cntrct_box_in\">";
 		html += "	<input type=\"text\" id=\"popFileName\" name=\"fileName\" readonly=\"readonly\">";
 		html += "</div>";
-		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\"/>";
+		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadpopName(this)\"/>";
 		html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />";	
 		html += "</form>";
 	
@@ -1079,8 +1079,8 @@ $(document).ready(function () {
 						html += "	<input type=\"button\" id=\"fileDelete\" value=\"삭제\" />";
 					}
 					html += "	<input type=\"text\" id=\"popFileName\" readonly=\"readonly\" />                 ";
-					html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />   ";
-					html += "	<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />           ";
+					html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadPopName(this)\" />   ";
+					html += "	<input type=\"hidden\" id=\"uschdlAttFile\" name=\"schdlAttFile\" value=\"" + data.ATT_FILE_NAME +"\"/>           ";
 					html += "	<input type=\"hidden\" id=\"schdlnum\" name=\"schdlnum\" />           ";
 					html += "</div>                                                                     ";
 					html += "</form>";
@@ -1098,6 +1098,7 @@ $(document).ready(function () {
 				$("#fileDelete").on("click", function() {
 					$("#file_name").remove();
 					$(this).remove();
+					$("#uschdlAttFile").val("");
 					
 					var html = "";
 					
@@ -1341,6 +1342,11 @@ function uploadName(e) {
 	var files = e.files;
 	var leadfilename = files[0].name;
 	$("#leadFileName").val(leadfilename);
+}
+
+function uploadpopName(e) {
+	var files = e.files;
+	var filename = files[0].name;
 	$("#popFileName").val(filename);
 }
 
