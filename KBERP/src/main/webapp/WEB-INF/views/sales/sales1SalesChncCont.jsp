@@ -906,7 +906,7 @@ $(document).ready(function() {
 								
 							RegForm.submit();
 							closePopup(1);
-							reloadSCList();
+							reloadSScList();	
 							} //if else문 end
 						}
 					}, {
@@ -1022,6 +1022,7 @@ $(document).ready(function() {
 						html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
 						html += "	<input type=\"button\" id=\"fileDelete\" value=\"삭제\" />";
 					}
+					/* 파일 등록시 파일명이 들어갈곳 */				
 					html += "<input type=\"text\" id=\"fileName\" readonly=\"readonly\" />";
 					html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />   ";
 					html += "	<input type=\"hidden\" id=\"schdlnum\" name=\"schdlnum\" />           ";
@@ -1039,8 +1040,9 @@ $(document).ready(function() {
 				contentsEvent : function() {
 					
 					$("#fileDelete").on("click", function() {
-						$("#file_name").remove();
-						$("#schdlAttFile").val("");
+						/* 파일삭제시 기존에 있던 파일명을 지움 */
+						$("#file_name").remove(); // 기존 파일명
+						$("#schdlAttFile").val(""); // 올릴 파일명
 						$(this).remove();
 						
 						var html = "";
