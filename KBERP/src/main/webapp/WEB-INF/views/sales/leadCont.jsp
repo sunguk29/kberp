@@ -1079,8 +1079,8 @@ $(document).ready(function () {
 						html += "	<input type=\"button\" id=\"fileDelete\" value=\"삭제\" />";
 					}
 					html += "	<input type=\"text\" id=\"popFileName\" readonly=\"readonly\" />                 ";
-					html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />   ";
-					html += "	<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />           ";
+					html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadPopName(this)\" />   ";
+					html += "	<input type=\"hidden\" id=\"uschdlAttFile\" name=\"schdlAttFile\" value=\"" + data.ATT_FILE_NAME +"\"/>           ";
 					html += "	<input type=\"hidden\" id=\"schdlnum\" name=\"schdlnum\" />           ";
 					html += "</div>                                                                     ";
 					html += "</form>";
@@ -1098,6 +1098,7 @@ $(document).ready(function () {
 				$("#fileDelete").on("click", function() {
 					$("#file_name").remove();
 					$(this).remove();
+					$("#uschdlAttFile").val("");
 					
 					var html = "";
 					
