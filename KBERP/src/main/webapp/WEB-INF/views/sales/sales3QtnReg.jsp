@@ -1968,7 +1968,7 @@ function test(t) {
 										<input type="button" class="btn" value="대출 원인*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="loanCauseNum" name="loanCauseNum" value="${loan.LOAN_CAUSE_NUM}" disabled="disabled">
+										<select class="txt" id="loanCauseNum" name="loanCauseNum" value="${data.LOAN_CAUSE_NUM}" disabled="disabled">
 											<optgroup>
 												<c:choose>
 													<c:when test="${data.LOAN_CAUSE_NUM eq 0}">
@@ -2020,7 +2020,7 @@ function test(t) {
 														<option value="0" selected="selected">장기대출</option>
 														<option value="1">단기대출</option>
 													</c:when>
-													<c:when test="${loan.LOAN_HOPE_TYPE eq 1}">
+													<c:when test="${data.LOAN_HOPE_TYPE eq 1}">
 														<option value="0">장기대출</option>
 														<option value="1" selected="selected">단기대출</option>
 													</c:when>
