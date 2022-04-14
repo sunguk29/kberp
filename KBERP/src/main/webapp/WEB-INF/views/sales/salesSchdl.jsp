@@ -403,8 +403,6 @@ $(document).ready(function() {
 	}
 	$('input[name=clndrDate]').attr('value',Cdate);
 	
-	console.log($("#clndrDate").val());
-	
 	if('${param.usrsrchTxt}' != ''){
 		$("#usrsrchTxt").val('${param.usrsrchTxt}');
 		$("#deptS").val(${param.deptS});
@@ -429,9 +427,8 @@ $(document).ready(function() {
 		$("#oldSearchMngrTxt").val($("#usrsrchTxt").val());
 		
 		
-		//기존 이벤트 제거
-		$("#fullCalendarArea").fullCalendar("removeEventSources", ${param.oldEvent});
-		$("#fullCalendarArea").fullCalendar("refetchEvents");
+ 		//기존 이벤트 제거
+ 		$("#fullCalendarArea").fullCalendar("removeEventSources");
 		
 		$(".cal_cont").hide();
 		
@@ -675,11 +672,9 @@ $(document).ready(function() {
 			data : params,
 			success : function(res){		
 				
-					var oldEvents = $("#fullCalendarArea").fullCalendar("getEventSources");
-					document.getElementById("oldEvent").value = oldEvents;
 					//신규이벤트 추가
 					$("#fullCalendarArea").fullCalendar("addEventSource", res.slist);
-					$("#fullCalendarArea").fullCalendar("refetchEvents");
+					
 					
 			},
 			error : function(req) {
@@ -697,6 +692,10 @@ $(document).ready(function() {
 	
 	// 달력에서 이후 버튼 누를 시
 	$("body").on("click", ".fc-next-button", function() {
+
+		//기존 이벤트 제거
+		$("#fullCalendarArea").fullCalendar("removeEventSources");
+		
 		
 			clndrMonth = clndrMonth+1;
 			if(clndrMonth >= 13){
@@ -715,6 +714,10 @@ $(document).ready(function() {
 	
 	// 달력에서 이전 버튼 누를 시
 	$("body").on("click", ".fc-prev-button", function() {
+		
+		//기존 이벤트 제거
+		$("#fullCalendarArea").fullCalendar("removeEventSources");
+		
 		clndrMonth = clndrMonth-1;
 		
 		if(clndrMonth < 1){
@@ -742,7 +745,7 @@ $(document).ready(function() {
 	      height: 400,
 	      events: data,
 	      eventClick: function(event) { // 이벤트 클릭
-			
+	    	  
 	      },
 	      dayClick: function(date, js, view) { // 일자 클릭
 	    	  
@@ -810,7 +813,6 @@ $(document).ready(function(){
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" id="schdlnum" name="schdlnum" value="${param.schdlnum}" />
-	<input type="hidden" id="oldEvent" />
 	<input type="hidden" id="clndrDate" name="clndrDate" />
 	
 	<!-- 내용영역 -->
