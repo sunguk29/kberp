@@ -897,7 +897,7 @@ $(document).ready(function () {
 		html += "<div class=\"pop_cntrct_box_in\">";
 		html += "	<input type=\"text\" id=\"popFileName\" name=\"fileName\" readonly=\"readonly\">";
 		html += "</div>";
-		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\"/>";
+		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadpopName(this)\"/>";
 		html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />";	
 		html += "</form>";
 	
@@ -1341,6 +1341,11 @@ function uploadName(e) {
 	var files = e.files;
 	var leadfilename = files[0].name;
 	$("#leadFileName").val(leadfilename);
+}
+
+function uploadpopName(e) {
+	var files = e.files;
+	var filename = files[0].name;
 	$("#popFileName").val(filename);
 }
 
