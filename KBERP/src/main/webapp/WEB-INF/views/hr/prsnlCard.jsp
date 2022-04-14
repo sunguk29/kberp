@@ -170,7 +170,10 @@
 	width: 370px;
 }
 #lt3_l2_e1 {
-	width: 175px;
+	width: 220px;
+}
+#lt3_l2_e2 {
+	width: 325px;
 }
 
 #lt4_l1_e1 {
@@ -301,6 +304,17 @@ td:nth-child(even) {
 	width: 100%;
 	margin-top: 1px;
 }
+
+.td_cont_text {
+	height: 100%;
+	width: 100%;
+	background: none;
+	border: 0;
+	outline: 0;
+	padding-left: 10px;
+	font-size: 9pt;
+}
+
 
 .tab_btn {
 	display: inline-block;
@@ -785,6 +799,17 @@ function tabContChange(tId, data, dataList) {
 		}
 		html += "\" />                   ";
 		html += "	</div>                                                                                                                ";
+		html += "	<div class=\"cont_element\" id=\"lt3_l2_e2\">                                                                         ";
+		html += "		<div class=\"cont_name\">통장사본 파일</div>                                                                             ";
+		html += "		<br/>                                                                                                             ";
+		if (data != null && data.BNKBK_COPY_FILE != null) {
+			var fileLength = data.BNKBK_COPY_FILE.length;
+			var fileName = data.BNKBK_COPY_FILE.substring(20, fileLength);
+			html += "		<a href=\"resources/upload/" + data.BNKBK_COPY_FILE + "\" download=\"" + fileName + "\"><input type=\"text\" title=\"파일 다운로드\" class=\"cont_text\" id=\"bnkbk_copy_file\" readonly=\"readonly\" value=\"" + fileName + "\" /></a>";
+		} else {
+			html += "		<input type=\"text\" class=\"cont_text\" id=\"bnkbk_copy_file\" readonly=\"readonly\" value=\"\" />                   ";
+		}
+		html += "	</div>                                                                                                                ";
 		html += "</div>                                                                                                                   ";
 		$("#lt_edit_btn").show();
 		$("#left_top_cont").html(html);
@@ -796,11 +821,12 @@ function tabContChange(tId, data, dataList) {
 		console.log("학력사항 탭");
 		html += "<table id=\"btm1_table\">                                   ";
 		html += "<colgroup>                                                  ";
-		html += "<col width=\"25%\" />                                       ";
-		html += "<col width=\"24%\" />                                       ";
-		html += "<col width=\"24%\" />                                       ";
-		html += "<col width=\"15%\" />                                       ";
-		html += "<col width=\"12%\" />                                       ";
+		html += "<col width=\"20%\" />                                       ";
+		html += "<col width=\"18%\" />                                       ";
+		html += "<col width=\"18%\" />                                       ";
+		html += "<col width=\"14%\" />                                       ";
+		html += "<col width=\"10%\" />                                       ";
+		html += "<col width=\"20%\" />                                       ";
 		html += "	<thead>                                                  ";
 		html += "		<tr>                                                 ";
 		html += "			<th>학교명</th>                                  ";
@@ -808,6 +834,7 @@ function tabContChange(tId, data, dataList) {
 		html += "			<th>졸업일</th>                                  ";
 		html += "			<th>학점</th>                                    ";
 		html += "			<th>학적구분</th>                                    ";
+		html += "			<th>증명서파일</th>                                    ";
 		html += "		</tr>                                                ";
 		html += "	</thead>                                                 ";
 		html += "	<tbody>                                                  ";
@@ -839,6 +866,17 @@ function tabContChange(tId, data, dataList) {
 				html += "퇴학";
 			}
 			html += "</div></td>  ";
+			html += "<td";
+			if (dl.GRDTN_CRTFCT_FILE != null) {
+				html += " onclick=\"event.cancelBubble=true\">";
+				var fileLength = dl.GRDTN_CRTFCT_FILE.length;
+				var fileName = dl.GRDTN_CRTFCT_FILE.substring(20, fileLength);
+				html += "		<a class=\"td_cont\" href=\"resources/upload/" + dl.GRDTN_CRTFCT_FILE + "\" download=\"" + fileName + "\"><input type=\"text\" title=\"파일 다운로드\" class=\"td_cont_text grdtn_crtfct_file\" readonly=\"readonly\" value=\"" + fileName + "\" /></a>";
+			} else {
+				html += ">";
+				html += "		<div class=\"td_cont grdtn_crtfct_file\"></div>                   ";
+			}
+			
 			html += "		</tr>                                                ";
 		}
 		if (dataList.length < 10) {
@@ -849,6 +887,7 @@ function tabContChange(tId, data, dataList) {
 				html += "			<td><div class=\"td_cont\"></div></td> ";
 				html += "			<td><div class=\"td_cont\"></div></td> ";
 				html += "			<td><div class=\"td_cont\"></div></td> ";
+				html += "			<td><div class=\"td_cont\"></div></td>           ";
 				html += "			<td><div class=\"td_cont\"></div></td>           ";
 				html += "			<td><div class=\"td_cont\"></div></td>           ";
 				html += "		</tr>                                                ";
@@ -933,11 +972,12 @@ function tabContChange(tId, data, dataList) {
 		console.log("자격사항 탭");
 		html += "<table id=\"btm3_table\">                                   ";
 		html += "<colgroup>                                                  ";
-		html += "<col width=\"24%\" />                                       ";
+		html += "<col width=\"20%\" />                                       ";
+		html += "<col width=\"14%\" />                                       ";
 		html += "<col width=\"18%\" />                                       ";
-		html += "<col width=\"22%\" />                                       ";
-		html += "<col width=\"18%\" />                                       ";
-		html += "<col width=\"18%\" />                                       ";
+		html += "<col width=\"14%\" />                                       ";
+		html += "<col width=\"14%\" />                                       ";
+		html += "<col width=\"20%\" />                                       ";
 		html += "	<thead>                                                  ";
 		html += "		<tr>                                                 ";
 		html += "			<th>자격(면허)증명</th>                          ";
@@ -945,6 +985,7 @@ function tabContChange(tId, data, dataList) {
 		html += "			<th>발급기관</th>                                ";
 		html += "			<th>취득점수</th>                                ";
 		html += "			<th>만료기한</th>                                ";
+		html += "			<th>증빙자료</th>                                ";
 		html += "		</tr>                                                ";
 		html += "	</thead>                                                 ";
 		html += "	<tbody>                                                  ";
@@ -966,6 +1007,16 @@ function tabContChange(tId, data, dataList) {
 				html += dl.EXPRTN_DATE;
 			}
 			html += "</div></td> ";
+			html += "<td";
+			if (dl.COPY_FILE != null) {
+				html += " onclick=\"event.cancelBubble=true\">";
+				var fileLength = dl.COPY_FILE.length;
+				var fileName = dl.COPY_FILE.substring(20, fileLength);
+				html += "		<a class=\"td_cont\" href=\"resources/upload/" + dl.COPY_FILE + "\" download=\"" + fileName + "\"><input type=\"text\" title=\"파일 다운로드\" class=\"td_cont_text copy_file\" readonly=\"readonly\" value=\"" + fileName + "\" /></a>";
+			} else {
+				html += ">";
+				html += "		<div class=\"td_cont copy_file\"></div>                   ";
+			}
 			html += "		</tr>                                                ";
 		}
 		
@@ -977,6 +1028,7 @@ function tabContChange(tId, data, dataList) {
 				html += "			<td><div class=\"td_cont\"></div></td>";
 				html += "			<td><div class=\"td_cont\"></div></td> ";
 				html += "			<td><div class=\"td_cont\"></div></td>    ";
+				html += "			<td><div class=\"td_cont\"></div></td>           ";
 				html += "			<td><div class=\"td_cont\"></div></td>           ";
 				html += "			<td><div class=\"td_cont\"></div></td>           ";
 				html += "		</tr>                                                ";
@@ -1914,6 +1966,21 @@ $(document).ready(function() {
 				console.log("이거 안됨");
 			}
 			reloadTab(params);
+		}
+	});
+	
+	$("body").on("mouseenter", "#bnkbk_copy_file, .grdtn_crtfct_file, .copy_file", function() {
+		if ($(this).val() != "" && $(this).val() != null) {
+			$(this).css("cursor", "pointer");
+			$(this).css("text-decoration", "underline");
+			$(this).css("color", "#4B94F2");
+		}
+	});
+	$("body").on("mouseleave", "#bnkbk_copy_file, .grdtn_crtfct_file, .copy_file", function() {
+		if ($(this).val() != "" && $(this).val() != null) {
+			$(this).css("cursor", "default");
+			$(this).css("text-decoration", "none");
+			$(this).css("color", "#000000");
 		}
 	});
 	
