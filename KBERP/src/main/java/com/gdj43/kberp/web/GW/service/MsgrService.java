@@ -15,6 +15,11 @@ public class MsgrService implements IMsgrService {
 	public IMsgrDao imsDao;
 	
 	@Override
+	public int getMaxNo() throws Throwable {
+		return imsDao.getMaxNo();
+	}
+	
+	@Override
 	public void insertCont(HashMap<String, String> params) throws Throwable {
 		imsDao.insertCont(params);
 	}
@@ -29,11 +34,6 @@ public class MsgrService implements IMsgrService {
 		imsDao.insertChat(params);
 	}
 
-	@Override
-	public int getMaxNo() throws Throwable {
-		return imsDao.getMaxNo();
-	}
-	
 	
 
 }
