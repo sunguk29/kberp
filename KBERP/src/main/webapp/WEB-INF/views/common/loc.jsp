@@ -14,7 +14,7 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-<form action="sample" id="locationForm" method="post">
+<form action="board" id="locationForm" method="post">
 	<input type="hidden" id="top" name="top" value="21" />
 	<input type="hidden" id="menuNum" name="menuNum" value="1" />
 	<input type="hidden" id="menuType" name="menuType" value="B" />
