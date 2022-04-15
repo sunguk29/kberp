@@ -70,26 +70,25 @@
 	</select>
 	
 	<!-- 대응가이드 게시글 수 -->
-	<select id="inqryRspndCnt" resultType="Integer">
-		SELECT COUNT(*) CNT
+	<select id="inqryRspndCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
 		FROM RSPND_GUIDE
 		WHERE DEL_CHECK = 1 AND CTGRY_NUM = 1
 	</select>
 	
 	<!-- 대응가이드 목록 -->
 	<select id="inqryRspndList" parameterType="hashmap" resultType="hashmap">
-		SELECT R.GUIDE_NUM, C.CTGRY_NAME, E.EMP_NAME, R.CLNT_TYPE, R.TYPE_CASE, R.RSPNS_PLAN, TO_CHAR(R.WRITE_DATE, 'YYYY-MM-DD')AS WRITE_DATE
+		SELECT T.GUIDE_NUM, T.CTGRY_NAME, T.EMP_NAME, T.CLNT_TYPE, T.TYPE_CASE, T.RSPNS_PLAN, T.WRITE_DATE
+		FROM( SELECT R.GUIDE_NUM, C.CTGRY_NAME, E.EMP_NAME, R.CLNT_TYPE, R.TYPE_CASE, R.RSPNS_PLAN, TO_CHAR(R.WRITE_DATE, 'YYYY-MM-DD')AS WRITE_DATE, ROW_NUMBER() OVER(ORDER BY GUIDE_NUM DESC) AS RNUM
 		FROM( SELECT CTGRY_NUM, CTGRY_NAME
-		     FROM RSPND_GUIDE_CTGRY ) C INNER JOIN ( SELECT GUIDE_NUM, CTGRY_NUM, EMP_NUM, CLNT_TYPE, TYPE_CASE, RSPNS_PLAN, WRITE_DATE, DEL_CHECK,
-		                                                 ROW_NUMBER() OVER(ORDER BY GUIDE_NUM DESC ) AS RNUM
-		                                             FROM RSPND_GUIDE ) R
-		                                      ON C.CTGRY_NUM = R.CTGRY_NUM
-		                                INNER JOIN EMP E
-		                                        ON R.EMP_NUM = E.EMP_NUM
-		WHERE R.DEL_CHECK = 1 
-		AND R.CTGRY_NUM = 1 
-		AND R.RNUM BETWEEN #{startCnt} AND #{endCnt}
-		ORDER BY R.GUIDE_NUM DESC
+		      FROM RSPND_GUIDE_CTGRY)C INNER JOIN (SELECT GUIDE_NUM, EMP_NUM, CTGRY_NUM, CLNT_TYPE, TYPE_CASE, RSPNS_PLAN, WRITE_DATE, DEL_CHECK
+		                                           FROM RSPND_GUIDE
+		                                           WHERE DEL_CHECK = 1 ) R
+		                                       ON C.CTGRY_NUM = R.CTGRY_NUM
+		                               INNER JOIN EMP E
+		                                       ON R.EMP_NUM = E.EMP_NUM
+			 WHERE R.CTGRY_NUM = 1 ) T
+		WHERE T.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
 	<!-- 대응가이드 등록 -->

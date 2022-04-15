@@ -7,7 +7,22 @@
 		FROM (  SELECT L.LEAD_NUM, CC.CLNT_CMPNY_NAME, EC.CLNT_NAME, E.EMP_NAME, L.LEAD_NAME, L.PRGRS_STS_NUM,
 		               DECODE(L.PRGRS_STS_NUM, 1, '진행중', 2, '종료(영업기회 전환)', 3, '종료(영업기회 실패)') AS PSNUM, 
 		               TO_CHAR(L.RGSTRTN_DATE, 'YYYY-MM-DD') AS RGSTRTN_DATE, 
-		               ROW_NUMBER() OVER(ORDER BY L.LEAD_NUM DESC) AS RNUM, L.PSBL_CHECK
+		               ROW_NUMBER() OVER(ORDER BY 
+		               <choose>
+		               	<when test="listSort == 0">
+			               L.LEAD_NUM DESC
+		               	</when>
+		               	<when test="listSort == 1">
+		               		L.RGSTRTN_DATE DESC
+		               	</when>
+		               	<when test="listSort == 2">
+		               		L.LEAD_NAME ASC
+		               	</when>
+		               	<when test="listSort == 3">
+		               		CC.CLNT_CMPNY_NAME ASC 
+		               	</when>
+		               </choose>
+		               ) AS RNUM, L.PSBL_CHECK
 		        FROM LEAD L LEFT OUTER JOIN EMP E
 		                            ON L.MNGR_EMP_NUM = E.EMP_NUM
 		                    INNER JOIN ENTRPRS_CLNT EC
@@ -68,17 +83,6 @@
 					</choose>
 				</if> ) LL
 		WHERE LL.RNUM BETWEEN #{startCount} AND #{endCount}
-		<choose>
-			<when test="listSort == 1">
-				ORDER BY LL.RGSTRTN_DATE DESC
-			</when>
-			<when test="listSort == 2">
-				ORDER BY LL.LEAD_NAME ASC
-			</when>
-			<when test="listSort == 3">
-				ORDER BY LL.CLNT_CMPNY_NAME ASC
-			</when>
-		</choose>
 	</select>
 	
 	<select id="getLeadCnt" resultType="Integer" parameterType="hashmap">

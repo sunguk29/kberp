@@ -75,7 +75,7 @@ public class SalesMngController {
 
 		modelMap.put("RsltCnt", RsltCnt);
 
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), listCnt, 10, 5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), RsltCnt, 10, 5);
 
 		// 데이터 시작, 종료 할당
 		params.put("startCount", Integer.toString(pb.getStartCount()));
@@ -612,7 +612,6 @@ public class SalesMngController {
 
 	// salesMng4ActionAjax : 계약 등록, 수정, 삭제
 	@RequestMapping(value = "/salesMng4ActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
-
 	@ResponseBody
 	public String salesMng4ActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn)
 			throws Throwable {
