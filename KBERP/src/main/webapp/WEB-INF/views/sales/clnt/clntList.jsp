@@ -185,10 +185,24 @@ $(document).ready(function() {
 	
 	// 검색
 	$("#searchBtn").on("click", function() {
-		$("#page").val("1");
-		$("#oldSearchType").val($("#searchType").val());
-		$("#oldSearchTxt").val($("#searchTxt").val());
-		reloadList();
+		if($("#searchType").val() == 2) {
+			if(isNaN($("#searchTxt").val())) {
+				makeAlert("경고", "고객번호 검색시 숫자만 입력해주세요(CL01 -> 01)", function() {
+					$("#searchTxt").val("");
+					$("#searchTxt").focus();
+				});
+			} else {
+				$("#page").val("1");
+				$("#oldSearchType").val($("#searchType").val());
+				$("#oldSearchTxt").val($("#searchTxt").val());
+				reloadList();
+			}
+		} else {
+			$("#page").val("1");
+			$("#oldSearchType").val($("#searchType").val());
+			$("#oldSearchTxt").val($("#searchTxt").val());
+			reloadList();
+		}
 	});
 	
 	// 정렬
