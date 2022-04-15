@@ -27,29 +27,23 @@
 		                         AND Q.QTN_STS_NUM = 0 
 		WHERE 1 = 1
 		<choose>
-			<when test="mngNum != null and mngNum != ''">
-				AND E.EMP_NUM = #{mngNum}
+			<when test="mngNum != '' and mngNum != null">
+			 	AND S.MNGR_EMP_NUM = #{mngNum}
+			</when>
+			<when test="mngName != '' and mngName != null">
+			 	AND E.EMP_NAME LIKE '%' || #{mngName} || '%'
 			</when>
 			<when test="prgrsStage1 != 9">
-				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
+			 	AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
 			</when>
 			<when test="prgrsStage2 != 9">
-				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
+			 	AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
 			</when>
-			<when test="startDate != null and startDate != '' or endDate != null and endDate != ''">
-				AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
-			</when>
-			<when test="prgrsStage1 != 9 and prgrsStage2 != 9">
-				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
-				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
-			</when>
-			<when test="prgrsStage1 != 9 and prgrsStage2 != 9 and startDate != null and startDate != '' or endDate != null and endDate != ''">
-				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
-				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
-				AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
+			<when test="startDate != '' and startDate != null">
+			 	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') = #{startDate} 
 			</when>
 		</choose>
-		<if test="searchTxt != null and searchTxt != ''">
+		<if test="searchTxt != '' and searchTxt != null">
 			<choose>
 				<when test="searchGbn == 0">
 					AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
@@ -103,7 +97,24 @@
 		              EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, S.START_DATE,
 		              DECODE(SUBSTR(S.PRGRS_STS_NUM, 2, 1), 5, '종료(성공)', 6, '종료(실패)', 7, '진행중') AS PRGRS_STS,
 		              DECODE(SUBSTR(S.PRGRS_STS_NUM, 1, 1), 1, '영업기회', 2, '제안', 3, '견적', 4, '계약') AS PRGRS_STS2,
-		              ROW_NUMBER() OVER(ORDER BY S.SALES_NUM DESC) AS RNUM, Q.QTN_NUM, Q.QTN_STS_NUM
+		            <choose>
+						<when test="listSort == 9">
+							ROW_NUMBER() OVER(ORDER BY S.SALES_NUM DESC) AS RNUM
+						</when>
+						<when test="listSort == 0">
+							ROW_NUMBER() OVER(ORDER BY L.LEAD_NAME DESC) AS RNUM
+						</when>
+						<when test="listSort == 1">
+							ROW_NUMBER() OVER(ORDER BY CC.CLNT_CMPNY_NAME DESC) AS RNUM
+						</when>
+						<when test="listSort == 2">
+							ROW_NUMBER() OVER(ORDER BY LDI.EXPCTN_LOAN_SCALE DESC) AS RNUM
+						</when>
+						<when test="listSort == 3">
+							ROW_NUMBER() OVER(ORDER BY TO_CHAR(S.START_DATE, 'YYYY-MM-DD') DESC) AS RNUM
+						</when>
+					</choose>
+					, Q.QTN_NUM, Q.QTN_STS_NUM
 		       FROM SALES S INNER JOIN EMP E
 		                            ON S.MNGR_EMP_NUM = E.EMP_NUM
 		                    INNER JOIN LEAD L
@@ -119,29 +130,23 @@
 		                                AND Q.QTN_STS_NUM = 0 
 		      WHERE 1 = 1
 		<choose>
-			<when test="mngName != null and mngName != ''">
-				AND E.EMP_NAME = #{mngName}
+			<when test="mngNum != '' and mngNum != null">
+			 	AND S.MNGR_EMP_NUM = #{mngNum}
+			</when>
+			<when test="mngName != '' and mngName != null">
+			 	AND E.EMP_NAME LIKE '%' || #{mngName} || '%'
 			</when>
 			<when test="prgrsStage1 != 9">
-				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
+			 	AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
 			</when>
 			<when test="prgrsStage2 != 9">
-				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
+			 	AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
 			</when>
-			<when test="startDate != null and startDate != '' or endDate != null and endDate != ''">
-				AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
-			</when>
-			<when test="prgrsStage1 != 9 and prgrsStage2 != 9">
-				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
-				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
-			</when>
-			<when test="prgrsStage1 != 9 and prgrsStage2 != 9 and startDate != null and startDate != '' or endDate != null and endDate != ''">
-				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
-				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
-				AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
+			<when test="startDate != '' and startDate != null">
+			 	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') = #{startDate} 
 			</when>
 		</choose>
-		<if test="searchTxt != null and searchTxt != ''">
+		<if test="searchTxt != '' and searchTxt != null">
 			<choose>
 				<when test="searchGbn == 0">
 					AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
@@ -154,28 +159,9 @@
 				</when>
 			</choose>
 		</if>
-		<if test="listSort != '9'">
-			<choose>
-				<when test="listSort == 0">
-					ORDER BY L.LEAD_NAME ASC
-				</when>
-				<when test="listSort == 1">
-					ORDER BY CC.CLNT_CMPNY_NAME ASC
-				</when>
-				<when test="listSort == 2">
-					ORDER BY LDI.EXPCTN_LOAN_SCALE ASC
-				</when>
-				<when test="listSort == 3">
-					ORDER BY TO_CHAR(S.START_DATE, 'YYYY-MM-DD') ASC
-				</when>
-			</choose>
-		</if> 
 		) SS
 		WHERE SS.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
-	
-	
-	
 	
 	<!-- 영업기회 기본정보tab 리드에서 가져오기 -->
 	<select id="getSales1BringLead" parameterType="hashmap" resultType="hashmap">
