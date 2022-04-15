@@ -330,7 +330,7 @@
 }
 
 /* 대응가이드 팝업 */
-.board_table {
+#guide_table {
 	margin-top: 70px;
 }
 
@@ -359,10 +359,6 @@
 
 #type_case {
 	display: inline;
-}
-
-.add {
-	vertical-align: bottom;
 }
 
 #rspndAddBtn, #rspndUpBtn, #rspndCanBtn{
@@ -405,6 +401,11 @@
 }
 #rspndActionForm textarea:focus{
 	outline: 2px solid #F2CB05;
+}
+
+#btn2Btn makePopup, #btn3Btn makePopup {
+	text-align: center;
+	line-height: 100px;
 }
 
 </style>
@@ -505,7 +506,7 @@ $(document).ready(function() {
 					rspndRe();
 				});
 				
-				
+				// 대응가이드 등록
 				$("#rspndAddBtn").on("click", function() {
 					
 					if(checkEmpty("#clnt_type")) {
@@ -523,7 +524,7 @@ $(document).ready(function() {
 						
 						$.ajax({
 							type : "post",
-							url : "inqryRspndListAction/i",
+							url : "inqryRspndListActionAjax/i",
 							dataType : "json",
 							data : params,
 							success : function(res) {
@@ -567,6 +568,7 @@ $(document).ready(function() {
 					$(".update").attr("class", "add");
 				});
 				
+				// 대응가이드 수정
 				$("#rspndUpBtn").on("click", function() {
 					
 					if(checkEmpty("#clnt_type")) {
@@ -584,7 +586,7 @@ $(document).ready(function() {
 						
 						$.ajax({
 							type : "post",
-							url : "inqryRspndListAction/u",
+							url : "inqryRspndListActionAjax/u",
 							dataType : "json",
 							data : params,
 							success : function(res) {
@@ -601,10 +603,11 @@ $(document).ready(function() {
 	
 							}
 						}); // ajax end
+						
 					}
 				});
 				
-				// 목록의 삭제버튼
+				// 대응가이드 삭제버튼
 				$("#guide_table_tbody").on("click", "#dBtn", function() {
 					if(confirm("삭제하시겠습니까?")) {
 						// tr
@@ -616,7 +619,7 @@ $(document).ready(function() {
 						
 						$.ajax({
 							type : "post",
-							url : "inqryRspndListAction/d",
+							url : "inqryRspndListActionAjax/d",
 							dataType : "json",
 							data : params,
 							success : function(res) {
@@ -633,9 +636,10 @@ $(document).ready(function() {
 	
 							}
 						}); // ajax end
+						
 					}
+					
 				});
-				
 			},
 			draggable : true,
 			buttons : [{
@@ -655,7 +659,7 @@ $(document).ready(function() {
 		
 		$.ajax({
 			type : "post",
-			url : "rspndListAjax",
+			url : "inqryRspndListAjax",
 			dataType : "json",
 			data : params,
 			success : function(res) {
