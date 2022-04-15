@@ -1981,7 +1981,6 @@ function uploadName(e) {
 				</form>
 					<hr class="hr_bot" color="white" width="925px">
 					<hr class="hr_bot" color="white" width="925px">
-					<div class="salesOver_btn nb">영업 종료하기</div>
 					<!-- 끝 -->
 					</div>
 				</div>
