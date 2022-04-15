@@ -84,3 +84,14 @@ function dateFormatter(targetDate){
 	return dateString;
 }
 
+// 팝업 한줄 내용
+function popContOneLine(cont) {
+	var content = "<span class=\"popContOneLine\">" + cont + "</span>";
+	return content;
+}
+
+// 팝업 두줄 내용
+function popContTwoLine(cont) {
+	var content = "<div class=\"popContTwoLine\">" + cont + "</div>";
+	return content;
+}

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface IMsgrDao {
+	
+	public int getMaxNo() throws Throwable;
 
 	public void insertCont(HashMap<String, String> params) throws Throwable;
 
@@ -11,6 +13,5 @@ public interface IMsgrDao {
 
 	public void insertChat(HashMap<String, String> params) throws Throwable;
 
-	public int getMaxNo() throws Throwable;
 
 }
