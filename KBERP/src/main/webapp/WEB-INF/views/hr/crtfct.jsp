@@ -42,7 +42,7 @@ height: 25px;
 .crtfct_rqst_cont {
 display: inline-block;
     vertical-align: top;
-    width: 859px;
+    width: 705px;
     height: 94px;
     padding: 10px;
     border-radius: 5px;
@@ -97,7 +97,7 @@ display: inline-block;
 }
 
 .rqst_input{
-width: 529px;
+	width: 404px;
     height: 21px;
     border-radius: 3px;
     border: solid 1px #d7d7d7;
@@ -110,7 +110,7 @@ width: 529px;
 .rqst_btn_area {
 vertical-align: top;
     display: inline-block;
-    width: 160px;
+    width: 143px;
     /* height: 50px; */
     text-align: right;
 }
@@ -138,7 +138,7 @@ vertical-align: top;
 
 .crtfct_list {
     display: block;
-    width: 882px;
+    width: 730px;
     height: 430px;
     padding: 10px 0px;
 }
@@ -154,7 +154,7 @@ height: 25px;
 .crtfct_list_cont {
     display: inline-block;
     vertical-align: top;
-    width: 882px;
+    width: 730px;
     height: 289px;
     padding: 0px 0 10px 0;
     border-top: solid 1px #d7d7d7;
@@ -194,6 +194,36 @@ height: 25px;
 	color: #333333;
 	font-size: 13px;
 }
+/* .cont_area {
+display : none;
+}
+ */
+ .crtfct_html {
+	font-size: 13px;
+	color: #222222;
+}
+.print_area {
+	display: none;
+}
+.print_area th {
+font-size: 25px;
+font-weight: normal;
+}
+@page {
+    size: 21cm 29.7cm;
+    margin: 30mm 45mm 30mm 45mm;
+}
+
+/* #printArea {
+	width: 750px;
+	height: 1000px;	
+} */
+
+/* .crtfct_html{
+width:18cm;
+height: 28cm;
+} */
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -221,7 +251,7 @@ $(document).ready(function() {
 			console.log("발급신청버튼 클릭! 파람즈 값 : " + params)
 	 		$.ajax({
 			      type : "post",
-			      url : "crtfctUserAjax",
+			      url : "crtfctUserAjax/addCrtfct",
 			      dataType : "json",
 			      data : params,
 			      success : function(res) {
@@ -238,11 +268,53 @@ $(document).ready(function() {
 		}
 	   
    });
+    $("#print").on("click", function(){
+    	$("#rCrtfctNum").val($("#pCrtfctNum").val());
+    	console.log($("#rCrtfctNum").val())
+    	var params = $("#printForm").serialize();
+    	$.ajax({
+		      type : "post",
+		      url : "crtfctUserAjax/print",
+		      dataType : "json",
+		      data : params,
+		      success : function(res) {
+			    	  if(res.res=="success"){
+				    	  console.log(res);
+				    	  onPrint();
+			    	  }
+		      }, 
+		      error : function(req) {
+		         console.log(req.responseText);
+		      }
+	   }); 
+   }); 
    
 });
 
+function onPrint() {
+   var html = document.querySelector('html');
+   var printContents = document.querySelector('#printArea').innerHTML;
+   var printDiv = document.createElement("DIV");
+   printDiv.className = "print_div";
+
+   html.appendChild(printDiv);
+   printDiv.innerHTML = printContents;	
+   document.body.style.display = 'none';
+   window.print();
+   document.body.style.display = 'block';
+   printDiv.style.display = 'none';
+}
+
+
 </script>
 </head>
+<form name="pf">
+	<input type="hidden" name="printzone">
+</form>
+<form action="#" id="printForm">
+	<input type="hidden" name="rCrtfctNum" id="rCrtfctNum">
+	<input type="hidden" name="rEmpNum" id="rEmpNum" value="${sEmpNum}">
+</form>
 <body>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -283,14 +355,14 @@ $(document).ready(function() {
 								<option value="3">3</option>
 							</select>
 						</div>
-						<div class="rqst_slct_wrap">
+<!-- 						<div class="rqst_slct_wrap">
 							<div class="rqst_slct_title">발급유형*</div>
 							<select class="rqst_slct" id="issueType" name="issueType" >
 								<option >선택</option>
 								<option value="0">국문증명서</option>
 								<option value="1">영문증명서</option>
 							</select>
-						</div>
+						</div> -->
 						<div class="rqst_input_wrap">
 							<div class="rqst_input_title">용도 및 제출처*</div>
 								<textarea class="rqst_input" rows="1" cols="20" id="use" name="use"></textarea>
@@ -313,6 +385,7 @@ $(document).ready(function() {
 							<col width="100">
 							<col width="100">
 							<col width="150">
+							<col width="50">
 						</colgroup>
 						<thead>
 							<tr>
@@ -323,6 +396,7 @@ $(document).ready(function() {
 								<th>발급요청일</th>
 								<th>발급완료일</th>
 								<th>발급현황</th>
+								<th>인쇄</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -331,7 +405,7 @@ $(document).ready(function() {
 						            <td>${data.ROWNUM}</td>
 						            <c:choose>
 							            <c:when test="${data.ISSUE_STS_NUM==1}">
-								            <td >${data.CRTFCT_NUM}</td>
+								            <td id="pCrtfctNum">${data.CRTFCT_NUM}</td>
 							            </c:when>
 							            <c:when test="${data.ISSUE_STS_NUM!=1}">
 								            <td >-</td>
@@ -365,14 +439,89 @@ $(document).ready(function() {
 						         			<td style="color:#ff6f60;">발급불가: ${data.RSN}</td> 
 						         		</c:when>
 						         	</c:choose>
+						         	<c:if test="${data.ISSUE_STS_NUM==1}">
+				         				<td><input type="button" value="인쇄" id="print"/></td>
+						         	</c:if>
 						         </tr>
 						      </c:forEach>
 						</tbody>
 					</table>
 				</div>
 			</div>
+		</div> <!-- contarea 끝 -->
 		</div>
-	</div>
+		<div class="print_area" id="printArea">
+			<div class="print_outline">
+				<table class="crtfct_html" border="1" cellspacing="0">
+					<colgroup>
+						<col width="100">
+						<col width="80">
+						<col width="130">
+						<col width="50">
+						<col width="40">
+						<col width="60">
+						<col width="30">
+						<col width="130">
+					</colgroup>
+					<tr height="150">
+						<th colspan="8" align="center"> 재직증명서 </th>
+					</tr>
+					<tr height="35">
+						<td colspan="8" align="right">발급번호 : 제 호</td>
+					</tr>
+					<tr height="35">
+						<td rowspan="2"align="center">인적사항</td>
+						<td align="center">성명</td>
+						<td colspan="2"></td>
+						<td colspan="2"align="center">주민등록번호</td>
+						<td colspan="2"></td>
+					</tr>
+					<tr height="35">
+						<td align="center">주소</td>
+						<td colspan="6"></td>
+					</tr>
+					<tr height="35">
+						<td rowspan="2"align="center">재직사항</td>
+						<td colspan="1"align="center">현소속</td>
+						<td colspan="2"></td>
+						<td colspan="2"align="center">현직위</td>
+						<td colspan="2"></td>
+					</tr>
+					<tr height="35">
+						<td colspan="1">입사일자</td>
+						<td colspan="2"></td>
+						<td colspan="2" align="center">담당업무</td>
+						<td colspan="2"></td>
+					</tr>
+					<tr height="35">
+						<td colspan="2" align="center">용도</td>				
+						<td colspan="6"></td>				
+					</tr>
+					<tr height="250">
+						<td colspan="8" align="center">상기인은 위와 같이 재직하고 있음을 증명합니다.</td>
+					</tr>
+					<tr height="35">
+						<td colspan="5" rowspan="3" align="right" >확인자</td>
+						<td align="center">부서</td>
+						<td colspan="2"></td>
+					</tr>
+					<tr height="35">
+						<td align="center">직급</td>
+						<td colspan="2"></td>
+					</tr>
+					<tr height="35">
+						<td align="center">성명</td>
+						<td colspan="2"></td>
+					</tr>
+					<tr height="150">
+						<td colspan="8" align="center"> 년 월 일</td> 
+					</tr>
+					<tr height="100">
+						<td colspan="8" align="center">한국카카오은행(주)</td>
+					</tr>
+				</table>
+			</div>
+		</div>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>
