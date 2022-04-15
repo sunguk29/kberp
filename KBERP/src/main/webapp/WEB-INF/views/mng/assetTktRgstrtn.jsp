@@ -188,6 +188,7 @@ $("#srchEmp").on("click", function() {
 				});
 				
 				$("#empSrchBtn").on("click", function() {
+					$("#page").val("1");
 					$("#sendSrchTxt").val($("#empSrchTxt").val());
 					reloadList();
 				});
@@ -271,6 +272,7 @@ $("#srchAsset").on("click", function() {
 				});
 				
 				$("#assetSrchBtn").on("click", function() {
+					$("#assetSrchForm #page").val("1");
 					$("#sendSrchTxt1").val($("#assetSrchTxt").val());
 					reloadList1();
 				});
