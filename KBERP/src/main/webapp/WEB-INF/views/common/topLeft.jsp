@@ -27,10 +27,10 @@
 					</div>
 				</c:when>
 				<c:otherwise>
-					<div class="top_menu" topnum="${menu.MENU_NUM}" menunum="${menu.ADD_PRMTR}" adrs="sample">
 					<%-- 
-					<div class="top_menu" topnum="${menu.MENU_NUM}" menunum="${menu.ADD_PRMTR}" adrs="${menu.ADRS}">
+					<div class="top_menu" topnum="${menu.MENU_NUM}" menunum="${menu.ADD_PRMTR}" adrs="sample">
 					 --%>
+					<div class="top_menu" topnum="${menu.MENU_NUM}" menunum="${menu.ADD_PRMTR}" adrs="${menu.ADRS}">
 						<div class="top_menu_text">${menu.MENU_NAME}</div>
 						<div class="top_menu_bar"></div>
 					</div>
