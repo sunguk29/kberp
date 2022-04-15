@@ -971,25 +971,50 @@ $(document).ready(function() {
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#daoName")) {
-			alert("입금계좌 소유주명을 입력하세요.");
-			$("#daoName").focus();
-		} else if($("#dbNum").val() == "9") {
-			alert("입금 은행명을 입력하세요.");
-			$("#dbName").focus();
+			makeAlert("필수 항목 알림", "입금계좌 소유주명을 입력하세요.", function() {
+				$("#daoName").focus();
+			});
+		} else if(!isNaN($("#daoName").val())) {
+			makeAlert("알림", "입금계좌 소유주명은 한글 또는 영문으로 입력하세요.", function() {
+				$("#daoName").val("");
+				$("#daoName").focus();
+			});
+		} else if($("#dbNum").val() == 9) {
+			makeAlert("필수 항목 알림", "입금 은행명을 선택하세요.", function() {
+				$("#dbNum").focus();
+			});
 		} else if(checkEmpty("#daNum")) {
-			alert("입금 계좌번호를 입력하세요.");
-			$("#daNum").focus();
+			makeAlert("필수 항목 알림", "입금 계좌번호를 입력하세요.", function() {
+				$("#daNum").focus();
+			});
+		} else if(isNaN($("#daNum").val())) {
+			makeAlert("알림", "입금 계좌번호는 숫자만 입력 가능합니다.", function() {
+				$("#daNum").val("");
+				$("#daNum").focus();
+			});
 		} else if(checkEmpty("#payerName")) {
-			alert("납입자명을 입력하세요.");
-			$("#payerName").focus();
+			makeAlert("필수 항목 알림", "납입자명을 입력하세요.", function() {
+				$("#payerName").focus();
+			});
+		} else if(!isNaN($("#payerName").val())) {
+			makeAlert("알림", "납입자명은 한글 또는 영문으로 입력하세요.", function() {
+				$("#payerName").val("");
+				$("#payerName").focus();
+			});
 		} else if(checkEmpty("#paNum")) {
-			alert("납입 계좌번호를 입력하세요.");
-			$("#paNum").focus();
+			makeAlert("필수 항목 알림", "납입 계좌번호를 입력하세요.", function() {
+				$("#paNum").focus();
+			});
+		} else if(isNaN($("#paNum").val())) {
+			makeAlert("알림", "납입 계좌번호는 숫자만 입력 가능합니다.", function() {
+				$("#paNum").val("");
+				$("#paNum").focus();
+			});
 		} else if(checkEmpty("#reDate")) {
-			alert("갱신 예정일을 입력하세요.");
-			$("#reDate").focus();
-		} 
-		else {
+			makeAlert("필수 항목 알림", "갱신 예정일을 입력하세요.", function() {
+				$("#reDate").focus();
+			});
+		} else {
 			var html = "";
 			
 			html += "<div class=\"popup_cont2\">저장하시겠습니까?</div>";
@@ -2535,9 +2560,9 @@ function test(t) {
 						<tbody>
 							<tr height="40">
 									<td><input type="button" class="btn" value="고객사" /></td>
-									<td><input type="text" class="txt" value="${data.CLNT_CMPNY_NAME}"/></td>
+									<td><input type="text" class="txt" value="${data.CLNT_CMPNY_NAME}" readonly="readonly" /></td>
 									<td><input type="button" class="btn" value="고객" /></td>
-									<td><input type="text" class="txt"  value="${data.CLNT_NAME}"/></td>		
+									<td><input type="text" class="txt"  value="${data.CLNT_NAME}" readonly="readonly" /></td>		
 							</tr> 
 							<tr height="40">
 									<td><input type="button" class="btn" value="입금계좌 소유주명*" readonly="readonly" /></td>
