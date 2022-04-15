@@ -1268,12 +1268,14 @@ function drawSScList(list) {
 	$(".sBox").html(html);
 }
 
+// 일정 등록 파일명
 function popuploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
 	$("#popFileName").val(filename);
 }
 
+// 일정 수정 파일명
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
