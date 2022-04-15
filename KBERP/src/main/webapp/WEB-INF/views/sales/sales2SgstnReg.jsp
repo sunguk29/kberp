@@ -443,29 +443,62 @@ $(document).ready(function() {
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
 		if($("#sgstnloanCauseNum").val() == 9) {
-			alert("대출 원인을 선택하세요.");
-			$("#sgstnloanCauseNum").focus();
+			makeAlert("필수 항목 알림", "대출 원인을 선택하세요.", function() {
+				$("#sgstnloanCauseNum").focus();
+			});
 		} else if(checkEmpty("#sgstnLoanScale")) {
-			alert("대출 규모를 입력하세요.");
-			$("#sgstnLoanScale").focus();
+			makeAlert("필수 항목 알림", "대출 규모를 입력하세요.", function() {
+				$("#sgstnLoanScale").focus();
+			});
+		} else if(isNaN($("#sgstnLoanScale").val())) {
+			makeAlert("알림", "대출 규모는 숫자만 입력 가능합니다.", function() {
+				$("#sgstnLoanScale").val("");
+				$("#sgstnLoanScale").focus();
+			});
 		} else if($("#sgstnloanType").val() == 9) {
-			alert("대출 유형을 선택하세요.");
-			$("#sgstnloanType").focus();
+			makeAlert("필수 항목 알림", "대출 유형을 선택하세요.", function() {
+				$("#sgstnloanType").focus();
+			});
 		} else if(checkEmpty("#sgstnloanTime")) {
-			alert("대출 시기를 선택하세요.");
-			$("#sgstnloanTime").focus();
+			makeAlert("필수 항목 알림", "대출 시기를 선택하세요.", function() {
+				$("#sgstnloanTime").focus();
+			});
 		} else if(checkEmpty("#sgstnRdmptnTime")) {
-			alert("상환 시기를 선택하세요.");
-			$("#sgstnRdmptnTime").focus();
+			makeAlert("필수 항목 알림", "상환 시기를 선택하세요.", function() {
+				$("#sgstnRdmptnTime").focus();
+			});
 		} else if(checkEmpty("#sgstnTotalAmnt")) {
-			alert("자산 총액을 입력하세요.");
-			$("#sgstnTotalAmnt").focus();
+			makeAlert("필수 항목 알림", "자산 총액을 입력하세요.", function() {
+				$("#sgstnTotalAmnt").focus();
+			});
+		} else if(isNaN($("#sgstnTotalAmnt").val())) {
+			makeAlert("알림", "자산 총액은 숫자만 입력 가능합니다.", function() {
+				$("#sgstnTotalAmnt").val("");
+				$("#sgstnTotalAmnt").focus();
+			});
 		} else if(checkEmpty("#sgstnDebtAmnt")) {
-			alert("부채액을 입력하세요.");
-			$("#sgstnDebtAmnt").focus();
+			makeAlert("필수 항목 알림", "부채액을 입력하세요.", function() {
+				$("#sgstnDebtAmnt").focus();
+			});
+		} else if(isNaN($("#sgstnDebtAmnt").val())) {
+			makeAlert("알림", "부채액은 숫자만 입력 가능합니다.", function() {
+				$("#sgstnDebtAmnt").val("");
+				$("#sgstnDebtAmnt").focus();
+			});
+		} else if(isNaN($("#sgstnAvgRvnAmnt").val())) {
+			makeAlert("알림", "평균 매출액은 숫자만 입력 가능합니다.", function() {
+				$("#sgstnAvgRvnAmnt").val("");
+				$("#sgstnAvgRvnAmnt").focus();
+			});
+		} else if(isNaN($("#sgstnEmpCount").val())) {
+			makeAlert("알림", "사원 수는 숫자만 입력 가능합니다.", function() {
+				$("#sgstnEmpCount").val("");
+				$("#sgstnEmpCount").focus();
+			});
 		} else if(checkEmpty("#dtlCont")) {
-			alert("상세내용을 입력하세요.");
-			$("#dtlCont").focus();
+			makeAlert("필수 항목 알림", "상세내용을 입력하세요.", function() {
+				$("#dtlCont").focus();
+			});
 		} else {
 			var html = "";
 			

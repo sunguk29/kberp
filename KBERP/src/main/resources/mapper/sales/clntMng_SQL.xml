@@ -5,17 +5,19 @@
 	<select id="getClntCmpntList" parameterType="hashmap" resultType="hashmap">
 		SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, TRIM(TO_CHAR(RVN, 'L999,999,999,999,999')) AS RVN, A.CNT, A.DEL_CHECK
 		FROM (  SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, A.RVN, A.CNT,
+							ROW_NUMBER() OVER(ORDER BY
 							<choose>
 								<when test="listSort == 9">
-									ROW_NUMBER() OVER(ORDER BY A.RNUM DESC) AS RNUM2
+									 A.RNUM
 								</when>
 								<when test="listSort == 0">
-									ROW_NUMBER() OVER(ORDER BY A.RVN DESC) AS RNUM2
+									A.RVN 
 								</when>
 								<when test="listSort == 1">
-									ROW_NUMBER() OVER(ORDER A.CLNT_CMPNY_NUM DESC) AS RNUM2
+									A.CLNT_CMPNY_NAME
 								</when>
 							</choose>
+							DESC) AS RNUM2
 		               , A.DEL_CHECK
 		        FROM (  SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, A.RVN, A.CNT,
 		                       A.CLNT_CMPNY_CLSFY_NUM, A.DEL_CHECK
@@ -190,17 +192,19 @@
 	<select id="getClntList" parameterType="hashmap" resultType="hashmap">
 		SELECT EC.CLNT_NUM, NVL(EC.DEPT, ' ') AS DEPT, NVL(EC.DUTY, ' ') AS DUTY, NVL(EC.EMAIL, ' ') AS EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM
 		FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM,
-		               <choose>
+		               ROW_NUMBER() OVER(ORDER BY 
+		                <choose>
 							<when test="listSort == 9">
-								ROW_NUMBER() OVER(ORDER BY EC.RNUM DESC) AS RNUM2 
+								EC.RNUM
 							</when>
 							<when test="listSort == 0">
-								ROW_NUMBER() OVER(ORDER BY EC.CLNT_NUM DESC) AS RNUM2
+								EC.CLNT_NUM
 							</when>
 							<when test="listSort == 1">
-								ROW_NUMBER() OVER(ORDER BY EC.CLNT_CMPNY_NAME DESC) AS RNUM2
+								EC.CLNT_CMPNY_NAME
 							</when>
 						</choose>
+					   DESC) AS RNUM2
 		        FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM
 		                FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME,
 		                               EC.MBL, ROW_NUMBER() OVER(ORDER BY EC.RNUM DESC) AS RNUM
