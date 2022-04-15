@@ -162,30 +162,32 @@ function uploadName(e) {
 								</tr>
 								<tr height="40">
 									<td><input type="button" class="btn" value="이자율 *"  /></td>
-									<td><input type="text" class="txt" name="intrst_rate" id="intrst_rate"/></td> 				 			<!-- INTRST_RATE 으로 / 보낼값 8  -->
-									<td><input type="button" class="btn" value="이자 납부 방식 *" /></td>
-									<td>
-										<select class="txt" name="intrst_pymnt_mthd" id="intrst_pymnt_mthd"> 										<!-- INTRST_PYMNT_MTHD_NUM 으로 / 보낼값 9  -->
+									<td><input type="text" class="txt" name="intrst_rate" id="intrst_rate"/></td>				 			<!-- INTRST_RATE 으로 / 보낼값 8  -->
+									<!-- <td><input type="hidden" value="이자 납부 방식 *" /></td>
+									<td><input type="hidden" name="intrst_pymnt_mthd" id="intrst_pymnt_mthd" value="-1" /></td> -->
+									<!-- <td>
+										<select class="txt" name="intrst_pymnt_mthd" id="intrst_pymnt_mthd"> 										INTRST_PYMNT_MTHD_NUM 으로 / 보낼값 9 
 											<option value="-1">선택 하세요</option>
 											<option value="0">원금 균등</option>
 											<option value="1">원리금 균등</option>
 											<option value="2">만기 일시상환</option>
 										</select>
-									</td>
+									</td> -->
 								</tr>
 								<tr height="40">
-									<td><input type="button" class="btn" value="원금 납부 방식 *" /></td>
-									<td>
-										<select class="txt" name="prncpl_pymnt_mthd" id="prncpl_pymnt_mthd"> 										<!-- PRNCPL_PYMNT_MTHD_NUM 으로 / 보낼값 10  -->
+									<!-- <td><input type="hidden" class="btn" value="원금 납부 방식 *" /></td>
+									<td><input type="hidden" name="prncpl_pymnt_mthd" id="prncpl_pymnt_mthd" value="-1" /></td> -->
+									<!-- <td>
+										<select class="txt" name="prncpl_pymnt_mthd" id="prncpl_pymnt_mthd"> 										PRNCPL_PYMNT_MTHD_NUM 으로 / 보낼값 10 
 											<option value="-1">선택 하세요</option>
 											<option value="0">원금 균등</option>
 											<option value="1">원리금 균등</option>
 											<option value="2">만기 일시상환</option>
 										</select>
-									</td>
+									</td> -->
 									<td><input type="button" class="btn" value="중도상환 가능 여부 *" /></td>
 									<td>
-										<select class="txt" name="mid_prdmptn_psbl_check" id="mid_prdmptn_psbl_check"> 									<!-- MID_RDMPTN_PSBL_CHECK 으로 / 보낼값 11  -->
+										<select class="txt" name="mid_prdmptn_psbl_check" id="mid_prdmptn_psbl_check"> 									<!-- MID_RDMPTN_PSBL_CHECK 으로 / 보낼값 11 --> 
 											<option value="-1">선택 하세요</option>
 											<option value="0">가능</option>
 											<option value="1">불가능</option>

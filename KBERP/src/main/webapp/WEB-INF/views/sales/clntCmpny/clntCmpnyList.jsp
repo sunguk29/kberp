@@ -218,6 +218,8 @@ $(document).ready(function() {
 		
 		$("#page").val("1");
 		$("#clntCmpnyClsfyNum").val($(this).attr("num"));
+		$("#oldClntCmpnyClsfyNum").val($(this).attr("num"));
+		$("#listSort").val("9");
 		
 		if($("#searchTxt").val() != "") { // 검색어 txt가 비어있지 않으면 초기화
 			var txt = document.getElementById("searchTxt");
@@ -253,6 +255,7 @@ $(document).ready(function() {
 	
 	// 검색
 	$("#searchBtn").on("click", function() {
+		var clsfyNum = $("#clntCmpnyClsfyNum").val();
 		if($("#searchType").val() == 1){
 			if(isNaN($("#searchTxt").val())) {
 				makeAlert("경고", "고객사번호 검색시 숫자만 입력해주세요(CC01 -> 01)", function() {
@@ -260,8 +263,6 @@ $(document).ready(function() {
 					$("#searchTxt").focus();
 				});
 			} else {
-				var clsfyNum = $("#clntCmpnyClsfyNum").val();
-				
 				if(clsfyNum != "9") {
 					$(".sts").children(".sts_list_on").attr("class", "sts_list");
 					$("#sts" + clsfyNum + "").removeClass();
@@ -277,8 +278,6 @@ $(document).ready(function() {
 				reloadList();
 			}
 		} else {
-			var clsfyNum = $("#clntCmpnyClsfyNum").val();
-			
 			if(clsfyNum != "9") {
 				$(".sts").children(".sts_list_on").attr("class", "sts_list");
 				$("#sts" + clsfyNum + "").removeClass();
