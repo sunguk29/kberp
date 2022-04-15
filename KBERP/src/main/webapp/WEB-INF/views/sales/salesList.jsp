@@ -607,11 +607,12 @@ $(document).ready(function() {
 		reloadList();
 	})
 	
+	// 검색 엔터 처리
 	$("#searchTxt").on("keypress", function(event) {
 		if(event.keyCode == 13) {
 			$("#searchBtn").click();
 			
-			return flase; // event 실행 않도록.
+			return false; // event 실행 않도록.
 		}
 	});
 	
