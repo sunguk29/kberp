@@ -612,7 +612,6 @@ public class SalesMngController {
 
 	// salesMng4ActionAjax : 계약 등록, 수정, 삭제
 	@RequestMapping(value = "/salesMng4ActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
-
 	@ResponseBody
 	public String salesMng4ActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn)
 			throws Throwable {
