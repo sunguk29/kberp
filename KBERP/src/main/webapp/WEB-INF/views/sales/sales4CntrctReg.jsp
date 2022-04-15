@@ -933,8 +933,6 @@ pre {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	console.log(${param.salesNum});
-	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
 
@@ -972,16 +970,7 @@ $(document).ready(function() {
 	
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
-		if(checkEmpty("#cntrctDt")) {
-			alert("계약일을 선택하세요.");
-			$("#cntrctDt").focus();
-		} else if($("#cntrctSdt").val() == 9) {
-			alert("계약기간 시작일을 선택하세요.");
-			$("#cntrctSdt").focus();
-		} else if(checkEmpty("#cntrctEdt")) {
-			alert("계약기간 종료일을 입력하세요.");
-			$("#cntrctEdt").focus();
-		} else if(checkEmpty("#daoName")) {
+		if(checkEmpty("#daoName")) {
 			alert("입금계좌 소유주명을 입력하세요.");
 			$("#daoName").focus();
 		} else if($("#dbNum").val() == "9") {
@@ -1713,6 +1702,21 @@ $(document).ready(function() {
 	
 	}
 	
+// 	계약 종료일
+	var today = new Date();
+	if(${param.loanPrd eq 0}) {
+		today.setMonth(today.getMonth() + 6)
+		document.getElementById("cntrctEdt").value = today.getFullYear() + lpad(today.getMonth() + 1, 2, 0) + lpad(today.getDate(), 2, 0);
+	} else if(${param.loanPrd eq 1}) {
+		today.setMonth(today.getMonth() + 12)
+		document.getElementById("cntrctEdt").value = today.getFullYear() + lpad(today.getMonth() + 1, 2, 0) + lpad(today.getDate(), 2, 0);
+	} else if(${param.loanPrd eq 2}) {
+		today.setMonth(today.getMonth() + 36)
+		document.getElementById("cntrctEdt").value = today.getFullYear() + lpad(today.getMonth() + 1, 2, 0) + lpad(today.getDate(), 2, 0);
+	} else if(${param.loanPrd eq 3}) {
+		today.setMonth(today.getMonth() + 60)
+		document.getElementById("cntrctEdt").value = today.getFullYear() + lpad(today.getMonth() + 1, 2, 0) + lpad(today.getDate(), 2, 0);
+	}
 	
 }); // JS end
 
@@ -2516,6 +2520,7 @@ function test(t) {
 				<hr class="hr_bot" color="#4B94F2" width="925px">
 				<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
+					<input type="hidden" id="cntrctEdt" name="cntrctEdt" /> <!-- 영업기회에서 가져온 영업번호 -->
 					<input type="hidden" id= "mdNum" name="mdNum" />
 					<div class="bot_title"><h3>계약<div class="drop_btn"></div></h3></div>
 					 <hr class="hr_bot" color="white" width="925px"> 
@@ -2528,18 +2533,6 @@ function test(t) {
 							<col width="250" />
 						</colgroup>
 						<tbody>
-							<tr height="40">
-								<td><input type="button" class="btn" value="계약일*" readonly="readonly" /></td>
-								<td colspan="3"><input type="date" class="txt" id="cntrctDt" name="cntrctDt" /></td>		
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="계약기간*" readonly="readonly"/></td>
-								<td><input type="date" class="txt" id="cntrctSdt" name="cntrctSdt"/></td>
-								<td>
-									<div class="wave"> ~ </div>
-								</td>
-								<td><input type="date" class="txt" id="cntrctEdt" name="cntrctEdt"/></td>
-							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="고객사" /></td>
 									<td><input type="text" class="txt" value="${data.CLNT_CMPNY_NAME}"/></td>
