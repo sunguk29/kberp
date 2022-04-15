@@ -640,10 +640,10 @@ hr { /* 구분선 */
 	line-height: 33px;
 	border: none;	
 }
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+#a {
+	color : red;
+	font-size: 9pt;
+	display : none;
 }
 </style>
 <script type="text/javascript">
@@ -706,6 +706,16 @@ $(document).ready(function() {
 		$("#attFile").val(""); // 기존파일 초기화
 	});
 	
+	// 가능여부 숫자 100 넘어가면 초기화 
+	$("#psblCheck").on("change", function() {
+		if($(this).val() * 1 > 100) {
+			$(this).val("");
+			a.style.display = "block";
+		} else {
+			a.style.display = "";
+		}
+	});
+	
 	// 저장버튼
 	$("#writeBtn").on("click", function() {
 		if(checkEmpty("#leadName")) {
@@ -725,7 +735,7 @@ $(document).ready(function() {
 			$("#mngEmp").focus();
 		} else if(checkEmpty("#psblCheck")) {
 			alert("가능여부를 입력하세요.");
-			$("#psblCheck").focus();
+			$("#psblCheck").focus();		
 		} else {	
 			var html = "";
 			
@@ -1432,6 +1442,7 @@ function uploadName(e) {
 	var leadfilename = files[0].name;
 	$("#leadFileName").val(leadfilename);
 }
+
 </script>
 </head>
 <body>
@@ -1535,9 +1546,9 @@ function uploadName(e) {
 									</td>
 									<td><input type="button" class="btn" value="가능여부 *" readonly="readonly"/></td>
 									<td>
-										<input type="text" class="txt" id="psblCheck" name="psblCheck" min="0" max="100" value="${data.PSBL_CHECK}" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" style="text-align: right;"/>
-										<%-- <input type="number" class="txt" id="psblCheck" name="psblCheck" min="0" max="100" value="${data.PSBL_CHECK}" style="text-align: right;"/> --%>
+										<input type="text" class="txt" id="psblCheck" name="psblCheck" value="${data.PSBL_CHECK}" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" style="text-align: right;" maxlength="3"/>
 										<div id="percent">%</div>
+										<span id="a">숫자 0~100까지만 입력가능합니다.</span>
 									</td>
 								</tr>
 								<tr>

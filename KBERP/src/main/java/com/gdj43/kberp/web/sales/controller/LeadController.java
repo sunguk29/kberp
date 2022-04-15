@@ -52,7 +52,7 @@ public class LeadController {
 		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(dt);
-		cal.add(Calendar.DATE, -60);
+		cal.add(Calendar.DATE, -30);
 		
 		String startDate = sdf.format(cal.getTime());
 		String endDate = sdf.format(dt);
