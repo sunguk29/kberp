@@ -645,7 +645,6 @@ $(document).ready(function() {
 			success : function(res) {
 				$("#actionForm").attr("action", "sales3QtnReg");
 				$("#actionForm").submit();
-				console.log("여기도?");
 			},
 			error : function(req) {
 				console.log(req.responseText);

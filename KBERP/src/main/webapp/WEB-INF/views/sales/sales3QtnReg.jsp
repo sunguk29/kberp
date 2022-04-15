@@ -1030,7 +1030,7 @@ $(document).ready(function() {
 												data : params,
 												success : function(res) {
 													if(res.res == "success") {
-														$("#contForm").attr("action", "salesList");
+														$("#contForm").attr("action", "sales3QtnCont");
 														$("#contForm").submit();
 													} else {
 														alert("등록중 문제가 발생하였습니다.");
