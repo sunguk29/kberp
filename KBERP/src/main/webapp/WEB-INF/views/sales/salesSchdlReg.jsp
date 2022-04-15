@@ -1,12 +1,21 @@
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now();
+	request.setAttribute("version", version);
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>카카오뱅크 ERP - 일정</title>
+<!-- popup css파일 -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}" /></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -440,19 +449,19 @@ $(document).ready(function() {
 	/* 저장 이동 및 알림 이벤트 */
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#ssname")){
-			makeAlert("필수기재사항", "일정명을 입력하세요", function() {
+			makeAlert("필수기재사항", popContTwoLine("일정명을 입력하세요.<br/>나가시겠습니까?"), function() {
 				$("#ssname").focus();			
 			});
 		} else if($("#ssactvtyclsfy").val() == 9){
-			makeAlert("필수기재사항", "활동분류를 입력하세요", function() {
+			makeAlert("필수기재사항", popContTwoLine("활동분류를 입력하세요.<br/>나가시겠습니까?"), function() {
 				$("#ssactvtyclsfy").focus();			
 			});
 		} else if(checkEmpty("#sdt")){
-			makeAlert("필수기재사항", "시작일을 입력하세요", function() {
+			makeAlert("필수기재사항", popContTwoLine("시작일을 입력하세요.<br/>나가시겠습니까?"), function() {
 				$("#sdt").focus();				
 			});
 		} else if(checkEmpty("#ssactvtycont")){
-			makeAlert("필수입력", "활동내용을 입력하세요", function() {
+			makeAlert("필수입력", popContTwoLine("활동내용을 입력하세요.<br/>나가시겠습니까?"), function() {
 				$("#ssactvtycont").focus();			
 			});
 		} else {

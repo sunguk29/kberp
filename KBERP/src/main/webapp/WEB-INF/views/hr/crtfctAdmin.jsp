@@ -180,6 +180,13 @@ height: 25px;
 	margin-bottom: 15px;
 }
 
+.crtfct_table {
+	display: inline-table;
+	border-collapse: collapse;
+	width: 100%;
+	margin-bottom: 15px;
+}
+
 .crtfct_table thead tr {
    background-color: #f4f4f4;
    border-bottom: 1px solid #d7d7d7;
@@ -294,6 +301,18 @@ display: inline-block;
     color: #333333;
     border-radius: 5px;
 }
+/* 프린트 영역 숨기기 */
+#pArea {
+	display: none;
+	width: 21cm;
+	height: 29.7cm
+}
+
+@page {
+    size: 21cm 29.7cm;
+    margin: 30mm 45mm 30mm 45mm;
+}
+
 
 </style>
 <script type="text/javascript">
@@ -303,7 +322,7 @@ $(document).ready(function() {
    $(".crtfct_list_cont").slimScroll({height: "200px"}); // 슬림스크롤
    
    // 신청목록 클릭 시 
-   $(".crtfct_table tbody tr").on("click", function() {
+   $("#crtfctTable tbody tr").on("click", function() {
 	   $("#rCrtfctNum").val($(this).attr("rCrtfctNum")); // 선택한 tr의 증명서번호 값 보관
 	   $("#rEmpNum").val($(this).attr("rEmpNum")); // 선택한 tr의 증명서번호 값 보관
 	   console.log("증명서번호 : " +  $("#rCrtfctNum").val())
@@ -368,14 +387,6 @@ $(document).ready(function() {
 	    			html += "				<input type=\"text\" value=\"퇴직증명서\" class=\"r_input\"/>    ";
 	    			} else {
 	    			html += "				<input type=\"text\" value=\"기타\" class=\"r_input\"/>    ";
-	    			}
-	    			html += "			</div>                                          ";
-	    			html += "			<div class=\"r_info\">                          ";
-	    			html += "				<div class=\"r_info_txt\">발급유형</div>    ";
-	    			if(res.cont.ISSUE_TYPE == 0) {
-	    			html += "				<input type=\"text\" value=\"국문증명서\" class=\"r_input\"/>    ";
-	    			} else {
-	    			html += "				<input type=\"text\" value=\"영문증명서\"  class=\"r_input\"/>    ";
 	    			}
 	    			html += "			</div>                                          ";
 	    			html += "		</div>                                              ";
@@ -494,7 +505,103 @@ $(document).ready(function() {
 
 	});
    
+   // 출력버튼 클릭 시 
+   $("#printBtn").on("click", function(){
+	   /* 	$("#rCrtfctNum").val($("#pCrtfctNum").val());
+		console.log($("#rCrtfctNum").val())
+		var params = $("#printForm").serialize();
+		$.ajax({
+		      type : "post",
+		      url : "crtfctUserAjax/print",
+		      dataType : "json",
+		      data : params,
+		      success : function(res) {
+			    	  if(res.res=="success"){
+				    	  console.log(res);
+				    	  onPrint();
+			    	  }
+		      }, 
+		      error : function(req) {
+		         console.log(req.responseText);
+		      }
+	   });  */
+	  printDraw(); 
+	   $("#pArea").hide();
+   });
+   
 });
+
+function printDraw(){
+	var html = "";
+	html += "<div class=\"print_area\" id=\"printArea\">                                           ";
+	html += "	<table class=\"crtfct_html\" border=\"1\" cellspacing=\"0\">                       ";
+	html += "		<colgroup>                                                                     ";
+	html += "			<col width=\"100\">                                                        ";
+	html += "			<col width=\"80\">                                                         ";
+	html += "			<col width=\"130\">                                                        ";
+	html += "			<col width=\"50\">                                                         ";
+	html += "			<col width=\"40\">                                                         ";
+	html += "			<col width=\"60\">                                                         ";
+	html += "			<col width=\"30\">                                                         ";
+	html += "			<col width=\"130\">                                                        ";
+	html += "		</colgroup>                                                                    ";
+	html += "		<tr height=\"150\">                                                            ";
+	html += "			<th colspan=\"8\" align=\"center\"> 재직증명서 </th>                       ";
+	html += "		</tr>                                                                          ";
+	html += "		<tr height=\"35\">                                                             ";
+	html += "			<td colspan=\"8\" align=\"right\">발급번호 : 제 호</td>                    ";
+	html += "		</tr>                                                                          ";
+	html += "		<tr height=\"35\">                                                             ";
+	html += "			<td rowspan=\"2\"align=\"center\">인적사항</td>                            ";
+	html += "			<td align=\"center\">성명</td>                                             ";
+	html += "			<td colspan=\"2\"></td>                                                    ";
+	html += "			<td colspan=\"2\"align=\"center\">주민등록번호</td>                        ";
+	html += "			<td colspan=\"2\"></td>                                                    ";
+	html += "		</tr>                                                                          ";
+	html += "		<tr height=\"35\">                                                             ";
+	html += "			<td align=\"center\">주소</td>                                             ";
+	html += "			<td colspan=\"6\"></td>                                                    ";
+	html += "		</tr>                                                                          ";
+	html += "		<tr height=\"35\">                                                             ";
+	html += "			<td rowspan=\"2\"align=\"center\">재직사항</td>                            ";
+	html += "			<td colspan=\"1\"align=\"center\">현소속</td>                              ";
+	html += "			<td colspan=\"2\"></td>                                                    ";
+	html += "			<td colspan=\"2\"align=\"center\">현직위</td>                              ";
+	html += "			<td colspan=\"2\"></td>                                                    ";
+	html += "		</tr>                                                                          ";
+	html += "		<tr height=\"35\">                                                             ";
+	html += "			<td colspan=\"1\">근무일</td>                                            ";
+	html += "			<td colspan=\"7\"></td>                                                    ";
+	html += "		</tr>                                                                          ";
+	html += "		<tr height=\"35\">                                                             ";
+	html += "			<td colspan=\"2\" align=\"center\">용도</td>				               ";
+	html += "			<td colspan=\"6\"></td>				                                       ";
+	html += "		</tr>                                                                          ";
+	html += "		<tr height=\"250\">                                                            ";
+	html += "			<td colspan=\"8\" align=\"center\">상기인은 위와 같이 재직하고 있음을 증명합니다.</td>";
+	html += "		</tr>                                                                          ";
+	html += "		<tr height=\"150\">                                                            ";
+	html += "			<td colspan=\"8\" align=\"center\"> 년 월 일</td>                          ";
+	html += "		</tr>                                                                          ";
+	html += "		<tr height=\"100\">                                                            ";
+	html += "			<td colspan=\"8\" align=\"center\">한국카카오은행(주)</td>                 ";
+	html += "		</tr>                                                                          ";
+	html += "	</table>                                                                           ";
+	html += "</div>                                                                                ";
+	$("#pArea").html(html);
+	
+   var html = document.querySelector('html');
+   var printContents = document.querySelector('#printArea').innerHTML;
+   var printDiv = document.createElement("DIV");
+   printDiv.className = "print_div";
+
+   html.appendChild(printDiv);
+   printDiv.innerHTML = printContents;	
+   document.body.style.display = 'none';
+   window.print();
+   document.body.style.display = 'block';
+   printDiv.style.display = 'none';
+}
 
 </script>
 </head>
@@ -525,7 +632,7 @@ $(document).ready(function() {
 				<div class="crtfct_rqst">
 					<div class="crtfct_rqst_title">신청목록</div>
 				<div class="rqst_list_cont">
-					<table class="crtfct_table">
+					<table class="crtfct_table" id="crtfctTable">
 						<colgroup>
 							<col width="40">      
 							<col width="100">
@@ -585,6 +692,7 @@ $(document).ready(function() {
 							<col width="100">
 							<col width="100">
 							<col width="100">
+							<col width="50">
 						</colgroup>
 						<thead>
 							<tr>
@@ -595,11 +703,12 @@ $(document).ready(function() {
 								<th>발급요청일</th>
 								<th>발급완료일</th>
 								<th>발급현황</th>
+								<th>출력</th>
 							</tr>
 						</thead>
 						<tbody>
 							<c:forEach var="data" items="${iList}">
-						         <tr>
+						         <tr rCrtfctNum="${data.CRTFCT_NUM}" rEmpNum="${data.RQST_EMP_NUM}">
 						            <td>${data.ROWNUM}</td>
 						            <c:choose>
 							            <c:when test="${data.ISSUE_STS_NUM==1}">
@@ -637,6 +746,9 @@ $(document).ready(function() {
 						         			<td style="color:#ff6f60;">발급불가: ${data.RSN}</td> 
 						         		</c:when>
 						         	</c:choose>
+ 	      						    <c:if test="${data.ISSUE_STS_NUM==1}">
+				         				<td><input type="button" value="인쇄" id="printBtn"/></td>
+						         	</c:if>
 						         </tr>
 						      </c:forEach>
 						</tbody>
@@ -644,6 +756,7 @@ $(document).ready(function() {
 					</table>
 				</div>
 			</div>
+			<div id="pArea"></div>
 		</div>
 	</div>
 	<!-- bottom -->

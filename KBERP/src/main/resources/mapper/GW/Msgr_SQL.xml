@@ -110,7 +110,7 @@
 	
 <!-- 채팅방 인원 추가 -->	
 	<update id="joinChat" parameterType="hashmap">
-		UPDATE MSGR SET EMP_NUM = #{EMP_NUM},
+		UPDATE MSGR SET EMP_NUM = #{empNum},
 	                 RGSTRTN_DT = #{rgdt}
 		WHERE CHAT_NUM = #{chatNum}
 	</update>
@@ -128,14 +128,6 @@
 		WHERE CONT_NUM > #{lastChatNo}
 		ORDER BY CONT_NUM ASC
 	</select>
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 </mapper>

@@ -32,8 +32,6 @@ $(document).ready(function() {
 	$('#md_type').val(${data.MD_TYPE_NUM}).prop("selected", true);
 	$('#md_grade').val(${data.MD_GRADE_NUM}).prop("selected", true);
 	$('#sales_sts').val(${data.SALES_STS_NUM}).prop("selected", true);
-	$('#intrst_pymnt_mthd').val(${data.INTRST_PYMNT_MTHD_NUM}).prop("selected", true);
-	$('#prncpl_pymnt_mthd').val(${data.PRNCPL_PYMNT_MTHD_NUM}).prop("selected", true);
 	$('#mid_prdmptn_psbl_check').val(${data.MID_RDMPTN_PSBL_CHECK}).prop("selected", true);
 	$('#loan_prd').val(${data.LOAN_PRD}).prop("selected", true);
 	
@@ -199,30 +197,30 @@ function fileDownLoad(){
 								<td>
 									<input type="text" class="txt" readonly="readonly" disabled="disabled" id="intrst_rate" value="${data.INTRST_RATE}" /> <!-- 받을 값 8 -->
 								</td>				
-								<td>
+								<!-- <td>
 									<input type="button" class="btn" value="이자 납부 방식 *" />
 								</td>
 								<td>
-									<select class="txt" disabled="disabled" id="intrst_pymnt_mthd">										<!-- 받을 값 9 -->
+									<select class="txt" disabled="disabled" id="intrst_pymnt_mthd">										받을 값 9
 										<option value="-1">선택 하세요</option>
 										<option value="0">원금 균등</option>
 										<option value="1">원리금 균등</option>
 										<option value="2">만기 일시상환</option>
 									</select>
-								</td>
+								</td> -->
 							</tr>
 							<tr height="40">
-								<td>
+								<!-- <td>
 									<input type="button" class="btn" value="원금 납부 방식 *" />
 								</td>
 								<td>
-									<select class="txt" disabled="disabled" id="prncpl_pymnt_mthd">									<!-- 받을 값 10 -->
+									<select class="txt" disabled="disabled" id="prncpl_pymnt_mthd">									받을 값 10
 										<option value="-1">선택 하세요</option>
 										<option value="0">원금 균등</option>
 										<option value="1">원리금 균등</option>
 										<option value="2">만기 일시상환</option>
 									</select>
-								</td>
+								</td> -->
 								<td>
 									<input type="button" class="btn" value="중도상환 가능 여부 *" />
 								</td>

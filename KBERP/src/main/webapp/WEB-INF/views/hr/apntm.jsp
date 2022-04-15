@@ -1440,7 +1440,8 @@ $(document).ready(function() {
 					      data : params,
 					      success : function(res) {		
 				    	 			 if(res.res=="success"){
-							    		  makeAlert("알림", "결재가 요청되었습니다.", function(){		
+							    		  makeAlert("알림", "결재가 요청되었습니다.", function(){
+							    			  
 													location.reload();
 		    	 									 console.log(res);
    															});
@@ -1451,7 +1452,7 @@ $(document).ready(function() {
 					      		}
  					 	
   					     
-					}); // 아작스 끝
+					}); 
 				}
 			}, {
 				name : "취소"
