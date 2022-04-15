@@ -349,7 +349,15 @@
 	font-size: 8pt;
 }
 
-#clnt_type, #type_case{
+#clnt_type {
+	display: inline-block;
+	height: 21px;
+	width: 107px;
+    margin-left: -4px;
+} 
+
+#type_case {
+	display: inline-block;
 	width: 100px;
 }
 
@@ -379,7 +387,8 @@
 	vertical-align: top;
 	resize: none;
 	margin-bottom: 5px;
-	white-space: pre-line;
+	white-space: pre-wrap;
+	text-overflow: ellipsis;
 }
 
 .rspnd_top_row1 {
@@ -458,7 +467,16 @@ $(document).ready(function() {
 		html += "			<input type=\"hidden\" id=\"guide_num\" name=\"guide_num\"/>";
 		html += "			<input type=\"hidden\" id=\"emp_num\" name=\"emp_num\" value=\"" + $("#emp_num").val() + "\"/>";
 		html += "			<div class=\"rspnd_top_row1\">";
-		html += "				<div class=\"rspndPopTxt\">고객유형</div><input type=\"text\" id=\"clnt_type\" name=\"clnt_type\"/>";
+		html += "				<div class=\"rspndPopTxt\">고객유형</div>";
+		html += "           		<select id=\"clnt_type\" name=\"clnt_type\">";
+		html += "						<option value=\"일반\">일반</option>";
+		html += "						<option value=\"폭언\">폭언</option>";
+		html += "						<option value=\"성희롱\">성희롱</option>";
+		html += "						<option value=\"허위 민원\">허위 민원</option>";
+		html += "						<option value=\"반복적 민원\">반복적 민원</option>";
+		html += "						<option value=\"노인/농아자\">노인/농아자</option>";
+		html += "						<option value=\"기타\">기타</option>";
+		html += "					</select>";
 		html += "				<div class=\"rspndPopTxt\">대응방안</div><textarea rows=\"7\" cols=\"58\" id=\"rspns_plan\" name=\"rspns_plan\"></textarea>";
 		html += "			</div>";
 		html += "			<div class=\"rspndPopTxt\" id=\"type_case_div\">유형별 사례</div><input type=\"text\" id=\"type_case\" name=\"type_case\"/>";
@@ -542,6 +560,9 @@ $(document).ready(function() {
 							}
 						}); // ajax end
 					}
+					$("#clnt_type").val("일반"); // 고객유형
+					$("#rspns_plan").val(""); // 대응방안
+					$("#type_case").val(""); // 유형별 사례
 				});
 				// 목록의 수정버튼
 				$("#guide_table_tbody").on("click", "#uBtn", function() {
@@ -604,6 +625,10 @@ $(document).ready(function() {
 						}); // ajax end
 						
 					}
+					$("#clnt_type").val("일반"); // 고객유형
+					$("#rspns_plan").val(""); // 대응방안
+					$("#type_case").val(""); // 유형별 사례
+					$(".update").attr("class", "add");
 				});
 				
 				// 대응가이드 삭제버튼
@@ -636,6 +661,9 @@ $(document).ready(function() {
 						}); // ajax end
 						
 					}
+					$("#clnt_type").val("일반"); // 고객유형
+					$("#rspns_plan").val(""); // 대응방안
+					$("#type_case").val(""); // 유형별 사례
 				});
 			},
 			draggable : true,
