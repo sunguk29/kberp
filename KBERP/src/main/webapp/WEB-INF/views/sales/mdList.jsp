@@ -55,6 +55,7 @@ $(document).ready(function() {
 
 	goSrch(); 			/* 검색 */
 	
+	goSort()			/* 정렬 */
 	
 	//상세보기
 	goDetailView();
@@ -217,13 +218,15 @@ $(document).ready(function() {
 								</td>
 								<td>
 									<select name="sort_gbn" id="sort_gbn">
-										<option selected="selected" value="0">등록일</option>										<!-- 보낼값7 -->
-										<option value="1" >상품이름</option>
-										<option value="2">상품등급</option>
+										<option selected="selected" value="0">선택안함</option>										<!-- 보낼값7 -->
+										<option value="1">등록일</option>										<!-- 보낼값7 -->
+										<option value="2" >상품이름</option>
+										<option value="3">상품등급</option>
+										<option value="4">대출한도금액</option>
 									</select>
 								</td>
 								<td>
-									<img class="asc_btn cmn_btn" alt="등록버튼" src="resources/images/sales/asc.png" />
+									<img class="asc_btn cmn_btn" id="sort_btn" alt="정렬버튼" src="resources/images/sales/asc.png" />
 								</td>
 								<td colspan="7"></td>
 							</tr>
@@ -255,7 +258,7 @@ $(document).ready(function() {
 							</tr>
 							<tr>
 								<th>대출 한도 금액</th>
-								<th>계약 기간</th>
+								<th>판매 기간</th>
 								<th></th>
 							</tr>
 						</thead>

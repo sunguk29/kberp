@@ -208,11 +208,11 @@
 	font-weight: normal;
 }
 
-tbody td {
+.inqry_info tbody td {
 	height: 25px;
 }
 
-tbody td input {
+.inqry_info tbody td input {
 	width: 200px;
 	height: 20px;
 	padding: 5px 10px;
@@ -221,12 +221,12 @@ tbody td input {
 	border-radius: 2px;
 }
 
-tbody td input:focus {
+.inqry_info tbody td input:focus {
 	outline: 1px solid;
 	outline-color: #2E83F2;
 }
 
-tr:nth-child(2) input, tr:nth-child(4) input {
+.inqry_info tr:nth-child(2) input, tr:nth-child(4) input {
 	width: 606px;
 	border: 1px solid #d5d5d5;
 	border-radius: 2px;
@@ -329,7 +329,82 @@ tr:nth-child(2) input, tr:nth-child(4) input {
 	margin-right: 30px;
 }
 
-.popup_cont {
+/* 대응가이드 팝업 */
+#guide_table {
+	margin-top: 70px;
+}
+
+#guide_wrap {
+	width: 830px;
+}
+#guide_title_text{
+	font-size: 12pt;
+}
+#guide_table thead tr{
+	height : 23px;
+	font-size: 8pt;
+}
+#guide_table tbody tr{
+	height : 23px;
+	font-size: 8pt;
+}
+
+#clnt_type, #type_case{
+	width: 100px;
+}
+
+#type_case_div {
+	display: inline-block;
+}
+
+#type_case {
+	display: inline;
+}
+
+#rspndAddBtn, #rspndUpBtn, #rspndCanBtn{
+	float:right;
+	margin-top: -51px;
+    margin-bottom: 22px;
+}
+
+.add #rspndUpBtn, .add #rspndCanBtn{
+	display: none;
+}
+.update #rspndAddBtn{
+	display: none;
+}
+
+#rspns_plan{
+	display: inline-block;
+	vertical-align: top;
+	resize: none;
+	margin-bottom: 5px;
+	white-space: pre-line;
+}
+
+.rspnd_top_row1 {
+	height: 30px;
+}
+
+.rspndPopTxt{
+	display: inline-block;
+	vertical-align: top;
+	font-weight: bold;
+	background-color: #F2F2F2;
+	width: 80px;
+	height: 20px;
+	text-align: center;
+	border-radius: 2px;
+}
+
+#rspndActionForm input:focus {
+	outline: 2px solid #F2CB05;
+}
+#rspndActionForm textarea:focus{
+	outline: 2px solid #F2CB05;
+}
+
+#btn2Btn makePopup, #btn3Btn makePopup {
 	text-align: center;
 	line-height: 100px;
 }
@@ -368,24 +443,281 @@ $(document).ready(function() {
 		$("#ansr_attFile").val("");
 	});
 	
-	$("#btn1Btn").on("click", function() {
+	// 대응가이드 팝업
+	$("#guide_btn").on("click", function() {
+		var html = "";
+		
+		html += "<div class=\"cont_wrap\" id=\"guide_wrap\">";
+		html += "	<div class=\"page_title_bar\">";
+		html += "		<div class=\"page_title_text\" id=\"guide_title_text\">대응가이드(1:1문의)</div>";
+		html += "	</div>";
+		html += "	<div class=\"rspnd_cont_area\">";
+		html += "		<form action=\"#\" id=\"rspndActionForm\" method=\"post\">";
+		html += "			<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
+		html += "			<input type=\"hidden\" id=\"gbn\" name=\"gbn\"/>";
+		html += "			<input type=\"hidden\" id=\"guide_num\" name=\"guide_num\"/>";
+		html += "			<input type=\"hidden\" id=\"emp_num\" name=\"emp_num\" value=\"" + $("#emp_num").val() + "\"/>";
+		html += "			<div class=\"rspnd_top_row1\">";
+		html += "				<div class=\"rspndPopTxt\">고객유형</div><input type=\"text\" id=\"clnt_type\" name=\"clnt_type\"/>";
+		html += "				<div class=\"rspndPopTxt\">대응방안</div><textarea rows=\"7\" cols=\"58\" id=\"rspns_plan\" name=\"rspns_plan\"></textarea>";
+		html += "			</div>";
+		html += "			<div class=\"rspndPopTxt\" id=\"type_case_div\">유형별 사례</div><input type=\"text\" id=\"type_case\" name=\"type_case\"/>";
+		html += "			<div class=\"add\">";
+		html += "				<div class=\"cmn_btn_mr\" id=\"rspndAddBtn\">등록</div>";
+		html += "				<div class=\"cmn_btn_mr\" id=\"rspndCanBtn\">취소</div>";
+		html += "				<div class=\"cmn_btn_mr\" id=\"rspndUpBtn\">수정</div>";
+		html += "			</div>";
+		html += "		</form>";
+		html += "		<table class=\"board_table\" id=\"guide_table\">";
+		html += "			<colgroup>";
+		html += "				<col width=\"100\"/>";
+		html += "				<col width=\"200\"/>";
+		html += "				<col width=\"200\"/>";
+		html += "				<col width=\"100\"/>";
+		html += "			</colgroup>";
+		html += "			<thead>";
+		html += "				<tr>";
+		html += "					<th>고객유형</th>";
+		html += "					<th>유형별 사례</th>";
+		html += "					<th>대응방안</th>";
+		html += "					<th>수정/삭제</th>";
+		html += "				</tr>";
+		html += "			</thead>";
+		html += "			<tbody id=\"guide_table_tbody\"></tbody>";
+		html += "		</table>";
+		html += "	</div>";
+		html += "		<div class=\"board_bottom\">";
+		html += "			<div class=\"pgn_area\" id=\"paging_wrap\"></div>";
+		html += "		</div>";
+		html += "</div>";
+		
 		makePopup({
-			depth : 1,
 			bg : false,
 			bgClose : false,
-			width : 500,
-			height : 600,
+			width: 850,
+			height: 700,
 			title : "대응가이드",
-			contents : "",
-			buttons : {
-				name : "확인",
+			contents : html,
+			contentsEvent : function() {
+				rspndRe();
+				
+				$("#paging_wrap").on("click", "div", function() {
+					$("#page").val($(this).attr("page"));
+					
+					rspndRe();
+				});
+				
+				// 대응가이드 등록
+				$("#rspndAddBtn").on("click", function() {
+					
+					if(checkEmpty("#clnt_type")) {
+						alert("고객유형을 입력해 주세요");
+						$("#clnt_type").focus();
+					} else if(checkEmpty("#type_case")) {
+						alert("유형별 사례를 입력해 주세요");
+						$("#type_case").focus();
+					} else if(checkEmpty("#rspns_plan")) {
+						alert("대응방안을 입력해 주세요");
+						$("#rspnd_plan").focus();
+					} else {
+						
+						var params = $("#rspndActionForm").serialize();
+						
+						$.ajax({
+							type : "post",
+							url : "inqryRspndListActionAjax/i",
+							dataType : "json",
+							data : params,
+							success : function(res) {
+								if(res.res == "success") {
+									rspndRe();
+								} else {
+									alert("작성중 문제가 발생하였습니다.");
+								}
+	
+							},
+							error : function(request, status, error) {
+								console.log(request.responseText);
+	
+							}
+						}); // ajax end
+					}
+				});
+				// 목록의 수정버튼
+				$("#guide_table_tbody").on("click", "#uBtn", function() {
+					// tr
+					var tr = $(this).parent().parent();
+					
+					$("#guide_num").val(tr.attr("no"));
+					// tr의 첫번째 자식의 내용을 취득
+					$("#clnt_type").val(tr.children(":nth-child(1)").html());
+					$("#type_case").val(tr.children(":nth-child(2)").html());
+					$("#rspns_plan").val(tr.children(":nth-child(3)").html());
+					
+					// 작성 부분 버튼 변경
+					$(".add").attr("class", "update");
+				});
+				// 수정영역 취소버튼
+				$("#rspndActionForm").on("click", "#rspndCanBtn", function() {
+					$("#guide_num").val("");
+					$("#clnt_type").val("");
+					$("#type_case").val("");
+					$("#rspns_plan").val("");
+					
+					// 수정 부분 버튼 변경
+					$(".update").attr("class", "add");
+				});
+				
+				// 대응가이드 수정
+				$("#rspndUpBtn").on("click", function() {
+					
+					if(checkEmpty("#clnt_type")) {
+						alert("고객유형을 입력해 주세요");
+						$("#clnt_type").focus();
+					} else if(checkEmpty("#type_case")) {
+						alert("유형별 사례를 입력해 주세요");
+						$("#type_case").focus();
+					} else if(checkEmpty("#rspns_plan")) {
+						alert("대응방안을 입력해 주세요");
+						$("#rspnd_plan").focus();
+					} else {
+						
+						var params = $("#rspndActionForm").serialize();
+						
+						$.ajax({
+							type : "post",
+							url : "inqryRspndListActionAjax/u",
+							dataType : "json",
+							data : params,
+							success : function(res) {
+								if(res.res == "success") {
+									rspndRe();
+								} else {
+									alert("작성중 문제가 발생하였습니다.");
+								}
+	
+							},
+							error : function(request, status, error) {
+								console.log(request.responseText);
+	
+							}
+						}); // ajax end
+						
+					}
+				});
+				
+				// 대응가이드 삭제버튼
+				$("#guide_table_tbody").on("click", "#dBtn", function() {
+					if(confirm("삭제하시겠습니까?")) {
+						// tr
+						var tr = $(this).parent().parent();
+						
+						$("#guide_num").val(tr.attr("no"));
+						
+						var params = $("#rspndActionForm").serialize();
+						
+						$.ajax({
+							type : "post",
+							url : "inqryRspndListActionAjax/d",
+							dataType : "json",
+							data : params,
+							success : function(res) {
+								if(res.res == "success") {
+									rspndRe();
+								} else {
+									alert("작성중 문제가 발생하였습니다.");
+								}
+	
+							},
+							error : function(request, status, error) {
+								console.log(request.responseText);
+	
+							}
+						}); // ajax end
+						
+					}
+				});
+			},
+			draggable : true,
+			buttons : [{
+				name : "닫기",
 				func:function() {
 					console.log("One!");
 					closePopup();
 				}
-			}
+			}]
 		});
+		
 	});
+
+	// 대응가이드 리로드
+	function rspndRe() {
+		var params = $("#rspndActionForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "inqryRspndListAjax",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				console.log(res);
+				drawRspndList(res.list);
+				drawPaging(res.pb);
+			},
+			error : function(request, status, error) {
+				console.log(request.responseText);
+
+			}
+			
+		});
+	}
+	// 대응가이드 리스트
+	function drawRspndList(list) {
+		var html = "";
+		
+		for(var data of list) {
+			html += "<tr no=\"" + data.GUIDE_NUM +"\">";
+			html += "<td>" + data.CLNT_TYPE + "</td>";
+			html += "<td>" + data.TYPE_CASE + "</td>";
+			html += "<td>" + data.RSPNS_PLAN + "</td>";
+			html += "<td>";
+			html += "<input type=\"button\" value=\"수정\" id=\"uBtn\"/>";
+			html += "<input type=\"button\" value=\"삭제\" id=\"dBtn\"/>";
+			html += "</td>";
+			html += "</tr>";
+		}
+		$("#guide_table_tbody").html(html);
+	}
+	// 페이지 리스트
+	function drawPaging(pb) {
+		var html = "";
+		
+		html += "<div page=\"1\" class=\"page_btn page_first\">first</div>";
+		
+		if($("#page").val() == "1") {
+			html += "<div page=\"1\" class=\"page_btn page_prev\">prev</div>";
+		} else {
+			html += "<div page=\"" + ($("#page").val() * 1 - 1) + "\" class=\"page_btn page_prev\">prev</div>";
+		}
+		
+		for(var i = pb.startPcount ; i <= pb.endPcount ; i++) {
+			if($("#page").val() == i){
+				html += "<div page=\"" + i + "\" class=\"page_btn_on\">" + i + "</div>";
+			} else {
+				html += "<div page=\"" + i + "\" class=\"page_btn\">" + i + "</div>";
+			}
+		}
+		
+		if($("#page").val() == pb.maxPcount) {
+			html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_next\">next</div>";
+		} else {
+			html += "<div page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</div>";
+		}
+		
+		html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
+		
+		$("#paging_wrap").html(html);
+	}
 	
 	$("#btn2Btn").on("click", function() {
 		makePopup({
@@ -634,7 +966,7 @@ function checkEmpty(sel) {
 											<input type="hidden" id="ansr_attFile" name="ansr_attFile"/>
 										</div>
 										<div class="ansr_btn">
-											<div class="cmn_btn_mr" id="btn1Btn">대응가이드</div>
+											<div class="cmn_btn_mr" id="guide_btn">대응가이드</div>
 											<div class="cmn_btn_mr" id="btn2Btn">답변등록</div>
 											<div class="cmn_btn_mr" id="cancelBtn">취소</div>
 										</div>
@@ -670,7 +1002,7 @@ function checkEmpty(sel) {
 											</c:choose>
 											</div>
 										<div class="ansr_btn">
-											<div class="cmn_btn_mr" id="btn1Btn">대응가이드</div>
+											<div class="cmn_btn_mr" id="guide_btn">대응가이드</div>
 											<div class="cmn_btn_mr" id="btn3Btn">수정완료</div>
 											<div class="cmn_btn_mr" id="cancelBtn">취소</div>
 										</div>

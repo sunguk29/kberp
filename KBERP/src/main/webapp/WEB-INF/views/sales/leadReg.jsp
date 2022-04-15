@@ -637,6 +637,7 @@ input[type="number"]::-webkit-inner-spin-button {
     margin: 0;
 }
 </style>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	//목록 버튼 클릭시 
@@ -681,8 +682,11 @@ $(document).ready(function() {
 
 	// 저장버튼
 	$("#writeBtn").on("click", function() {
+		
+		
 		if(checkEmpty("#leadName")) {
-			alert("리드명을 입력하세요.");
+			/* swal("필수항목알림", "리드명을 입력하세요.", "warning");  */
+			alert("리드명을 입력하세요."); 
 			$("#leadName").focus();
 		} else if(checkEmpty("#clntName")) {
 			alert("고객명을 입력하세요.");
@@ -925,7 +929,7 @@ function ecAddPopup() {
 	html += "<div class=\"popup_cont pc_back\">";
 	html += "<form action=\"#\" id=\"ccAddForm\" method=\"post\">";
 	html += 	"<div class=\"popup_table\">";
-	html += 		"<div class=\"btn2\">고객</div>";
+	html += 		"<div class=\"btn2\">고객 *</div>";
 	html += 		"<div class=\"txt2\"><input type=\"text\" class=\"txt3\" id=\"clntName\" name=\"clntName\" /></div>";
 	html += 		"<div class=\"btn2\">고객사 *</div>";
 	html += 		"<div class=\"txt2\"><input type=\"text\" class=\"txt3\" id=\"clntCmpnyName\" name=\"clntCmpnyName\" />";
@@ -1096,46 +1100,61 @@ function ecAddPopup() {
 		buttons : [{
 			name : "등록",
 			func:function() {
-				var html = "";
 				
-				html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
-				
-				makePopup({
-					depth : 4,
-					bg : true,
-					bgClose : true,
-					title : "저장 완료",
-					contents : html,
-					width : 400,
-					height : 180,
-					buttons : {
-						name : "확인",
-						func : function() {
-							var params = $("#ccAddForm").serialize(); 
-							
-							$.ajax({
-								type : "post",
-								url : "leadAction/ecInsert", 
-								dataType : "json",
-								data : params,
-								success : function(res) {
-									if(res.res == "success") {
-										$("#ecSearchTxt").val("");
-										$("#ecPopupForm #page").val("1");
-										$("#ecBtn").click(); 
-										closePopup(4);
-										closePopup(2);
-									} else {
-										alert("작성 중 문제가 발생하였습니다.");
+				if(checkEmpty("#clntName")) {
+					alert("고객명을 입력하세요.");
+					$("#clntName").focus();
+				} else if(checkEmpty("#clntCmpnyName")) {
+					alert("고객사명을 입력하세요.");
+					$("#clntCmpnyName").focus();
+				} else if(checkEmpty("#mbl")) {
+					alert("휴대폰번호를 입력하세요.");
+					$("#mbl").focus();					
+				} else if (checkEmpty("#mngName")) {
+					alert("담당자를 입력하세요.");
+					$("#mngName").focus();
+				} else {
+					var html = "";
+					
+					html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
+					
+					makePopup({
+						depth : 4,
+						bg : true,
+						bgClose : true,
+						title : "저장 완료",
+						contents : html,
+						width : 400,
+						height : 180,
+						buttons : {
+							name : "확인",
+							func : function() {
+								var params = $("#ccAddForm").serialize(); 
+								
+								$.ajax({
+									type : "post",
+									url : "leadAction/ecInsert", 
+									dataType : "json",
+									data : params,
+									success : function(res) {
+										if(res.res == "success") {
+											$("#ecSearchTxt").val("");
+											$("#ecPopupForm #page").val("1");
+											$("#ecBtn").click(); 
+											closePopup(4);
+											closePopup(2);
+										} else {
+											alert("작성 중 문제가 발생하였습니다.");
+										}
+									},
+									error : function(request, status, error) {
+										console.log(request.responseText);
 									}
-								},
-								error : function(request, status, error) {
-									console.log(request.responseText);
-								}
-							});
+								});
+							}
 						}
-					}
-				}); // 저장완료 makePopup end
+					}); // 저장완료 makePopup end					
+				} // else end				
 			} // 등록 func end
 		}, {
 			name : "취소"

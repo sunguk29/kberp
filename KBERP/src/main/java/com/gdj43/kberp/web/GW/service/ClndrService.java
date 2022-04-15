@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.gdj43.kberp.web.GW.dao.IClndrDao;
 
-
 @Service
 public class ClndrService implements IClndrService{
 	@Autowired
 	public IClndrDao iClndrDao;
+	
 	
 	@Override
 	public void clndrAdd(HashMap<String, String> params) throws Throwable {
@@ -38,7 +38,5 @@ public class ClndrService implements IClndrService{
 	public List<HashMap<String, String>> dtlSchdl(HashMap<String, String> params) throws Throwable {
 		return iClndrDao.dtlSchdl(params);
 	}
-
-
 
 }

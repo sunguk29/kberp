@@ -392,9 +392,23 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	var now = new Date();
+	var clndrYear = now.getFullYear();	// 연도
+	var clndrMonth = now.getMonth()+1;	// 월
+	var Cdate = "";
+	if(clndrMonth >= 10){
+		Cdate = ""+clndrYear+"-"+clndrMonth;
+	}else{
+		Cdate = ""+clndrYear+"-0"+clndrMonth;
+	}
+	$('input[name=clndrDate]').attr('value',Cdate);
+	
+	if('${param.usrsrchTxt}' != ''){
+		$("#usrsrchTxt").val('${param.usrsrchTxt}');
+		$("#deptS").val(${param.deptS});
+	}
+	
 	drawDayCalc();
-	
-	
 	
 	/* 엔터 입력 시  */
 	$("#usrsrchTxt").on("keypress", function(event) {
@@ -408,10 +422,13 @@ $(document).ready(function() {
 	/* 검색버튼 누를 시  */
 	$("#searchBtn").on("click", function() {
 		
+		//검색어 유지
+		$("#oldSearchTeam").val($("#deptS").val());
+		$("#oldSearchMngrTxt").val($("#usrsrchTxt").val());
 		
-		//기존 이벤트 제거
-		$("#fullCalendarArea").fullCalendar("removeEventSources", ${param.oldEvent});
-		$("#fullCalendarArea").fullCalendar("refetchEvents");
+		
+ 		//기존 이벤트 제거
+ 		$("#fullCalendarArea").fullCalendar("removeEventSources");
 		
 		$(".cal_cont").hide();
 		
@@ -448,6 +465,7 @@ $(document).ready(function() {
 	$(".calendar_text").on("click", ".cal_text1", function() {
 		var tempSnum = $(this).children("#schln").val();
 		document.getElementById("schdlnum").value = tempSnum;
+		
 		
 		$("#actionForm").attr("action", "salesSchdlCont");
 		$("#actionForm").submit();
@@ -652,13 +670,11 @@ $(document).ready(function() {
 			url : "salesSchdlAjax",
 			dataType : "json",
 			data : params,
-			success : function(res){					
-					
-					var oldEvents = $("#fullCalendarArea").fullCalendar("getEventSources");
-					document.getElementById("oldEvent").value = oldEvents;
+			success : function(res){		
+				
 					//신규이벤트 추가
 					$("#fullCalendarArea").fullCalendar("addEventSource", res.slist);
-					$("#fullCalendarArea").fullCalendar("refetchEvents");
+					
 					
 			},
 			error : function(req) {
@@ -667,6 +683,55 @@ $(document).ready(function() {
 		});
 	}
 	
+	$("body").on("click", ".fc-month-button", function() {
+		clndrDvsn
+		$("#clndrDvsn").attr('value',"month");
+		history.go(0);
+	});
+	
+	
+	// 달력에서 이후 버튼 누를 시
+	$("body").on("click", ".fc-next-button", function() {
+
+		//기존 이벤트 제거
+		$("#fullCalendarArea").fullCalendar("removeEventSources");
+		
+		
+			clndrMonth = clndrMonth+1;
+			if(clndrMonth >= 13){
+				clndrMonth = 1;
+				clndrYear = clndrYear + 1;
+			}
+			if(clndrMonth >= 10){
+				Cdate = ""+clndrYear+"-"+clndrMonth;
+			}else{
+				Cdate = ""+clndrYear+"-0"+clndrMonth;
+			}
+			$('input[name=clndrDate]').attr('value',Cdate);
+			drawDayCalc();
+		
+	});
+	
+	// 달력에서 이전 버튼 누를 시
+	$("body").on("click", ".fc-prev-button", function() {
+		
+		//기존 이벤트 제거
+		$("#fullCalendarArea").fullCalendar("removeEventSources");
+		
+		clndrMonth = clndrMonth-1;
+		
+		if(clndrMonth < 1){
+			clndrMonth = 12;
+			clndrYear = clndrYear - 1;
+		}
+		if(clndrMonth >= 10){
+			Cdate = ""+clndrYear+"-"+clndrMonth;
+		}else{
+			Cdate = ""+clndrYear+"-0"+clndrMonth;
+		}
+		$('input[name=clndrDate]').attr('value',Cdate);
+		drawDayCalc();
+	});
 	
 	
 	$("#fullCalendarArea").fullCalendar({
@@ -683,7 +748,7 @@ $(document).ready(function() {
 	    	  
 	      },
 	      dayClick: function(date, js, view) { // 일자 클릭
-	    	   
+	    	  
 			var tdv = date.format();
 			document.getElementById("ctt").value = "      " + tdv;
 		
@@ -714,13 +779,11 @@ $(document).ready(function() {
 	      }
 	});
 	
-	
-	
-	
 	/* 캘린더 이벤트 관련 끝 */
 	
 	
 	$("#regBtn").on("click", function() {
+		
 		$("#actionForm").attr("action", "salesSchdlReg");
 		$("#actionForm").submit();
 	});
@@ -750,7 +813,7 @@ $(document).ready(function(){
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" id="schdlnum" name="schdlnum" value="${param.schdlnum}" />
-	<input type="hidden" id="oldEvent" />
+	<input type="hidden" id="clndrDate" name="clndrDate" />
 	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
@@ -765,7 +828,7 @@ $(document).ready(function(){
 						<div class="sc_title">
 						<span class="marg">
 						팀분류
-						<select class="boxsize" name="deptS">
+						<select class="boxsize" id="deptS" name="deptS">
 							<option value="6">영업부</option>
 							<option value="7">영업1팀</option>
 							<option value="8">영업2팀</option>

@@ -404,6 +404,11 @@ input {
 	outline : none;
 }
 
+[href] {
+	color: black;
+	text-decoration: none;
+}
+
 /* 첨부파일명 공간 크기 */
 
 </style>
@@ -957,7 +962,7 @@ function updatePop() {
 	
 	
 	/* 활동분류 선택되게 */
-	$("#ssactvtyclsfy").val(${data.ACTVTY_CLSFY_NUM}).prop("selected", this.selected);
+	$("#ssactvtyclsfy").val(${data.ACTVTY_CLSFY_NUM}).prop("selected", true);
 	
 });
 /* 첨부파일 업로드 관련 */
@@ -973,6 +978,8 @@ function uploadName(e) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" name="deptS" value="${param.deptS}" />
+	<input type="hidden" name="usrsrchTxt" value="${param.usrsrchTxt}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">

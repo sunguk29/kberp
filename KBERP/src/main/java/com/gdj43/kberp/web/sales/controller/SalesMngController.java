@@ -75,7 +75,7 @@ public class SalesMngController {
 
 		modelMap.put("RsltCnt", RsltCnt);
 
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), listCnt, 10, 5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), RsltCnt, 10, 5);
 
 		// 데이터 시작, 종료 할당
 		params.put("startCount", Integer.toString(pb.getStartCount()));
@@ -443,7 +443,6 @@ public class SalesMngController {
 
 	// salesMng3ActionAjax : 견적 등록, 수정, 삭제
 	@RequestMapping(value = "/salesMng3ActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
-
 	@ResponseBody
 	public String salesMng3ActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn)
 			throws Throwable {
@@ -612,7 +611,6 @@ public class SalesMngController {
 
 	// salesMng4ActionAjax : 계약 등록, 수정, 삭제
 	@RequestMapping(value = "/salesMng4ActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
-
 	@ResponseBody
 	public String salesMng4ActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn)
 			throws Throwable {
@@ -627,13 +625,11 @@ public class SalesMngController {
 				iCommonService.insertData("salesMng.sales4CntrctAdd", params); // 계약
 				iCommonService.insertData("salesMng.sales4CntrctAttAdd", params); // 계약 첨부파일
 				iCommonService.updateData("salesMng.sales3to4", params); // 계약 단계 전환
+				iCommonService.updateData("salesMng.sales4Failure", params); // 종료(성공)
 				break;
 			case "update" :
 				iCommonService.updateData("salesMng.sales4Update", params); // 계약 정보 수정
 				iCommonService.updateData("salesMng.sales4UpdateAttFile", params); // 계약 첨부파일 수정
-				break;
-			case "failure" :
-				iCommonService.updateData("salesMng.sales4Failure", params);
 				break;
 			}
 			modelMap.put("res", "success");
@@ -735,5 +731,40 @@ public class SalesMngController {
 			return mav; 
 		}
 
+		// 영업관리 예정된 일정 목록
+		@RequestMapping(value = "/SSchdlListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+		@ResponseBody
+		public String SSchdlListAjax(@RequestParam HashMap<String, String> params) throws Throwable{
+			ObjectMapper mapper = new ObjectMapper();
+			
+			Map<String, Object> modelMap = new HashMap<String, Object>();
+			
+			int SScListCnt = iCommonService.getIntData("salesMng.SScListCnt", params);
+			
+			List<HashMap<String, String>> list = iCommonService.getDataList("salesMng.getSScList", params);
+			
+			modelMap.put("list", list);
+			modelMap.put("SScListCnt", SScListCnt);
+			
+			
+			return mapper.writeValueAsString(modelMap);
+		}
+		
+		// 영업관리 예정된 일정 상세보기
+		@RequestMapping(value ="/SSchdlAjax", method = RequestMethod.POST,
+				produces = "text/json;charset=UTF-8")
+		@ResponseBody
+		public String SSchdlAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+			
+			ObjectMapper mapper = new ObjectMapper();
+			
+			Map<String, Object> modelMap = new HashMap<String, Object>();
 
+			HashMap<String, String> SSData = iCommonService.getData("salesMng.SSchdlCont", params);
+			
+			modelMap.put("SSData", SSData);
+			
+			return mapper.writeValueAsString(modelMap); 
+		}
+		
 }

@@ -271,9 +271,24 @@ $(document).ready(function() {
 			makeAlert("필수 항목 알림", "등급을 선택하세요", function() {
 				$("#ccGrade").focus();
 			});
+		} else if(isNaN($("#brNum").val())) {
+			makeAlert("알림", "사업자 번호는 숫자만 가능합니다.", function() {
+				$("#brNum").val("");
+				$("#brNum").focus();
+			});
 		} else if(checkEmpty("#cName")) {
 			makeAlert("필수 항목 알림", "대표명을 입력하세요", function() {
 				$("#cName").focus();
+			});
+		} else if(isNaN($("#phoneNum").val())) {
+			makeAlert("알림", "유선번호는 숫자만 가능합니다.", function() {
+				$("#phoneNum").val("");
+				$("#phoneNum").focus();
+			});
+		} else if(isNaN($("#fax").val())) {
+			makeAlert("알림", "팩스번호는 숫자만 가능합니다.", function() {
+				$("#fax").val("");
+				$("#fax").focus();
 			});
 		} else if(checkEmpty("#zipCodeNum")) {
 			makeAlert("필수 항목 알림", "우편번호를 입력하세요", function() {
@@ -289,6 +304,11 @@ $(document).ready(function() {
 			});
 		} else if(checkEmpty("#rvn")) {
 			makeAlert("필수 항목 알림", "매출를 입력하세요", function() {
+				$("#rvn").focus();
+			});
+		} else if(isNaN($("#rvn").val())) {
+			makeAlert("알림", "매출은 숫자만 가능합니다.", function() {
+				$("#rvn").val("");
 				$("#rvn").focus();
 			});
 		} else if($("#rp").val() == 9) {

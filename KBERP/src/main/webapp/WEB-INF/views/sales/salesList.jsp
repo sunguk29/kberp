@@ -599,19 +599,36 @@ $(document).ready(function() {
 	
 	// 검색
 	$("#searchBtn").on("click", function() {
-		$("#page").val("1");
-		
-		$("#oldSearchGbn").val($("#searchGbn").val());
-		$("#oldSearchTxt").val($("#searchTxt").val());
-		
-		reloadList();
+		if($("#searchGbn").val() == 2) {
+			if(isNaN($("#searchTxt").val())) {
+				makeAlert("경고", "영업번호 검색시 숫자만 입력해주세요", function() {
+					$("#searchTxt").val("");
+					$("#searchTxt").focus();
+				});
+			} else {
+				$("#page").val("1");
+				
+				$("#oldSearchGbn").val($("#searchGbn").val());
+				$("#oldSearchTxt").val($("#searchTxt").val());
+				
+				reloadList();
+			}
+		} else {
+			$("#page").val("1");
+			
+			$("#oldSearchGbn").val($("#searchGbn").val());
+			$("#oldSearchTxt").val($("#searchTxt").val());
+			
+			reloadList();
+		} 
 	})
 	
+	// 검색 엔터 처리
 	$("#searchTxt").on("keypress", function(event) {
 		if(event.keyCode == 13) {
 			$("#searchBtn").click();
 			
-			return flase; // event 실행 않도록.
+			return false; // event 실행 않도록.
 		}
 	});
 	
@@ -620,7 +637,7 @@ $(document).ready(function() {
 		if(event.keyCode == 13) {
 			$("#searchBtn").click();
 			
-			return flase;
+			return false;
 		}
 	});
 	
@@ -1210,7 +1227,7 @@ function drawMngPaging(mngPb) {
 									<select id="searchGbn" name="searchGbn">
 										<option value="0">고객사명</option>
 										<option value="1">영업명</option>
-										<option value="2">영업기회번호</option>
+										<option value="2">영업번호</option>
 									</select>
 								</td>
 								<td colspan="2">

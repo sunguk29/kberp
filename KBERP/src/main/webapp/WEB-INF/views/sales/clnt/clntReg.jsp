@@ -527,9 +527,10 @@ $(document).ready(function() {
 			makeAlert("필수 항목 알림", "휴대폰번호를 입력하세요", function() {
 				$("#mbl").focus();
 			});
-		} else if(checkEmpty("#mngEmp")) {
-			makeAlert("필수 항목 알림", "담당자를 입력하세요", function() {
-				$("#mngEmp").focus();
+		}  else if(isNaN($("#mbl").val())) {
+			makeAlert("알림", "휴대폰 번호는 숫자만 가능합니다.", function() {
+				$("#mbl").val("");
+				$("#mbl").focus();
 			});
 		} else {
 			makePopup({

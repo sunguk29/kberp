@@ -5,28 +5,41 @@
 	<select id="getClntCmpntList" parameterType="hashmap" resultType="hashmap">
 		SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, TRIM(TO_CHAR(RVN, 'L999,999,999,999,999')) AS RVN, A.CNT, A.DEL_CHECK
 		FROM (  SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, A.RVN, A.CNT,
-		               ROW_NUMBER() OVER(ORDER BY A.RNUM DESC) AS RNUM2, A.DEL_CHECK
+							ROW_NUMBER() OVER(ORDER BY
+							<choose>
+								<when test="listSort == 9">
+									 A.RNUM
+								</when>
+								<when test="listSort == 0">
+									A.RVN 
+								</when>
+								<when test="listSort == 1">
+									A.CLNT_CMPNY_NAME
+								</when>
+							</choose>
+							DESC) AS RNUM2
+		               , A.DEL_CHECK
 		        FROM (  SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, A.RVN, A.CNT,
 		                       A.CLNT_CMPNY_CLSFY_NUM, A.DEL_CHECK
 		                FROM ( SELECT A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, A.RVN, NVL(B.CNT, 0) AS CNT,
 		                              A.CLNT_CMPNY_CLSFY_NUM, ROW_NUMBER() OVER(ORDER BY A.RNUM DESC) AS RNUM, A.DEL_CHECK
 		                       FROM ( SELECT ROW_NUMBER() OVER(ORDER BY CC.CLNT_CMPNY_NUM DESC) AS RNUM, CC.CLNT_CMPNY_NUM, CCG.GRADE_NAME, CCC.CLNT_CMPNY_CLSFY_NAME,
-		                                     CC.CLNT_CMPNY_NAME, CC.RVN, CC.ADRS || CC.DTL_ADRS AS ADRS, CC.CLNT_CMPNY_CLSFY_NUM, CC.DEL_CHECK
+		                                     CC.CLNT_CMPNY_NAME, CC.RVN, CC.ADRS, CC.CLNT_CMPNY_CLSFY_NUM, CC.DEL_CHECK
 		                              FROM CLNT_CMPNY CC INNER JOIN CLNT_CMPNY_GRADE CCG
 		                                                         ON CC.GRADE_NUM = CCG.GRADE_NUM
 		                                                 INNER JOIN CLNT_CMPNY_CLSFY CCC
 		                                                         ON CC.CLNT_CMPNY_CLSFY_NUM = CCC.CLNT_CMPNY_CLSFY_NUM ) A 
-		                                                 LEFT OUTER JOIN ( SELECT CC.CLNT_CMPNY_NAME, COUNT(*) AS CNT
-		                                                                   FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
-		                                                                                              ON CC.CLNT_NAME = EC.CLNT_NAME
-		                                                                                      INNER JOIN LEAD L
-		                                                                                              ON L.CLNT_NUM = EC.CLNT_NUM 
-		                                                                                      INNER JOIN SALES S
-		                                                                                              ON S.LEAD_NUM = L.LEAD_NUM
-		                                                                                      INNER JOIN CNTRCT C
-		                                                                                              ON C.SALES_NUM = S.SALES_NUM                        
-		                                                                   GROUP BY CC.CLNT_CMPNY_NAME ) B
-		                                                              ON A.CLNT_CMPNY_NAME = B.CLNT_CMPNY_NAME ) A
+                                                    LEFT OUTER JOIN (	SELECT CC.CLNT_CMPNY_NAME, COUNT(*) AS CNT
+																		FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
+																		                           ON CC.CLNT_NAME = EC.CLNT_NAME
+																		                   INNER JOIN LEAD L
+																		                           ON L.CLNT_NUM = EC.CLNT_NUM 
+																		                   LEFT OUTER JOIN SALES S
+																		                           ON S.LEAD_NUM = L.LEAD_NUM
+																		                   LEFT OUTER JOIN CNTRCT C
+																		                           ON C.SALES_NUM = S.SALES_NUM                        
+																		GROUP BY CC.CLNT_CMPNY_NAME  ) B
+		                                                           ON A.CLNT_CMPNY_NAME = B.CLNT_CMPNY_NAME ) A
 		                WHERE A.DEL_CHECK IS NULL ) A
 		WHERE 1 = 1
 		<choose>
@@ -52,16 +65,6 @@
 				</when>
 			</choose>
 		</if>
-		<if test="listSort != '9'">
-			<choose>
-				<when test="listSort == 0">
-					ORDER BY A.RVN ASC
-				</when>
-				<when test="listSort == 1">
-					ORDER BY A.CLNT_CMPNY_NUM ASC
-				</when>
-			</choose>
-		</if> 
 		) A
 		WHERE A.RNUM2 BETWEEN #{startCount} AND #{endCount}
 	</select>
@@ -189,7 +192,19 @@
 	<select id="getClntList" parameterType="hashmap" resultType="hashmap">
 		SELECT EC.CLNT_NUM, NVL(EC.DEPT, ' ') AS DEPT, NVL(EC.DUTY, ' ') AS DUTY, NVL(EC.EMAIL, ' ') AS EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM
 		FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM,
-		               ROW_NUMBER() OVER(ORDER BY EC.RNUM DESC) AS RNUM2 
+		               ROW_NUMBER() OVER(ORDER BY 
+		                <choose>
+							<when test="listSort == 9">
+								EC.RNUM
+							</when>
+							<when test="listSort == 0">
+								EC.CLNT_NUM
+							</when>
+							<when test="listSort == 1">
+								EC.CLNT_CMPNY_NAME
+							</when>
+						</choose>
+					   DESC) AS RNUM2
 		        FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM
 		                FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME,
 		                               EC.MBL, ROW_NUMBER() OVER(ORDER BY EC.RNUM DESC) AS RNUM

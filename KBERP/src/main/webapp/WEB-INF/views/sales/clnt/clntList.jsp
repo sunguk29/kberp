@@ -144,7 +144,7 @@ select {
 }
 .cont_table {
 	width: 927px;
-	height: 250px;
+	height: 328px;
 }
 </style>
 <script type="text/javascript">
@@ -185,10 +185,24 @@ $(document).ready(function() {
 	
 	// 검색
 	$("#searchBtn").on("click", function() {
-		$("#page").val("1");
-		$("#oldSearchType").val($("#searchType").val());
-		$("#oldSearchTxt").val($("#searchTxt").val());
-		reloadList();
+		if($("#searchType").val() == 2) {
+			if(isNaN($("#searchTxt").val())) {
+				makeAlert("경고", "고객번호 검색시 숫자만 입력해주세요(CL01 -> 01)", function() {
+					$("#searchTxt").val("");
+					$("#searchTxt").focus();
+				});
+			} else {
+				$("#page").val("1");
+				$("#oldSearchType").val($("#searchType").val());
+				$("#oldSearchTxt").val($("#searchTxt").val());
+				reloadList();
+			}
+		} else {
+			$("#page").val("1");
+			$("#oldSearchType").val($("#searchType").val());
+			$("#oldSearchTxt").val($("#searchTxt").val());
+			reloadList();
+		}
 	});
 	
 	// 정렬
@@ -249,7 +263,7 @@ function drawList(list) {
 	html += "<tr>";		
 	html += "<th>고객사명</th>";			
 	html += "<th>고객명</th>";			
-	html += "<th>전화번호</th>";			
+	html += "<th>휴대폰 번호</th>";			
 	html += "</tr>";		
 	html += "</thead>";
 	
