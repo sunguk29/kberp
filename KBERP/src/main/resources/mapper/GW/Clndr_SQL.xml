@@ -32,7 +32,7 @@ DEL_DVSN, TO_CHAR(SCHDL_START_TIME,'YYYY-MM-DD') AS START_DATE, TO_CHAR(SCHDL_ST
     
 FROM SCHDL S INNER JOIN APNTM A
                 ON S.EMP_NUM = A.EMP_NUM
-WHERE #{clndrDate} BETWEEN TO_CHAR(ADD_MONTHS(TRUNC(SCHDL_START_TIME,'MM'),-1),'YYYYMM')
+WHERE Z BETWEEN TO_CHAR(ADD_MONTHS(TRUNC(SCHDL_START_TIME,'MM'),-1),'YYYYMM')
                    AND TO_CHAR(ADD_MONTHS(TRUNC(SCHDL_END_TIME,'MM'),+1),'YYYYMM')AND DEL_DVSN = 0 
                    AND SCHDL_CTGRY_NUM IN (#{user_dsgnt},#{bsns},#{leave},#{edctn},#{mtng},#{get_tgthr},#{bsns_trip},#{devel})
                    AND((#{type}= 0 AND S.EMP_NUM = #{emp_num} AND S.SCHDL_TYPE_NUM = '0')

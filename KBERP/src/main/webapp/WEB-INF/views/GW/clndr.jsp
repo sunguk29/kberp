@@ -421,7 +421,7 @@ $(document).ready(function() {
 	  		html += "<select class=\"slct_type\" id=\"schdl_type\" name=\"schdl_type\">";
 	  		html += "<option value=\"0\">개인</option>";
 	  		html += "<option value=\"1\">부서</option>";
-	  		if(${sDeptNum} == "1" || ${sDeptNum} == "4"){
+	  		if(${sDeptNum} == "1" || ${sDeptNum} == "5"){
 	  			html += "<option value=\"2\">전사</option>";
 	  			}
 	  		html += "</select>";
@@ -443,7 +443,7 @@ $(document).ready(function() {
 	  		html += "<div class=\"popup_style\">";
 	  		html += "<span>종료 시간</span>";
 	  		html += "<input type=\"date\" value=\"" + date.format() + "\"  id=\"schdl_end_date\" name=\"schdl_end_date\">";			
-	  		html += "<input type=\"time\" id=\"schdl_end_time\" name=\"schdl_end_time\" value=\""+ end.toISOString().slice(11, 16) +"\">";
+	  		html += "<input type=\"time\" id=\"schdl_end_time\" name=\"schdl_end_time\" >";
 	  		html += "<input type=\"hidden\" id=\"hidden_end_time\" name=\"schdl_end_time\">";
 	  		html += "</div>";
 	  		html += "<div class=\"popup_dtl_cont\">";
@@ -483,6 +483,7 @@ $(document).ready(function() {
 	  				 $('#schdl_start_time').attr('disabled',false);
 	  				 $('input[name=schdl_end_time]').attr('style', "display:inline;");
 	  				 $('#schdl_end_time').attr('disabled',false);
+	  				 
 	  			 }
 	  		});
 	  		/* 사용자지정 범주를 선택하지 않으면 입력창 비활성화 및 숨기기 */
@@ -510,10 +511,10 @@ $(document).ready(function() {
 	  						alert("제목을 입력하세요.");
 	  						$("#schdl_title").focus();
 	  					}else if(checkEmpty("#schdl_start_date")){
-	  						alert("시작 시간을 선택하세요.");
+	  						alert("시작 날짜를 선택하세요.");
 	  						$("#schdl_start_date").focus();
 	  					}else if(checkEmpty("#schdl_end_date")){
-	  						alert("종료 시간을 선택하세요.");
+	  						alert("종료 날짜를 선택하세요.");
 	  						$("#schdl_end_date").focus();
 	  					}else if($("#schdl_ctgry").val() == "0" && checkEmpty("#user_ctgry")){
 	  						alert("사용자지정 범주를 입력하세요.");
@@ -521,6 +522,9 @@ $(document).ready(function() {
 	  					}else if($("#schdl_start_date").val() > $("#schdl_end_date").val()){
 	  						alert("종료일이 시작일보다 빠를 수 없습니다.");
 	  						$("#schdl_end_date").focus();
+	  					}else if(checkEmpty("#schdl_end_time") && !$("#aldy_dvsn").is(":checked")){
+	  						alert("종료 시간을 입력하세요.");
+	  						$("#schdl_end_time").focus();
 	  					}else{
 	  						 if(checkEmpty("#schdl_cont")){
 	  							$("#schdl_cont").val(" "); // 내용을 비워두면 undefined 출력돼서 추가
@@ -755,7 +759,7 @@ $(document).ready(function() {
   	  html += "<textarea rows=\"10\" cols=\"57\" class=\"dtl_cont\" readonly>" + data.schdl_cont + "</textarea>";			
   	  html += "</div>";
   	  html += "</form>";
-  	if(${sEmpNum} == data.emp_num){
+  	if(${sEmpNum} == data.emp_num || ${sDeptNum} == "1"){
   		
   			makePopup({
   				bg : true,
@@ -859,7 +863,7 @@ function schdlUpdate(data){
 	html += "<select class=\"slct_type\" id=\"schdl_type\" name=\"schdl_type\">";
 	html += "<option value=\"0\">개인</option>";
 	html += "<option value=\"1\">부서</option>";
-	if(${sDeptNum} == "1" || ${sDeptNum} == "4"){
+	if(${sDeptNum} == "1" || ${sDeptNum} == "5"){
 		html += "<option value=\"2\">전사</option>";
 		}
 	html += "</select>";
@@ -962,10 +966,10 @@ function schdlUpdate(data){
 					alert("제목을 입력하세요.");
 					$("#schdl_title").focus();
 				}else if(checkEmpty("#schdl_start_date")){
-					alert("시작 시간을 입력하세요.");
+					alert("시작 날짜를 입력하세요.");
 					$("#schdl_start_date").focus();
 				}else if(checkEmpty("#schdl_end_date")){
-					alert("종료 시간을 입력하세요.");
+					alert("종료 날짜를 입력하세요.");
 					$("#schdl_end_date").focus();
 				}else if($("#schdl_ctgry").val() == "0" && checkEmpty("#user_ctgry")){
 					alert("범주를 입력하세요.");
@@ -973,7 +977,10 @@ function schdlUpdate(data){
 				}else if($("#schdl_start_date").val() > $("#schdl_end_date").val()){
 					alert("종료일이 시작일보다 빠를 수 없습니다.");
 					$("#schdl_end_date").focus();
-				}else{
+				}else if(checkEmpty("#schdl_end_time") && !$("#aldy_dvsn").is(":checked")){
+						alert("종료 시간을 입력하세요.");
+  						$("#schdl_end_time").focus();
+  					}else{
 					if(checkEmpty("#schdl_cont")){
 						$("#schdl_cont").val(" ");
 					}
@@ -1176,7 +1183,7 @@ $(document).ready(function() {
 		html += "<select class=\"slct_type\" id=\"schdl_type\" name=\"schdl_type\">";
 		html += "<option value=\"0\">개인</option>";
 		html += "<option value=\"1\">부서</option>";
-		if(${sDeptNum} == "1" || ${sDeptNum} == "4"){
+		if(${sDeptNum} == "1" || ${sDeptNum} == "5"){
 		html += "<option value=\"2\">전사</option>";
 		}
 		html += "</select>";
@@ -1198,7 +1205,7 @@ $(document).ready(function() {
 		html += "<div class=\"popup_style\">";
 		html += "<span>종료 시간</span>";
 		html += "<input type=\"date\" id=\"schdl_end_date\" name=\"schdl_end_date\">";			
-		html += "<input type=\"time\" id=\"schdl_end_time\" name=\"schdl_end_time\" value=\""+ end.toISOString().slice(11, 16) +"\">";
+		html += "<input type=\"time\" id=\"schdl_end_time\" name=\"schdl_end_time\" >";
 		html += "<input type=\"hidden\" id=\"hidden_end_time\" name=\"schdl_end_time\">";
 		html += "</div>";
 		html += "<div class=\"popup_dtl_cont\">";
@@ -1265,10 +1272,10 @@ $(document).ready(function() {
 						alert("제목을 입력하세요.");
 						$("#schdl_title").focus();
 					}else if(checkEmpty("#schdl_start_date")){
-						alert("시작 시간을 선택하세요.");
+						alert("시작 날짜를 선택하세요.");
 						$("#schdl_start_date").focus();
 					}else if(checkEmpty("#schdl_end_date")){
-						alert("종료 시간을 선택하세요.");
+						alert("종료 날짜를 선택하세요.");
 						$("#schdl_end_date").focus();
 					}else if($("#schdl_ctgry").val() == "0" && checkEmpty("#user_ctgry")){
 						alert("사용자지정 범주를 입력하세요.");
@@ -1276,7 +1283,10 @@ $(document).ready(function() {
 					}else if($("#schdl_start_date").val() > $("#schdl_end_date").val()){
 						alert("종료일이 시작일보다 빠를 수 없습니다.");
 						$("#schdl_end_date").focus();
-					}else{
+					}else if(checkEmpty("#schdl_end_time") && !$("#aldy_dvsn").is(":checked")){
+  						alert("종료 시간을 입력하세요.");
+  						$("#schdl_end_time").focus();
+  					}else{
 						 if(checkEmpty("#schdl_cont")){
 							$("#schdl_cont").val(" "); // 내용을 비워두면 undefined 출력돼서 추가
 						}
