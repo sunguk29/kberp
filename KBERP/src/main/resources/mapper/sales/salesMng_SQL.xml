@@ -97,24 +97,25 @@
 		              EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, S.START_DATE,
 		              DECODE(SUBSTR(S.PRGRS_STS_NUM, 2, 1), 5, '종료(성공)', 6, '종료(실패)', 7, '진행중') AS PRGRS_STS,
 		              DECODE(SUBSTR(S.PRGRS_STS_NUM, 1, 1), 1, '영업기회', 2, '제안', 3, '견적', 4, '계약') AS PRGRS_STS2,
+					ROW_NUMBER() OVER(ORDER BY 		            
 		            <choose>
 						<when test="listSort == 9">
-							ROW_NUMBER() OVER(ORDER BY S.SALES_NUM DESC) AS RNUM
+							S.SALES_NUM
 						</when>
 						<when test="listSort == 0">
-							ROW_NUMBER() OVER(ORDER BY L.LEAD_NAME DESC) AS RNUM
+							L.LEAD_NAME
 						</when>
 						<when test="listSort == 1">
-							ROW_NUMBER() OVER(ORDER BY CC.CLNT_CMPNY_NAME DESC) AS RNUM
+							CC.CLNT_CMPNY_NAME
 						</when>
 						<when test="listSort == 2">
-							ROW_NUMBER() OVER(ORDER BY LDI.EXPCTN_LOAN_SCALE DESC) AS RNUM
+							LDI.EXPCTN_LOAN_SCALE
 						</when>
 						<when test="listSort == 3">
-							ROW_NUMBER() OVER(ORDER BY TO_CHAR(S.START_DATE, 'YYYY-MM-DD') DESC) AS RNUM
+							TO_CHAR(S.START_DATE, 'YYYY-MM-DD')
 						</when>
 					</choose>
-					, Q.QTN_NUM, Q.QTN_STS_NUM
+					 DESC) AS RNUM, Q.QTN_NUM, Q.QTN_STS_NUM
 		       FROM SALES S INNER JOIN EMP E
 		                            ON S.MNGR_EMP_NUM = E.EMP_NUM
 		                    INNER JOIN LEAD L
