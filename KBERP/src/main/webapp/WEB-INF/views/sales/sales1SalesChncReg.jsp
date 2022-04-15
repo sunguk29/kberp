@@ -609,8 +609,6 @@ $(document).ready(function() {
 								}
 							}
 						}); // makePopup depth2 end
-						console.log("One!");
-						console.log(lpsNum);
 						closePopup();
 					}
 				}, {

@@ -2290,7 +2290,6 @@ function test(t) {
 					<input type="hidden" name="menuNum" value="${param.menuNum}" />
 					<input type="hidden" name="menuType" value="${param.menuType}" />
 					<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
-					<input type="hidden" name="qtnNum" value="${param.qtnNum}" /> <!-- 견적 번호 -->
 					<input type="hidden" id= "mdNum" name="mdNum" />
 					<input type="hidden" id= "mdName" name="mdName" />
 					<div class="bot_title"><h3>견적<div class="drop_btn"></div></h3></div>

@@ -617,10 +617,6 @@ pre {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-
-	console.log(${param.salesNum});
-	console.log(${param.qtnNum});
-	
 	reloadSgstnList();
 	
 	// 목록 버튼
@@ -635,16 +631,14 @@ $(document).ready(function() {
 	
 	// 견적서 추가(수정) 버튼
 	$("#updateBtn").on("click", function() {
-		var params = $("#actionForm").serialize();
-		
+		var params = $("#addForm").serialize();
 		$.ajax({
 			type : "post",
 			url : "qtnAddAjax",
 			dataType : "json",
 			data : params,
 			success : function(res) {
-				$("#actionForm").attr("action", "sales3QtnReg");
-				$("#actionForm").submit();
+				$("#addForm").submit();
 			},
 			error : function(req) {
 				console.log(req.responseText);
@@ -1172,7 +1166,6 @@ $(document).ready(function() {
 								$("#ssactvtycont").focus();
 							} else {					
 									
-									console.log(${sEmpNum});
 									var RegForm = $("#RegForm");
 											
 									RegForm.ajaxForm({
@@ -1439,8 +1432,8 @@ function uploadName(e) {
 </head>
 <body>
 <form action="#" id="ssForm" method="post">
-	<input type="hidden" id="schdlNumber" name="schdlNum"  />
-	<input type="hidden" id="salesNumber" name="salesNum"  />
+	<input type="hidden" id="schdlNumber" name="schdlNum" />
+	<input type="hidden" id="salesNumber" name="salesNum" />
 </form>	
 <form action="#" id="actionForm" method="post">
 	<input type="hidden" id="page" name="page" value="${page}" />
@@ -1451,6 +1444,13 @@ function uploadName(e) {
 	<input type="hidden" name="qtnNum" value="${param.qtnNum}" /> <!-- 견적 번호 -->
 	<input type="hidden" name="mdName" value="${param.mdName}" /> <!-- 상품 이름 -->
 	<input type="hidden" name="loanPrd" value="${data3.LOAN_PRD}" /> <!-- 상품 이름 -->
+</form>
+<form action="sales3QtnReg" id="addForm" method="post">
+	<input type="hidden" name="top" value="${param.top}" />
+	<input type="hidden" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업번호 -->
+	<input type="hidden" name="qtnNum" value="${data3.QTN_NUM}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
