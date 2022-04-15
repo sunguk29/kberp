@@ -1860,7 +1860,7 @@ function uploadName(e) {
 							<tr height="40">
 								<td><input type="button" class="btn" value="이자율(%)" /></td>
 								<td><input type="text" class="txt" id="intrstRate" name="intrstRate" value="${data3.INTRST_RATE}" readonly="readonly" /></td>
-								<td><input type="button" class="btn" value="납부일" readonly="readonly" /></td>
+								<td><input type="button" class="btn" value="납부일*" readonly="readonly" /></td>
 								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" value="${data3.PYMNT_DATE}" readonly="readonly" placeholder="매달    일" /></td>
 							</tr>
 							<tr height="40">

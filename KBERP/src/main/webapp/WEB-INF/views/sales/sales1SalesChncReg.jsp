@@ -513,21 +513,27 @@ $(document).ready(function() {
 	
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
-		if(checkEmpty("#mngrName")) {
-			alert("담당자를 입력하세요.");
-			$("#mngrName").focus();
-		} else if($("#loanCauseNum").val() == 9) {
-			alert("대출원인을 선택하세요.");
-			$("#loanCauseNum").focus();
+		if($("#loanCauseNum").val() == 9) {
+			makeAlert("필수 항목 알림", "대출원인을 선택하세요.", function() {
+				$("#loanCauseNum").focus();
+			});
+		} else if(isNaN($("#expctnLoanScale").val())) {
+			makeAlert("알림", "예상 대출 규모는 숫자만 입력 가능합니다.", function() {
+				$("#expctnLoanScale").val("");
+				$("#expctnLoanScale").focus();
+			});
 		} else if($("#loanHopeType").val() == 9) {
-			alert("대출 희망 유형을 입력하세요.");
-			$("#loanHopeType").focus();
+			makeAlert("필수 항목 알림", "대출 희망 유형을 입력하세요.", function() {
+				$("#loanHopeType").focus();
+			});
 		} else if($("#loanHopeTime").val() == 9) {
-			alert("대출 희망 시기를 입력하세요.");
-			$("#loanHopeTime").focus();
+			makeAlert("필수 항목 알림", "대출 희망 시기를 입력하세요.", function() {
+				$("#loanHopeTime").focus();
+			});
 		} else if($("#expctdBsnsType").val() == 9) {
-			alert("예정 사업 형태를 입력하세요.");
-			$("#expctdBsnsType").focus();
+			makeAlert("필수 항목 알림", "예정 사업 형태를 입력하세요.", function() {
+				$("#expctdBsnsType").focus();
+			});
 		} else {
 			var html = "";
 			
