@@ -218,6 +218,8 @@ $(document).ready(function() {
 		
 		$("#page").val("1");
 		$("#clntCmpnyClsfyNum").val($(this).attr("num"));
+		$("#oldClntCmpnyClsfyNum").val($(this).attr("num"));
+		$("#listSort").val("9");
 		
 		if($("#searchTxt").val() != "") { // 검색어 txt가 비어있지 않으면 초기화
 			var txt = document.getElementById("searchTxt");

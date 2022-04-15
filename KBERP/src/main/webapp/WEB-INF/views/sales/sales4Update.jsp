@@ -490,9 +490,8 @@ $(document).ready(function() {
 			buttons : [ {
 				name : "확인",
 				func : function() {
-					$("#listForm").attr("action", "salesList");
-					$("#listForm").submit();
-					console.log("One!");
+					$("#backForm").attr("action", "sales4CntrctCont");
+					$("#backForm").submit();
 					closePopup();
 				}
 			}, {
@@ -1207,21 +1206,21 @@ function uploadName(e) {
 						<tbody>
 							<tr height="40">
 								<td><input type="button" class="btn" value="계약일*" readonly="readonly" /></td>
-								<td colspan="3"><input type="date" class="txt" id="cntrctDt" name="cntrctDt" value="${data4.CNTRCT_DATE}"/></td>		
+								<td colspan="3"><input type="date" class="txt" id="cntrctDt" name="cntrctDt" value="${data4.CNTRCT_DATE}" readonly="readonly" /></td>		
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="계약기간*" readonly="readonly"/></td>
-								<td><input type="date" class="txt" id="cntrctSdt" name="cntrctSdt" value="${data4.CNTRCT_START_DATE}"/></td>
+								<td><input type="date" class="txt" id="cntrctSdt" name="cntrctSdt" value="${data4.CNTRCT_START_DATE}" readonly="readonly" /></td>
 								<td>
 									<div class="wave"> ~ </div>
 								</td>
-								<td><input type="date" class="txt" id="cntrctEdt" name="cntrctEdt" value="${data4.CNTRCT_END_DATE}"/></td>
+								<td><input type="date" class="txt" id="cntrctEdt" name="cntrctEdt" value="${data4.CNTRCT_END_DATE}" readonly="readonly" /></td>
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="고객사" /></td>
-									<td><input type="text" class="txt" value="${data.CLNT_CMPNY_NAME}"/></td>
+									<td><input type="text" class="txt" value="${data.CLNT_CMPNY_NAME}" readonly="readonly" /></td>
 									<td><input type="button" class="btn" value="고객" /></td>
-									<td><input type="text" class="txt"  value="${data.CLNT_NAME}"/></td>		
+									<td><input type="text" class="txt"  value="${data.CLNT_NAME}" readonly="readonly" /></td>		
 							</tr> 
 							<tr height="40">
 									<td><input type="button" class="btn" value="입금계좌 소유주명*" readonly="readonly" /></td>
@@ -1247,7 +1246,7 @@ function uploadName(e) {
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="갱신예정일*" /></td>
-								<td colspan="3"><input type="date" class="txt"  id="reDate" name="reDate" value="${data4.RNWL_EXPCTD_DATE}" /></td>
+								<td colspan="3"><input type="date" class="txt"  id="reDate" name="reDate" value="${data4.RNWL_EXPCTD_DATE}" readonly="readonly" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>

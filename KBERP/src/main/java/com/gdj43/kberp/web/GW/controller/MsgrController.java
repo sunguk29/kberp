@@ -39,6 +39,10 @@ public class MsgrController {
 	@RequestMapping(value = "/msgr")
 	public ModelAndView msgr(ModelAndView mav) throws Throwable {
 		
+		int maxNo = ims.getMaxNo();
+		
+		mav.addObject("maxNo", maxNo);
+		System.out.println("##########" + maxNo);
 		
 		mav.setViewName("GW/msgr");
 		
@@ -73,8 +77,6 @@ public class MsgrController {
 				params.put("chatsq", seq); // 채팅방 번호 넣어주기
 				ics.insertData("msgr.insertChat", params);
 				
-				int maxNo = ims.getMaxNo();
-				modelMap.put("maxNo", maxNo);
 				//반복문으로 하거나 srch_check를 인서트해서 hashmap put 계속추가?
 				for(String num : srch_check) {
 					HashMap<String, String>data = new HashMap<String, String>();
@@ -82,13 +84,14 @@ public class MsgrController {
 					data.put("num", num);
 					ics.insertData("msgr.insertChatHead", data);
 				}
-					
 				/* ics.insertData("msgr.insertCont",params); */
 				break;
+				
 			case "join" :
 				ics.updateData("msgr.joinChat", params);
 				break;
-	/*			case "delete" :
+				
+	/*		case "delete" :
 				ims.deleteChat(params);
 				break; */
 			}
@@ -181,8 +184,6 @@ public class MsgrController {
 		
 		params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
 		
-		ics.getDataList("msgr.addListChat", params);
-		
 		try {
 			System.out.println("!!!!!!!!!!!!!!!" + params);
 			
@@ -209,14 +210,14 @@ public class MsgrController {
 		
 		int lastChatNo = Integer.parseInt(request.getParameter("lastChatNo"));
 		
-		System.out.println("555555555555" + lastChatNo + request);
+		System.out.println("555555555555" + lastChatNo);
 		System.out.println("333333333333" + params);
-		
 		
 		try {
 			List<HashMap<String, String>> list = ims.getContList(lastChatNo);
-		//	List<HashMap<String, String>> list = ics.getDataList("msgr.DrawRoom", params);
 			
+		//	List<HashMap<String, String>> list = ics.getDataList("msgr.DrawRoom", params);
+			System.out.println("333333333333" + list);
 			modelMap.put("list", list);
 			modelMap.put("message", CommonProperties.RESULT_SUCCESS);
 		} catch (Exception e) {
