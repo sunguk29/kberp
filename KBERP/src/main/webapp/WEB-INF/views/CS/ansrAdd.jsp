@@ -379,6 +379,7 @@
 	vertical-align: top;
 	resize: none;
 	margin-bottom: 5px;
+	white-space: pre-line;
 }
 
 .rspnd_top_row1 {
@@ -529,8 +530,7 @@ $(document).ready(function() {
 							data : params,
 							success : function(res) {
 								if(res.res == "success") {
-									closePopup();
-									$("#guide_btn").click();
+									rspndRe();
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
 								}
@@ -591,8 +591,7 @@ $(document).ready(function() {
 							data : params,
 							success : function(res) {
 								if(res.res == "success") {
-									closePopup();
-									$("#guide_btn").click();
+									rspndRe();
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
 								}
@@ -624,8 +623,7 @@ $(document).ready(function() {
 							data : params,
 							success : function(res) {
 								if(res.res == "success") {
-									closePopup();
-									$("#guide_btn").click();
+									rspndRe();
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
 								}
@@ -638,7 +636,6 @@ $(document).ready(function() {
 						}); // ajax end
 						
 					}
-					
 				});
 			},
 			draggable : true,
