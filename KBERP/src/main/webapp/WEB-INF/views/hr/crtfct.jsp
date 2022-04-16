@@ -385,7 +385,7 @@ function onPrint() {
 							<col width="100">
 							<col width="100">
 							<col width="150">
-							<col width="50">
+							<%-- <col width="50"> --%>
 						</colgroup>
 						<thead>
 							<tr>
@@ -396,7 +396,7 @@ function onPrint() {
 								<th>발급요청일</th>
 								<th>발급완료일</th>
 								<th>발급현황</th>
-								<th>인쇄</th>
+							<!--<th>인쇄</th>  -->	
 							</tr>
 						</thead>
 						<tbody>
@@ -439,9 +439,9 @@ function onPrint() {
 						         			<td style="color:#ff6f60;">발급불가: ${data.RSN}</td> 
 						         		</c:when>
 						         	</c:choose>
-						         	<c:if test="${data.ISSUE_STS_NUM==1}">
+						        <%--  	<c:if test="${data.ISSUE_STS_NUM==1}">
 				         				<td><input type="button" value="인쇄" id="print"/></td>
-						         	</c:if>
+						         	</c:if> --%>
 						         </tr>
 						      </c:forEach>
 						</tbody>
