@@ -346,8 +346,17 @@
 		UPDATE LEAD SET LEAD_NAME = #{leadName},
                 MNGR_EMP_NUM = #{mngNum},
                 CLNT_NUM = #{clntNum},
-                RCGNTN_PATH_NUM =   #{rp},
+                RCGNTN_PATH_NUM = #{rp},
                 PRGRS_STS_NUM =  #{psNum},
+                PSBL_CHECK = #{psblCheck}
+		WHERE LEAD_NUM = #{leadNum}
+	</update>
+<!-- ******************************* 리드 영업기회 전환 성공시 수정 ******************************* -->		
+	<update id="scsUpdate" parameterType="hashmap">
+		UPDATE LEAD SET LEAD_NAME = #{leadName},
+                MNGR_EMP_NUM = #{mngNum},
+                CLNT_NUM = #{clntNum},
+                RCGNTN_PATH_NUM = #{rp},
                 PSBL_CHECK = #{psblCheck}
 		WHERE LEAD_NUM = #{leadNum}
 	</update>

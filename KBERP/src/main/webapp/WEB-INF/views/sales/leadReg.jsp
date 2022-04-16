@@ -351,6 +351,9 @@ tr:nth-child(9) td:nth-child(1){
 td:nth-child(1) {
 	text-align: center;
 }
+tr:nth-child(7) {
+	border: none;
+}
 .btn{
 	width : 90px;
 	height: 40px;
@@ -1544,8 +1547,14 @@ function uploadName(e) {
 									<td>
 										<input type="text" class="txt" id="psblCheck" name="psblCheck" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" style="text-align: right;" maxlength="3"/>
 										<div id="percent">%</div>
-										<span id="a">숫자 0~100까지만 입력가능합니다.</span>
+										
 									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th><span id="a">숫자 0~100까지만 입력가능합니다.</span></th>
 								</tr>													
 							</tbody>
 						</table>

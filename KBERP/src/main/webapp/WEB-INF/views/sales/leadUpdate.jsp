@@ -756,53 +756,110 @@ $(document).ready(function() {
 						
 						html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
 						
-						makePopup({
-							depth : 2,
-							bg : true,
-							bgClose : false,
-							title : "저장 완료",
-							contents : html,
-							width : 400,
-							height : 180,
-							buttons : {
-								name : "확인",
-								func:function() {
-									var updateForm = $("#updateForm");
-									
-									updateForm.ajaxForm({
-										success : function(res) {
-											// 물리파일명 보관
-											if(res.fileName.length > 0) {
-												$("#attFile").val(res.fileName[0]);										
-											}
-											// 글 저장
-											var params = $("#updateForm").serialize();
-									
-											$.ajax({
-												type : "post", 
-												url : "leadAction/update", 
-												dataType : "json", 
-												data : params, 
-												success : function(res) { 
-													if(res.res == "success") {
-														$("#listForm").submit();
-													} else {
-														alert("수정중 문제가 발생하였습니다.");
-													}
-												},
-												error : function(request, status, error) {
-													console.log(request.responseText);
+						// 셀렉트박스로 진행상태-영업기회전환 수정 시 영업기회 등록페이지로 이동 
+						// 영업기회 등록에서 저장안할 시 psNum은 업데이트 안됨 
+						if($("#psNum").val() == 2) {
+							var ltshtml = "";
+							
+							ltshtml += "<div class=\"popup_cont2\">해당 리드가 영업기회로 전환되었습니다.</div>";
+							
+							makePopup({
+								depth : 2,
+								bg : true,
+								bgClose : false,
+								title : "영업기회로 전환",
+								contents : ltshtml,
+								width : 400,
+								height : 180,
+								buttons : {
+									name : "확인",
+									func:function() {
+										var updateForm = $("#updateForm");
+										
+										updateForm.ajaxForm({
+											success : function(res) {
+												// 물리파일명 보관
+												if(res.fileName.length > 0) {
+													$("#attFile").val(res.fileName[0]);										
 												}
-											}); //ajax end	
-										},
-										error : function(req) {
-											console.log(req.responseText);
-										}
-									});	
-									updateForm.submit(); // ajaxForm 실행							
-								} // 확인 func end
-							} // buttons1 end
-						}) // popup end
+												// 글 저장
+												var params = $("#updateForm").serialize();
+												
+												$.ajax({
+													type : "post", 
+													url : "leadAction/salesChangeSuccess", 
+													dataType : "json", 
+													data : params, 
+													success : function(res) { 
+														if(res.res == "success") {
+															$("#listForm").attr("action", "sales1SalesChncReg"); 
+															$("#listForm").submit(); 
+														} else {
+															alert("수정중 문제가 발생하였습니다.");
+														}
+													},
+													error : function(request, status, error) {
+														console.log(request.responseText);
+													}
+												}); //ajax end	
+											},
+											error : function(req) {
+												console.log(req.responseText);
+											}
+										});	
+										updateForm.submit(); // ajaxForm 실행							
+									} // 확인 func end
+								} // buttons1 end
+							}) // popup end
+						} else {
+							makePopup({
+								depth : 2,
+								bg : true,
+								bgClose : false,
+								title : "저장 완료",
+								contents : html,
+								width : 400,
+								height : 180,
+								buttons : {
+									name : "확인",
+									func:function() {
+										var updateForm = $("#updateForm");
+										
+										updateForm.ajaxForm({
+											success : function(res) {
+												// 물리파일명 보관
+												if(res.fileName.length > 0) {
+													$("#attFile").val(res.fileName[0]);										
+												}
+												// 글 저장
+												var params = $("#updateForm").serialize();
+												
+												$.ajax({
+													type : "post", 
+													url : "leadAction/update", 
+													dataType : "json", 
+													data : params, 
+													success : function(res) { 
+														if(res.res == "success") {
+															$("#listForm").submit();
+														} else {
+															alert("수정중 문제가 발생하였습니다.");
+														}
+													},
+													error : function(request, status, error) {
+														console.log(request.responseText);
+													}
+												}); //ajax end	
+											},
+											error : function(req) {
+												console.log(req.responseText);
+											}
+										});	
+										updateForm.submit(); // ajaxForm 실행							
+									} // 확인 func end
+								} // buttons1 end
+							}) // popup end	
+						}
 					console.log("One!");
 					closePopup();
 					} // 저장 func end
@@ -1548,8 +1605,13 @@ function uploadName(e) {
 									<td>
 										<input type="text" class="txt" id="psblCheck" name="psblCheck" value="${data.PSBL_CHECK}" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" style="text-align: right;" maxlength="3"/>
 										<div id="percent">%</div>
-										<span id="a">숫자 0~100까지만 입력가능합니다.</span>
 									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th><span id="a">숫자 0~100까지만 입력가능합니다.</span></th>	
 								</tr>
 								<tr>
 									<td><input type="button" class="btn" value="진행상태 *" readonly="readonly"/></td>

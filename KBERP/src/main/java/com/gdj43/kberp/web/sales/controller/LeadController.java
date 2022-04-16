@@ -218,6 +218,9 @@ public class LeadController {
 				iCommonService.updateData("lead.getLeadUpdate", params); // 리드 수정
 				iCommonService.updateData("lead.getLeadAttUpdate", params); // 리드 첨부파일 수정
 				break;
+			case "salesChangeSuccess" :
+				iCommonService.updateData("lead.scsUpdate", params); // 리드 셀렉트박스에서 진행상태-영업기회전환시 진행상태빼고 업데이트
+				break;
 			case "delete" :
 				iCommonService.updateData("lead.getLeadDelete", params); // 리드 삭제
 				break;
