@@ -1441,10 +1441,9 @@ $(document).ready(function() {
 					      success : function(res) {		
 				    	 			 if(res.res=="success"){
 							    		  makeAlert("알림", "결재가 요청되었습니다.", function(){
-							    			  
-													location.reload();
-		    	 									 console.log(res);
-   															});
+											location.reload();
+    	 									console.log(res);
+										  });
 				    	 			 }
 					      },
 					      error : function(req) {

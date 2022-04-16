@@ -439,7 +439,7 @@ $(document).ready(function() {
 				name : "확인",
 				func:function() {
 						if (checkEmpty("#deptInput")) {
-							alert("부서명을 입력하세요.");
+							makeAlert("알림","부서명을 입력하세요.");
 							$("#deptInput").focus();
 						} else {
 							$("#deptName").val($("#deptInput").val());
