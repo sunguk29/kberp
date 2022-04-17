@@ -312,6 +312,77 @@ td:nth-child(1), td:nth-child(3) {
 	color: black;
 	text-decoration: none;
 }
+.mgtop {
+	margin-top: 50px;
+}
+.op_title { 
+	font-size: 11pt;
+}
+.opbx {
+	width: 860px;
+	height: 305px;
+	margin-left: 47.5px;
+	overflow-y: auto;
+}
+.opBox {
+	width: 860px;
+	height: 56px;
+	margin: 15px 0px 5px 47.5px;
+}
+textarea {
+	width: 757px;
+	height: 52px;
+	font-size: 10.5pt;
+	white-space: pre-wrap;
+	resize: none;
+	font-family: "맑은 고딕";
+	display: inline-block;
+	vertical-align: top;
+	outline: none;
+}
+.subm {
+	margin-left: 14px;
+	width: 35px;
+	height: 56px;
+	line-height: 56px;
+}
+.OpinionBox {
+	width: 830px;
+	height: 70px;
+	font-size: 10pt;
+	border: 1px solid gray;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+	margin-bottom: 5px;
+	background-color: #F2F2F2;
+}
+.name {
+	margin-top: 3px;
+	font-weight: bold;
+	padding-top: 5px;
+	padding-left: 20px;
+}
+.txtOp, .dt, .del {
+	padding-left: 20px;
+}
+.dt {
+	padding-right: 590px;
+}
+.del:hover {
+	cursor: pointer;
+	color: #F2CB05;
+}
+.dt, .del {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 9pt;
+	color: gray;
+}
+hr {
+	margin-bottom: 10px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -371,7 +442,128 @@ $(document).ready(function() {
 		
 	});
 	
+	// 의견
+	reloadOpList();
+	
+	// 의견 등록
+	$(".subm").on("click", function() {
+		if($("#tatacont").val() != '' && $("#tatacont").val() != null) {
+			var params = $("#botOpActionForm").serialize();
+		
+			$.ajax({
+				type : "post",
+				url : "clOpBotActionAjax/insert",
+				dataType : "json",
+				data : params,
+				success : function(res) {
+					if(res.res == "success") {
+						$("#tatacont").val("");
+						reloadOpList();
+					} else {
+						alert("등록중 문제가 발생하였습니다.");
+					}
+				},
+				error : function(request, status, error) {
+					console.log(request.responseText);
+				}
+			});
+		} else {
+			makeAlert("알림", "내용을 입력해주세요.");
+		}
+	});
+	
+	
+	// 의견 삭제
+	$(".opbx").on("click", ".del", function() {
+		var cmntNum = $(this).children("#cmntNum").val();
+		document.getElementById("cmntNum").value = cmntNum;
+		
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "경고",
+			contents : "<div class=\"text_center\"><b>삭제하시겠습니까?</b></div>",
+			contentsEvent : function() {
+				$("#popup1").draggable();
+			},
+			buttons : [{
+				name : "예",
+				func:function() {
+					var params = $("#botOpActionForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "clOpBotActionAjax/update",
+						dataType : "json",
+						data : params,
+						success : function(res) {
+							if(res.res == "success") {
+								reloadOpList();
+							} else {
+								alert("삭제중 문제가 발생하였습니다.");
+							}
+						},
+						error : function(request, status, error) {
+							console.log(request.responseText);
+						}
+					});
+					closePopup();
+				}
+			}, {
+				name : "아니오"
+			}]
+		});
+		
+	});
+	
 });
+
+//의견 ajax
+function reloadOpList() {
+	var params = $("#botOpActionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "clOpBotListAjax",
+		data : params,
+		dataType : "json",
+		success : function(res) {
+			drawOpCnt(res.opListCnt);
+			drawOpList(res.list);
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	});
+}
+
+// 의견 개수
+function drawOpCnt(opListCnt) {
+	var html = "";
+	
+	html = "<h3>의견(" + opListCnt + ")</h3>";
+	
+	$(".op_title").html(html);
+}
+
+// 의견 목록
+function drawOpList(list) {
+	var html = "";
+	
+	for(var data of list) {
+		html += "<div class=\"OpinionBox\">";
+		html += "<div class=\"name\">" + data.EMP_NAME + "(" + data.DEPT_NAME + " / " + data.RANK_NAME + ")" + "</div>";
+		html += "<div class=\"txtOp\">" + data.CONT + "</div>";
+		html += "<div class=\"dt\">" + data.RGSTRTN_DATE + "</div>";
+		html += "<div class=\"del\">삭제";
+		html += "<input type=\"hidden\" id=\"cmntNum\" name=\"cmntNum\" value=\"" + data.CMNT_NUM + "\" />";
+		html += "</div>";
+		html += "</div>";
+	}
+	
+	$(".opbx").html(html);
+	
+}
 </script>
 </head>
 <body>
@@ -469,6 +661,21 @@ $(document).ready(function() {
 				<div class="cntrct_box_in">
 					<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
 				</div>
+				<!-- 상세보기 내용 하단부분 -->
+				<form action="#" id="botOpActionForm" method="post">
+					<input type="hidden" name="cn" value="${param.cn}" />
+					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
+					<input type="hidden" id="cmntNum" name="cmntNum" />
+					<!-- 의견 -->
+					<div class="mgtop"></div>
+					<div class="op_title"></div>
+					<hr color="#F2B705" width="925px">
+					<div class="opbx"></div>
+					<div class="opBox">
+						<textarea id="tatacont" name="tacont"></textarea>
+						<div class="cmn_btn subm">등록</div>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>

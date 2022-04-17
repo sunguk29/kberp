@@ -269,15 +269,15 @@ $(document).ready(function() {
 	// 저장
 	$("#addBtn").on("click", function() {
 		if(checkEmpty("#ccName")) {
-			makeAlert("필수 항목 알림", popContTwoLine("고객사를 입력하세요.<br/>나가시겠습니까?"), function() {
+			makeAlert("알림", popContOneLine("고객사를 입력하세요."), function() {
 				$("#ccName").focus();
 				});
 		} else if($("#ccClsfy").val() == 9) {
-			makeAlert("필수 항목 알림", popContOneLine("고객사 분류를 선택하세요."), function() {
+			makeAlert("알림", popContOneLine("고객사 분류를 선택하세요."), function() {
 				$("#ccClsfy").focus();
 			});
 		}else if($("#ccGrade").val() == 9) {
-			makeAlert("필수 항목 알림", popContOneLine("등급을 선택하세요."), function() {
+			makeAlert("알림", popContOneLine("등급을 선택하세요."), function() {
 				$("#ccGrade").focus();
 			});
 		} else if(isNaN($("#brNum").val())) {
@@ -286,42 +286,42 @@ $(document).ready(function() {
 				$("#brNum").focus();
 			});
 		} else if(checkEmpty("#cName")) {
-			makeAlert("필수 항목 알림", popContOneLine("대표명을 입력하세요."), function() {
+			makeAlert("알림", popContOneLine("대표명을 입력하세요."), function() {
 				$("#cName").focus();
 			});
 		} else if(isNaN($("#phoneNum").val())) {
-			makeAlert("알림", "<span class=\"popContOneLine\">유선번호는 숫자만 가능합니다.<span>", function() {
+			makeAlert("알림", popContOneLine("유선번호는 숫자만 가능합니다."), function() {
 				$("#phoneNum").val("");
 				$("#phoneNum").focus();
 			});
 		} else if(isNaN($("#fax").val())) {
-			makeAlert("알림", "<span class=\"popContOneLine\">팩스번호는 숫자만 가능합니다.<span>", function() {
+			makeAlert("알림", popContOneLine("팩스번호는 숫자만 가능합니다."), function() {
 				$("#fax").val("");
 				$("#fax").focus();
 			});
 		} else if(checkEmpty("#zipCodeNum")) {
-			makeAlert("필수 항목 알림", "<span class=\"popContOneLine\">우편번호를 입력하세요.<span>", function() {
+			makeAlert("알림", popContOneLine("우편번호를 입력하세요."), function() {
 				$("#zipCodeNum").focus();
 			});
 		} else if(checkEmpty("#adrs")) {
-			makeAlert("필수 항목 알림", "<span class=\"popContOneLine\">주소를 입력하세요.<span>", function() {
+			makeAlert("알림", popContOneLine("주소를 입력하세요."), function() {
 				$("#adrs").focus();
 			});
 		} else if(checkEmpty("#dtlAdrs")) {
-			makeAlert("필수 항목 알림", "<span class=\"popContOneLine\">상세주소를 입력하세요.<span>", function() {
+			makeAlert("알림", popContOneLine("상세주소를 입력하세요."), function() {
 				$("#dtlAdrs").focus();
 			});
 		} else if(checkEmpty("#rvn")) {
-			makeAlert("필수 항목 알림", "<span class=\"popContOneLine\">매출를 입력하세요", function() {
+			makeAlert("알림", popContOneLine("매출를 입력하세요"), function() {
 				$("#rvn").focus();
 			});
 		} else if(isNaN($("#rvn").val())) {
-			makeAlert("알림", "<span class=\"popContOneLine\">매출은 숫자만 가능합니다.", function() {
+			makeAlert("알림", popContOneLine("매출은 숫자만 가능합니다."), function() {
 				$("#rvn").val("");
 				$("#rvn").focus();
 			});
 		} else if($("#rp").val() == 9) {
-			makeAlert("필수 항목 알림", "<span class=\"popContOneLine\">인지경로를 선택하세요", function() {
+			makeAlert("알림", popContOneLine("인지경로를 선택하세요"), function() {
 				$("#rp").focus();
 			});
 		} else {
@@ -329,7 +329,7 @@ $(document).ready(function() {
 				bg : true,
 				bgClose : false,
 				title : "알림",
-				contents : "<span class=\"popContOneLine\">저장하시겠습니까?</span>",
+				contents : popContOneLine("저장하시겠습니까?"),
 				contentsEvent : function() {
 					$("#popup1").draggable();
 				},
@@ -355,7 +355,7 @@ $(document).ready(function() {
 										if(res.res == "success") {
 											$("#listForm").submit();
 										} else {
-											alert("등록중 문제가 발생하였습니다.");
+											makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 										}
 									},
 									error : function(request, status, error) {
