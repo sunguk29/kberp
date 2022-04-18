@@ -675,17 +675,10 @@ $(document).ready(function() {
 			dataType : "json",
 			data : params,
 			success : function(res){						
-				
-				
 					//신규이벤트 추가
 					$("#fullCalendarArea").fullCalendar("addEventSource", res.slist);
 					
-					if(${param.initialDate ne ''}){
-					$("#fullCalendarArea").fullCalendar("defaultDate", ${param.initialDate});
-						
-					}
-				
-					
+					console.log(${param.initialDate});
 			},
 			error : function(req) {
 				console.log(req.responseText);
@@ -693,11 +686,11 @@ $(document).ready(function() {
 		});
 	}
 	
-	$("body").on("click", ".fc-month-button", function() {
+	/* $("body").on("click", ".fc-month-button", function() {
 		clndrDvsn
 		$("#clndrDvsn").attr('value',"month");
 		history.go(0);
-	});
+	}); */
 	
 	
 	// 달력에서 이후 버튼 누를 시
@@ -721,13 +714,11 @@ $(document).ready(function() {
 			drawDayCalc();
 			
 			if(clndrMonth <= 9){
-				var day = clndrYear+"-0"+clndrMonth+"-01";				
+				var day = clndrYear+"-0"+clndrMonth+"-10";				
 			} else {
-				var day = clndrYear+"-"+clndrMonth+"-01";
+				var day = clndrYear+"-"+clndrMonth+"-10";
 			}
 			document.getElementById("initialDate").value = day;
-		
-	console.log($("#initialDate").val());
 	});
 	
 	
@@ -752,56 +743,49 @@ $(document).ready(function() {
 		drawDayCalc();
 		
 		if(clndrMonth <= 9){
-			var day = clndrYear+"-0"+clndrMonth+"-01";				
+			var day = clndrYear+"-0"+clndrMonth+"-10";				
 		} else {
-			var day = clndrYear+"-"+clndrMonth+"-01";
+			var day = clndrYear+"-"+clndrMonth+"-10";
 		}
 		document.getElementById("initialDate").value = day;
 	});
 	
 	$("#fullCalendarArea").fullCalendar({
-		header: {
-			left: '',
-	        center: 'prev, title, next',
-	        right: ''
-	      },
-	      locale: "ko",
-	      editable: false,
-	      height: 400,
-	      events: data,
-	      eventClick: function(event) { // 이벤트 클릭
-	    	  
-	      },
-	      dayClick: function(date, js, view) { // 일자 클릭
-	    	  
-			var tdv = date.format();
-			document.getElementById("ctt").value = "      " + tdv;
-		
-			$(".cal_cont").show();
-			$("#ctt").show();
+			header: {
+				left: '',
+		        center: 'prev, title, next',
+		        right: ''
+		      },
+		      locale: "ko",
+		      editable: false,
+		      height: 400,
+		      events: data,
+		      eventClick: function(event) { // 이벤트 클릭
+		    	  
+		      },
+		      dayClick: function(date, js, view) { // 일자 클릭
+		    	  
+				var tdv = date.format();
+				document.getElementById("ctt").value = "      " + tdv;
 			
-			var params = $("#actionForm").serialize();
-			
-	  		$.ajax({
-	  			type : "post",
-	  			url : "salesDaySchdlAjax",
-	  			dataType : "json",
-	  			data : params,
-	  			success : function(res) {
-	  				drawList(res.list);
-	  			},
-	  			error : function(req) {
-	  				console.log(req.responseText);
-	  			}
-	  		});
-	    	  
-	    	  
-	    	   //alert('Clicked on: ' + date.format());
-
-	    	  //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-
-	    	  //alert('Current view: ' + view.name);
-	      }
+				$(".cal_cont").show();
+				$("#ctt").show();
+				
+				var params = $("#actionForm").serialize();
+				
+		  		$.ajax({
+		  			type : "post",
+		  			url : "salesDaySchdlAjax",
+		  			dataType : "json",
+		  			data : params,
+		  			success : function(res) {
+		  				drawList(res.list);
+		  			},
+		  			error : function(req) {
+		  				console.log(req.responseText);
+		  			}
+		  		});
+		      }
 	      
 	});
 	
