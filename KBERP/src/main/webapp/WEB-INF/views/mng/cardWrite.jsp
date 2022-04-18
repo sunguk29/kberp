@@ -236,6 +236,7 @@ $(document).ready(function() {
 				
 				$("#empSrchBtn").on("click", function() {
 					$("#sendSrchTxt").val($("#empSrchTxt").val());
+					$("#page").val("1");
 					reloadList();
 				});
 				

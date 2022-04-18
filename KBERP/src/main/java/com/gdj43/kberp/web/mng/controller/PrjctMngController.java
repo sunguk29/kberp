@@ -59,4 +59,30 @@ public class PrjctMngController {
 		
 		return mapper.writeValueAsString(modelMap);
 	}
+	//상세보기
+			@RequestMapping(value = "/prjctView")
+			public ModelAndView prjctView(@RequestParam HashMap<String, String> params, 
+										 ModelAndView mav) throws Throwable {
+			
+				HashMap<String, String> data = ics.getData("prjctMng.prjctView", params);
+				
+				mav.addObject("data", data);
+				
+				mav.setViewName("mng/prjctView");
+				
+				return mav;
+			}
+	
+			
+			@RequestMapping(value="/prjctMngView2Ajax", method= RequestMethod.POST, produces = "text/json;charset=UTF-8")
+			@ResponseBody
+			public String prjctMngView2Ajax(@RequestParam HashMap<String,String>params) throws Throwable{
+				ObjectMapper mapper = new ObjectMapper();
+				Map<String,Object> modelMap = new HashMap<String, Object>();
+				
+				List<HashMap<String, String>> list = ics.getDataList("prjctMng.prjctView2", params);
+				modelMap.put("list", list);
+				
+				return mapper.writeValueAsString(modelMap);
+			}
 }
