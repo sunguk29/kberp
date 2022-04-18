@@ -1260,10 +1260,10 @@ function drawSScList(list) {
 		html += "";
 		html +=	"<div class=\"name\">일정명   :" + data.SCHDL_NAME + "</div>";
 		html +=	"<div class=\"txtOp\">기간   " + data.START_DATE_HR +  " ~ " + data.END_DATE_HR + "</div>";
-		if(data.MNGR_EMP_NUM == ${sEmpNum}) {
+		if(data.EMP_NUM == ${sEmpNum}) {
 			html +=	"<div class=\"txtOp sche\">담당자   :" + data.EMP_NAME + "</div><span class=\"sch_re\" >수정<input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"salesListNumber\" value=\"" + ${param.salesNum} + "\" /></span><span> | </span><span class=\"sch_del\" >삭제<input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"salesListNumber\" value=\"" + ${param.salesNum} + "\" /></span>";
-		} else if(data.MNGR_EMP_NUM != ${sEmpNum}) {
-			html +=	"<div class=\"txtOp sche\">담당자   :" + data.EMP_NAME + "</div><span class=\"sch_re\" ><input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"salesListNumber\" value=\"" + ${param.salesNum} + "\" /></span><span></span><span class=\"sch_del\" ><input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"salesListNumber\" value=\"" + ${param.salesNum} + "\" /></span>";
+		} else {
+			html +=	"<div class=\"txtOp sche\">담당자   :" + data.EMP_NAME + "</div>";
 			
 		}
 		html += "</div>";
