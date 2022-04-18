@@ -391,7 +391,6 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-
 	var now = new Date();
 	var clndrYear = now.getFullYear();	// 연도
 	var clndrMonth = now.getMonth()+1;	// 월
@@ -401,6 +400,7 @@ $(document).ready(function() {
 	}else{
 		Cdate = ""+clndrYear+"-0"+clndrMonth;
 	}
+	
 	$('input[name=clndrDate]').attr('value',Cdate);
 	
 	if('${param.usrsrchTxt}' != ''){
@@ -675,16 +675,8 @@ $(document).ready(function() {
 			dataType : "json",
 			data : params,
 			success : function(res){						
-				
-				
-					//신규이벤트 추가
-					$("#fullCalendarArea").fullCalendar("addEventSource", res.slist);
-					
-					if(${param.initialDate ne ''}){
-					$("#fullCalendarArea").fullCalendar("defaultDate", ${param.initialDate});
-						
-					}
-				
+				//신규이벤트 추가
+				$("#fullCalendarArea").fullCalendar("addEventSource", res.slist);
 					
 			},
 			error : function(req) {
@@ -706,28 +698,27 @@ $(document).ready(function() {
 		//기존 이벤트 제거
 		$("#fullCalendarArea").fullCalendar("removeEventSources");
 		
+		clndrMonth = clndrMonth+1;
+		if(clndrMonth >= 13){
+			clndrMonth = 1;
+			clndrYear = clndrYear + 1;
+		}
+		if(clndrMonth >= 10){
+			Cdate = ""+clndrYear+"-"+clndrMonth;
+		}else{
+			Cdate = ""+clndrYear+"-0"+clndrMonth;
+		}
+		$('input[name=clndrDate]').attr('value',Cdate);
+		drawDayCalc();
 		
-			clndrMonth = clndrMonth+1;
-			if(clndrMonth >= 13){
-				clndrMonth = 1;
-				clndrYear = clndrYear + 1;
-			}
-			if(clndrMonth >= 10){
-				Cdate = ""+clndrYear+"-"+clndrMonth;
-			}else{
-				Cdate = ""+clndrYear+"-0"+clndrMonth;
-			}
-			$('input[name=clndrDate]').attr('value',Cdate);
-			drawDayCalc();
-			
-			if(clndrMonth <= 9){
-				var day = clndrYear+"-0"+clndrMonth+"-01";				
-			} else {
-				var day = clndrYear+"-"+clndrMonth+"-01";
-			}
-			document.getElementById("initialDate").value = day;
-		
-	console.log($("#initialDate").val());
+		if(clndrMonth <= 9){
+			var day = clndrYear+"-0"+clndrMonth+"-01";				
+		} else {
+			var day = clndrYear+"-"+clndrMonth+"-01";
+		}
+		document.getElementById("initialDate").value = day;
+	
+		console.log($("#initialDate").val());
 	});
 	
 	
@@ -795,7 +786,6 @@ $(document).ready(function() {
 	  			}
 	  		});
 	    	  
-	    	  
 	    	   //alert('Clicked on: ' + date.format());
 
 	    	  //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
@@ -804,7 +794,7 @@ $(document).ready(function() {
 	      }
 	      
 	});
-	
+
 	/* 캘린더 이벤트 관련 끝 */
 	
 	
