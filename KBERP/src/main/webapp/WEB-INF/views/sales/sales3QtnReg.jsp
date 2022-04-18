@@ -963,7 +963,7 @@ $(document).ready(function() {
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#qtnName")) {
-			makeAlert("필수 항목 알림", "견적명을 선택하세요.", function() {				
+			makeAlert("필수 항목 알림", "견적명을 입력하세요.", function() {				
 				$("#qtnName").focus();
 			});
 		} else if($("#mdType").val() == 9) {
@@ -973,10 +973,6 @@ $(document).ready(function() {
 		}  else if($("#prdmptn_psbl_check").val() == 9) {
 			makeAlert("필수 항목 알림", "상품을 선택하세요.", function() {
 				$("#prdmptn_psbl_check").focus();			
-			});
-		} else if(checkEmpty("#qtnDate")) {
-			makeAlert("필수 항목 알림", "견적일을 입력하세요.", function() {
-				$("#qtnDate").focus();				
 			});
 		} else if(checkEmpty("#LoanAmnt")) {
 			makeAlert("필수 항목 알림", "대출금액을 입력하세요.", function() {
@@ -1189,7 +1185,7 @@ $(document).ready(function() {
 								html += "				<input type=\"button\" class=\"btn\" value=\"상품 등급 *\" />                                                                                                ";
 								html += "			</td>                                                                                                                                                            ";
 								html += "			<td>                                                                                                                                                             ";
-								html += "				<select class=\"txt\" disabled=\"disabled\" id=\"md_grade\">									                                                             ";
+								html += "				<select class=\"txt\" disabled=\"disabled\" id=\"md_grade\" name=\"mdGrade\">									                                                             ";
 								if(data.MD_GRADE_NUM == 0) {
 									html += "					<option value=\"0\">S</option>                                                                                                                           ";
 								}
@@ -1409,7 +1405,7 @@ $(document).ready(function() {
 					html += "				<input type=\"button\" class=\"btn\" value=\"상품 등급 *\" />                                                                                                ";
 					html += "			</td>                                                                                                                                                            ";
 					html += "			<td>                                                                                                                                                             ";
-					html += "				<select class=\"txt\" disabled=\"disabled\" id=\"md_grade\">									                                                             ";
+					html += "				<select class=\"txt\" disabled=\"disabled\" id=\"md_grade\" name=\"mdGrade\">									                                                             ";
 					if(data.MD_GRADE_NUM == 0) {
 						html += "					<option value=\"0\">S</option>                                                                                                                           ";
 					}
@@ -2327,17 +2323,17 @@ function test(t) {
 									</select>
 								</td>
 							</tr>
-							<tr height="40">
+							<!-- <tr height="40">
 									<td><input type="button" class="btn" value="견적일*" readonly="readonly" /></td>
 									<td colspan="3"><input type="date" class="txt" id="qtnDate" name="qtnDate" /></td>
-							</tr>
+							</tr> -->
 							<tr height="40">
 									<td><input type="button" class="btn" value="대출금액*" readonly="readonly" /></td>
 									<td colspan="3"><input type="text" class="txt" id="LoanAmnt" name="LoanAmnt" placeholder="대출금액 입력 후 부가세 란을 선택하세요." /></td>		
 							</tr> 
 							<tr height="40">
 									<td><input type="button" class="btn" value="공급가액*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" id="splyPrice" name="sqlyPrice" readonly="readonly" /></td>		
+									<td colspan="3"><input type="text" class="txt" id="splyPrice" name="splyPrice" readonly="readonly" /></td>		
 							</tr> 
 							<tr height="40">
 									<td><input type="button" class="btn" value="세액*" readonly="readonly" /></td>
@@ -2411,7 +2407,7 @@ function test(t) {
 							<!-- </tr> -->
 							<tr height="40">
 								<td><input type="button" class="btn" value="이자율(%)" readonly="readonly" /></td>
-								<td><input type="text" class="txt" id="intrstRate" name="intrstRate" /></td>
+								<td><input type="text" class="txt" id="intrstRate" name="intrstRate" readonly="readonly" /></td>
 								<td><input type="button" class="btn" value="납부일*" readonly="readonly" /></td>
 								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" placeholder="매달    일" /></td>
 							</tr>
