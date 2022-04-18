@@ -70,17 +70,7 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-<!-- 검색 데이터 유지용 -->
-<input type="hidden" id="old_md_grade" 			value="${param.md_grade}" />
-<input type="hidden" id="old_sales_stsA" 		value="${param.sales_stsA}" />
-<input type="hidden" id="old_sales_sts0"	  	value="${param.sales_sts0}" />
-<input type="hidden" id="old_sales_sts1"	   	value="${param.sales_sts1}" />
-<input type="hidden" id="old_sales_sts2"	   	value="${param.sales_sts2}" />
-<input type="hidden" id="old_sales_start_date" 	value="${param.sales_start_date}" />
-<input type="hidden" id="old_sales_end_date" 	value="${param.sales_end_date}" />
-<input type="hidden" id="old_srch_gbn" 			value="${param.srch_gbn}" />
-<input type="hidden" id="old_srch_txt" 			value="${param.srch_txt}" />
-<input type="hidden" id="old_sort_gbn" 			value="${param.sort_gbn}" />
+
 
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -98,6 +88,18 @@ $(document).ready(function() {
 		
 	<!-- 해당 내용에 작업을 진행하시오. -->
 	<form action="#" id="actionForm" method="post">
+		<!-- 검색 데이터 유지용 -->
+		<input type="hidden" id="old_md_grade" 			value="${param.md_grade}" />
+		<input type="hidden" id="old_sales_stsA" 		value="${param.sales_stsA}" />
+		<input type="hidden" id="old_sales_sts0"	  	value="${param.sales_sts0}" />
+		<input type="hidden" id="old_sales_sts1"	   	value="${param.sales_sts1}" />
+		<input type="hidden" id="old_sales_sts2"	   	value="${param.sales_sts2}" />
+		<input type="hidden" id="old_sales_start_date" 	value="${param.sales_start_date}" />
+		<input type="hidden" id="old_sales_end_date" 	value="${param.sales_end_date}" />
+		<input type="hidden" id="old_srch_gbn" 			value="${param.srch_gbn}" />
+		<input type="hidden" id="old_srch_txt" 			value="${param.srch_txt}" />
+		<input type="hidden" id="old_sort_gbn" 			value="${param.sort_gbn}" />
+	
 		<input type="hidden" name="no" 	 id="no">   							<!-- 글번호 -->
 		<input type="hidden" name="page" id="page" value="${page}"> 			<!-- 페이지 -->
 		<input type="hidden" name="top" 		   value="${params.top}"> 		<!-- top정보 -->
