@@ -1,7 +1,12 @@
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now() ;	
+	request.setAttribute("version", version);		//캐시 처리
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +14,10 @@
 <title>카카오뱅크 ERP - 고객사</title>
 <!-- 카카오 주소 API -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -235,7 +244,7 @@ $(document).ready(function() {
 			bg : true,
 			bgClose : false,
 			title : "알림",
-			contents : "<div class=\"text_center\"><b>저장되지않았습니다, 나가시겠습니까?</b></div>",
+			contents : popContTwoLine("저장되지않았습니다.<br/>나가시겠습니까?"),
 			buttons : [{
 				name : "나가기",
 				func:function() {
@@ -279,15 +288,15 @@ $(document).ready(function() {
 	// 저장
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#ccName")) {
-			makeAlert("필수 항목 알림", "고객사를 입력하세요", function() {
+			makeAlert("필수 정보 알림", popContOneLine("고객사를 입력하세요"), function() {
 				$("#ccName").focus();
 				});
 		} else if($("#ccClsfy").val() == 9) {
-			makeAlert("필수 항목 알림", "고객사 분류를 선택하세요", function() {
+			makeAlert("필수 정보 알림", popContOneLine("고객사 분류를 선택하세요"), function() {
 				$("#ccClsfy").focus();
 			});
 		}else if($("#ccGrade").val() == 9) {
-			makeAlert("필수 항목 알림", "등급을 선택하세요", function() {
+			makeAlert("필수 정보 알림", popContOneLine("등급을 선택하세요"), function() {
 				$("#ccGrade").focus();
 			});
 		} else if(checkEmpty("#cName")) {
@@ -295,23 +304,23 @@ $(document).ready(function() {
 				$("#cName").focus();
 			});
 		} else if(checkEmpty("#zipCodeNum")) {
-			makeAlert("필수 항목 알림", "우편번호를 입력하세요", function() {
+			makeAlert("필수 정보 알림", popContOneLine("우편번호를 입력하세요"), function() {
 				$("#zipCodeNum").focus();
 			});
 		} else if(checkEmpty("#adrs")) {
-			makeAlert("필수 항목 알림", "주소를 입력하세요", function() {
+			makeAlert("필수 정보 알림", popContOneLine("주소를 입력하세요"), function() {
 				$("#adrs").focus();
 			});
 		} else if(checkEmpty("#dtlAdrs")) {
-			makeAlert("필수 항목 알림", "상세주소를 입력하세요", function() {
+			makeAlert("필수 정보 알림", popContOneLine("상세주소를 입력하세요"), function() {
 				$("#dtlAdrs").focus();
 			});
 		} else if(checkEmpty("#rvn")) {
-			makeAlert("필수 항목 알림", "매출를 입력하세요", function() {
+			makeAlert("필수 정보 알림", popContOneLine("매출를 입력하세요"), function() {
 				$("#rvn").focus();
 			});
 		} else if($("#rp").val() == 9) {
-			makeAlert("필수 항목 알림", "인지경로를 선택하세요", function() {
+			makeAlert("필수 정보 알림", popContOneLine("인지경로를 선택하세요"), function() {
 				$("#rp").focus();
 			});
 		} else {
@@ -319,7 +328,7 @@ $(document).ready(function() {
 				bg : true,
 				bgClose : false,
 				title : "알림",
-				contents : "<div class=\"text_center\"><b>저장하시겠습니까?</b></div>",
+				contents : popContOneLine("저장하시겠습니까?"),
 				contentsEvent : function() {
 					$("#popup1").draggable();
 				},
@@ -346,7 +355,7 @@ $(document).ready(function() {
 											$("#listForm").attr("action", "clntCmpnyCont");
 											$("#listForm").submit();
 										} else {
-											alert("등록중 문제가 발생하였습니다.");
+											makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 										}
 									},
 									error : function(request, status, error) {

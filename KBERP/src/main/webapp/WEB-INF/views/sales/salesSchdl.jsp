@@ -391,7 +391,6 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-
 	var now = new Date();
 	var clndrYear = now.getFullYear();	// 연도
 	var clndrMonth = now.getMonth()+1;	// 월
@@ -401,6 +400,7 @@ $(document).ready(function() {
 	}else{
 		Cdate = ""+clndrYear+"-0"+clndrMonth;
 	}
+	
 	$('input[name=clndrDate]').attr('value',Cdate);
 	
 	if('${param.usrsrchTxt}' != ''){
@@ -686,11 +686,11 @@ $(document).ready(function() {
 		});
 	}
 	
-	/* $("body").on("click", ".fc-month-button", function() {
+	$("body").on("click", ".fc-month-button", function() {
 		clndrDvsn
 		$("#clndrDvsn").attr('value',"month");
 		history.go(0);
-	}); */
+	});
 	
 	
 	// 달력에서 이후 버튼 누를 시
@@ -699,6 +699,18 @@ $(document).ready(function() {
 		//기존 이벤트 제거
 		$("#fullCalendarArea").fullCalendar("removeEventSources");
 		
+		clndrMonth = clndrMonth+1;
+		if(clndrMonth >= 13){
+			clndrMonth = 1;
+			clndrYear = clndrYear + 1;
+		}
+		if(clndrMonth >= 10){
+			Cdate = ""+clndrYear+"-"+clndrMonth;
+		}else{
+			Cdate = ""+clndrYear+"-0"+clndrMonth;
+		}
+		$('input[name=clndrDate]').attr('value',Cdate);
+		drawDayCalc();
 		
 			clndrMonth = clndrMonth+1;
 			if(clndrMonth >= 13){
@@ -788,7 +800,7 @@ $(document).ready(function() {
 		      }
 	      
 	});
-	
+
 	/* 캘린더 이벤트 관련 끝 */
 	
 	

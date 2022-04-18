@@ -1,12 +1,21 @@
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now() ;	
+	request.setAttribute("version", version);		//캐시 처리
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>카카오뱅크 ERP - 고객사</title>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -224,6 +233,9 @@ $(document).ready(function() {
 		if($("#searchTxt").val() != "") { // 검색어 txt가 비어있지 않으면 초기화
 			var txt = document.getElementById("searchTxt");
 			txt.value = "";
+			var oldtxt = document.getElementById("oldSearchTxt");
+			oldtxt.value = "";
+			
 		}
 		
 		reloadList();
@@ -258,7 +270,7 @@ $(document).ready(function() {
 		var clsfyNum = $("#clntCmpnyClsfyNum").val();
 		if($("#searchType").val() == 1){
 			if(isNaN($("#searchTxt").val())) {
-				makeAlert("경고", "고객사번호 검색시 숫자만 입력해주세요(CC01 -> 01)", function() {
+				makeAlert("알림", popContOneLine("고객사번호 검색시 숫자만 입력해주세요(CC01 -> 01)"), function() {
 					$("#searchTxt").val("");
 					$("#searchTxt").focus();
 				});

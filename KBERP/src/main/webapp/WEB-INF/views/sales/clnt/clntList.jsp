@@ -1,11 +1,20 @@
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now() ;	
+	request.setAttribute("version", version);		//캐시 처리
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>카카오뱅크 ERP - 고객</title>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -187,7 +196,7 @@ $(document).ready(function() {
 	$("#searchBtn").on("click", function() {
 		if($("#searchType").val() == 2) {
 			if(isNaN($("#searchTxt").val())) {
-				makeAlert("경고", "고객번호 검색시 숫자만 입력해주세요(CL01 -> 01)", function() {
+				makeAlert("경고", popContOneLine("고객번호 검색시 숫자만 입력해주세요(CL01 -> 01)"), function() {
 					$("#searchTxt").val("");
 					$("#searchTxt").focus();
 				});
