@@ -449,19 +449,19 @@ $(document).ready(function() {
 	/* 저장 이동 및 알림 이벤트 */
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#ssname")){
-			makeAlert("필수기재사항", popContTwoLine("일정명을 입력하세요.<br/>나가시겠습니까?"), function() {
+			makeAlert("필수 정보 입력", popContTwoLine("일정명을 입력하세요.<br/>나가시겠습니까?"), function() {
 				$("#ssname").focus();			
 			});
 		} else if($("#ssactvtyclsfy").val() == 9){
-			makeAlert("필수기재사항", popContTwoLine("활동분류를 입력하세요.<br/>나가시겠습니까?"), function() {
+			makeAlert("필수 정보 입력", popContTwoLine("활동분류를 입력하세요.<br/>나가시겠습니까?"), function() {
 				$("#ssactvtyclsfy").focus();			
 			});
 		} else if(checkEmpty("#sdt")){
-			makeAlert("필수기재사항", popContTwoLine("시작일을 입력하세요.<br/>나가시겠습니까?"), function() {
+			makeAlert("필수 정보 입력", popContTwoLine("시작일을 입력하세요.<br/>나가시겠습니까?"), function() {
 				$("#sdt").focus();				
 			});
 		} else if(checkEmpty("#ssactvtycont")){
-			makeAlert("필수입력", popContTwoLine("활동내용을 입력하세요.<br/>나가시겠습니까?"), function() {
+			makeAlert("필수 정보 입력", popContTwoLine("활동내용을 입력하세요.<br/>나가시겠습니까?"), function() {
 				$("#ssactvtycont").focus();			
 			});
 		} else {
@@ -499,7 +499,7 @@ $(document).ready(function() {
 										if(res.res == "success"){
 											savePop();								
 										} else {
-											alert("등록중 문제가 발생하였습니다.");
+											makeAlert("알림", popContTwoLine("등록 중 문제가 발생하였습니다.<br/>나가시겠습니까?"));
 										}
 									},
 									error : function(request, status, error) {
@@ -920,6 +920,7 @@ function uploadName(e) {
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="deptS" value="${param.deptS}" />
 	<input type="hidden" name="usrsrchTxt" value="${param.usrsrchTxt}" />
+	<input type="hidden" name="initialDate" value="${param.initialDate}"/>
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">

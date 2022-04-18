@@ -1321,7 +1321,9 @@ function uploadName(e) {
 		<div class="page_title_bar">
 			<div class="page_title_text">영업관리 - 제안 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
-				<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
+				<c:if test="${data.MNGR_EMP_NUM eq sEmpNum}">
+					<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
+				</c:if>
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -1623,7 +1625,9 @@ function uploadName(e) {
 							</div> 
 						</div>
 					<div class="next_bot">
-						<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
+						<c:if test="${data.MNGR_EMP_NUM eq sEmpNum}">
+							<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
+						</c:if>
 					</div>
 				</form>					
 				<form action="#" id="botOpActionForm" method="post">

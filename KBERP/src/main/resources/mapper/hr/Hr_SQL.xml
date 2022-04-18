@@ -158,9 +158,9 @@
 	                    WHERE STS_NUM ='1'
 	                    AND EMP_NUM = #{addEmpNum})
 	</update>
-	<update id="aprvlSuccess" parameterType="hashmap" ><!-- 발령 결제상태 변경(결재진행중) UPDATE -->
-		UPDATE APNTM SET STS_NUM = '0'
-		WHERE APNTM_NUM = #{apntmNum}
+	<update id="aprvlSuccess" parameterType="hashmap" ><!-- 발령 결재요청 -->
+		UPDATE APNTM SET APRVL_NUM = #{aNum}, STS_NUM = '0'
+		WHERE APNTM_NUM = #{aApntmNum}
 	</update>
 	<delete  id="deleteApntm" parameterType="hashmap"><!-- 발령취소(삭제)  -->
 		DELETE FROM APNTM

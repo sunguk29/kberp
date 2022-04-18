@@ -243,7 +243,7 @@ $(document).ready(function() {
 			bg : true,
 			bgClose : false,
 			title : "알림",
-			contents : "<div class=\"text_center\"><b>저장되지않았습니다, 나가시겠습니까?</b></div>",
+			contents : popContTwoLine("저장되지않았습니다.<br/>나가시겠습니까?"),
 			buttons : [{
 				name : "나가기",
 				func:function() {
@@ -269,15 +269,15 @@ $(document).ready(function() {
 	// 저장
 	$("#addBtn").on("click", function() {
 		if(checkEmpty("#ccName")) {
-			makeAlert("알림", popContOneLine("고객사를 입력하세요."), function() {
+			makeAlert("필수 정보 알림", popContOneLine("고객사를 입력하세요."), function() {
 				$("#ccName").focus();
 				});
 		} else if($("#ccClsfy").val() == 9) {
-			makeAlert("알림", popContOneLine("고객사 분류를 선택하세요."), function() {
+			makeAlert("필수 정보 알림", popContOneLine("고객사 분류를 선택하세요."), function() {
 				$("#ccClsfy").focus();
 			});
 		}else if($("#ccGrade").val() == 9) {
-			makeAlert("알림", popContOneLine("등급을 선택하세요."), function() {
+			makeAlert("필수 정보 알림", popContOneLine("등급을 선택하세요."), function() {
 				$("#ccGrade").focus();
 			});
 		} else if(isNaN($("#brNum").val())) {
@@ -286,7 +286,7 @@ $(document).ready(function() {
 				$("#brNum").focus();
 			});
 		} else if(checkEmpty("#cName")) {
-			makeAlert("알림", popContOneLine("대표명을 입력하세요."), function() {
+			makeAlert("필수 정보 알림", popContOneLine("대표명을 입력하세요."), function() {
 				$("#cName").focus();
 			});
 		} else if(isNaN($("#phoneNum").val())) {
@@ -300,19 +300,19 @@ $(document).ready(function() {
 				$("#fax").focus();
 			});
 		} else if(checkEmpty("#zipCodeNum")) {
-			makeAlert("알림", popContOneLine("우편번호를 입력하세요."), function() {
+			makeAlert("필수 정보 알림", popContOneLine("우편번호를 입력하세요."), function() {
 				$("#zipCodeNum").focus();
 			});
 		} else if(checkEmpty("#adrs")) {
-			makeAlert("알림", popContOneLine("주소를 입력하세요."), function() {
+			makeAlert("필수 정보 알림", popContOneLine("주소를 입력하세요."), function() {
 				$("#adrs").focus();
 			});
 		} else if(checkEmpty("#dtlAdrs")) {
-			makeAlert("알림", popContOneLine("상세주소를 입력하세요."), function() {
+			makeAlert("필수 정보 알림", popContOneLine("상세주소를 입력하세요."), function() {
 				$("#dtlAdrs").focus();
 			});
 		} else if(checkEmpty("#rvn")) {
-			makeAlert("알림", popContOneLine("매출를 입력하세요"), function() {
+			makeAlert("필수 정보 알림", popContOneLine("매출를 입력하세요"), function() {
 				$("#rvn").focus();
 			});
 		} else if(isNaN($("#rvn").val())) {
@@ -321,7 +321,7 @@ $(document).ready(function() {
 				$("#rvn").focus();
 			});
 		} else if($("#rp").val() == 9) {
-			makeAlert("알림", popContOneLine("인지경로를 선택하세요"), function() {
+			makeAlert("필수 정보 알림", popContOneLine("인지경로를 선택하세요"), function() {
 				$("#rp").focus();
 			});
 		} else {
