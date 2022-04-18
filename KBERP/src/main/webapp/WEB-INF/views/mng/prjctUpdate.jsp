@@ -75,9 +75,7 @@
 .fclt_use_rsrv_top{
 	height: 30px;
 }
-.fclt_use_rsrv_row{
-	height: 30px;
-}
+
 #input_man_pwr_list{
       display:inline-block;
    width:100%;
@@ -93,10 +91,8 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-	reloadList();
-	$("#listBtn").on("click",function(){
-		$("#actionForm").attr("action","prjctMng");
-		$("#actionForm").submit();
+	$("#cancelBtn").on("click", function(){
+		$("#backForm").submit();
 	});
 	
 	$("#updateBtn").on("click",function(){
@@ -104,50 +100,51 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-	function check_all(o){
+	$("#updateBtn").on("click", function() {
+		if(checkEmpty("#issue_dt")) {
+			alert("발급일자를 입력하세요.")
+			$("#issue_dt").focus();
+		} else if(checkEmpty("#end_dt")) {
+			alert("종료일자를 입력하세요.")
+			$("#end_dt").focus();
+		} else {
+			var updateForm = $("#updateForm");
+			
+			updateForm.ajaxForm({
+				success : function(res) {
 
-		// 클릭한 체크박스의 table 에서 (바로위 부모요소를 대상)
-		// 이름이 chk 인것을 찾고
-		// 현재 요소의 체크 상태를 찾은 대상에 적용
-		$(o).closest('table').find('[name=chk]').prop('checked', o.checked);
-
-	}
-	
-});
-function reloadList() { // 목록 조회용
-	var params = $("#actionForm").serialize();
-	
-	$.ajax({
-		type : "post", // 전송 형태
-		url : "prjctMngView2Ajax", // 통신 주소
-		dataType : "json", // 받을 데이터 형태
-		data : params, // 보낼 데이터. 보낼 것이 없으면 안 씀
-		success : function(res) { // 성공 시 실행 함수. 인자는 받아온 데이터
-			console.log(res);
-			drawList(res.list);
-		},
-		error : function(request, status, error) { // 문제 발생 시 실행 함수
-			console.log(request.responseText); // 결과 텍스트
+					// 글 저장
+					var params = $("#updateForm").serialize();
+					
+					$.ajax({
+						type : "post", // 전송 형태
+						url : "prjctMngAction/update", // 통신 주소
+						dataType : "json", // 받을 데이터 형태
+						data : params, // 보낼 데이터. 보낼 것이 없으면 안 씀
+						success : function(res) { // 성공 시 실행 함수. 인자는 받아온 데이터
+							if(res.res == "success") {
+								$("#backForm").submit();
+							} else {
+								alert("작성 중 문제가 발생했습니다.");
+							}
+						},
+						error : function(request, status, error) { // 문제 발생 시 실행 함수
+							console.log(request.responseText); // 결과 텍스트
+						}
+					});
+				},
+				error : function(req) {
+					console.log(req.responseText);
+					
+				}
+			});
+			updateForm.submit(); // ajaxForm 실행	
 		}
 	});
-}
-function drawList(list) {
-	var html = "";
 	
-	for(data of list) {
-		html += "<tr>";
-		html += "<td><input type=\"checkbox\" name=\"chk\" value=\""+ data.EMP_NUM+"\"> </td>";
-		html += "<td>" + data.DEPT_NAME	+ "</td>";
-		html += "<td>" + data.EMP_NAME 		+ "</td>";
-		html += "<td>" + data.RANK_NAME + "</td>";
-		html += "<td>" + data.PI_START_DATE 	+ "</td><td>~</td>";
-		html += "<td>" + data.PI_END_DATE 		+ "</td>";
+	
+});
 
-		
-	}
-	
-	$("tbody").html(html);
-}
 
 </script>
 </head>
@@ -172,7 +169,7 @@ function drawList(list) {
 		<input type="hidden" id="page" name=page value=1> 
 	</form>
 
-	<form action="prjctView" id="actionForm" method="post">
+	<form action="#" id="updateForm" method="post">
 	<input type="hidden" id="top" name="top" value="${param.top}" />
 	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
@@ -185,62 +182,26 @@ function drawList(list) {
 	            <div id="cont_top">
 				<div class ="fclt_use_rsrv_top">
 					<div class="fclt_use_rsrv_txt" style="float: left; width: 16%;">프로젝트 명 :</div>
-					<div class="fclt_use_rsrv" style="float: left; width: 16%;">${data.PRJCT_NAME}</div>
-					<div class="fclt_use_rsrv_txt" style="float: left; width: 16%;">담당자 :</div>
-					<div class="fclt_use_rsrv" style="float: left; width: 16%;">${data.EMP_NAME}</div>
-					<div class="fclt_use_rsrv_txt" style="float: left; width: 16%;">투입된 인력 수 :</div>
-					<div class="fclt_use_rsrv" style="float: left; width: 16%;">${data.CNT}</div>					
-				</div>
-				<div class ="fclt_use_rsrv_row">
+					<div class="fclt_use_rsrv" style="float: left; width: 16%;"><input type="text" name="prjct_name" value="${data.PRJCT_NAME}"></div>
 					<div class="fclt_use_rsrv_txt" style="float: left; width: 16%;">프로젝트 시작일 :</div>
-					<div class="fclt_use_rsrv" style="float: left; width: 16%;">${data.START_DATE}</div>
+					 <div class="fclt_use_rsrv" style="float: left; width: 16%;"><input type="date" name="start_date" value="${data.START_DATE}"></div>
 					<div class="fclt_use_rsrv_txt" style="float: left; width: 16%;">프로젝트 종료일 :</div>
-					<div class="fclt_use_rsrv" style="float: left; width: 16%;">${data.END_DATE}</div>
+					<div class="fclt_use_rsrv" style="float: left; width: 16%;"><input type="date" name="end_date" value="${data.END_DATE}"></div>					
 				</div>
+
 			</div>		
 				<div id="cont_bottom">
 				<br/>
 					<div class="prjct_text">프로젝트 내용 :</div>
-					<textarea cols="100" rows="50" id = "prjt_cont" readonly="readonly">${data.CONT}
+					<textarea cols="100" rows="50" id = "prjt_cont" name="cont" >${data.CONT}
 					</textarea>
 					<div class="prjct_text">비고 :</div>
-					<textarea cols="100" rows="40" id = "prjt_rmrks" readonly="readonly">${data.RMRKS}
+					<textarea cols="100" rows="40" id = "prjt_rmrks" name="rmrks">${data.RMRKS}
 					</textarea>
 				</div>
-         <div class = "prjt_btn_row">
-            <div class="cmn_btn" id="updateBtn">프로젝트 수정</div>
-            <div class="cmn_btn" id="prjctDel">프로젝트 삭제</div>
-         </div>
-         <div class="prjct_list_text">투입 인력 목록</div>
-         <table class="board_table" id="input_man_pwr_list"> 
-         <colgroup>
-               <col width="65"/>
-               <col width="131"/>
-               <col width="166"/>
-               <col width="166"/>
-               <col width="166"/>
-               <col width="40"/>
-               <col width="166"/>
-               
-      </colgroup>
-         <thead class="popup_head">
-            <tr>
-                  <th><input  type="checkbox"  onclick="check_all" class="check_all" id="check_all" /></th>
-                  <th>부서명</th>
-                  <th>사원명</th>
-                  <th>직급</th>
-                  <th>프로젝트 시작일</th>
-                  <th></th>
-                  <th>프로젝트 종료일</th>
-            </tr>
-         </thead>
-         <tbody>
-         </tbody>
-         </table>
 			<div class="board_bottom">
-				<div class="cmn_btn" id="addBtn">투입 인력 추가</div>
-				<div class="cmn_btn" id="delBtn">투입 인력 삭제</div>
-				<div class="cmn_btn" id="listBtn">확인</div>
+				<<div class="cmn_btn" id="updateBtn">수정</div>
+            <div class="cmn_btn" id="cancelBtn">취소</div>
 			</div>
 		</div>
 		</form>
