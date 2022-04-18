@@ -203,7 +203,7 @@
 		</choose>
 		<choose>
 			<when test="usrsrchTxt != ''">
-				AND E.EMP_NAME = #{usrsrchTxt}
+				AND E.EMP_NAME LIKE '%' || #{usrsrchTxt} || '%'
 			</when>
 		</choose>
 	</select>
