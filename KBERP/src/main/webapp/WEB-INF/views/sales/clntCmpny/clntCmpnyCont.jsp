@@ -690,7 +690,7 @@ $(document).ready(function() {
 		
 			$.ajax({
 				type : "post",
-				url : "opBotActionAjax/insert",
+				url : "ccOpBotActionAjax/insert",
 				dataType : "json",
 				data : params,
 				success : function(res) {
@@ -731,7 +731,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "opBotActionAjax/update",
+						url : "ccOpBotActionAjax/update",
 						dataType : "json",
 						data : params,
 						success : function(res) {
@@ -1067,7 +1067,7 @@ function reloadOpList() {
 	
 	$.ajax({
 		type : "post",
-		url : "opBotListAjax",
+		url : "ccOpBotListAjax",
 		data : params,
 		dataType : "json",
 		success : function(res) {

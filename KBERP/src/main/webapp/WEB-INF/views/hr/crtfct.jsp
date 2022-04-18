@@ -255,10 +255,15 @@ $(document).ready(function() {
 			      dataType : "json",
 			      data : params,
 			      success : function(res) {
-			    	  console.log(res);
-			    	  makeAlert("알림","발급요청이 완료되었습니다.", function(){
+			    	  if(res.res == "success"){
+				    	  console.log(res);
+				    	  makeAlert("알림","발급요청이 완료되었습니다.", function(){
 				    	  location.reload();
-			    	  })
+				    	  });
+			    	  } else {
+			    		  makeAlert("알림","발급요청 중 오류가 발생하였습니다.<br/> 관리자에게 문의하세요.")
+			    	  }
+			    	  
 			      }, 
 			      error : function(req) {
 			         console.log(req.responseText);
@@ -385,7 +390,7 @@ function onPrint() {
 							<col width="100">
 							<col width="100">
 							<col width="150">
-							<col width="50">
+							<%-- <col width="50"> --%>
 						</colgroup>
 						<thead>
 							<tr>
@@ -396,7 +401,7 @@ function onPrint() {
 								<th>발급요청일</th>
 								<th>발급완료일</th>
 								<th>발급현황</th>
-								<th>인쇄</th>
+							<!--<th>인쇄</th>  -->	
 							</tr>
 						</thead>
 						<tbody>
@@ -439,9 +444,9 @@ function onPrint() {
 						         			<td style="color:#ff6f60;">발급불가: ${data.RSN}</td> 
 						         		</c:when>
 						         	</c:choose>
-						         	<c:if test="${data.ISSUE_STS_NUM==1}">
+						        <%--  	<c:if test="${data.ISSUE_STS_NUM==1}">
 				         				<td><input type="button" value="인쇄" id="print"/></td>
-						         	</c:if>
+						         	</c:if> --%>
 						         </tr>
 						      </c:forEach>
 						</tbody>

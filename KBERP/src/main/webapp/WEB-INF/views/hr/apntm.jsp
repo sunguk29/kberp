@@ -845,15 +845,27 @@ $(document).ready(function() {
      }
    });
    
-   // 발령조회 버튼이벤트
+   // 검색 버튼 클릭 시
    $("#searchBtn").on("click", function() {
-      $("#oldSearchAprvl").val($("#searchAprvl").val());
-      $("#oldSearchGbn").val($("#searchGbn").val());
-      $("#oldSearchTxt").val($("#searchTxt").val());      
-      $("#oldstartPrd").val($("#startPrd").val());      
-      $("#oldendPrd").val($("#endPrd").val());      
-
-      reloadList();
+	    if($(".prd_value:checked").val() == "1") { // 기간설정 선택시 checkEmpty
+	    	if(checkEmpty("#prd_start")||checkEmpty("#prd_end")){
+	    		makeAlert("알림","기간을 입력하세요.");
+	    	} else {
+	  	      $("#oldSearchAprvl").val($("#searchAprvl").val());
+		      $("#oldSearchGbn").val($("#searchGbn").val());
+		      $("#oldSearchTxt").val($("#searchTxt").val());      
+		      $("#oldstartPrd").val($("#startPrd").val());      
+		      $("#oldendPrd").val($("#endPrd").val());      
+		      reloadList();
+	    	}
+	   } else {
+	      $("#oldSearchAprvl").val($("#searchAprvl").val());
+	      $("#oldSearchGbn").val($("#searchGbn").val());
+	      $("#oldSearchTxt").val($("#searchTxt").val());      
+	      $("#oldstartPrd").val($("#startPrd").val());      
+	      $("#oldendPrd").val($("#endPrd").val());      
+	      reloadList();
+	   }
    });
    
 
@@ -1441,10 +1453,9 @@ $(document).ready(function() {
 					      success : function(res) {		
 				    	 			 if(res.res=="success"){
 							    		  makeAlert("알림", "결재가 요청되었습니다.", function(){
-							    			  
-													location.reload();
-		    	 									 console.log(res);
-   															});
+											location.reload();
+    	 									console.log(res);
+										  });
 				    	 			 }
 					      },
 					      error : function(req) {
@@ -1500,6 +1511,7 @@ function drawInqryList(inqryList) {
 // 발령 리스트 리로드
 function reloadList() {
    var params = $("#actionForm").serialize();
+	console.log(params)
    
    $.ajax({
       type : "post",

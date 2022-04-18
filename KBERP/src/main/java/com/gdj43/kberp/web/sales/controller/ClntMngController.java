@@ -305,18 +305,18 @@ public class ClntMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	//의견 목록 비동기
-	@RequestMapping(value = "/opBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	//고객사 의견
+	@RequestMapping(value = "/ccOpBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String opBotListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+	public String ccOpBotListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		int opListCnt = iCommonService.getIntData("clntCmpnyMng.opListCnt", params);
+		int opListCnt = iCommonService.getIntData("clntCmpnyMng.ccOpListCnt", params);
 		
-		List<HashMap<String, String>> list = iCommonService.getDataList("clntCmpnyMng.getOpList", params);
+		List<HashMap<String, String>> list = iCommonService.getDataList("clntCmpnyMng.getCcOpList", params);
 		
 		modelMap.put("list", list);
 		modelMap.put("opListCnt", opListCnt);
@@ -324,10 +324,10 @@ public class ClntMngController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	//의견 등록,삭제 비동기
-	@RequestMapping(value = "/opBotActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	//고객사 의견 등록,삭제
+	@RequestMapping(value = "/ccOpBotActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String ccBotActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+	public String ccOpBotActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -336,10 +336,57 @@ public class ClntMngController {
 		try {
 			switch(gbn) {
 			case "insert" :
-				iCommonService.insertData("clntCmpnyMng.opContAdd", params);
+				iCommonService.insertData("clntCmpnyMng.ccOpContAdd", params);
 				break;
 			case "update" :
-				iCommonService.updateData("clntCmpnyMng.opContUpdate", params);
+				iCommonService.updateData("clntCmpnyMng.ccOpContUpdate", params);
+				break;
+			}
+			modelMap.put("res", "success");
+		} catch (Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "faild");
+		}
+		
+		return mapper.writeValueAsString(modelMap);
+		
+	}
+	
+	//고객 의견
+	@RequestMapping(value = "/clOpBotListAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String clOpBotListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		int opListCnt = iCommonService.getIntData("clntCmpnyMng.clOpListCnt", params);
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("clntCmpnyMng.getClOpList", params);
+		
+		modelMap.put("list", list);
+		modelMap.put("opListCnt", opListCnt);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
+	//고객 의견 등록,삭제
+	@RequestMapping(value = "/clOpBotActionAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String clOpBotActionAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			switch(gbn) {
+			case "insert" :
+				iCommonService.insertData("clntCmpnyMng.clOpContAdd", params);
+				break;
+			case "update" :
+				iCommonService.updateData("clntCmpnyMng.clOpContUpdate", params);
 				break;
 			}
 			modelMap.put("res", "success");

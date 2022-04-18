@@ -599,7 +599,7 @@ function drawList(list) {
 		html += "<td><span class=\"sales_psbl_btn\">" + data.PSBL_CHECK + "%</span></td>";
 		html += "</tr>";
 		html += "<tr>";
-		html += "<td>" + data.PSNUM + "</td>";
+		html += "<td>" + data.PSNUM + "</td>";		
 		html += "<td>" + data.RGSTRTN_DATE + "</td>";
 		html += "<td></td>";
 		html += "</tr>";
