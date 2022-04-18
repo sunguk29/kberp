@@ -179,48 +179,18 @@ function fileDownLoad(){
 									<input type="button" class="btn" value="판매 기간 *" />
 								</td>
 									<td>
-										<input type="date" class="txt" readonly="readonly" disabled="disabled" id="sales_start_date" value="${data.SALES_START_DATE}"/>
-									</td>		<!-- 받을 값 6 -->
+										<input type="date" class="txt" readonly="readonly" disabled="disabled" id="sales_start_date" value="${data.SALES_START_DATE}"/> <!-- 받을 값 6 -->
+									</td>		
 									<td>
 										<div class="date_sign">
 											<span class="txt">~</span>
 										</div>
 									</td>
 									<td colspan="2">
-										<input type="date" class="txt" readonly="readonly" disabled="disabled" id="sales_end_date" value="${data.SALES_END_DATE}"/>
-									</td>	<!-- 받을 값 7 -->
+										<input type="date" class="txt" readonly="readonly" disabled="disabled" id="sales_end_date" value="${data.SALES_END_DATE}"/> <!-- 받을 값 7 -->
+									</td>
 							</tr>
 							<tr height="40">
-								<td>
-									<input type="button" class="btn" value="이자율 *" />
-								</td>
-								<td>
-									<input type="text" class="txt" readonly="readonly" disabled="disabled" id="intrst_rate" value="${data.INTRST_RATE}" /> <!-- 받을 값 8 -->
-								</td>				
-								<!-- <td>
-									<input type="button" class="btn" value="이자 납부 방식 *" />
-								</td>
-								<td>
-									<select class="txt" disabled="disabled" id="intrst_pymnt_mthd">										받을 값 9
-										<option value="-1">선택 하세요</option>
-										<option value="0">원금 균등</option>
-										<option value="1">원리금 균등</option>
-										<option value="2">만기 일시상환</option>
-									</select>
-								</td> -->
-							</tr>
-							<tr height="40">
-								<!-- <td>
-									<input type="button" class="btn" value="원금 납부 방식 *" />
-								</td>
-								<td>
-									<select class="txt" disabled="disabled" id="prncpl_pymnt_mthd">									받을 값 10
-										<option value="-1">선택 하세요</option>
-										<option value="0">원금 균등</option>
-										<option value="1">원리금 균등</option>
-										<option value="2">만기 일시상환</option>
-									</select>
-								</td> -->
 								<td>
 									<input type="button" class="btn" value="중도상환 가능 여부 *" />
 								</td>
@@ -231,8 +201,6 @@ function fileDownLoad(){
 										<option value="1">불가능</option>
 									</select>
 								</td>
-							</tr>
-							<tr height="40">
 								<td>
 									<input type="button" class="btn" value="대출 기간 *" />
 								</td>
@@ -245,6 +213,15 @@ function fileDownLoad(){
 										<option value="3">5년</option>
 									</select>
 								</td>
+							</tr>
+							<tr height="40">
+								<td>
+									<input type="button" class="btn" value="이자율 *" />
+								</td>
+								<td>
+									<input type="text" class="txt" readonly="readonly" disabled="disabled" id="intrst_rate" value="${data.INTRST_RATE}" /> <!-- 받을 값 8 -->
+								</td>				
+								
 							</tr>
 							<tr height="40">
 								<td rowspan="2">
