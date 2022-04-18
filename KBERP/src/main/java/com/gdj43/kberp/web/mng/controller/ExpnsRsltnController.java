@@ -181,6 +181,9 @@ public class ExpnsRsltnController {
 			case "delete":
 				iCommonService.deleteData("expnsRsltn.DeleteExpnsRsltn", params);
 				break;
+			case "monthdelete":
+				iCommonService.deleteData("expnsRsltn.MonthDeleteExpnsRsltn", params);
+				break;
 			}
 			modelMap.put("res", "success");
 		} catch (Throwable e) {

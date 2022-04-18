@@ -77,8 +77,9 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#backBtn").on("click", function() {
+		$("#actionForm").attr("action", "expnsRsltnEmpMnthlyList");
+		$("#actionForm").submit();
 		
-		history.back();
 	});	
 	
 	$("#updateBtn").on("click", function() {
@@ -218,7 +219,7 @@ $(document).ready(function() {
 						<td>${data.CHIT_NUM}</td>
 					</tr>
 					<tr>
-						<td>계정명</td>
+						<td acntcode = "${data.ACNT_NUM}">계정명</td>
 						<td>${data.ACNT_NAME}</td>
 					</tr>
 					<tr>

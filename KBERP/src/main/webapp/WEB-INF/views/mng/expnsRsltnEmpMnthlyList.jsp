@@ -99,6 +99,12 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
+	$("#backBtn").on("click", function() {
+		$("#actionForm").attr("action", "expnsRsltn");
+		$("#actionForm").submit();
+		
+	});	
+	
 	$("#deletebtn").on("click", function() {
 		
 		var html = ""
@@ -125,9 +131,9 @@ $(document).ready(function() {
 					name : "삭제",
 					func:function() {
 						
-							var deleteForm = $("#actionForm");
+							var actionForm = $("#actionForm");
 							
-							deleteForm.ajaxForm({
+							actionForm.ajaxForm({
 								success : function(res){
 									
 									//글 저장
@@ -135,12 +141,13 @@ $(document).ready(function() {
 									
 									$.ajax({
 										type : "post", 
-										url : "expnsRsltnAction/delete", 
+										url : "expnsRsltnAction/monthdelete", 
 										dataType : "json", 
 										data : params, 
 										success : function(res){ 
 											if(res.res == "success"){
-												location.href = "expnsRsltnEmpMnthlyList";
+												$("#backForm").attr("action", "expnsRsltn");
+												$("#backForm").submit();	
 											}else{
 												alert("삭제중 문제가 발생하였습니다.");
 											}
@@ -291,9 +298,12 @@ function drawSum(data) {
 		<input type="hidden" name="menuNum" value="${param.menuNum}">
 		<input type="hidden" name="menuType" value="${param.menuType}">
 </form>
-<form action="#" id="deleteForm" method="post">
-	
-</form>
+	<form action="expnsRsltn" id="backForm" method="post">
+		<input type="hidden" name="top" value="${param.top}">
+		<input type="hidden" name="menuNum" value="${param.menuNum}">
+		<input type="hidden" name="menuType" value="${param.menuType}">
+		<input type="hidden" id="mon" name="mon" value="${param.mon}">
+	</form>
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 				<div class="page_title_text">지출결의서 목록</div>
@@ -349,6 +359,7 @@ function drawSum(data) {
 				<div class="board_bottom">
 				
 				<div class="btn_wrap">
+				<div class="cmn_btn_ml" id="backBtn">돌아가기</div>	
 				<div class="cmn_btn_ml" id ="writebtn">신규</div>
 				<div class="cmn_btn_ml" id ="deletebtn">월 삭제</div>
 				</div>

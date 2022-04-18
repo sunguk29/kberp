@@ -63,7 +63,7 @@
 	</select>
 	
 	<select id="expnsRsltnDtl" resultType="hashmap" parameterType="hashmap">
-	SELECT TO_CHAR(ER.RGSTRTN_DATE_HR, 'YYYY-MM-DD') AS RGS_DATE, ER.CHIT_NUM, AC.ACNT_NAME, ER.EXPNS, ER.AMNT,
+	SELECT TO_CHAR(ER.RGSTRTN_DATE_HR, 'YYYY-MM-DD') AS RGS_DATE, ER.CHIT_NUM,ER.ACNT_NUM, AC.ACNT_NAME, ER.EXPNS, ER.AMNT,
 		       TO_CHAR(ER.DATE_HR, 'YYYY-MM-DD') AS DATE_D, ER.EXPNS_TYPE, ER.RMRKS, ER.ATT_FILE
 		FROM EXPNS_RSLTN ER INNER JOIN ACNT_CODE AC
 		                       ON ER.ACNT_NUM = AC.SUB_CTGR_ACNT_CODE
@@ -108,6 +108,13 @@
 	DELETE FROM EXPNS_RSLTN
 	WHERE CHIT_NUM = #{sendChitNum}
 	</delete>
+	
+	<delete id ="MonthDeleteExpnsRsltn" parameterType="hashmap">
+	DELETE FROM EXPNS_RSLTN
+	WHERE EMP_NUM = #{sesEmpNum} AND TO_CHAR(DATE_HR, 'YYYY-MM') = #{mon}
+	</delete>
+	
+	
 	
 
 </mapper>

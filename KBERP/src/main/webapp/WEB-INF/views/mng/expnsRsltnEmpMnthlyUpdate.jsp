@@ -380,7 +380,7 @@ function drawPaging(pb) {
 		<input type="hidden" id="page" name="page" value="1">
 </form>
 
-	<form action="expnsRsltn" id="backForm" method="post">
+	<form action="expnsRsltnEmpMnthly" id="backForm" method="post">
 		<input type="hidden" name="top" value="${param.top}">
 		<input type="hidden" name="menuNum" value="${param.menuNum}">
 		<input type="hidden" name="menuType" value="${param.menuType}">
