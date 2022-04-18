@@ -255,10 +255,15 @@ $(document).ready(function() {
 			      dataType : "json",
 			      data : params,
 			      success : function(res) {
-			    	  console.log(res);
-			    	  makeAlert("알림","발급요청이 완료되었습니다.", function(){
+			    	  if(res.res == "success"){
+				    	  console.log(res);
+				    	  makeAlert("알림","발급요청이 완료되었습니다.", function(){
 				    	  location.reload();
-			    	  })
+				    	  });
+			    	  } else {
+			    		  makeAlert("알림","발급요청 중 오류가 발생하였습니다.<br/> 관리자에게 문의하세요.")
+			    	  }
+			    	  
 			      }, 
 			      error : function(req) {
 			         console.log(req.responseText);

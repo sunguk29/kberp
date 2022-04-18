@@ -224,7 +224,7 @@
 	
 	<insert id="addCrtfct" parameterType="hashmap"><!--  증명서발급(사용자) 산청 insert -->
 		INSERT INTO CRTFCT (CRTFCT_NUM, RQST_EMP_NUM, CRTFCT_KIND, ISSUE_COUNT, USE)
-		VALUES (CRTFCT_SEQ.NEXTVAL, #{sEmpNum}, #{kind}, #{issueCount}, #{issueType}, #{use})
+		VALUES (CRTFCT_SEQ.NEXTVAL, #{sEmpNum}, #{kind}, #{issueCount}, #{use})
 	</insert>
 	<update id="updateCrtfct" parameterType="hashmap"><!--  증명서발급(관리자) 승인 update -->
 		UPDATE CRTFCT SET ISSUE_STS_NUM = '1', ISSUE_EMP_NUM = #{sEmpNum}, ISSUE_DATE = SYSDATE
