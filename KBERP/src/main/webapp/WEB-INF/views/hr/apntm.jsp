@@ -1145,6 +1145,9 @@ $(document).ready(function() {
   	}); 
   	// 결재요청 버튼이벤트 
   	$("body").on("click","#aprvlBtn", function() {
+  		$("#aApntmNum").val($(this).attr("aApntmNum"));
+  		console.log("결재요청 발령번호  : " + $("#aApntmNum").val())
+  		
 		var html = "";
 		
 		html += "<div class=\"aprvl_popup_area\">                          ";
@@ -1438,8 +1441,6 @@ $(document).ready(function() {
 				func:function() {	
 					$("#title").val($("#aprvlTitle").val());
 					$("#cont").val($("#aprvlCont").val());
-					//$("#aprvlerList").val($("#aprvlerInput").val());
-					//$("#rfrncList").val($("#aprvlTitle").val());
 					$("#aprvlTurn").val($("#aprvlTitle").val());
 					
 					var params = $("#aprvlForm").serialize();
@@ -1452,10 +1453,34 @@ $(document).ready(function() {
 					      data : params,
 					      success : function(res) {		
 				    	 			 if(res.res=="success"){
-							    		  makeAlert("알림", "결재가 요청되었습니다.", function(){
+							    		 /*   makeAlert("알림", "결재가 요청되었습니다.", function(){
 											location.reload();
     	 									console.log(res);
-										  });
+										  }); */
+										  $("#aNum").val(res.aNum);
+										  console.log("결재번호  : " + $("#aNum").val())
+										  
+										  var params = $("#aprvlSuccessForm").serialize();
+				    						$.ajax({
+				    						      type : "post",
+				    						      url : "apntmListAjax/aprvlSuccess",
+				    						      dataType : "json",
+				    						      data : params,
+				    						      success : function(res) {		
+				    					    	 			 if(res.res=="success"){
+				    								    			makeAlert("알림", "결재가 요청되었습니다.", function(){
+				    												location.reload();
+				    	    	 									console.log(res); 
+				    	    	 									
+				    											  });
+				    					    	 			 }
+				    						      },
+				    						      error : function(req) {
+				    						         		console.log(req.responseText);
+				    						      		}
+				    	 					 	
+				    	  					     
+				    						}); 
 				    	 			 }
 					      },
 					      error : function(req) {
@@ -1591,7 +1616,7 @@ function drawCont(cont, emp){
    // STS_NUM 결재요청 전 상태일 경우 결재버튼, 발령취소버튼 생성
    if($("#stsNum").val() == "NULL" || $("#stsNum").val() == "" || $("#stsNum").val() == "undefined"){
    html += "      <input type=\"button\" class=\"apntm_del_btn\" id=\"aprvlDelBtn\" value=\"발령취소\" />                                      ";
-   html += "      <input type=\"button\" class=\"apntm_add_btn_2\" id=\"aprvlBtn\" value=\"결재요청\" />                                      ";
+   html += "      <input type=\"button\" class=\"apntm_add_btn_2\" id=\"aprvlBtn\" aApntmNum=\""+cont.APNTM_NUM +"\" value=\"결재요청\" />                                      ";
    }
    html += "   </div>                                                                                 ";
    html += "   <div class=\"apnmt_add_area\">                                                         ";
@@ -1806,6 +1831,7 @@ function drawAddApntm(dept,rank){
 <body>
 	<!-- 발령결재 성공시 결재진행중 상태로 변경하는 폼 -->
 	<form action="#" id="aprvlSuccessForm" method="post">
+		<input type="hidden" id="aNum" name="aNum" />
 		<input type="hidden" id="aApntmNum" name="aApntmNum" />
 	</form>
 	<!-- 결재 데이터 넘기는 폼 -->
