@@ -205,19 +205,21 @@ public class MsgrController {
 												HttpServletRequest request,
 												ModelAndView mav) throws Throwable {
 		
+		System.out.println("3333333" + params.get("lastChatNo"));
+		System.out.println("3333333" + params.get("chatNum"));
+		
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		int lastChatNo = Integer.parseInt(request.getParameter("lastChatNo"));
+	//	List<HashMap<String, String>> group = ics.getDataList("msgr.chatInCont");
 		
-		System.out.println("555555555555" + lastChatNo);
-		System.out.println("333333333333" + params);
+	//	modelMap.put("group", group);
 		
 		try {
 			List<HashMap<String, String>> list = ims.getContList(lastChatNo);
+			System.out.println("7777777777" + params.get("lastChatNo"));
 			
-		//	List<HashMap<String, String>> list = ics.getDataList("msgr.DrawRoom", params);
-			System.out.println("333333333333" + list);
 			modelMap.put("list", list);
 			modelMap.put("message", CommonProperties.RESULT_SUCCESS);
 		} catch (Exception e) {

@@ -391,7 +391,7 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
+
 	var now = new Date();
 	var clndrYear = now.getFullYear();	// 연도
 	var clndrMonth = now.getMonth()+1;	// 월
@@ -419,6 +419,9 @@ $(document).ready(function() {
 		}
 	});
 	
+	console.log(clndrMonth);
+	console.log(clndrYear);
+	
 	/* 검색버튼 누를 시  */
 	$("#searchBtn").on("click", function() {
 		
@@ -431,6 +434,7 @@ $(document).ready(function() {
  		$("#fullCalendarArea").fullCalendar("removeEventSources");
 		
 		$(".cal_cont").hide();
+
 		
 		drawDayCalc();
 	});
@@ -670,11 +674,17 @@ $(document).ready(function() {
 			url : "salesSchdlAjax",
 			dataType : "json",
 			data : params,
-			success : function(res){		
+			success : function(res){						
+				
 				
 					//신규이벤트 추가
 					$("#fullCalendarArea").fullCalendar("addEventSource", res.slist);
 					
+					if(${param.initialDate ne ''}){
+					$("#fullCalendarArea").fullCalendar("defaultDate", ${param.initialDate});
+						
+					}
+				
 					
 			},
 			error : function(req) {
@@ -709,8 +719,17 @@ $(document).ready(function() {
 			}
 			$('input[name=clndrDate]').attr('value',Cdate);
 			drawDayCalc();
+			
+			if(clndrMonth <= 9){
+				var day = clndrYear+"-0"+clndrMonth+"-01";				
+			} else {
+				var day = clndrYear+"-"+clndrMonth+"-01";
+			}
+			document.getElementById("initialDate").value = day;
 		
+	console.log($("#initialDate").val());
 	});
+	
 	
 	// 달력에서 이전 버튼 누를 시
 	$("body").on("click", ".fc-prev-button", function() {
@@ -731,8 +750,14 @@ $(document).ready(function() {
 		}
 		$('input[name=clndrDate]').attr('value',Cdate);
 		drawDayCalc();
+		
+		if(clndrMonth <= 9){
+			var day = clndrYear+"-0"+clndrMonth+"-01";				
+		} else {
+			var day = clndrYear+"-"+clndrMonth+"-01";
+		}
+		document.getElementById("initialDate").value = day;
 	});
-	
 	
 	$("#fullCalendarArea").fullCalendar({
 		header: {
@@ -777,6 +802,7 @@ $(document).ready(function() {
 
 	    	  //alert('Current view: ' + view.name);
 	      }
+	      
 	});
 	
 	/* 캘린더 이벤트 관련 끝 */
@@ -814,6 +840,7 @@ $(document).ready(function(){
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" id="schdlnum" name="schdlnum" value="${param.schdlnum}" />
 	<input type="hidden" id="clndrDate" name="clndrDate" />
+	<input type="hidden" id="initialDate" name="initialDate"/>
 	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">

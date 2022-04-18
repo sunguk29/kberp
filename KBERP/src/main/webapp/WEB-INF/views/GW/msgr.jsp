@@ -336,6 +336,7 @@ td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 	width : 550px;
 	height : 540px;
 	border-radius: 8px;
+	overflow: auto;
 	
 }
 
@@ -584,12 +585,17 @@ $(document).ready(function() {
 	
 	
 	$("div").on("click", ".chat_list1", function() {	
+	//	refreshInterval = setInterval(readCont, 1000);
+	//	clearInterval(refreshInterval);
+		readCont();
+		
+		$("#chatNum").val($(this).attr("chatNum"));
 		
 		var html = "";
 		
 		html += "		<div class = \"right_box\">                                                      ";
 		html += "			<div class = \"rcpnt_rank_box\">                                                 ";
-		html += "				<div id = \"rcpnt_rank\"> ${param.empNum} ${data.RankName} ${EmpName} </div>";
+		html += "				<div id = \"rcpnt_rank\"> ${param.empNum} ${RankName} ${EmpName} </div>";
 		html += "			</div>		                                                                  	 ";
 		html += "			                                                                              	 ";
 		html += "			<div class = \"chat_room\">                                                      ";
@@ -617,7 +623,7 @@ $(document).ready(function() {
 		html += "				</div>";
 		html += "			</div>";
 		html += "		</div>";
-		
+		readCont();
 		
 		$(".msgr_main").remove();
 		$(".right_box").html(html);
@@ -629,7 +635,7 @@ $(document).ready(function() {
 				alert("내용을 입력하세요.");
 			} else {
 				insertCont();
-				readCont();
+				
 			}
 		});
 		
@@ -770,6 +776,7 @@ function insertCont() {
 					console.log(res);
 					$(".chat_dtl").val("");
 					$("#cont").val("");
+					readCont();
 				},
 				error : function(res) { 
 					alert(res.errorMessage);
@@ -807,12 +814,9 @@ function readCont() {
 		dataType : "json",
 		data : params,
 		success : function(res) {
-			console.log("성공?")
-			console.log()
-			console.log(res)
-			console.log(res.list)
+			console.log("성공")
+			
 			if(res.list.length != 0) {
-				console.log("성공2?")
 				var html = "";
 				for(var i = 0 ; i < res.list.length; i++) {
 					if(res.list[i].EMP_NUM ==  '${sEmpNum}') {
@@ -823,7 +827,7 @@ function readCont() {
 							html += "</div>";
 						} else {
 							html += "<div class = \"chat_rcpnt\">";
-							html += "<div id = \"chat_rcpnt_name\">" + res.list[i].EMP_NUM + "</div>";
+							html += "<div id = \"chat_rcpnt_name\">" + res.list[i].EMP_NAME + res.list[i].RANK_NAME + "</div>";
 							html += "<div id = \"chat_rcpnt_cont\">" + res.list[i].CONT + "&nbsp;</div>";
 							html += "<div id = \"chat_rcpnt_time\">" + res.list[i].RGSTRTN_DT + "</div>";
 							html += "</div>";
@@ -832,8 +836,9 @@ function readCont() {
 				
 					$(".chat_dtl").append(html);
 					$("#lastChatNo").val(res.list[res.list.length -1].CONT_NUM);
+					
+					scrollDown()
 				}
-//				refreshInterval = setInterval(readCont, 1000);
 			},
 			error : function(res, error) {
 				console.log(res.responseText);
@@ -841,7 +846,6 @@ function readCont() {
 				console.log("실패");
 				alert(res.errorMessage);
 				
-//				refreshInterval = setInterval(readCont, 1000);
 			}
 	}); 
 }
@@ -883,7 +887,16 @@ function reloadList() {
 	
 }
 
+/* function scrollDown() {
+	$(".chat_dtl").animate ({
+		scrollTop: $(".chat_dtl").prop("scrollHeight") 
+	}, 'slow', function () {});
+} */
 
+function scrollDown() {
+ $(".chat_dtl").scrollTop($(".chat_dtl")[0].scrollHeight);
+ 
+}
 
 
 function drawList(list) {
@@ -951,6 +964,7 @@ function drawRoom(list) {
 			
 			<form action = "#" id = "readForm">
 				<input type="hidden" id = "lastChatNo" name = "lastChatNo" value = "${maxNo}">
+				<input type ="text" id = "chatNum" name = "chatNum" />
 			</form>
 			
 				<div class = "main_box">
