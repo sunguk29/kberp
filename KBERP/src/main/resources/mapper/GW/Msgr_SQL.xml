@@ -110,7 +110,7 @@
 	
 <!-- 채팅방 인원 추가 -->	
 	<update id="joinChat" parameterType="hashmap">
-		UPDATE MSGR SET EMP_NUM = #{EMP_NUM},
+		UPDATE MSGR SET EMP_NUM = #{empNum},
 	                 RGSTRTN_DT = #{rgdt}
 		WHERE CHAT_NUM = #{chatNum}
 	</update>
@@ -121,21 +121,28 @@
 		FROM MSGR_CONT
 	</select>
 	
-<!-- 읽은 채팅번호 -->	
+<!-- lastChatNo 기준으로 이전 채팅 읽어오기, 이후 채팅 불러오기 -->	
 	<select id="getContList" parameterType="Integer" resultType="hashmap">
-		SELECT CONT_NUM, EMP_NUM, CONT, TO_CHAR(RGSTRTN_DT, 'YYYY-MM-DD HH24:MI:SS') AS RGSTRTN_DT
-		FROM MSGR_CONT
-		WHERE CONT_NUM > #{lastChatNo}
-		ORDER BY CONT_NUM ASC
+		SELECT MC.CHAT_NUM, MC.CONT_NUM, MC.EMP_NUM, MC.CONT, MC.RGSTRTN_DT, R.RANK_NAME, E.EMP_NAME, D.DEPT_NAME
+		FROM (SELECT CHAT_NUM, CONT_NUM, EMP_NUM, CONT, TO_CHAR(RGSTRTN_DT, 'MM/DD HH24:MI') AS RGSTRTN_DT
+		        FROM MSGR_CONT
+		        WHERE CONT_NUM > #{lastChatNo}
+		        AND CHAT_NUM = #{chatNum}
+		        ORDER BY CONT_NUM ASC) MC INNER JOIN EMP E
+		                                    ON MC.EMP_NUM = E.EMP_NUM
+		                                  INNER JOIN APNTM A
+					                        ON E.EMP_NUM = A.EMP_NUM
+		                                  INNER JOIN DEPT D
+					                        ON A.DEPT_NUM = D.DEPT_NUM
+		                                  INNER JOIN RANK R
+					                        ON A.RANK_NUM = R.RANK_NUM
 	</select>
 	
-	
-	
-	
-	
-	
-	
-	
-	
+<!-- 채팅방 별 대화 -->	
+	<select id = "chatInCont" parameterType="hashmap" resultType="hashmap">
+		SELECT CHAT_NUM
+		FROM MSGR_CONT
+		GROUP BY #{chatNum}
+	</select>
 	
 </mapper>

@@ -91,34 +91,48 @@
 		VALUES(ASSET_SEQ.NEXTVAL, #{assetName}, #{writer}, #{mngrNum}, #{assetType}, #{qunty}, #{quntyDvsnNum}, #{acqrmntDt})
 	</insert>
 	
-	<select id="getMngmntEmpList" resultType="hashmap" parameterType="hashmap">
-		SELECT O.EMP_NUM,O.EMP_NAME
-		FROM       ( SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM
-	        		FROM DEPT D INNER JOIN APNTM A
-	                    		ON D.DEPT_NUM = A.DEPT_NUM
-	                   			INNER JOIN EMP E
-	                    		ON A.EMP_NUM = E.EMP_NUM
-	        		WHERE D.DEPT_NUM = 5 
-		             <if test="sendSrchTxt != null and sendSrchTxt != ''">
-		             	AND E.EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
-		             </if>
-		            )O
-		WHERE O.RNUM BETWEEN #{startCount} AND #{endCount}
-		
-	</select>
-	
 	<select id="getMngmntEmpCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*)
-		FROM(   SELECT A.EMP_NUM,E.EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM
-	       		FROM DEPT D INNER JOIN APNTM A
-	                    ON D.DEPT_NUM = A.DEPT_NUM
-	                    INNER JOIN EMP E
-	                    ON A.EMP_NUM = E.EMP_NUM
-	       		WHERE D.DEPT_NUM = 5 
+		FROM(   SELECT E.EMP_NUM, E.EMP_NAME, R.RANK_NAME
+					FROM EMP E INNER JOIN (SELECT EMP_NUM, DEPT_NUM, RANK_NUM, END_DATE,
+                                      ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY APNTM_NUM DESC) AS RNUM
+                               FROM APNTM
+                               WHERE STS_NUM = 1) A
+		                   ON E.EMP_NUM = A.EMP_NUM
+                          AND A.RNUM = 1
+		                  AND (A.END_DATE IS NULL OR TO_CHAR(A.END_DATE, 'YYYYMMDD') >= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+		           INNER JOIN DEPT D
+		                   ON A.DEPT_NUM = D.DEPT_NUM
+		           INNER JOIN RANK R
+		                   ON A.RANK_NUM = R.RANK_NUM
+                           WHERE D.DEPT_NUM = 5
 			<if test="sendSrchTxt != null and sendSrchTxt != ''">
 				AND E.EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
 			</if>
 			) 
+	</select>
+	
+	<select id="getMngmntEmpList" resultType="hashmap" parameterType="hashmap">
+		SELECT EMP_NUM,EMP_NAME
+		FROM       ( SELECT E.EMP_NUM, E.EMP_NAME, R.RANK_NAME, ROW_NUMBER() OVER(ORDER BY E.EMP_NUM DESC) AS RNUM
+					FROM EMP E INNER JOIN (SELECT EMP_NUM, DEPT_NUM, RANK_NUM, END_DATE,
+                                      ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY APNTM_NUM DESC) AS RNUM
+                               FROM APNTM
+                               WHERE STS_NUM = 1) A
+		                   ON E.EMP_NUM = A.EMP_NUM
+                          AND A.RNUM = 1
+		                  AND (A.END_DATE IS NULL OR TO_CHAR(A.END_DATE, 'YYYYMMDD') >= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+		           INNER JOIN DEPT D
+		                   ON A.DEPT_NUM = D.DEPT_NUM
+		           INNER JOIN RANK R
+		                   ON A.RANK_NUM = R.RANK_NUM
+                           WHERE D.DEPT_NUM = 5
+		             <if test="sendSrchTxt != null and sendSrchTxt != ''">
+		             	AND E.EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
+		             </if>
+		            )
+		WHERE RNUM BETWEEN #{startCount} AND #{endCount}
+		
 	</select>
 	
 	<update id="drblMdfy" parameterType="hashmap">
@@ -246,32 +260,40 @@
 	
 	<select id="getAllEmpCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
-		FROM(  SELECT A.EMP_NUM, EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM,DEPT_NAME,RANK_NAME
-	        		FROM DEPT D INNER JOIN APNTM A
-	                    		ON D.DEPT_NUM = A.DEPT_NUM
-	                   			INNER JOIN EMP E
-	                    		ON A.EMP_NUM = E.EMP_NUM
-                                INNER JOIN RANK R
-                                ON A.RANK_NUM = R.RANK_NUM
-	        		WHERE 1=1 
+		FROM( SELECT E.EMP_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME
+		FROM EMP E INNER JOIN (SELECT EMP_NUM, DEPT_NUM, RANK_NUM, END_DATE,
+                                      ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY APNTM_NUM DESC) AS RNUM
+                               FROM APNTM
+                               WHERE STS_NUM = 1) A
+		                   ON E.EMP_NUM = A.EMP_NUM
+                          AND A.RNUM = 1
+		                  AND (A.END_DATE IS NULL OR TO_CHAR(A.END_DATE, 'YYYYMMDD') >= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+		           INNER JOIN DEPT D
+		                   ON A.DEPT_NUM = D.DEPT_NUM
+		           INNER JOIN RANK R
+		                   ON A.RANK_NUM = R.RANK_NUM
 			<if test="sendSrchTxt != null and sendSrchTxt != ''">
-				AND EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
+				AND E.EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
 			</if>
 			) 
 	</select>
 	
 	<select id="getAllEmpList" resultType="hashmap" parameterType="hashmap">
 		SELECT EMP_NAME, DEPT_NAME, RANK_NAME, EMP_NUM
-		FROM       (SELECT A.EMP_NUM, EMP_NAME,ROW_NUMBER() OVER(ORDER BY E.EMP_NUM ASC) AS RNUM,DEPT_NAME,RANK_NAME
-	        		FROM DEPT D INNER JOIN APNTM A
-	                    		ON D.DEPT_NUM = A.DEPT_NUM
-	                   			INNER JOIN EMP E
-	                    		ON A.EMP_NUM = E.EMP_NUM
-                                INNER JOIN RANK R
-                                ON A.RANK_NUM = R.RANK_NUM
-	        		WHERE 1=1 
+		FROM       (SELECT E.EMP_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, ROW_NUMBER() OVER(ORDER BY E.EMP_NUM DESC) AS RNUM
+		FROM EMP E INNER JOIN (SELECT EMP_NUM, DEPT_NUM, RANK_NUM, END_DATE,
+                                      ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY APNTM_NUM DESC) AS RNUM
+                               FROM APNTM
+                               WHERE STS_NUM = 1) A
+		                   ON E.EMP_NUM = A.EMP_NUM
+                          AND A.RNUM = 1
+		                  AND (A.END_DATE IS NULL OR TO_CHAR(A.END_DATE, 'YYYYMMDD') >= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+		           INNER JOIN DEPT D
+		                   ON A.DEPT_NUM = D.DEPT_NUM
+		           INNER JOIN RANK R
+		                   ON A.RANK_NUM = R.RANK_NUM
 		             <if test="sendSrchTxt != null and sendSrchTxt != ''">
-		             	AND EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
+		             	AND E.EMP_NAME LIKE '%' || #{sendSrchTxt} || '%'
 		             </if>
 		            )A
 		WHERE RNUM BETWEEN #{startCount} AND #{endCount}

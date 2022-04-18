@@ -330,7 +330,7 @@
 }
 
 /* 대응가이드 팝업 */
-.board_table {
+#guide_table {
 	margin-top: 70px;
 }
 
@@ -349,7 +349,15 @@
 	font-size: 8pt;
 }
 
-#clnt_type, #type_case{
+#clnt_type {
+	display: inline-block;
+	height: 21px;
+	width: 107px;
+    margin-left: -4px;
+} 
+
+#type_case {
+	display: inline-block;
 	width: 100px;
 }
 
@@ -359,10 +367,6 @@
 
 #type_case {
 	display: inline;
-}
-
-.add {
-	vertical-align: bottom;
 }
 
 #rspndAddBtn, #rspndUpBtn, #rspndCanBtn{
@@ -383,6 +387,8 @@
 	vertical-align: top;
 	resize: none;
 	margin-bottom: 5px;
+	white-space: pre-wrap;
+	text-overflow: ellipsis;
 }
 
 .rspnd_top_row1 {
@@ -405,6 +411,11 @@
 }
 #rspndActionForm textarea:focus{
 	outline: 2px solid #F2CB05;
+}
+
+#btn2Btn makePopup, #btn3Btn makePopup {
+	text-align: center;
+	line-height: 100px;
 }
 
 </style>
@@ -456,7 +467,16 @@ $(document).ready(function() {
 		html += "			<input type=\"hidden\" id=\"guide_num\" name=\"guide_num\"/>";
 		html += "			<input type=\"hidden\" id=\"emp_num\" name=\"emp_num\" value=\"" + $("#emp_num").val() + "\"/>";
 		html += "			<div class=\"rspnd_top_row1\">";
-		html += "				<div class=\"rspndPopTxt\">고객유형</div><input type=\"text\" id=\"clnt_type\" name=\"clnt_type\"/>";
+		html += "				<div class=\"rspndPopTxt\">고객유형</div>";
+		html += "           		<select id=\"clnt_type\" name=\"clnt_type\">";
+		html += "						<option value=\"일반\">일반</option>";
+		html += "						<option value=\"폭언\">폭언</option>";
+		html += "						<option value=\"성희롱\">성희롱</option>";
+		html += "						<option value=\"허위 민원\">허위 민원</option>";
+		html += "						<option value=\"반복적 민원\">반복적 민원</option>";
+		html += "						<option value=\"노인/농아자\">노인/농아자</option>";
+		html += "						<option value=\"기타\">기타</option>";
+		html += "					</select>";
 		html += "				<div class=\"rspndPopTxt\">대응방안</div><textarea rows=\"7\" cols=\"58\" id=\"rspns_plan\" name=\"rspns_plan\"></textarea>";
 		html += "			</div>";
 		html += "			<div class=\"rspndPopTxt\" id=\"type_case_div\">유형별 사례</div><input type=\"text\" id=\"type_case\" name=\"type_case\"/>";
@@ -505,7 +525,7 @@ $(document).ready(function() {
 					rspndRe();
 				});
 				
-				
+				// 대응가이드 등록
 				$("#rspndAddBtn").on("click", function() {
 					
 					if(checkEmpty("#clnt_type")) {
@@ -523,13 +543,12 @@ $(document).ready(function() {
 						
 						$.ajax({
 							type : "post",
-							url : "inqryRspndListAction/i",
+							url : "inqryRspndListActionAjax/i",
 							dataType : "json",
 							data : params,
 							success : function(res) {
 								if(res.res == "success") {
-									closePopup();
-									$("#guide_btn").click();
+									rspndRe();
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
 								}
@@ -541,6 +560,9 @@ $(document).ready(function() {
 							}
 						}); // ajax end
 					}
+					$("#clnt_type").val("일반"); // 고객유형
+					$("#rspns_plan").val(""); // 대응방안
+					$("#type_case").val(""); // 유형별 사례
 				});
 				// 목록의 수정버튼
 				$("#guide_table_tbody").on("click", "#uBtn", function() {
@@ -567,6 +589,7 @@ $(document).ready(function() {
 					$(".update").attr("class", "add");
 				});
 				
+				// 대응가이드 수정
 				$("#rspndUpBtn").on("click", function() {
 					
 					if(checkEmpty("#clnt_type")) {
@@ -584,13 +607,12 @@ $(document).ready(function() {
 						
 						$.ajax({
 							type : "post",
-							url : "inqryRspndListAction/u",
+							url : "inqryRspndListActionAjax/u",
 							dataType : "json",
 							data : params,
 							success : function(res) {
 								if(res.res == "success") {
-									closePopup();
-									$("#guide_btn").click();
+									rspndRe();
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
 								}
@@ -601,10 +623,15 @@ $(document).ready(function() {
 	
 							}
 						}); // ajax end
+						
 					}
+					$("#clnt_type").val("일반"); // 고객유형
+					$("#rspns_plan").val(""); // 대응방안
+					$("#type_case").val(""); // 유형별 사례
+					$(".update").attr("class", "add");
 				});
 				
-				// 목록의 삭제버튼
+				// 대응가이드 삭제버튼
 				$("#guide_table_tbody").on("click", "#dBtn", function() {
 					if(confirm("삭제하시겠습니까?")) {
 						// tr
@@ -616,13 +643,12 @@ $(document).ready(function() {
 						
 						$.ajax({
 							type : "post",
-							url : "inqryRspndListAction/d",
+							url : "inqryRspndListActionAjax/d",
 							dataType : "json",
 							data : params,
 							success : function(res) {
 								if(res.res == "success") {
-									closePopup();
-									$("#guide_btn").click();
+									rspndRe();
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
 								}
@@ -633,9 +659,12 @@ $(document).ready(function() {
 	
 							}
 						}); // ajax end
+						
 					}
+					$("#clnt_type").val("일반"); // 고객유형
+					$("#rspns_plan").val(""); // 대응방안
+					$("#type_case").val(""); // 유형별 사례
 				});
-				
 			},
 			draggable : true,
 			buttons : [{
@@ -655,7 +684,7 @@ $(document).ready(function() {
 		
 		$.ajax({
 			type : "post",
-			url : "rspndListAjax",
+			url : "inqryRspndListAjax",
 			dataType : "json",
 			data : params,
 			success : function(res) {

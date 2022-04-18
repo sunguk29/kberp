@@ -62,12 +62,6 @@ function insertMdData(){
 		}else if(checkNum("#intrst_rate")){
 			alert("이자율은 숫자만 입력 가능합니다.");
 			$("#intrst_rate").focus();
-		}else if(checkSelect("#intrst_pymnt_mthd")){
-			alert("이자 납부 방식을 입력하세요.");
-			$("#intrst_pymnt_mthd").focus();
-		}else if(checkSelect("#prncpl_pymnt_mthd")){
-			alert("원금 납부 방식을 입력하세요.");
-			$("#prncpl_pymnt_mthd").focus();
 		}else if(checkSelect("#mid_prdmptn_psbl_check")){
 			alert("중도 상환 가능 여부를 입력하세요.");
 			$("#mid_prdmptn_psbl_check").focus();

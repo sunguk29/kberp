@@ -843,7 +843,7 @@ $(document).ready(function() {
 		html += "<div class=\"pop_cntrct_box_in\">";
 		html += "	<input type=\"text\" id=\"popFileName\" name=\"fileName\" readonly=\"readonly\">";
 		html += "</div>";
-		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />";
+		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"popuploadName(this)\" />";
 		html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />";	
 		html += "</form>";
 		
@@ -912,7 +912,7 @@ $(document).ready(function() {
 								
 							RegForm.submit();
 							closePopup(1);
-							reloadSCList();
+							reloadSScList();
 							} //if else문 end
 						}
 					}, {
@@ -1024,14 +1024,15 @@ $(document).ready(function() {
 					html += "</span>";
 					html += "</div>";
 					html += "<div class=\"pop_cntrct_box_in\">";
-					if(data.ATT_FILE_NAME != null) {
+					if(data.ATT_FILE_NAME != "" && data.ATT_FILE_NAME != null) {
 						html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
 						html += "	<input type=\"button\" id=\"fileDelete\" value=\"삭제\" />";
 					}
-					html += "	<input type=\"text\" id=\"popFileName\" readonly=\"readonly\" />                 ";
+					/* 파일 등록시 파일명이 들어갈곳 */				
+					html += "<input type=\"text\" id=\"fileName\" readonly=\"readonly\" />";
 					html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />   ";
-					html += "	<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />           ";
 					html += "	<input type=\"hidden\" id=\"schdlnum\" name=\"schdlnum\" />           ";
+					html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" value=\"" + data.ATT_FILE_NAME + "\" />";	
 					html += "</div>                                                                     ";
 					html += "</form>";
 				}); // each end
@@ -1045,7 +1046,9 @@ $(document).ready(function() {
 				contentsEvent : function() {
 					
 					$("#fileDelete").on("click", function() {
-						$("#file_name").remove();
+						/* 파일삭제시 기존에 있던 파일명을 지움 */
+						$("#file_name").remove(); // 기존 파일명
+						$("#schdlAttFile").val(""); // 올릴 파일명
 						$(this).remove();
 						
 						var html = "";
@@ -1054,12 +1057,6 @@ $(document).ready(function() {
 						
 						$("#uploadBtn").html(html);
 					});
-					
-					function uploadName(e) {
-						var files = e.files;
-						var filename = files[0].name;
-						$("#fileName").val(filename);
-					}
 					
 					$(".pop_rvn_txt").on("click", ".aff_btn", function() {
 						$("#att").click();
@@ -1121,7 +1118,7 @@ $(document).ready(function() {
 									
 								RegForm.submit();
 								closePopup(1);
-								reloadSCList();
+								reloadSScList();
 								} //if else문 end
 							}
 						}, {
@@ -1284,12 +1281,19 @@ function drawSScList(list) {
 	$(".sBox").html(html);
 }
 
-function uploadName(e) {
+//일정 등록 파일명
+function popuploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
 	$("#popFileName").val(filename);
 }
- 
+
+// 일정 수정 파일명
+function uploadName(e) {
+	var files = e.files;
+	var filename = files[0].name;
+	$("#fileName").val(filename);
+}
 </script>
 </head>
 <body>
@@ -1317,7 +1321,9 @@ function uploadName(e) {
 		<div class="page_title_bar">
 			<div class="page_title_text">영업관리 - 제안 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
-				<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
+				<c:if test="${data.MNGR_EMP_NUM eq sEmpNum}">
+					<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
+				</c:if>
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -1619,7 +1625,9 @@ function uploadName(e) {
 							</div> 
 						</div>
 					<div class="next_bot">
-						<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
+						<c:if test="${data.MNGR_EMP_NUM eq sEmpNum}">
+							<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
+						</c:if>
 					</div>
 				</form>					
 				<form action="#" id="botOpActionForm" method="post">

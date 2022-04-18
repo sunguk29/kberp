@@ -1,7 +1,5 @@
 package com.gdj43.kberp.web.sales.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,12 +50,6 @@ public class SchdlController {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
-		
-		Date month = new Date();
-		
-		SimpleDateFormat sdm = new SimpleDateFormat("YYYY-MM");
-		
-		params.put("month", sdm.format(month));
 		
 		List<HashMap<String, String>> slist = iCommonService.getDataList("salesSchdl.getSalesDaySchdlList", params);
 		

@@ -1,12 +1,21 @@
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now() ;	
+	request.setAttribute("version", version);		//캐시 처리
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>카카오뱅크 ERP - 고객사</title>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -638,8 +647,8 @@ $(document).ready(function() {
 		makePopup({
 			bg : false,
 			bgClose : false,
-			title : "경고",
-			contents : "<div class=\"text_center\"><b>삭제하시겠습니까?</b></div>",
+			title : "알림",
+			contents : popContOneLine("삭제하시겠습니까?"),
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
@@ -659,7 +668,7 @@ $(document).ready(function() {
 								$("#actionForm").attr("action", "clntCmpnyList");
 								$("#actionForm").submit();
 							} else {
-								alert("삭제중 문제가 발생하였습니다.");
+								makeAlert("알림", "삭제중 문제가 발생하였습니다.");
 							}
 						},
 						error : function(request, status, error) {
@@ -690,7 +699,7 @@ $(document).ready(function() {
 		
 			$.ajax({
 				type : "post",
-				url : "opBotActionAjax/insert",
+				url : "ccOpBotActionAjax/insert",
 				dataType : "json",
 				data : params,
 				success : function(res) {
@@ -698,7 +707,7 @@ $(document).ready(function() {
 						$("#tatacont").val("");
 						reloadOpList();
 					} else {
-						alert("등록중 문제가 발생하였습니다.");
+						makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 					}
 				},
 				error : function(request, status, error) {
@@ -706,7 +715,7 @@ $(document).ready(function() {
 				}
 			});
 		} else {
-			makeAlert("알림", "내용을 입력해주세요.");
+			makeAlert("알림", popContOneLine("내용을 입력해주세요."));
 		}
 	});
 	
@@ -719,8 +728,8 @@ $(document).ready(function() {
 		makePopup({
 			bg : false,
 			bgClose : false,
-			title : "경고",
-			contents : "<div class=\"text_center\"><b>삭제하시겠습니까?</b></div>",
+			title : "알림",
+			contents : popContTwoLine("삭제하시겠습니까?"),
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
@@ -731,14 +740,14 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "opBotActionAjax/update",
+						url : "ccOpBotActionAjax/update",
 						dataType : "json",
 						data : params,
 						success : function(res) {
 							if(res.res == "success") {
 								reloadOpList();
 							} else {
-								alert("삭제중 문제가 발생하였습니다.");
+								makeAlert("알림", popContOneLine("삭제중 문제가 발생하였습니다."));
 							}
 						},
 						error : function(request, status, error) {
@@ -998,19 +1007,15 @@ $(document).ready(function() {
 				name : "등록",
 				func : function() {
 					if(checkEmpty("#cName")) {
-						makeAlert("필수 항목 알림", "고객을 입력하세요", function() {
+						makeAlert("필수 정보 알림", popContOneLine("고객을 입력하세요"), function() {
 							$("#cName").focus();
 						});
-					} else if(checkEmpty("#ccName")) {
-						makeAlert("필수 항목 알림", "고객사를 입력하세요", function() {
-							$("#ccName").focus();
-						});
 					} else if(checkEmpty("#mbl")) {
-						makeAlert("필수 항목 알림", "휴대폰번호를 입력하세요", function() {
+						makeAlert("필수 정보 알림", popContOneLine("휴대폰번호를 입력하세요"), function() {
 							$("#mbl").focus();
 						});
 					} else if(checkEmpty("#mngEmp")) {
-						makeAlert("필수 항목 알림", "담당자를 선택하세요", function() {
+						makeAlert("필수 정보 알림", popContOneLine("담당자를 선택하세요"), function() {
 							$("#mngEmp").focus();
 						});
 					} else {
@@ -1033,7 +1038,7 @@ $(document).ready(function() {
 										if(res.res == "success") {
 											reloadCList();
 										} else {
-											alert("등록중 문제가 발생하였습니다.");
+											makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 										}
 									},
 									error : function(request, status, error) {
@@ -1067,7 +1072,7 @@ function reloadOpList() {
 	
 	$.ajax({
 		type : "post",
-		url : "opBotListAjax",
+		url : "ccOpBotListAjax",
 		data : params,
 		dataType : "json",
 		success : function(res) {

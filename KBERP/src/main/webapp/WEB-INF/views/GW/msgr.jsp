@@ -336,6 +336,7 @@ td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 	width : 550px;
 	height : 540px;
 	border-radius: 8px;
+	overflow: auto;
 	
 }
 
@@ -357,9 +358,11 @@ td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 	position : relative;
 }
 
-.chat_img_file {
+#chat_img_file {
  	width : 35px;
 	height : 35px;
+	border : 0px;
+	outline : 0px;
  	background-image: url("resources/images/GW/file.png");
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
@@ -423,7 +426,7 @@ td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 	background-color: white;
 	margin-top: 5pt;
 	margin-bottom: 5pt;
-	float: right;
+	text-align: right;
 }
 
 #chat_user_name {
@@ -464,6 +467,12 @@ td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 
 .popup_cont {
 
+}
+
+img { 
+	display: block;
+	content: "";
+	border : 0px solid;
 }
 
  
@@ -573,13 +582,20 @@ $(document).ready(function() {
 		});
 	}); // main msgr btn
 	
+	
+	
 	$("div").on("click", ".chat_list1", function() {	
+	//	refreshInterval = setInterval(readCont, 1000);
+	//	clearInterval(refreshInterval);
+		readCont();
+		
+		$("#chatNum").val($(this).attr("chatNum"));
 		
 		var html = "";
 		
 		html += "		<div class = \"right_box\">                                                      ";
 		html += "			<div class = \"rcpnt_rank_box\">                                                 ";
-		html += "				<div id = \"rcpnt_rank\"> ${empNum} ${data.RankName} ${EmpName} </div>";
+		html += "				<div id = \"rcpnt_rank\"> ${param.empNum} ${RankName} ${EmpName} </div>";
 		html += "			</div>		                                                                  	 ";
 		html += "			                                                                              	 ";
 		html += "			<div class = \"chat_room\">                                                      ";
@@ -588,41 +604,149 @@ $(document).ready(function() {
 		html += "				</div>                                                                    	 ";
 		html += "				<div class = \"chat_input\">                                            	 ";
 		
-		html += "					<form action = \"#\" id = \"insertForm\" method = \"post\">";
+		html += "					<form action = \"#\" id = \"insertForm\" method = \"post\" enctype= \"multipart/form-data\">";
 		html += "						<input type = \"hidden\" name = \"chatNum\" value = \"" + $(this).attr("chatNum") + "\">";
 		html += "						<div class= \"cmn_btn_ml\" id = \"insertBtn\" style=\"float: left;\">보내기</div>";
-		html += "						<div class = \"chat_img_file\"></div>                                ";
-		html += "						<div class = \"chat_img_plus\"></div>                                ";
+										/* 첨부파일 */
+		html += "						<div class = \"chat_img\">";
+		html += "							<label for = \"attFile\">";
+		html += "								<img id = \"chat_img_file\">";
+		html += "							</label>";	
+		html += "							<input type=\"file\" id=\"attFile\" name=\"attFile\" style=\"display:none\"/>";
+		html += "						</div>";
+		
+		html += "						<div class = \"chat_img_plus\"></div>";
 		html += "						<input type= \"text\" placeholder = \"메시지 입력..\" name = \"cont\"  id = \"cont\" onkeydown= \"enterCheck();\" style = \"float: right;  \">";
 		html += "						<input type= \"text\" style = \"display:none\">";
-		html += "					</form>																	 ";
+		html += "					</form>";
 		
-		html += "				</div>                                                                     	 ";
-		html += "			</div>	                                                                         ";
-		html += "		</div>	                                                                         ";
+		html += "				</div>";
+		html += "			</div>";
+		html += "		</div>";
+		readCont();
 		
 		$(".msgr_main").remove();
 		$(".right_box").html(html);
+		$(".chat_dtl").slimScroll({height:"545px"});
 		
 		
 		$("#insertBtn").on("click", function() {
-			if($.trim($("#cont").val()) == null) {
+			if($.trim($("#cont").val()) == "") {
 				alert("내용을 입력하세요.");
 			} else {
 				insertCont();
+				
 			}
 		});
 		
-	});
-	
+		
+		$(".chat_img_plus").on("click", function() {
+
+			var html = "";
+			
+			html += "		<form action = \"#\" id = \"joinForm\" method = \"post\">";
+			html += "			<input type = \"hidden\" id = \"no\" name = \"no\" value = \"${sEMP_NUM}\"/>";		
+	 		html += "			<input type = \"hidden\" id = \"CHAT_NUM\" name = \"CHAT_NUM\" value=\"${chatsq}\"/>";		
+	 		html += "			<input type = \"hidden\" id = \"EMP_NUM\" name = \"EMP_NUM\" value=\"${EMP_NUM}\"/>";
+
+			html +=	"		<div class = \"srch_mid\">                                          ";
+			html +=	"		<div class = \"chart\"></div>                                       ";
+			html +=	"			<div class = \"srch_rcpnt\">받는 사람:</div>                      	";
+			html +=	"			<input type=\"text\" placeholder = \"검색...\" class = \"srch_srch\">";
+			html +=	"			<div id=\"chatList\">                                           ";
+			html +=	"			<table>                                                         ";
+			html +=	"				<thead>                                                     ";
+			html +=	"					<tr>                                                    ";
+			html +=	"						<th>부서</th>                                        	";
+			html +=	"						<th>직급</th>                                        	";
+			html +=	"						<th>성명</th>                                        	";
+			html +=	"						<th>확인</th>                                   		";
+			html +=	"					</tr>													";
+			html +=	"				</thead>                                                    ";
+			html +=	"				<tbody>                                                     ";
+	                                        	
+			html +=	"				</tbody>					                                ";
+			html +=	"			</table>                                                        ";
+			html +=	"			</div>                                                        ";
+			html +=	"		</div>                                                              ";
+			html += "		</form>";
+			
+			makePopup ({
+				bg:true,
+				bgClose : false,
+				title : "추가 검색",
+				width : 500,
+				height : 500,
+				contents : html,
+				contentsEvent : function() {
+					$.ajax({
+						type : "post",
+						url : "addListChatAjax",
+						dataType : "json",
+						success : function(res) {
+							drawList(res.list);
+						},
+						error : function(req) {
+							console.log(req.responseText)
+						}
+					});
+					
+					$("#chatList").slimScroll({height:"340px"});
+				},
+				
+				buttons : [{
+					name : "완료",
+					func : function() {
+						if($("#srch_check:checked").length == 0) {
+							alert("대화상대를 선택하세요.");
+							$("#srch_check").focus();
+						} else {
+							var params = $("#joinForm").serialize();
+							console.log(params);
+							
+							$.ajax ({
+								type : "post",
+								url : "actionChatAjax/join",
+								dataType : "json",
+								data : params,
+								success : function(res) {
+									if(res.res == "success") {
+										
+										closePopup();
+									} else {
+										alert("추가중 문제가 발생하였습니다.");
+									}
+								},
+								error : function(request, status, error) {
+									console.log(request.responseText);
+								}
+							});
+							}
+						
+						}
+					}, {
+						name : "취소",
+							func : function() {
+								closePopup();
+							}
+					
+				}]
+				
+			});
+		}); // chat_img_plus End
+		
+		
+	}); // div End
+		
 }); // ready
 
 function enterCheck() {
 	if(event.keyCode == 13) {
-		if($.trim($("#cont").val()) == null) {
+		if($.trim($("#cont").val()) == "") {
 			alert("내용을 입력해 주세요.");
 		} else {
 			insertCont();
+			readCont();
 		}
 		return;
 	}
@@ -631,24 +755,41 @@ function enterCheck() {
 function insertCont() {
 	$(".chat_dtl").val($("#cont").val());
 	
-	var params = $("#insertForm").serialize();
+/*	var insertForm = $("#insertForm");
 	
- 		$.ajax({
-			type : "post",
-			url : "insertContAjax",
-			dataType : "json",
-			data : params,
-			success : function(res) {
-				console.log(res);
-				$(".chat_dtl").val("");
-				$("#cont").val("");
-			},
-			error : function(res) { 
-				alert(res.errorMessage);
-				$(".chat_dtl").val("");
-				$("#cont").val("");
-			}
-		}); 
+	insertForm.ajaxForm({
+		success : function(res) {
+			if(res.fileName.length > 0) {
+				// 물리파일명 보관
+				$("#attFile").val(res.fileName[0]);
+			} */
+		
+	
+		var params = $("#insertForm").serialize();
+		
+	 		$.ajax({
+				type : "post",
+				url : "insertContAjax",
+				dataType : "json",
+				data : params,
+				success : function(res) {
+					console.log(res);
+					$(".chat_dtl").val("");
+					$("#cont").val("");
+					readCont();
+				},
+				error : function(res) { 
+					alert(res.errorMessage);
+					$(".chat_dtl").val("");
+					$("#cont").val("");
+				}
+			}); 
+/*		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	}); // ajaxForm End
+ 		insertForm.submit(); */
 	}
 	
 /* function chatDelete() {
@@ -663,21 +804,19 @@ function insertCont() {
 	
 
 function readCont() {
-//	clearInterval(refreshInterval);
+	clearInterval(refreshInterval);
 	// 채팅 인서트는 성공했지만, 리스트띄우는건 실패. 오류명 undefined 'parsererror' 
 	var params = $("#readForm").serialize();
-	
+	console.log(params);
 	$.ajax({
 		type : "post",
 		url : "getContListAjax",
 		dataType : "json",
 		data : params,
 		success : function(res) {
-			console.log("성공?")
-			console.log(res)
-			if(res.list != 0) {
-				console.log("성공2?")
-				
+			console.log("성공")
+			
+			if(res.list.length != 0) {
 				var html = "";
 				for(var i = 0 ; i < res.list.length; i++) {
 					if(res.list[i].EMP_NUM ==  '${sEmpNum}') {
@@ -688,25 +827,25 @@ function readCont() {
 							html += "</div>";
 						} else {
 							html += "<div class = \"chat_rcpnt\">";
-							html += "<div id = \"chat_rcpnt_name\">" + res.list[i].EMP_NAME + "</div>";
+							html += "<div id = \"chat_rcpnt_name\">" + res.list[i].EMP_NAME + res.list[i].RANK_NAME + "</div>";
 							html += "<div id = \"chat_rcpnt_cont\">" + res.list[i].CONT + "&nbsp;</div>";
 							html += "<div id = \"chat_rcpnt_time\">" + res.list[i].RGSTRTN_DT + "</div>";
 							html += "</div>";
 						}
 					}
 				
-					$(".chatdtl").append(html);
-					$("#lastChatNo").val(res.list[res.list.length -1].data.CHAT_NUM);
+					$(".chat_dtl").append(html);
+					$("#lastChatNo").val(res.list[res.list.length -1].CONT_NUM);
+					
+					scrollDown()
 				}
-			//	refreshInterval = setInterval(readCont, 1000);
 			},
 			error : function(res, error) {
 				console.log(res.responseText);
 				console.log(res);
-				console.log("실패")
-			//	alert(res.errorMessage);
+				console.log("실패");
+				alert(res.errorMessage);
 				
-			//	refreshInterval = setInterval(readCont, 1000);
 			}
 	}); 
 }
@@ -725,6 +864,7 @@ function checkEmpty(sel) {
 		return true;
 	} else {
 		return false;
+		alert("대화를 입력하세요.");
 	}
 }
 
@@ -747,7 +887,16 @@ function reloadList() {
 	
 }
 
+/* function scrollDown() {
+	$(".chat_dtl").animate ({
+		scrollTop: $(".chat_dtl").prop("scrollHeight") 
+	}, 'slow', function () {});
+} */
 
+function scrollDown() {
+ $(".chat_dtl").scrollTop($(".chat_dtl")[0].scrollHeight);
+ 
+}
 
 
 function drawList(list) {
@@ -783,7 +932,6 @@ function drawRoom(list) {
 			html += "			<div class = \"chat_list1_1\"></div>";
 			html += "		</div>";
 		}
-	/* $(".chat_box").slimScroll({height: "610px"}); */
 	$(".chat_box").html(html); 
 }
 
@@ -816,6 +964,7 @@ function drawRoom(list) {
 			
 			<form action = "#" id = "readForm">
 				<input type="hidden" id = "lastChatNo" name = "lastChatNo" value = "${maxNo}">
+				<input type ="text" id = "chatNum" name = "chatNum" />
 			</form>
 			
 				<div class = "main_box">

@@ -439,8 +439,9 @@ $(document).ready(function() {
 				name : "확인",
 				func:function() {
 						if (checkEmpty("#deptInput")) {
-							alert("부서명을 입력하세요.");
+							makeAlert("알림","부서명을 입력하세요.", function(){
 							$("#deptInput").focus();
+							});
 						} else {
 							$("#deptName").val($("#deptInput").val());
 							var params = $("#actionForm").serialize();
@@ -525,8 +526,9 @@ $(document).ready(function() {
 								name : "확인",
 								func:function() {
 									if (checkEmpty("#deptInput")) {
-										alert("부서명을 입력하세요.");
+										makeAlert("알림","부서명을 입력하세요.", function(){
 										$("#deptInput").focus();
+										});
 									} else {
 									$("#deptName").val($("#deptInput").val());
 									if($("#superDeptSelect option:selected").attr("odeptNum") == "undefined" || $("#superDeptSelect option:selected").attr("odeptNum") == "" ) {

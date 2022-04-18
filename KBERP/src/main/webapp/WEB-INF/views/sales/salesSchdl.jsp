@@ -391,7 +391,6 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
 	var now = new Date();
 	var clndrYear = now.getFullYear();	// 연도
 	var clndrMonth = now.getMonth()+1;	// 월
@@ -401,6 +400,7 @@ $(document).ready(function() {
 	}else{
 		Cdate = ""+clndrYear+"-0"+clndrMonth;
 	}
+	
 	$('input[name=clndrDate]').attr('value',Cdate);
 	
 	if('${param.usrsrchTxt}' != ''){
@@ -419,6 +419,9 @@ $(document).ready(function() {
 		}
 	});
 	
+	console.log(clndrMonth);
+	console.log(clndrYear);
+	
 	/* 검색버튼 누를 시  */
 	$("#searchBtn").on("click", function() {
 		
@@ -431,6 +434,7 @@ $(document).ready(function() {
  		$("#fullCalendarArea").fullCalendar("removeEventSources");
 		
 		$(".cal_cont").hide();
+
 		
 		drawDayCalc();
 	});
@@ -670,12 +674,11 @@ $(document).ready(function() {
 			url : "salesSchdlAjax",
 			dataType : "json",
 			data : params,
-			success : function(res){		
-				
+			success : function(res){						
 					//신규이벤트 추가
 					$("#fullCalendarArea").fullCalendar("addEventSource", res.slist);
 					
-					
+					console.log(${param.initialDate});
 			},
 			error : function(req) {
 				console.log(req.responseText);
@@ -696,6 +699,18 @@ $(document).ready(function() {
 		//기존 이벤트 제거
 		$("#fullCalendarArea").fullCalendar("removeEventSources");
 		
+		clndrMonth = clndrMonth+1;
+		if(clndrMonth >= 13){
+			clndrMonth = 1;
+			clndrYear = clndrYear + 1;
+		}
+		if(clndrMonth >= 10){
+			Cdate = ""+clndrYear+"-"+clndrMonth;
+		}else{
+			Cdate = ""+clndrYear+"-0"+clndrMonth;
+		}
+		$('input[name=clndrDate]').attr('value',Cdate);
+		drawDayCalc();
 		
 			clndrMonth = clndrMonth+1;
 			if(clndrMonth >= 13){
@@ -709,8 +724,15 @@ $(document).ready(function() {
 			}
 			$('input[name=clndrDate]').attr('value',Cdate);
 			drawDayCalc();
-		
+			
+			if(clndrMonth <= 9){
+				var day = clndrYear+"-0"+clndrMonth+"-10";				
+			} else {
+				var day = clndrYear+"-"+clndrMonth+"-10";
+			}
+			document.getElementById("initialDate").value = day;
 	});
+	
 	
 	// 달력에서 이전 버튼 누를 시
 	$("body").on("click", ".fc-prev-button", function() {
@@ -731,54 +753,54 @@ $(document).ready(function() {
 		}
 		$('input[name=clndrDate]').attr('value',Cdate);
 		drawDayCalc();
+		
+		if(clndrMonth <= 9){
+			var day = clndrYear+"-0"+clndrMonth+"-10";				
+		} else {
+			var day = clndrYear+"-"+clndrMonth+"-10";
+		}
+		document.getElementById("initialDate").value = day;
 	});
-	
 	
 	$("#fullCalendarArea").fullCalendar({
-		header: {
-			left: '',
-	        center: 'prev, title, next',
-	        right: ''
-	      },
-	      locale: "ko",
-	      editable: false,
-	      height: 400,
-	      events: data,
-	      eventClick: function(event) { // 이벤트 클릭
-	    	  
-	      },
-	      dayClick: function(date, js, view) { // 일자 클릭
-	    	  
-			var tdv = date.format();
-			document.getElementById("ctt").value = "      " + tdv;
-		
-			$(".cal_cont").show();
-			$("#ctt").show();
+			header: {
+				left: '',
+		        center: 'prev, title, next',
+		        right: ''
+		      },
+		      locale: "ko",
+		      editable: false,
+		      height: 400,
+		      events: data,
+		      eventClick: function(event) { // 이벤트 클릭
+		    	  
+		      },
+		      dayClick: function(date, js, view) { // 일자 클릭
+		    	  
+				var tdv = date.format();
+				document.getElementById("ctt").value = "      " + tdv;
 			
-			var params = $("#actionForm").serialize();
-			
-	  		$.ajax({
-	  			type : "post",
-	  			url : "salesDaySchdlAjax",
-	  			dataType : "json",
-	  			data : params,
-	  			success : function(res) {
-	  				drawList(res.list);
-	  			},
-	  			error : function(req) {
-	  				console.log(req.responseText);
-	  			}
-	  		});
-	    	  
-	    	  
-	    	   //alert('Clicked on: ' + date.format());
-
-	    	  //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-
-	    	  //alert('Current view: ' + view.name);
-	      }
+				$(".cal_cont").show();
+				$("#ctt").show();
+				
+				var params = $("#actionForm").serialize();
+				
+		  		$.ajax({
+		  			type : "post",
+		  			url : "salesDaySchdlAjax",
+		  			dataType : "json",
+		  			data : params,
+		  			success : function(res) {
+		  				drawList(res.list);
+		  			},
+		  			error : function(req) {
+		  				console.log(req.responseText);
+		  			}
+		  		});
+		      }
+	      
 	});
-	
+
 	/* 캘린더 이벤트 관련 끝 */
 	
 	
@@ -814,6 +836,7 @@ $(document).ready(function(){
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" id="schdlnum" name="schdlnum" value="${param.schdlnum}" />
 	<input type="hidden" id="clndrDate" name="clndrDate" />
+	<input type="hidden" id="initialDate" name="initialDate"/>
 	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">

@@ -933,8 +933,6 @@ pre {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	console.log(${param.salesNum});
-	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
 
@@ -972,35 +970,51 @@ $(document).ready(function() {
 	
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
-		if(checkEmpty("#cntrctDt")) {
-			alert("계약일을 선택하세요.");
-			$("#cntrctDt").focus();
-		} else if($("#cntrctSdt").val() == 9) {
-			alert("계약기간 시작일을 선택하세요.");
-			$("#cntrctSdt").focus();
-		} else if(checkEmpty("#cntrctEdt")) {
-			alert("계약기간 종료일을 입력하세요.");
-			$("#cntrctEdt").focus();
-		} else if(checkEmpty("#daoName")) {
-			alert("입금계좌 소유주명을 입력하세요.");
-			$("#daoName").focus();
-		} else if($("#dbNum").val() == "9") {
-			alert("입금 은행명을 입력하세요.");
-			$("#dbName").focus();
+		if(checkEmpty("#daoName")) {
+			makeAlert("필수 항목 알림", "입금계좌 소유주명을 입력하세요.", function() {
+				$("#daoName").focus();
+			});
+		} else if(!isNaN($("#daoName").val())) {
+			makeAlert("알림", "입금계좌 소유주명은 한글 또는 영문으로 입력하세요.", function() {
+				$("#daoName").val("");
+				$("#daoName").focus();
+			});
+		} else if($("#dbNum").val() == 9) {
+			makeAlert("필수 항목 알림", "입금 은행명을 선택하세요.", function() {
+				$("#dbNum").focus();
+			});
 		} else if(checkEmpty("#daNum")) {
-			alert("입금 계좌번호를 입력하세요.");
-			$("#daNum").focus();
+			makeAlert("필수 항목 알림", "입금 계좌번호를 입력하세요.", function() {
+				$("#daNum").focus();
+			});
+		} else if(isNaN($("#daNum").val())) {
+			makeAlert("알림", "입금 계좌번호는 숫자만 입력 가능합니다.", function() {
+				$("#daNum").val("");
+				$("#daNum").focus();
+			});
 		} else if(checkEmpty("#payerName")) {
-			alert("납입자명을 입력하세요.");
-			$("#payerName").focus();
+			makeAlert("필수 항목 알림", "납입자명을 입력하세요.", function() {
+				$("#payerName").focus();
+			});
+		} else if(!isNaN($("#payerName").val())) {
+			makeAlert("알림", "납입자명은 한글 또는 영문으로 입력하세요.", function() {
+				$("#payerName").val("");
+				$("#payerName").focus();
+			});
 		} else if(checkEmpty("#paNum")) {
-			alert("납입 계좌번호를 입력하세요.");
-			$("#paNum").focus();
+			makeAlert("필수 항목 알림", "납입 계좌번호를 입력하세요.", function() {
+				$("#paNum").focus();
+			});
+		} else if(isNaN($("#paNum").val())) {
+			makeAlert("알림", "납입 계좌번호는 숫자만 입력 가능합니다.", function() {
+				$("#paNum").val("");
+				$("#paNum").focus();
+			});
 		} else if(checkEmpty("#reDate")) {
-			alert("갱신 예정일을 입력하세요.");
-			$("#reDate").focus();
-		} 
-		else {
+			makeAlert("필수 항목 알림", "갱신 예정일을 입력하세요.", function() {
+				$("#reDate").focus();
+			});
+		} else {
 			var html = "";
 			
 			html += "<div class=\"popup_cont2\">저장하시겠습니까?</div>";
@@ -1713,6 +1727,21 @@ $(document).ready(function() {
 	
 	}
 	
+// 	계약 종료일
+	var today = new Date();
+	if(${param.loanPrd eq 0}) {
+		today.setMonth(today.getMonth() + 6)
+		document.getElementById("cntrctEdt").value = today.getFullYear() + lpad(today.getMonth() + 1, 2, 0) + lpad(today.getDate(), 2, 0);
+	} else if(${param.loanPrd eq 1}) {
+		today.setMonth(today.getMonth() + 12)
+		document.getElementById("cntrctEdt").value = today.getFullYear() + lpad(today.getMonth() + 1, 2, 0) + lpad(today.getDate(), 2, 0);
+	} else if(${param.loanPrd eq 2}) {
+		today.setMonth(today.getMonth() + 36)
+		document.getElementById("cntrctEdt").value = today.getFullYear() + lpad(today.getMonth() + 1, 2, 0) + lpad(today.getDate(), 2, 0);
+	} else if(${param.loanPrd eq 3}) {
+		today.setMonth(today.getMonth() + 60)
+		document.getElementById("cntrctEdt").value = today.getFullYear() + lpad(today.getMonth() + 1, 2, 0) + lpad(today.getDate(), 2, 0);
+	}
 	
 }); // JS end
 
@@ -2516,6 +2545,7 @@ function test(t) {
 				<hr class="hr_bot" color="#4B94F2" width="925px">
 				<form action="fileUploadAjax" id="addForm" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
+					<input type="hidden" id="cntrctEdt" name="cntrctEdt" /> <!-- 영업기회에서 가져온 영업번호 -->
 					<input type="hidden" id= "mdNum" name="mdNum" />
 					<div class="bot_title"><h3>계약<div class="drop_btn"></div></h3></div>
 					 <hr class="hr_bot" color="white" width="925px"> 
@@ -2529,22 +2559,10 @@ function test(t) {
 						</colgroup>
 						<tbody>
 							<tr height="40">
-								<td><input type="button" class="btn" value="계약일*" readonly="readonly" /></td>
-								<td colspan="3"><input type="date" class="txt" id="cntrctDt" name="cntrctDt" /></td>		
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="계약기간*" readonly="readonly"/></td>
-								<td><input type="date" class="txt" id="cntrctSdt" name="cntrctSdt"/></td>
-								<td>
-									<div class="wave"> ~ </div>
-								</td>
-								<td><input type="date" class="txt" id="cntrctEdt" name="cntrctEdt"/></td>
-							</tr>
-							<tr height="40">
 									<td><input type="button" class="btn" value="고객사" /></td>
-									<td><input type="text" class="txt" value="${data.CLNT_CMPNY_NAME}"/></td>
+									<td><input type="text" class="txt" value="${data.CLNT_CMPNY_NAME}" readonly="readonly" /></td>
 									<td><input type="button" class="btn" value="고객" /></td>
-									<td><input type="text" class="txt"  value="${data.CLNT_NAME}"/></td>		
+									<td><input type="text" class="txt"  value="${data.CLNT_NAME}" readonly="readonly" /></td>		
 							</tr> 
 							<tr height="40">
 									<td><input type="button" class="btn" value="입금계좌 소유주명*" readonly="readonly" /></td>

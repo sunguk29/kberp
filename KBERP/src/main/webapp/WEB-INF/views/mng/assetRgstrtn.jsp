@@ -137,6 +137,7 @@ $("#srchEmp").on("click", function() {
 				});
 				
 				$("#empSrchBtn").on("click", function() {
+					$("#page").val("1");
 					$("#sendSrchTxt").val($("#empSrchTxt").val());
 					reloadList();
 				});

@@ -27,29 +27,23 @@
 		                         AND Q.QTN_STS_NUM = 0 
 		WHERE 1 = 1
 		<choose>
-			<when test="mngNum != null and mngNum != ''">
-				AND E.EMP_NUM = #{mngNum}
+			<when test="mngNum != '' and mngNum != null">
+			 	AND S.MNGR_EMP_NUM = #{mngNum}
+			</when>
+			<when test="mngName != '' and mngName != null">
+			 	AND E.EMP_NAME LIKE '%' || #{mngName} || '%'
 			</when>
 			<when test="prgrsStage1 != 9">
-				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
+			 	AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
 			</when>
 			<when test="prgrsStage2 != 9">
-				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
+			 	AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
 			</when>
-			<when test="startDate != null and startDate != '' or endDate != null and endDate != ''">
-				AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
-			</when>
-			<when test="prgrsStage1 != 9 and prgrsStage2 != 9">
-				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
-				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
-			</when>
-			<when test="prgrsStage1 != 9 and prgrsStage2 != 9 and startDate != null and startDate != '' or endDate != null and endDate != ''">
-				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
-				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
-				AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
+			<when test="startDate != '' and startDate != null">
+			 	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') = #{startDate} 
 			</when>
 		</choose>
-		<if test="searchTxt != null and searchTxt != ''">
+		<if test="searchTxt != '' and searchTxt != null">
 			<choose>
 				<when test="searchGbn == 0">
 					AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
@@ -103,7 +97,25 @@
 		              EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, S.START_DATE,
 		              DECODE(SUBSTR(S.PRGRS_STS_NUM, 2, 1), 5, '종료(성공)', 6, '종료(실패)', 7, '진행중') AS PRGRS_STS,
 		              DECODE(SUBSTR(S.PRGRS_STS_NUM, 1, 1), 1, '영업기회', 2, '제안', 3, '견적', 4, '계약') AS PRGRS_STS2,
-		              ROW_NUMBER() OVER(ORDER BY S.SALES_NUM DESC) AS RNUM, Q.QTN_NUM, Q.QTN_STS_NUM
+					ROW_NUMBER() OVER(ORDER BY 		            
+		            <choose>
+						<when test="listSort == 9">
+							S.SALES_NUM
+						</when>
+						<when test="listSort == 0">
+							L.LEAD_NAME
+						</when>
+						<when test="listSort == 1">
+							CC.CLNT_CMPNY_NAME
+						</when>
+						<when test="listSort == 2">
+							LDI.EXPCTN_LOAN_SCALE
+						</when>
+						<when test="listSort == 3">
+							TO_CHAR(S.START_DATE, 'YYYY-MM-DD')
+						</when>
+					</choose>
+					 DESC) AS RNUM, Q.QTN_NUM, Q.QTN_STS_NUM
 		       FROM SALES S INNER JOIN EMP E
 		                            ON S.MNGR_EMP_NUM = E.EMP_NUM
 		                    INNER JOIN LEAD L
@@ -119,29 +131,23 @@
 		                                AND Q.QTN_STS_NUM = 0 
 		      WHERE 1 = 1
 		<choose>
-			<when test="mngName != null and mngName != ''">
-				AND E.EMP_NAME = #{mngName}
+			<when test="mngNum != '' and mngNum != null">
+			 	AND S.MNGR_EMP_NUM = #{mngNum}
+			</when>
+			<when test="mngName != '' and mngName != null">
+			 	AND E.EMP_NAME LIKE '%' || #{mngName} || '%'
 			</when>
 			<when test="prgrsStage1 != 9">
-				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
+			 	AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
 			</when>
 			<when test="prgrsStage2 != 9">
-				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
+			 	AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
 			</when>
-			<when test="startDate != null and startDate != '' or endDate != null and endDate != ''">
-				AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
-			</when>
-			<when test="prgrsStage1 != 9 and prgrsStage2 != 9">
-				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
-				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
-			</when>
-			<when test="prgrsStage1 != 9 and prgrsStage2 != 9 and startDate != null and startDate != '' or endDate != null and endDate != ''">
-				AND SUBSTR(S.PRGRS_STS_NUM, 1, 1) = #{prgrsStage1}
-				AND SUBSTR(S.PRGRS_STS_NUM, 2, 1) = #{prgrsStage2}
-				AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
+			<when test="startDate != '' and startDate != null">
+			 	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') = #{startDate} 
 			</when>
 		</choose>
-		<if test="searchTxt != null and searchTxt != ''">
+		<if test="searchTxt != '' and searchTxt != null">
 			<choose>
 				<when test="searchGbn == 0">
 					AND CC.CLNT_CMPNY_NAME LIKE '%' || #{searchTxt} || '%'
@@ -154,28 +160,9 @@
 				</when>
 			</choose>
 		</if>
-		<if test="listSort != '9'">
-			<choose>
-				<when test="listSort == 0">
-					ORDER BY L.LEAD_NAME ASC
-				</when>
-				<when test="listSort == 1">
-					ORDER BY CC.CLNT_CMPNY_NAME ASC
-				</when>
-				<when test="listSort == 2">
-					ORDER BY LDI.EXPCTN_LOAN_SCALE ASC
-				</when>
-				<when test="listSort == 3">
-					ORDER BY TO_CHAR(S.START_DATE, 'YYYY-MM-DD') ASC
-				</when>
-			</choose>
-		</if> 
 		) SS
 		WHERE SS.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
-	
-	
-	
 	
 	<!-- 영업기회 기본정보tab 리드에서 가져오기 -->
 	<select id="getSales1BringLead" parameterType="hashmap" resultType="hashmap">
@@ -563,6 +550,8 @@
 		       FROM MD
 		       WHERE DEL_CHECK IS NULL ) M
 		WHERE M.RNUM BETWEEN #{startCount} AND #{endCount}
+		AND M.SALES_STS = '판매가능'
+		AND M.MD_GRADE = #{mdGrade}
 	</select>
 	
 	<!-- 견적(등록) 상품 리스트 -->
@@ -577,8 +566,8 @@
 	
 	<!-- 견적 등록 -->
 	<insert id="sales3QtnAdd" parameterType="hashmap">
-		INSERT INTO QTN(QTN_NUM, SALES_NUM, MD_NUM, QTN_NAME, QTN_DATE, SPLY_PRICE, TAX_AMNT, SRTX, INTRST_RATE, PYMNT_DATE, RMKS, LOAN_AMNT)
-		VALUES(QTN_SEQ.NEXTVAL, #{salesNum}, #{mdNum}, #{qtnName}, #{qtnDate}, #{sqlyPrice}, #{taxAmnt}, #{srtx}, #{intrstRate}, #{pymntDate}, #{rmksCont}, #{LoanAmnt})
+		INSERT INTO QTN(QTN_NUM, SALES_NUM, MD_NUM, QTN_NAME, SPLY_PRICE, TAX_AMNT, SRTX, INTRST_RATE, PYMNT_DATE, RMKS, PRNCPL_PYMNT_MTHD_NUM, LOAN_AMNT)
+		VALUES(QTN_SEQ.NEXTVAL, #{salesNum}, #{mdNum}, #{qtnName}, #{splyPrice}, #{taxAmnt}, #{srtx}, #{intrstRate}, #{pymntDate}, #{rmksCont}, #{prncplPymnt}, #{LoanAmnt})
 	</insert>
 	
 	<!-- 견적 첨부파일 등록 -->
@@ -591,8 +580,8 @@
 	<select id="getSales3" resultType="hashmap" parameterType="hashmap">
 		SELECT Q.SALES_NUM, Q.QTN_NUM, Q.QTN_NAME, TO_CHAR(Q.QTN_DATE, 'YYYY-MM-DD') AS QTN_DATE,
 		       Q.LOAN_AMNT, Q.SPLY_PRICE, Q.TAX_AMNT, (Q.SPLY_PRICE + Q.TAX_AMNT) AS TOTAL,
-		       Q.SRTX, Q.INTRST_RATE, Q.PYMNT_DATE, Q.RMKS,
-		       M.MD_TYPE_NUM, M.MID_RDMPTN_PSBL_CHECK, M.INTRST_PYMNT_MTHD_NUM, M.PRNCPL_PYMNT_MTHD_NUM, M.LOAN_PRD,
+		       Q.SRTX, Q.INTRST_RATE, Q.PYMNT_DATE, Q.RMKS, Q.PRNCPL_PYMNT_MTHD_NUM,
+		       M.MD_TYPE_NUM, M.MID_RDMPTN_PSBL_CHECK, M.LOAN_PRD,
 		       QAF.ATT_FILE_NAME
 		FROM  QTN Q INNER JOIN MD M
 		                     ON Q.MD_NUM = M.MD_NUM
@@ -677,9 +666,9 @@
 	
 	<!-- 계약 등록 -->
 	<insert id="sales4CntrctAdd" parameterType="hashmap">
-		INSERT INTO CNTRCT (CNTRCT_NUM, SALES_NUM, DPST_BANK_NUM, CNTRCT_DATE, CNTRCT_START_DATE, CNTRCT_END_DATE,
+		INSERT INTO CNTRCT (CNTRCT_NUM, SALES_NUM, DPST_BANK_NUM, CNTRCT_END_DATE,
                     DPST_ACNT_NUM, DPST_TRSC_OWNER_NAME, PYMT_ACNT_NUM, PAYER_NAME, RNWL_EXPCTD_DATE, MONTH_PYMNT_AMNT, MONTH_INTRST_AMNT)
-		VALUES(CNTRCT_SEQ.NEXTVAL,  #{salesNum}, #{dbNum}, #{cntrctDt}, #{cntrctSdt}, #{cntrctEdt}, #{daNum}, #{daoName},
+		VALUES(CNTRCT_SEQ.NEXTVAL,  #{salesNum}, #{dbNum}, #{cntrctEdt}, #{daNum}, #{daoName},
         		#{paNum}, #{payerName}, #{reDate}, #{monthPymntAmnt}, #{monthIntrstAmnt})
 	</insert>
 	

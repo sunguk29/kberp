@@ -351,6 +351,9 @@ tr:nth-child(9) td:nth-child(1){
 td:nth-child(1) {
 	text-align: center;
 }
+tr:nth-child(7) {
+	border: none;
+}
 .btn{
 	width : 90px;
 	height: 40px;
@@ -631,10 +634,10 @@ hr { /* 구분선 */
 	line-height: 33px;
 	border: none;	
 }
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+#a {
+	color : red;
+	font-size: 9pt;
+	display : none;
 }
 </style>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -680,10 +683,18 @@ $(document).ready(function() {
 		$("#att").click();
 	});
 
+	// 가능여부 숫자 100 넘어가면 초기화 
+	$("#psblCheck").on("change", function() {
+		if($(this).val() * 1 > 100) {
+			$(this).val("");
+			a.style.display = "block";
+		} else {
+			a.style.display = "";
+		}
+	});
+	
 	// 저장버튼
 	$("#writeBtn").on("click", function() {
-		
-		
 		if(checkEmpty("#leadName")) {
 			/* swal("필수항목알림", "리드명을 입력하세요.", "warning");  */
 			alert("리드명을 입력하세요."); 
@@ -700,9 +711,14 @@ $(document).ready(function() {
 		} else if(checkEmpty("#mngEmp")) {
 			alert("담당자를 입력하세요.");
 			$("#mngEmp").focus();
-		} else if(checkEmpty("#psblCheck")) {
-			alert("가능여부를 입력하세요.");
-			$("#psblCheck").focus();
+		} else if(checkEmpty("#psblCheck")) {	
+			if($("#psblCheck").val() > 100 && $("#psblCheck").val() < 0 ) {
+				alert("0~100까지의 숫자만 입력 가능합니다.");
+				$("#psblCheck").val("100");
+			} else {
+				alert("가능여부를 입력하세요.");
+				$("#psblCheck").focus();				
+			}
 		} else {	
 			var html = "";
 			
@@ -1529,9 +1545,16 @@ function uploadName(e) {
 									</td>
 									<td><input type="button" class="btn" value="가능여부 *" readonly="readonly"/></td>
 									<td>
-										<input type="text" class="txt" id="psblCheck" name="psblCheck" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" style="text-align: right;"/>
+										<input type="text" class="txt" id="psblCheck" name="psblCheck" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" style="text-align: right;" maxlength="3"/>
 										<div id="percent">%</div>
+										
 									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th><span id="a">숫자 0~100까지만 입력가능합니다.</span></th>
 								</tr>													
 							</tbody>
 						</table>

@@ -490,9 +490,8 @@ $(document).ready(function() {
 			buttons : [ {
 				name : "확인",
 				func : function() {
-					$("#listForm").attr("action", "salesList");
-					$("#listForm").submit();
-					console.log("One!");
+					$("#backForm").attr("action", "sales4CntrctCont");
+					$("#backForm").submit();
 					closePopup();
 				}
 			}, {
@@ -523,35 +522,47 @@ $(document).ready(function() {
 	
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
-		if(checkEmpty("#cntrctDt")) {
-			alert("계약일을 선택하세요.");
-			$("#cntrctDt").focus();
-		} else if($("#cntrctSdt").val() == 9) {
-			alert("계약기간 시작일을 선택하세요.");
-			$("#cntrctSdt").focus();
-		} else if(checkEmpty("#cntrctEdt")) {
-			alert("계약기간 종료일을 입력하세요.");
-			$("#cntrctEdt").focus();
-		} else if(checkEmpty("#daoName")) {
-			alert("입금계좌 소유주명을 입력하세요.");
-			$("#daoName").focus();
-		} else if($("#dbNum").val() == "9") {
-			alert("입금 은행명을 입력하세요.");
-			$("#dbName").focus();
+		if(checkEmpty("#daoName")) {
+			makeAlert("필수 항목 알림", "입금계좌 소유주명을 입력하세요.", function() {
+				$("#daoName").focus();
+			});
+		} else if(!isNaN($("#daoName").val())) {
+			makeAlert("알림", "입금계좌 소유주명은 한글 또는 영문으로 입력하세요.", function() {
+				$("#daoName").val("");
+				$("#daoName").focus();
+			});
 		} else if(checkEmpty("#daNum")) {
-			alert("입금 계좌번호를 입력하세요.");
-			$("#daNum").focus();
+			makeAlert("필수 항목 알림", "입금 계좌번호를 입력하세요.", function() {
+				$("#daNum").focus();
+			});
+		} else if(isNaN($("#daNum").val())) {
+			makeAlert("알림", "입금 계좌번호는 숫자만 입력 가능합니다.", function() {
+				$("#daNum").val("");
+				$("#daNum").focus();
+			});
 		} else if(checkEmpty("#payerName")) {
-			alert("납입자명을 입력하세요.");
-			$("#payerName").focus();
+			makeAlert("필수 항목 알림", "납입자명을 입력하세요.", function() {
+				$("#payerName").focus();
+			});
+		} else if(!isNaN($("#payerName").val())) {
+			makeAlert("알림", "납입자명은 한글 또는 영문으로 입력하세요.", function() {
+				$("#payerName").val("");
+				$("#payerName").focus();
+			});
 		} else if(checkEmpty("#paNum")) {
-			alert("납입 계좌번호를 입력하세요.");
-			$("#paNum").focus();
+			makeAlert("필수 항목 알림", "납입 계좌번호를 입력하세요.", function() {
+				$("#paNum").focus();
+			});
+		} else if(isNaN($("#paNum").val())) {
+			makeAlert("알림", "납입 계좌번호는 숫자만 입력 가능합니다.", function() {
+				$("#paNum").val("");
+				$("#paNum").focus();
+			});
 		} else if(checkEmpty("#reDate")) {
-			alert("갱신 예정일을 입력하세요.");
-			$("#reDate").focus();
-		} 
-		else {
+			makeAlert("필수 항목 알림", "갱신 예정일을 입력하세요.", function() {
+				$("#reDate").focus();
+			});
+		} else {
 			
 			var html = "";
 			
@@ -613,7 +624,22 @@ $(document).ready(function() {
 		}
 	});
 	
+	// 선택박스 초기값
+	$("#loanCauseNum").val(${data.LOAN_CAUSE_NUM}).prop("selected", true);
+	$("#loanHopeType").val(${data.LOAN_HOPE_TYPE}).prop("selected", true);
+	$("#loanHopeTime").val(${data.LOAN_HOPE_TIME}).prop("selected", true);
+	$("#expctdBsnsType").val(${data.EXPCTD_BSNS_TYPE}).prop("selected", true);
 	
+	$("#sgstnloanCauseNum").val(${data2.SGSTN_LOAN_CAUSE_NUM}).prop("selected", true);
+	$("#sgstnloanType").val(${data2.SGSTN_LOAN_TYPE}).prop("selected", true);
+	
+	$("#mdType").val(${data3.MD_TYPE_NUM}).prop("selected", true);
+	$("#prdmptn_psbl_check").val(${data3.MID_RDMPTN_PSBL_CHECK}).prop("selected", true);
+	$("#srtx").val(${data3.SRTX}).prop("selected", true);
+	$("#prncpl_pymnt").val(${data3.PRNCPL_PYMNT_MTHD_NUM}).prop("selected", true);
+	$("#loanPrd").val(${data3.LOAN_PRD}).prop("selected", true);
+	
+	$("#dbNum").val(${data4.DPST_BANK_NUM}).prop("selected", true);
 	
 	
 	
@@ -806,24 +832,12 @@ function uploadName(e) {
 							<tr>
 								<td><input type="button" class="btn" value="대출 원인*" /></td>
 								<td colspan="3">
-									<select class="txt" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${data.LOAN_CAUSE_NUM eq 0}">													
-														<option value="0" selected="selected">사업확장</option>
-													</c:when>
-													<c:when test="${data.LOAN_CAUSE_NUM eq 1}">													
-														<option value="0" selected="selected">제품개발</option>
-													</c:when>
-													<c:when test="${data.LOAN_CAUSE_NUM eq 2}">													
-														<option value="0" selected="selected">토지매매</option>
-													</c:when>
-													<c:when test="${data.LOAN_CAUSE_NUM eq 3}">													
-														<option value="0" selected="selected">기타</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
-										</select>
+									<select class="txt" id="loanCauseNum" name="loanCauseNum" disabled="disabled">
+										<option value="0">사업확장</option>
+										<option value="1">제품개발</option>
+										<option value="2">토지매매</option>
+										<option value="3">기타</option>
+									</select>
 								</td>
 							</tr>
 							<tr height="40">
@@ -833,40 +847,20 @@ function uploadName(e) {
 							<tr height="40">
 									<td><input type="button" class="btn" value="대출 희망 유형*" /></td>
 									<td colspan="3">
-										<select class="txt" disabled="disabled">
-											<optgroup>
-											<c:choose>
-													<c:when test="${data.LOAN_HOPE_TYPE eq 0}">													
-														<option value="0" selected="selected">장기대출</option>
-													</c:when>
-													<c:when test="${data.LOAN_HOPE_TYPE eq 1}">													
-														<option value="0" selected="selected">단기대출</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+										<select class="txt" id="loanHopeType" name="loanHopeType" disabled="disabled">
+											<option value="0" selected="selected">장기대출</option>
+											<option value="1" selected="selected">단기대출</option>
 										</select>
 									</td>
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="대출 희망 시기*"/></td>
 									<td colspan="3">
-										<select class="txt" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${data.LOAN_HOPE_TIME eq 0}">													
-														<option value="0" selected="selected">근시일 내</option>
-													</c:when>
-													<c:when test="${data.LOAN_HOPE_TIME eq 1}">													
-														<option value="0" selected="selected">3개월 이후</option>
-													</c:when>
-													<c:when test="${data.LOAN_HOPE_TIME eq 2}">													
-														<option value="0" selected="selected">6개월 이후</option>
-													</c:when>
-													<c:when test="${data.LOAN_HOPE_TIME eq 3}">													
-														<option value="0" selected="selected">1년 이후</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+										<select class="txt" id="loanHopeTime" name="loanHopeTime" disabled="disabled">
+											<option value="0">근시일 내</option>
+											<option value="1">3개월 이후</option>
+											<option value="2">6개월 이후</option>
+											<option value="3">1년 이후</option>
 										</select>
 									</td>	
 							</tr>
@@ -889,20 +883,10 @@ function uploadName(e) {
 							<tr height="40">
 									<td><input type="button" class="btn" value="예정 사업 형태" /></td>
 									<td colspan="3">
-										<select class="txt" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${data.EXPCTD_BSNS_TYPE eq 0}">													
-														<option value="0" selected="selected">민수 사업</option>
-													</c:when>
-													<c:when test="${data.EXPCTD_BSNS_TYPE eq 1}">													
-														<option value="0" selected="selected">관공 사업</option>
-													</c:when>
-													<c:when test="${data.EXPCTD_BSNS_TYPE eq 2}">													
-														<option value="0" selected="selected">기타</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+										<select class="txt" id="expctdBsnsType" name="expctdBsnsType" disabled="disabled">
+											<option value="0">민수 사업</option>
+											<option value="1">관공 사업</option>
+											<option value="2">기타</option>
 										</select>
 									</td>
 							</tr>
@@ -951,22 +935,10 @@ function uploadName(e) {
 									</td>
 									<td colspan="3">
 										<select class="txt" id="sgstnloanCauseNum" name="sgstnloanCauseNum" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${data2.SGSTN_LOAN_CAUSE_NUM eq 0}">
-														<option value="0">사업확장</option>
-													</c:when>
-													<c:when test="${data2.SGSTN_LOAN_CAUSE_NUM eq 1}">
-														<option value="1">제품개발</option>
-													</c:when>
-													<c:when test="${data2.SGSTN_LOAN_CAUSE_NUM eq 2}">
-														<option value="2">토지매매</option>
-													</c:when>
-													<c:when test="${data2.SGSTN_LOAN_CAUSE_NUM eq 3}">
-														<option value="3">기타</option>
-													</c:when>
-												</c:choose>
-												</optgroup>
+											<option value="0">사업확장</option>
+											<option value="1">제품개발</option>
+											<option value="2">토지매매</option>
+											<option value="3">기타</option>
 										</select>
 									</td>
 								</tr>
@@ -984,16 +956,8 @@ function uploadName(e) {
 									</td>
 									<td colspan="3">
 										<select class="txt" id="sgstnloanType" name="sgstnloanType" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${data2.SGSTN_LOAN_TYPE eq 0}">
-														<option value="0">장기 대출</option>
-													</c:when>
-													<c:when test="${data2.SGSTN_LOAN_TYPE eq 1}">
-														<option value="1">단기 대출</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+											<option value="0">장기 대출</option>
+											<option value="1">단기 대출</option>
 										</select>
 									</td>
 								</tr>
@@ -1126,19 +1090,9 @@ function uploadName(e) {
 								<td><input type="button" class="btn" value="상품유형" readonly="readonly" /></td>
 								<td colspan="3">
 									<select class="txt" id="mdType" name="mdType" disabled="disabled">
-									 	<optgroup>
-									 		<c:choose>
-									 			<c:when test="${data3.MD_TYPE_NUM eq 0}">
-											 		<option value="0" selected="selected">개인사업</option>
-									 			</c:when>
-									 			<c:when test="${data3.MD_TYPE_NUM eq 1}">
-											 		<option value="1" selected="selected">법인사업</option>
-									 			</c:when>
-									 			<c:when test="${data3.MD_TYPE_NUM eq 2}">
-											 		<option value="2" selected="selected">공공사업</option>
-									 			</c:when>
-									 		</c:choose>
-									 	</optgroup>
+									 	<option value="0">개인사업</option>
+								 		<option value="1">법인사업</option>
+								 		<option value="2">공공사업</option>
 									</select>
 								</td>
 							</tr>
@@ -1166,34 +1120,16 @@ function uploadName(e) {
 									<td><input type="button" class="btn" value="중도상환가능여부" readonly="readonly" /></td>
 									<td>
 										<select class="txt" id="prdmptn_psbl_check" name="prdmptnPsbl"  disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${data3.MID_RDMPTN_PSBL_CHECK eq 0}">
-														<option value="0" selected="selected">가능</option>
-													</c:when>
-													<c:when test="${data3.MID_RDMPTN_PSBL_CHECK eq 1}">
-														<option value="0" selected="selected">불가능</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+											<option value="0">가능</option>
+											<option value="1">불가능</option>
 										</select>
 									</td>
 									<td><input type="button" class="btn" value="부가세*" readonly="readonly" /></td>
 									<td>
 										<select class="txt" id="srtx" name="srtx" onchange="test(this);" disabled="disabled">
-										 	<optgroup>
-										 		<c:choose>
-										 			<c:when test="${data3.SRTX eq 0}">
-										 				<option value="0" selected="selected">미포함</option>
-										 			</c:when>
-										 			<c:when test="${data3.SRTX eq 1}">
-										 				<option value="1" selected="selected">포함</option>
-										 			</c:when>
-										 			<c:when test="${data3.SRTX eq 2}">
-										 				<option value="2" selected="selected">면세</option>
-										 			</c:when>
-										 		</c:choose>
-										 	</optgroup>
+										 	<option value="0">미포함</option>
+							 				<option value="1">포함</option>
+							 				<option value="2">면세</option>
 										</select>
 									</td>
 							</tr>
@@ -1201,41 +1137,19 @@ function uploadName(e) {
 								<td><input type="button" class="btn" value="대출기간" readonly="readonly" /></td>
 								<td>
 									<select class="txt" id="loanPrd" name="loanPrd" disabled="disabled">
-										<optgroup>
-											<c:choose>
-												<c:when test="${data3.LOAN_PRD eq 0}">
-													<option value="0" selected="selected">6개월</option>
-												</c:when>
-												<c:when test="${data3.LOAN_PRD eq 1}">
-													<option value="1" selected="selected">1년</option>
-												</c:when>
-												<c:when test="${data3.LOAN_PRD eq 2}">
-													<option value="2" selected="selected">3년</option>
-												</c:when>
-												<c:when test="${data3.LOAN_PRD eq 3}">
-													<option value="3" selected="selected">5년</option>
-												</c:when>
-											</c:choose>
-										</optgroup>
+										<option value="0">6개월</option>
+										<option value="1">1년</option>
+										<option value="2">3년</option>
+										<option value="3">5년</option>
 									</select>	
 								</td>
 								
 								<td><input type="button" class="btn" value="원금상환방식" readonly="readonly" /></td>
 								<td colspan="2">
 									<select class="txt" id="prncpl_pymnt" name="prncplPymnt" disabled="disabled">
-										<optgroup>
-											<c:choose>
-												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 0}">
-													<option value="0" selected="selected">원금 균등 상환</option>
-												</c:when>
-												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 1}">
-													<option value="1" selected="selected">원리금 균등 상환</option>
-												</c:when>
-												<c:when test="${data3.PRNCPL_PYMNT_MTHD_NUM eq 2}">
-													<option value="2" selected="selected">만기 일시 상환</option>
-												</c:when>
-											</c:choose>
-										</optgroup>
+										<option value="0">원금 균등 상환</option>
+										<option value="1">원리금 균등 상환</option>
+										<option value="2">만기 일시 상환</option>
 									</select>
 								</td>
 							</tr>
@@ -1292,21 +1206,21 @@ function uploadName(e) {
 						<tbody>
 							<tr height="40">
 								<td><input type="button" class="btn" value="계약일*" readonly="readonly" /></td>
-								<td colspan="3"><input type="date" class="txt" id="cntrctDt" name="cntrctDt" value="${data4.CNTRCT_DATE}"/></td>		
+								<td colspan="3"><input type="date" class="txt" id="cntrctDt" name="cntrctDt" value="${data4.CNTRCT_DATE}" readonly="readonly" /></td>		
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="계약기간*" readonly="readonly"/></td>
-								<td><input type="date" class="txt" id="cntrctSdt" name="cntrctSdt" value="${data4.CNTRCT_START_DATE}"/></td>
+								<td><input type="date" class="txt" id="cntrctSdt" name="cntrctSdt" value="${data4.CNTRCT_START_DATE}" readonly="readonly" /></td>
 								<td>
 									<div class="wave"> ~ </div>
 								</td>
-								<td><input type="date" class="txt" id="cntrctEdt" name="cntrctEdt" value="${data4.CNTRCT_END_DATE}"/></td>
+								<td><input type="date" class="txt" id="cntrctEdt" name="cntrctEdt" value="${data4.CNTRCT_END_DATE}" readonly="readonly" /></td>
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="고객사" /></td>
-									<td><input type="text" class="txt" value="${data.CLNT_CMPNY_NAME}"/></td>
+									<td><input type="text" class="txt" value="${data.CLNT_CMPNY_NAME}" readonly="readonly" /></td>
 									<td><input type="button" class="btn" value="고객" /></td>
-									<td><input type="text" class="txt"  value="${data.CLNT_NAME}"/></td>		
+									<td><input type="text" class="txt"  value="${data.CLNT_NAME}" readonly="readonly" /></td>		
 							</tr> 
 							<tr height="40">
 									<td><input type="button" class="btn" value="입금계좌 소유주명*" readonly="readonly" /></td>
@@ -1315,45 +1229,11 @@ function uploadName(e) {
 							<tr height="40">
 									<td><input type="button" class="btn" value="입금 은행명*" /></td>
 									<td><select class="txt" id="dbNum" name="dbNum" required>
-											<optgroup>
-											<c:choose>
-												<c:when test="${data4.DPST_BANK_NUM  eq 0}">
-													<option value="0" selected="selected">카카오뱅크</option>
-													<option value="1">국민은행</option>
-													<option value="2">농협은행</option>
-													<option value="3">신한은행</option>
-													<option value="4">기업은행</option>
-												</c:when>
-												<c:when test="${data4.DPST_BANK_NUM  eq 1}">
-													<option value="0">카카오뱅크</option>
-													<option value="1" selected="selected">국민은행</option>
-													<option value="2">농협은행</option>
-													<option value="3">신한은행</option>
-													<option value="4">기업은행</option>												
-												</c:when>
-												<c:when test="${data4.DPST_BANK_NUM  eq 2}">
-													<option value="0">카카오뱅크</option>
-													<option value="1">국민은행</option>
-													<option value="2" selected="selected">농협은행</option>
-													<option value="3">신한은행</option>
-													<option value="4">기업은행</option>												
-												</c:when>
-												<c:when test="${data4.DPST_BANK_NUM  eq 3}">
-													<option value="0">카카오뱅크</option>
-													<option value="1">국민은행</option>
-													<option value="2">농협은행</option>
-													<option value="3" selected="selected">신한은행</option>
-													<option value="4">기업은행</option>												
-												</c:when>
-												<c:when test="${data4.DPST_BANK_NUM  eq 4}">
-													<option value="0">카카오뱅크</option>
-													<option value="1">국민은행</option>
-													<option value="2">농협은행</option>
-													<option value="3">신한은행</option>
-													<option value="4" selected="selected">기업은행</option>												
-												</c:when>
-											</c:choose>												
-											</optgroup>
+											<option value="0">카카오뱅크</option>												
+											<option value="1">국민은행</option>												
+											<option value="2">농협은행</option>												
+											<option value="3">신한은행</option>												
+											<option value="4">기업은행</option>
 										</select></td>
 									<td><input type="button" class="btn" value="입금 계좌번호*" /></td>
 									<td><input type="text" class="txt" id="daNum" name="daNum" value="${data4.DPST_ACNT_NUM}"/></td>
@@ -1366,7 +1246,7 @@ function uploadName(e) {
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="갱신예정일*" /></td>
-								<td colspan="3"><input type="date" class="txt"  id="reDate" name="reDate" value="${data4.RNWL_EXPCTD_DATE}" /></td>
+								<td colspan="3"><input type="date" class="txt"  id="reDate" name="reDate" value="${data4.RNWL_EXPCTD_DATE}" readonly="readonly" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
