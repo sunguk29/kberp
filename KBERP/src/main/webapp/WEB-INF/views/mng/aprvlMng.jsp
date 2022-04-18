@@ -158,6 +158,8 @@ function drawPaging(pb) {
 </script>
 </head>
 <body>
+	<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
+	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -165,11 +167,6 @@ function drawPaging(pb) {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
-	<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
-	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
-	<input type="hidden" id="top" name="top" value="${param.top}" />
-	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
-	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">

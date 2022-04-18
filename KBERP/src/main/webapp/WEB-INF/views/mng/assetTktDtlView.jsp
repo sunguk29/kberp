@@ -63,6 +63,8 @@ $(document).ready(function() {
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
 <form action="#" id="actionForm" method="post">
+	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 	<input type="hidden" name="num" value="${param.num}"/>
 	<input type="hidden" name="page" value="${param.page}"/>
 	<input type="hidden" id="top" name="top" value="${param.top}" />

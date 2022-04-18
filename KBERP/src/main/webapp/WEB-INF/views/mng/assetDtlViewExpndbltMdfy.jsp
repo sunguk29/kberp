@@ -259,8 +259,8 @@ function reloadList() {
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
 <form action="assetDtlViewExpndblt" id="cnclForm" method="post">
-	<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
-	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
+	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 	<input type="hidden" name="num" value="${param.num}"/>
 	<input type="hidden" name="page" value="${param.page}"/>
 	<input type="hidden" id="top" name="top" value="${param.top}" />
@@ -273,6 +273,8 @@ function reloadList() {
 			<input type="hidden" id="page" name="page" value="1">
 </form>
 <form action="#" id="mdfyForm" method="post">
+	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 <div class="cont_wrap">
 <input type="hidden" name="num" value="${param.num}" />
 <input type="hidden" name="mngrNum" id="mngrNum" value="${data.MNGR_NUM}"/>

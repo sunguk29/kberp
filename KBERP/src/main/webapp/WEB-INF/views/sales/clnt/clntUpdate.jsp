@@ -1,11 +1,20 @@
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now() ;	
+	request.setAttribute("version", version);		//캐시 처리
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>카카오뱅크 ERP - 고객</title>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -321,7 +330,7 @@ $(document).ready(function() {
 			bg : true,
 			bgClose : false,
 			title : "알림",
-			contents : "나가면 저장되지않습니다, 나가시겠습니까?",
+			contents : popContTwoLine("나가면 저장되지않습니다.<br/>나가시겠습니까?"),
 			buttons : [{
 				name : "나가기",
 				func:function() {
@@ -515,19 +524,19 @@ $(document).ready(function() {
 	// 저장
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#cName")) {
-			makeAlert("필수 항목 알림", "고객을 입력하세요", function() {
+			makeAlert("필수 정보 입력", popContOneLine("고객을 입력하세요"), function() {
 				$("#cName").focus();
 			});
 		} else if(checkEmpty("#ccName")) {
-			makeAlert("필수 항목 알림", "고객사를 입력하세요", function() {
+			makeAlert("필수 정보 입력", popContOneLine("고객사를 입력하세요"), function() {
 				$("#ccName").focus();
 			});
 		} else if(checkEmpty("#mbl")) {
-			makeAlert("필수 항목 알림", "휴대폰번호를 입력하세요", function() {
+			makeAlert("필수 정보 입력", popContOneLine("휴대폰번호를 입력하세요"), function() {
 				$("#mbl").focus();
 			});
 		} else if(checkEmpty("#mngEmp")) {
-			makeAlert("필수 항목 알림", "담당자를 입력하세요", function() {
+			makeAlert("필수 정보 입력", "담당자를 선택하세요", function() {
 				$("#mngEmp").focus();
 			});
 		} else {
@@ -535,7 +544,7 @@ $(document).ready(function() {
 				bg : true,
 				bgClose : false,
 				title : "알림",
-				contents : "저장하시겠습니까?",
+				contents : popContOneLine("저장하시겠습니까?"),
 				contentsEvent : function() {
 					$("#popup1").draggable();
 				},
@@ -562,7 +571,7 @@ $(document).ready(function() {
 										if(res.res == "success") {
 											$("#listForm").submit();
 										} else {
-											alert("등록중 문제가 발생하였습니다.");
+											makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 										}
 									},
 									error : function(request, status, error) {

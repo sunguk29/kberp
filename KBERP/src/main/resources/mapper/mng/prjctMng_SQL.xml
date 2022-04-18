@@ -52,8 +52,14 @@
                          ON A.DEPT_NUM = D.DEPT_NUM
                  INNER JOIN RANK R
                          ON A.RANK_NUM = R.RANK_NUM) EN
-                         ON P.EMP_NUM = EN.EMP_NUM
+                         ON PI.EMP_NUM = EN.EMP_NUM
 	WHERE P.PRJCT_NUM=#{prjct_num}    
 	</select>
+	
+	 <select id="prjctUpdate" resultType="hashmap" parameterType="hashmap">
+	   UPDATE PRJCT
+	     SET PRJCT_NAME = #{prjct_name} ,START_DATE = #{start_date}, END_DATE=#{end_date}, RMRKS=#{rmrks},CONT=#{cont}
+	 WHERE prjct_num =#{prjct_num}
+	 </select>
 	
 </mapper>

@@ -109,7 +109,10 @@ public class HrController {
 		    		   rfrnc = params.get("rfrncList").split(",");
 		    		   rfrncList = Arrays.asList(rfrnc);
 		    	   }
-		    	   iAprvlService.aprvlAdd(params.get("emp_num"), params.get("title"), params.get("cont"), aprvlerList, rfrncList, null );
+		    	   String aprvl_num = iAprvlService.aprvlAdd(params.get("emp_num"), params.get("title"), params.get("cont"), aprvlerList, rfrncList, null );
+		    	   modelMap.put("aNum", aprvl_num);
+		    	   System.out.println("결재번호 : " + aprvl_num);
+		    	   
 		    	   break;
 		       case "aprvlSuccess" :
 		    	   iCommonService.updateData("hr.aprvlSuccess", params);
