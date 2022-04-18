@@ -74,7 +74,7 @@ public class MdController {
 			int onSaleCnt = iCommonService.getIntData("md.getOnSaleCnt", params);
 			int offSaleCnt = iCommonService.getIntData("md.getOffSaleCnt", params);
 			
-			PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), totalCnt);
+			PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), totalCnt, 10, 5);
 					
 			params.put("startCount", Integer.toString(pb.getStartCount()));
 			params.put("endCount", Integer.toString(pb.getEndCount()));
