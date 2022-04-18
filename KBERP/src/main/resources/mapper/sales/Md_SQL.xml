@@ -185,9 +185,7 @@ WHERE R.RNUM BETWEEN #{startCount}  AND #{endCount}
 	        ,LIMIT_AMNT                              
 	        ,TO_CHAR(SALES_START_DATE, 'YYYY-MM-DD') AS SALES_START_DATE
 	        ,TO_CHAR(SALES_END_DATE, 'YYYY-MM-DD')   AS SALES_END_DATE
-	        ,INTRST_RATE                            
-	        <!-- ,INTRST_PYMNT_MTHD_NUM                  
-	        ,PRNCPL_PYMNT_MTHD_NUM  -->                  
+	        ,INTRST_RATE                                           
 	        ,MID_RDMPTN_PSBL_CHECK                  
 	        ,LOAN_PRD                               
 	        ,MD_DSCRPTN                            
@@ -207,8 +205,6 @@ WHERE R.RNUM BETWEEN #{startCount}  AND #{endCount}
 	                ,SALES_START_DATE
 	                ,SALES_END_DATE
 	                ,INTRST_RATE
-	                ,INTRST_PYMNT_MTHD_NUM <!-- 삭제 예정 -->
-	                ,PRNCPL_PYMNT_MTHD_NUM <!-- 삭제 예정 -->
 	                ,MID_RDMPTN_PSBL_CHECK
 	                ,LOAN_PRD
 	                ,MD_DSCRPTN
@@ -223,8 +219,6 @@ WHERE R.RNUM BETWEEN #{startCount}  AND #{endCount}
 	                ,#{sales_start_date}
 	                ,#{sales_end_date}
 	                ,#{intrst_rate}
-	                ,'-1'	<!-- 삭제 예정 -->
-	                ,'-1'	<!-- 삭제 예정 -->
 	                ,#{mid_prdmptn_psbl_check}
 	                ,#{loan_prd}
 	                ,#{md_dscrptn}
