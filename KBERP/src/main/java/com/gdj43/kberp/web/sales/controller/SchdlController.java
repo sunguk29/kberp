@@ -189,6 +189,9 @@ public class SchdlController {
 		try {
 			switch (gbn) {
 			case "insert":
+				String seq = iCommonService.getStringData("salesSchdl.schdlSeq"); // 일정번호 시퀀스 가져오기
+				params.put("schdlSeq", seq); // 일정번호 시퀀스 넣어주기
+				modelMap.put("schdlnum", seq); // 일정 등록 후 영업기회 상세보기로 이동할 때 필요.
 				iCommonService.insertData("salesSchdl.salesSchdlAdd", params); // 전체 데이터 저장
 				iCommonService.insertData("salesSchdl.salesSchdlAttFile", params); // 첨부파일 저장
 				break;

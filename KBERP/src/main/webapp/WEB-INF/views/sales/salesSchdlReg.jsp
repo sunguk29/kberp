@@ -497,6 +497,7 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success"){
+											$("#schdlnum").val(res.schdlnum);
 											savePop();								
 										} else {
 											makeAlert("알림", popContTwoLine("등록 중 문제가 발생하였습니다.<br/>나가시겠습니까?"));
@@ -551,7 +552,7 @@ function savePop() {
 		buttons : [{
 			name : "확인",
 			func:function() {
-				$("#backForm").submit();
+				$("#actionForm").submit();
 			}
 		}]
 	});
@@ -921,6 +922,12 @@ function uploadName(e) {
 	<input type="hidden" name="deptS" value="${param.deptS}" />
 	<input type="hidden" name="usrsrchTxt" value="${param.usrsrchTxt}" />
 	<input type="hidden" name="initialDate" value="${param.initialDate}"/>
+</form>
+<form action="salesSchdlCont" id="actionForm" method="post">
+	<input type="hidden" name="top" value="${param.top}" />
+	<input type="hidden" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" id="schdlnum" name="schdlnum"/>
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
