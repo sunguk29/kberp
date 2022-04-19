@@ -550,6 +550,8 @@
 		       FROM MD
 		       WHERE DEL_CHECK IS NULL ) M
 		WHERE M.RNUM BETWEEN #{startCount} AND #{endCount}
+		AND M.SALES_STS = '판매가능'
+		AND M.MD_GRADE = #{mdGrade}
 	</select>
 	
 	<!-- 견적(등록) 상품 리스트 -->
@@ -564,8 +566,8 @@
 	
 	<!-- 견적 등록 -->
 	<insert id="sales3QtnAdd" parameterType="hashmap">
-		INSERT INTO QTN(QTN_NUM, SALES_NUM, MD_NUM, QTN_NAME, QTN_DATE, SPLY_PRICE, TAX_AMNT, SRTX, INTRST_RATE, PYMNT_DATE, RMKS, LOAN_AMNT)
-		VALUES(QTN_SEQ.NEXTVAL, #{salesNum}, #{mdNum}, #{qtnName}, #{qtnDate}, #{sqlyPrice}, #{taxAmnt}, #{srtx}, #{intrstRate}, #{pymntDate}, #{rmksCont}, #{LoanAmnt})
+		INSERT INTO QTN(QTN_NUM, SALES_NUM, MD_NUM, QTN_NAME, SPLY_PRICE, TAX_AMNT, SRTX, INTRST_RATE, PYMNT_DATE, RMKS, PRNCPL_PYMNT_MTHD_NUM, LOAN_AMNT)
+		VALUES(QTN_SEQ.NEXTVAL, #{salesNum}, #{mdNum}, #{qtnName}, #{splyPrice}, #{taxAmnt}, #{srtx}, #{intrstRate}, #{pymntDate}, #{rmksCont}, #{prncplPymnt}, #{LoanAmnt})
 	</insert>
 	
 	<!-- 견적 첨부파일 등록 -->
@@ -578,8 +580,8 @@
 	<select id="getSales3" resultType="hashmap" parameterType="hashmap">
 		SELECT Q.SALES_NUM, Q.QTN_NUM, Q.QTN_NAME, TO_CHAR(Q.QTN_DATE, 'YYYY-MM-DD') AS QTN_DATE,
 		       Q.LOAN_AMNT, Q.SPLY_PRICE, Q.TAX_AMNT, (Q.SPLY_PRICE + Q.TAX_AMNT) AS TOTAL,
-		       Q.SRTX, Q.INTRST_RATE, Q.PYMNT_DATE, Q.RMKS,
-		       M.MD_TYPE_NUM, M.MID_RDMPTN_PSBL_CHECK, M.INTRST_PYMNT_MTHD_NUM, M.PRNCPL_PYMNT_MTHD_NUM, M.LOAN_PRD,
+		       Q.SRTX, Q.INTRST_RATE, Q.PYMNT_DATE, Q.RMKS, Q.PRNCPL_PYMNT_MTHD_NUM,
+		       M.MD_TYPE_NUM, M.MID_RDMPTN_PSBL_CHECK, M.LOAN_PRD,
 		       QAF.ATT_FILE_NAME
 		FROM  QTN Q INNER JOIN MD M
 		                     ON Q.MD_NUM = M.MD_NUM
@@ -755,13 +757,13 @@
     </select>
 		
 	<!-- 영업관리 예정된 일정 목록 띄우기 -->
-    <select id="salesMng.getSScList" parameterType="hashmap" resultType="hashmap">
+    <select id="getSScList" parameterType="hashmap" resultType="hashmap">
        SELECT SUBSTR(START_DATE_HR, 6, 5) || ' ' || SUBSTR(START_DATE_HR, 12, 16) AS START_DATE_HR, DECODE(END_DATE_HR, NULL, '미정', SUBSTR(END_DATE_HR, 6, 5) || ' ' || SUBSTR(END_DATE_HR, 12, 16)) AS END_DATE_HR,
-              SCHDL_NAME, E.EMP_NAME, SS.SCHDL_NUM
+              SS.SCHDL_NAME, E.EMP_NAME, SS.SCHDL_NUM, SS.EMP_NUM
        FROM SALES_SCHDL SS INNER JOIN EMP E
                                    ON SS.EMP_NUM = E.EMP_NUM
        WHERE DEL_CHECK IS NULL
-       AND SALES_NUM = #{salesNum}
+       AND SS.SALES_NUM = #{salesNum}
    </select>
 	
 	<!-- 예정된 일정 상세보기  -->

@@ -679,6 +679,7 @@ $(document).ready(function () {
 	/* 리드 상세보기 실행될 시 비동기로 의견 목록 그리기 위해 선언  */
 	reloadOpList();
 	
+	// 진행상태 - 전환 성공시 목록버튼,수정버튼 숨김
 	if($("#psNum").val() == 2) {
 		$("#updateBtn").hide();	
 		$("#deleteBtn").hide();	
@@ -1280,7 +1281,9 @@ function drawOpList(list) {
 		html += "<div class=\"name\">" + data.EMP_NAME + "(" + data.DEPT_NAME + " / " + data.RANK_NAME + ")" + "</div>";
 		html += "<div class=\"txtOp\">" + data.CONT + "</div>";
 		html += "<div class=\"dt\">" + data.RGSTRTN_DATE + "</div>";
-		html += "<div class=\"del\">삭제";
+		if(data.EMP_NAME == "${sEmpName}") {
+			html += "<div class=\"del\">삭제";			
+		} 
 		html += "<input type=\"hidden\" id=\"cmntNum\" name=\"cmntNum\" value=\"" + data.CMNT_NUM + "\" />";
 		html += "</div>";
 		html += "</div>";

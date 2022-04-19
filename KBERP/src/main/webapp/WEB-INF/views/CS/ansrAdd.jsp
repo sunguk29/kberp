@@ -20,6 +20,11 @@
 }
 
 /* 개인 작업 영역 */
+.popup_cont {
+	text-align: center;
+	line-height: 100px;
+}
+
 #ansr_File {
 	display: none;
 }
@@ -332,10 +337,13 @@
 /* 대응가이드 팝업 */
 #guide_table {
 	margin-top: 70px;
+	text-align: center;
 }
 
 #guide_wrap {
 	width: 830px;
+	text-align: left;
+	line-height: 18px;
 }
 #guide_title_text{
 	font-size: 12pt;
@@ -581,7 +589,7 @@ $(document).ready(function() {
 				// 수정영역 취소버튼
 				$("#rspndActionForm").on("click", "#rspndCanBtn", function() {
 					$("#guide_num").val("");
-					$("#clnt_type").val("");
+					$("#clnt_type").val("일반");
 					$("#type_case").val("");
 					$("#rspns_plan").val("");
 					
