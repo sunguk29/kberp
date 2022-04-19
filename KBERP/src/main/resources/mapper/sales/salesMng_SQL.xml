@@ -757,13 +757,13 @@
     </select>
 		
 	<!-- 영업관리 예정된 일정 목록 띄우기 -->
-    <select id="salesMng.getSScList" parameterType="hashmap" resultType="hashmap">
+    <select id="getSScList" parameterType="hashmap" resultType="hashmap">
        SELECT SUBSTR(START_DATE_HR, 6, 5) || ' ' || SUBSTR(START_DATE_HR, 12, 16) AS START_DATE_HR, DECODE(END_DATE_HR, NULL, '미정', SUBSTR(END_DATE_HR, 6, 5) || ' ' || SUBSTR(END_DATE_HR, 12, 16)) AS END_DATE_HR,
-              SCHDL_NAME, E.EMP_NAME, SS.SCHDL_NUM
+              SS.SCHDL_NAME, E.EMP_NAME, SS.SCHDL_NUM, SS.EMP_NUM
        FROM SALES_SCHDL SS INNER JOIN EMP E
                                    ON SS.EMP_NUM = E.EMP_NUM
        WHERE DEL_CHECK IS NULL
-       AND SALES_NUM = #{salesNum}
+       AND SS.SALES_NUM = #{salesNum}
    </select>
 	
 	<!-- 예정된 일정 상세보기  -->

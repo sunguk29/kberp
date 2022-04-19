@@ -81,8 +81,7 @@ $(document).ready(function() {
 	});
 	
 	$("#pgn_area").on("click", "div", function() {
-		$("#page").val("1");
-		$("#mon").val($("#srchMonth").val());
+		$("#page").val($(this).attr("page"));
 		reloadList();
 	});
 	

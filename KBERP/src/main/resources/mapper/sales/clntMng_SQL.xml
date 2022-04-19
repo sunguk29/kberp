@@ -407,7 +407,7 @@
 	<!-- 고객사 의견 목록 -->
 	<select id="getCcOpList" parameterType="hashmap" resultType="hashmap">
 		SELECT CCC.CLNT_CMPNY_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, CCC.CONT, TO_CHAR(CCC.RGSTRTN_DATE, 'YYYY-MM-DD AM HH:MI') AS RGSTRTN_DATE,
-		       CCC.CMNT_NUM
+		       CCC.CMNT_NUM, E.EMP_NUM
 		FROM CLNT_CMPNY_CMNT CCC INNER JOIN CLNT_CMPNY CC
 		                             ON CCC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM  
 		                         INNER JOIN EMP E
@@ -426,7 +426,7 @@
 	<!-- 고객 의견 목록 -->
 	<select id="getClOpList" parameterType="hashmap" resultType="hashmap">
 		SELECT EC.CLNT_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, CC.CONT, TO_CHAR(EC.RGSTRTN_DATE, 'YYYY-MM-DD AM HH:MI') AS RGSTRTN_DATE,
-		       CC.CMNT_NUM
+		       CC.CMNT_NUM, E.EMP_NUM
 		FROM ENTRPRS_CLNT EC INNER JOIN CLNT_CMNT CC
 		                             ON EC.CLNT_NUM = CC.CLNT_NUM	
 		                     INNER JOIN EMP E
