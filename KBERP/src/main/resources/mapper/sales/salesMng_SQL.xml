@@ -456,7 +456,7 @@
 	<!-- 영업기회 의견목록 -->
 	<select id="getSalesOpList" parameterType="hashmap" resultType="hashmap">
 		SELECT S.SALES_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, SOC.CONT, TO_CHAR(SOC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
-		       SOC.CMNT_NUM
+		       SOC.CMNT_NUM, E.EMP_NUM
 		FROM SALES S INNER JOIN SALES_OPRTNTY_CMNT SOC
 		                     ON S.SALES_NUM = SOC.SALES_NUM
 		                 INNER JOIN EMP E
@@ -495,7 +495,7 @@
 	<!-- 제안 의견목록 -->
 	<select id="getSgstnOpList" parameterType="hashmap" resultType="hashmap">
 		SELECT S.SALES_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, SC.CONT, TO_CHAR(SC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
-		       SC.CMNT_NUM
+		       SC.CMNT_NUM, E.EMP_NUM
 		FROM SALES S INNER JOIN SGSTN_CMNT SC
 		                     ON S.SALES_NUM = SC.SALES_NUM
 		                 INNER JOIN EMP E
@@ -594,7 +594,7 @@
 	<!-- 견적 의견목록 -->
 	<select id="getQtnOpList" parameterType="hashmap" resultType="hashmap">
 		SELECT Q.QTN_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, QC.CONT, TO_CHAR(QC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
-		       QC.CMNT_NUM
+		       QC.CMNT_NUM, E.EMP_NUM
 		FROM QTN Q INNER JOIN QTN_CMNT QC
 		                     ON Q.QTN_NUM = QC.QTN_NUM
 		                 INNER JOIN EMP E
@@ -700,7 +700,7 @@
 	<!-- 계약 의견목록 -->
 	<select id="cntrctOpList" parameterType="hashmap" resultType="hashmap">
 		SELECT CNC.CNTRCT_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, CNC.CONT, TO_CHAR(CNC.RGSTRTN_DATE, 'YYYY-MM-DD AMFM HH:MI') AS RGSTRTN_DATE,
-		       CNC.CMNT_NUM
+		       CNC.CMNT_NUM, E.EMP_NUM
 		FROM CNTRCT_CMNT CNC INNER JOIN EMP E
 		                             ON CNC.EMP_NUM = E.EMP_NUM
 		                     INNER JOIN APNTM A

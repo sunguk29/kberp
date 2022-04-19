@@ -1720,10 +1720,8 @@ $(document).ready(function() {
 		$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
 	}
 	if(${data3.PRNCPL_PYMNT_MTHD_NUM} == 2 ) { // 만기 일시 상환
-		if(${data3.INTRST_PYMNT_MTHD_NUM} != 2) {
-			$("#monthPymntAmnt").val("0");
-			$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
-		}
+		$("#monthPymntAmnt").val("0");
+		$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
 	
 	}
 	
