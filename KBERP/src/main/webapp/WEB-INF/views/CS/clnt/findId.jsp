@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>아이디 찾기</title>
+<title>비밀번호 찾기</title>
 <!-- 공용 CSS -->
 <link rel="stylesheet" type="text/css" href="resources/css/common/cmn.css" />
 <!-- 팝업 CSS -->
@@ -40,7 +40,7 @@ body {
 }
 
 .login_logo {
-    padding-top: 350px;
+    padding-top: 300px;
     margin-bottom: 30px;
 }
 
@@ -75,11 +75,11 @@ body {
 
 .findIdLogo {
     display: block;
-    width: 200px;
+    width: 210px;
     height: 40px;
     margin: 0px auto; 
     background: url(https://t1.daumcdn.net/id/member/2014/img_logo_find_140905.gif) no-repeat 0 0;
-    background-size: 220px;
+    background-size: 210px;
 }
 
 .login_area {

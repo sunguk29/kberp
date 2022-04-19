@@ -73,7 +73,7 @@ body {
 	padding-top: 250px;
 }
 
-.findIdLogo {
+.findPwLogo {
     display: block;
     width: 210px;
     height: 40px;
@@ -214,7 +214,7 @@ $(document).ready(function() {
 	<div class="kabang_wrap">
 		<div class="login_middle">
 			<div id="findHead">
-	            <div class="findIdLogo"></div>
+	            <div class="findPwLogo"></div>
 		    </div>
 			<div class="login_area">
 				<div class="input_id">
