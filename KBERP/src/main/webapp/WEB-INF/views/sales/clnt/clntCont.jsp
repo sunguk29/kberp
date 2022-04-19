@@ -564,7 +564,7 @@ function drawOpList(list) {
 		html += "<div class=\"name\">" + data.EMP_NAME + "(" + data.DEPT_NAME + " / " + data.RANK_NAME + ")" + "</div>";
 		html += "<div class=\"txtOp\">" + data.CONT + "</div>";
 		html += "<div class=\"dt\">" + data.RGSTRTN_DATE + "</div>";
-		if(data.EMP_NUM == ${sEmpNum}) {
+		if(data.EMP_NUM == ${sEmpNum} || ${sEmpNum} == "2022000001") {
 			html += "<div class=\"del\">삭제";
 			html += "<input type=\"hidden\" id=\"cmntNum\" name=\"cmntNum\" value=\"" + data.CMNT_NUM + "\" />";
 			html += "</div>";
@@ -600,8 +600,16 @@ function drawOpList(list) {
 		<div class="page_title_bar">
 			<div class="page_title_text">고객 상세보기</div>
 			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
-			<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
-			<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" id="deleteBtn" />
+			<c:choose>
+				<c:when test="${data.MNGR_EMP_NUM eq sEmpNum}">
+					<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
+					<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" id="deleteBtn" />
+				</c:when>
+				<c:when test="${sEmpNum eq 2022000001}">
+					<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
+					<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" id="deleteBtn" />
+				</c:when>
+			</c:choose>
 			<!-- 검색영역 선택적 사항 -->
 			<!-- <div class="page_srch_area">
 				<select class="srch_sel">
