@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>비밀번호 찾기</title>
+<title>아이디 찾기</title>
 <!-- 공용 CSS -->
 <link rel="stylesheet" type="text/css" href="resources/css/common/cmn.css" />
 <!-- 팝업 CSS -->
@@ -40,7 +40,7 @@ body {
 }
 
 .login_logo {
-    padding-top: 300px;
+    padding-top: 350px;
     margin-bottom: 30px;
 }
 
