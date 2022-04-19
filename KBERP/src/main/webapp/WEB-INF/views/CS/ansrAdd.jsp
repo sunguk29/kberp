@@ -337,6 +337,7 @@
 /* 대응가이드 팝업 */
 #guide_table {
 	margin-top: 70px;
+	text-align: center;
 }
 
 #guide_wrap {
