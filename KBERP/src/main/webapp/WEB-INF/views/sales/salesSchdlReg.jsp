@@ -415,6 +415,7 @@ input {
 <script type="text/javascript">
 $(document).ready(function() {
 
+	console.log("${param.dt}");
 	
 	$("#alertBtn").on("click", function() {
 		makeAlert("하이", "내용임");
