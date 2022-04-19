@@ -10,7 +10,7 @@
 	</select>
 	 <select id="prjctMngList" resultType="hashmap" parameterType="hashmap">
 		SELECT *
-		FROM ( SELECT PRJCT_NUM, PRJCT_NAME,EMP_NAME,
+		FROM ( SELECT PRJCT_NUM, PRJCT_NAME,EMP_NAME,DEL,
        			      TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE,
                       TO_CHAR(END_DATE,'YYYY-MM-DD') AS END_DATE,
                       RMRKS,
@@ -18,7 +18,7 @@
 			   FROM PRJCT P INNER JOIN EMP E
                                     ON P.EMP_NUM = E.EMP_NUM
 			   WHERE 1=1) A
-		WHERE A.RNUM BETWEEN #{startCount} AND #{endCount}
+		WHERE DEL = 0 AND A.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
 	<select id="prjctView" resultType="hashmap" parameterType="hashmap">
@@ -55,11 +55,23 @@
                          ON PI.EMP_NUM = EN.EMP_NUM
 	WHERE P.PRJCT_NUM=#{prjct_num}    
 	</select>
-	
+	<insert id="prjctWrite" parameterType="hashmap"> 
+	 INSERT INTO PRJCT(PRJCT_NUM,EMP_NUM,PRJCT_NAME,START_DATE,END_DATE,CONT,RMRKS,RGSTRTN_DATE)
+     VALUES (PRJCT_SEQ.NEXTVAL,#{writer},#{prjct_name},#{start_date},#{end_date},#{cont},#{rmrks},SYSDATE)
+	</insert>
 	 <select id="prjctUpdate" resultType="hashmap" parameterType="hashmap">
 	   UPDATE PRJCT
 	     SET PRJCT_NAME = #{prjct_name} ,START_DATE = #{start_date}, END_DATE=#{end_date}, RMRKS=#{rmrks},CONT=#{cont}
 	 WHERE prjct_num =#{prjct_num}
+	 </select>
+	 <select id="prjctDel" resultType="hashmap" parameterType="hashmap">
+	   UPDATE PRJCT
+	     SET DEL = 1
+	 WHERE prjct_num =#{prjct_num}
+	 </select>
+	 <select id="input_delete" resultType="hashmap" parameterType="hashmap">
+	    DELETE FROM PRJCT_INPUT_MAN_PWR
+        WHERE EMP_NUM=#{chk}
 	 </select>
 	
 </mapper>

@@ -14,6 +14,9 @@
 .cont_wrap {
 	width: 1013px;;
 }
+input[type="text"], #ccGrade, #rp {
+	font-size: 9pt;
+}
 /* 팝업 조회영역 */
 .popup_title_mid {
 	width: calc(100% + 20px);
@@ -899,13 +902,17 @@ $(document).ready(function() {
 					var ecn = $(this).children("#ecn").val();
 					var cnn = $(this).children("#cnn").val();
 					var ccn = $(this).children("#ccn").val();
-					var ccgNum = $(this).children("#ccgNum").val();					
+					var ccgNum = $(this).children("#ccgNum").val();	
+					var mnge = $(this).children("#mnge").val();
+					var mgee = $(this).children("#mgee").val();
 					
 					document.getElementById("clntName").value = ecnm;
 					document.getElementById("clntNum").value = ecn;			
 					document.getElementById("ccName").value = cnn;
 					document.getElementById("ccNum").value = ccn;
 					document.getElementById("ccGrade").value = ccgNum;
+					document.getElementById("mngEmp").value = mnge;
+					document.getElementById("mngNum").value = mgee;
 					
 					closePopup();					
 				});
@@ -946,68 +953,6 @@ $(document).ready(function() {
 				}
 			}]
 		});			
-	});
-	// 담당자 조회 팝업
-	$("#userIcon").on("click", function() {
-		var html = "";
-		
-		html += "<div class=\"popup_title_mid\" id=\"mngrS\">"; 
-		html += "</div>";
-		html += "<div class=\"popup_cont pc_back\">";
-		html +=		"<div class=\"popup_box\" id=\"mngrBox\"></div>";
-		html += 	"<div class=\"board_bottom2\">";
-		html +=			"<div class=\"pgn_area\" id=\"mngrpb\"></div>";
-		html +=		"</div>";
-		html += "</div>";
-		
-		makePopup({
-			bg : true,
-			bgClose : false,
-			title : "담당자 조회",
-			contents : html,
-			contentsEvent : function() {
-				mngrSearchBox();
-				mngrList();
-				
-				$("#mngrBox").on("click", ".popup_box_in", function() {
-					var mng = $(this).children("#mng").val();
-					var mge = $(this).children("#mge").val();
-					document.getElementById("mngEmp").value = mng;
-					document.getElementById("mngNum").value = mge;
-					closePopup();
-				});
-				
-				//페이징 
-				$("#mngrpb").on("click", "div", function() {
-					$("#page").val($(this).attr("page"));
-					
-					mngrList();
-				});
-				// 검색버튼
-				$("#mngrBtn").on("click", function () {
-					$("#page").val("1");
-					
-					mngrList();	
-				});
-				
-				$("#searchT").on("keypress", function(event) {
-					if(event.keyCode == 13 ) {
-						$("#mngrBtn").click();
-						
-						return false;
-					}
-				});
-			},
-			width : 600,
-			height : 500,
-			buttons : {
-				name : "닫기",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
 	});
 });
 /* ******************************************* 고객 추가 팝업 ******************************************* */
@@ -1287,6 +1232,8 @@ function ecDrawList(list) {
 		html += "<input type=\"hidden\" id=\"cnn\" value=\"" + data.CLNT_CMPNY_NAME + "\" />";
 		html += "<input type=\"hidden\" id=\"ccn\" value=\"" + data.CLNT_CMPNY_NUM + "\" />";
 		html += "<input type=\"hidden\" id=\"ccgNum\" value=\"" + data.GRADE_NUM + "\" />";
+		html += "<input type=\"hidden\" id=\"mnge\" value=\"" + data.EMP_NAME + "\" />";
+		html += "<input type=\"hidden\" id=\"mgee\" value=\"" + data.EMP_NUM + "\" />";
 		html += "<div class=\"popup_cc_box_left\">";
 		html += "<span><img alt=\"고객이미지\" class=\"company\" src=\"resources/images/sales/clnt.png\"></span>";
 		html += "</div>";
@@ -1599,7 +1546,6 @@ function uploadName(e) {
 									<td>
 										<input type="text" class="mngTxt" id="mngEmp" name="mngEmp" value="${data.EMP_NAME}" />
 										<input type="hidden" id="mngNum" name="mngNum" value="${data.MNGR_EMP_NUM}" />
-										<img class="btnImg_in" id="userIcon" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
 									</td>
 									<td><input type="button" class="btn" value="가능여부 *" readonly="readonly"/></td>
 									<td>

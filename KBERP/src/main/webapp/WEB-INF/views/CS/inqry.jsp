@@ -304,7 +304,7 @@ $(document).ready(function() {
 										</a>
 									</td>
 								</tr>
-							</c:if>
+						</c:if>
 					</tbody>
 					</table>
 				</c:when>

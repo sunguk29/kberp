@@ -40,7 +40,7 @@
 	</if>
 	<!-- 판매 종료일 -->
 	<if test="sales_end_date != null and sales_end_date !=''"> 
-		AND SALES_END_DATE  <![CDATA[ <= ]]>  #{sales_end_date}
+		AND SALES_START_DATE  <![CDATA[ <= ]]>  #{sales_end_date}
 	</if>
 	
 	

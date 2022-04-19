@@ -75,7 +75,7 @@ public class SalesMngController {
 
 		modelMap.put("RsltCnt", RsltCnt);
 
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), RsltCnt, 10, 5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), RsltCnt, 3, 5);
 
 		// 데이터 시작, 종료 할당
 		params.put("startCount", Integer.toString(pb.getStartCount()));
