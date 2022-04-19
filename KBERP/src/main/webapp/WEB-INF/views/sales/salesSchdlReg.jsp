@@ -921,7 +921,7 @@ function uploadName(e) {
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="deptS" value="${param.deptS}" />
 	<input type="hidden" name="usrsrchTxt" value="${param.usrsrchTxt}" />
-	<input type="hidden" name="initialDate" value="${param.initialDate}"/>
+	<input type="hidden" name="dt" value="${param.dt}"/>
 </form>
 <form action="salesSchdlCont" id="actionForm" method="post">
 	<input type="hidden" name="top" value="${param.top}" />

@@ -392,29 +392,32 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	if($("#initialDate").val() == ''){
+	var a = new Date();
+	a.setMonth(a.getMonth() + 1);
+	$("#clndrDate").val(a.getFullYear() + "-" + lpad(a.getMonth(), 2, 0));
+// 	if($("#initialDate").val() == ''){
 
-		var now = new Date();
-		var clndrYear = now.getFullYear();	// 연도
-		var clndrMonth = now.getMonth()+1;	// 월
-		var Cdate = "";
-		var Ddate = "";
-		if(clndrMonth >= 10){
-			Cdate = ""+clndrYear+"-"+clndrMonth;
-			Ddate = ""+clndrYear+"-"+clndrMonth;
-		}else{
-			Cdate = ""+clndrYear+"-0"+clndrMonth;
-			Ddate = ""+clndrYear+"-0"+clndrMonth;
-		}
+// 		var now = new Date();
+// 		var clndrYear = now.getFullYear();	// 연도
+// 		var clndrMonth = now.getMonth()+1;	// 월
+// 		var Cdate = "";
+// 		var Ddate = "";
+// 		if(clndrMonth >= 10){
+// 			Cdate = ""+clndrYear+"-"+clndrMonth;
+// 			Ddate = ""+clndrYear+"-"+clndrMonth;
+// 		}else{
+// 			Cdate = ""+clndrYear+"-0"+clndrMonth;
+// 			Ddate = ""+clndrYear+"-0"+clndrMonth;
+// 		}
 		
 		
-		$('input[name=clndrDate]').attr('value',Cdate);
-	} else {
+// 		$('input[name=clndrDate]').attr('value',Cdate);
+// 	} else {
 		
 		
-		$('input[name=clndrDate]').attr('value', $("#initialDate").val().substr(0, 7));
+// 		$('input[name=clndrDate]').attr('value', $("#initialDate").val().substr(0, 7));
 	
-	}
+// 	}
 	
 	if('${param.usrsrchTxt}' != ''){
 		$("#usrsrchTxt").val('${param.usrsrchTxt}');
@@ -431,9 +434,6 @@ $(document).ready(function() {
 			return false;
 		}
 	});
-	
-	console.log(clndrMonth);
-	console.log(clndrYear);
 	
 	/* 검색버튼 누를 시  */
 	$("#searchBtn").on("click", function() {
@@ -676,6 +676,12 @@ $(document).ready(function() {
 		});
 	}
 	
+	var dt
+	if(${param.dt ne ''}) {
+		dt = $("#dt").val();		
+	} else {
+		dt = $("#clndrDate").val();
+	}
 	
 	// 달력에서 이후 버튼 누를 시
 	$("body").on("click", ".fc-next-button", function() {
@@ -683,42 +689,13 @@ $(document).ready(function() {
 		//기존 이벤트 제거
   		$("#fullCalendarArea").fullCalendar("removeEventSources");
   		$("#fullCalendarArea").fullCalendar("refetchEvents");
-		
-  		if($("#initialDate").val() == ''){
   		
-		clndrMonth = clndrMonth+1;
-		if(clndrMonth >= 13){
-			clndrMonth = 1;
-			clndrYear = clndrYear + 1;
-		}
-		if(clndrMonth >= 10){
-			Cdate = ""+clndrYear+"-"+clndrMonth;
-		}else{
-			Cdate = ""+clndrYear+"-0"+clndrMonth;
-		}
-		
-		
-			if(clndrMonth <= 9){
-				var day = clndrYear+"-0"+clndrMonth+"-10";				
-			} else {
-				var day = clndrYear+"-"+clndrMonth+"-10";
-			}
-			
-			document.getElementById("initialDate").value = day;
-			$('input[name=clndrDate]').attr('value',Cdate);
-		} else {
-			document.getElementById("initialDate").value = $("#initialDate").val();
-			
-			var dd = $("#initialDate").val().substr(0,7);
-			
-			$('input[name=clndrDate]').attr('value',dd);
-			
-			console.log($("#initialDate").val());
-		}
-		
-		
-		console.log(Cdate);
-		console.log($("#initialDate").val());
+  		a.setMonth(a.getMonth() + 1);
+  		
+  		dt = a.getFullYear() + "-" + lpad(a.getMonth(), 2, 0);
+  		document.getElementById("dt").value = dt;
+  		$("#clndrDate").val(a.getFullYear() + "-" + lpad(a.getMonth(), 2, 0));
+  		
 		drawDayCalc();
 		
 	});
@@ -731,47 +708,25 @@ $(document).ready(function() {
   		$("#fullCalendarArea").fullCalendar("removeEventSources");
   		$("#fullCalendarArea").fullCalendar("refetchEvents");
 		
-		if($("#initialDate").val() == ''){
-		clndrMonth = clndrMonth-1;
-		
-		if(clndrMonth < 1){
-			clndrMonth = 12;
-			clndrYear = clndrYear - 1;
-		}
-		if(clndrMonth >= 10){
-			Cdate = ""+clndrYear+"-"+clndrMonth;
-		}else{
-			Cdate = ""+clndrYear+"-0"+clndrMonth;
-		}
-		
-			if(clndrMonth <= 9){
-				var day = clndrYear+"-0"+clndrMonth+"-10";				
-			} else {
-				var day = clndrYear+"-"+clndrMonth+"-10";
-			}
-			
-			document.getElementById("initialDate").value = day;
-			$('input[name=clndrDate]').attr('value',Cdate);
-		} else {
-			document.getElementById("initialDate").value = $("#initialDate").val();
-			
-			var dd = $("#initialDate").val().substr(0,7);
-			
-			$('input[name=clndrDate]').attr('value',dd); 
-		}
+  		a.setMonth(a.getMonth() - 1);
+  		
+  		dt = a.getFullYear() + "-" + lpad(a.getMonth(), 2, 0);
+  		document.getElementById("dt").value = dt;
+  		$("#clndrDate").val(a.getFullYear() + "-" + lpad(a.getMonth(), 2, 0));
+  		
 		drawDayCalc();
 		
 	});
 
-	var dt = '';
+
 	
-	if($("#initialDate").val() != ''){
-		dt = $("#initialDate").val();
-		console.log(dt);
-	} else{
-		dt = Ddate;
-		console.log(dt);
-	}
+// 	if($("#initialDate").val() != ''){
+// 		dt = $("#initialDate").val();
+// 		console.log(dt);
+// 	} else{
+// 		dt = Ddate;
+// 		console.log(dt);
+// 	}
 	
 	$("#fullCalendarArea").fullCalendar({
 			header: {
@@ -779,10 +734,10 @@ $(document).ready(function() {
 		        center: 'prev, title, next',
 		        right: ''
 		      },
-		      defaultDate: dt,
 		      locale: "ko",
 		      editable: false,
 		      height: 400,
+		      defaultDate: dt,
 		      eventClick: function(event) { // 이벤트 클릭
 		    	
 		      },
@@ -846,8 +801,9 @@ $(document).ready(function(){
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" id="schdlnum" name="schdlnum" value="${param.schdlnum}" />
-	<input type="hidden" id="clndrDate" name="clndrDate" />
-	<input type="hidden" id="initialDate" name="initialDate" value="${param.initialDate}"/>
+	<input type="hidden" id="clndrDate" name="clndrDate"/>
+	<input type="hidden" id="dt" name="dt" value="${param.dt}"/>
+<%-- 	<input type="hidden" id="initialDate" name="initialDate" value="${param.initialDate}"/> --%>
 	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
