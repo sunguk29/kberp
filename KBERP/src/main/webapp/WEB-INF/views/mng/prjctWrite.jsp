@@ -107,7 +107,7 @@ $(document).ready(function() {
 	});
 
 	
-	$("#updateBtn").on("click", function() {
+	$("#addBtn").on("click", function() {
 		if(checkEmpty("#prjct_name")) {
 			alert("프로젝트 이름을 입력하세요.")
 			$("#prjct_name").focus();
@@ -121,17 +121,17 @@ $(document).ready(function() {
 			alert("내용을 입력하세요.")
 			$("#cont").focus();	
 		} else {
-			var updateForm = $("#updateForm");
+			var writeForm = $("#writeForm");
 			
-			updateForm.ajaxForm({
+			writeForm.ajaxForm({
 				success : function(res) {
 
 					// 글 저장
-					var params = $("#updateForm").serialize();
+					var params = $("#writeForm").serialize();
 					
 					$.ajax({
 						type : "post", // 전송 형태
-						url : "prjctMngAction/update", // 통신 주소
+						url : "prjctMngAction/insert", // 통신 주소
 						dataType : "json", // 받을 데이터 형태
 						data : params, // 보낼 데이터. 보낼 것이 없으면 안 씀
 						success : function(res) { // 성공 시 실행 함수. 인자는 받아온 데이터
@@ -151,7 +151,7 @@ $(document).ready(function() {
 					
 				}
 			});
-			updateForm.submit(); // ajaxForm 실행	
+			writeForm.submit(); // ajaxForm 실행	
 		}
 	});
 	
@@ -176,19 +176,20 @@ $(document).ready(function() {
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
-	<form action="prjctView" id="backForm" method="post">
+	<form action="prjctMng" id="backForm" method="post">
 	<input type="hidden" name="prjct_num" value="${param.prjct_num}" />
 	<input type="hidden" id="top" name="top" value="${param.top}" />
 	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 </form>
 
-	<form action="#" id="updateForm" method="post">
+	<form action="#" id="writeForm" method="post">
 	<input type="hidden" id="top" name="top" value="${param.top}" />
 	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 	<input type="hidden"  name="page" value="${param.page}" />
 	<input type="hidden" id="prjct_num" name="prjct_num" value="${param.prjct_num}"/>
+	<input type="hidden" name="writer" value="${sEmpNum}" />
 			<!-- 여기부터 쓰면 됨 -->
        <div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
@@ -211,7 +212,7 @@ $(document).ready(function() {
 					<div><input type="text" class="cont_box" name="rmrks"   id="rmrks" value="${data.RMRKS}"></div>
 				</div>
 			<div class="board_bottom">
-				<<div class="cmn_btn" id="updateBtn">수정</div>
+				<<div class="cmn_btn" id="addBtn">추가</div>
             <div class="cmn_btn" id="cancelBtn">취소</div>
 			</div>
 		</div>

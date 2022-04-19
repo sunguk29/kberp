@@ -86,12 +86,21 @@ public class PrjctMngController {
 				
 				return mapper.writeValueAsString(modelMap);
 			}
-			//카드업데이트
+			//프로젝트 등록
+			@RequestMapping(value = "/prjctWrite")
+			public ModelAndView prjctWrite(@RequestParam HashMap<String, String> params, ModelAndView mav)
+					throws Throwable {
+
+				mav.setViewName("mng/prjctWrite");
+
+				return mav;
+			}
+			//프로젝트업데이트
 			@RequestMapping(value = "/prjctUpdate")
 			public ModelAndView prjctUpdate(@RequestParam HashMap<String, String> params, 
 										 ModelAndView mav) throws Throwable {
 				
-				HashMap<String, String> data = ics.getData("prjctMng.prjctUpdate", params);
+				HashMap<String, String> data = ics.getData("prjctMng.prjctView", params);
 				
 				
 				mav.addObject("data", data);
@@ -111,11 +120,16 @@ public class PrjctMngController {
 				try {
 				switch(gbn) {
 				case "insert":
-					ics.insertData("prjctMng.writePrjct",params);
+					ics.insertData("prjctMng.prjctWrite",params);
 					break;
 				case "update":
 					ics.updateData("prjctMng.prjctUpdate",params);
-					
+					break;
+				case "delete":
+					ics.updateData("prjctMng.prjctDel",params);
+					break;
+				case "input_delete":
+					ics.deleteData("prjctMng.input_delete",params);
 					break;
 				}
 					modelMap.put("res", "success");
