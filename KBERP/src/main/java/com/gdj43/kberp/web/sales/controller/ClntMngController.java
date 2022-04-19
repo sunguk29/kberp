@@ -130,6 +130,9 @@ public class ClntMngController {
 		try {
 			switch(gbn) {
 			case "insert" :
+				String seq = iCommonService.getStringData("clntCmpnyMng.clntCmpnySeq"); // 고객 시퀀스 가져오기
+				params.put("ccs", seq); // 고객사 시퀀스 넣어주기
+				modelMap.put("seq", seq); // 고객사 등록 후 고객사 상세보기로 이동할 때 필요.
 				iCommonService.insertData("clntCmpnyMng.ClntCmpnyAdd", params); 
 				iCommonService.insertData("clntCmpnyMng.ClntCmpnyAddAttFile", params); 
 				break;
@@ -236,6 +239,9 @@ public class ClntMngController {
 		try {
 			switch(gbn) {
 			case "insert" :
+				String seq = iCommonService.getStringData("clntCmpnyMng.clntSeq"); // 고객 시퀀스 가져오기
+				params.put("cs", seq); // 고객 시퀀스 넣어주기
+				modelMap.put("seq", seq); // 고객 등록 후 고객 상세보기로 이동할 때 필요.
 				iCommonService.getData("clntCmpnyMng.clntAdd", params);
 				iCommonService.getData("clntCmpnyMng.clntAttAdd", params);
 				break;

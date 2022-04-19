@@ -991,119 +991,141 @@ $(document).ready(function () {
 			});
 		});		
 	
+	/* 예정된 일정 상세 팝업 */
 	$(".sbx").on("click","#scName", function() {
-		var html = "";
-			
-			html += "<input type=\"hidden\" id=\"schdlNumber\" name=\"schdlNum\" value=\"${param.schdlNum}\"/>";
-			html += "<input type=\"hidden\" name=\"sEmpNum\" value=\"${sEmpNum}\" />";
-			html += "<table class=\"popup_table\">";
-			html += "	<tbody>";
-			html += "		<tr height=\"10\">                                                                                                          ";
-			html += "			<td><input type=\"button\" class=\"popBtn\" value=\"일정명 *\" readonly=\"readonly\"/></td>";
-			html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ssname\" name=\"ssname\" value=\"" + data.SCHDL_NAME + "\"/></td>";
-			html += "		</tr>";
-			html += "		<tr height=\"10\">                                                                                                          ";
-			html += "			<td><input type=\"button\" class=\"popBtn\" value=\"리드\" readonly=\"readonly\"/></td>";
-			html += "			<td>";
-			html += "				<div class=\"imgP\">";
-			html += "					<input type=\"text\" class=\"pop_txt imgName\" id=\"lName\" name=\"lName\" value=\"" + data.LEAD_NAME + "\" />";
-			html += "					<input type=\"hidden\" id=\"lNum\" name=\"lNum\" value=\"${param.leadNum}\"/>";
-			html += "				</div>";
-			html += "			</td>";
-			html += "		</tr>";
-			html += "		<tr height=\"10\">                                                                                                          ";
-			html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객명\" readonly=\"readonly\"/></td>";
-			html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"clName\" name=\"clName\" value=\"" + data.LEAD_CLNT_NAME + "\"/></td>";
-			html += "		</tr>";
-			html += "		<tr height=\"10\">                                                                                                          ";
-			html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객사\" readonly=\"readonly\"/></td>";
-			html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ccName\" name=\"ccName\"  value=\"" + data.LEAD_CLNT_CMPNY_NAME + "\"/></td>";
-			html += "		</tr>";
-			html += "		<tr height=\"10\">                                                                                                          ";
-			html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동분류 *\" readonly=\"readonly\"/></td>";
-			html += "			<td><select class=\"pop_txt_in\" id=\"ssactvtyclsfy\" name=\"ssactvtyclsfy\" >";
-			html += "					<optgroup>";
-			html += "						<option value=\"9\">선택하세요</option>";
-			if(data.ACTVTY_CLSFY_NUM == 0) {
-				html += "						<option value=\"0\" selected=\"selected\">전화</option>";
-				html += "						<option value=\"1\">메일</option>";
-				html += "						<option value=\"2\">방문</option>";
-				html += "						<option value=\"3\">기타</option>";
-			} else if (data.ACTVTY_CLSFY_NUM == 1) {
-				html += "						<option value=\"0\">전화</option>";
-				html += "						<option value=\"1\" selected=\"selected\">메일</option>";
-				html += "						<option value=\"2\">방문</option>";
-				html += "						<option value=\"3\">기타</option>";
-			} else if (data.ACTVTY_CLSFY_NUM == 2) {
-				html += "						<option value=\"0\">전화</option>";
-				html += "						<option value=\"1\">메일</option>";
-				html += "						<option value=\"2\" selected=\"selected\">방문</option>";
-				html += "						<option value=\"3\">기타</option>";
-			} else if (data.ACTVTY_CLSFY_NUM == 3) {
-				html += "						<option value=\"0\">전화</option>";
-				html += "						<option value=\"1\">메일</option>";
-				html += "						<option value=\"2\">방문</option>";
-				html += "						<option value=\"3\" selected=\"selected\">기타</option>";
-			}
-			html += "					</optgroup>";
-			html += "			</select></td>";
-			html += "		</tr>";
-			html += "		<tr height=\"10\">                                                                                                          ";
-			html += "			<td><input type=\"button\" class=\"popBtn\" value=\"날짜 *\" readonly=\"readonly\"/></td>";
-			html += "			<td><input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"sdt\" name=\"sdt\" value=\"" + data.START_DATE_HR + "\"/>";
-			html += "				<div class=\"wave\">" + " ~ "  + "</div>";
-			if(data.END_DATE_HR == null) {
-				html += "			<input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\" /></td>";
-			} else {
-				html += "			<input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\" value=\"" + data.END_DATE_HR + "\"/></td>";
-			}
-			html += "		</tr>";
-			html += "		<tr height=\"10\">                                                                                                          ";
-			html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동내용 *\" readonly=\"readonly\"/></td>";
-			html += "			<td style=\"border-bottom: none\"><textarea class=\"ta_box\" id=\"ssactvtycont\" name=\"ssactvtycont\">" + data.ACTVTY_CONT + "</textarea></td>";
-			html += "		</tr>";
-			html += "	</tbody>";
-			html += "</table>";
-			if(data.ATT_FILE_NAME != null) {
-				var fileLength = data.ATT_FILE_NAME.length;
-				var fileName = data.ATT_FILE_NAME.substring(20, fileLength);
-			}
-			html += "<div class=\"pop_rvn_txt\"> 첨부파일";
-			html += "<span id=\"uploadBtn\">";
-			if(data.ATT_FILE_NAME == null) {
-				html += "	<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
-			}
-			html += "</span>";
-			html += "</div>";
-			html += "<div class=\"pop_cntrct_box_in\">";
-			if(data.ATT_FILE_NAME != null) {
-				html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
-				html += "	<input type=\"button\" id=\"fileDelete\" value=\"삭제\" />";
-			}
-			html += "<input type=\"text\" id=\"fileName\" readonly=\"readonly\" />";
-			html += "	<input type=\"text\" id=\"popFileName\" readonly=\"readonly\" />                 ";
-			html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadPopName(this)\" />   ";
-			html += "	<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" value=\"" + data.ATT_FILE_NAME +"\"/>           ";
-			html += "	<input type=\"hidden\" id=\"schdlnum\" name=\"schdlnum\" />           ";
-			html += "</div>                                                                     ";
+		var snum = $(this).children("#schdlListNumber").val();
+		var lnum = $(this).children("#leadListNumber").val();
+		document.getElementById("schdlNumber").value = snum;
+		document.getElementById("leadNumber").value = lnum;
 		
+		
+		var params = $("#lsForm").serialize();
+		
+		$.ajax({
+			type  : "post",
+			url : "leadSchdlAjax",
+			dataType : "json",
+			data : params,
+			success : function(lsData) {	
+				var html = "";
+				
+				$.each(lsData, function(index, data) {
+					
+					html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
+					html += "<input type=\"hidden\" name=\"sEmpNum\" value=\"${sEmpNum}\" />";
+					html += "<table class=\"popup_table\">";
+					html += "	<tbody>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"일정명 *\" readonly=\"readonly\"/></td>";
+					html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ssname\" name=\"ssname\" value=\"" + data.SCHDL_NAME + "\"/></td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"리드\" readonly=\"readonly\"/></td>";
+					html += "			<td>";
+					html += "				<div class=\"imgP\">";
+					html += "					<input type=\"text\" class=\"pop_txt imgName\" id=\"lName\" name=\"lName\" value=\"" + data.LEAD_NAME + "\" />";
+					html += "					<input type=\"hidden\" id=\"lNum\" name=\"lNum\" value=\"${param.leadNum}\"/>";
+					html += "				</div>";
+					html += "			</td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객명\" readonly=\"readonly\"/></td>";
+					html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"clName\" name=\"clName\" value=\"" + data.LEAD_CLNT_NAME + "\"/></td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객사\" readonly=\"readonly\"/></td>";
+					html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ccName\" name=\"ccName\"  value=\"" + data.LEAD_CLNT_CMPNY_NAME + "\"/></td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동분류 *\" readonly=\"readonly\"/></td>";
+					html += "			<td><select class=\"pop_txt_in\" id=\"ssactvtyclsfy\" name=\"ssactvtyclsfy\" >";
+					html += "					<optgroup>";
+					html += "						<option value=\"9\">선택하세요</option>";
+					if(data.ACTVTY_CLSFY_NUM == 0) {
+						html += "						<option value=\"0\" selected=\"selected\">전화</option>";
+						html += "						<option value=\"1\">메일</option>";
+						html += "						<option value=\"2\">방문</option>";
+						html += "						<option value=\"3\">기타</option>";
+					} else if (data.ACTVTY_CLSFY_NUM == 1) {
+						html += "						<option value=\"0\">전화</option>";
+						html += "						<option value=\"1\" selected=\"selected\">메일</option>";
+						html += "						<option value=\"2\">방문</option>";
+						html += "						<option value=\"3\">기타</option>";
+					} else if (data.ACTVTY_CLSFY_NUM == 2) {
+						html += "						<option value=\"0\">전화</option>";
+						html += "						<option value=\"1\">메일</option>";
+						html += "						<option value=\"2\" selected=\"selected\">방문</option>";
+						html += "						<option value=\"3\">기타</option>";
+					} else if (data.ACTVTY_CLSFY_NUM == 3) {
+						html += "						<option value=\"0\">전화</option>";
+						html += "						<option value=\"1\">메일</option>";
+						html += "						<option value=\"2\">방문</option>";
+						html += "						<option value=\"3\" selected=\"selected\">기타</option>";
+					}
+					html += "					</optgroup>";
+					html += "			</select></td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"날짜 *\" readonly=\"readonly\"/></td>";
+					html += "			<td><input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"sdt\" name=\"sdt\" value=\"" + data.START_DATE_HR + "\"/>";
+					html += "				<div class=\"wave\">" + " ~ "  + "</div>";
+					if(data.END_DATE_HR == null) {
+						html += "			<input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\" /></td>";
+					} else {
+						html += "			<input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\" value=\"" + data.END_DATE_HR + "\"/></td>";
+					}
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동내용 *\" readonly=\"readonly\"/></td>";
+					html += "			<td style=\"border-bottom: none\"><textarea class=\"ta_box\" id=\"ssactvtycont\" name=\"ssactvtycont\">" + data.ACTVTY_CONT + "</textarea></td>";
+					html += "		</tr>";
+					html += "	</tbody>";
+					html += "</table>";
+					if(data.ATT_FILE_NAME != null) {
+						var fileLength = data.ATT_FILE_NAME.length;
+						var fileName = data.ATT_FILE_NAME.substring(20, fileLength);
+					}
+					html += "<div class=\"pop_rvn_txt\"> 첨부파일";
+					html += "<span id=\"uploadBtn\">";
+					if(data.ATT_FILE_NAME == null) {
+						html += "	<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
+					}
+					html += "</span>";
+					html += "</div>";
+					html += "<div class=\"pop_cntrct_box_in\">";
+					if(data.ATT_FILE_NAME != null) {
+						html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
+					}
+					html += "<input type=\"text\" id=\"fileName\" readonly=\"readonly\" />";
+					html += "	<input type=\"text\" id=\"popFileName\" readonly=\"readonly\" />                 ";
+					html += "	<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" value=\"" + data.ATT_FILE_NAME +"\"/>           ";
+					html += "	<input type=\"hidden\" id=\"schdlnum\" name=\"schdlnum\" />           ";
+					html += "</div>                                                                     ";
+					html += "</form>";
+					
+				});	
+				
 		makePopup({
 			depth : 1,
-			bg : true,
+			bg : false,
+			bgClose : false,
+			title : "예정된 일정 상세보기",
+			contents : html,
 			width : 600,
 			height : 520,
-			title : "예정된 일정",
-			contents : "내용",
-			buttons : {
+			buttons : [{
 				name : "확인",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
+				func : function() {
+						closePopup();
+						}
+					}]// button 함수 end
+			});
+			},	
+			error : function(request) {
+				console.log(request.responseTxt);
 			}
-		});		
+		});
 	});
-	
 	/* 예정된 일정 수정 팝업 */
 	$(".sbx").on("click", ".sch_re", function() {
 		var snum = $(this).children("#schdlListNumber").val();
@@ -1458,7 +1480,7 @@ function drawScList(list) {
 		html += "<div class=\"schdl_box_in\">";
 		html += "";
 		html += "";
-		html +=	"<div class=\"name\">일정명 :<span id=\"scName\">" + data.SCHDL_NAME + "</span></div>";
+		html +=	"<div class=\"name\">일정명 :<span id=\"scName\" ><input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"leadListNumber\" value=\"" + ${param.leadNum} + "\" />" + data.SCHDL_NAME + "</span></div>";
 		html +=	"<div class=\"txtOp\">기간   " + data.START_DATE_HR +  " ~ " + data.END_DATE_HR + "</div>";
 		html +=	"<div class=\"txtOp sche\">담당자   :" + data.EMP_NAME
 		if(data.EMP_NAME == "${sEmpName}") {

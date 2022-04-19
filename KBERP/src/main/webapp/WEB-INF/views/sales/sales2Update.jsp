@@ -949,6 +949,12 @@ function uploadName(e) {
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
 		<input type="hidden" id="salesNum" name="salesNum" value="${data.SALES_NUM}" />
+		<input type="hidden" name="prgrsStage1" value="${param.prgrsStage1}" />
+		<input type="hidden" name="prgrsStage2" value="${param.prgrsStage2}" />
+		<input type="hidden" name="mngName" value="${param.mngName}" />
+		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+		<input type="hidden" name="listSort" value="${param.listSort}" />
 		<!-- 영업번호 -->
 	</form>
 	<!-- top & left -->
@@ -1315,7 +1321,7 @@ function uploadName(e) {
 									<input type="text" id="fileName" readonly="readonly" />
 							</div>
 						<input type=file id="att" name="att" onchange="uploadName(this)" />
-						<input type="hidden" id="attFile" name="attFile" />
+						<input type="hidden" id="attFile" name="attFile" value="${data2.ATT_FILE_NAME}" />
 						</div>
 						<!-- ********** 제안 끝 ********** -->
 					</form>
