@@ -391,17 +391,30 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	var now = new Date();
-	var clndrYear = now.getFullYear();	// 연도
-	var clndrMonth = now.getMonth()+1;	// 월
-	var Cdate = "";
-	if(clndrMonth >= 10){
-		Cdate = ""+clndrYear+"-"+clndrMonth;
-	}else{
-		Cdate = ""+clndrYear+"-0"+clndrMonth;
-	}
 	
-	$('input[name=clndrDate]').attr('value',Cdate);
+	if($("#initialDate").val() == ''){
+
+		var now = new Date();
+		var clndrYear = now.getFullYear();	// 연도
+		var clndrMonth = now.getMonth()+1;	// 월
+		var Cdate = "";
+		var Ddate = "";
+		if(clndrMonth >= 10){
+			Cdate = ""+clndrYear+"-"+clndrMonth;
+			Ddate = ""+clndrYear+"-"+clndrMonth;
+		}else{
+			Cdate = ""+clndrYear+"-0"+clndrMonth;
+			Ddate = ""+clndrYear+"-0"+clndrMonth;
+		}
+		
+		
+		$('input[name=clndrDate]').attr('value',Cdate);
+	} else {
+		
+		
+		$('input[name=clndrDate]').attr('value', $("#initialDate").val().substr(0, 7));
+	
+	}
 	
 	if('${param.usrsrchTxt}' != ''){
 		$("#usrsrchTxt").val('${param.usrsrchTxt}');
@@ -642,30 +655,6 @@ $(document).ready(function() {
 		$(sel).html(html);
 	}
 	
-	/* 캘린더 이벤트 관련 시작 */
-	var data = [
-        {
-            title: 'All Day Event',
-            start: '2019-01-01',
-            color : 'yellow', // 기타 옵션들
-			textColor : 'black',
-          },
-          {
-            title: 'Long Event',
-            start: '2019-01-07',
-            end: '2019-01-10'
-          },
-          {
-            id: 999,
-            title: 'Repeating Event',
-            start: '2019-01-09T16:00:00'
-          },
-          {
-            id: 999,
-            title: 'Repeating Event',
-            start: '2019-01-16T16:00:00'
-          }
-        ];
 	
 	function drawDayCalc(slist) {
 		var params = $("#actionForm").serialize();
@@ -675,10 +664,11 @@ $(document).ready(function() {
 			dataType : "json",
 			data : params,
 			success : function(res){						
+					
 					//신규이벤트 추가
 					$("#fullCalendarArea").fullCalendar("addEventSource", res.slist);
+					$("#fullCalendarArea").fullCalendar("refetchEvents");
 					
-					console.log(${param.initialDate});
 			},
 			error : function(req) {
 				console.log(req.responseText);
@@ -686,19 +676,16 @@ $(document).ready(function() {
 		});
 	}
 	
-	$("body").on("click", ".fc-month-button", function() {
-		clndrDvsn
-		$("#clndrDvsn").attr('value',"month");
-		history.go(0);
-	});
-	
 	
 	// 달력에서 이후 버튼 누를 시
 	$("body").on("click", ".fc-next-button", function() {
 
 		//기존 이벤트 제거
-		$("#fullCalendarArea").fullCalendar("removeEventSources");
+  		$("#fullCalendarArea").fullCalendar("removeEventSources");
+  		$("#fullCalendarArea").fullCalendar("refetchEvents");
 		
+  		if($("#initialDate").val() == ''){
+  		
 		clndrMonth = clndrMonth+1;
 		if(clndrMonth >= 13){
 			clndrMonth = 1;
@@ -709,28 +696,31 @@ $(document).ready(function() {
 		}else{
 			Cdate = ""+clndrYear+"-0"+clndrMonth;
 		}
-		$('input[name=clndrDate]').attr('value',Cdate);
-		drawDayCalc();
 		
-			clndrMonth = clndrMonth+1;
-			if(clndrMonth >= 13){
-				clndrMonth = 1;
-				clndrYear = clndrYear + 1;
-			}
-			if(clndrMonth >= 10){
-				Cdate = ""+clndrYear+"-"+clndrMonth;
-			}else{
-				Cdate = ""+clndrYear+"-0"+clndrMonth;
-			}
-			$('input[name=clndrDate]').attr('value',Cdate);
-			drawDayCalc();
-			
+		
 			if(clndrMonth <= 9){
 				var day = clndrYear+"-0"+clndrMonth+"-10";				
 			} else {
 				var day = clndrYear+"-"+clndrMonth+"-10";
 			}
+			
 			document.getElementById("initialDate").value = day;
+			$('input[name=clndrDate]').attr('value',Cdate);
+		} else {
+			document.getElementById("initialDate").value = $("#initialDate").val();
+			
+			var dd = $("#initialDate").val().substr(0,7);
+			
+			$('input[name=clndrDate]').attr('value',dd);
+			
+			console.log($("#initialDate").val());
+		}
+		
+		
+		console.log(Cdate);
+		console.log($("#initialDate").val());
+		drawDayCalc();
+		
 	});
 	
 	
@@ -738,8 +728,10 @@ $(document).ready(function() {
 	$("body").on("click", ".fc-prev-button", function() {
 		
 		//기존 이벤트 제거
-		$("#fullCalendarArea").fullCalendar("removeEventSources");
+  		$("#fullCalendarArea").fullCalendar("removeEventSources");
+  		$("#fullCalendarArea").fullCalendar("refetchEvents");
 		
+		if($("#initialDate").val() == ''){
 		clndrMonth = clndrMonth-1;
 		
 		if(clndrMonth < 1){
@@ -751,16 +743,35 @@ $(document).ready(function() {
 		}else{
 			Cdate = ""+clndrYear+"-0"+clndrMonth;
 		}
-		$('input[name=clndrDate]').attr('value',Cdate);
+		
+			if(clndrMonth <= 9){
+				var day = clndrYear+"-0"+clndrMonth+"-10";				
+			} else {
+				var day = clndrYear+"-"+clndrMonth+"-10";
+			}
+			
+			document.getElementById("initialDate").value = day;
+			$('input[name=clndrDate]').attr('value',Cdate);
+		} else {
+			document.getElementById("initialDate").value = $("#initialDate").val();
+			
+			var dd = $("#initialDate").val().substr(0,7);
+			
+			$('input[name=clndrDate]').attr('value',dd); 
+		}
 		drawDayCalc();
 		
-		if(clndrMonth <= 9){
-			var day = clndrYear+"-0"+clndrMonth+"-10";				
-		} else {
-			var day = clndrYear+"-"+clndrMonth+"-10";
-		}
-		document.getElementById("initialDate").value = day;
 	});
+
+	var dt = '';
+	
+	if($("#initialDate").val() != ''){
+		dt = $("#initialDate").val();
+		console.log(dt);
+	} else{
+		dt = Ddate;
+		console.log(dt);
+	}
 	
 	$("#fullCalendarArea").fullCalendar({
 			header: {
@@ -768,12 +779,12 @@ $(document).ready(function() {
 		        center: 'prev, title, next',
 		        right: ''
 		      },
+		      defaultDate: dt,
 		      locale: "ko",
 		      editable: false,
 		      height: 400,
-		      events: data,
 		      eventClick: function(event) { // 이벤트 클릭
-		    	  
+		    	
 		      },
 		      dayClick: function(date, js, view) { // 일자 클릭
 		    	  
@@ -836,7 +847,7 @@ $(document).ready(function(){
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" id="schdlnum" name="schdlnum" value="${param.schdlnum}" />
 	<input type="hidden" id="clndrDate" name="clndrDate" />
-	<input type="hidden" id="initialDate" name="initialDate"/>
+	<input type="hidden" id="initialDate" name="initialDate" value="${param.initialDate}"/>
 	
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
