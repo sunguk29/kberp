@@ -960,6 +960,21 @@ $(document).ready(function() {
 		$("#att").click();
 	});
 	
+	$("#fileDelete").on("click", function() {
+		$("#file_name").remove();
+		$(this).remove();
+		
+		var html = "";
+		
+		html += "<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
+		
+		$("#uploadBtn").html(html);
+	});
+	
+	$(".adc_txt").on("click", ".aff_btn", function() {
+		$("#att").click();
+	});
+	
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#qtnName")) {
@@ -1807,15 +1822,21 @@ function test(t) {
 		<input type="hidden" name="top" value="${param.top}" />
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
-		<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
+		<input type="hidden" name="salesNum" value="${param.salesNum}" />
 		<input type="hidden" name="qtnNum" value="${param.qtnNum}" />
+		<input type="hidden" name="prgrsStage1" value="${param.prgrsStage1}" />
+		<input type="hidden" name="prgrsStage2" value="${param.prgrsStage2}" />
+		<input type="hidden" name="mngName" value="${param.mngName}" />
+		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+		<input type="hidden" name="listSort" value="${param.listSort}" />
 	</form>
 	<form action="#" id="contForm" method="post">
 		<input type="hidden" id="page" name="page" value="${page}" />
 		<input type="hidden" name="top" value="${param.top}" />
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
-		<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
+		<input type="hidden" name="salesNum" value="${param.salesNum}" />
 	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -2425,17 +2446,27 @@ function test(t) {
 					</table>
 					
 					<!-- 첨부자료 -->
+					<c:set var="qtnFileLength" value="${fn:length(data3.ATT_FILE_NAME)}"></c:set>
+						<c:set var="qtnFileName" value="${fn:substring(data3.ATT_FILE_NAME, 20, qtnFileLength)}"></c:set>
+						<div class="spc">
+							<div class="adc_txt">
+								첨부자료
+								<span id="uploadBtn">
+									<c:if test="${empty data3.ATT_FILE_NAME}">
+										<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" />
+									</c:if>
+								</span>
+							</div>
+							<div class="cntrct_box_in">
+							<span id="file_name">${qtnFileName}</span>
+								<c:if test="${!empty data3.ATT_FILE_NAME}">
+									<input type="button" id="fileDelete" value="삭제" />
+								</c:if>
+								<input type="text" id="fileName" readonly="readonly" />
+							</div>
+						</div>
 					<input type=file id="att" name="att" onchange="uploadName(this)" />
-					<input type="hidden" id="attFile" name="attFile" />
-					<div class="spc">
-						<div class="adc_txt">
-							첨부자료
-							<img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
-						</div>
-						<div class="cntrct_box_in">
-							<input type="text" id="fileName" readonly="readonly" />
-						</div>
-					</div>
+					<input type="hidden" id="attFile" name="attFile" value="${data3.ATT_FILE_NAME}" />
 				</form>
 				<!-- ******************** 지난 견적서 ******************** -->
 				<div class="qtnDiv">
