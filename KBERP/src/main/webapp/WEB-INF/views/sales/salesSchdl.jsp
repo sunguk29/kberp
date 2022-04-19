@@ -496,6 +496,11 @@ $(document).ready(function() {
 		var tempSnum = $(this).children("#schln").val();
 		document.getElementById("schdlnum").value = tempSnum;
 		
+		var sdf = new Date($("#fullCalendarArea").fullCalendar("getDate"));
+  		var dt = sdf.getFullYear() + "-" + lpad((sdf.getMonth() + 1), 2, 0);
+  		console.log(dt);
+  		document.getElementById("clndrDate").value = dt;
+  		document.getElementById("dt").value = dt;
 		
 		$("#actionForm").attr("action", "salesSchdlCont");
 		$("#actionForm").submit();
