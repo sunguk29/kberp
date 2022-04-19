@@ -244,7 +244,7 @@ $(document).ready(function() {
 			bg : true,
 			bgClose : false,
 			title : "알림",
-			contents : popContTwoLine("저장되지않았습니다.<br/>나가시겠습니까?"),
+			contents : popContTwoLine("나가면 저장되지않습니다.<br/>나가시겠습니까?"),
 			buttons : [{
 				name : "나가기",
 				func:function() {

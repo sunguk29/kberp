@@ -104,16 +104,86 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-	function check_all(o){
+	$("#prjctDel").on("click", function() {
+		makePopup({
+			bg : true,
+			bgClose : true,
+			title : "삭제",
+			contents : "프로젝트를 삭제하시겠습니까??",
+			buttons : [{
+				name : "삭제",
+				func:function() {
+					var params = $("#actionForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "prjctMngAction/delete",
+						dataType : "json",
+						data : params,
+						success : function(res){ 
+							if(res.res == "success"){
+								$("#actionForm").attr("action","prjctMng");
+								$("#actionForm").submit();
+							}else{
+								alert("삭제 중 문제가 발생했습니다.");
+							}
+						},
+						error : function(request, status, error){
+							console.log(request.responseText);
+						}
+					});	
+				}
+			}, {
+				name : "닫기"
+			}]
+		});
+	});
+	
+	
+	$("#delBtn").on("click", function() {
+		$("[name='chk']").is(":checked")
+		makePopup({
+			bg : true,
+			bgClose : true,
+			title : "삭제",
+			contents : "선택 인원을 삭제하시겠습니까??",
+			buttons : [{
+				name : "삭제",
+				func:function() {
+					var params = $("#actionForm").serialize();
+					
+					$.ajax({
+						type : "post",
+						url : "prjctMngAction/input_delete",
+						dataType : "json",
+						data : params,
+						success : function(res){ 
+							if(res.res == "success"){
+								$("#actionForm").attr("action","prjctView");
+								$("#actionForm").submit();
+							}else{
+								alert("삭제 중 문제가 발생했습니다.");
+							}
+						},
+						error : function(request, status, error){
+							console.log(request.responseText);
+						}
+					});	
+				}
+			}, {
+				name : "닫기"
+			}]
+		});
+	});
+  });
 
-		// 클릭한 체크박스의 table 에서 (바로위 부모요소를 대상)
-		// 이름이 chk 인것을 찾고
-		// 현재 요소의 체크 상태를 찾은 대상에 적용
-		$(o).closest('table').find('[name=chk]').prop('checked', o.checked);
 
+
+function gogogo(o){
+
+	   $(o).closest('table').find('[name=chk]').prop('checked', o.checked);
 	}
 	
-});
 function reloadList() { // 목록 조회용
 	var params = $("#actionForm").serialize();
 	
@@ -136,7 +206,7 @@ function drawList(list) {
 	
 	for(data of list) {
 		html += "<tr>";
-		html += "<td><input type=\"checkbox\" name=\"chk\" value=\""+ data.EMP_NUM+"\"> </td>";
+		html += "<td><input type=\"checkbox\" name=\"chk\"  chk=\""+ data.EMP_NUM+"\" value=\""+ data.EMP_NUM+"\"> </td>";
 		html += "<td>" + data.DEPT_NAME	+ "</td>";
 		html += "<td>" + data.EMP_NAME 		+ "</td>";
 		html += "<td>" + data.RANK_NAME + "</td>";
@@ -166,19 +236,16 @@ function drawList(list) {
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
-	<form action="#" id="hstryForm" method="post">
-		<input type="hidden" name="num" value="${param.num}"/>
-		<input type="hidden" name="mng_num" value="${param.prjct_num}" />
-		<input type="hidden" id="page" name=page value=1> 
-	</form>
+	
 
 	<form action="prjctView" id="actionForm" method="post">
 	<input type="hidden" id="top" name="top" value="${param.top}" />
 	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 	<input type="hidden"  name="page" value="${param.page}" />
-	<input type="hidden" id ="no" name="no" value="${param.no}" />
+	<input type="hidden" id ="no" name="no"  />
 	<input type="hidden" id="prjct_num" name="prjct_num" value="${param.prjct_num}"/>
+	</form>
 			<!-- 여기부터 쓰면 됨 -->
        <div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
@@ -225,7 +292,7 @@ function drawList(list) {
       </colgroup>
          <thead class="popup_head">
             <tr>
-                  <th><input  type="checkbox"  onclick="check_all" class="check_all" id="check_all" /></th>
+                  <th><input type="checkbox" onclick="gogogo(this)" /></th>
                   <th>부서명</th>
                   <th>사원명</th>
                   <th>직급</th>
@@ -243,7 +310,7 @@ function drawList(list) {
 				<div class="cmn_btn" id="listBtn">확인</div>
 			</div>
 		</div>
-		</form>
+		
 	</div>
 
 	<!-- bottom -->

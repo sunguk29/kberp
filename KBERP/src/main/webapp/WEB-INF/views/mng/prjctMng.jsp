@@ -36,6 +36,12 @@ $(document).ready(function() {
 		
 		reloadList();
 	});
+	
+	$("#addBtn").on("click", function() {
+
+		$("#actionForm").attr("action", "prjctWrite");
+		$("#actionForm").submit();
+});
 });
 
 function reloadList() { // 목록 조회용 + 페이징 조회용
