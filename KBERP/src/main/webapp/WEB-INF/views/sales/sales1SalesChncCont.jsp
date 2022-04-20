@@ -911,7 +911,7 @@ $(document).ready(function() {
 												if(res.res == "success"){
 													reloadSScList();								
 												} else {
-													makeAlert("알림", popContOneLine("삭제중 문제가 발생하였습니다."));
+													makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 														}
 												},
 												error : function(request, status, error) {
@@ -935,7 +935,7 @@ $(document).ready(function() {
 											
 					});
 		} else {
-			makeAlert("알림", popContOneLine("삭제중 문제가 발생하였습니다."));
+			makeAlert("알림", popContOneLine("권한이 없습니다."));
 		}
 	});
 
