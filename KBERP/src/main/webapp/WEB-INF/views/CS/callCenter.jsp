@@ -629,8 +629,15 @@
 	margin-left: 5px;
 }
 /* 대응가이드 팝업 */
+#guide_table {
+	margin-top: 70px;
+	text-align: center;
+}
+
 #guide_wrap {
-	width: 783px;
+	width: 830px;
+	text-align: left;
+	line-height: 18px;
 }
 #guide_title_text{
 	font-size: 12pt;
@@ -644,12 +651,29 @@
 	font-size: 8pt;
 }
 
-#clnt_type, #type_case{
+#clnt_type {
+	display: inline-block;
+	height: 15px;
+	width: 100px;
+} 
+
+#type_case {
+	display: inline-block;
 	width: 100px;
 }
+
+#type_case_div {
+	display: inline-block;
+}
+
+#type_case {
+	display: inline;
+}
+
 #rspndAddBtn, #rspndUpBtn, #rspndCanBtn{
 	float:right;
-	margin-bottom: 5px;
+	margin-top: -31px;
+    margin-bottom: 22px;
 }
 
 .add #rspndUpBtn, .add #rspndCanBtn{
@@ -663,6 +687,8 @@
 	vertical-align: top;
 	resize: none;
 	margin-bottom: 5px;
+	white-space: pre-wrap;
+	text-overflow: ellipsis;
 }
 .rspndPopTxt{
 	display: inline-block;
@@ -674,6 +700,12 @@
 	text-align: center;
 	border-radius: 2px;
 }
+
+.rspnd_top_row1{
+	height: 30px;
+}
+
+
 
 #rspndActionForm input:focus {
 	outline: 2px solid #F2CB05;
@@ -692,19 +724,21 @@ $(document).ready(function() {
 		html += "	<div class=\"page_title_bar\">";
 		html += "		<div class=\"page_title_text\" id=\"guide_title_text\">대응가이드(콜센터)</div>";
 		html += "	</div>";
-		html += "	<div class=\"cont_area\">";
+		html += "	<div class=\"rspnd_cont_area\">";
 		html += "		<form action=\"#\" id=\"rspndActionForm\" method=\"post\">";
 		html += "			<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
 		html += "			<input type=\"hidden\" id=\"gbn\" name=\"gbn\"/>";
 		html += "			<input type=\"hidden\" id=\"guide_num\" name=\"guide_num\"/>";
 		html += "			<input type=\"hidden\" id=\"emp_num\" name=\"emp_num\" value=\"" + $("#emp_num").val() + "\"/>";
+		html += "			<div class=\"rspnd_top_row1\">";
 		html += "			<div class=\"rspndPopTxt\">고객유형</div><input type=\"text\" id=\"clnt_type\" name=\"clnt_type\"/>";
-		html += "			<div class=\"rspndPopTxt\">유형별 사례</div><input type=\"text\" id=\"type_case\" name=\"type_case\"/>";
-		html += "			<div class=\"rspndPopTxt\">대응방안</div><textarea rows=\"3\" cols=\"24\" id=\"rspns_plan\" name=\"rspns_plan\"></textarea>";
+		html += "			<div class=\"rspndPopTxt\">대응방안</div><textarea rows=\"7\" cols=\"58\" id=\"rspns_plan\" name=\"rspns_plan\"></textarea>";
+		html += "			</div>";
+		html += "			<div class=\"rspndPopTxt\" id=\"type_case_div\">유형별 사례</div><input type=\"text\" id=\"type_case\" name=\"type_case\"/>";
 		html += "			<span class=\"add\">";
-		html += "			<div class=\"cmn_btn_mr\" id=\"rspndAddBtn\">등록</div>";
-		html += "			<div class=\"cmn_btn_mr\" id=\"rspndCanBtn\">취소</div>";
-		html += "			<div class=\"cmn_btn_mr\" id=\"rspndUpBtn\">수정</div>";
+		html += "				<div class=\"cmn_btn_mr\" id=\"rspndAddBtn\">등록</div>";
+		html += "				<div class=\"cmn_btn_mr\" id=\"rspndCanBtn\">취소</div>";
+		html += "				<div class=\"cmn_btn_mr\" id=\"rspndUpBtn\">수정</div>";
 		html += "			</span>";
 		html += "		</form>";
 		html += "		<table class=\"board_table\" id=\"guide_table\">";
@@ -733,8 +767,8 @@ $(document).ready(function() {
 		makePopup({
 			bg : false,
 			bgClose : false,
-			width: 800,
-			height: 600,
+			width: 850,
+			height: 700,
 			title : "대응가이드",
 			contents : html,
 			contentsEvent : function() {
