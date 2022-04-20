@@ -210,13 +210,13 @@
 	position: absolute;
 	top: 35px;
 	left: 10px;
-	background-color: #F2B705;
+	background-color: #2c7da0;
 }
 .clnt {
 	position: absolute;
 	top: 90px;
 	left: 10px;
-	background-color: #F2CB05;
+	background-color: #61a5c2;
 }
 .ccTxt {
 	display: inline-block;
@@ -416,21 +416,51 @@ $(document).ready(function() {
 
 	var pieData = [${ccg.S},${ccg.A},${ccg.B},${ccg.C},${ccg.D}];
 	var barData = [${sc.CNT},${sc.CNT1},${sc.CNT2}];
-	
-	var pieColors = ["#FFAB00","#FFC107","#FFD740","#FFEB3B","#FFF59D"];
 
 	var pieChart = new Chart(pie, {
+		
 	    type: 'pie',
 	    data: {
 	        labels: pieLabels,
 	        datasets: [{
-	            label: '고객등급',
 	            data: pieData,
-	            backgroundColor: pieColors
+	            backgroundColor: ["#2c7da0","#468faf","#61a5c2","#89c2d9","#a9d6e5"]
 	        }]
 	    },
 	    options: {
-	    	responsive: false
+	    	responsive: false,
+	    	plugins: {
+		    	legend: {
+		    		display: true,
+		    		position: 'bottom'
+		    	},
+    			datalabels: {
+    				color: '#ffffff',
+    				anchor: 'end',
+    				align: 'center',
+    				offset: -10,
+    				borderWidth: 2,
+    				borderColor: '#ffffff',
+    				borderRadius: 25,
+    				padding: {
+    					bottom: 5,
+    					top: 5,
+    					left: 5,
+    					right: 5
+    				},
+    				backgroundColor: (context) => {
+    					return context.dataset.backgroundColor;
+    				},
+    				font: {
+    					weight: 'bold',
+    					size: '10',
+    					family: "맑은 고딕"   					
+    				},
+    				formatter: (value, context) => {
+    					return context.chart.data.labels[context.dataIndex] + "등급 : " + value;
+    				}
+    			}
+	    	}
 	    },
 	    plugins: [ChartDataLabels]
 	});
@@ -442,11 +472,17 @@ $(document).ready(function() {
 	        datasets: [{
 	            label: '고객',
 	            data: barData,
-	            backgroundColor: "#F2CB05"
+	            backgroundColor: ["#89c2d9", "#a9d6e5"]
 	        }]
 	    },
 	    options: {
-	    	responsive: false
+	    	responsive: true,
+	    	plugins: {
+		    	legend: {		    		
+		    		display: true,
+		    		position: 'bottom'
+		    	}		    	
+	    	}
 	    },
 	    plugins: [ChartDataLabels]
 	});
