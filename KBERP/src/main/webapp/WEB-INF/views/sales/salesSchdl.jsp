@@ -498,9 +498,8 @@ $(document).ready(function() {
 		
 		var sdf = new Date($("#fullCalendarArea").fullCalendar("getDate"));
   		var dt = sdf.getFullYear() + "-" + lpad((sdf.getMonth() + 1), 2, 0);
-  		console.log(dt);
+  		
   		document.getElementById("clndrDate").value = dt;
-  		document.getElementById("dt").value = dt;
 		
 		$("#actionForm").attr("action", "salesSchdlCont");
 		$("#actionForm").submit();
@@ -682,9 +681,8 @@ $(document).ready(function() {
   		
   		var sdf = new Date($("#fullCalendarArea").fullCalendar("getDate"));
   		var dt = sdf.getFullYear() + "-" + lpad((sdf.getMonth() + 1), 2, 0);
-  		console.log(dt);
+  		
   		document.getElementById("clndrDate").value = dt;
-  		document.getElementById("dt").value = dt;
   		
 		drawDayCalc();
 	});
@@ -699,9 +697,8 @@ $(document).ready(function() {
 
   		var sdf = new Date($("#fullCalendarArea").fullCalendar("getDate"));
   		var dt = sdf.getFullYear() + "-" + lpad((sdf.getMonth() + 1) , 2, 0);
-  		console.log(dt);
+  		
   		document.getElementById("clndrDate").value = dt;
-  		document.getElementById("dt").value = dt;
   		
 		drawDayCalc();
 	});
@@ -783,14 +780,6 @@ $(document).ready(function() {
 	
 });
 </script>
-<!-- calendar Script -->
-<script type="text/javascript"
-	src="resources/script/calendar/calendar.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-	showCalendar(d.getFullYear(),(d.getMonth() + 1));
-});
-</script>
 </head>
 <body>
 	<!-- top & left -->
@@ -806,15 +795,13 @@ $(document).ready(function(){
 		<input type="hidden" name="menuType" value="${param.menuType}" /> 
 		<input type="hidden" id="schdlnum" name="schdlnum" value="${param.schdlnum}" />
 		<c:choose>
-			<c:when test="${param.dt ne ''}">
-				<input type="hidden" id="clndrDate" name="clndrDate" value="${param.dt}" /> 
+			<c:when test="${param.clndrDate ne ''}">
+				<input type="hidden" id="clndrDate" name="clndrDate" value="${param.clndrDate}" /> 
 			</c:when>
 			<c:otherwise>
 				<input type="hidden" id="clndrDate" name="clndrDate" />
 			</c:otherwise>
 		</c:choose>
-		<input type="hidden" id="dt" name="dt" />
-
 		<!-- 내용영역 -->
 		<div class="cont_wrap">
 			<div class="page_title_bar">
