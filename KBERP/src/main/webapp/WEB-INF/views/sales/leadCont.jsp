@@ -14,7 +14,9 @@
 .cont_wrap {
 	width: 1013px;
 }
-
+input[type="text"], #ccGrade, #rp, #psNum {
+	font-size: 9pt;
+}
 /* 개인 작업 영역 */
 .body {
 	display: block;
@@ -1614,7 +1616,7 @@ function uploadPopName(e) {
 								</td>
 								<td><input type="button" class="btn" value="가능여부 *" readonly="readonly"/></td>
 								<td>
-									<input type="number" class="txt" id="psblCheck" name="psblCheck" value="${data.PSBL_CHECK}" style="text-align: right;" readonly="readonly"/>
+									<input type="text" class="txt" id="psblCheck" name="psblCheck" value="${data.PSBL_CHECK}" style="text-align: right;" readonly="readonly"/>
 									<div id="percent">%</div>
 								</td>
 							</tr>							
