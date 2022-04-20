@@ -922,13 +922,14 @@ function uploadName(e) {
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="deptS" value="${param.deptS}" />
 	<input type="hidden" name="usrsrchTxt" value="${param.usrsrchTxt}" />
-	<input type="hidden" name="dt" value="${param.dt}"/>
+	<input type="hidden" name="clndrDate" value="${param.clndrDate}"/>
 </form>
 <form action="salesSchdlCont" id="actionForm" method="post">
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" id="schdlnum" name="schdlnum"/>
+	<input type="hidden" name="clndrDate" value="${param.clndrDate}"/>
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
