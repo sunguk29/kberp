@@ -40,7 +40,7 @@ body {
 }
 
 .login_logo {
-    padding-top: 350px;
+    padding-top: 366px;
     margin-bottom: 30px;
 }
 
@@ -75,7 +75,7 @@ body {
 
 .findIdLogo {
     display: block;
-    width: 210px;
+    width: 200px;
     height: 40px;
     margin: 0px auto; 
     background: url(https://t1.daumcdn.net/id/member/2014/img_logo_find_140905.gif) no-repeat 0 0;

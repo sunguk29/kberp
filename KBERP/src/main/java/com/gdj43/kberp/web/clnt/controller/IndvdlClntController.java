@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,6 +40,7 @@ public class IndvdlClntController {
 		return mav; 
 	}
 	
+	// LeftMenu
 	@RequestMapping(value = "/cLeft")
 	public ModelAndView cLeft(@RequestParam HashMap<String, String> params, 
 								HttpSession session, ModelAndView mav) throws Throwable {
@@ -48,6 +50,7 @@ public class IndvdlClntController {
 		return mav;
 	}
 	
+	// LeftMenu Ajax
 	@RequestMapping(value = "/cLeftAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String cLeftAjax(@RequestParam HashMap<String, String> params, HttpSession session) throws Throwable {
@@ -60,7 +63,8 @@ public class IndvdlClntController {
 		
 		return mapper.writeValueAsString(modelMap);
 	}
-
+	
+	// 로그인
 	@RequestMapping(value = "/indvdlLogin")
 	public ModelAndView indvdlLogin(HttpSession session, ModelAndView mav) {
 		if (session.getAttribute("sClntNum") != null) {
@@ -71,7 +75,8 @@ public class IndvdlClntController {
 
 		return mav;
 	}
-
+	
+	// 로그인 Ajax
 	@RequestMapping(value = "/indvdlLoginAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String indvdlLoginAjax(@RequestParam HashMap<String, String> params, HttpSession session) throws Throwable {
@@ -99,7 +104,8 @@ public class IndvdlClntController {
 		}
 		return mapper.writeValueAsString(modelMap);
 	}
-
+	
+	// 로그아웃
 	@RequestMapping(value = "/cLogout")
 	public ModelAndView cLogout(HttpSession session, ModelAndView mav) {
 		session.invalidate();
@@ -109,6 +115,7 @@ public class IndvdlClntController {
 		return mav;
 	}
 	
+	// 로그인 후 보여질 뷰
 	@RequestMapping(value = "/cmbnInfo")
 	public ModelAndView cmbnInfo(ModelAndView mav) {
 		
@@ -117,13 +124,7 @@ public class IndvdlClntController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/signUp")
-	public ModelAndView signUp(ModelAndView mav) {
-		mav.setViewName("CS/clnt/signUp");
-
-		return mav;
-	}
-	
+	// 아이디 찾기
 	@RequestMapping(value = "/findId")
 	public ModelAndView findId(ModelAndView mav) {
 		mav.setViewName("CS/clnt/findId");
@@ -131,10 +132,53 @@ public class IndvdlClntController {
 		return mav;
 	}
 	
+	// 비밀번호 찾기
 	@RequestMapping(value = "/findPw")
 	public ModelAndView findPw(ModelAndView mav) {
 		mav.setViewName("CS/clnt/findPw");
 
 		return mav;
+	}
+	
+	// 회원가입
+	@RequestMapping(value = "/signUp")
+	public ModelAndView signUp(ModelAndView mav) {
+		mav.setViewName("CS/clnt/signUp");
+		
+		return mav;
+	}
+	
+	// 회원 가입, 수정, 탈퇴
+	@RequestMapping(value="/signUpActionAjax/{gbn}", method = RequestMethod.POST,
+					produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String signUpActionAjax(@RequestParam HashMap<String, String> params,
+								   @PathVariable String gbn) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			params.put("signup_pw", Utils.encryptAES128(params.get("signup_pw")));
+			
+			switch(gbn) {
+			case "i":
+				iCommonService.insertData("cl.signUp", params);
+				break;
+			case "u":
+				iCommonService.updateData("cl.inqryRspndUp", params);
+				break;
+			case "d":
+				iCommonService.updateData("cl.inqryRspndDel", params);
+				break;
+			}
+			modelMap.put("res", "success");
+			
+		} catch(Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "failed");
+		}
+		
+		return mapper.writeValueAsString(modelMap);
 	}
 }

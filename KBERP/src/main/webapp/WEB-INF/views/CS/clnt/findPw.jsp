@@ -40,7 +40,7 @@ body {
 }
 
 .login_logo {
-    padding-top: 300px;
+    padding-top: 310px;
     margin-bottom: 30px;
 }
 
