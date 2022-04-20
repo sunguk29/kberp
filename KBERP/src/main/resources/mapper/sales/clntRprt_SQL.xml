@@ -1,120 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="clntRprt">
-<!-- 신규고객사 전월 개수 -->
-	<select id="ccLastMonthCnt" resultType="Integer" parameterType="hashmap">
-		SELECT  COUNT(*) AS CNT
-		FROM CLNT_CMPNY
-		WHERE TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM')
-		AND DEL_CHECK IS NULL
+<!-- 신규고객사 개수 -->
+	<select id="ccAllCnt" resultType="hashmap" parameterType="hashmap">
+		SELECT CC.LAST, CC.THAT, CC.AVG, CC.CNT
+		FROM (SELECT  COUNT(*) AS LAST
+		   	  FROM CLNT_CMPNY
+			  WHERE TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM')
+		      AND DEL_CHECK IS NULL) CC
+		      INNER JOIN (SELECT  COUNT(*) AS THAT 
+		                  FROM CLNT_CMPNY 
+		                  WHERE TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
+		                  AND DEL_CHECK IS NULL) CC
+		       ON 1 = 1
+		       INNER JOIN (SELECT ROUND((CNT / 3), 1) AS AVG 
+		                   FROM (SELECT COUNT(*) AS CNT FROM CLNT_CMPNY 
+		                   WHERE RGSTRTN_DATE BETWEEN ADD_MONTHS(SYSDATE,-3) AND SYSDATE
+		                   AND DEL_CHECK IS NULL)) CC
+		       ON 1 = 1
+		       INNER JOIN (SELECT COUNT(*) AS CNT
+		                   FROM CLNT_CMPNY
+		                   WHERE DEL_CHECK IS NULL) CC
+		       ON 1 = 1
 	</select>
-<!-- 신규고객사 당월 개수 -->	
-	<select id="ccThatMonthCnt" resultType="Integer" parameterType="hashmap">
-		SELECT  COUNT(*) AS CNT
-		FROM CLNT_CMPNY
-		WHERE DEL_CHECK IS NULL
-		AND TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
-	</select>
-<!-- 신규고객사 평균3개월 개수 -->		
-	<select id="ccAvgCnt" resultType="Double" parameterType="hashmap">
-		SELECT ROUND((CNT / 3), 1) 
-		FROM (SELECT COUNT(*) AS CNT
-		      FROM CLNT_CMPNY
-		      WHERE RGSTRTN_DATE BETWEEN ADD_MONTHS(SYSDATE,-3) AND SYSDATE
-      		  AND DEL_CHECK IS NULL)
-	</select>
-<!-- 신규고객 전월 개수 -->
-	<select id="clntLastMonthCnt" resultType="Integer" parameterType="hashmap">
-		SELECT  COUNT(*) AS CNT
-		FROM ENTRPRS_CLNT
-		WHERE TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM')
-		AND DEL_CHECK IS NULL
-	</select>
-<!-- 신규고객 당월 개수 -->	
-	<select id="clntThatMonthCnt" resultType="Integer" parameterType="hashmap">
-		SELECT  COUNT(*) AS CNT
-		FROM ENTRPRS_CLNT
-		WHERE DEL_CHECK IS NULL
-		AND TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
-	</select>
-<!-- 신규고객 평균3개월 개수 -->		
-	<select id="clntAvgCnt" resultType="Double" parameterType="hashmap">
-		SELECT ROUND((CNT / 3), 1) 
-		FROM (SELECT COUNT(*) AS CNT
-		      FROM ENTRPRS_CLNT
-		      WHERE RGSTRTN_DATE BETWEEN ADD_MONTHS(SYSDATE,-3) AND SYSDATE
-		      AND DEL_CHECK IS NULL)
-	</select>
-<!-- 신규고객 전체 개수 -->
-	<select id="clntAllCnt" resultType="Integer" parameterType="hashmap">
-		SELECT  COUNT(*) AS CNT
-		FROM ENTRPRS_CLNT
-		WHERE 1 = 1
-		AND DEL_CHECK IS NULL
+
+<!-- 신규고객 개수 -->
+	<select id="ecAllCnt" resultType="hashmap" parameterType="hashmap">
+		SELECT EC.LAST, EC.THAT, EC.AVG, EC.CNT
+		FROM (SELECT  COUNT(*) AS LAST
+		   	  FROM ENTRPRS_CLNT
+			  WHERE TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM')
+		      AND DEL_CHECK IS NULL) EC
+		      INNER JOIN (SELECT  COUNT(*) AS THAT 
+		                  FROM ENTRPRS_CLNT
+		                  WHERE TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
+		                  AND DEL_CHECK IS NULL) EC
+		       ON 1 = 1
+		       INNER JOIN (SELECT ROUND((CNT / 3), 1) AS AVG 
+		                   FROM (SELECT COUNT(*) AS CNT FROM ENTRPRS_CLNT
+		                   WHERE RGSTRTN_DATE BETWEEN ADD_MONTHS(SYSDATE,-3) AND SYSDATE
+		                   AND DEL_CHECK IS NULL)) EC
+		       ON 1 = 1
+		       INNER JOIN (SELECT COUNT(*) AS CNT
+		                   FROM ENTRPRS_CLNT
+		                   WHERE DEL_CHECK IS NULL) EC
+		       ON 1 = 1
 	</select>
 <!-- 고객등급 개수 -->	
-	<select id="clntGradeS" resultType="Integer" parameterType="hashmap">
-		SELECT COUNT(*) AS CNT
-		FROM CLNT_CMPNY
-		WHERE GRADE_NUM = 0
-		AND DEL_CHECK IS NULL
+	<select id="clntGrade" resultType="hashmap" parameterType="hashmap">
+		SELECT CCG.S, CCG.A, CCG.B, CCG.C, CCG.D
+		FROM (SELECT COUNT(*) AS S
+			  FROM CLNT_CMPNY
+			  WHERE GRADE_NUM = 0
+		      AND DEL_CHECK IS NULL) CCG 
+		      INNER JOIN ( SELECT COUNT(*) AS A
+		                   FROM CLNT_CMPNY
+		                   WHERE GRADE_NUM = 1
+		                   AND DEL_CHECK IS NULL) CCG
+		      ON 1 = 1
+		      INNER JOIN (SELECT COUNT(*) AS B
+		                  FROM CLNT_CMPNY
+		                  WHERE GRADE_NUM = 2
+		                  AND DEL_CHECK IS NULL) CCG
+		      ON 1 = 1
+		      INNER JOIN (SELECT COUNT(*) AS C
+		                  FROM CLNT_CMPNY
+		                  WHERE GRADE_NUM = 3
+		                  AND DEL_CHECK IS NULL) CCG
+		      ON 1 = 1 
+		      INNER JOIN (SELECT COUNT(*) AS D
+		                  FROM CLNT_CMPNY
+		                  WHERE GRADE_NUM = 4
+		                  AND DEL_CHECK IS NULL) CCG
+		              ON 1 = 1
 	</select>
-	<select id="clntGradeA" resultType="Integer" parameterType="hashmap">
-		SELECT COUNT(*) AS CNT
-		FROM CLNT_CMPNY
-		WHERE GRADE_NUM = 1
-		AND DEL_CHECK IS NULL
-	</select>
-	<select id="clntGradeB" resultType="Integer" parameterType="hashmap">
-		SELECT COUNT(*) AS CNT
-		FROM CLNT_CMPNY
-		WHERE GRADE_NUM = 2
-		AND DEL_CHECK IS NULL
-	</select>
-	<select id="clntGradeC" resultType="Integer" parameterType="hashmap">
-		SELECT COUNT(*) AS CNT
-		FROM CLNT_CMPNY
-		WHERE GRADE_NUM = 3
-		AND DEL_CHECK IS NULL
-	</select>
-	<select id="clntGradeD" resultType="Integer" parameterType="hashmap">
-		SELECT COUNT(*) AS CNT
-		FROM CLNT_CMPNY
-		WHERE GRADE_NUM = 4
-		AND DEL_CHECK IS NULL
-	</select>
+
 <!-- 영업 고객수 -->
-	<select id="salesCnt" resultType="Integer" parameterType="hashmap">
-		SELECT COUNT(*) AS CNT
-		FROM ENTRPRS_CLNT EC INNER JOIN EMP E
-		                          ON EC.MNGR_EMP_NUM = E.EMP_NUM
-		                     INNER JOIN APNTM A
-		                             ON E.EMP_NUM = A.EMP_NUM
-		                     INNER JOIN DEPT D
-		                             ON A.DEPT_NUM = D.DEPT_NUM
-		WHERE D.DEPT_NAME = '영업부'
-		AND EC.DEL_CHECK IS NULL
-	</select>
-	<select id="salesCnt1" resultType="Integer" parameterType="hashmap">
-		SELECT COUNT(*) AS CNT
-		FROM ENTRPRS_CLNT EC INNER JOIN EMP E
-		                          ON EC.MNGR_EMP_NUM = E.EMP_NUM
-		                     INNER JOIN APNTM A
-		                             ON E.EMP_NUM = A.EMP_NUM
-		                     INNER JOIN DEPT D
-		                             ON A.DEPT_NUM = D.DEPT_NUM
-		WHERE D.DEPT_NAME = '영업1팀'
-		AND EC.DEL_CHECK IS NULL
-	</select>
-	<select id="salesCnt2" resultType="Integer" parameterType="hashmap">
-		SELECT COUNT(*) AS CNT
-		FROM ENTRPRS_CLNT EC INNER JOIN EMP E
-		                          ON EC.MNGR_EMP_NUM = E.EMP_NUM
-		                     INNER JOIN APNTM A
-		                             ON E.EMP_NUM = A.EMP_NUM
-		                     INNER JOIN DEPT D
-		                             ON A.DEPT_NUM = D.DEPT_NUM
-		WHERE D.DEPT_NAME = '영업2팀'
-		AND EC.DEL_CHECK IS NULL
+	<select id="salesCnt" resultType="hashmap" parameterType="hashmap">
+		SELECT SC.CNT, SC.CNT1, SC.CNT2
+		FROM (SELECT COUNT(*) AS CNT
+			  FROM ENTRPRS_CLNT EC INNER JOIN EMP E
+			                               ON EC.MNGR_EMP_NUM = E.EMP_NUM
+				                   INNER JOIN APNTM A
+				                           ON E.EMP_NUM = A.EMP_NUM
+				WHERE A.DEPT_NUM = 6
+				AND EC.DEL_CHECK IS NULL) SC
+		      INNER JOIN (SELECT COUNT(*) AS CNT1
+		                  FROM ENTRPRS_CLNT EC INNER JOIN EMP E
+		                                               ON EC.MNGR_EMP_NUM = E.EMP_NUM
+		                                       INNER JOIN APNTM A
+		                                               ON E.EMP_NUM = A.EMP_NUM
+		                  WHERE A.DEPT_NUM = 7
+		                  AND EC.DEL_CHECK IS NULL) SC
+		      ON 1 = 1
+		      INNER JOIN (SELECT COUNT(*) AS CNT2
+		                  FROM ENTRPRS_CLNT EC INNER JOIN EMP E
+		                                               ON EC.MNGR_EMP_NUM = E.EMP_NUM
+		                                       INNER JOIN APNTM A
+		                                               ON E.EMP_NUM = A.EMP_NUM
+		                  WHERE A.DEPT_NUM = 8
+		                  AND EC.DEL_CHECK IS NULL) SC
+		     ON 1 = 1
 	</select>
 </mapper>

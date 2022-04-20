@@ -414,8 +414,8 @@ $(document).ready(function() {
 	var pieLabels = ["S", "A", "B", "C", "D"];
 	var barLabels = ["영업부", "영업1팀", "영업2팀"];
 
-	var pieData = [${clntGradeS},${clntGradeA},${clntGradeB},${clntGradeC},${clntGradeD}];
-	var barData = [${salesCnt},${salesCnt1},${salesCnt2}];
+	var pieData = [${ccg.S},${ccg.A},${ccg.B},${ccg.C},${ccg.D}];
+	var barData = [${sc.CNT},${sc.CNT1},${sc.CNT2}];
 	
 	var pieColors = ["#FFAB00","#FFC107","#FFD740","#FFEB3B","#FFF59D"];
 
@@ -731,17 +731,17 @@ function drawPaging(pb, sel) {
 							</div>
 							<span class="ccTxt cc">고객사</span>
 							<div class="chartData">
-								<span class="ccMonth ago">${ccLastMonthCnt}</span>	
-								<span class="ccMonth mon">${ccThatMonthCnt}</span>	
-								<span class="ccMonth mon">${ccAvgCnt}</span>	
-								<span class="ccMonth all">${AllCnt}</span>	
+								<span class="ccMonth ago">${cc.LAST}</span>	
+								<span class="ccMonth mon">${cc.THAT}</span>	
+								<span class="ccMonth mon">${cc.AVG}</span>	
+								<span class="ccMonth all">${cc.CNT}</span>	
 							</div>
 							<span class="ccTxt clnt">고객</span>
 							<div class="chartData">
-								<span class="ccMonth ago">${clntLastMonthCnt}</span>	
-								<span class="ccMonth mon">${clntThatMonthCnt}</span>	
-								<span class="ccMonth mon">${clntAvgCnt}</span>	
-								<span class="ccMonth all">${clntAllCnt}</span>	
+								<span class="ccMonth ago">${ec.LAST}</span>	
+								<span class="ccMonth mon">${ec.THAT}</span>	
+								<span class="ccMonth mon">${ec.AVG}</span>	
+								<span class="ccMonth all">${ec.CNT}</span>	
 							</div>
 						</div>
 					</div>
