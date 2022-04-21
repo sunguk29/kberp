@@ -62,7 +62,7 @@
 	border-top: 1px solid black;
 }
 
-.rcpnt {
+.sndr {
 	display: inline-block;
 	vertical-align: top;
 	width: 440px;
@@ -139,9 +139,11 @@ $(document).ready(function() {
 				<input type="hidden" id="top" name="top" value="${param.top}" />
 				<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 				<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
-				<input type="hidden" name="no" value="${param.no}" />
+				<input type="hidden" id="no" name="no" value="${param.no}"/>
+				<input type="hidden" id="sename" name="sename" value="${data.EMP_NAME}"/>
+				<input type="hidden" id="senum" name="senum" value="${data.SNDR_EMP_NUM}"/>
+				<input type="hidden" id="readcheck" name="readcheck" value="${data.READ_CHECK}"/>
 			</form>
-			${data.NOTE_NUM}
 			<input type="hidden" id="delcheck" name="delcheck" value="${data.DEL_CHECK}" />
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -155,7 +157,7 @@ $(document).ready(function() {
 								  (단, 30일이 지난 쪽지라도 사용자가 열어보지 않으면 삭제되지 않습니다.)
 				</div>
 				<div class="cont">
-					<div class="rcpnt">보낸사람 : ${data.EMP_NAME}</div>
+					<div class="sndr">보낸사람 : ${data.EMP_NAME}</div>
 					<div class="rcvd_time">받은시간 : ${data.VIEW_DATE}</div>
 				</div>
 				<textarea class="write" readonly = "readonly">${data.NOTE_CNT}</textarea>
@@ -163,7 +165,7 @@ $(document).ready(function() {
 					<c:if test="${!empty data.ATT_FILE}">
 						<c:set var="fileLength" value="${fn:length(data.ATT_FILE)}"></c:set>
 						<c:set var="fileName" value="${fn:substring(data.ATT_FILE, 20, fileLength)}"></c:set>
-						받은파일 : <a href="resources/images/GW/upload/${data.ATT_FILE}" download="${fileName}">${fileName}</a><br/>
+						받은파일 : <a href="resources/upload/${data.ATT_FILE}" download="${fileName}">${fileName}</a><br/>
 					</c:if>
 					<c:if test="${empty data.ATT_FILE}">
 						받은파일 : 없음

@@ -18,8 +18,6 @@
 <script type="text/javascript" src="resources/script/jquery/jquery-ui.js"></script>
 <!-- 슬림 스크롤 js 파일 -->
 <script type="text/javascript" src="resources/script/jquery/jquery.slimscroll.js"></script>
-<!-- main js 파일 -->
-<script type="text/javascript" src="resources/script/common/main.js"></script>
 <!-- 팝업 js 파일 -->
 <script type="text/javascript" src="resources/script/common/popup.js"></script>
 <!-- Util js 파일 -->

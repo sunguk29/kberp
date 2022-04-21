@@ -105,8 +105,16 @@ th:nth-child(5) {
 td:nth-child(5) {
 	width: 450px;
 	text-align: left;
-	color: blue;
 	text-align: center;
+}
+
+.read_check {
+	color : black;
+}
+
+.no_read {
+	color : blue;
+	font-weight: bold;
 }
 
 td:nth-child(6), th:nth-child(6) {
@@ -122,7 +130,6 @@ td:nth-child(5):hover {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
 	if('${param.srch_sel}' !='') {
 		$('#srch_sel').val('${param.srch_sel}');
 	}
@@ -145,6 +152,7 @@ $(document).ready(function() {
 	});
 
 	$("tbody").on("click", "td:nth-child(2), td:nth-child(3), td:nth-child(4), td:nth-child(5), td:nth-child(6)", function() {
+		
 		$("#no").val($(this).parent().attr("no")); 
 		
 		$("#actionForm").attr("action", "rcvdNoteView");
@@ -221,7 +229,11 @@ function drawList(list) {
 			html += "<td>" + "</td>";
 		}
 		html += "<td>" + data.EMP_NAME + "</td>";
-		html += "<td>" + data.NOTE_CNT + "</td>";
+		if(data.READ_CHECK == 1) {
+			html += "<td class=\"read_check\">" + data.NOTE_CNT + "</td>";
+		} else {
+			html += "<td class=\"no_read\">" + data.NOTE_CNT + "</td>";
+		} 
 		html += "<td>" + data.VIEW_DATE + "</td>";
 		html += "</tr>";
 	}
@@ -281,9 +293,10 @@ function drawPaging(pb) {
 					<input type="hidden" id="top" name="top" value="${param.top}" />
 					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
-					<input type="hidden" id="no" name="no" />
+					<input type="hidden" id="no" name="no" value="${param.no}" />
 					<input type="hidden" id="page" name="page" value="${page}">
-					<input type="hidden" id="notesq" name="notesq" value="${param.no}"/>
+					<input type="hidden" id="notesq" name="notesq" value="${notesq}"/>
+					<input type="hidden" id="readcheck" name="readcheck" value="${param.readcheck}" />
 					<select id="srch_sel" name="srch_sel">
 						<option value="0">내용</option>
 						<option value="1">보낸사람</option>
@@ -306,6 +319,7 @@ function drawPaging(pb) {
 								  (단, 30일이 지난 쪽지라도 사용자가 열어보지 않으면 삭제되지 않습니다.)
 				</div>
 				<form action="#" id="actForm" method="post">
+					<input type="hidden" id="no" name="no" value="${param.no}" />
 					<table class="board_table">
 						<thead>
 							<tr>

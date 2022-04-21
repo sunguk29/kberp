@@ -210,13 +210,13 @@
 	position: absolute;
 	top: 35px;
 	left: 10px;
-	background-color: #F2B705;
+	background-color: #2c7da0;
 }
 .clnt {
 	position: absolute;
 	top: 90px;
 	left: 10px;
-	background-color: #F2CB05;
+	background-color: #61a5c2;
 }
 .ccTxt {
 	display: inline-block;
@@ -414,27 +414,68 @@ $(document).ready(function() {
 	var pieLabels = ["S", "A", "B", "C", "D"];
 	var barLabels = ["영업부", "영업1팀", "영업2팀"];
 
-	var pieData = [${clntGradeS},${clntGradeA},${clntGradeB},${clntGradeC},${clntGradeD}];
-	var barData = [${salesCnt},${salesCnt1},${salesCnt2}];
-	
-	var pieColors = ["#FFAB00","#FFC107","#FFD740","#FFEB3B","#FFF59D"];
+	var pieData = [${ccg.S},${ccg.A},${ccg.B},${ccg.C},${ccg.D}];
+	var barData = [${sc.CNT},${sc.CNT1},${sc.CNT2}];
 
+// 고객 등급 차트
 	var pieChart = new Chart(pie, {
+		
 	    type: 'pie',
 	    data: {
 	        labels: pieLabels,
 	        datasets: [{
-	            label: '고객등급',
 	            data: pieData,
-	            backgroundColor: pieColors
+	            backgroundColor: ["#2c7da0","#468faf","#61a5c2","#89c2d9","#a9d6e5"],
+	        	pointStyle: 'circle'
 	        }]
 	    },
 	    options: {
-	    	responsive: false
+	    	responsive: false, 
+	    	plugins: {
+		    	legend: { // 툴팁 위치 지정
+		    		display: true,
+		    		position: 'bottom',
+		    		usePointStyle: true		    		
+		    	},
+    			datalabels: { // 차트 글씨 꾸미기
+    				color: '#ffffff',
+    				anchor: 'end', // 글씨 어디에올지 위치 지정 start,end,center .. 
+    				align: 'center', 
+    				offset: -10,
+    				borderWidth: 2,
+    				borderColor: '#ffffff',
+    				borderRadius: 25,
+    				padding: {
+    					bottom: 5,
+    					top: 5,
+    					left: 5,
+    					right: 5
+    				},
+    				backgroundColor: (context) => { // 글씨 배경색이랑 차트배경색이랑 똑같게
+    					return context.dataset.backgroundColor;
+    				},
+    				font: {
+    					weight: 'bold',
+    					size: '10',
+    					family: "맑은 고딕"   					
+    				},
+    				formatter: (value, context) => { // 값 보여주기
+    				
+    					var sum = 0;
+    					var valueArr = context.chart.data.datasets[0].data;
+    					for(var i in valueArr) {
+    						sum += parseInt(valueArr[i]);
+    					}
+    					var percentage = (value * 100 / sum).toFixed(1) + "% (" + value + "명)";
+    					
+    					return percentage;
+    				}
+    			}
+	    	}
 	    },
 	    plugins: [ChartDataLabels]
 	});
-
+// 부서 차트
 	var barChart = new Chart(bar, {
 	    type: 'bar',
 	    data: {
@@ -442,13 +483,13 @@ $(document).ready(function() {
 	        datasets: [{
 	            label: '고객',
 	            data: barData,
-	            backgroundColor: "#F2CB05"
+	            barThickness: 40, // 바 두께 설정
+	            backgroundColor: ["#89c2d9", "#a9d6e5"]
 	        }]
 	    },
 	    options: {
-	    	responsive: false
-	    },
-	    plugins: [ChartDataLabels]
+	    	responsive: false // 위치 자동으로 설정안되게
+	    }
 	});
 	
 	/* 담당자 팝업  */
@@ -614,7 +655,6 @@ function drawPaging(pb, sel) {
 	
 	$(sel).html(html);
 }
-
 </script>
 </head>
 <body>
@@ -731,17 +771,17 @@ function drawPaging(pb, sel) {
 							</div>
 							<span class="ccTxt cc">고객사</span>
 							<div class="chartData">
-								<span class="ccMonth ago">${ccLastMonthCnt}</span>	
-								<span class="ccMonth mon">${ccThatMonthCnt}</span>	
-								<span class="ccMonth mon">${ccAvgCnt}</span>	
-								<span class="ccMonth all">${AllCnt}</span>	
+								<span class="ccMonth ago">${cc.LAST}</span>	
+								<span class="ccMonth mon">${cc.THAT}</span>	
+								<span class="ccMonth mon">${cc.AVG}</span>	
+								<span class="ccMonth all">${cc.CNT}</span>	
 							</div>
 							<span class="ccTxt clnt">고객</span>
 							<div class="chartData">
-								<span class="ccMonth ago">${clntLastMonthCnt}</span>	
-								<span class="ccMonth mon">${clntThatMonthCnt}</span>	
-								<span class="ccMonth mon">${clntAvgCnt}</span>	
-								<span class="ccMonth all">${clntAllCnt}</span>	
+								<span class="ccMonth ago">${ec.LAST}</span>	
+								<span class="ccMonth mon">${ec.THAT}</span>	
+								<span class="ccMonth mon">${ec.AVG}</span>	
+								<span class="ccMonth all">${ec.CNT}</span>	
 							</div>
 						</div>
 					</div>

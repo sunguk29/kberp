@@ -127,7 +127,7 @@
 		FROM (SELECT CHAT_NUM, CONT_NUM, EMP_NUM, CONT, TO_CHAR(RGSTRTN_DT, 'MM/DD HH24:MI') AS RGSTRTN_DT
 		        FROM MSGR_CONT
 		        WHERE CONT_NUM > #{lastChatNo}
-		        AND CHAT_NUM = #{chatNum}
+		        <!-- AND CHAT_NUM = #{chatNum} -->
 		        ORDER BY CONT_NUM ASC) MC INNER JOIN EMP E
 		                                    ON MC.EMP_NUM = E.EMP_NUM
 		                                  INNER JOIN APNTM A
@@ -136,13 +136,15 @@
 					                        ON A.DEPT_NUM = D.DEPT_NUM
 		                                  INNER JOIN RANK R
 					                        ON A.RANK_NUM = R.RANK_NUM
+		WHERE CHAT_NUM = #{chatNum}
 	</select>
 	
-<!-- 채팅방 별 대화 -->	
-	<select id = "chatInCont" parameterType="hashmap" resultType="hashmap">
-		SELECT CHAT_NUM
-		FROM MSGR_CONT
-		GROUP BY #{chatNum}
-	</select>
+	<update id="rcvdNoteReadCheck" parameterType="hashmap">
+					
+	
+	</update>
+	
+	
+	
 	
 </mapper>

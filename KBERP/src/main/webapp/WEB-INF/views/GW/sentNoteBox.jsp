@@ -106,7 +106,6 @@ td:nth-child(5) {
 	width: 450px;
 	text-align: left;
 	color: black;
-	font-weight: bold;
 	text-align: center;
 }
 

@@ -393,7 +393,6 @@ $(document).ready(function() {
 					dataType : "json",
 					data : {id : event.id}, 
 					success : function(res) { 
-						 console.log(res);
 						 drawList(res.dtl);
 						 
 					},
@@ -522,6 +521,9 @@ $(document).ready(function() {
 	  					}else if($("#schdl_start_date").val() > $("#schdl_end_date").val()){
 	  						alert("종료일이 시작일보다 빠를 수 없습니다.");
 	  						$("#schdl_end_date").focus();
+	  					}else if($("#schdl_start_time").val() > $("#schdl_end_time").val()){
+	  						alert("종료시간이 시작시간보다 빠를 수 없습니다.");
+	  						$("#schdl_end_time").focus();
 	  					}else if(checkEmpty("#schdl_end_time") && !$("#aldy_dvsn").is(":checked")){
 	  						alert("종료 시간을 입력하세요.");
 	  						$("#schdl_end_time").focus();
@@ -538,7 +540,6 @@ $(document).ready(function() {
 									$("#schdl_start_time").val(now.toLocaleTimeString().slice(0, 8)); 
 								}
 	  						var params = $("#addForm").serialize();
-	  						console.log(params);
 	  						$.ajax({
 	  							type: "post", 
 	  							url : "clndrAction/insert",
@@ -853,7 +854,6 @@ $(document).ready(function() {
 	
 });
 function schdlUpdate(data){
-	console.log(data.id);
 	var html = "";
 	
 	html += "<form action=\"#\" id=\"updateForm\" method=\"post\">";
@@ -977,6 +977,9 @@ function schdlUpdate(data){
 				}else if($("#schdl_start_date").val() > $("#schdl_end_date").val()){
 					alert("종료일이 시작일보다 빠를 수 없습니다.");
 					$("#schdl_end_date").focus();
+				}else if($("#schdl_start_time").val() > $("#schdl_end_time").val()){
+					alert("종료시간이 시작시간보다 빠를 수 없습니다.");
+					$("#schdl_end_time").focus();
 				}else if(checkEmpty("#schdl_end_time") && !$("#aldy_dvsn").is(":checked")){
 						alert("종료 시간을 입력하세요.");
   						$("#schdl_end_time").focus();
@@ -989,7 +992,6 @@ function schdlUpdate(data){
 						}
 					 
 					var params = $("#updateForm").serialize();
-					console.log(params);
 					$.ajax({
 						type: "post", 
 						url : "clndrAction/update",
@@ -1283,6 +1285,9 @@ $(document).ready(function() {
 					}else if($("#schdl_start_date").val() > $("#schdl_end_date").val()){
 						alert("종료일이 시작일보다 빠를 수 없습니다.");
 						$("#schdl_end_date").focus();
+					}else if($("#schdl_start_time").val() > $("#schdl_end_time").val()){
+						alert("종료시간이 시작시간보다 빠를 수 없습니다.");
+						$("#schdl_end_time").focus();
 					}else if(checkEmpty("#schdl_end_time") && !$("#aldy_dvsn").is(":checked")){
   						alert("종료 시간을 입력하세요.");
   						$("#schdl_end_time").focus();
@@ -1295,7 +1300,6 @@ $(document).ready(function() {
 							}
 							
 						var params = $("#addForm").serialize();
-						console.log(params);
 						$.ajax({
 							type: "post", 
 							url : "clndrAction/insert",

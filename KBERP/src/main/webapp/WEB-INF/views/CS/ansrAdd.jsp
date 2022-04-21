@@ -879,7 +879,7 @@ $(document).ready(function() {
 						name : "아니오"
 					}]
 		}); // makePopup end
-	}); // btn2Btn end
+	}); // btn3Btn end
 	
 	$("#cancelBtn").on("click", function() {
 		$("#backForm").submit();

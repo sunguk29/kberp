@@ -7,19 +7,12 @@
 <head>
 <meta charset="UTF-8">
 <title>회원가입</title>
-<!-- 공용 CSS -->
-<link rel="stylesheet" type="text/css" href="resources/css/common/cmn.css" />
-<!-- 팝업 CSS -->
-<link rel="stylesheet" type="text/css" href="resources/css/common/popup.css" />
-<link rel="icon" href="resources/favicon/favi.gif" />
+<c:import url="/cHeader"></c:import>
 <style type="text/css">
 
 .main{
     text-align: center;
 	margin-top: 20px;
-}
-input{
-    cursor: pointer
 }
 
 html, body {
@@ -73,11 +66,11 @@ body {
 	margin-left: 5px;
 }
 
-.signup-wrap {
+.signup_wrap {
 	margin-top: 35px;
 }
 /*input 아이디박스*/
-.login-id-wrap{
+.login_id_wrap{
 
     margin: 0px 10px 8px 10px;
     padding: 10px;
@@ -85,13 +78,13 @@ body {
     background: #fff;
 }
 /*input 아이디 form*/
-#input-id{
+#input_id{
     border: none;
     outline:none;
     width:100%;
 }
 /*input 패스워드박스*/
-.login-pw-wrap{
+.login_pw_wrap{
 
     margin: 0px 10px 8px 10px;
     padding: 10px;
@@ -99,13 +92,13 @@ body {
     background: #fff;
 }
 /*input 패스워드 form*/
-#input-pw{
+#input_pw{
     border: none;
     outline:none;
     width:100%;
 }
 /*로그인버튼박스*/
-.login-btn-wrap{
+.login_btn_wrap{
     height: 52px;
     line-height: 55px;
     margin: 0px 10px 8px 10px;
@@ -115,7 +108,7 @@ body {
     cursor: pointer;
 }
 /*로그인버튼*/
-#login-btn{
+#login_btn{
     width:100px;
     background-color: #03c75a;
     border: none;
@@ -125,56 +118,13 @@ body {
     cursor: pointer;
 }
 /*로그인 아래 박스*/
-.under-login{
+.under_login{
     height: 50px;
     border-bottom: 1px solid gainsboro;
     margin: 0px 10px 35px 10px;
 }
-/*로그인상태유지*/
-.stay-check{
-    margin-left: 7px;
-    float: left;
-}
-/*로그인상태유지 체크박스*/
-.stay-check input[type="checkbox"] {
-    /*기존 체크박스 숨기기*/
-    position: absolute;
-    width: 0px;
-    position: absolute;
-}
-.stay-check input[type="checkbox"] + label {
-    display: inline-block;
-    position: relative;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    }
-.stay-check input[type="checkbox"] + label::before {
-    content: ' ';
-    display: inline-block;
-    width: 22px;
-    height: 22px;
-    line-height: 18px;
-    margin: -2px 8px 0 0;
-    text-align: center;
-    vertical-align: middle;
-    background: #fafafa;
-    border: 1px solid #cacece;
-    border-radius: 50%;
-    box-shadow: 0px 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
-}
-.stay-check input[type="checkbox"]:checked + label::before {
-    content: '\2713';
-    color: white;
-    text-shadow: 1px 1px white;
-    background: #03c75a;
-    border-color: #03c75a;
-    box-shadow: 0px 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
-}
 /*회원가입*/
-.sign-up{
+.sign_up{
     margin: 3px;
     font-size: 14px;
 }
@@ -184,20 +134,13 @@ footer{
 }
 
 
-/*IP보안 표시*/
-#ip-check{
-    margin-right: 7px;
-    float: right;
-    display:block;
-}
-
 /*저작권 표시*/
 footer{
     display:block;
 }
 
 /*회원가입 부분*/
-.main-signup{
+.main_signup{
     text-align: center;
     width: 460px;
     margin: auto;
@@ -208,27 +151,29 @@ h3{
     font-size: 14px;
     font-family: Dotum,'돋움',Helvetica,sans-serif;
 }
-.signup-input{
+
+.terms_choice {
+    font-size: 12px;
+    font-weight: 400;
+    color: #8e8e8e;
+    margin-left: 5px;
+}
+
+.signup_input {
     display:flex;
     /* margin: 0px 10px 8px 10px; */
     padding: 10px;
     border: solid 1px #dadada;
     background: #fff;
-    cursor: pointer;
 }
-#signup-id, #signup-pw, #signup-pww{
+.signup_input input {
     height: 29px;
     border: none;
     outline:none;
     width:100%;
 }
-.signup-at{
-    color: rgb(150, 150, 150);
-    font-size: 15px;
-    font-family: Dotum,'돋움',Helvetica,sans-serif;
-    margin-top: 8px;
-}
-.pw-lock{
+
+.pw_lock{
     /* content: ''; */
     /* display: inline-block; */
     top: 50%;
@@ -240,7 +185,7 @@ h3{
     background-size: 125px 75px;
     cursor: pointer;
 }
-.pww-lock{
+.cpw_lock{
     /* content: ''; */
     /* display: inline-block; */
     top: 50%;
@@ -252,50 +197,22 @@ h3{
     background-size: 125px 75px;
     cursor: pointer;
 }
-#signup-name, #signup-phone, #signup-cnum{
+#signup_name, #signup_phone, #signup_cnum{
     width:100%;
     height: 29px;
     border: none;
     outline:none;
 }
 /*회원가입버튼박스*/
-.signup-btn-wrap{
+.signup_btn_wrap{
     height: 52px;
     line-height: 55px;
     margin: 10px 0px 50px 0px;
     border: solid 1px rgba(0,0,0,.1);
     background-color: #F2B705;
-    color: #fff;
-    cursor: pointer;
-}
-/*회원가입버튼*/
-#signup-btn{
-    width:100px;
-    background-color: #F2B705;
-    border: none;
-    color:#fff;
-    font-size: 18px;
-    outline:none;
-    cursor: pointer;
-}
-/*인증번호버튼박스*/
-.cnum-btn-wrap{
-    height: 52px;
-    line-height: 55px;
-    margin: 10px 0px 0px 10px;
-    border: solid 1px rgba(0,0,0,.1);
-    background-color: #F2B705;
-    color: #fff;
-    cursor: pointer;
-}
-/*인증번호버튼*/
-#cnum-btn{
-    width:115px;
-    background-color: #F2B705;
-    border: none;
-    color:#fff;
-    font-size: 15px;
-    outline:none;
+    color: #000;
+    font-size: 12pt;
+    font-weight: bold;
     cursor: pointer;
 }
 
@@ -309,10 +226,87 @@ h3{
 	z-index: 50;
 	opacity: 0.6;/* opacity : 투명도 */
 }
+
+.popup_cont {
+	text-align: center;
+	line-height: 100px;
+}
 </style>
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	$("#sign_Btn").on("click", function() {
+		makePopup({
+			bg : false,
+			bgClose : false,
+			title : "회원가입",
+			contents : "회원가입 하시겠습니까?",
+			draggable : true,
+			buttons : [{
+				name : "예",
+				func:function() {
+					if(checkEmpty("#signup_id")) {
+						alert("아이디를 입력하세요.");
+						$("#signup_id").focus();
+					} else if(checkEmpty("#signup_pw")) {
+						alert("비밀번호를 입력하세요.");
+						$("#signup_pw").focus();
+					} else if(checkEmpty("#signup_cpw")) {
+						alert("비밀번호 재확인을 입력하세요.");
+						$("#signup_cpw").focus();
+					} else if($("#signup_pw").val() != $("#signup_cpw").val()) {
+						alert("비밀번호가 일치하지 않습니다."); 
+						$("#signup_cpw").focus();
+					} else if(checkEmpty("#signup_name")) {
+						alert("이름을 입력하세요.");
+						$("#signup_name").focus();
+					} else if(checkEmpty("#phone_num1")) {
+						alert("휴대전화를 입력하세요.");
+						$("#phone_num1").focus();
+					} else {
+						var params= $("#signUpForm").serialize();
+						
+						$.ajax({
+							type: "post", // 전송형태
+							url : "signUpActionAjax/i" , //통신 주소
+							dataType : "json", //받을 데이터 형태
+							data : params, //보낼 데이터. 보낼 것이 없으면 안씀
+							success : function(res){ // 성공 시 실행 함수. 인자는 받아온 데이터
+								if(res.res=="success"){
+									location.href = "indvdlLogin";
+								}else{
+									alert("작성중 문제가 발생하였습니다");
+								}
+							},
+							error: function(request, status, error){ // 문제 발생 시 실행 함수
+								console.log(request.responseText); //결과텍스트. 스프링 실행 결과
+							}
+						});
+					} // else end
+				
+					closePopup();
+						
+				} // func:function end
+			}, {
+				name : "아니오"
+			}]
+		}); // makePopup end
+	}); // btn2Btn end
+	
+}); // document ready end
+
+function checkEmpty(sel) {
+	if($.trim($(sel).val()) == "") {
+		return true;
+	} else {
+		return false;
+	}
+
+}
+</script>
 </head>
 <body>
-    <div class="main-signup">
+    <div class="main_signup">
     	<div class="kabang_wrap">
         <!--웹페이지 상단-->
         <header>
@@ -328,70 +322,71 @@ h3{
         </header>
 
         <!--회원가입 부분-->
-        <section class="signup-wrap">
-
-            <div>
-                <!--아이디,비번,비번재확인-->
-
-                <h3>아이디</h3>
-                <span class="signup-input">
-                    <input id="signup-id" type="text"></input>
-                </span>
-
-                <h3>비밀번호</h3>
-                <span class="signup-input">
-                    <input id="signup-pw" type="text"></input>
-                    <span class="pw-lock"></span>
-                </span>
-
-                <h3>비밀번호 재확인</h3>
-                <span class="signup-input">
-                    <input id="signup-pww" type="text"></input>
-                    <span class="pww-lock"></span>
-                </span>
-
-            </div>
-
-            <div>
-                <!--이름,생년월일,성별,이메일-->
-                <h3>이름</h3>
-                <span class="signup-input">
-                    <input id="signup-name" type="text">
-                </span>
-            </div>
-
-            <div>
-                <!--휴대전화-->
-                <h3>휴대전화</h3>
-                <div>
-                    <span class="signup-input">
-                        <input id="signup-phone" type="text" placeholder="전화번호 입력">
-                    </span>
-                </div>
-            </div>
-			
-			 <div>
-                <!--주소-->
-                <h3>주소</h3>
-                <div>
-                    <span class="signup-input">
-                        <input id="signup-phone" type="text">
-                    </span>
-                    <span class="signup-input">
-                        <input type="text" class="txt" placeholder="상세주소" id="signup-phone" name="dtlAdrs"/>
-                    </span>
-                </div>
-            </div>
-			
-            <div>
-                <!--가입하기-->
-                <div class="signup-btn-wrap">가입하기</div>
-            </div>
-        </section>
-
+        <form action="signUp" id="signUpForm" method="post">
+	        <section class="signup_wrap">
+	
+	            <div>
+	                <!--아이디,비번,비번재확인-->
+	
+	                <h3>아이디</h3>
+	                <span class="signup_input">
+	                    <input type="text" id="signup_id" name="signup_id" />
+	                </span>
+	
+	                <h3>비밀번호</h3>
+	                <span class="signup_input">
+	                    <input type="password" id="signup_pw" name="signup_pw" />
+	                    <span class="pw_lock"></span>
+	                </span>
+	
+	                <h3>비밀번호 재확인</h3>
+	                <span class="signup_input">
+	                    <input type="password" id="signup_cpw" name="signup_cpw" />
+	                    <span class="cpw_lock"></span>
+	                </span>
+	
+	            </div>
+	
+	            <div>
+	                <!--이름,생년월일,성별,이메일-->
+	                <h3>이름</h3>
+	                <span class="signup_input">
+	                    <input type="text" id="signup_name" name="signup_name" />
+	                </span>
+	            </div>
+	
+	            <div>
+	                <!--휴대전화-->
+	                <h3>휴대전화</h3>
+	                <div>
+	                    <span class="signup_input">
+	                        <input type="text" id="phone_num1" name="phone_num1" placeholder="전화번호 입력" />
+	                    </span>
+	                </div>
+	            </div>
+				
+				<div>
+	                <!--주소-->
+	                <h3>주소<span class="terms_choice">(선택)</span></h3>
+	                <div>
+	                    <span class="signup_input">
+	                        <input type="text" id="adrs" name="adrs"/>
+	                    </span>
+	                    <span class="signup_input">
+	                        <input type="text" class="txt" placeholder="상세주소" id="dtlAdrs" name="dtlAdrs"/>
+	                    </span>
+	                </div>
+	           	</div>
+				
+	            <div>
+	                <!--가입하기-->
+	                <div class="signup_btn_wrap" id="sign_Btn">회원가입</div>
+	            </div>
+	        </section>
+		</form>
         <!--저작권 정보-->
         <footer>
-            <div class="copyright-wrap">
+            <div class="copyright_wrap">
                 <div>GDJ43 Team Project</div>
             </div>
         </footer>

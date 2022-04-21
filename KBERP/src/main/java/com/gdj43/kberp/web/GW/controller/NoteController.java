@@ -28,9 +28,9 @@ public class NoteController {
 	
 	@Autowired
 	public IPagingService iPagingService;
-	
+
 	@RequestMapping(value = "/writeNote")
-	public ModelAndView wirteNote(ModelAndView mav) {
+	public ModelAndView writeNote(ModelAndView mav) {
 		
 		mav.setViewName("GW/writeNote");
 		
@@ -145,8 +145,6 @@ public class NoteController {
 					iCommonService.updateData("note.sentNoteDelete", data);
 					iCommonService.updateData("note.rcvdNoteDelete", data);
 				}
-				
-				break;
 			}
 			modelMap.put("res", "success");
 		} catch (Throwable e) {
@@ -157,9 +155,30 @@ public class NoteController {
 		return mapper.writeValueAsString(modelMap); 
 	}
 	
+	@RequestMapping(value = "/NoteOrgnztChartAjax", method = RequestMethod.POST,
+			produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String NoteOrgnztChartAjax(@RequestParam HashMap<String, String> params, 
+								  HttpSession session) throws Throwable {
+				
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("note.NoteOrgnztChart", params) ;
+		
+		modelMap.put("list", list);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	
 	@RequestMapping(value = "/rcvdNoteView")
 	public ModelAndView rcvdNoteView(@RequestParam HashMap<String, String> params,
 									 ModelAndView mav) throws Throwable {
+		
+		iCommonService.updateData("note.rcvdNoteReadCheck", params);
 				
 		HashMap<String, String> data = iCommonService.getData("note.rcvdNoteView", params);
 		
