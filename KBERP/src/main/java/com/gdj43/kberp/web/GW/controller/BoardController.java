@@ -51,15 +51,32 @@ import com.gdj43.kberp.web.common.service.ICommonService;
 		int cnt = ics.getIntData("board.getBoardCnt", params);
 		// 페이징 계산
 		
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 9, 5);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
 		List<HashMap<String, String>> list = ics.getDataList("board.getBoardList",params);
+	
 		
 		modelMap.put("list", list);
 		modelMap.put("pb", pb);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
+	@RequestMapping(value = "/boardntcAjax", method = RequestMethod.POST,
+			produces = "test/json;charset=UTF-8")
+	@ResponseBody 
+	public String boardntcAjax(@RequestParam HashMap<String, String> params) throws Throwable{
+		ObjectMapper mapper = new ObjectMapper();
+	
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		// 총 게시글 수	
+		
+		List<HashMap<String, String>> list = ics.getDataList("board.getBoardntc",params);
+	
+		
+		modelMap.put("list", list);
 		
 		return mapper.writeValueAsString(modelMap);
 	}
