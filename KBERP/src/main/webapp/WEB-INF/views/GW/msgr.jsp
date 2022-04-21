@@ -89,6 +89,7 @@
 	background-repeat: no-repeat;
 	background-size: 20pt;
 	background-color: white;
+	cursor: pointer;
 }
 
 .chat_list1 input:focus {
@@ -148,7 +149,8 @@
 	border: 0px solid;
 	font-size : 13pt;
 	text-overflow: ellipsis;
-	margin-right: 28px;	
+	margin-right: 28px;
+	cursor: pointer;
 }
 
 #head_count {
@@ -158,7 +160,7 @@
 	height: 20px;
 	border: 0px solid;
 	font-size : 13pt;
-
+	cursor: pointer;
 }
 
 #chat_view {
@@ -169,6 +171,7 @@
 	text-overflow: ellipsis;
 	line-height : 14px;
 	padding: 2px;
+	cursor: pointer;
 }
 
 .msgr_main {
@@ -469,13 +472,11 @@ td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 
 }
 
-img { 
-	display: block;
-	content: "";
-	border : 0px solid;
+.clicked {
+	color : blue;
 }
 
- 
+
 
 </style>
 <script type="text/javascript">
@@ -623,7 +624,7 @@ $(document).ready(function() {
 		html += "				</div>";
 		html += "			</div>";
 		html += "		</div>";
-		readCont();
+		init();
 		
 		$(".msgr_main").remove();
 		$(".right_box").html(html);
@@ -635,7 +636,6 @@ $(document).ready(function() {
 				alert("내용을 입력하세요.");
 			} else {
 				insertCont();
-				
 			}
 		});
 		
@@ -667,7 +667,7 @@ $(document).ready(function() {
 	                                        	
 			html +=	"				</tbody>					                                ";
 			html +=	"			</table>                                                        ";
-			html +=	"			</div>                                                        ";
+			html +=	"			</div>                                                        	";
 			html +=	"		</div>                                                              ";
 			html += "		</form>";
 			
@@ -738,6 +738,9 @@ $(document).ready(function() {
 		
 	}); // div End
 		
+	
+	
+	
 }); // ready
 
 function enterCheck() {
@@ -746,7 +749,6 @@ function enterCheck() {
 			alert("내용을 입력해 주세요.");
 		} else {
 			insertCont();
-			readCont();
 		}
 		return;
 	}
@@ -800,7 +802,7 @@ function insertCont() {
 		
 	})
 }	 */
-	
+
 	
 
 function readCont() {
@@ -815,7 +817,6 @@ function readCont() {
 		data : params,
 		success : function(res) {
 			console.log("성공")
-			
 			if(res.list.length != 0) {
 				var html = "";
 				for(var i = 0 ; i < res.list.length; i++) {
@@ -895,6 +896,7 @@ function reloadList() {
 
 function scrollDown() {
  $(".chat_dtl").scrollTop($(".chat_dtl")[0].scrollHeight);
+ 	scrollTo = "500"
  
 }
 
@@ -932,9 +934,32 @@ function drawRoom(list) {
 			html += "			<div class = \"chat_list1_1\"></div>";
 			html += "		</div>";
 		}
-	$(".chat_box").html(html); 
+	$(".chat_box").html(html);
 }
 
+
+var chat_list1 = document.getElementsByClassName("chat_list1");
+
+function handleClick(event) {
+    console.log(event.target);
+    console.log(event.target.classList);
+
+    if(event.target.classList[1] == "clicked") {
+    	event.target.classList.remove("clicked");
+    } else {
+    	for(var i = 0; i < chat_list1.length; i++) {
+    		chat_list1[i].classList.remove("clicked");
+    	}
+    	event.target.classList.add("clicked");
+    }
+}
+
+function init() {
+	for (var i = 0; i < chat_list1.length; i++) {
+		chat_list1[i].addEventListener("click", handleClick);
+	}
+}
+    
 </script>
 </head>
 <body>
@@ -963,8 +988,8 @@ function drawRoom(list) {
 			</form>
 			
 			<form action = "#" id = "readForm">
-				<input type="hidden" id = "lastChatNo" name = "lastChatNo" value = "${maxNo}">
-				<input type ="text" id = "chatNum" name = "chatNum" />
+				<input type="text" id = "lastChatNo" name = "lastChatNo" value = "${maxNo}">
+				<input type ="text" id = "chatNum" name = "chatNum" value = "${chatNum}"/>
 			</form>
 			
 				<div class = "main_box">

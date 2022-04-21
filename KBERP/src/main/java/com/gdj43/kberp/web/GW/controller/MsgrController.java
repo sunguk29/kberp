@@ -79,7 +79,7 @@ public class MsgrController {
 				
 				//반복문으로 하거나 srch_check를 인서트해서 hashmap put 계속추가?
 				for(String num : srch_check) {
-					HashMap<String, String>data = new HashMap<String, String>();
+					HashMap<String, String> data = new HashMap<String, String>();
 					data.put("chatsq", seq);
 					data.put("num", num);
 					ics.insertData("msgr.insertChatHead", data);
@@ -217,8 +217,12 @@ public class MsgrController {
 	//	modelMap.put("group", group);
 		
 		try {
+	//		ics.updateData("msgr.rcvdNoteReadCheck", params);
+			
 			List<HashMap<String, String>> list = ims.getContList(lastChatNo);
 			System.out.println("7777777777" + params.get("lastChatNo"));
+			System.out.println("8888888888" + params.get("chatNum"));
+			
 			
 			modelMap.put("list", list);
 			modelMap.put("message", CommonProperties.RESULT_SUCCESS);
