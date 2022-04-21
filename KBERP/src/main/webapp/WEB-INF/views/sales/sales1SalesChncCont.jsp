@@ -392,8 +392,8 @@ textarea {
 }
 .popup_cont2 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-	font-weight: 600;
+	font-size: 12pt;
+	font-weight: bold;
 	text-align: center;
 	line-height: 100px;
 }
@@ -886,6 +886,14 @@ $(document).ready(function() {
 								makeAlert("필수 정보 알림", popContOneLine("시작일을 입력하세요."), function() {
 									$("#sdt").focus();
 								});
+							} else if(checkEmpty("#edt")){
+								makeAlert("필수 정보 알림", popContOneLine("종료일을 입력하세요."), function() {
+									$("#edt").focus();
+								});
+							} else if($("#sdt").val() > $("#edt").val()) {
+								makeAlert("알림", popContOneLine("종료일이 시작일보다 빠를 수 없습니다."), function() {
+									$("#edt").focus();
+								});
 							} else if(checkEmpty("#ssactvtycont")){
 								makeAlert("필수 정보 알림", popContOneLine("활동내용을 입력하세요."), function() {
 									$("#ssactvtycont").focus();
@@ -1237,6 +1245,10 @@ $(document).ready(function() {
 							} else if(checkEmpty("#sdt")){
 								makeAlert("필수 정보 알림", popContOneLine("시작일을 입력하세요."), function() {
 									$("#sdt").focus();
+								});
+							} else if($("#sdt").val() > $("#edt").val()) {
+								makeAlert("알림", popContOneLine("종료일이 시작일보다 빠를 수 없습니다."), function() {
+									$("#edt").focus();
 								});
 							} else if(checkEmpty("#ssactvtycont")){
 								makeAlert("필수 정보 알림", popContOneLine("활동내용을 입력하세요."), function() {

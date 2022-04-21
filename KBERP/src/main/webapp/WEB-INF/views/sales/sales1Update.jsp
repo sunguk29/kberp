@@ -1,14 +1,23 @@
 <!-- 
 	영업기회 수정 : sales1Update
  -->
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now() ;	
+	request.setAttribute("version", version);		//캐시 처리
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>영업기회 수정</title>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -532,15 +541,15 @@ textarea {
 }
 .popup_cont2 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-	font-weight: 600;
+	font-size: 12pt;
+	font-weight: bold;
 	text-align: center;
 	line-height: 100px;
 }
 .popup_cont3 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-    font-weight: 600;
+	font-size: 12pt;
+    font-weight: bold;
     text-align: center;
     height: 40px;
     line-height: 50px;
@@ -548,8 +557,8 @@ textarea {
 }
 .popup_cont4 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-    font-weight: 600;
+	font-size: 12pt;
+    font-weight: bold;
     text-align: center;
     height: 40px;
     line-height: 40px;
@@ -613,7 +622,7 @@ $(document).ready(function() {
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
 		if(isNaN($("#expctnLoanScale").val())) {
-			makeAlert("알림", "예상 대출 규모는 숫자만 입력 가능합니다.", function() {
+			makeAlert("필수 항목 알림", popContOneLine("예상 대출 규모는 숫자만 입력 가능합니다."), function() {
 				$("#expctnLoanScale").val("");
 				$("#expctnLoanScale").focus();
 			});
@@ -656,7 +665,7 @@ $(document).ready(function() {
 										if (res.res == "success") {
 											$("#backForm").submit();
 										} else {
-											alert("수정중 문제가 발생하였습니다.");
+											makeAlert("알림", popContOneLine("수정중 문제가 발생하였습니다."));
 										}
 									},
 									error : function(request, status, error) {

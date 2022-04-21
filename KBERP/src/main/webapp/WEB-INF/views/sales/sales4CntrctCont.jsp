@@ -1,14 +1,23 @@
 <!-- 
 	계약 상세보기 : sales4CntrctCont
  -->
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now() ;	
+	request.setAttribute("version", version);		//캐시 처리
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>계약 상세보기</title>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -432,8 +441,8 @@ pre {
 }
 .popup_cont2 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-	font-weight: 600;
+	font-size: 12pt;
+	font-weight: bold;
 	text-align: center;
 	line-height: 100px;
 }
@@ -688,7 +697,7 @@ $(document).ready(function() {
 								$("#updateForm").attr("action", "salesList");
 								$("#updateForm").submit();
 							} else {
-								alert("영업 종료중 문제가 발생하였습니다.");
+								makeAlert("알림", popContOneLine("영업 종료중 문제가 발생하였습니다."));
 							}
 						},
 						error : function(request, status, error) { // 문제 발생 시 실행 함수
@@ -769,7 +778,7 @@ $(document).ready(function() {
 						$("#tatacont").val("");
 						reloadOpList();
 					} else {
-						alert("등록중 문제가 발생하였습니다.");
+						makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 					}
 				},
 				error : function(request, status, error) {
@@ -812,7 +821,7 @@ $(document).ready(function() {
 							if(res.res == "success") {
 								reloadOpList();
 							} else {
-								alert("삭제중 문제가 발생하였습니다.");
+								makeAlert("알림", popContOneLine("삭제중 문제가 발생하였습니다."));
 							}
 						},
 						error : function(request, status, error) {
@@ -971,19 +980,31 @@ $(document).ready(function() {
 				buttons : [{
 					name : "등록",
 					func : function() {
-							if(checkEmpty("#ssname")){
-								makeAlert("필수입력", "일정명을 입력하세요");
+						if(checkEmpty("#ssname")){
+							makeAlert("필수 정보 알림", popContOneLine("일정명을 입력하세요."), function() {
 								$("#ssname").focus();
-							} else if($("#ssactvtyclsfy").val() == 9){
-								makeAlert("필수입력", "활동분류를 입력하세요");
+							});
+						} else if($("#ssactvtyclsfy").val() == 9){
+							makeAlert("필수 정보 알림", popContOneLine("활동분류를 입력하세요."), function() {
 								$("#ssactvtyclsfy").focus();
-							} else if(checkEmpty("#sdt")){
-								makeAlert("필수입력", "시작일을 입력하세요");
+							});
+						} else if(checkEmpty("#sdt")){
+							makeAlert("필수 정보 알림", popContOneLine("시작일을 입력하세요."), function() {
 								$("#sdt").focus();
-							} else if(checkEmpty("#ssactvtycont")){
-								makeAlert("필수입력", "활동내용을 입력하세요");
+							});
+						} else if(checkEmpty("#edt")){
+							makeAlert("필수 정보 알림", popContOneLine("종료일을 입력하세요."), function() {
+								$("#edt").focus();
+							});
+						} else if($("#sdt").val() > $("#edt").val()) {
+							makeAlert("알림", popContOneLine("종료일이 시작일보다 빠를 수 없습니다."), function() {
+								$("#edt").focus();
+							});
+						} else if(checkEmpty("#ssactvtycont")){
+							makeAlert("필수 정보 알림", popContOneLine("활동내용을 입력하세요."), function() {
 								$("#ssactvtycont").focus();
-							} else {					
+							});
+						} else {					
 									
 									console.log(${sEmpNum});
 									var RegForm = $("#RegForm");
@@ -1005,7 +1026,7 @@ $(document).ready(function() {
 												if(res.res == "success"){
 													reloadSScList();								
 												} else {
-														alert("등록중 문제가 발생하였습니다.");
+													makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 														}
 												},
 												error : function(request, status, error) {
@@ -1029,7 +1050,7 @@ $(document).ready(function() {
 											
 					});
 		} else {
-			makeAlert("알림", "권한이 없습니다.");
+			makeAlert("알림", popContOneLine("권한이 없습니다."));
 		}
 	});
 
@@ -1317,19 +1338,27 @@ $(document).ready(function() {
 				buttons : [{
 					name : "수정",
 					func : function() {
-							if(checkEmpty("#ssname")){
-								makeAlert("필수입력", "일정명을 입력하세요");
+						if(checkEmpty("#ssname")){
+							makeAlert("필수 정보 알림", popContOneLine("일정명을 입력하세요."), function() {
 								$("#ssname").focus();
-							} else if($("#ssactvtyclsfy").val() == 9){
-								makeAlert("필수입력", "활동분류를 입력하세요");
+							});
+						} else if($("#ssactvtyclsfy").val() == 9){
+							makeAlert("필수 정보 알림", popContOneLine("활동분류를 입력하세요."), function() {
 								$("#ssactvtyclsfy").focus();
-							} else if(checkEmpty("#sdt")){
-								makeAlert("필수입력", "시작일을 입력하세요");
+							});
+						} else if(checkEmpty("#sdt")){
+							makeAlert("필수 정보 알림", popContOneLine("시작일을 입력하세요."), function() {
 								$("#sdt").focus();
-							} else if(checkEmpty("#ssactvtycont")){
-								makeAlert("필수입력", "활동내용을 입력하세요");
+							});
+						} else if($("#sdt").val() > $("#edt").val()) {
+							makeAlert("알림", popContOneLine("종료일이 시작일보다 빠를 수 없습니다."), function() {
+								$("#edt").focus();
+							});
+						} else if(checkEmpty("#ssactvtycont")){
+							makeAlert("필수 정보 알림", popContOneLine("활동내용을 입력하세요."), function() {
 								$("#ssactvtycont").focus();
-							} else {					
+							});
+						} else {					
 									
 									console.log(${sEmpNum});
 									var RegForm = $("#RegForm");
@@ -1351,7 +1380,7 @@ $(document).ready(function() {
 												if(res.res == "success"){
 													reloadSScList();								
 												} else {
-														alert("수정중 문제가 발생하였습니다.");
+													makeAlert("알림", popContOneLine("수정중 문제가 발생하였습니다."));
 														}
 												},
 												error : function(request, status, error) {
@@ -1418,7 +1447,7 @@ $(document).ready(function() {
 							if(res.res == "success") {
 								reloadSScList();
 							} else {
-								alert("삭제중 문제가 발생하였습니다.");
+								makeAlert("알림", popContOneLine("삭제중 문제가 발생하였습니다."));
 							}
 						},
 						error : function(request, status, error) {

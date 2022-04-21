@@ -1,14 +1,23 @@
 <!-- 
 	제안 수정 : sales2Update
  -->
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now() ;	
+	request.setAttribute("version", version);		//캐시 처리
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>제안 수정</title>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -537,15 +546,15 @@ textarea {
 }
 .popup_cont2 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-	font-weight: 600;
+	font-size: 12pt;
+	font-weight: bold;
 	text-align: center;
 	line-height: 100px;
 }
 .popup_cont3 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-    font-weight: 600;
+	font-size: 12pt;
+    font-weight: bold;
     text-align: center;
     height: 40px;
     line-height: 50px;
@@ -553,8 +562,8 @@ textarea {
 }
 .popup_cont4 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-    font-weight: 600;
+	font-size: 12pt;
+    font-weight: bold;
     text-align: center;
     height: 40px;
     line-height: 40px;
@@ -618,44 +627,48 @@ $(document).ready(function() {
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#sgstnLoanScale")) {
-			makeAlert("필수 항목 알림", "대출 규모를 입력하세요.", function() {
+			makeAlert("필수 항목 알림", popContOneLine("대출 규모를 입력하세요."), function() {
 				$("#sgstnLoanScale").focus();
 			});
 		} else if(isNaN($("#sgstnLoanScale").val())) {
-			makeAlert("알림", "대출 규모는 숫자만 입력 가능합니다.", function() {
+			makeAlert("알림", popContOneLine("대출 규모는 숫자만 입력 가능합니다."), function() {
 				$("#sgstnLoanScale").val("");
 				$("#sgstnLoanScale").focus();
 			});
+		} else if($("#sgstnloanTime").val() > $("#sgstnRdmptnTime").val()) {
+			makeAlert("알림", popContOneLine("상환 시기는 대출 시기보다 빠를 수 없습니다."), function() {
+				$("#sgstnRdmptnTime").focus();
+			});
 		} else if(checkEmpty("#sgstnTotalAmnt")) {
-			makeAlert("필수 항목 알림", "자산 총액을 입력하세요.", function() {
+			makeAlert("필수 항목 알림", popContOneLine("자산 총액을 입력하세요."), function() {
 				$("#sgstnTotalAmnt").focus();
 			});
 		} else if(isNaN($("#sgstnTotalAmnt").val())) {
-			makeAlert("알림", "자산 총액은 숫자만 입력 가능합니다.", function() {
+			makeAlert("알림", popContOneLine("자산 총액은 숫자만 입력 가능합니다."), function() {
 				$("#sgstnTotalAmnt").val("");
 				$("#sgstnTotalAmnt").focus();
 			});
 		} else if(checkEmpty("#sgstnDebtAmnt")) {
-			makeAlert("필수 항목 알림", "부채액을 입력하세요.", function() {
+			makeAlert("필수 항목 알림", popContOneLine("부채액을 입력하세요."), function() {
 				$("#sgstnDebtAmnt").focus();
 			});
 		} else if(isNaN($("#sgstnDebtAmnt").val())) {
-			makeAlert("알림", "부채액은 숫자만 입력 가능합니다.", function() {
+			makeAlert("알림", popContOneLine("부채액은 숫자만 입력 가능합니다."), function() {
 				$("#sgstnDebtAmnt").val("");
 				$("#sgstnDebtAmnt").focus();
 			});
 		} else if(isNaN($("#sgstnAvgRvnAmnt").val())) {
-			makeAlert("알림", "평균 매출액은 숫자만 입력 가능합니다.", function() {
+			makeAlert("알림", popContOneLine("평균 매출액은 숫자만 입력 가능합니다."), function() {
 				$("#sgstnAvgRvnAmnt").val("");
 				$("#sgstnAvgRvnAmnt").focus();
 			});
 		} else if(isNaN($("#sgstnEmpCount").val())) {
-			makeAlert("알림", "사원 수는 숫자만 입력 가능합니다.", function() {
+			makeAlert("알림", popContOneLine("사원 수는 숫자만 입력 가능합니다."), function() {
 				$("#sgstnEmpCount").val("");
 				$("#sgstnEmpCount").focus();
 			});
 		} else if(checkEmpty("#dtlCont")) {
-			makeAlert("필수 항목 알림", "상세내용을 입력하세요.", function() {
+			makeAlert("필수 항목 알림", popContOneLine("상세내용을 입력하세요."), function() {
 				$("#dtlCont").focus();
 			});
 		} else {
@@ -700,7 +713,7 @@ $(document).ready(function() {
 													$("#backForm").attr("action", "sales2SgstnCont");
 													$("#backForm").submit();
 												} else {
-													alert("수정중 문제가 발생하였습니다.");
+													makeAlert("알림", popContOneLine("수정중 문제가 발생하였습니다."));
 												}
 											},
 											error : function(request, status, error) {
