@@ -257,6 +257,9 @@ $(document).ready(function() {
 					} else if($("#signup_pw").val() != $("#signup_cpw").val()) {
 						alert("비밀번호가 일치하지 않습니다."); 
 						$("#signup_cpw").focus();
+					} else if(checkEmpty("#signup_name")) {
+						alert("이름을 입력하세요.");
+						$("#signup_name").focus();
 					} else if(checkEmpty("#phone_num1")) {
 						alert("휴대전화를 입력하세요.");
 						$("#phone_num1").focus();
