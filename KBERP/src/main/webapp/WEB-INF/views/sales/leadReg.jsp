@@ -40,18 +40,6 @@ input[type="text"], #ccGrade, #rp {
 	text-align: center;
 	line-height: 80px;
 }
-/* 리스트 팝업 개인 작업 영역 */
-.msg_1 {
-	width: 380px;
-	height: 30px;
-	padding-top: 10px;
-}
-.msg_2 {
-	width: 380px;
-	height: 30px;
-	padding-bottom: 10px;
-}
-
 .ptm_left {
 	display: inline-block;
 	vertical-align: top;
@@ -642,7 +630,10 @@ hr { /* 구분선 */
 	display : none;
 }
 </style>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	//목록 버튼 클릭시 
@@ -650,18 +641,12 @@ $(document).ready(function() {
 		// 내용이 입력되어있으면 팝업창 띄움
 		if($("#leadName").val() != "" || $("#clntName").val() != ""  || 
 		   $("#ccName").val() != "" || $("#mngEmp").val() != "" || $("#psblCheck").val() != "") {
-			var html = "";
-			
-			html += "<div class=\"popup_cont1\">";
-			html += 	"<div class=\"msg_1\">내용이 저장되지 않았습니다.</div>";
-			html += 	"<div class=\"msg_2\">페이지를 나가시겠습니까?</div>";
-			html += "</div>";
 			
 			makePopup({
 				bg : true,
 				bgClose : false,
 				title : "알림",
-				contents : html,
+				contents : popContTwoLine("내용이 저장되지 않았습니다.<br/>페이지를 나가시겠습니까?"),
 				contentsEvent : function() {
 					
 				},
@@ -698,33 +683,26 @@ $(document).ready(function() {
 	// 저장버튼
 	$("#writeBtn").on("click", function() {
 		if(checkEmpty("#leadName")) {
-			/* swal("필수항목알림", "리드명을 입력하세요.", "warning");  */
-			alert("리드명을 입력하세요."); 
-			$("#leadName").focus();
+			makeAlert("필수 정보 알림", popContOneLine("리드명을 입력하세요."), function() {
+				$("#leadName").focus();				
+			});
 		} else if(checkEmpty("#clntName")) {
-			alert("고객명을 입력하세요.");
-			$("#clntName").focus();
+			makeAlert("필수 정보 알림", popContOneLine("고객명을 입력하세요."), function() {
+				$("#clntName").focus();				
+			});
 		} else if(checkEmpty("#ccName")) {
-			alert("고객사명을 입력하세요.");
-			$("#ccName").focus();
-		} else if(checkEmpty("#rp")) {
-			alert("인지경로를 입력하세요.");
-			$("#rp").focus();
+			makeAlert("필수 정보 알림", popContOneLine("고객사명을 입력하세요."), function() {
+				$("#ccName").focus();				
+			});
 		} else if(checkEmpty("#mngEmp")) {
-			alert("담당자를 입력하세요.");
-			$("#mngEmp").focus();
+			makeAlert("필수 정보 알림", popContOneLine("담당자를 입력하세요."), function() {
+				$("#mngEmp").focus();				
+			})
 		} else if(checkEmpty("#psblCheck")) {	
-			if($("#psblCheck").val() > 100 && $("#psblCheck").val() < 0 ) {
-				alert("0~100까지의 숫자만 입력 가능합니다.");
-				$("#psblCheck").val("100");
-			} else {
-				alert("가능여부를 입력하세요.");
-				$("#psblCheck").focus();				
-			}
+			makeAlert("필수 정보 알림", popContOneLine("가능여부를 입력하세요."), function() {
+				$("#psblCheck").focus();									
+			});
 		} else {	
-			var html = "";
-			
-			html += "<div class=\"popup_cont2\">저장하시겠습니까?</div>";
 			
 			makePopup({
 				depth : 1,
@@ -733,22 +711,17 @@ $(document).ready(function() {
 				title : "알림",
 				width : 400,
 				height : 200,
-				contents : html,
-				contentsEvent : function() {					
-				},
+				contents : popContOneLine("저장하시겠습니까?"),
 				buttons : [{
-					name : "저장",
+					name : "확인",
 					func:function() {
-						var html = "";
-						
-						html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
 						
 						makePopup({
 							depth : 2,
 							bg : true,
 							bgClose : false,
-							title : "저장 완료",
-							contents : html,
+							title : "알림",
+							contents : popContOneLine("저장되었습니다."),
 							width : 400,
 							height : 180,
 							buttons : {
@@ -774,7 +747,7 @@ $(document).ready(function() {
 													if(res.res == "success") {
 														$("#listForm").submit();
 													} else {
-														alert("작성중 문제가 발생하였습니다.");
+														makeAlert("알림", popContOneLine("작성중 문제가 발생하였습니다."));
 													}
 												},
 												error : function(request, status, error) {
@@ -1062,28 +1035,28 @@ function ecAddPopup() {
 			func:function() {
 				
 				if(checkEmpty("#clntName")) {
-					alert("고객명을 입력하세요.");
-					$("#clntName").focus();
+					makeAlert("필수 정보 입력", popContOneLine("고객명을 입력하세요."), function() {
+						$("#clntName").focus();						
+					});
 				} else if(checkEmpty("#clntCmpnyName")) {
-					alert("고객사명을 입력하세요.");
-					$("#clntCmpnyName").focus();
+					makeAlert("필수 정보 입력", popContOneLine("고객사명을 입력하세요."), function() {
+						$("#clntCmpnyName").focus();						
+					});
 				} else if(checkEmpty("#mbl")) {
-					alert("휴대폰번호를 입력하세요.");
-					$("#mbl").focus();					
+					makeAlert("필수 정보 입력", popContOneLine("휴대폰번호를 입력하세요."), function() {
+						$("#mbl").focus();											
+					});
 				} else if (checkEmpty("#mngName")) {
-					alert("담당자를 입력하세요.");
-					$("#mngName").focus();
+					makeAlert("필수 정보 입력", popContOneLine("담당자를 입력하세요."), function() {
+						$("#mngName").focus();						
+					});
 				} else {
-					var html = "";
-					
-					html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
-					
 						makePopup({
 							depth : 4,
 							bg : true,
 							bgClose : true,
 							title : "저장 완료",
-							contents : html,
+							contents : popContOneLine("저장되었습니다."),
 							width : 400,
 							height : 180,
 							buttons : {
@@ -1376,13 +1349,6 @@ function drawPaging(pb, sel) {
 	
 	$(sel).html(html);
 }
-function checkEmpty(sel) {
-	if($.trim($(sel).val()) == "") {
-		return true;
-	} else {
-		return false;
-	}
-}	
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;

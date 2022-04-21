@@ -181,7 +181,7 @@
 }
 .sales_text_bot2{
 	width: 927px;
-	height: 200px;
+	height: 240px;
 	/* border: 1px solid #000; */
 	border: none;
 	margin-top: 10px;
@@ -809,7 +809,7 @@ function drawPaging(pb, sel) {
 						</div>
 						<div class="sales_text_bot">
 							<div class="pie-bot">
-								<canvas id="pie-chart" width="350" height="240"></canvas>
+								<canvas id="pie-chart" width="350" height="250"></canvas>
 							</div>	
 						</div>
 					</div> 
