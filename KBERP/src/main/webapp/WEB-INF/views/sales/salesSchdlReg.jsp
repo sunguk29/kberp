@@ -427,12 +427,12 @@ $(document).ready(function() {
 			bg : true,
 			bgClose : false,
 			title : "알림",
-			contents : "나가면 저장되지않습니다, 나가시겠습니까?",
+			contents : popContTwoLine("내용이 저장되지 않았습니다.<br/>페이지를 나가시겠습니까?"),
 			contentsEvent : function() {
 				
 			},
 			buttons : [{
-				name : "나가기",
+				name : "확인",
 				func:function() {
 					$("#backForm").submit();
 				}
@@ -470,7 +470,7 @@ $(document).ready(function() {
 				bg : false,
 				bgClose : false,
 				title : "저장",
-				contents : "저장하시겠습니까?",
+				contents : popContOneLine("저장하시겠습니까?"),
 				contentsEvent : function() {
 					$("#popup").draggable();
 				},
