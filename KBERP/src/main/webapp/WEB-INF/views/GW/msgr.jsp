@@ -585,10 +585,9 @@ $(document).ready(function() {
 	
 	
 	
-	$("div").on("click", ".chat_list1", function() {	
+	$("body").on("click", ".chat_list1", function() {	
 	//	refreshInterval = setInterval(readCont, 1000);
 	//	clearInterval(refreshInterval);
-		readCont();
 		
 		$("#chatNum").val($(this).attr("chatNum"));
 		
@@ -624,11 +623,15 @@ $(document).ready(function() {
 		html += "				</div>";
 		html += "			</div>";
 		html += "		</div>";
-		init();
+	//	init();
 		
 		$(".msgr_main").remove();
 		$(".right_box").html(html);
-		$(".chat_dtl").slimScroll({height:"545px"});
+		
+		readCont();
+		
+		$(".chat_dtl").slimScroll({height:"545px",
+								  start: "bottom"});
 		
 		
 		$("#insertBtn").on("click", function() {
@@ -809,7 +812,6 @@ function readCont() {
 	clearInterval(refreshInterval);
 	// 채팅 인서트는 성공했지만, 리스트띄우는건 실패. 오류명 undefined 'parsererror' 
 	var params = $("#readForm").serialize();
-	console.log(params);
 	$.ajax({
 		type : "post",
 		url : "getContListAjax",
@@ -817,6 +819,8 @@ function readCont() {
 		data : params,
 		success : function(res) {
 			console.log("성공")
+				console.log(res.list);
+				console.log(res);
 			if(res.list.length != 0) {
 				var html = "";
 				for(var i = 0 ; i < res.list.length; i++) {
@@ -836,7 +840,7 @@ function readCont() {
 					}
 				
 					$(".chat_dtl").append(html);
-					$("#lastChatNo").val(res.list[res.list.length -1].CONT_NUM);
+					$("#lastContNo").val(res.list[res.list.length -1].CONT_NUM);
 					
 					scrollDown()
 				}
@@ -896,8 +900,7 @@ function reloadList() {
 
 function scrollDown() {
  $(".chat_dtl").scrollTop($(".chat_dtl")[0].scrollHeight);
- 	scrollTo = "500"
- 
+ 	
 }
 
 
@@ -942,6 +945,7 @@ var chat_list1 = document.getElementsByClassName("chat_list1");
 
 function handleClick(event) {
     console.log(event.target);
+    console.log(this);
     console.log(event.target.classList);
 
     if(event.target.classList[1] == "clicked") {
@@ -975,9 +979,9 @@ function init() {
 	
 	
 	<!-- 내용영역 -->
-<!-- 		<div class="page_title_bar">
-			<div class="page_title_text">메신저</div>
-		</div> -->
+		<!-- <div class="page_title_bar">
+			 <div class="page_title_text">메신저</div>
+			 </div> -->
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
@@ -988,7 +992,7 @@ function init() {
 			</form>
 			
 			<form action = "#" id = "readForm">
-				<input type="text" id = "lastChatNo" name = "lastChatNo" value = "${maxNo}">
+				<input type="text" id = "lastContNo" name = "lastContNo" value = "${maxNo}">
 				<input type ="text" id = "chatNum" name = "chatNum" value = "${chatNum}"/>
 			</form>
 			
