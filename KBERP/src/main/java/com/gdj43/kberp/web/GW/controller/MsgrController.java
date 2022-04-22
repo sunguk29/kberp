@@ -224,7 +224,6 @@ public class MsgrController {
 			// params로 받았을 경우, 내가 읽은번호 업데이트로 업데이트
 			
 			
-			
 			System.out.println("6666666666" + params);
 			System.out.println("7777777777" + list);
 			System.out.println("8888888888" + params.get("chatNum"));
