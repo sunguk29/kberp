@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+`<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -599,6 +599,10 @@ input[type="number"]::-webkit-inner-spin-button {
 	text-decoration: none;
 }
 </style>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <script type="text/javascript">
 $(document).ready(function () {
 	
@@ -616,9 +620,6 @@ $(document).ready(function () {
 	});
 	/* 삭제버튼 선택 시 */
 	$("#deleteBtn").on("click", function() {
-		var html = "";
-		
-		html += "<div class=\"popup_cont2\">삭제하시겠습니까?</div>";
 		
 		makePopup({
 			depth : 1,
@@ -627,21 +628,18 @@ $(document).ready(function () {
 			title : "알림",
 			width : 400,
 			height : 200,
-			contents : html,
+			contents : popContOneLine("삭제하시겠습니까?"),
 			contentsEvent : function() {					
 			},
 			buttons : [{
 				name : "삭제",
 				func:function() {
-					var html = "";
-					
-					html += "<div class=\"popup_cont2\">삭제되었습니다.</div>";
 					
 					makePopup({
 						depth : 2,
 						bg : true,
 						bgClose : false,
-						title : "삭제 완료",
+						title : popContOneLine("삭제되었습니다."),
 						contents : html,
 						width : 400,
 						height : 180,
@@ -661,7 +659,7 @@ $(document).ready(function () {
 											$("#actionForm").attr("action", "leadList");
 											$("#actionForm").submit();
 										} else {
-											alert("삭제중 문제가 발생하였습니다.");
+											makeAlert("알림", popContOneLine("삭제중 문제가 발생하였습니다."));
 										}
 									},
 									error : function(request, status, error) {
@@ -751,9 +749,6 @@ $(document).ready(function () {
 	$(".subm").on("click", function() {
 
 		if(checkEmpty("#tatacont")) {
-			var html = "";
-			
-			html += "<div class=\"popup_cont2\">의견 내용 입력 후, 등록버튼을 눌러주세요.</div>";
 			
 			makePopup({
 				depth : 1,
@@ -761,7 +756,7 @@ $(document).ready(function () {
 				width : 400,
 				height : 200,
 				title : "알림",
-				contents : html,
+				contents :  popContOneLine("의견 내용 입력 후, 등록버튼을 눌러주세요."),
 				buttons : {
 					name : "확인",
 					func:function() {
@@ -784,7 +779,7 @@ $(document).ready(function () {
 						$("#tatacont").val("");
 						reloadOpList();
 					} else {
-						alert("등록중 문제가 발생하였습니다.");
+						makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 					}
 				}, error : function(request,status, error) {
 					console.log(request.responseText);
@@ -803,7 +798,7 @@ $(document).ready(function () {
 			bg : false,
 			bgClose : false,
 			title : "경고",
-			contents : "삭제하시겠습니까?",
+			contents : popContOneLine("삭제하시겠습니까?"),
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
@@ -822,7 +817,7 @@ $(document).ready(function () {
 							if(res.res == "success"){
 								reloadOpList();
 							} else {
-								alert("삭제중 문제가 발생하였습니다.");
+								makeAlert("알림", popContOneLine("삭제중 문제가 발생하였습니다."));
 							}
 						},
 						error : function(request, status, error) {
@@ -939,17 +934,21 @@ $(document).ready(function () {
 				name : "등록",
 				func : function() {
 						if(checkEmpty("#ssname")){
-							makeAlert("필수입력", "일정명을 입력하세요");
-							$("#ssname").focus();
+							makeAlert("필수입력", popContOneLine("일정명을 입력하세요"), function() {
+								$("#ssname").focus();								
+							});
 						} else if($("#ssactvtyclsfy").val() == 9){
-							makeAlert("필수입력", "활동분류를 입력하세요");
-							$("#ssactvtyclsfy").focus();
+							makeAlert("필수입력", popContOneLine("활동분류를 입력하세요"), function() {
+								$("#ssactvtyclsfy").focus();
+							});
 						} else if(checkEmpty("#sdt")){
-							makeAlert("필수입력", "시작일을 입력하세요");
-							$("#sdt").focus();
+							makeAlert("필수입력", popContOneLine("시작일을 입력하세요"), function() {
+								$("#sdt").focus();								
+							});
 						} else if(checkEmpty("#ssactvtycont")){
-							makeAlert("필수입력", "활동내용을 입력하세요");
-							$("#ssactvtycont").focus();
+							makeAlert("필수입력", popContOneLine("활동내용을 입력하세요"), function() {
+								$("#ssactvtycont").focus();								
+							});
 						} else {							
 							console.log(${sEmpNum});
 							var RegForm = $("#RegForm");
@@ -970,7 +969,7 @@ $(document).ready(function () {
 										if(res.res == "success"){
 											reloadSCList();								
 										} else {
-												alert("등록중 문제가 발생하였습니다.");
+											makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 												}
 										},
 										error : function(request, status, error) {
@@ -1277,17 +1276,21 @@ $(document).ready(function () {
 				name : "수정",
 				func : function() {
 						if(checkEmpty("#ssname")){
-							makeAlert("필수입력", "일정명을 입력하세요");
-							$("#ssname").focus();
+							makeAlert("필수입력", popContOneLine("일정명을 입력하세요"), function() {
+								$("#ssname").focus();								
+							})
 						} else if($("#ssactvtyclsfy").val() == 9){
-							makeAlert("필수입력", "활동분류를 입력하세요");
-							$("#ssactvtyclsfy").focus();
+							makeAlert("필수입력", popContOneLine("활동분류를 입력하세요"), function() {
+								$("#ssactvtyclsfy").focus();								
+							});
 						} else if(checkEmpty("#sdt")){
-							makeAlert("필수입력", "시작일을 입력하세요");
-							$("#sdt").focus();
+							makeAlert("필수입력", popContOneLine("시작일을 입력하세요"), function() {
+								$("#sdt").focus();								
+							});
 						} else if(checkEmpty("#ssactvtycont")){
-							makeAlert("필수입력", "활동내용을 입력하세요");
-							$("#ssactvtycont").focus();
+							makeAlert("필수입력", popContOneLine("활동내용을 입력하세요"), function() {
+								$("#ssactvtycont").focus();								
+							});
 						} else {					
 								
 								console.log(${sEmpNum});
@@ -1310,7 +1313,7 @@ $(document).ready(function () {
 											if(res.res == "success"){
 												reloadSCList();								
 											} else {
-													alert("수정중 문제가 발생하였습니다.");
+												makeAlert("알림", popContOneLine("수정중 문제가 발생하였습니다."));
 													}
 											},
 											error : function(request, status, error) {
@@ -1352,7 +1355,7 @@ $(document).ready(function () {
 			bg : false,
 			bgClose : false,
 			title : "삭제",
-			contents : "삭제하시겠습니까?",
+			contents : popContOneLine("삭제하시겠습니까?"),
 			contentsEvent : function() {
 				$("#popup").draggable();
 				
@@ -1377,7 +1380,7 @@ $(document).ready(function () {
 										closePopup();
 										reloadSCList();
 									} else {
-										alert("삭제중 문제가 발생하였습니다.");
+										makeAlert("알림", popContOneLine("삭제중 문제가 발생하였습니다."));
 									}
 								},
 								error : function(request, status, error) {
