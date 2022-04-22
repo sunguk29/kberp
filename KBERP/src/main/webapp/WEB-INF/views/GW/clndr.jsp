@@ -352,29 +352,7 @@ $(document).ready(function() {
 	}
 	$('input[name=clndrDate]').attr('value',Cdate);
 	reloadList();
-	var data = [
-        {
-            title: 'All Day Event',
-            start: '2019-01-01',
-            color : 'yellow', // 기타 옵션들
-			textColor : 'black',
-          },
-          {
-            title: 'Long Event',
-            start: '2019-01-07',
-            end: '2019-01-10'
-          },
-          {
-            id: 999,
-            title: 'Repeating Event',
-            start: '2019-01-09T16:00:00'
-          },
-          {
-            id: 999,
-            title: 'Repeating Event',
-            start: '2019-01-16T16:00:00'
-          }
-        ];
+	var data = [];
 	
 	$("#fullCalendarArea").fullCalendar({
 		header: {
@@ -386,7 +364,7 @@ $(document).ready(function() {
 	      editable: false,
 	      height: 600,
 	      events: data,
-	      eventClick: function(event) { // 이벤트 클릭
+	      eventClick: function(event) { // 이벤트 클릭 
 	    	 
 	    	  $.ajax({
 					type: "post", 
@@ -525,11 +503,10 @@ $(document).ready(function() {
 	  					}else if(checkEmpty("#schdl_end_time") && !$("#aldy_dvsn").is(":checked")){
 	  						alert("종료 시간을 입력하세요.");
 	  						$("#schdl_end_time").focus();
-	  					}else if($("#aldy_dvsn").is(":checked") == false){
-	  						if($("#schdl_start_time").val() > $("#schdl_end_time").val()){
+	  					}else if($("#aldy_dvsn").is(":checked") == false &&
+	  							$("#schdl_start_time").val() > $("#schdl_end_time").val()){
 	  							alert("종료시간이 시작시간보다 빠를 수 없습니다.");
 	  		 						$("#schdl_end_time").focus();
-	  							}
 	  					}else{
 	  						 if(checkEmpty("#schdl_cont")){
 	  							$("#schdl_cont").val(" "); // 내용을 비워두면 undefined 출력돼서 추가
@@ -537,7 +514,6 @@ $(document).ready(function() {
 	  						 if(checkEmpty("#schdl_place")){
 	  								$("#schdl_place").val(" "); // 내용을 비워두면 undefined 출력돼서 추가
 	  							}
-							$("#asd").val($("#schdl_start_time").val());
 							 if($("#schdl_start_time").val() == "12:00"){
 									alert($("#schdl_start_time").val());
 									$("#schdl_start_time").val(now.toLocaleTimeString().slice(0, 8)); 
@@ -1003,11 +979,10 @@ function schdlUpdate(data){
 				}else if(checkEmpty("#schdl_end_time") && !$("#aldy_dvsn").is(":checked")){
 						alert("종료 시간을 입력하세요.");
   						$("#schdl_end_time").focus();
-				}else if($("#aldy_dvsn").is(":checked") == false){
-					if($("#schdl_start_time").val() > $("#schdl_end_time").val()){
+				}else if($("#aldy_dvsn").is(":checked") == false &&
+							$("#schdl_start_time").val() > $("#schdl_end_time").val()){
 						alert("종료시간이 시작시간보다 빠를 수 없습니다.");
 	 						$("#schdl_end_time").focus();
-						}
 				}else{
 					if(checkEmpty("#schdl_cont")){
 						$("#schdl_cont").val(" ");
@@ -1313,11 +1288,10 @@ $(document).ready(function() {
 					}else if(checkEmpty("#schdl_end_time") && !$("#aldy_dvsn").is(":checked")){
   						alert("종료 시간을 입력하세요.");
   						$("#schdl_end_time").focus();
-  					}else if($("#aldy_dvsn").is(":checked") == false){
-  						if($("#schdl_start_time").val() > $("#schdl_end_time").val()){
-  							alert("종료시간이 시작시간보다 빠를 수 없습니다.");
-  		 						$("#schdl_end_time").focus();
-  							}
+  					}else if($("#aldy_dvsn").is(":checked") == false &&
+  							$("#schdl_start_time").val() > $("#schdl_end_time").val()){
+							alert("종료시간이 시작시간보다 빠를 수 없습니다.");
+		 						$("#schdl_end_time").focus();
   					}else{
 						 if(checkEmpty("#schdl_cont")){
 							$("#schdl_cont").val(" "); // 내용을 비워두면 undefined 출력돼서 추가
