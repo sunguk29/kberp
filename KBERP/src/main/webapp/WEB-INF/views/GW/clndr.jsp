@@ -48,7 +48,7 @@
 	position: absolute;
 	left: calc(50% - 140px);
 	width: 160px;
-	height: 25px;
+	height: 27px;
 	text-align: center;
 	font-size: 9pt;
 }
@@ -194,16 +194,8 @@
 	padding: 5px 40px 5px 40px;
 	border: 1px solid #000;
 }
-.dtl_schdl_cont{
-	position: absolute;
-	top: calc(50% - 150px);
-	left: calc(50% - 240px);
-	width: 500px;
-	height: 500px;
-	font-size: 9pt;
-}
 .dtl_schdl_style{
-	height: 30px;
+	height: 30px; 
 	margin-top: 20px;
 	margin-bottom: 15px;
 	margin-left: 30px;
@@ -217,8 +209,17 @@
 	left: calc(50% - 208px);
 	font-size: 9pt;
 }
-
-#dtl_schdl_title, #dtl_schdl_place, #dtl_schdl_time {
+ #schdl_start_date, #schdl_end_date{
+	width: 164px;
+	height: 25px; 
+	position: relative;
+	left: calc(50% - 208px);
+	font-size: 9pt;
+}
+#schdl_start_date{
+	margin-right: 30px; 
+}
+#dtl_schdl_title, #dtl_schdl_place  {
 	position: absolute;
 	left: calc(50% - 140px);
 	width: 360px;
@@ -227,11 +228,11 @@
 }
 #dtl_schdl_start_time, #dtl_schdl_end_time{
 	position: absolute;
-	left: calc(50% - 140px);
-	width: 160px;
-	height: 25px;
+	left: calc(50% + 57px);
+	width: 164px;
+	height: 27px;
+	font-size: 9pt;  
 	text-align: center;
-	font-size: 9pt;
 }
 
 .dtl_schdl_time{
@@ -247,7 +248,7 @@
 	width: 475px;
 	height: 160px;
 	font-size: 9pt;
-	margin-top: 20px;
+	margin-top: 20px; 
 	margin-bottom: 15px;
 	margin-left: 30px;
 }
@@ -521,12 +522,14 @@ $(document).ready(function() {
 	  					}else if($("#schdl_start_date").val() > $("#schdl_end_date").val()){
 	  						alert("종료일이 시작일보다 빠를 수 없습니다.");
 	  						$("#schdl_end_date").focus();
-	  					}else if($("#schdl_start_time").val() > $("#schdl_end_time").val()){
-	  						alert("종료시간이 시작시간보다 빠를 수 없습니다.");
-	  						$("#schdl_end_time").focus();
 	  					}else if(checkEmpty("#schdl_end_time") && !$("#aldy_dvsn").is(":checked")){
 	  						alert("종료 시간을 입력하세요.");
 	  						$("#schdl_end_time").focus();
+	  					}else if($("#aldy_dvsn").is(":checked") == false){
+	  						if($("#schdl_start_time").val() > $("#schdl_end_time").val()){
+	  							alert("종료시간이 시작시간보다 빠를 수 없습니다.");
+	  		 						$("#schdl_end_time").focus();
+	  							}
 	  					}else{
 	  						 if(checkEmpty("#schdl_cont")){
 	  							$("#schdl_cont").val(" "); // 내용을 비워두면 undefined 출력돼서 추가
@@ -740,21 +743,40 @@ $(document).ready(function() {
   	  html += "<input type=\"text\" value=\"" + schdl_ctgry_name + "\" class=\"dtl_schdl_type\" readonly id=\"dtl_schdl_ctgry\">";
   	  html += "</div>";
   	  html += "<div class=\"dtl_schdl_style\">";
-  	  html += "<span>제목</span>";
-  	  html += "<input type=\"text\" value=\"" + data.title + "\" id=\"dtl_schdl_title\" readonly>";
-  	  html += "</div>";
+	  html += "<span>제목</span>";
+	  html += "<input type=\"text\" value=\"" + data.title + "\" id=\"dtl_schdl_title\" readonly>";
+	  html += "</div>";
   	  html += "<div class=\"dtl_schdl_style\">";
   	  html += "<span>위치</span>";
   	  html += "<input type=\"text\" value=\"" + data.schdl_place + "\" id=\"dtl_schdl_place\" readonly>";
   	  html += "</div>";
-  	  html += "<div class=\"dtl_schdl_style\">";
-  	  html += "<span>기간</span>";
   	  if(data.aldy_dvsn == "1"){
-	  	  html += "<input type=\"text\" value=\"" + data.start_date + " ~ " + data.end_date + "\" id=\"dtl_schdl_time\" readonly>";
+	  	var date1 = new Date(data.end_date);
+	  	var date2 = new Date(data.start_date);
+	  	  if(date1 - date2 == 0){
+	  		html += "<div class=\"dtl_schdl_style\">";
+		  	  html += "<span>종일 일정</span>";
+		  	  html += "<input type=\"date\" value=\"" + data.start_date + "\"  id=\"schdl_start_date\" name=\"schdl_start_date\"readonly>";
+		  	  html += "</div>";	
+	  	  }else{
+		  	  html += "<div class=\"dtl_schdl_style\">";
+		  	  html += "<span>일정 기간</span>";
+		  	  html += "<input type=\"date\" value=\"" + data.start_date + "\"  id=\"schdl_start_date\" name=\"schdl_start_date\"readonly>";
+		  	  html += "<input type=\"date\" value=\"" + data.end_date + "\"  id=\"schdl_end_date\" name=\"schdl_end_date\"readonly>";			
+		  	  html += "</div>";	
+	  	  }
   	  }else{
-  	 	  html += "<input type=\"text\" value=\"" + data.start_date + data.start_time + " ~ " + data.end_date + data.end_time + "\" id=\"dtl_schdl_time\" readonly>";
-  	  }
+  		html += "<div class=\"dtl_schdl_style\">";
+  	  html += "<span>일정 시작</span>";
+  	  html += "<input type=\"date\" value=\"" + data.start_date + "\"  id=\"schdl_start_date\" name=\"schdl_start_date\"readonly>";
+  	  html += "<input type=\"time\" id=\"dtl_schdl_start_time\" name=\"schdl_start_time\" value=\""+ data.start_time +"\"readonly>";
+  	  html += "</div>";	
+  	  html += "<div class=\"dtl_schdl_style\">";
+  	  html += "<span>일정 종료</span>";
+  	  html += "<input type=\"date\" value=\"" + data.end_date + "\"  id=\"schdl_end_date\" name=\"schdl_end_date\"readonly>";			
+  	  html += "<input type=\"time\" id=\"dtl_schdl_end_time\" name=\"schdl_end_time\" value=\""+ data.end_time +"\"readonly>";
   	  html += "</div>";
+  	  }
   	  html += "<div class=\"dtl_schdl_dtl_cont\">";
   	  html += "<span>상세내용</span>";
   	  html += "<textarea rows=\"10\" cols=\"57\" class=\"dtl_cont\" readonly>" + data.schdl_cont + "</textarea>";			
@@ -769,7 +791,7 @@ $(document).ready(function() {
   				contents : html,
   				draggable : true,
   				width : 540,
-  				height : 520,
+  				height : 550,
   				buttons : [{
   					
   					name : "수정",
@@ -962,6 +984,7 @@ function schdlUpdate(data){
 		buttons : [{
 			name : "저장",
 			func:function() {
+			
 				if(checkEmpty("#schdl_title")){
 					alert("제목을 입력하세요.");
 					$("#schdl_title").focus();
@@ -977,13 +1000,15 @@ function schdlUpdate(data){
 				}else if($("#schdl_start_date").val() > $("#schdl_end_date").val()){
 					alert("종료일이 시작일보다 빠를 수 없습니다.");
 					$("#schdl_end_date").focus();
-				}else if($("#schdl_start_time").val() > $("#schdl_end_time").val()){
-					alert("종료시간이 시작시간보다 빠를 수 없습니다.");
-					$("#schdl_end_time").focus();
 				}else if(checkEmpty("#schdl_end_time") && !$("#aldy_dvsn").is(":checked")){
 						alert("종료 시간을 입력하세요.");
   						$("#schdl_end_time").focus();
-  					}else{
+				}else if($("#aldy_dvsn").is(":checked") == false){
+					if($("#schdl_start_time").val() > $("#schdl_end_time").val()){
+						alert("종료시간이 시작시간보다 빠를 수 없습니다.");
+	 						$("#schdl_end_time").focus();
+						}
+				}else{
 					if(checkEmpty("#schdl_cont")){
 						$("#schdl_cont").val(" ");
 					}
@@ -1220,7 +1245,7 @@ $(document).ready(function() {
 		html += "<option value=\"0\">사용자지정</option>";
 		html += "<option value=\"1\">업무</option>";
 		html += "<option value=\"2\">휴가</option>";
-		html += "<option value=\"3\">교육</option>";
+		html += "<option value=\"3\">교육</option>"; 
 		html += "<option value=\"4\">회의</option>";
 		html += "<option value=\"5\">회식</option>";
 		html += "<option value=\"6\">출장</option>";
@@ -1285,12 +1310,14 @@ $(document).ready(function() {
 					}else if($("#schdl_start_date").val() > $("#schdl_end_date").val()){
 						alert("종료일이 시작일보다 빠를 수 없습니다.");
 						$("#schdl_end_date").focus();
-					}else if($("#schdl_start_time").val() > $("#schdl_end_time").val()){
-						alert("종료시간이 시작시간보다 빠를 수 없습니다.");
-						$("#schdl_end_time").focus();
 					}else if(checkEmpty("#schdl_end_time") && !$("#aldy_dvsn").is(":checked")){
   						alert("종료 시간을 입력하세요.");
   						$("#schdl_end_time").focus();
+  					}else if($("#aldy_dvsn").is(":checked") == false){
+  						if($("#schdl_start_time").val() > $("#schdl_end_time").val()){
+  							alert("종료시간이 시작시간보다 빠를 수 없습니다.");
+  		 						$("#schdl_end_time").focus();
+  							}
   					}else{
 						 if(checkEmpty("#schdl_cont")){
 							$("#schdl_cont").val(" "); // 내용을 비워두면 undefined 출력돼서 추가
