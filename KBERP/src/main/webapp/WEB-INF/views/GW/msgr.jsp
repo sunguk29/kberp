@@ -586,8 +586,8 @@ $(document).ready(function() {
 	
 	
 	$("body").on("click", ".chat_list1", function() {	
-	//	refreshInterval = setInterval(readCont, 1000);
-	//	clearInterval(refreshInterval);
+		clearInterval(refreshInterval);
+		refreshInterval = setInterval(readCont, 1000);
 		
 		$("#chatNum").val($(this).attr("chatNum"));
 		
