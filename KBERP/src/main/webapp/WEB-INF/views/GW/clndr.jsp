@@ -486,26 +486,26 @@ $(document).ready(function() {
 	  				name : "저장",
 	  				func:function() {
 	  					if(checkEmpty("#schdl_title")){
-	  						alert("제목을 입력하세요.");
+	  						callPopup("제목을 입력하세요.")
 	  						$("#schdl_title").focus();
 	  					}else if(checkEmpty("#schdl_start_date")){
-	  						alert("시작 날짜를 선택하세요.");
+	  						callPopup("시작 날짜를 입력하세요.")
 	  						$("#schdl_start_date").focus();
 	  					}else if(checkEmpty("#schdl_end_date")){
-	  						alert("종료 날짜를 선택하세요.");
+	  						callPopup("종료 날짜를 입력하세요.")
 	  						$("#schdl_end_date").focus();
 	  					}else if($("#schdl_ctgry").val() == "0" && checkEmpty("#user_ctgry")){
-	  						alert("사용자지정 범주를 입력하세요.");
+	  						callPopup("범주명을 입력하세요.")
 	  						$("#user_ctgry").focus();
 	  					}else if($("#schdl_start_date").val() > $("#schdl_end_date").val()){
-	  						alert("종료일이 시작일보다 빠를 수 없습니다.");
+	  						callPopup("종료일이 시작일보다 빠를 수 없습니다.")
 	  						$("#schdl_end_date").focus();
 	  					}else if(checkEmpty("#schdl_end_time") && !$("#aldy_dvsn").is(":checked")){
-	  						alert("종료 시간을 입력하세요.");
-	  						$("#schdl_end_time").focus();
+	  						callPopup("종료 시간을 입력하세요.")
+	  	  						$("#schdl_end_time").focus();
 	  					}else if($("#aldy_dvsn").is(":checked") == false &&
-	  							$("#schdl_start_time").val() > $("#schdl_end_time").val()){
-	  							alert("종료시간이 시작시간보다 빠를 수 없습니다.");
+	  								$("#schdl_start_time").val() > $("#schdl_end_time").val()){
+	  						callPopup("종료 시간이 시작 시간보다 빠를 수 없습니다.")
 	  		 						$("#schdl_end_time").focus();
 	  					}else{
 	  						 if(checkEmpty("#schdl_cont")){
@@ -514,10 +514,6 @@ $(document).ready(function() {
 	  						 if(checkEmpty("#schdl_place")){
 	  								$("#schdl_place").val(" "); // 내용을 비워두면 undefined 출력돼서 추가
 	  							}
-							 if($("#schdl_start_time").val() == "12:00"){
-									alert($("#schdl_start_time").val());
-									$("#schdl_start_time").val(now.toLocaleTimeString().slice(0, 8)); 
-								}
 	  						var params = $("#addForm").serialize();
 	  						$.ajax({
 	  							type: "post", 
@@ -528,7 +524,7 @@ $(document).ready(function() {
 	  								if(res.res == "success"){
 	  									history.go(0);
 	  								}else{
-	  									alert("작성중 문제가 발생하였습니다.");
+	  									callPopup("작성중 문제가 발생하였습니다.")
 	  								}
 	  							},
 	  							error : function(request, status, error) { 
@@ -785,22 +781,21 @@ $(document).ready(function() {
   				}, {
   					name : "삭제",
   					func:function(){
-  						
-	  						makePopup({
-	  							bg : true,
-	  							bgClose : false,
-	  							title : "삭제",
-	  							contents : "삭제하시겠습니까?",
-	  							draggable : true,
-	  							buttons : [{
-	  								name : "삭제",
-	  								func:function() {
-				  						schdlDelete(data);
-	  								}
-	  							}, {
-	  								name : "취소"
-	  							}]
-	  						});
+  						makePopup({
+  							bg : true,
+  							bgClose : false,
+  							title : "삭제",
+  							contents : "일정을 삭제하시겠습니까?",
+  							draggable : true,
+  							buttons : [{
+  								name : "삭제",
+  								func:function() {
+  									schdlDelete(data);
+  								}
+  							}, {
+  								name : "취소"
+  							}]
+  						});
   						
   					}
   					
@@ -824,30 +819,6 @@ $(document).ready(function() {
   		}
   		
 	}
-	$("#eventChangeBtn").on("click", function() {
-		var newEvents = [ {
-			title : "계획1",
-			start : "2019-01-02",
-			end : "2019-01-08",
-			color : 'yellow', // 기타 옵션들
-			textColor : 'black',
-
-		}, {
-			title : "계획2",
-			start : "2019-01-02",
-			end : "2019-01-08",
-			color : 'green', // 기타 옵션들
-			textColor : 'black',
-		} ];
-		
-		var oldEvents = $("#fullCalendarArea").fullCalendar("getEventSources");
-		//기존 이벤트 제거
-		$("#fullCalendarArea").fullCalendar("removeEventSources", oldEvents);
-		$("#fullCalendarArea").fullCalendar("refetchEvents");
-		//신규이벤트 추가
-		$("#fullCalendarArea").fullCalendar("addEventSource", newEvents);
-		$("#fullCalendarArea").fullCalendar("refetchEvents");
-	});
 	
 	
 });
@@ -962,26 +933,26 @@ function schdlUpdate(data){
 			func:function() {
 			
 				if(checkEmpty("#schdl_title")){
-					alert("제목을 입력하세요.");
+					callPopup("제목을 입력하세요.")
 					$("#schdl_title").focus();
 				}else if(checkEmpty("#schdl_start_date")){
-					alert("시작 날짜를 입력하세요.");
+					callPopup("시작 날짜를 입력하세요.")
 					$("#schdl_start_date").focus();
 				}else if(checkEmpty("#schdl_end_date")){
-					alert("종료 날짜를 입력하세요.");
+					callPopup("종료 날짜를 입력하세요.")
 					$("#schdl_end_date").focus();
 				}else if($("#schdl_ctgry").val() == "0" && checkEmpty("#user_ctgry")){
-					alert("범주를 입력하세요.");
+					callPopup("범주명을 입력하세요.")
 					$("#user_ctgry").focus();
 				}else if($("#schdl_start_date").val() > $("#schdl_end_date").val()){
-					alert("종료일이 시작일보다 빠를 수 없습니다.");
+					callPopup("종료일이 시작일보다 빠를 수 없습니다.")
 					$("#schdl_end_date").focus();
 				}else if(checkEmpty("#schdl_end_time") && !$("#aldy_dvsn").is(":checked")){
-						alert("종료 시간을 입력하세요.");
+					callPopup("종료 시간을 입력하세요.")
   						$("#schdl_end_time").focus();
 				}else if($("#aldy_dvsn").is(":checked") == false &&
 							$("#schdl_start_time").val() > $("#schdl_end_time").val()){
-						alert("종료시간이 시작시간보다 빠를 수 없습니다.");
+					callPopup("종료 시간이 시작 시간보다 빠를 수 없습니다.")
 	 						$("#schdl_end_time").focus();
 				}else{
 					if(checkEmpty("#schdl_cont")){
@@ -1001,7 +972,7 @@ function schdlUpdate(data){
 							if(res.res == "success"){
 								history.go(0);
 							}else{
-								alert("수정중 문제가 발생하였습니다.");
+								callPopup("수정중 문제가 발생하였습니다.")
 							}
 						},
 						error : function(request, status, error) { 
@@ -1016,6 +987,19 @@ function schdlUpdate(data){
 		}]
 	});
 }
+/* 경고창 팝업 메소드 */
+function callPopup(cont) {
+	makePopup({
+			bg : true,
+			bgClose : false,
+			title : "경고",
+			contents : cont,
+			draggable : true,
+			buttons : [{
+				name : "닫기"
+			}]
+		});
+}
 /* 일정삭제 */
 function schdlDelete(data){
 	var params = "";
@@ -1029,7 +1013,7 @@ function schdlDelete(data){
 				if(res.res == "success"){
 					history.go(0);
 				}else{
-					alert("삭제중 문제가 발생하였습니다.");
+					callPopup("삭제중 문제가 발생하였습니다.")
 				}
 				 
 			},
@@ -1134,40 +1118,6 @@ $(document).ready(function() {
 		dateFormat: 'yy/mm/dd'    
 	}); 
 	
-	$("#date_start").datepicker({
-		dateFormat : 'yy-mm-dd',
-		duration: 200,
-		onSelect:function(dateText, inst){
-			var startDate = parseInt($("#date_end").val().replace("-", '').replace("-", ''));
-			var endDate = parseInt(dateText.replace(/-/g,''));
-			
-            if (endDate > startDate) {
-            	alert("조회 기간은 과거로 설정하세요.");
-            	//달력에 종료 날짜 넣어주기
-        		$("#date_start").val($("#stdt").val());
-			} else {
-				$("#stdt").val($("#date_start").val());
-			}
-		}
-	});
-	
-	$("#date_end").datepicker({
-		dateFormat : 'yy-mm-dd',
-		duration: 200,
-		onSelect:function(dateText, inst){
-			var startDate = parseInt($("#date_start").val().replace("-", '').replace("-", ''));
-			var endDate = parseInt(dateText.replace(/-/g,''));
-			
-            if (startDate > endDate) {
-            	alert("조회 기간은 과거로 설정하세요.");
-            	
-            	//달력에 종료 날짜 넣어주기
-        		$("#date_end").val($("#eddt").val());
-			} else {
-				$("#eddt").val($("#date_end").val());
-			}
-		}
-	});
 	
 	$("#new_schdl").on("click", function () {
 		var html = "";
@@ -1271,28 +1221,28 @@ $(document).ready(function() {
 				name : "저장",
 				func:function() {
 					if(checkEmpty("#schdl_title")){
-						alert("제목을 입력하세요.");
+						callPopup("제목을 입력하세요.")
 						$("#schdl_title").focus();
 					}else if(checkEmpty("#schdl_start_date")){
-						alert("시작 날짜를 선택하세요.");
+						callPopup("시작 날짜를 입력하세요.")
 						$("#schdl_start_date").focus();
 					}else if(checkEmpty("#schdl_end_date")){
-						alert("종료 날짜를 선택하세요.");
+						callPopup("종료 날짜를 입력하세요.")
 						$("#schdl_end_date").focus();
 					}else if($("#schdl_ctgry").val() == "0" && checkEmpty("#user_ctgry")){
-						alert("사용자지정 범주를 입력하세요.");
+						callPopup("범주명을 입력하세요.")
 						$("#user_ctgry").focus();
 					}else if($("#schdl_start_date").val() > $("#schdl_end_date").val()){
-						alert("종료일이 시작일보다 빠를 수 없습니다.");
+						callPopup("종료일이 시작일보다 빠를 수 없습니다.")
 						$("#schdl_end_date").focus();
 					}else if(checkEmpty("#schdl_end_time") && !$("#aldy_dvsn").is(":checked")){
-  						alert("종료 시간을 입력하세요.");
-  						$("#schdl_end_time").focus();
-  					}else if($("#aldy_dvsn").is(":checked") == false &&
-  							$("#schdl_start_time").val() > $("#schdl_end_time").val()){
-							alert("종료시간이 시작시간보다 빠를 수 없습니다.");
+						callPopup("종료 시간을 입력하세요.")
+	  						$("#schdl_end_time").focus();
+					}else if($("#aldy_dvsn").is(":checked") == false &&
+								$("#schdl_start_time").val() > $("#schdl_end_time").val()){
+						callPopup("종료 시간이 시작 시간보다 빠를 수 없습니다.")
 		 						$("#schdl_end_time").focus();
-  					}else{
+					}else{
 						 if(checkEmpty("#schdl_cont")){
 							$("#schdl_cont").val(" "); // 내용을 비워두면 undefined 출력돼서 추가
 						}
@@ -1310,7 +1260,7 @@ $(document).ready(function() {
 								if(res.res == "success"){
 									history.go(0);
 								}else{
-									alert("작성중 문제가 발생하였습니다.");
+									callPopup("작성중 문제가 발생하였습니다.")
 								}
 							},
 							error : function(request, status, error) { 
