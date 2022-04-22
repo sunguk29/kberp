@@ -288,8 +288,8 @@
 	margin: 10px 0px 50px 0;
 	border-top: 1.5px solid #4B94F2;
 }
-.srch_table tr:nth-child(3) {
-	border-top: 2.5px solid #d7d7d7;
+.srch_table tr:nth-child(2) {
+	border-bottom: 2.5px solid #d7d7d7;
 }
 .srch_table tr {
 	height: 40px;
@@ -407,6 +407,12 @@ input:focus {
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+	
+	$(".cmn_btn").on("click", function() {
+		
+		$("#actionForm").attr("action", "clntChart");
+		$("#actionForm").submit();
+	});
 	
 	var pie = $("#pie-chart");
 	var bar = $("#bar-chart");
@@ -670,7 +676,7 @@ function drawPaging(pb, sel) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
-</form>
+
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">고객 차트</div>
@@ -733,22 +739,6 @@ function drawPaging(pb, sel) {
 								<td>
 									<span class="cmn_btn">검색</span>
 								</td>
-							</tr>
-							<tr>
-								<td>
-									<span class="srch_name">정렬</span>
-								</td>
-								<td>
-									<select>
-										<option selected="selected">선택안함</option>
-										<option>오름차순</option>
-										<option>내림차순 </option>
-									</select>
-								</td>
-								<td>
-									<img class="asc_btn cmn_btn" id="soltBtn" alt="정렬버튼" src="resources/images/sales/asc.png" />
-								</td>
-								<td></td>
 							</tr>
 						</tbody>
 					</table>
@@ -818,6 +808,7 @@ function drawPaging(pb, sel) {
 		</div>
 	</div>
 </div>
+</form>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>
