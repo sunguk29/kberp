@@ -365,7 +365,8 @@ $(document).ready(function() {
 						data : params, 
 						success : function(res) { 
 							if(res.res == "success") {
-								$("#actionForm").submit();
+								location.href = "prgrsEvent";
+								/* $("#actionForm").submit(); */
 							} else {
 								alert("삭제중 문제가 발생하였습니다.");
 							}
@@ -475,7 +476,7 @@ $(document).ready(function() {
 				<div class="title">${data.EVENT_TITLE}</div>
 				<div class="writer_area">
 					<div class="write_info">
-						<div class="writer">${EMP_NAME}</div>
+						<div class="writer">${data.EMP_NAME}</div>
 						<div class="date">${data.WRITE_DATE}</div>
 					</div>
 				</div>
@@ -513,7 +514,7 @@ $(document).ready(function() {
 				</c:forEach>
 				
 				<div id="comment_write">
-				<form action="fileUploadAjax" id="CmntAddForm" method="post"
+				<form action="eventCmntActionAjax" id="CmntAddForm" method="post"
 							  enctype="multipart/form-data">
 				<input type="hidden" name="no" value="${param.no}" />
 							<input type="hidden" id="emp_num" name="emp_num" value="${sEmpNum}" />
