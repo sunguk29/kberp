@@ -180,7 +180,19 @@ $(document).ready(function() {
 		            </div>       
 	            </div>
 			<div class="slryCrntState_right_area">
-				<div class=""
+				<div class="gbg_list_area">
+					<div class="gbg_List_txt"></div>
+					<div class="gbg_List">
+						<table>
+							<thead>
+								<tr>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
