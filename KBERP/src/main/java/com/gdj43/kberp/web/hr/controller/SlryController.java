@@ -81,5 +81,15 @@ public class SlryController {
       return mav;
     }
     
+    @RequestMapping(value = "/slryCrntState")
+    public ModelAndView slryCrntState(@RequestParam HashMap<String,String> params, 
+    		ModelAndView mav) throws Throwable {
+    	List<HashMap<String, String>> list = iCommonService.getDataList("hr.getApntmList", params);
+    	mav.addObject("list", list);
+    	mav.setViewName("hr/slryCrntState");
+    	
+    	return mav;
+    }
+    
     
 }
