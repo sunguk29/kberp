@@ -71,4 +71,15 @@ public class SlryController {
 	    return mapper.writeValueAsString(modelMap);
     }
     
+    @RequestMapping(value = "/bnftRgstn")
+    public ModelAndView bnftRgstn(@RequestParam HashMap<String,String> params, 
+                         ModelAndView mav) throws Throwable {
+    	List<HashMap<String, String>> list = iCommonService.getDataList("hr.getApntmList", params);
+    	mav.addObject("list", list);
+    	mav.setViewName("hr/bnftRgstn");
+      
+      return mav;
+    }
+    
+    
 }
