@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+`<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -14,7 +14,9 @@
 .cont_wrap {
 	width: 1013px;
 }
-
+input[type="text"], #ccGrade, #rp, #psNum {
+	font-size: 9pt;
+}
 /* 개인 작업 영역 */
 .body {
 	display: block;
@@ -144,6 +146,17 @@ hr { /* 구분선 */
 	font-weight: bold;
 	padding-top: 5px;
 	padding-left: 20px;
+}
+#scName {
+	margin-top: 3px;
+	font-weight: bold;
+	padding-top: 5px;
+	padding-left: 5px;	
+}
+#scName:hover {
+	color: #4b94f2;
+	cursor: pointer;
+	text-decoration: underline;
 }
 .txtOp, .dt, .del {
 	padding-left: 20px;
@@ -586,6 +599,10 @@ input[type="number"]::-webkit-inner-spin-button {
 	text-decoration: none;
 }
 </style>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <script type="text/javascript">
 $(document).ready(function () {
 	
@@ -603,9 +620,6 @@ $(document).ready(function () {
 	});
 	/* 삭제버튼 선택 시 */
 	$("#deleteBtn").on("click", function() {
-		var html = "";
-		
-		html += "<div class=\"popup_cont2\">삭제하시겠습니까?</div>";
 		
 		makePopup({
 			depth : 1,
@@ -614,21 +628,18 @@ $(document).ready(function () {
 			title : "알림",
 			width : 400,
 			height : 200,
-			contents : html,
+			contents : popContOneLine("삭제하시겠습니까?"),
 			contentsEvent : function() {					
 			},
 			buttons : [{
 				name : "삭제",
 				func:function() {
-					var html = "";
-					
-					html += "<div class=\"popup_cont2\">삭제되었습니다.</div>";
 					
 					makePopup({
 						depth : 2,
 						bg : true,
 						bgClose : false,
-						title : "삭제 완료",
+						title : popContOneLine("삭제되었습니다."),
 						contents : html,
 						width : 400,
 						height : 180,
@@ -648,7 +659,7 @@ $(document).ready(function () {
 											$("#actionForm").attr("action", "leadList");
 											$("#actionForm").submit();
 										} else {
-											alert("삭제중 문제가 발생하였습니다.");
+											makeAlert("알림", popContOneLine("삭제중 문제가 발생하였습니다."));
 										}
 									},
 									error : function(request, status, error) {
@@ -679,6 +690,7 @@ $(document).ready(function () {
 	/* 리드 상세보기 실행될 시 비동기로 의견 목록 그리기 위해 선언  */
 	reloadOpList();
 	
+	// 진행상태 - 전환 성공시 목록버튼,수정버튼 숨김
 	if($("#psNum").val() == 2) {
 		$("#updateBtn").hide();	
 		$("#deleteBtn").hide();	
@@ -737,9 +749,6 @@ $(document).ready(function () {
 	$(".subm").on("click", function() {
 
 		if(checkEmpty("#tatacont")) {
-			var html = "";
-			
-			html += "<div class=\"popup_cont2\">의견 내용 입력 후, 등록버튼을 눌러주세요.</div>";
 			
 			makePopup({
 				depth : 1,
@@ -747,7 +756,7 @@ $(document).ready(function () {
 				width : 400,
 				height : 200,
 				title : "알림",
-				contents : html,
+				contents :  popContOneLine("의견 내용 입력 후, 등록버튼을 눌러주세요."),
 				buttons : {
 					name : "확인",
 					func:function() {
@@ -770,7 +779,7 @@ $(document).ready(function () {
 						$("#tatacont").val("");
 						reloadOpList();
 					} else {
-						alert("등록중 문제가 발생하였습니다.");
+						makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 					}
 				}, error : function(request,status, error) {
 					console.log(request.responseText);
@@ -789,7 +798,7 @@ $(document).ready(function () {
 			bg : false,
 			bgClose : false,
 			title : "경고",
-			contents : "삭제하시겠습니까?",
+			contents : popContOneLine("삭제하시겠습니까?"),
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
@@ -808,7 +817,7 @@ $(document).ready(function () {
 							if(res.res == "success"){
 								reloadOpList();
 							} else {
-								alert("삭제중 문제가 발생하였습니다.");
+								makeAlert("알림", popContOneLine("삭제중 문제가 발생하였습니다."));
 							}
 						},
 						error : function(request, status, error) {
@@ -925,17 +934,21 @@ $(document).ready(function () {
 				name : "등록",
 				func : function() {
 						if(checkEmpty("#ssname")){
-							makeAlert("필수입력", "일정명을 입력하세요");
-							$("#ssname").focus();
+							makeAlert("필수입력", popContOneLine("일정명을 입력하세요"), function() {
+								$("#ssname").focus();								
+							});
 						} else if($("#ssactvtyclsfy").val() == 9){
-							makeAlert("필수입력", "활동분류를 입력하세요");
-							$("#ssactvtyclsfy").focus();
+							makeAlert("필수입력", popContOneLine("활동분류를 입력하세요"), function() {
+								$("#ssactvtyclsfy").focus();
+							});
 						} else if(checkEmpty("#sdt")){
-							makeAlert("필수입력", "시작일을 입력하세요");
-							$("#sdt").focus();
+							makeAlert("필수입력", popContOneLine("시작일을 입력하세요"), function() {
+								$("#sdt").focus();								
+							});
 						} else if(checkEmpty("#ssactvtycont")){
-							makeAlert("필수입력", "활동내용을 입력하세요");
-							$("#ssactvtycont").focus();
+							makeAlert("필수입력", popContOneLine("활동내용을 입력하세요"), function() {
+								$("#ssactvtycont").focus();								
+							});
 						} else {							
 							console.log(${sEmpNum});
 							var RegForm = $("#RegForm");
@@ -956,7 +969,7 @@ $(document).ready(function () {
 										if(res.res == "success"){
 											reloadSCList();								
 										} else {
-												alert("등록중 문제가 발생하였습니다.");
+											makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 												}
 										},
 										error : function(request, status, error) {
@@ -979,6 +992,141 @@ $(document).ready(function () {
 			});
 		});		
 	
+	/* 예정된 일정 상세 팝업 */
+	$(".sbx").on("click","#scName", function() {
+		var snum = $(this).children("#schdlListNumber").val();
+		var lnum = $(this).children("#leadListNumber").val();
+		document.getElementById("schdlNumber").value = snum;
+		document.getElementById("leadNumber").value = lnum;
+		
+		
+		var params = $("#lsForm").serialize();
+		
+		$.ajax({
+			type  : "post",
+			url : "leadSchdlAjax",
+			dataType : "json",
+			data : params,
+			success : function(lsData) {	
+				var html = "";
+				
+				$.each(lsData, function(index, data) {
+					
+					html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
+					html += "<input type=\"hidden\" name=\"sEmpNum\" value=\"${sEmpNum}\" />";
+					html += "<table class=\"popup_table\">";
+					html += "	<tbody>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"일정명 *\" readonly=\"readonly\"/></td>";
+					html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ssname\" name=\"ssname\" value=\"" + data.SCHDL_NAME + "\"/></td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"리드\" readonly=\"readonly\"/></td>";
+					html += "			<td>";
+					html += "				<div class=\"imgP\">";
+					html += "					<input type=\"text\" class=\"pop_txt imgName\" id=\"lName\" name=\"lName\" value=\"" + data.LEAD_NAME + "\" />";
+					html += "					<input type=\"hidden\" id=\"lNum\" name=\"lNum\" value=\"${param.leadNum}\"/>";
+					html += "				</div>";
+					html += "			</td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객명\" readonly=\"readonly\"/></td>";
+					html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"clName\" name=\"clName\" value=\"" + data.LEAD_CLNT_NAME + "\"/></td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객사\" readonly=\"readonly\"/></td>";
+					html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ccName\" name=\"ccName\"  value=\"" + data.LEAD_CLNT_CMPNY_NAME + "\"/></td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동분류 *\" readonly=\"readonly\"/></td>";
+					html += "			<td><select class=\"pop_txt_in\" id=\"ssactvtyclsfy\" name=\"ssactvtyclsfy\" >";
+					html += "					<optgroup>";
+					html += "						<option value=\"9\">선택하세요</option>";
+					if(data.ACTVTY_CLSFY_NUM == 0) {
+						html += "						<option value=\"0\" selected=\"selected\">전화</option>";
+						html += "						<option value=\"1\">메일</option>";
+						html += "						<option value=\"2\">방문</option>";
+						html += "						<option value=\"3\">기타</option>";
+					} else if (data.ACTVTY_CLSFY_NUM == 1) {
+						html += "						<option value=\"0\">전화</option>";
+						html += "						<option value=\"1\" selected=\"selected\">메일</option>";
+						html += "						<option value=\"2\">방문</option>";
+						html += "						<option value=\"3\">기타</option>";
+					} else if (data.ACTVTY_CLSFY_NUM == 2) {
+						html += "						<option value=\"0\">전화</option>";
+						html += "						<option value=\"1\">메일</option>";
+						html += "						<option value=\"2\" selected=\"selected\">방문</option>";
+						html += "						<option value=\"3\">기타</option>";
+					} else if (data.ACTVTY_CLSFY_NUM == 3) {
+						html += "						<option value=\"0\">전화</option>";
+						html += "						<option value=\"1\">메일</option>";
+						html += "						<option value=\"2\">방문</option>";
+						html += "						<option value=\"3\" selected=\"selected\">기타</option>";
+					}
+					html += "					</optgroup>";
+					html += "			</select></td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"날짜 *\" readonly=\"readonly\"/></td>";
+					html += "			<td><input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"sdt\" name=\"sdt\" value=\"" + data.START_DATE_HR + "\"/>";
+					html += "				<div class=\"wave\">" + " ~ "  + "</div>";
+					if(data.END_DATE_HR == null) {
+						html += "			<input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\" /></td>";
+					} else {
+						html += "			<input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\" value=\"" + data.END_DATE_HR + "\"/></td>";
+					}
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동내용 *\" readonly=\"readonly\"/></td>";
+					html += "			<td style=\"border-bottom: none\"><textarea class=\"ta_box\" id=\"ssactvtycont\" name=\"ssactvtycont\">" + data.ACTVTY_CONT + "</textarea></td>";
+					html += "		</tr>";
+					html += "	</tbody>";
+					html += "</table>";
+					if(data.ATT_FILE_NAME != null) {
+						var fileLength = data.ATT_FILE_NAME.length;
+						var fileName = data.ATT_FILE_NAME.substring(20, fileLength);
+					}
+					html += "<div class=\"pop_rvn_txt\"> 첨부파일";
+					html += "<span id=\"uploadBtn\">";
+					if(data.ATT_FILE_NAME == null) {
+						html += "	<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
+					}
+					html += "</span>";
+					html += "</div>";
+					html += "<div class=\"pop_cntrct_box_in\">";
+					if(data.ATT_FILE_NAME != null) {
+						html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
+					}
+					html += "<input type=\"text\" id=\"fileName\" readonly=\"readonly\" />";
+					html += "	<input type=\"text\" id=\"popFileName\" readonly=\"readonly\" />                 ";
+					html += "	<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" value=\"" + data.ATT_FILE_NAME +"\"/>           ";
+					html += "	<input type=\"hidden\" id=\"schdlnum\" name=\"schdlnum\" />           ";
+					html += "</div>                                                                     ";
+					html += "</form>";
+					
+				});	
+				
+		makePopup({
+			depth : 1,
+			bg : false,
+			bgClose : false,
+			title : "예정된 일정 상세보기",
+			contents : html,
+			width : 600,
+			height : 520,
+			buttons : [{
+				name : "확인",
+				func : function() {
+						closePopup();
+						}
+					}]// button 함수 end
+			});
+			},	
+			error : function(request) {
+				console.log(request.responseTxt);
+			}
+		});
+	});
 	/* 예정된 일정 수정 팝업 */
 	$(".sbx").on("click", ".sch_re", function() {
 		var snum = $(this).children("#schdlListNumber").val();
@@ -1128,17 +1276,21 @@ $(document).ready(function () {
 				name : "수정",
 				func : function() {
 						if(checkEmpty("#ssname")){
-							makeAlert("필수입력", "일정명을 입력하세요");
-							$("#ssname").focus();
+							makeAlert("필수입력", popContOneLine("일정명을 입력하세요"), function() {
+								$("#ssname").focus();								
+							})
 						} else if($("#ssactvtyclsfy").val() == 9){
-							makeAlert("필수입력", "활동분류를 입력하세요");
-							$("#ssactvtyclsfy").focus();
+							makeAlert("필수입력", popContOneLine("활동분류를 입력하세요"), function() {
+								$("#ssactvtyclsfy").focus();								
+							});
 						} else if(checkEmpty("#sdt")){
-							makeAlert("필수입력", "시작일을 입력하세요");
-							$("#sdt").focus();
+							makeAlert("필수입력", popContOneLine("시작일을 입력하세요"), function() {
+								$("#sdt").focus();								
+							});
 						} else if(checkEmpty("#ssactvtycont")){
-							makeAlert("필수입력", "활동내용을 입력하세요");
-							$("#ssactvtycont").focus();
+							makeAlert("필수입력", popContOneLine("활동내용을 입력하세요"), function() {
+								$("#ssactvtycont").focus();								
+							});
 						} else {					
 								
 								console.log(${sEmpNum});
@@ -1161,7 +1313,7 @@ $(document).ready(function () {
 											if(res.res == "success"){
 												reloadSCList();								
 											} else {
-													alert("수정중 문제가 발생하였습니다.");
+												makeAlert("알림", popContOneLine("수정중 문제가 발생하였습니다."));
 													}
 											},
 											error : function(request, status, error) {
@@ -1203,7 +1355,7 @@ $(document).ready(function () {
 			bg : false,
 			bgClose : false,
 			title : "삭제",
-			contents : "삭제하시겠습니까?",
+			contents : popContOneLine("삭제하시겠습니까?"),
 			contentsEvent : function() {
 				$("#popup").draggable();
 				
@@ -1228,7 +1380,7 @@ $(document).ready(function () {
 										closePopup();
 										reloadSCList();
 									} else {
-										alert("삭제중 문제가 발생하였습니다.");
+										makeAlert("알림", popContOneLine("삭제중 문제가 발생하였습니다."));
 									}
 								},
 								error : function(request, status, error) {
@@ -1280,7 +1432,9 @@ function drawOpList(list) {
 		html += "<div class=\"name\">" + data.EMP_NAME + "(" + data.DEPT_NAME + " / " + data.RANK_NAME + ")" + "</div>";
 		html += "<div class=\"txtOp\">" + data.CONT + "</div>";
 		html += "<div class=\"dt\">" + data.RGSTRTN_DATE + "</div>";
-		html += "<div class=\"del\">삭제";
+		if(data.EMP_NAME == "${sEmpName}") {
+			html += "<div class=\"del\">삭제";			
+		} 
 		html += "<input type=\"hidden\" id=\"cmntNum\" name=\"cmntNum\" value=\"" + data.CMNT_NUM + "\" />";
 		html += "</div>";
 		html += "</div>";
@@ -1331,9 +1485,12 @@ function drawScList(list) {
 		html += "<div class=\"schdl_box_in\">";
 		html += "";
 		html += "";
-		html +=	"<div class=\"name\">일정명   :" + data.SCHDL_NAME + "</div>";
+		html +=	"<div class=\"name\">일정명 :<span id=\"scName\" ><input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"leadListNumber\" value=\"" + ${param.leadNum} + "\" />" + data.SCHDL_NAME + "</span></div>";
 		html +=	"<div class=\"txtOp\">기간   " + data.START_DATE_HR +  " ~ " + data.END_DATE_HR + "</div>";
-		html +=	"<div class=\"txtOp sche\">담당자   :" + data.EMP_NAME + "</div><span class=\"sch_re\" >수정<input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"leadListNumber\" value=\"" + ${param.leadNum} + "\" /></span><span> | </span><span class=\"sch_del\" >삭제<input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"leadListNumber\" value=\"" + ${param.leadNum} + "\" /></span>";
+		html +=	"<div class=\"txtOp sche\">담당자   :" + data.EMP_NAME
+		if(data.EMP_NAME == "${sEmpName}") {
+			html += "</div><span class=\"sch_re\" >수정<input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"leadListNumber\" value=\"" + ${param.leadNum} + "\" /></span><span> | </span><span class=\"sch_del\" >삭제<input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"leadListNumber\" value=\"" + ${param.leadNum} + "\" /></span>";			
+		}
 		html += "</div>";
 		html += "</div>";
 	}
@@ -1462,7 +1619,7 @@ function uploadPopName(e) {
 								</td>
 								<td><input type="button" class="btn" value="가능여부 *" readonly="readonly"/></td>
 								<td>
-									<input type="number" class="txt" id="psblCheck" name="psblCheck" value="${data.PSBL_CHECK}" style="text-align: right;" readonly="readonly"/>
+									<input type="text" class="txt" id="psblCheck" name="psblCheck" value="${data.PSBL_CHECK}" style="text-align: right;" readonly="readonly"/>
 									<div id="percent">%</div>
 								</td>
 							</tr>							

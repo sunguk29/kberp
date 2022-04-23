@@ -334,6 +334,7 @@ $(document).ready(function() {
 			buttons : [{
 				name : "나가기",
 				func:function() {
+					$("#listForm").attr("action", "clntList");
 					$("#listForm").submit();
 					closePopup();
 				}
@@ -570,6 +571,9 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
+											$("#cn").val(res.seq);
+											
+											$("#listForm").attr("action", "clntCont");
 											$("#listForm").submit();
 										} else {
 											makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
@@ -750,7 +754,8 @@ function uploadName(e) {
 </script>
 </head>
 <body>
-<form action="clntList" id="listForm" method="post">
+<form action="#" id="listForm" method="post">
+	<input type="hidden" name="cn" id="cn" />
 	<input type="hidden" id="page" name="page" value="${page}" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />

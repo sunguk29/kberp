@@ -19,10 +19,20 @@
 	text-align: left;
 }
 
-.board_table .board_table_hover {
+.board_table .board_table_hover{
 	color: #222222;
 	font-weight: bold;
 	cursor: pointer;
+}
+.board_ntc:hover{
+	color: #4B94F2;
+	text-decoration : underline;
+	font-weight: bold;
+	cursor: pointer;
+}
+.board_ntc_num, .board_ntc{ 
+	color: #ff4e59;
+	font-weight: bold;
 }
 
 </style>
@@ -109,13 +119,21 @@ function reloadList() { // 목록 조회용 + 페이징 조회용
     });
 	
 }
+
 function drawList(list) {
 	var html = "";
 	
 	for(var data of list){
+		
 		html += "<tr no=\"" + data.WRTNG_NUM + "\">";
-		html += "<td>" + data.WRTNG_NUM + "</td>";
-		html += "<td class=\"board_table_hover board_cont_left\">" + data.BOARD_TITLE + "</td>";
+		
+		if(data.BOARD_ADMNSTRTN_NUM == 0) { 
+			html += "<td class=\"board_ntc_num\">" + data.WRTNG_NUM + "</td>";
+			html += "<td class=\"board_ntc board_cont_left\">" + data.BOARD_TITLE + "</td>";	
+		} else {
+			html += "<td>" + data.WRTNG_NUM + "</td>";
+			html += "<td class=\"board_table_hover board_cont_left\">" + data.BOARD_TITLE + "</td>";
+		}
 		html += "<td>" + data.EMP_NAME + "</td>";
 		html += "<td>" + data.BOARD_WRTNG_DATE + "</td>";
 		html += "<td>" + data.BOARD_HITS + "</td>";

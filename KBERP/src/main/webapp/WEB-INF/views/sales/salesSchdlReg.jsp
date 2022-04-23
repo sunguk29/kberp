@@ -415,6 +415,7 @@ input {
 <script type="text/javascript">
 $(document).ready(function() {
 
+	console.log("${param.dt}");
 	
 	$("#alertBtn").on("click", function() {
 		makeAlert("하이", "내용임");
@@ -426,12 +427,12 @@ $(document).ready(function() {
 			bg : true,
 			bgClose : false,
 			title : "알림",
-			contents : "나가면 저장되지않습니다, 나가시겠습니까?",
+			contents : popContTwoLine("내용이 저장되지 않았습니다.<br/>페이지를 나가시겠습니까?"),
 			contentsEvent : function() {
 				
 			},
 			buttons : [{
-				name : "나가기",
+				name : "확인",
 				func:function() {
 					$("#backForm").submit();
 				}
@@ -469,7 +470,7 @@ $(document).ready(function() {
 				bg : false,
 				bgClose : false,
 				title : "저장",
-				contents : "저장하시겠습니까?",
+				contents : popContOneLine("저장하시겠습니까?"),
 				contentsEvent : function() {
 					$("#popup").draggable();
 				},
@@ -497,6 +498,7 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success"){
+											$("#schdlnum").val(res.schdlnum);
 											savePop();								
 										} else {
 											makeAlert("알림", popContTwoLine("등록 중 문제가 발생하였습니다.<br/>나가시겠습니까?"));
@@ -551,7 +553,7 @@ function savePop() {
 		buttons : [{
 			name : "확인",
 			func:function() {
-				$("#backForm").submit();
+				$("#actionForm").submit();
 			}
 		}]
 	});
@@ -920,7 +922,14 @@ function uploadName(e) {
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="deptS" value="${param.deptS}" />
 	<input type="hidden" name="usrsrchTxt" value="${param.usrsrchTxt}" />
-	<input type="hidden" name="initialDate" value="${param.initialDate}"/>
+	<input type="hidden" name="clndrDate" value="${param.clndrDate}"/>
+</form>
+<form action="salesSchdlCont" id="actionForm" method="post">
+	<input type="hidden" name="top" value="${param.top}" />
+	<input type="hidden" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" id="schdlnum" name="schdlnum"/>
+	<input type="hidden" name="clndrDate" value="${param.clndrDate}"/>
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">

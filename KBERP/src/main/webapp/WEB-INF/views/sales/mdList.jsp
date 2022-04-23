@@ -173,7 +173,7 @@ $(document).ready(function() {
 								</td>
 								<td>
 									<select>
-										<option selected="selected">판매 기간</option>
+										<option selected="selected">판매기간 시작일</option>
 									</select>
 								</td>
 								<td colspan="8">

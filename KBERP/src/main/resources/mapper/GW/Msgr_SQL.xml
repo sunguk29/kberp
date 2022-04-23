@@ -87,14 +87,19 @@
 
 <!-- 사원리스트 -->	
 	<select id = "addListChat" parameterType = "hashmap" resultType="hashmap">
-	SELECT *
-	FROM (SELECT E.EMP_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME
-			FROM  EMP E INNER JOIN APNTM A
-			                        ON E.EMP_NUM = A.EMP_NUM
-			            INNER JOIN DEPT D
-			                        ON A.DEPT_NUM = D.DEPT_NUM
-			            INNER JOIN RANK R
-			                        ON A.RANK_NUM = R.RANK_NUM
+		SELECT EMP_NAME, DEPT_NAME, RANK_NAME, EMP_NUM
+		FROM (SELECT E.EMP_NUM, E.EMP_NAME, D.DEPT_NAME, R.RANK_NAME, ROW_NUMBER() OVER(ORDER BY E.EMP_NUM DESC) AS RNUM
+		FROM EMP E INNER JOIN (SELECT EMP_NUM, DEPT_NUM, RANK_NUM, END_DATE,
+                                      ROW_NUMBER() OVER(PARTITION BY EMP_NUM ORDER BY APNTM_NUM DESC) AS RNUM
+                               FROM APNTM
+                               WHERE STS_NUM = 1) A
+		                   ON E.EMP_NUM = A.EMP_NUM
+                          AND A.RNUM = 1
+		                  AND (A.END_DATE IS NULL OR TO_CHAR(A.END_DATE, 'YYYYMMDD') >= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+		           INNER JOIN DEPT D
+		                   ON A.DEPT_NUM = D.DEPT_NUM
+		           INNER JOIN RANK R
+		                   ON A.RANK_NUM = R.RANK_NUM
 		  )
 	WHERE EMP_NUM != #{sEmpNum}
 	</select>
@@ -117,16 +122,15 @@
 	
 <!-- 마지막 채팅번호 -->	
 	<select id="getMaxNo" resultType="Integer">
-		SELECT NVL(MAX(CHAT_NUM), 0) AS MAXNO
+		SELECT NVL(MAX(CONT_NUM), 0) AS MAXNO
 		FROM MSGR_CONT
 	</select>
 	
-<!-- lastChatNo 기준으로 이전 채팅 읽어오기, 이후 채팅 불러오기 -->	
-	<select id="getContList" parameterType="Integer" resultType="hashmap">
+	<select id="getContList" parameterType="hashmap" resultType="hashmap">
 		SELECT MC.CHAT_NUM, MC.CONT_NUM, MC.EMP_NUM, MC.CONT, MC.RGSTRTN_DT, R.RANK_NAME, E.EMP_NAME, D.DEPT_NAME
 		FROM (SELECT CHAT_NUM, CONT_NUM, EMP_NUM, CONT, TO_CHAR(RGSTRTN_DT, 'MM/DD HH24:MI') AS RGSTRTN_DT
 		        FROM MSGR_CONT
-		        WHERE CONT_NUM > #{lastChatNo}
+		        WHERE #{lastContNo} > CONT_NUM
 		        AND CHAT_NUM = #{chatNum}
 		        ORDER BY CONT_NUM ASC) MC INNER JOIN EMP E
 		                                    ON MC.EMP_NUM = E.EMP_NUM
@@ -138,11 +142,28 @@
 					                        ON A.RANK_NUM = R.RANK_NUM
 	</select>
 	
-<!-- 채팅방 별 대화 -->	
-	<select id = "chatInCont" parameterType="hashmap" resultType="hashmap">
-		SELECT CHAT_NUM
-		FROM MSGR_CONT
-		GROUP BY #{chatNum}
+	
+	
+<!-- lastChatNo 기준으로 이전 채팅 읽어오기, 이후 채팅 불러오기 -->	
+	<select id="getCont" parameterType="hashmap" resultType="hashmap">
+		SELECT MC.CHAT_NUM, MC.CONT_NUM, MC.EMP_NUM, MC.CONT, MC.RGSTRTN_DT, R.RANK_NAME, E.EMP_NAME, D.DEPT_NAME
+		FROM (SELECT CHAT_NUM, CONT_NUM, EMP_NUM, CONT, TO_CHAR(RGSTRTN_DT, 'MM/DD HH24:MI') AS RGSTRTN_DT
+		        FROM MSGR_CONT
+		        WHERE CONT_NUM > #{lastContNo}
+		        AND CHAT_NUM = #{chatNum}
+		        ORDER BY CONT_NUM ASC) MC INNER JOIN EMP E
+		                                    ON MC.EMP_NUM = E.EMP_NUM
+		                                  INNER JOIN APNTM A
+					                        ON E.EMP_NUM = A.EMP_NUM
+		                                  INNER JOIN DEPT D
+					                        ON A.DEPT_NUM = D.DEPT_NUM
+		                                  INNER JOIN RANK R
+					                        ON A.RANK_NUM = R.RANK_NUM
 	</select>
+	
+<!--처음입장할땐 등록이후의 채팅을가져와야하고
+	추가 글을 가져올때 -->	
+	
+
 	
 </mapper>

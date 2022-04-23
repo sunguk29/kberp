@@ -104,13 +104,79 @@
 	margin-top: 50px;
 	margin-right: 15px;
 }
+
+.srch_mid {
+	display : inline-block;
+	width: 480px;
+	height: 60px;
+	margin-bottom: 15px;
+}
+
+table {
+	border-collapse: collapse;
+	width: auto;
+	margin-top: 15px;
+	border-top: 1px solid #5555; 
+}
+
+thead {
+	display : inline-block;
+	font-size: 14px;
+	border-collapse: collapse;
+	border-bottom: 1px solid #5555;
+}
+
+tbody {
+	display :inline-block;
+	height: 40px;
+	font-size: 13px;
+	color: black;
+}
+
+tr {
+	overflow: auto;
+}
+
+th:nth-child(1), th:nth-child(2) {
+	width: 120px;
+	height: 39.5px;
+	text-align: center;
+	border-right: 1px solid #5555; 
+}
+
+th:nth-child(3) {
+	width: 120px;
+	text-align: center; 
+	border-right: 1px solid #5555;
+}
+
+th:nth-child(4) {
+	width: 120px;
+	text-align: center; 
+}
+
+td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
+	text-align: center;
+	font-size: 12pt; 
+	width: 120px;
+	height: 39.5px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$(".rcpnt_btn").on("click", function() {
+	
+	// 답장할때 보낸사람을 받는사람으로 표기
+	if($("#senum").val() == ""){
+		$("#rcpnt_name").val(""); // 보낸사람이 없으면 받는사람 text를 공백으로 둠.
+	} else {
+		$("#rcpnt_name").val($("#senum").val() + "(" + $("#sename").val() + ")" ); // 보낸사람이 있으면 받는사람 text에 사원번호(이름)을 표기
+		$("#rcpnt").val($("#senum").val()); // 보낸사람이 있으면 rcpnt에 사원번호를 넣어둠.
+	}
+	
+	/* $(".rcpnt_btn").on("click", function() {
 		var html = "";
 		html += "<div id=\"t\">";
-		html += "<input type=\"checkbox\" id=\"no\" value=\"1\" />1";
+		html += "<input type=\"checkbox\" id=\"no\" value=\"2022000017\" />지사원";
 		html += "<input type=\"checkbox\" id=\"no\" value=\"2\" />2";
 		html += "</div>";
 		
@@ -124,23 +190,99 @@ $(document).ready(function() {
 			buttons : [{
 				name : "추가",
 				func:function() {
-					var arr = [];
+					// var arr = [];
+					
+					if(checkEmpty("#t #no:checked")) {
+						alert("받는사람을 선택하세요.");
+					}
+					
 					$("#t #no:checked").each(function() {
-						arr.push($(this).val());
+						$("#rcpnt").val($(this).val());
+						//arr.push($(this).val());
+						//console.log(arr.toString());
+						closePopup();
 					});
-					console.log(arr.toString());
-					//closePopup();
 				}
 			}, {
 				name : "취소"
 			}]
 		});
+	}); */
+	
+	$(".rcpnt_btn").on("click", function() {
+				
+		var html = "";
+		
+		html +=	"	<div class = \"srch_mid\">                                              ";
+		html +=	"		<div class = \"chart\" id = \"chart\">                              ";
+		html +=	"			<table>                                                         ";
+		html +=	"				<thead>                                                     ";
+		html +=	"					<tr>                                                    ";
+		html +=	"						<th>부서</th>                                        ";
+		html +=	"						<th>직급</th>                                        ";
+		html +=	"						<th>성명</th>                                        ";
+		html +=	"						<th>선택</th>                                   		";
+		html +=	"					</tr>													";
+		html +=	"				</thead>                                                    ";
+		html +=	"				<tbody>                                                     ";
+		html +=	"				</tbody>					                                ";
+		html +=	"			</table>                                                        ";
+		html +=	"		</div>                                                                  ";
+		html +=	"	</div>                                                                  ";
+
+		
+		makePopup({
+			bg : true,
+			bgClose : false,
+			title : "받는사람",
+			width : 500,
+			height : 500,
+			contents : html,
+			contentsEvent : function() {
+				// Ajax태우고
+				// list받아서 팝업 테이블에 내용 추가 id추가
+				$.ajax({
+					type : "post",
+					url : "NoteOrgnztChartAjax",
+					dataType : "json",
+					success : function(res) { 
+						drawList(res.list);
+					},
+					error : function(req) {
+						console.log(req.responseText)	
+					}
+				});
+				
+				$("#chart").slimScroll({height: "340px"});
+ 			},
+ 			buttons : [{
+				name : "추가",
+				func:function(res) {
+					if($("#srch_check:checked").length == 0) {
+						alert("받는사람을 선택하세요.");
+					} else {
+						$("#rcpnt_name").val($("#srch_check:checked").val()); // 받는사람 text엔 사원번호(이름)이 보여지도록 함.
+						$("#rcpnt").val($("#srch_check:checked").val().substr(0, 10)); // 실제로 사원번호를 받는 id는 rcpnt
+						closePopup();
+					}
+				}
+			}, {
+				name : "취소"
+			}]
+			
+		});
 	});
 	
 	$("#sendBtn").on("click", function() {
-		if(checkEmpty("#rcpnt")) {
+		
+		// 받는사람을 수기로 직접 작성할 때, rcpnt의 값이 비어있으면 넣어줌
+		if($("#rcpnt").val() == ""){
+			$("#rcpnt").val($("#rcpnt_name").val());
+		}
+		
+		if(checkEmpty("#rcpnt_name")) {
 			alert("받는사람을 입력하세요.");
-			$("#rcpnt").focus();
+			$("#rcpnt_name").focus();
 		} else if(checkEmpty("#cnt")) {
 			alert("내용을 입력하세요.");
 			$("#cnt").focus();
@@ -190,6 +332,21 @@ $(document).ready(function() {
 	});
 });
 
+function drawList(list) {
+	
+	var html = "";
+	
+		for(var data of list) {
+			html +=	"<tr no =\"" + data.EMP_NAME +"\">";
+			html +=	"<td>" + data.DEPT_NAME + "</td>";
+			html +=	"<td>" + data.RANK_NAME + "</td>";
+			html +=	"<td>" + data.EMP_NAME + "</td>";
+			html +=	"<td><input type =\"radio\" id = \"srch_check\" name = \"srch_check\" value = \"" + data.EMP_NUM + "(" + data.EMP_NAME + ")" + "\"><label for=\"srch_check\"></label></td> ";
+			html +=	"</tr>";
+		}	
+	$("tbody").html(html);
+}
+
 function checkEmpty(sel) {
 	if($.trim($(sel).val()) == "") {
 		return true;
@@ -216,6 +373,11 @@ function checkEmpty(sel) {
 				<input type="hidden" id="top" name="top" value="${param.top}" />
 				<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 				<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+				<input type="hidden" id="no" name="no" value="${param.no}"/>
+				<!-- 받은편지에서 보낸사람의 이름을 나타냄 -->
+				<input type="hidden" id="sename" name="sename" value="${param.sename}"/>
+				<!-- 받은편지에서 보낸사람의 사원번호를 나타냄-->
+				<input type="hidden" id="senum" name="senum" value="${param.senum}"/>
 			</form>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
@@ -226,14 +388,14 @@ function checkEmpty(sel) {
 					<div class="title_bar"></div>
 				</div>
 				<div class="guide">※ 받는 사람은 직접 입력이 가능합니다.<br/>
-								  (단, 입력 시 '이름 또는 사원번호'로 입력을 해야 하며
-								  구분자로 , 또는 엔터값을 허용합니다.)
+								  (단, 입력 시 '사원번호'로 입력을 해야 하며, 받는사람 버튼에서 단일 선택을 허용합니다.)
 				</div>
 				<form action="fileUploadAjax" id="sendForm" method="post" enctype="multipart/form-data">
 					<div class="cont">
 						<div class="rcpnt_emp">받는사람</div>
 						<div class="emp">
-							<input type="text" size="95" id="rcpnt" name="rcpnt" />
+							<!-- 단순히 사원번호(이름)의 형태를 띄게하기 위해서 존재 -->
+							<input type="text" size="95" id="rcpnt_name" name="rcpnt_name" />
 						</div>
 						<div class="rcpnt_btn">
 							<input type="button" value="받는사람">
@@ -245,8 +407,12 @@ function checkEmpty(sel) {
 							<input type = "file" id="att" name="att"/>
 						</div>
 					</div>
+					<!-- SQL로 데이터를 보내기 위해서 실제로 사용되어지는 id는 rcpnt(사원번호를 담음) -->
+					<input type="hidden" id="rcpnt" name="rcpnt" />
+					<!-- 보낸편지와 받는편지를 동시에 생성하기 위함. -->
 					<input type="hidden" id="sndr" name="sndr" value="${sEmpNum}"/>
 					<input type="hidden" id="notesq" name="notesq" value="${notesq}"/>
+					
 					<input type="hidden" id="attFile" name="attFile" />
 					<div class="note_bottom">
 						<div class="cmn_btn_ml" id="sendBtn">보내기</div>

@@ -1103,7 +1103,7 @@ function drawOpList(list) {
 		html += "<div class=\"name\">" + data.EMP_NAME + "(" + data.DEPT_NAME + " / " + data.RANK_NAME + ")" + "</div>";
 		html += "<div class=\"txtOp\">" + data.CONT + "</div>";
 		html += "<div class=\"dt\">" + data.RGSTRTN_DATE + "</div>";
-		if(data.EMP_NUM == ${sEmpNum}) {
+		if(data.EMP_NUM == ${sEmpNum} || ${sEmpNum} == "2022000001") {
 			html += "<div class=\"del\">삭제";
 			html += "<input type=\"hidden\" id=\"cmntNum\" name=\"cmntNum\" value=\"" + data.CMNT_NUM + "\" />";
 			html += "</div>";

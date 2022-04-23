@@ -74,7 +74,7 @@
 	margin-left: 10px;
 }
 
-.rcvd_time {
+.sent_time {
 	display: inline-block;
 	width: 440px;
 	height: 50px;
@@ -91,7 +91,7 @@
 	height: 235px;
 }
 
-.rcvd_atchmnt {
+.sent_atchmnt {
 	display: inline-block;
 	width: 440px;
 	height: 50px;
@@ -151,10 +151,10 @@ $(document).ready(function() {
 				</div>
 				<div class="cont">
 					<div class="rcpnt">받는사람 : ${data.EMP_NAME}</div>
-					<div class="rcvd_time">보낸시간 : ${data.WRTNG_DATE}</div>
+					<div class="sent_time">보낸시간 : ${data.WRTNG_DATE}</div>
 				</div>
 				<textarea class="write" readonly = "readonly">${data.NOTE_CNT}</textarea>
-				<div class="rcvd_atchmnt">
+				<div class="sent_atchmnt">
 					<c:if test="${!empty data.ATT_FILE}">
 						<c:set var="fileLength" value="${fn:length(data.ATT_FILE)}"></c:set>
 						<c:set var="fileName" value="${fn:substring(data.ATT_FILE, 20, fileLength)}"></c:set>

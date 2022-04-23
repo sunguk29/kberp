@@ -79,7 +79,7 @@ public class MsgrController {
 				
 				//반복문으로 하거나 srch_check를 인서트해서 hashmap put 계속추가?
 				for(String num : srch_check) {
-					HashMap<String, String>data = new HashMap<String, String>();
+					HashMap<String, String> data = new HashMap<String, String>();
 					data.put("chatsq", seq);
 					data.put("num", num);
 					ics.insertData("msgr.insertChatHead", data);
@@ -205,22 +205,31 @@ public class MsgrController {
 												HttpServletRequest request,
 												ModelAndView mav) throws Throwable {
 		
-		System.out.println("3333333" + params.get("lastChatNo"));
-		System.out.println("3333333" + params.get("chatNum"));
+		System.out.println("#######" + params.get("lastContNo"));
+		System.out.println("$$$$$$$" + params.get("chatNum"));
+		System.out.println("%%%%%%%" + params);
+		
 		
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		int lastChatNo = Integer.parseInt(request.getParameter("lastChatNo"));
-	//	List<HashMap<String, String>> group = ics.getDataList("msgr.chatInCont");
+		int lastContNo = Integer.parseInt(request.getParameter("lastContNo"));
 		
-	//	modelMap.put("group", group);
 		
 		try {
-			List<HashMap<String, String>> list = ims.getContList(lastChatNo);
-			System.out.println("7777777777" + params.get("lastChatNo"));
+			
+			List<HashMap<String, String>> list = ims.getContList(params);
+			HashMap<String, String> data =  ims.getCont(params);
+			// params로 넘겨야함.
+			// params로 받았을 경우, 내가 읽은번호 업데이트로 업데이트
+			
+			
+			System.out.println("6666666666" + params);
+			System.out.println("7777777777" + list);
+			System.out.println("8888888888" + params.get("chatNum"));
 			
 			modelMap.put("list", list);
+			modelMap.put("data", data);
 			modelMap.put("message", CommonProperties.RESULT_SUCCESS);
 		} catch (Exception e) {
 			modelMap.put("message", CommonProperties.RESULT_ERROR);

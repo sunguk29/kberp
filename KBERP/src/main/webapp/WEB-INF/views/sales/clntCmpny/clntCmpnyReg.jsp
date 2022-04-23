@@ -353,6 +353,9 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
+											$("#ccn").val(res.seq);
+											
+											$("#listForm").attr("action", "clntCmpnyCont");
 											$("#listForm").submit();
 										} else {
 											makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
@@ -416,6 +419,7 @@ function uploadName(e) {
 </head>
 <body>
 <form action="clntCmpnyList" id="listForm" method="post">
+	<input type="hidden" name="ccn" id="ccn" />
 	<input type="hidden" id="page" name="page" value="${page}" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />

@@ -1,14 +1,23 @@
 <!-- 
 	계약 수정 : sales4Update
  -->
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now() ;	
+	request.setAttribute("version", version);		//캐시 처리
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>계약 수정</title>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -440,15 +449,15 @@ pre {
 }
 .popup_cont2 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-	font-weight: 600;
+	font-size: 12pt;
+	font-weight: bold;
 	text-align: center;
 	line-height: 100px;
 }
 .popup_cont3 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-    font-weight: 600;
+	font-size: 12pt;
+    font-weight: bold;
     text-align: center;
     height: 40px;
     line-height: 50px;
@@ -456,8 +465,8 @@ pre {
 }
 .popup_cont4 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-    font-weight: 600;
+	font-size: 12pt;
+    font-weight: bold;
     text-align: center;
     height: 40px;
     line-height: 40px;
@@ -523,43 +532,43 @@ $(document).ready(function() {
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#daoName")) {
-			makeAlert("필수 항목 알림", "입금계좌 소유주명을 입력하세요.", function() {
+			makeAlert("필수 정보 알림", popContOneLine("입금계좌 소유주명을 입력하세요."), function() {
 				$("#daoName").focus();
 			});
 		} else if(!isNaN($("#daoName").val())) {
-			makeAlert("알림", "입금계좌 소유주명은 한글 또는 영문으로 입력하세요.", function() {
+			makeAlert("알림", popContOneLine("입금계좌 소유주명은 한글 또는 영문으로 입력하세요."), function() {
 				$("#daoName").val("");
 				$("#daoName").focus();
 			});
 		} else if(checkEmpty("#daNum")) {
-			makeAlert("필수 항목 알림", "입금 계좌번호를 입력하세요.", function() {
+			makeAlert("필수 정보 알림", popContOneLine("입금 계좌번호를 입력하세요."), function() {
 				$("#daNum").focus();
 			});
 		} else if(isNaN($("#daNum").val())) {
-			makeAlert("알림", "입금 계좌번호는 숫자만 입력 가능합니다.", function() {
+			makeAlert("알림", popContOneLine("입금 계좌번호는 숫자만 입력 가능합니다."), function() {
 				$("#daNum").val("");
 				$("#daNum").focus();
 			});
 		} else if(checkEmpty("#payerName")) {
-			makeAlert("필수 항목 알림", "납입자명을 입력하세요.", function() {
+			makeAlert("필수 정보 알림", popContOneLine("납입자명을 입력하세요."), function() {
 				$("#payerName").focus();
 			});
 		} else if(!isNaN($("#payerName").val())) {
-			makeAlert("알림", "납입자명은 한글 또는 영문으로 입력하세요.", function() {
+			makeAlert("알림", popContOneLine("납입자명은 한글 또는 영문으로 입력하세요."), function() {
 				$("#payerName").val("");
 				$("#payerName").focus();
 			});
 		} else if(checkEmpty("#paNum")) {
-			makeAlert("필수 항목 알림", "납입 계좌번호를 입력하세요.", function() {
+			makeAlert("필수 정보 알림", popContOneLine("납입 계좌번호를 입력하세요."), function() {
 				$("#paNum").focus();
 			});
 		} else if(isNaN($("#paNum").val())) {
-			makeAlert("알림", "납입 계좌번호는 숫자만 입력 가능합니다.", function() {
+			makeAlert("알림", popContOneLine("납입 계좌번호는 숫자만 입력 가능합니다."), function() {
 				$("#paNum").val("");
 				$("#paNum").focus();
 			});
 		} else if(checkEmpty("#reDate")) {
-			makeAlert("필수 항목 알림", "갱신 예정일을 입력하세요.", function() {
+			makeAlert("필수 정보 알림", popContOneLine("갱신 예정일을 입력하세요."), function() {
 				$("#reDate").focus();
 			});
 		} else {
@@ -600,7 +609,7 @@ $(document).ready(function() {
 											$("#backForm").attr("action", "sales4CntrctCont");
 											$("#backForm").submit();
 										} else {
-											alert("등록중 문제가 발생하였습니다.");
+											makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 											console.log($("#dbNum").val());
 										}
 									},
@@ -751,6 +760,12 @@ function uploadName(e) {
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업번호 -->
+	<input type="hidden" name="prgrsStage1" value="${param.prgrsStage1}" />
+	<input type="hidden" name="prgrsStage2" value="${param.prgrsStage2}" />
+	<input type="hidden" name="mngName" value="${param.mngName}" />
+	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+	<input type="hidden" name="listSort" value="${param.listSort}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">

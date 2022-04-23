@@ -89,6 +89,7 @@
 	background-repeat: no-repeat;
 	background-size: 20pt;
 	background-color: white;
+	cursor: pointer;
 }
 
 .chat_list1 input:focus {
@@ -148,7 +149,8 @@
 	border: 0px solid;
 	font-size : 13pt;
 	text-overflow: ellipsis;
-	margin-right: 28px;	
+	margin-right: 28px;
+	cursor: pointer;
 }
 
 #head_count {
@@ -158,7 +160,7 @@
 	height: 20px;
 	border: 0px solid;
 	font-size : 13pt;
-
+	cursor: pointer;
 }
 
 #chat_view {
@@ -169,6 +171,7 @@
 	text-overflow: ellipsis;
 	line-height : 14px;
 	padding: 2px;
+	cursor: pointer;
 }
 
 .msgr_main {
@@ -469,13 +472,11 @@ td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 
 }
 
-img { 
-	display: block;
-	content: "";
-	border : 0px solid;
+.clicked {
+	color : blue;
 }
 
- 
+
 
 </style>
 <script type="text/javascript">
@@ -584,10 +585,9 @@ $(document).ready(function() {
 	
 	
 	
-	$("div").on("click", ".chat_list1", function() {	
-	//	refreshInterval = setInterval(readCont, 1000);
-	//	clearInterval(refreshInterval);
-		readCont();
+	$("body").on("click", ".chat_list1", function() {	
+		clearInterval(refreshInterval);
+		refreshInterval = setInterval(readCont, 1000);
 		
 		$("#chatNum").val($(this).attr("chatNum"));
 		
@@ -623,11 +623,15 @@ $(document).ready(function() {
 		html += "				</div>";
 		html += "			</div>";
 		html += "		</div>";
-		readCont();
+	//	init();
 		
 		$(".msgr_main").remove();
 		$(".right_box").html(html);
-		$(".chat_dtl").slimScroll({height:"545px"});
+		
+		readCont();
+		
+		$(".chat_dtl").slimScroll({height:"545px",
+								  start: "bottom"});
 		
 		
 		$("#insertBtn").on("click", function() {
@@ -635,7 +639,6 @@ $(document).ready(function() {
 				alert("내용을 입력하세요.");
 			} else {
 				insertCont();
-				
 			}
 		});
 		
@@ -667,7 +670,7 @@ $(document).ready(function() {
 	                                        	
 			html +=	"				</tbody>					                                ";
 			html +=	"			</table>                                                        ";
-			html +=	"			</div>                                                        ";
+			html +=	"			</div>                                                        	";
 			html +=	"		</div>                                                              ";
 			html += "		</form>";
 			
@@ -738,6 +741,9 @@ $(document).ready(function() {
 		
 	}); // div End
 		
+	
+	
+	
 }); // ready
 
 function enterCheck() {
@@ -746,7 +752,6 @@ function enterCheck() {
 			alert("내용을 입력해 주세요.");
 		} else {
 			insertCont();
-			readCont();
 		}
 		return;
 	}
@@ -800,14 +805,13 @@ function insertCont() {
 		
 	})
 }	 */
-	
+
 	
 
 function readCont() {
 	clearInterval(refreshInterval);
 	// 채팅 인서트는 성공했지만, 리스트띄우는건 실패. 오류명 undefined 'parsererror' 
 	var params = $("#readForm").serialize();
-	console.log(params);
 	$.ajax({
 		type : "post",
 		url : "getContListAjax",
@@ -815,7 +819,8 @@ function readCont() {
 		data : params,
 		success : function(res) {
 			console.log("성공")
-			
+				console.log(res.list);
+				console.log(res);
 			if(res.list.length != 0) {
 				var html = "";
 				for(var i = 0 ; i < res.list.length; i++) {
@@ -835,7 +840,7 @@ function readCont() {
 					}
 				
 					$(".chat_dtl").append(html);
-					$("#lastChatNo").val(res.list[res.list.length -1].CONT_NUM);
+					$("#lastContNo").val(res.list[res.list.length -1].CONT_NUM);
 					
 					scrollDown()
 				}
@@ -895,7 +900,7 @@ function reloadList() {
 
 function scrollDown() {
  $(".chat_dtl").scrollTop($(".chat_dtl")[0].scrollHeight);
- 
+ 	
 }
 
 
@@ -932,9 +937,33 @@ function drawRoom(list) {
 			html += "			<div class = \"chat_list1_1\"></div>";
 			html += "		</div>";
 		}
-	$(".chat_box").html(html); 
+	$(".chat_box").html(html);
 }
 
+
+var chat_list1 = document.getElementsByClassName("chat_list1");
+
+function handleClick(event) {
+    console.log(event.target);
+    console.log(this);
+    console.log(event.target.classList);
+
+    if(event.target.classList[1] == "clicked") {
+    	event.target.classList.remove("clicked");
+    } else {
+    	for(var i = 0; i < chat_list1.length; i++) {
+    		chat_list1[i].classList.remove("clicked");
+    	}
+    	event.target.classList.add("clicked");
+    }
+}
+
+function init() {
+	for (var i = 0; i < chat_list1.length; i++) {
+		chat_list1[i].addEventListener("click", handleClick);
+	}
+}
+    
 </script>
 </head>
 <body>
@@ -950,9 +979,9 @@ function drawRoom(list) {
 	
 	
 	<!-- 내용영역 -->
-<!-- 		<div class="page_title_bar">
-			<div class="page_title_text">메신저</div>
-		</div> -->
+		<!-- <div class="page_title_bar">
+			 <div class="page_title_text">메신저</div>
+			 </div> -->
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
@@ -963,8 +992,8 @@ function drawRoom(list) {
 			</form>
 			
 			<form action = "#" id = "readForm">
-				<input type="hidden" id = "lastChatNo" name = "lastChatNo" value = "${maxNo}">
-				<input type ="text" id = "chatNum" name = "chatNum" />
+				<input type="text" id = "lastContNo" name = "lastContNo" value = "${maxNo}">
+				<input type ="text" id = "chatNum" name = "chatNum" value = "${chatNum}"/>
 			</form>
 			
 				<div class = "main_box">

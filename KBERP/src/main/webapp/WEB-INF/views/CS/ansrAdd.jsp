@@ -337,6 +337,7 @@
 /* 대응가이드 팝업 */
 #guide_table {
 	margin-top: 70px;
+	text-align: center;
 }
 
 #guide_wrap {
@@ -878,7 +879,7 @@ $(document).ready(function() {
 						name : "아니오"
 					}]
 		}); // makePopup end
-	}); // btn2Btn end
+	}); // btn3Btn end
 	
 	$("#cancelBtn").on("click", function() {
 		$("#backForm").submit();
