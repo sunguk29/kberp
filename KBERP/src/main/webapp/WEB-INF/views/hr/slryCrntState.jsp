@@ -25,7 +25,7 @@
 	display: inline-block;
 	vertical-align: top;
 	height: 480px;
-	width: 500px;
+	width: 440px;
 	margin-left: 45px;
 }
 .popup_emp_srch_area {
@@ -104,7 +104,34 @@ width: 283px;
 .empinqry_list tbody tr:hover {
 	background-color: rgb(200, 218, 248);
 }
-
+.slry_cont_area{
+	display: inline-block;
+	width: 437px;
+    height: 430px;
+    border: solid 1px #d7d7d7;
+}
+.slry_table{ 
+	display: inline-table;
+	width: 100%;
+	border-collapse: collapse;
+	border: solid 1px b7b7b7;
+	color: #222222;
+	font-size: 11px;
+}
+.slry_table tbody tr {
+   border-bottom: 1px solid #d7d7d7;
+   height: 30px;
+   text-align: center;
+   color: #333333;
+   font-size: 9.5pt;
+}
+.slry_cont_txt{
+    margin-bottom: 20px;
+    padding-top: 10px;
+    color: #333333;
+    font-size: 14px;
+    font-weight: 600;
+}
 /* 개인 작업 영역 */
 
 </style>
@@ -112,12 +139,94 @@ width: 283px;
 $(document).ready(function() {
   
 	$(".empinqry_area").slimScroll({height: "450px"});
+	$(".slry_cont_area").slimScroll({height: "420px"});
+	
+   // 급여 상세보기
+   $("tbody").on("click", "tr", function() {
+      $("#eNum").val($(this).attr("eNum"));
+      $("tbody").children("tr").css("background-color", "#ffffff");
+      $(this).css("background-color", "rgb(200,218,248)");
+	   console.log("급여상세 클릭! empnum : " + $("#eNum").val())
+
+      reloadCont();
+   });
 	   
 
 });
+function reloadCont(){
+   var params = $("#slryForm").serialize();
+   
+   $.ajax({
+      type : "post",
+      url : "slryCrntStateAjax/cont",
+      data : params,
+      dataType : "json",
+      success : function(res) {
+         drawCont(res.bnft, res.slry, res.tBnft);
+      },
+      error : function(req) {
+         console.log(req.responseText);
+      }
+   });
+}
+
+function drawCont(bnft, slry, tBnft){
+	console.log(bnft, slry, tBnft)
+	var html = '';
+	var tSal = '';
+	var sal = '';
+	var bnf = '';
+	
+	sal = slry.ANL_SAL * 1
+	bnf = tBnft.AMNT * 1
+	
+	if (isNaN(sal) || sal == 'undefined' || sal == null) { // 값이 없어서 NaN값이 나올 경우
+		sal = 0;
+		}
+	if (isNaN(bnf) || bnf == 'undefined' || bnf == null) { // 값이 없어서 NaN값이 나올 경우
+		bnf = 0;
+		}
+	
+	tSal = sal + bnf
+	console.log("총 급여" + tSal)    
+	console.log("기본급" + sal + "수당" + bnf) 
+	
+	
+	html += '<div class=\'slry_cont_txt\'>' + slry.SYSMON + '</div>                      ';
+	html += '<div class=\'slry_cont_area\'>                                   ';
+	html += '	<table class=\'slry_table\'>                                  ';
+	html += '		<colgroup>                                                ';
+	html += '			<col width=\'35%\'/>                                  ';
+	html += '			<col width=\'65%\'/>                                  ';
+	html += '		</colgroup>                                               ';
+	html += '		<tbody>                                                   ';
+	html += '			<tr>                                                  ';
+	html += '				<td style=\'font-weight:600;\'>기본급</td>     ';
+	html += '				<td>' + slry.ANL_SAL + '</td>                           ';
+	html += '			</tr>                                                 ';
+	for(var data of bnft){
+	html += '			<tr>                                                  ';
+	html += '				<td style=\'font-weight:600;\'>' + data.LIST_NAME + '</td>       ';
+	html += '				<td>' + data.AMNT + '</td>                                  ';
+	html += '			</tr>                                                 ';
+	}
+	html += '			<tr>                                                  ';
+	html += '				<td style=\'font-weight:600;\'>총 급여</td>   ';
+	html += '				<td style=\'font-weight:600;\'>' + tSal + '</td>   ';
+	html += '			</tr>                                                 ';
+	html += '		</tbody>                                                  ';
+	html += '	</table>                                                      ';
+	html += '</div> ';
+	
+	$("#slryHtml").html(html);
+	
+}
 </script>
 </head>
 <body>
+	<form action="#" id="slryForm" method="post">
+		<input type="hidden" id="eNum" name="eNum"/>
+	</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -167,7 +276,7 @@ $(document).ready(function() {
 		               </thead>                       
 		               <tbody id="aprvlerInqry_tbody">  
                			  <c:forEach var="data" items="${list}">
-					         <tr>
+					         <tr eNum="${data.EMP_NUM}">
 					            <td>${data.ROWNUM}</td>
 					            <td>${data.DEPT_NAME}</td>
 					            <td>${data.RANK_NAME}</td>
@@ -179,23 +288,11 @@ $(document).ready(function() {
 		              </table>                        
 		            </div>       
 	            </div>
-			<div class="slryCrntState_right_area">
-				<div class="gbg_list_area">
-					<div class="gbg_List_txt"></div>
-					<div class="gbg_List">
-						<table>
-							<thead>
-								<tr>
-									<th></th>
-									<th></th>
-								</tr>
-							</thead>
-						</table>
-					</div>
+				<div class="slryCrntState_right_area" id="slryHtml">
+
 				</div>
 			</div>
 		</div>
-	</div>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>
