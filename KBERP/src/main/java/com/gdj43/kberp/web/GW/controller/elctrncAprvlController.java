@@ -132,11 +132,15 @@ public class elctrncAprvlController {
 	}
 
 	@RequestMapping(value = "/aprvlTmpltBox")
-	public ModelAndView aprvlTmpltBox(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+	public ModelAndView aprvlTmpltBox(@RequestParam HashMap<String, String> params, ModelAndView mav , HttpSession session) throws Throwable {
 
 		if (params.get("page") == null || params.get("page") == "") {
 			params.put("page", "1");
 		}
+		
+		//if (sEmpNum == aprvlLineEmpNum) {
+			// 결재함에 나오게 함
+		//}
 
 		mav.addObject("page", params.get("page"));
 
@@ -147,7 +151,9 @@ public class elctrncAprvlController {
 
 	@RequestMapping(value = "/aprvlListAjax", method = RequestMethod.POST, produces = "test/json;charset=UTF-8")
 	@ResponseBody
-	public String aprvlListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+	public String aprvlListAjax(@RequestParam HashMap<String, String> params, HttpSession httpSession) throws Throwable {
+		
+								
 		System.out.println("@@@@@@@@@@@@@@2" + params);
 		ObjectMapper mapper = new ObjectMapper();
 
@@ -159,9 +165,13 @@ public class elctrncAprvlController {
 
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
+		params.put("employ_no", httpSession.getAttribute("sEmpNum").toString());
 
 		List<HashMap<String, String>> list = ics.getDataList("elctrncAprvl.getAprvlList", params);
-
+		
+		
+		
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@2여기까지왔니?" + list.toString());
 		modelMap.put("list", list);
 		modelMap.put("pb", pb);
 
@@ -173,9 +183,7 @@ public class elctrncAprvlController {
 	  @RequestMapping(value="/aprvlTmpltBoxAdd")
 	  public ModelAndView aprvlTmpltBoxAdd(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 	  
-	  //List<HashMap<String, String>> list = ics.getDataList("elctrncAprvl.getAprvlList", params);
-	  
-	  //mav.addObject("list", list);
+	  	  	  
 	  
 	  mav.setViewName("GW/aprvlTmpltBoxAdd");
 	  
@@ -183,6 +191,44 @@ public class elctrncAprvlController {
 	  
 	}
 	  
-	
-	 
+
+		@RequestMapping(value = "/aprvlListsAjax", method = RequestMethod.POST, produces = "test/json;charset=UTF-8")
+		@ResponseBody
+		public String aprvlListsAjax(@RequestParam HashMap<String, String> params, HttpSession httpSession) throws Throwable {
+			
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> modelMap = new HashMap<String, Object>();	
+		System.out.println("@@@@@@@@@@@@@@@@" + params);
+		
+		params.put("employ_no", httpSession.getAttribute("sEmpNum").toString());
+		
+		List<HashMap<String, String>> lists = ics.getDataList("elctrncAprvl.aprvlList", params);
+					
+		modelMap.put("list", lists);
+		
+		return mapper.writeValueAsString(modelMap);
+		
+		}
+		
+		@RequestMapping(value = "/aprvlProcessAjax", method = RequestMethod.POST, produces = "test/json;charset=UTF-8")
+		@ResponseBody
+		public String aprvlProcessAjax(@RequestParam HashMap<String, String> params, HttpSession httpSession) throws Throwable {
+			
+		
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> modelMap = new HashMap<String, Object>();	
+		
+		params.put("employ_name", httpSession.getAttribute("sEmpName").toString());
+		params.put("employ_dept", httpSession.getAttribute("sDeptName").toString());
+		
+		System.out.println("%%%%%%%%%%%%%%%" + params);
+		
+		List<HashMap<String, String>> list = ics.getDataList("elctrncAprvl.aprvlProcess", params);
+					
+		modelMap.put("list", list);
+		
+		
+		return mapper.writeValueAsString(modelMap);
+		
+		}
 }

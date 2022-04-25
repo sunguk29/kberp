@@ -194,7 +194,92 @@ h3 {
 $(document).ready(function() {
 	
 	reloadList();
+	$(".aprvl").on("click", function() {
+		
+		
+		
+	/*	html += "<div style=\"margin-top: 20px; font-size: 14px;\">";
+		html +=	"<span>결재처리</span>";
+		html +=	"<input type = \"radio\" name=\"a\" id=\"r1\"/><label for = \"r1\" >승인</label>";
+		html +=	"<input type = \"radio\" name=\"a\" id=\"r2\"/><label for = \"r2\" >반려</label>";
+		html +=	"</div>";
+		html +=	"<div>";
+		html +=	"<span>결재의견</span>";
+		html +=	"<input type=\"text\" id=\"aprvl_cmnt\">";
+		html +=	"</div>";
+		html +=	"<div>";
+		html +=	"<span>파일</span>";
+		html +=	"<input type=\"text\" style=\"width: 200px; margin-left: 28px; margin-top: 20px;\">";
+		html +=	"<input type=\"file\">";
+		html +=	"</div>";
+		*/
+		
+		 var html = "";
+		
+		
+		
+		html += "<div style=\"margin-top: 20px; font-size: 14px;\">";
+		html += "<span>결재처리</span>";
+		html += "<input type = \"radio\" name=\"a\" id=\"r1\"/><label for = \"r1\" >승인</label>";
+		html += "<input type = \"radio\" name=\"a\" id=\"r2\"/><label for = \"r2\" >반려</label>";
+		html += "</div>";
+		html += "<div>";
+		html += "<span>결재자</span>";
+		html += "<input type=\"text\" name=\"aprvler\" id=\"aprvler\" value=\"" + "${sEmpName}" +"\">";
+		html += "</div>";
+		html += "<div>";
+		html += "<span>부서</span>";
+		html += "<input type=\"text\" name=\"dept\" id=\"dept\" value=\"" + "${sDeptName}" +"\">";
+		html += "</div>";
+		html += "<div>";
+		html += "<span>결재일시</span>";
+		//html += "<input type=\"text\" name=\"aprvl_date\" id=\"aprvl_date\" value=\"" + data.STS_CHNG_DATE +"\">";
+		html += "</div>";
+		html += "<div>";
+		html += "<span>의견</span>";
+		html += "<input type=\"text\" style=\"width: 200px; height: 100px; margin-left: 28px; margin-top: 20px;\">";
+		html += "</div>"; 
+		
+		
+	makePopup({
+		bg : true,
+		bgClose : false,
+		width : 600,
+		height : 600,
+		title : "결재",
+		contents : html,
+		contentsEvent : function() {
+			console.log("????");
+			$.ajax({
+				type : "post",
+				url : "aprvlProcessAjax",
+				dataType : "json",
+					error : function(req) {
+					console.log(req.responseText)	
+				}
+				
+			});
+			
+			
+					
+			},
+		buttons : [{
+			name : "저장",
+			func:function() {
+				
+				/* 여기에 넣기 */
+				
+				closePopup();
+			}
+		},//버튼 저장 
+		{name : "닫기"
+		}] //버튼 닫기
+		
+		}); //팝업 
+
 	
+		});
+
 });
 
 function reloadList() { // 목록 조회용 + 페이징 조회용
@@ -202,14 +287,14 @@ function reloadList() { // 목록 조회용 + 페이징 조회용
   
   $.ajax({
  	 type : "post",
- 	 url : "aprvlListAjax",
+ 	 url : "aprvlListsAjax",
  	 dataType : "json",
  	 data : params,
  	 success : function(res) {
  		 	console.log(res);
  		 	console.log("옴?");
  		 	drawList(res.list);
- 		 	drawPaging(res.pb);
+ 		 	
 			},
 			error : function(request, status, error) {
 				console.log(request.responseText);
@@ -217,50 +302,57 @@ function reloadList() { // 목록 조회용 + 페이징 조회용
   });
 	
 }
-function drawList(list) {
+
+function drawList(list){
 	var html = "";
 	
 	for(var data of list){
-		html += "<tr no=\"" + data.APRVL_NUM + "\">";
-		html += "<td>" + data.APRVL_NUM + "</td>";
-		html += "<td></td>";
-		html += "<td>" + data.TITLE + "</td>";
-		html += "<td>" + data.EMP_NAME + "</td>";
-		html += "<td>" + data.DEPT_NAME + "</td>";
-		console.log(${APRVL_NUM});
-	}
-	$("tbody").html(html);
+		
+	let time = data.DRAFT_DATE;
+	
+	html+= "	<div>                                                                            ";
+	html+= "	<span>결재번호                                                            ";
+	html+= "</span>";
+	html+= "	<input type=\"text\" name=\"no\" id=\"no\" value= \"" + data.APRVL_NUM + "\">  ";
+	html+= "	<span>기안일자                                                            ";
+	html+= "</span>";
+	html+= "	<input type=\"text\" name=\"draft_day\" id=\"draft_day\" value=\"" + new Date(time).getFullYear()+'-'+(new Date(time).getMonth()+1)+'-'+ new Date(time).getDate() + "\">                                               ";
+	html+= "	</div>                                                                           ";
+	html+= "	<div>                                                                            ";
+	html+= "	<span>기안자                                                              ";
+	html+= "</span>";
+	html+= "	<input type= \"text\" id=\"drftr\">                                                  ";
+	html+= "	<span>참조자                                                             ";
+	html+= "</span>";
+	html+= "	<input type=\"text\" id=\"crbn_copy\">                                               ";
+	html+= "	</div>                                                                           ";
+	html+= "	<div>                                                                            ";
+	html+= "	<span>문서제목                                                            ";
+	html+= "</span>";
+	html+= "	<input type=\"text\" name=\"dcmnt_tlte\" id=\"dcmnt_tlte\" value= \"" + data.TITLE + "\">    ";
+	html+= "	</div>                                                                           ";
+	html+= "	<div>                                                                            ";
+	html+= "	<span>첨부파일                                                            ";
+	html+= "</span>";
+	html+= "	<input type=\"text\" id=\"atchd_file_box\">                                          ";
+	html+= "	<input type=\"file\" id=\"atchd_file\">                                              ";
+	html+= "	</div>                                                                           ";
+	html+= "	<div>                                                                            ";
+	html+= "	<span>내용                                                                ";
+	html+= "</span>";
+	html+= "	<input type=\"text\" id=\"cont\" name=\"cont\" value= \"" + data.CONT + "\">                 ";
+	html+= "	</div>                                                                           ";
+	
+	}                                                                                        
+	$(".container").html(html);
 }
 
-function drawPaging(pb) {
-	var html = "";
 	
-	html +="<div page=\"1\"class=\"page_btn page_first\">first</div>";
-	
-	if($("#page").val() == "1"){
-	html +="<div page=\"1\"class=\"page_btn page_prev\">prev</div>";
-	} else{
-	html +="<div page=\"" + ($("#page").val() * 1 - 1) + "\"class=\"page_btn page_prev\">prev</div>";
-	}
-	
-	for(var i = pb.startPcount ; i <= pb.endPcount ; i++) {
-		if($("#page").val() == i ){
-			html += "<div page=\"" + i +"\" class=\"page_btn_on\">" + i + "</div>";
-			
-		} else{
-			html += "<div page=\"" + i + "\" class=\"page_btn\">" + i +"</div>";
-		}
-	}
-	if($("#page").val() == pb.maxPcount) {
-		html += "<div page=\"" + pb.maxPcount +"\" class=\"page_btn page_next\">next</div>";
-	} else {
-		html += "<div page=\"" + ($("#page").val() * 1 + 1) + "\" class=\"page_btn page_next\">next</div>";
-	}
-		
-	html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
-		
-	$(".pgn_area").html(html);
-}
+
+
+
+
+
 </script>
 </head>
 <body>
@@ -276,13 +368,20 @@ function drawPaging(pb) {
 		<div class="page_title_bar">
 			<div class="page_title_text">프로젝트 관리</div>
 			<!-- 검색영역 선택적 사항 -->
-
+	<form action="aprvlTmpltBox" id="actionForm" method="post">
+					<input type="hidden" id="top" name="top" value="${param.top}" />
+					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+					<input type="hidden" id="no" name="no" value = "${param.no}"/>
+									
+		</form>
+	
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 						<div class="aprvl_btun">
-				<div class="aprvl">결재</div>
+				<div class="aprvl" id = "aprvl">결재</div>
 				<span class="hold">보류</span>
 			</div>
 			<div>
@@ -317,42 +416,9 @@ function drawPaging(pb) {
 				</tbody>
 			</table>
 			</div>
-			<div class="container">
-			<div>
-			
-				<span>결재번호</span>
-				<input type="text" name="dcmnt_num" id="dcmnt_num" value= "${list.APRVL_NUM}">
-				<span>기안일자</span>
-				<input type="date" id="draft_day">
-			</div>
-			<div>
-				<span>기안자</span>
-				<input type= "text" id="drftr">
-				<span>기안부서</span>
-				<input type= "text" id= "draft_dept">
-			</div>
-			<div>
-				<span>참조자</span>
-				<input type="text" id="crbn_copy">
-			</div>
-			<div>
-				<span>문서제목</span>
-				<input type="text" id="dcmnt_tlte">
-			</div>
-			<div>
-				<span>첨부파일</span>
-				<input type="text" id="atchd_file_box">
-				<input type="file" id="atchd_file">
-			</div>
-			<div>
-				<span>기안서</span>
-				<input type="text" id="draft">
-			</div>
-			<div>
-				<span>내용</span>
-				<input type="text" id="cont">
-			</div>
-			</div>
+				<div class="container">
+				
+				</div>
 			<div class="container_1">
 				<div>
 					<h3>결재의견</h3>
