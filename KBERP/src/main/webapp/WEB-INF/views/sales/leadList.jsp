@@ -449,6 +449,7 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
+	//진행상태 색표시 
 	$(".sts").on("click", ".sts_list", function() {
 		if($(this).attr("num") != "0") {
 			$(".sts").children(".sts_list_on").attr("class", "sts_list");
@@ -461,7 +462,9 @@ $(document).ready(function() {
 		$("#page").val("1");
 		
 		$("#psNum").val($(this).attr("num"));
-		
+		$("#oldPsNum").val($(this).attr("num"));
+		$("#srchType").val("0"); // 진행상태버튼 클릭시 검색어 초기화
+		$("#listSort").val("0"); // 진행상태버튼 클릭시 정렬 초기화
 
 		$("[name='sales_sts']").prop("checked", false);	
 		$("#sales_sts").prop("checked", true);
@@ -537,7 +540,7 @@ $(document).ready(function() {
 /* 리드 리스트 */
 function reloadList() {
 	var params = $("#actionForm").serialize();
-	console.log(params);
+	
 	$.ajax({
 		type : "post",
 		url : "leadListAjax",
@@ -547,7 +550,6 @@ function reloadList() {
 			drawTotal(res.cnt);
 			drawList(res.list);
 			drawPaging(res.pb, ".pgn_area");
-			console.log(res.list);
 		},
 		error : function(req) {
 			console.log(req.responseText);
@@ -597,7 +599,7 @@ function drawList(list) {
 		html += "<td><span class=\"sales_psbl_btn\">" + data.PSBL_CHECK + "%</span></td>";
 		html += "</tr>";
 		html += "<tr>";
-		html += "<td>" + data.PSNUM + "</td>";
+		html += "<td>" + data.PSNUM + "</td>";		
 		html += "<td>" + data.RGSTRTN_DATE + "</td>";
 		html += "<td></td>";
 		html += "</tr>";

@@ -20,6 +20,14 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	reloadList();
+	$("tbody").on("click",".board_table_hover", function() {
+		$("#no").val($(this).attr("no"));
+		$("#prjct_num").val($(this).attr("prjct_num"));
+		
+		$("#actionForm").attr("action", "prjctView");
+		$("#actionForm").submit();
+	});
+	
 	$(".pgn_area").on("click","div",function(){
 		$("#page").val($(this).attr("page"));
 		
@@ -28,6 +36,12 @@ $(document).ready(function() {
 		
 		reloadList();
 	});
+	
+	$("#addBtn").on("click", function() {
+
+		$("#actionForm").attr("action", "prjctWrite");
+		$("#actionForm").submit();
+});
 });
 
 function reloadList() { // 목록 조회용 + 페이징 조회용
@@ -55,15 +69,15 @@ function drawList(list) {
 	
 	for(var data of list) {
 		html += "<tr>";
-		html += "<td>" + data.PRJCT_NUM + "</td>";
+		html += "<td>" + data.PRJCT_NUM 	+ "</td>";
 		html += "<td class=\"board_table_hover\" id=\"clickPrjct\" prjct_num=\"" + data.PRJCT_NUM +  "\" no=\"" + data.PRJCT_NUM +  "\">" + data.PRJCT_NAME + "</td>";
-		html += "<td>" + data.EMP_NAME + "</td>";
-		html += "<td>" + data.START_DATE +"</td>";
-		html += "<td>~</td>";
-		html += "<td>" + data.END_DATE + "</td>";
-		html += "<td>" + data.RMRKS + "</td>";
-		html += "</tr>";
+		html += "<td>" + data.EMP_NAME 		+ "</td>";
+		html += "<td>" + data.START_DATE 	+ "</td><td>~</td>";
+		html += "<td>" + data.END_DATE 		+ "</td>";
+		html += "<td>" + data.RMRKS 		+ "</td>";
+	
 	}
+	console.log(html);
 	$("tbody").html(html);
 }
 
@@ -111,18 +125,21 @@ function drawPaging(pb) {
 		<div class="page_title_bar">
 			<div class="page_title_text">프로젝트 관리</div>
 			<!-- 검색영역 선택적 사항 -->
-		</div>
-		<!-- 해당 내용에 작업을 진행하시오. -->
-		<div class="cont_area">
-			<!-- 여기부터 쓰면 됨 -->
+			<div class="page_srch_area">
 		<form action="#" id="actionForm" method="post">
-			<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
-			<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
+			<input type="hidden" id="top" name="top" value="${param.top}" />
+			<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+			<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 			<input type="hidden" id="no" name="no"/>
 			<input type="hidden" id="prjct_num" name="prjct_num"/>
 			<input type="hidden" id="page" name="page" value="${page}" />
 		</form>
-			<table id="input_man_pwr_list"> 
+			</div>
+		</div>
+		<!-- 해당 내용에 작업을 진행하시오. -->
+		<div class="cont_area">
+			<!-- 여기부터 쓰면 됨 -->
+		<table class="board_table"> 
          <colgroup>
                <col width="100"/>
                <col width="100"/>
@@ -131,8 +148,7 @@ function drawPaging(pb) {
                <col width="10"/>
                <col width="100"/>
                <col width="100"/>
-               
-      </colgroup>
+	     </colgroup>
          <thead>
             <tr>
                   <th>프로젝트 번호</th>
@@ -153,6 +169,7 @@ function drawPaging(pb) {
 				</div>
 				<div class="cmn_btn_ml" id="addBtn">프로젝트추가</div>
 		   </div>
+		   
 		</div>
 	</div>
 	<!-- bottom -->

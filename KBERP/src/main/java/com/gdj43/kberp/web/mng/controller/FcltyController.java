@@ -303,7 +303,7 @@ public class FcltyController {
 		int cnt = iCommonService.getIntData("Fclty.getEmpCnt", params);
 		
 		// 페이징 계산
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), cnt, 5, 5);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));

@@ -15,13 +15,13 @@ public class MsgrService implements IMsgrService {
 	public IMsgrDao imsDao;
 	
 	@Override
+	public int getMaxNo() throws Throwable {
+		return imsDao.getMaxNo();
+	}
+	
+	@Override
 	public void insertCont(HashMap<String, String> params) throws Throwable {
 		imsDao.insertCont(params);
-	}
-
-	@Override
-	public List<HashMap<String, String>> getContList(int lastChatNo) throws Throwable {
-		return imsDao.getContList(lastChatNo);
 	}
 
 	@Override
@@ -30,10 +30,16 @@ public class MsgrService implements IMsgrService {
 	}
 
 	@Override
-	public int getMaxNo() throws Throwable {
-		return imsDao.getMaxNo();
+	public List<HashMap<String, String>> getContList(HashMap<String, String> params) throws Throwable {
+		return imsDao.getContList(params);
 	}
-	
+
+	@Override
+	public HashMap<String, String> getCont(HashMap<String, String> params) throws Throwable {
+		return imsDao.getCont(params);
+	}
+
+
 	
 
 }

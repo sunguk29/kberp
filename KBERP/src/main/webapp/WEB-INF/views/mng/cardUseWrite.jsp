@@ -225,6 +225,7 @@ $(document).ready(function() {
 				
 				$("#empSrchBtn").on("click", function() {
 					$("#sendSrchTxt").val($("#empSrchTxt").val());
+					$("#page").val("1");
 					reloadList();
 				});
 				
@@ -330,7 +331,10 @@ function reloadList() {
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
-<form action="cardList" id="backForm" method="post">
+<form action="cardView" id="backForm" method="post">
+	<input type="hidden" id="top" name="top" value="${param.top}" />
+	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="no" value="${param.no}" />
 	<input type="hidden" name="mng_num" value="${param.mng_num}" />
 	<input type="hidden" name="page" value="${param.page}" />
@@ -380,6 +384,10 @@ function reloadList() {
          <tr>
             <td class="title"> 사용종료일 </td>
                <td class="cont"><input type = "date" class = "text_cont"  id = "use_end_dt" name = "use_end_dt" ></td> 
+         </tr>
+         <tr>
+            <td class="title"> 비고 </td>
+               <td class="cont"><input type = "text" class = "text_cont"  id = "rmrks" name = "rmrks" ></td> 
          </tr>
 
          </tbody>

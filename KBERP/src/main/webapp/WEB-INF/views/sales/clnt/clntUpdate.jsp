@@ -1,11 +1,20 @@
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now() ;	
+	request.setAttribute("version", version);		//캐시 처리
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>카카오뱅크 ERP - 고객</title>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -13,7 +22,6 @@
 .cont_wrap {
 	width: 1013px;
 }
-
 /* 개인 작업 영역 */
 .body {
 	display: block;
@@ -29,20 +37,18 @@
 	height: 100%;
 	margin: 20px auto;
 }
-table{
-	
+table {
 	border: 1px;
 	width: 927px;
 	margin: 40px auto;
 }
-td:nth-child(2), td:nth-child(4){
+td:nth-child(2), td:nth-child(4) {
 	border-bottom: 1px solid #d7d7d7;
 }
-
-td:nth-child(1), td:nth-child(3){
+td:nth-child(1), td:nth-child(3) {
 	text-align: center;
 }
-.btn{ /* 내용 제목 영역 */
+.btn { 
 	width : 90px;
 	height: 40px;
 }
@@ -71,21 +77,17 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 33px;
 	border: none;
 }
-
 .btnImg{
 	width: 30px;
 	float: right;
 	margin-left: 10px;
 }
-
-/* 목록, 수정, 삭제 영역 */
 .imgPos{
 	position: relative;
 }
 .plus_btn:hover {
 	cursor: pointer;
 }
-/* 첨부자료 */
 .cntrct_box_in {
 	width: 885px;
 	height: 100px;
@@ -140,7 +142,6 @@ td:nth-child(1), td:nth-child(3){
 .imgName {
 	padding-right: 30px;
 }
-/* 팝업 */
 .popup_title_mid {
 	width: calc(100% + 20px);
 	height: 70px;
@@ -272,7 +273,6 @@ td:nth-child(1), td:nth-child(3){
    background-color: #F2F2F2;
    margin-bottom: 5px;
 }
-
 .popup_mng_box_in:hover, .popup_cc_box_in:hover {
    cursor: pointer;
    border: 2px solid #2E83F2;
@@ -323,20 +323,14 @@ td:nth-child(1), td:nth-child(3){
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-<<<<<<< HEAD
-	// 목록버튼
-=======
 	
->>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
+	// 목록
 	$("#listBtn").on("click", function() {
 		makePopup({
 			bg : true,
 			bgClose : false,
 			title : "알림",
-			contents : "나가면 저장되지않습니다, 나가시겠습니까?",
-			contentsEvent : function() {
-				
-			},
+			contents : popContTwoLine("나가면 저장되지않습니다.<br/>나가시겠습니까?"),
 			buttons : [{
 				name : "나가기",
 				func:function() {
@@ -349,14 +343,15 @@ $(document).ready(function() {
 		});
 	});
 	
+	// 파일업로드
 	$(".rvn_txt").on("click", ".aff_btn", function() {
 		$("#att").click();
 	});
 	
+	// 파일삭제
 	$("#fileDelete").on("click", function() {
 		$("#file_name").remove();
 		$(this).remove();
-
 		var html = "";
 		
 		html += "<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
@@ -364,11 +359,11 @@ $(document).ready(function() {
 		$("#uploadBtn").html(html);
 	});
 	
-// ************** 고객사 팝업 **************
+	// (팝업)고객사
 	$("#ccPop").on("click", function() {
 		var html = "";
         
-	 	html += "<form action=\"#\" id=\"popupForm\">";
+		html += "<form action=\"#\" id=\"popupForm\">";
 		html += " <div class=\"popup_title_mid\">                                                   ";
 	 	html += "<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
 		html += " <div class=\"ptm_left\">                                                          ";
@@ -377,10 +372,10 @@ $(document).ready(function() {
 		html += " </div>                                                                          ";
 		html += " <div class=\"ptm_mid\">                                                           ";
 		html += " 	<div class=\"ptm_mid_top\">                                                     ";
-		html += " 		<input type=\"text\"  class=\"text_size2\" placeholder=\"검색어를 입력해주세요\" /> ";
+		html += " 		<input type=\"text\"  class=\"text_size2\" id=\"searchTxt\" name=\"searchTxt\" placeholder=\"검색어를 입력해주세요\" /> ";
 		html += " 	</div>		                                                                  ";
 		html += " 	<div class=\"ptm_mid_bot\">                                                     ";
-		html += " 		<select class=\"sel_size\">                                                 ";
+		html += " 		<select class=\"sel_size\" name=\"searchType\">                                                 ";
 		html += " 			<option value=\"9\">선택안함</option>                                             ";
 		html += " 			<option value=\"0\">거래고객사</option>                                           ";
 		html += " 			<option value=\"1\">파트너사</option>                                             ";
@@ -428,17 +423,14 @@ $(document).ready(function() {
 			buttons : {
 				name : "닫기",
 				func:function() {
-					console.log("One!");
 					closePopup();
 				}
 			}
 		});
 	});
-// ************** 고객사 팝업 END **************	
 
-// ************** 담당자 팝업 **************
+	// (팝업)담당자
 	$("#mngPop").on("click", function() {
-		
 		var html = "";
 		
 	 	html += "<div class=\"popup_title_mid\">"; 
@@ -482,8 +474,6 @@ $(document).ready(function() {
 		html += "<div class=\"pgn_area\"></div>   ";
 		html += "</div>                         ";
 		
-		
-		
 		makePopup({
 			depth : 1,
 			bg : false,
@@ -505,52 +495,48 @@ $(document).ready(function() {
 				
 				$("#meBtn").on("click", function () {
 					$("#page").val("1");
-					
 					drawMngList();
-					
 				});
 				
 				$("#searchT").on("keypress", function(event) {
 					if(event.keyCode == 13 ) {
 						$("#meBtn").click();
-						
 						return false;
 					}
 				});
 				
 				$(".pgn_area").on("click", "div", function() {
 					$("#page").val($(this).attr("page"));
-
 					drawMngList();
 				});
+				
 			},
 			buttons : {
 				name : "닫기",
 				func:function() {
-					console.log("One!");
 					closePopup();
 				}
 			}
 		});
 		
 	});
-// ************** 담당자 팝업 END **************
-
+	
+	// 저장
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#cName")) {
-			makeAlert("필수 항목 알림", "고객을 입력하세요", function() {
+			makeAlert("필수 정보 입력", popContOneLine("고객을 입력하세요"), function() {
 				$("#cName").focus();
 			});
 		} else if(checkEmpty("#ccName")) {
-			makeAlert("필수 항목 알림", "고객사를 입력하세요", function() {
+			makeAlert("필수 정보 입력", popContOneLine("고객사를 입력하세요"), function() {
 				$("#ccName").focus();
 			});
 		} else if(checkEmpty("#mbl")) {
-			makeAlert("필수 항목 알림", "휴대폰번호를 입력하세요", function() {
+			makeAlert("필수 정보 입력", popContOneLine("휴대폰번호를 입력하세요"), function() {
 				$("#mbl").focus();
 			});
 		} else if(checkEmpty("#mngEmp")) {
-			makeAlert("필수 항목 알림", "담당자를 입력하세요", function() {
+			makeAlert("필수 정보 입력", "담당자를 선택하세요", function() {
 				$("#mngEmp").focus();
 			});
 		} else {
@@ -558,7 +544,7 @@ $(document).ready(function() {
 				bg : true,
 				bgClose : false,
 				title : "알림",
-				contents : "저장하시겠습니까?",
+				contents : popContOneLine("저장하시겠습니까?"),
 				contentsEvent : function() {
 					$("#popup1").draggable();
 				},
@@ -585,19 +571,19 @@ $(document).ready(function() {
 										if(res.res == "success") {
 											$("#listForm").submit();
 										} else {
-											alert("등록중 문제가 발생하였습니다.");
+											makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 										}
 									},
 									error : function(request, status, error) {
 										console.log(request.responseText);
 									}
-								});
+								}); // ajax End
 								
 							},
 							error : function(req) {
 								console.log(req.responseText);
 							}
-						});
+						}); // ajaxForm End
 						
 						updateForm.submit();
 						closePopup();
@@ -611,7 +597,7 @@ $(document).ready(function() {
 	});
 });
 
-// *********************************************** 고객사 팝업 ***********************************************
+// (팝업)고객사 ajax
 function drawCcList() {
 	var params = $("#popupForm").serialize();
 	
@@ -630,6 +616,7 @@ function drawCcList() {
 	});
 }
 
+// (팝업)고객사 목록
 function drawList(list) {
 	var html = "";
 
@@ -641,7 +628,7 @@ function drawList(list) {
 		html += "	<span class=\"company\"></span>                                                         ";
 		html += "</div>                                                                                   ";
 		html += "<span class=\"popup_cc_box_right\">                                                        ";
-		html += "	<span class=\"boldname\">" + data.CLNT_CMPNY_NAME + " / " +  data.CLNT_CMPNY_CLSFY_NUM + " / " + data.GRADE_NUM + "</span><br/>                 ";
+		html += "	<span class=\"boldname\">" + data.CLNT_CMPNY_NAME + " / " +  data.CLNT_CMPNY_CLSFY_NAME + " / " + data.GRADE_NAME + "</span><br/>                 ";
 		html += "	<span class=\"adrs_name\">" + data.ADRS + "</span><br/>                                              ";
 		html += "	<span class=\"clntCmpny_dt\">" + data.RGSTRTN_DATE + "</span>                                  ";
 		html += "</span>                                                                                  ";
@@ -652,6 +639,7 @@ function drawList(list) {
 	
 }
 
+// (팝업)고객사 페이징
 function drawPaging(pb) {
 	var html = "";
 	
@@ -680,11 +668,8 @@ function drawPaging(pb) {
 	$(".pgn_area").html(html);
 
 }
-// *********************************************** 고객사 팝업 END ***********************************************
 
-
-
-// *********************************************** 담당자 팝업 ***********************************************
+// (팝업)담당자 ajax
 function drawMngList() {
 	var params = $("#popupMngForm").serialize();
 	
@@ -701,8 +686,10 @@ function drawMngList() {
 			console.log(req.responseText);
 		}
 	});
+	
 }
 
+// (팝업)담당자 목록
 function drawMngCont(mngList) {
 	var html = "";
 	
@@ -724,6 +711,7 @@ function drawMngCont(mngList) {
 	
 }
 
+// (팝업)담당자 페이징
 function drawMngPaging(mngPb) {
 	var html = "";
 	
@@ -752,7 +740,8 @@ function drawMngPaging(mngPb) {
 	$(".pgn_area").html(html);
 
 }
-// *********************************************** 담당자 팝업 END ***********************************************
+
+// 파일명
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
@@ -784,7 +773,17 @@ function uploadName(e) {
 			<img alt="목록버튼" src="resources/images/sales/back.png" class="btnImg" id="listBtn" />
 			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
 			<!-- 검색영역 선택적 사항 -->
-			
+			<!-- <div class="page_srch_area">
+				<select class="srch_sel">
+					<option>제목</option>
+					<option>내용</option>
+					<option>작성자</option>
+				</select>
+				<div class="srch_text_wrap">
+					<input type="text" />
+				</div>
+				<div class="cmn_btn_ml">검색</div>
+			</div> -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
@@ -867,7 +866,7 @@ function uploadName(e) {
 						<input type="text" id="fileName" readonly="readonly" />
 					</div>
 					<input type="file" id="att" name="att" onchange="uploadName(this)" />
-					<input type="hidden" id="attFile" name="attFile" /> <!-- 파일명 전송용 -->
+					<input type="hidden" id="attFile" name="attFile" value="${data.ATT_FILE_NAME}" /> <!-- 파일명 전송용 -->
 				</form>	
 			</div>
 		</div>

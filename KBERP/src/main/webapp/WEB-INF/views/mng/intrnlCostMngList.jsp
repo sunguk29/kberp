@@ -37,15 +37,28 @@
 	color: black;
 }
 
+.board_table thead {
+	background-color: #F2F2F2;
+}
+
+
+.srch_year {
+	width: 120px;
+	height: 30px;
+}
+
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	
+	drawOption();
 	reloadList();
 	
-	$("#srchMonth").on("change", function() {
+	$("#srchYear").on("change", function() {
 		$("#page").val("1");
-		$("#mon").val($("#srchMonth").val());
+		$("#year").val($("#srchYear").val());
 		reloadList();
 	});
 	
@@ -128,10 +141,31 @@ function drawPaging(pb) {
 	$("#pgn_area").html(html);
 }
 
+function drawOption() {
+	var now = new Date();
+	var nyear = now.getFullYear();
+	
+	for(var sy = 2010; sy <= nyear; sy++) {
+		$("#srchYear").append("<option value=\"" + sy + "\">" + sy + "년</option>");
+	}
+	
+	if("${param.year}" != "") {
+		$("#srchYear").val("${param.year}");
+		$("#year").val("${param.year}");
+		
+	} else {
+		$("#srchYear").val(nyear);
+		$("#year").val(nyear);
+		
+	}
+	
+}
+
 </script>
 </head>
 <body>
 	<form action="#" id="actionForm" method="post">
+		<input type="hidden" id="year" name="year">
 		<input type="hidden" id="mon" name="mon">
 		<input type="hidden" id="page" name="page" value="${page}" />
 		<input type="hidden" name="top" value="${param.top}">
@@ -152,7 +186,7 @@ function drawPaging(pb) {
 		<div class="page_title_bar">
 			<div class="page_title_text">내부비용관리 목록</div>
 			<div class="mnthly_slct_wrap">
-				<input type="month" class="mnthly_slct" id="srchMonth" "/>
+				<select id="srchYear" class="srch_year" name="srchYear"></select>
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->

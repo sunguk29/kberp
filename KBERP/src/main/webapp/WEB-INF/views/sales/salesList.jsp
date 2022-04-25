@@ -587,31 +587,86 @@ table {
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	// 검색 후 구분란(searchGbn)에 검색어유지를 위해
-	if('${param.searchGbn}' != '') {
-		$("#searchGbn").val('${param.searchGbn}');
-	} else {
-		$("#oldSearchGbn").val("0");
-	}
+	// 검색 유지
+		if('${param.prgrsStage1}' != '' || '${param.prgrsStage2}' != '' || '${param.searchGbn}' != '') {
+			$("#prgrsStage1").val('${param.prgrsStage1}');
+			$("#prgrsStage2").val('${param.prgrsStage2}');
+			$("#searchGbn").val('${param.searchGbn}');
+		} else {
+			$("#oldPrgrsStage1").val("0");
+			$("#oldPrgrsStage2").val("0");
+			$("#oldSearchGbn").val("0");
+		}
+		
+		if('${param.listSort}' != '') {
+			$("#listSort").val('${param.listSort}');
+		} else {
+			$("#oldListSort").val("0");
+		}
+		
+		if('${param.mngName}' != '') {
+			$("#mngName").val('${param.mngName}');
+		}
 	
 	// 목록 조회
 	reloadList();
 	
-	// 검색
+	// 검색 버튼
 	$("#searchBtn").on("click", function() {
-		$("#page").val("1");
-		
-		$("#oldSearchGbn").val($("#searchGbn").val());
-		$("#oldSearchTxt").val($("#searchTxt").val());
-		
-		reloadList();
+		if($("#searchGbn").val() == 2) {
+			if(isNaN($("#searchTxt").val())) {
+				makeAlert("경고", "영업번호 검색시 숫자만 입력해주세요", function() {
+					$("#searchTxt").val("");
+					$("#searchTxt").focus();
+				});
+			} else {
+				$("#page").val("1");
+				
+				$("#oldPrgrsStage1").val($("#prgrsStage1").val());
+				$("#oldPrgrsStage2").val($("#prgrsStage2").val());
+				$("#oldMngName").val($("#mngName").val());
+				$("#oldSearchGbn").val($("#searchGbn").val());
+				$("#oldSearchTxt").val($("#searchTxt").val());
+				$("#oldListSort").val($("#listSort").val());
+				
+				reloadList();
+			}
+		} else {
+			$("#page").val("1");
+			
+			$("#oldPrgrsStage1").val($("#prgrsStage1").val());
+			$("#oldPrgrsStage2").val($("#prgrsStage2").val());
+			$("#oldMngName").val($("#mngName").val());
+			$("#oldSearchGbn").val($("#searchGbn").val());
+			$("#oldSearchTxt").val($("#searchTxt").val());
+			$("#oldListSort").val($("#listSort").val());
+			
+			reloadList();
+		} 
 	})
 	
+	
+	// 정렬 버튼
+	$("#sortBtn").on("click", function() {
+		$("#page").val("1");
+		
+		$("#oldPrgrsStage1").val($("#prgrsStage1").val());
+		$("#oldPrgrsStage2").val($("#prgrsStage2").val());
+		$("#oldMngName").val($("#mngName").val());
+		$("#oldSearchGbn").val($("#searchGbn").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
+		$("#oldListSort").val($("#listSort").val());
+		
+		reloadList();
+	});
+	
+	
+	// 검색 엔터 처리
 	$("#searchTxt").on("keypress", function(event) {
 		if(event.keyCode == 13) {
 			$("#searchBtn").click();
 			
-			return flase; // event 실행 않도록.
+			return false; // event 실행 않도록.
 		}
 	});
 	
@@ -620,13 +675,21 @@ $(document).ready(function() {
 		if(event.keyCode == 13) {
 			$("#searchBtn").click();
 			
-			return flase;
+			return false;
 		}
 	});
 	
+	// 상세보기
 	$(".salesWrap").on("click", ".salesOpportunityName", function() {
 		$("#salesNum").val($(this).attr("salesNum")); // 영업번호 가져오기
 		$("#qtnNum").val($(this).attr("qtnNum")); // 견적번호 가져오기
+		
+		$("#oldPrgrsStage1").val($("#prgrsStage1").val());
+		$("#oldPrgrsStage2").val($("#prgrsStage2").val());
+		$("#oldMngName").val($("#mngName").val());
+		$("#oldSearchGbn").val($("#searchGbn").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
+		$("#oldListSort").val($("#listSort").val());
 		
 		if($(this).children("#test").val() == "영업기회") {
 			$("#actionForm").attr("action", "sales1SalesChncCont"); // 영업기회 상세보기로 이동.
@@ -644,8 +707,7 @@ $(document).ready(function() {
 			$("#actionForm").attr("action", "sales4CntrctCont"); // 계약 상세보기로 이동.
 			$("#actionForm").submit();
 		} else if($(this).children("#test").val() == "종료(실패)") {
-			
-			$("#actionForm").attr("action", "sales4CntrctCont"); // 여기는 어디로 이동?? if로...처리?
+			$("#actionForm").attr("action", "sales4CntrctCont");
 			$("#actionForm").submit();
 		} 
 		
@@ -754,14 +816,16 @@ $(document).ready(function() {
 	$(".pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
 		
+		$("#oldPrgrsStage1").val($("#prgrsStage1").val());
+		$("#oldPrgrsStage2").val($("#prgrsStage2").val());
+		$("#oldMngName").val($("#mngName").val());
+		$("#oldSearchGbn").val($("#searchGbn").val());
+		$("#oldSearchTxt").val($("#searchTxt").val());
+		$("#oldListSort").val($("#listSort").val());
+		
 		reloadList();
 	});
 	
-	// *추후변경:리드에서 영업기회로 전환하면 영업기회등록화면(sales1SalesChncReg)으로 이어지게...
-	$("#addBtn").on("click", function() {
-		$("#actionForm").attr("action", "sales1SalesChncReg");
-		$("#actionForm").submit();
-	});
 	
 	/* 검색 상단 단계 버튼 클릭시 */
 	$(".stageM").on("click", ".stage", function() {
@@ -776,6 +840,11 @@ $(document).ready(function() {
 		$("#page").val("1");
 		
 		$("#prgrsStage1").val($(this).attr("num"));
+		$("#prgrsStage2").val($(this).attr("num"));
+		$("#searchGbn").val("0");
+		$("#listSort").val("0");
+		
+		$("#startDate").val('${startDate}');
 		
 		if($("#searchTxt").val() != "" || $("#mngName").val() != "") { // 검색어 txt가 비어있지 않으면 초기화
 			var txt = document.getElementById("searchTxt");
@@ -837,11 +906,7 @@ $(document).ready(function() {
 		$("#endDate").val(today);
 	});
 	
-	/* 정렬버튼 클릭시 */
-	$("#sortBtn").on("click", function() {
-		reloadList();
-	});
-	
+
 });
 
 function reloadList() {
@@ -1084,10 +1149,12 @@ function drawMngPaging(mngPb) {
 </head>
 <body>
 <!-- 검색 데이터 유지용 -->
-<!-- 머지 테스트 -->
-<!-- 머지 테스트 투 -->
+<input type="hidden" id="oldPrgrsStage1" value="${param.prgrsStage1}" />
+<input type="hidden" id="oldPrgrsStage2" value="${param.prgrsStage2}" />
+<input type="hidden" id="oldMngName" value="${param.mngName}" />
 <input type="hidden" id="oldSearchGbn" value="${param.searchGbn}" />
 <input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
+<input type="hidden" id="oldListSort" value="${param.listSort}" />
 
 	
 	<!-- top & left -->
@@ -1166,7 +1233,7 @@ function drawMngPaging(mngPb) {
 									<span class="srch_name_noMgn">완료 여부</span>
 								</td>
 								<td colspan="2">
-									<select name="prgrsStage2">
+									<select id="prgrsStage2" name="prgrsStage2">
 										<option value="9">선택안함</option>
 										<option value="7">진행중</option>
 										<option value="5">종료(성공)</option>
@@ -1196,9 +1263,9 @@ function drawMngPaging(mngPb) {
 								<td></td>
 								<td></td>
 								<td colspan="3">
-									<input type="date" id="startDate" name="startDate" />
+									<input type="date" id="startDate" name="startDate" value="${startDate}" style="font-family : 맑은 고딕;" />
 									~
-									<input type="date" id="endDate" name="endDate" />
+									<input type="date" id="endDate" name="endDate" value="${endDate}" style="font-family : 맑은 고딕;" />
 								</td>
 
 							</tr>
@@ -1210,7 +1277,7 @@ function drawMngPaging(mngPb) {
 									<select id="searchGbn" name="searchGbn">
 										<option value="0">고객사명</option>
 										<option value="1">영업명</option>
-										<option value="2">영업기회번호</option>
+										<option value="2">영업번호</option>
 									</select>
 								</td>
 								<td colspan="2">
@@ -1225,7 +1292,7 @@ function drawMngPaging(mngPb) {
 									<span class="srch_name">정렬</span>
 								</td>
 								<td>
-									<select name="listSort">
+									<select id="listSort" name="listSort">
 										<option value="9">선택안함</option>
 										<option value="0">영업명</option>
 										<option value="1">고객사명</option>

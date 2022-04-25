@@ -1,12 +1,21 @@
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now();
+	request.setAttribute("version", version);
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>카카오뱅크 ERP - 일정</title>
+<!-- popup css파일 -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}" /></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -344,13 +353,13 @@ input {
    margin-top : 8px;
    width: 558px;
    height: 50px;
-   margin-left : 100px;
+   margin-left : 10px;
 }
 .popup_lead_box{
    display: inline-block;
    width: 558px;
    height: 50px;
-   margin-left : 135px;
+   margin-left : 10px;
 }
 
 .prgrs {
@@ -405,6 +414,9 @@ input {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+
+	console.log("${param.dt}");
+	
 	$("#alertBtn").on("click", function() {
 		makeAlert("하이", "내용임");
 	});
@@ -415,12 +427,12 @@ $(document).ready(function() {
 			bg : true,
 			bgClose : false,
 			title : "알림",
-			contents : "나가면 저장되지않습니다, 나가시겠습니까?",
+			contents : popContTwoLine("내용이 저장되지 않았습니다.<br/>페이지를 나가시겠습니까?"),
 			contentsEvent : function() {
 				
 			},
 			buttons : [{
-				name : "나가기",
+				name : "확인",
 				func:function() {
 					$("#backForm").submit();
 				}
@@ -438,23 +450,27 @@ $(document).ready(function() {
 	/* 저장 이동 및 알림 이벤트 */
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#ssname")){
-			makeAlert("필수입력", "일정명을 입력하세요");
-			$("#ssname").focus();
+			makeAlert("필수 정보 입력", popContTwoLine("일정명을 입력하세요.<br/>나가시겠습니까?"), function() {
+				$("#ssname").focus();			
+			});
 		} else if($("#ssactvtyclsfy").val() == 9){
-			makeAlert("필수입력", "활동분류를 입력하세요");
-			$("#ssactvtyclsfy").focus();
+			makeAlert("필수 정보 입력", popContTwoLine("활동분류를 입력하세요.<br/>나가시겠습니까?"), function() {
+				$("#ssactvtyclsfy").focus();			
+			});
 		} else if(checkEmpty("#sdt")){
-			makeAlert("필수입력", "시작일을 입력하세요");
-			$("#sdt").focus();
+			makeAlert("필수 정보 입력", popContTwoLine("시작일을 입력하세요.<br/>나가시겠습니까?"), function() {
+				$("#sdt").focus();				
+			});
 		} else if(checkEmpty("#ssactvtycont")){
-			makeAlert("필수입력", "활동내용을 입력하세요");
-			$("#ssactvtycont").focus();
+			makeAlert("필수 정보 입력", popContTwoLine("활동내용을 입력하세요.<br/>나가시겠습니까?"), function() {
+				$("#ssactvtycont").focus();			
+			});
 		} else {
 			makePopup({
 				bg : false,
 				bgClose : false,
 				title : "저장",
-				contents : "저장하시겠습니까?",
+				contents : popContOneLine("저장하시겠습니까?"),
 				contentsEvent : function() {
 					$("#popup").draggable();
 				},
@@ -482,9 +498,10 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success"){
+											$("#schdlnum").val(res.schdlnum);
 											savePop();								
 										} else {
-											alert("등록중 문제가 발생하였습니다.");
+											makeAlert("알림", popContTwoLine("등록 중 문제가 발생하였습니다.<br/>나가시겠습니까?"));
 										}
 									},
 									error : function(request, status, error) {
@@ -536,7 +553,7 @@ function savePop() {
 		buttons : [{
 			name : "확인",
 			func:function() {
-				$("#backForm").submit();
+				$("#actionForm").submit();
 			}
 		}]
 	});
@@ -620,6 +637,7 @@ function savePop() {
 					}
 				});
 				
+				
 				$("#salesBox").on("click", ".popup_sales_box ", function() {
 					//변수에 값 넣어줌
 					var snm = $(this).children("#snm").val();
@@ -632,8 +650,14 @@ function savePop() {
 					document.getElementById("sName").value = sna;
 					document.getElementById("ccName").value = ccnm;
 					document.getElementById("clName").value = clnm;
+					
+					if($("#lName").val() != ""){ // 리드명이 비워져있지 않을때, 리드 선택했을 경우 동시 입력 방지
+						$("#lName").val("");
+					}
+					
 					closePopup();
-				});
+				});					
+				
 			},
 			width : 600,
 			height : 500,
@@ -799,6 +823,11 @@ function savePop() {
 					document.getElementById("lName").value = lna;
 					document.getElementById("ccName").value = ccnm;
 					document.getElementById("clName").value = clnm;
+					
+					if($("#sName").val() != ""){ // 영업명이 비워져있지 않을때, 영업 선택했을 경우 동시 입력 방지
+						$("#sName").val("");
+					}
+					
 					closePopup();
 				});
 			},
@@ -891,6 +920,16 @@ function uploadName(e) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" name="deptS" value="${param.deptS}" />
+	<input type="hidden" name="usrsrchTxt" value="${param.usrsrchTxt}" />
+	<input type="hidden" name="clndrDate" value="${param.clndrDate}"/>
+</form>
+<form action="salesSchdlCont" id="actionForm" method="post">
+	<input type="hidden" name="top" value="${param.top}" />
+	<input type="hidden" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" id="schdlnum" name="schdlnum"/>
+	<input type="hidden" name="clndrDate" value="${param.clndrDate}"/>
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -913,7 +952,9 @@ function uploadName(e) {
 				<div class="bodyWrap">
 				<!-- 시작 -->
 					<form action="fileUploadAjax" id="RegForm" method="post" enctype="multipart/form-data">
-					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />					
+					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
+					<input type="hidden" name="deptS" value="${param.deptS}" />
+					<input type="hidden" name="usrsrchTxt" value="${param.usrsrchTxt}" />					
 					<table>
 						<colgroup>
 							<col width="200" />

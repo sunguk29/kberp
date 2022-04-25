@@ -39,6 +39,10 @@
 	color: #000000;
 }
 
+.board_table thead {
+	background-color: #F2F2F2;
+}
+
 .total {
 	border-collapse: collapse;
 	font-size: 10.5pt;
@@ -261,6 +265,7 @@ function drawPaging(pb) {
 <body>
 	<form action="#" id="actionForm" method="post">
 		<input type="hidden" id="mon" name="mon" value="${param.mon}">
+		<input type="hidden" id="year" name="year" value="${param.year}">
 		<input type="hidden" id="page" name="page" value="${param.page}" />
 		<input type="hidden" id="page2" name="page2" value="${page2}" />
 		<input type="hidden" id="sendChitNum" name="sendChitNum">

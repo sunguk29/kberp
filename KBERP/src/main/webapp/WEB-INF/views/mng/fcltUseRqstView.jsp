@@ -79,6 +79,7 @@ $(document).ready(function() {
 		$("#actionForm").attr("action","fcltUseRqst");
 		$("#actionForm").submit();
 	});
+	
 	$("#btn2Btn").on("click", function() {
 		makePopup({
 			bg : true,
@@ -136,8 +137,8 @@ $(document).ready(function() {
 	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="no" value="${param.no}" />
 	<input type="hidden" name="page" value="${param.page}" />
-	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
-	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+	<input type="hidden" id="searchGbn" name="searchGbn" value="${param.searchGbn}" />
+	<input type="hidden" id="searchTxt" name="searchTxt" value="${param.searchTxt}" />
 </form>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->

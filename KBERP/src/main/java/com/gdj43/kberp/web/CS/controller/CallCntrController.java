@@ -163,7 +163,7 @@ public class CallCntrController {
 			int cnt = iCommonService.getIntData("CC.getRspndCnt", params);
 			
 			// 페이징 계산
-			PagingBean pb = ips.getPagingBean(Integer.parseInt(params.get("page")), cnt, 4, 5);
+			PagingBean pb = ips.getPagingBean(Integer.parseInt(params.get("page")), cnt, 3, 5);
 			
 			params.put("startCnt", Integer.toString(pb.getStartCount()));
 			params.put("endCnt", Integer.toString(pb.getEndCount()));

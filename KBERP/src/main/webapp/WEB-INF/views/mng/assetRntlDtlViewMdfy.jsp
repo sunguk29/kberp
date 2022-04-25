@@ -97,8 +97,8 @@ $(document).ready(function() {
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
 <form action="assetRntlDtlView" id="cnclForm" method="post">
-<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
-	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
+	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 	<input type="hidden" name="num" value="${param.num}"/>
 	<input type="hidden" name="unum" value="${param.unum}"/>
 	<input type="hidden" name="page" value="${param.page}"/>
@@ -108,6 +108,8 @@ $(document).ready(function() {
 	
 </form>
 <form action="#" id="mdfyForm" method="post">
+	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 <div class="cont_wrap">
 	<input type="hidden" name="num" value="${param.num}" />
 	<input type="hidden" name="unum" value="${param.unum}"/>

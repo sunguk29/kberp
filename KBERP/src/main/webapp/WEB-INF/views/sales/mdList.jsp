@@ -55,6 +55,7 @@ $(document).ready(function() {
 
 	goSrch(); 			/* 검색 */
 	
+	goSort()			/* 정렬 */
 	
 	//상세보기
 	goDetailView();
@@ -69,17 +70,7 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-<!-- 검색 데이터 유지용 -->
-<input type="hidden" id="old_md_grade" 			value="${param.md_grade}" />
-<input type="hidden" id="old_sales_stsA" 		value="${param.sales_stsA}" />
-<input type="hidden" id="old_sales_sts0"	  	value="${param.sales_sts0}" />
-<input type="hidden" id="old_sales_sts1"	   	value="${param.sales_sts1}" />
-<input type="hidden" id="old_sales_sts2"	   	value="${param.sales_sts2}" />
-<input type="hidden" id="old_sales_start_date" 	value="${param.sales_start_date}" />
-<input type="hidden" id="old_sales_end_date" 	value="${param.sales_end_date}" />
-<input type="hidden" id="old_srch_gbn" 			value="${param.srch_gbn}" />
-<input type="hidden" id="old_srch_txt" 			value="${param.srch_txt}" />
-<input type="hidden" id="old_sort_gbn" 			value="${param.sort_gbn}" />
+
 
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -97,6 +88,18 @@ $(document).ready(function() {
 		
 	<!-- 해당 내용에 작업을 진행하시오. -->
 	<form action="#" id="actionForm" method="post">
+		<!-- 검색 데이터 유지용 -->
+		<input type="hidden" id="old_md_grade" 			value="${param.md_grade}" />
+		<input type="hidden" id="old_sales_stsA" 		value="${param.sales_stsA}" />
+		<input type="hidden" id="old_sales_sts0"	  	value="${param.sales_sts0}" />
+		<input type="hidden" id="old_sales_sts1"	   	value="${param.sales_sts1}" />
+		<input type="hidden" id="old_sales_sts2"	   	value="${param.sales_sts2}" />
+		<input type="hidden" id="old_sales_start_date" 	value="${param.sales_start_date}" />
+		<input type="hidden" id="old_sales_end_date" 	value="${param.sales_end_date}" />
+		<input type="hidden" id="old_srch_gbn" 			value="${param.srch_gbn}" />
+		<input type="hidden" id="old_srch_txt" 			value="${param.srch_txt}" />
+		<input type="hidden" id="old_sort_gbn" 			value="${param.sort_gbn}" />
+	
 		<input type="hidden" name="no" 	 id="no">   							<!-- 글번호 -->
 		<input type="hidden" name="page" id="page" value="${page}"> 			<!-- 페이지 -->
 		<input type="hidden" name="top" 		   value="${params.top}"> 		<!-- top정보 -->
@@ -170,7 +173,7 @@ $(document).ready(function() {
 								</td>
 								<td>
 									<select>
-										<option selected="selected">판매 기간</option>
+										<option selected="selected">판매기간 시작일</option>
 									</select>
 								</td>
 								<td colspan="8">
@@ -217,13 +220,15 @@ $(document).ready(function() {
 								</td>
 								<td>
 									<select name="sort_gbn" id="sort_gbn">
-										<option selected="selected" value="0">등록일</option>										<!-- 보낼값7 -->
-										<option value="1" >상품이름</option>
-										<option value="2">상품등급</option>
+										<option selected="selected" value="0">선택안함</option>										<!-- 보낼값7 -->
+										<option value="1">등록일</option>										<!-- 보낼값7 -->
+										<option value="2" >상품이름</option>
+										<option value="3">상품등급</option>
+										<option value="4">대출한도금액</option>
 									</select>
 								</td>
 								<td>
-									<img class="asc_btn cmn_btn" alt="등록버튼" src="resources/images/sales/asc.png" />
+									<img class="asc_btn cmn_btn" id="sort_btn" alt="정렬버튼" src="resources/images/sales/asc.png" />
 								</td>
 								<td colspan="7"></td>
 							</tr>
@@ -255,7 +260,7 @@ $(document).ready(function() {
 							</tr>
 							<tr>
 								<th>대출 한도 금액</th>
-								<th>계약 기간</th>
+								<th>판매 기간</th>
 								<th></th>
 							</tr>
 						</thead>

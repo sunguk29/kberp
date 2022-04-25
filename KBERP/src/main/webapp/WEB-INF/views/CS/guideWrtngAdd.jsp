@@ -18,6 +18,13 @@
 }
 /* 개인 작업 영역 */
 
+.save_cont{
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	line-height: 110px;
+}
+
         table{
                 border-collapse: collapse;
                 border-spacing: 1px;
@@ -65,11 +72,15 @@ $(document).ready(function() {
 		history.back();
 	});
 	$("#addBtn").on("click", function() {
+		var html = "";
+		
+		html += "<div class=\"save_cont\">등록 하시겠습니까?</div>";
+		
 		makePopup({
 			bg : false,
 			bgClose : false,
 			title : "등록",
-			contents : "등록하시겠습니까?",
+			contents : html,
 			buttons : [{
 				name : "등록",
 				func:function() {

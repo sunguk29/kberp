@@ -14,6 +14,10 @@
 	width:130px;
 }
 
+#assetName,#useEmpName{
+	margin-top: 5px;
+}
+
 #qunty{
 	width:50px;
 }
@@ -106,7 +110,8 @@ $(document).ready(function() {
 						data : params, 
 						success : function(res) { 
 							if(res.res == "success") {
-								location.href ="assetTkt";
+								$("#actionForm").attr("action","assetTkt");
+								$("#actionForm").submit();
 							} else {
 								alert("작성중 문제가 발생하였습니다.");
 							}
@@ -183,6 +188,7 @@ $("#srchEmp").on("click", function() {
 				});
 				
 				$("#empSrchBtn").on("click", function() {
+					$("#page").val("1");
 					$("#sendSrchTxt").val($("#empSrchTxt").val());
 					reloadList();
 				});
@@ -266,6 +272,7 @@ $("#srchAsset").on("click", function() {
 				});
 				
 				$("#assetSrchBtn").on("click", function() {
+					$("#assetSrchForm #page").val("1");
 					$("#sendSrchTxt1").val($("#assetSrchTxt").val());
 					reloadList1();
 				});

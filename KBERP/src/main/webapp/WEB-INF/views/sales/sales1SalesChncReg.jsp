@@ -1,14 +1,23 @@
 <!-- 
 	영업기회 등록 : sales1SalesChncReg
  -->
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now() ;	
+	request.setAttribute("version", version);		//캐시 처리
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>영업기회 등록</title>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -451,15 +460,15 @@ tr:nth-child(9) td:nth-child(3) {
 /* **** 저장 팝업 **** */
 .popup_cont2 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-	font-weight: 600;
+	font-size: 12pt;
+	font-weight: bold;
 	text-align: center;
 	line-height: 100px;
 }
 .popup_cont3 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-    font-weight: 600;
+	font-size: 12pt;
+    font-weight: bold;
     text-align: center;
     height: 40px;
     line-height: 50px;
@@ -467,8 +476,8 @@ tr:nth-child(9) td:nth-child(3) {
 }
 .popup_cont4 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-    font-weight: 600;
+	font-size: 12pt;
+    font-weight: bold;
     text-align: center;
     height: 40px;
     line-height: 40px;
@@ -513,21 +522,27 @@ $(document).ready(function() {
 	
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
-		if(checkEmpty("#mngrName")) {
-			alert("담당자를 입력하세요.");
-			$("#mngrName").focus();
-		} else if($("#loanCauseNum").val() == 9) {
-			alert("대출원인을 선택하세요.");
-			$("#loanCauseNum").focus();
+		if($("#loanCauseNum").val() == 9) {
+			makeAlert("필수 항목 알림", popContOneLine("대출원인을 선택하세요."), function() {
+				$("#loanCauseNum").focus();
+			});
+		} else if(isNaN($("#expctnLoanScale").val())) {
+			makeAlert("알림", popContOneLine("예상 대출 규모는 숫자만 입력 가능합니다."), function() {
+				$("#expctnLoanScale").val("");
+				$("#expctnLoanScale").focus();
+			});
 		} else if($("#loanHopeType").val() == 9) {
-			alert("대출 희망 유형을 입력하세요.");
-			$("#loanHopeType").focus();
+			makeAlert("필수 항목 알림", popContOneLine("대출 희망 유형을 입력하세요."), function() {
+				$("#loanHopeType").focus();
+			});
 		} else if($("#loanHopeTime").val() == 9) {
-			alert("대출 희망 시기를 입력하세요.");
-			$("#loanHopeTime").focus();
+			makeAlert("필수 항목 알림", popContOneLine("대출 희망 시기를 입력하세요."), function() {
+				$("#loanHopeTime").focus();
+			});
 		} else if($("#expctdBsnsType").val() == 9) {
-			alert("예정 사업 형태를 입력하세요.");
-			$("#expctdBsnsType").focus();
+			makeAlert("필수 항목 알림", popContOneLine("예정 사업 형태를 입력하세요."), function() {
+				$("#expctdBsnsType").focus();
+			});
 		} else {
 			var html = "";
 			
@@ -586,7 +601,7 @@ $(document).ready(function() {
 														$("#listForm").attr("action", "sales1SalesChncCont");
 														$("#listForm").submit();
 													} else {
-														alert("등록중 문제가 발생하였습니다.");
+														makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 													}
 												},
 												error : function(request, status, error) {
@@ -603,8 +618,6 @@ $(document).ready(function() {
 								}
 							}
 						}); // makePopup depth2 end
-						console.log("One!");
-						console.log(lpsNum);
 						closePopup();
 					}
 				}, {

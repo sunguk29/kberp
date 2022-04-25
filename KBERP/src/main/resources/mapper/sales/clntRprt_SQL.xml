@@ -1,81 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="clntRprt">
-<!-- 신규고객사 전월 개수 -->
-	<select id="ccLastMonthCnt" resultType="Integer" parameterType="hashmap">
-		SELECT  COUNT(*) AS CNT
+<!-- 신규고객사 개수 -->
+	<select id="ccAllCnt" resultType="hashmap" parameterType="hashmap">
+		SELECT CC.LAST, CC.THAT, ROUND((CC.CNT / 3), 1) AS AVG, CC.CNT
+		FROM (SELECT COUNT(CASE WHEN TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM') THEN 1 END) LAST,
+				     COUNT(CASE WHEN TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM') THEN 1 END) THAT,
+				     COUNT(CASE WHEN RGSTRTN_DATE BETWEEN ADD_MONTHS(SYSDATE,-3) AND SYSDATE THEN 1 END) AVG,
+				     COUNT(*) AS CNT
 		FROM CLNT_CMPNY
-		WHERE TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM')
-		AND DEL_CHECK IS NULL
+		WHERE DEL_CHECK IS NULL) CC
 	</select>
-<!-- 신규고객사 당월 개수 -->	
-	<select id="ccThatMonthCnt" resultType="Integer" parameterType="hashmap">
-		SELECT  COUNT(*) AS CNT
+
+<!-- 신규고객 개수 -->
+	<select id="ecAllCnt" resultType="hashmap" parameterType="hashmap">
+		SELECT EC.LAST, EC.THAT, ROUND((EC.CNT / 3), 1) AS AVG, EC.CNT
+		FROM (SELECT COUNT(CASE WHEN TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM') THEN 1 END) LAST,
+		      		 COUNT(CASE WHEN TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM') THEN 1 END) THAT,
+		       		 COUNT(CASE WHEN RGSTRTN_DATE BETWEEN ADD_MONTHS(SYSDATE,-3) AND SYSDATE THEN 1 END) AVG,
+		       		 COUNT(*) AS CNT
+		FROM ENTRPRS_CLNT EC INNER JOIN EMP E
+			                 ON EC.MNGR_EMP_NUM = E.EMP_NUM
+			         INNER JOIN APNTM A
+			                 ON E.EMP_NUM = A.EMP_NUM
+		WHERE DEL_CHECK IS NULL
+		<if test="deptNum != 0"> 
+			<choose>
+				<when test="deptNum == 1">
+					AND A.DEPT_NUM = 6
+				</when>
+				<when test="deptNum == 2">
+					AND A.DEPT_NUM = 7
+				</when>
+				<when test="deptNum == 3">
+					AND A.DEPT_NUM = 8
+				</when>				
+			</choose>
+		</if>) EC
+		
+	</select>
+<!-- 고객등급 개수 -->	
+	<select id="clntGrade" resultType="hashmap" parameterType="hashmap">
+		SELECT COUNT(CASE WHEN GRADE_NUM = '0' THEN 1 END) AS S,
+		       COUNT(CASE WHEN GRADE_NUM = '1' THEN 1 END) AS A,
+		       COUNT(CASE WHEN GRADE_NUM = '2' THEN 1 END) AS B,
+		       COUNT(CASE WHEN GRADE_NUM = '3' THEN 1 END) AS C,
+		       COUNT(CASE WHEN GRADE_NUM = '4' THEN 1 END) AS D
 		FROM CLNT_CMPNY
 		WHERE DEL_CHECK IS NULL
-		AND TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
 	</select>
-<!-- 신규고객사 평균3개월 개수 -->		
-	<select id="ccAvgCnt" resultType="Double" parameterType="hashmap">
-		SELECT ROUND((CNT / 3), 1) 
-		FROM (SELECT COUNT(*) AS CNT
-		      FROM CLNT_CMPNY
-		      WHERE RGSTRTN_DATE BETWEEN ADD_MONTHS(SYSDATE,-3) AND SYSDATE
-      		  AND DEL_CHECK IS NULL)
-	</select>
-<!-- 신규고객 전월 개수 -->
-	<select id="clntLastMonthCnt" resultType="Integer" parameterType="hashmap">
-		SELECT  COUNT(*) AS CNT
-		FROM ENTRPRS_CLNT
-		WHERE TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM')
-		AND DEL_CHECK IS NULL
-	</select>
-<!-- 신규고객 당월 개수 -->	
-	<select id="clntThatMonthCnt" resultType="Integer" parameterType="hashmap">
-		SELECT  COUNT(*) AS CNT
-		FROM ENTRPRS_CLNT
+
+<!-- 영업 고객수 -->
+	<select id="salesCnt" resultType="hashmap" parameterType="hashmap">
+		SELECT COUNT(CASE WHEN A.DEPT_NUM = 6 THEN 1 END) CNT,
+    		   COUNT(CASE WHEN A.DEPT_NUM = 7 THEN 1 END) CNT1,
+   			   COUNT(CASE WHEN A.DEPT_NUM = 8 THEN 1 END) CNT2
+		FROM ENTRPRS_CLNT EC INNER JOIN EMP E
+					                 ON EC.MNGR_EMP_NUM = E.EMP_NUM
+					         INNER JOIN APNTM A
+					                 ON E.EMP_NUM = A.EMP_NUM
 		WHERE DEL_CHECK IS NULL
-		AND TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
-	</select>
-<!-- 신규고객 평균3개월 개수 -->		
-	<select id="clntAvgCnt" resultType="Double" parameterType="hashmap">
-		SELECT ROUND((CNT / 3), 1) 
-		FROM (SELECT COUNT(*) AS CNT
-		      FROM ENTRPRS_CLNT
-		      WHERE RGSTRTN_DATE BETWEEN ADD_MONTHS(SYSDATE,-3) AND SYSDATE
-		      AND DEL_CHECK IS NULL)
-	</select>
-<!-- 신규고객 전체 개수 -->
-	<select id="clntAllCnt" resultType="Integer" parameterType="hashmap">
-		SELECT  COUNT(*) AS CNT
-		FROM ENTRPRS_CLNT
-		WHERE 1 = 1
-		AND DEL_CHECK IS NULL
-	</select>
-	
-	<select id="clntGradeS" resultType="Integer" parameterType="hashmap">
-		SELECT COUNT(*) AS CNT
-		FROM CLNT_CMPNY
-		WHERE GRADE_NUM = 0
-	</select>
-	<select id="clntGradeA" resultType="Integer" parameterType="hashmap">
-		SELECT COUNT(*) AS CNT
-		FROM CLNT_CMPNY
-		WHERE GRADE_NUM = 1
-	</select>
-	<select id="clntGradeB" resultType="Integer" parameterType="hashmap">
-		SELECT COUNT(*) AS CNT
-		FROM CLNT_CMPNY
-		WHERE GRADE_NUM = 2
-	</select>
-	<select id="clntGradeC" resultType="Integer" parameterType="hashmap">
-		SELECT COUNT(*) AS CNT
-		FROM CLNT_CMPNY
-		WHERE GRADE_NUM = 3
-	</select>
-	<select id="clntGradeD" resultType="Integer" parameterType="hashmap">
-		SELECT COUNT(*) AS CNT
-		FROM CLNT_CMPNY
-		WHERE GRADE_NUM = 4
+		<if test="deptNum != 0"> 
+			<choose>
+				<when test="deptNum == 1">
+					AND A.DEPT_NUM = 6
+				</when>
+				<when test="deptNum == 2">
+					AND A.DEPT_NUM = 7
+				</when>
+				<when test="deptNum == 3">
+					AND A.DEPT_NUM = 8
+				</when>				
+			</choose>
+		</if>
 	</select>
 </mapper>

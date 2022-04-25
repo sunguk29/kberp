@@ -1,12 +1,21 @@
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now();
+	request.setAttribute("version", version);
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>카카오뱅크 ERP - 일정</title>
+<!-- popup css파일 -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}" /></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -404,14 +413,16 @@ input {
 	outline : none;
 }
 
+[href] {
+	color: black;
+	text-decoration: none;
+}
+
 /* 첨부파일명 공간 크기 */
 
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
 	
 	/* 목록 이동 이벤트 */
 	$("#listBtn").on("click", function() {
@@ -419,7 +430,7 @@ $(document).ready(function() {
 			bg : true,
 			bgClose : false,
 			title : "알림",
-			contents : "나가면 저장되지않습니다, 나가시겠습니까?",
+			contents : popContTwoLine("내용이 저장되지 않았습니다.<br/>나가시겠습니까?"),
 			contentsEvent : function() {
 				
 			},
@@ -454,7 +465,7 @@ $(document).ready(function() {
 				bg : false,
 				bgClose : false,
 				title : "수정",
-				contents : "수정하시겠습니까?",
+				contents : popContOneLine("수정하시겠습니까?"),
 				contentsEvent : function() {
 					$("#popup").draggable();
 				},
@@ -485,7 +496,7 @@ $(document).ready(function() {
 											closePopup();
 											updatePop();								
 										} else {
-											alert("수정중 문제가 발생하였습니다.");
+											makeAlert("알림", popContTwoLine("수정 중 문제가 발생하였습니다.<br/>나가시겠습니까?"));
 										}
 									},
 									error : function(request, status, error) {
@@ -514,7 +525,7 @@ $(document).ready(function() {
 			bg : false,
 			bgClose : false,
 			title : "삭제",
-			contents : "삭제하시겠습니까?",
+			contents : popContOneLine("삭제하시겠습니까?"),
 			contentsEvent : function() {
 				$("#popup").draggable();
 			},
@@ -544,7 +555,7 @@ $(document).ready(function() {
 									if(res.res == "success"){
 										$("#backForm").submit();								
 									} else {
-										alert("삭제중 문제가 발생하였습니다.");
+										makeAlert("알림", popContTwoLine("삭제 중 문제가 발생하였습니다.<br/>나가시겠습니까?"));
 									}
 								},
 								error : function(request, status, error) {
@@ -957,7 +968,7 @@ function updatePop() {
 	
 	
 	/* 활동분류 선택되게 */
-	$("#ssactvtyclsfy").val(${data.ACTVTY_CLSFY_NUM}).prop("selected", this.selected);
+	$("#ssactvtyclsfy").val(${data.ACTVTY_CLSFY_NUM}).prop("selected", true);
 	
 });
 /* 첨부파일 업로드 관련 */
@@ -973,6 +984,9 @@ function uploadName(e) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" name="deptS" value="${param.deptS}" />
+	<input type="hidden" name="usrsrchTxt" value="${param.usrsrchTxt}" />
+	<input type="hidden" name="clndrDate" value="${param.clndrDate}"/>
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -985,9 +999,11 @@ function uploadName(e) {
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">영업일정 상세보기</div>
-			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg"  id="listBtn"/> 
-			<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
-			<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" id="deleteBtn" />
+			<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg"  id="listBtn"/>
+			<c:if test="${sEmpNum eq data.EMP_NUM}">
+				<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
+				<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" id="deleteBtn" />			
+			</c:if> 
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">

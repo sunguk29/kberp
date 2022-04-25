@@ -1,13 +1,23 @@
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now() ;	
+	request.setAttribute("version", version);		//캐시 처리
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>카카오뱅크 ERP - 고객사</title>
+<!-- 카카오 주소 API -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -15,7 +25,7 @@
 .cont_wrap {
 	width: 1013px;
 }
-
+/* 개인 작업 영역 */
 .body {
 	display: block;
 	background-color: white;
@@ -30,30 +40,25 @@
 	height: 100%;
 	margin: 20px auto;
 }
-
-/* 개인 작업 영역 */
-table{	
+table {	
 	border: 1px;
 	width: 927px;
 	margin: 40px auto;
 }
-td:nth-child(2), td:nth-child(4){
+td:nth-child(2), td:nth-child(4) {
 	border-bottom: 1px solid #d7d7d7;
 }
-tr:nth-child(11) > td:nth-child(1){
+tr:nth-child(11) > td:nth-child(1) {
 	border-bottom: 1px solid #d7d7d7;
 }
-/* tr:nth-child(9) > td:nth-child(2){
-	background-color: #F2F2F2;
-} */
-td:nth-child(1), td:nth-child(3){
+td:nth-child(1), td:nth-child(3) {
 	text-align: center;
 }
-.btn{
+.btn {
 	width : 90px;
 	height: 40px;
 }
-.btn, .address{
+.btn, .address {
 	background-color: #fff;
 	border-radius: 3px;
 	font-weight: bold;
@@ -65,7 +70,7 @@ td:nth-child(1), td:nth-child(3){
 .btnImg:hover, .plus_btn:hover {
 	cursor: pointer;
 }
-.txt{
+.txt {
 	height: 30px;
 	width: 100%;
 	padding: 0 5px;
@@ -78,14 +83,13 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 33px;
 	border: none;
 }
-
-.btnImg{
+.btnImg {
 	width : 30px;
 	float: right;
 	margin-left: 10px;
 }
 
-.imgPos{
+.imgPos {
 	text-align: right;
 }
 .title_name {
@@ -152,7 +156,6 @@ td:nth-child(1), td:nth-child(3){
 .boldname{
 	font-weight: bold;
 }
-/* 팝업 버튼 */
 .btn_pos {
 	text-align: center;
 }
@@ -163,7 +166,6 @@ td:nth-child(1), td:nth-child(3){
 	line-height: 100px;
 	text-align: center;
 }
-/* 첨부자료 */
 .cntrct_box_in {
 	width: 885px;
 	height: 100px;
@@ -236,15 +238,13 @@ td:nth-child(1), td:nth-child(3){
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	// 목록
 	$("#listBtn").on("click", function() {
 		makePopup({
 			bg : true,
 			bgClose : false,
 			title : "알림",
-			contents : "<div class=\"text_center\"><b>저장되지않았습니다, 나가시겠습니까?</b></div>",
-			contentsEvent : function() {
-				
-			},
+			contents : popContTwoLine("나가면 저장되지않습니다.<br/>나가시겠습니까?"),
 			buttons : [{
 				name : "나가기",
 				func:function() {
@@ -258,14 +258,17 @@ $(document).ready(function() {
 		});
 	});
 	
+	// 주소
 	$("#search_icon").on("click", function() {
 		findAddr();
 	});
 	
+	// 파일업로드
 	$(".rvn_txt").on("click", ".aff_btn", function() {
 		$("#att").click();
 	});
 	
+	// 파일삭제
 	$("#fileDelete").on("click", function() {
 		$("#file_name").remove();
 		$(this).remove();
@@ -277,21 +280,23 @@ $(document).ready(function() {
 		$("#uploadBtn").html(html);
 	});
 	
+	// 선택박스 초기값
 	$("#ccClsfy").val(${data.CLNT_CMPNY_CLSFY_NUM}).prop("selected", this.selected);
 	$("#ccGrade").val(${data.GRADE_NUM}).prop("selected", this.selected);
 	$("#rp").val(${data.RCGNTN_PATH_NUM}).prop("selected", this.selected);
 	
+	// 저장
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#ccName")) {
-			makeAlert("필수 항목 알림", "고객사를 입력하세요", function() {
+			makeAlert("필수 정보 알림", popContOneLine("고객사를 입력하세요"), function() {
 				$("#ccName").focus();
 				});
 		} else if($("#ccClsfy").val() == 9) {
-			makeAlert("필수 항목 알림", "고객사 분류를 선택하세요", function() {
+			makeAlert("필수 정보 알림", popContOneLine("고객사 분류를 선택하세요"), function() {
 				$("#ccClsfy").focus();
 			});
 		}else if($("#ccGrade").val() == 9) {
-			makeAlert("필수 항목 알림", "등급을 선택하세요", function() {
+			makeAlert("필수 정보 알림", popContOneLine("등급을 선택하세요"), function() {
 				$("#ccGrade").focus();
 			});
 		} else if(checkEmpty("#cName")) {
@@ -299,23 +304,23 @@ $(document).ready(function() {
 				$("#cName").focus();
 			});
 		} else if(checkEmpty("#zipCodeNum")) {
-			makeAlert("필수 항목 알림", "우편번호를 입력하세요", function() {
+			makeAlert("필수 정보 알림", popContOneLine("우편번호를 입력하세요"), function() {
 				$("#zipCodeNum").focus();
 			});
 		} else if(checkEmpty("#adrs")) {
-			makeAlert("필수 항목 알림", "주소를 입력하세요", function() {
+			makeAlert("필수 정보 알림", popContOneLine("주소를 입력하세요"), function() {
 				$("#adrs").focus();
 			});
 		} else if(checkEmpty("#dtlAdrs")) {
-			makeAlert("필수 항목 알림", "상세주소를 입력하세요", function() {
+			makeAlert("필수 정보 알림", popContOneLine("상세주소를 입력하세요"), function() {
 				$("#dtlAdrs").focus();
 			});
 		} else if(checkEmpty("#rvn")) {
-			makeAlert("필수 항목 알림", "매출를 입력하세요", function() {
+			makeAlert("필수 정보 알림", popContOneLine("매출를 입력하세요"), function() {
 				$("#rvn").focus();
 			});
 		} else if($("#rp").val() == 9) {
-			makeAlert("필수 항목 알림", "인지경로를 선택하세요", function() {
+			makeAlert("필수 정보 알림", popContOneLine("인지경로를 선택하세요"), function() {
 				$("#rp").focus();
 			});
 		} else {
@@ -323,7 +328,7 @@ $(document).ready(function() {
 				bg : true,
 				bgClose : false,
 				title : "알림",
-				contents : "<div class=\"text_center\"><b>저장하시겠습니까?</b></div>",
+				contents : popContOneLine("저장하시겠습니까?"),
 				contentsEvent : function() {
 					$("#popup1").draggable();
 				},
@@ -350,22 +355,21 @@ $(document).ready(function() {
 											$("#listForm").attr("action", "clntCmpnyCont");
 											$("#listForm").submit();
 										} else {
-											alert("등록중 문제가 발생하였습니다.");
+											makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 										}
 									},
 									error : function(request, status, error) {
 										console.log(request.responseText);
 									}
-								});
+								}); // ajax End
 								
 							},
 							error : function(req) {
 								console.log(req.responseText);
 							}
-						});
+						}); // ajaxForm End
 						
 						updateForm.submit();
-						console.log("One!");
 						closePopup();
 					}
 				}, {
@@ -373,10 +377,12 @@ $(document).ready(function() {
 				}]
 			});
 				
-		}
+		} // if End
 	});
+	
 });
 
+// 카카오 주소
 function findAddr(){
 	new daum.Postcode({
         oncomplete: function(data) {
@@ -399,6 +405,8 @@ function findAddr(){
         }
     }).open();
 }
+
+// 파일명
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
@@ -431,7 +439,17 @@ function uploadName(e) {
 			<img alt="목록버튼" src="resources/images/sales/back.png" class="btnImg" id="listBtn" />
 			<img alt="저장버튼" src="resources/images/sales/save.png" class="btnImg" id="saveBtn" />
 			<!-- 검색영역 선택적 사항 -->
-			
+			<!-- <div class="page_srch_area">
+				<select class="srch_sel">
+					<option>제목</option>
+					<option>내용</option>
+					<option>작성자</option>
+				</select>
+				<div class="srch_text_wrap">
+					<input type="text" />
+				</div>
+				<div class="cmn_btn_ml">검색</div>
+			</div> -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
@@ -554,7 +572,7 @@ function uploadName(e) {
 						<input type="text" id="fileName" readonly="readonly" />
 					</div>
 					<input type="file" id="att" name="att" onchange="uploadName(this)" />
-					<input type="hidden" id="attFile" name="attFile" />
+					<input type="hidden" id="attFile" name="attFile" value="${data.ATT_FILE_NAME}" />
 				</form>
 			</div>
 		</div>

@@ -218,7 +218,8 @@ $(document).ready(function() {
 									data : params, 
 									success : function(res){ 
 										if(res.res == "success"){
-											location.href = "acntRgstrtn";
+											$("#actionForm").attr("action", "acntRgstrtn");
+											$("#actionForm").submit();
 										}else{
 											alert("작성중 문제가 발생하였습니다.");
 										}
@@ -318,7 +319,8 @@ $(document).ready(function() {
 									data : params, 
 									success : function(res){ 
 										if(res.res == "success"){
-											location.href = "acntRgstrtn";
+											$("#actionForm").attr("action", "acntRgstrtn");
+											$("#actionForm").submit();
 										}else{
 											alert("수정중 문제가 발생하였습니다.");
 										}
@@ -390,9 +392,10 @@ $(document).ready(function() {
 									data : params, 
 									success : function(res){ 
 										if(res.res == "success"){
-											location.href = "acntRgstrtn";
+											$("#actionForm").attr("action", "acntRgstrtn");
+											$("#actionForm").submit();
 										}else{
-											alert("수정중 문제가 발생하였습니다.");
+											alert("삭제중 문제가 발생하였습니다.");
 										}
 									},
 									error : function(request, status, error){ 
@@ -527,9 +530,9 @@ function reloadList(){
 		
 		for(var data of list){
 			
-			html += "<tr no=\"" + data.SUB_CTGR_ACNT_CODE + "\" class=\"board_table_hover\" tit=\""+ data.ACNT_NAME +"\">";
+			html += "<tr>";
 			html += "<td>" + data.SUB_CTGR_ACNT_CODE +"</td>";
-			html += "<td>" + data.ACNT_NAME +"</td>";
+			html += "<td no=\"" + data.SUB_CTGR_ACNT_CODE + "\" class=\"board_table_hover\" tit=\""+ data.ACNT_NAME +"\">" + data.ACNT_NAME +"</td>";
 			html +="</tr>";
 			
 		}
@@ -575,9 +578,9 @@ function drawsubList(sublist){
 	if($("#no").val() != "" ){
 	for(var data of sublist){
 		
-		html += "<tr sub_no=\"" + data.SUB_CTGR_ACNT_CODE + "\" class=\"sub_board_table_hover\" tit=\""+ data.ACNT_NAME +"\"abs=\""+data.ABSTRCT +"\">";
+		html += "<tr>";
 		html += "<td>" + data.SUB_CTGR_ACNT_CODE +"</td>";
-		html += "<td>" + data.ACNT_NAME +"</td>";
+		html += "<td sub_no=\"" + data.SUB_CTGR_ACNT_CODE + "\" class=\"board_table_hover\" tit=\""+ data.ACNT_NAME +"\"abs=\""+data.ABSTRCT +"\">" + data.ACNT_NAME +"</td>";
 		html +="</tr>";
 	}
 	}
@@ -651,23 +654,35 @@ function drawsubMaxCnt(submaxcnt){
 	<input type="hidden" name="empNum" value="${sEmpNum}"/>
 	<input type="hidden" id = "writesubname" name="sub_name" value=""/>
 	<input type="hidden" id ="writeabs" name="abs" value=""/>
+	<input type="hidden" name="top" value="${param.top}">
+	<input type="hidden" name="menuNum" value="${param.menuNum}">
+	<input type="hidden" name="menuType" value="${param.menuType}">
 </form>
 <form action="#" id="updateForm" method="post">
 	<input type="hidden" id = "updatesubname" name="updatesubname" value=""/>
 	<input type="hidden" id ="updateabs" name="updateabs" value=""/>
 	<input type = "hidden" id = "update_no" name ="update_no" value=""/>
 	<input type = "hidden" id = "updatesub_no" name="updatesub_no" value=""/>
+	<input type="hidden" name="top" value="${param.top}">
+	<input type="hidden" name="menuNum" value="${param.menuNum}">
+	<input type="hidden" name="menuType" value="${param.menuType}">
 
 </form>
 <form action="#" id="deleteForm" method="post">
 	<input type = "hidden" id = "delete_no" name ="delete_no" value=""/>
 	<input type = "hidden" id = "deletesub_no" name="deletesub_no" value=""/>
+	<input type="hidden" name="top" value="${param.top}">
+	<input type="hidden" name="menuNum" value="${param.menuNum}">
+	<input type="hidden" name="menuType" value="${param.menuType}">
 </form>
 <form action="#" id = "actionForm" method="post">
 	<input type = "hidden" id="no" name ="no" value=""/>
 	<input type = "hidden" id="sub_no" name ="sub_no" value=""/>
 	<input type = "hidden" id="mainPage" name ="mainPage" value ="1"/>
 	<input type = "hidden" id="subPage" name ="subPage" value ="1"/>
+	<input type="hidden" name="top" value="${param.top}">
+	<input type="hidden" name="menuNum" value="${param.menuNum}">
+	<input type="hidden" name="menuType" value="${param.menuType}">
 	
 			<div class="acnt_name_srch_wrap">
 				<table class="acnt_name_srch_table">

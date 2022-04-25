@@ -138,8 +138,8 @@ $("#deleteBtn").on("click", function() {
         		 if(res.res == "success"){
         			 reloadList(); 
         			 console.log($("#admstrName").val());
-        			 console.log($("#admstrName").val());
-        			 console.log($("#admstrName").val());
+        			 $("#locationForm").attr("action", "boardAdmnstr");
+        			 $("#locationForm").submit();
          		 } else{
         			 alert("삭제중 문제가 발생하였습니다.");
         		 }

@@ -320,6 +320,14 @@ function goSrch() {
 		reloadList();			//목록조회
 	});
 }
+/* 클릭하면 정렬 */
+function goSort() {
+	$("#sort_btn").on("click", function() {
+		$("#page").val("1");	//검색하면 1페이지가 되도록
+		oldSrchDataSave(); 		//검색 데이터 유지 하기 위해 old_ 에 값을 저장해놓는 함수
+		reloadList();			//목록조회
+	});
+}
 
 /*클릭하면 상단 박스 작동*/
 function clickBoxFunc() {

@@ -18,14 +18,16 @@
 
 .board_table tbody td {
 	color: black;
+	font-weight: normal;
 }
-.mon {
+.board_table thead {
+	background-color: #F2F2F2;
+}
+
+.srch_month {
 	display: inline-block;
 	vertical-align: top;
-	text-align: right;
-	width: calc(100%);
-	height: 20px;
-	margin-bottom: 15px;
+	height: 27px;
 }
 </style>
 <script type="text/javascript">
@@ -33,47 +35,27 @@ $(document).ready(function() {
 	
 	reloadList();
 	
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
-	$("#btn1Btn").on("click", function() {
-		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 300,
-			title : "버튼하나팝업",
-			contents : "내용임",
-			buttons : {
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
-	$("#btn2Btn").on("click", function() {
-		makePopup({
-			bg : false,
-			bgClose : false,
-			title : "버튼두개팝업",
-			contents : "내용임",
-			buttons : [{
-				name : "하나",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "둘닫기"
-			}]
-		});
-	});
-	
 	$("#pgn_area").on("click", "div", function() {
 		$("#Page").val($(this).attr("Page"));
 		reloadList();
+	});
+	
+	$("#mainlist").on("click", "#clickmon", function() {
+		
+		$("#mon").val($(this).attr("mon"));
+		$("#actionForm").attr("action", "expnsRsltnEmpMnthlyList");
+		$("#actionForm").submit();
+	});
+	
+	$("#srchMonth").on("change", function() {
+		$("#searchMonth").val($("#srchMonth").val());
+		reloadList();
+	});
+	$("#WriteBtn").on("click", function() {
+		
+		$("#mon").val($(this).attr("mon"));
+		$("#actionForm").attr("action", "expnsRsltnEmpMnthlyWrite");
+		$("#actionForm").submit();
 	});
 	
 	
@@ -102,7 +84,7 @@ $(document).ready(function() {
 		for(var data of list){
 			
 			html += "<tr>";
-			html += "<td>" + data.DATE_MON +"</td>";
+			html += "<td class=\"board_table_hover\" id =\"clickmon\" mon=\"" + data.DATE_MON + "\" >" + data.DATE_MON +"</td>";
 			if(data != null){
 				if(data.CRP){
 					html += "<td>" + data.CRP + "</td>";
@@ -164,6 +146,15 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
+<form action="#" id = "actionForm" method="post">
+	<input type ="hidden" name="Page" id="Page" value="1"/>
+	<input type="hidden" name="top" value="${param.top}">
+	<input type="hidden" name="menuNum" value="${param.menuNum}">
+	<input type="hidden" name="menuType" value="${param.menuType}">
+	<input type="hidden" id="mon" name="mon" value="${param.mon}">
+	<input type="hidden" id="searchMonth" name="searchMonth" value="${param.searchMonth}">
+	<input type="hidden" name ="backCheck" value="0">
+</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -176,15 +167,14 @@ $(document).ready(function() {
 		<div class="page_title_bar">
 			<div class="page_title_text">지출 결의서</div>
 			<!-- 검색영역 선택적 사항 -->
-			
+			<div class="page_srch_area">
+					<input type="month" class="srch_month" id="srchMonth" value="${param.searchMonth}">
+			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
-	<form action="#" id = "actionForm" method="post">
-	<input type ="hidden" name="Page" id="Page" value="1"/>
 			<div>
-				<div class = "mon"><input type = "month"></div>
 					<table class="board_table">
 						<thead>
 							<tr>
@@ -198,14 +188,15 @@ $(document).ready(function() {
 						</tbody>
 					</table>
 					<div class="board_bottom">
-						<div class="pgn_area" id = "pgn_area">
-						</div>
+						<div class="pgn_area" id = "pgn_area"></div>
+						<div class="cmn_btn_ml" id="WriteBtn">작성</div>	
+						
 					</div>
 				</div>
 			
 		</div>
 	</div>
-	</form>
+	
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

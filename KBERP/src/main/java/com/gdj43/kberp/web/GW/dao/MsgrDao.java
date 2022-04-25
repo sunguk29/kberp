@@ -13,13 +13,13 @@ public class MsgrDao implements IMsgrDao {
 	public SqlSession sqlSession;
 
 	@Override
+	public int getMaxNo() throws Throwable {
+		return (int) sqlSession.selectOne("msgr.getMaxNo");
+	}
+	
+	@Override
 	public void insertCont(HashMap<String, String> params) throws Throwable {
 		sqlSession.insert("msgr.insertCont", params);
-	}
-
-	@Override
-	public List<HashMap<String, String>> getContList(int lastChatNo) throws Throwable {
-		return sqlSession.selectList("msgr.getContList", lastChatNo);
 	}
 
 	@Override
@@ -28,9 +28,16 @@ public class MsgrDao implements IMsgrDao {
 	}
 
 	@Override
-	public int getMaxNo() throws Throwable {
-		return (int) sqlSession.selectOne("msgr.getMaxNo");
+	public List<HashMap<String, String>> getContList(HashMap<String, String> params) throws Throwable {
+		return sqlSession.selectList("msgr.getContList", params);
 	}
-	
+
+	@Override
+	public HashMap<String, String> getCont(HashMap<String, String> params) throws Throwable {
+		return sqlSession.selectOne("msgr.getCont", params);
+	}
+
+
+
 	
 }

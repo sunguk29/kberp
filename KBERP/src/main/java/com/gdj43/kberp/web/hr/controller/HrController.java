@@ -1,6 +1,5 @@
 package com.gdj43.kberp.web.hr.controller;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -110,7 +109,10 @@ public class HrController {
 		    		   rfrnc = params.get("rfrncList").split(",");
 		    		   rfrncList = Arrays.asList(rfrnc);
 		    	   }
-		    	   iAprvlService.aprvlAdd(params.get("emp_num"), params.get("title"), params.get("cont"), aprvlerList, rfrncList, null );
+		    	   String aprvl_num = iAprvlService.aprvlAdd(params.get("emp_num"), params.get("title"), params.get("cont"), aprvlerList, rfrncList, null );
+		    	   modelMap.put("aNum", aprvl_num);
+		    	   System.out.println("결재번호 : " + aprvl_num);
+		    	   
 		    	   break;
 		       case "aprvlSuccess" :
 		    	   iCommonService.updateData("hr.aprvlSuccess", params);
@@ -199,14 +201,28 @@ public class HrController {
 		}
 		return mav;
 	 }
-	
-	@RequestMapping(value = "/crtfctUserAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	// 증명서발급 ajax (사용자)
+	@RequestMapping(value = "/crtfctUserAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
     @ResponseBody
-    public String crtfctUserAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+    public String crtfctUserAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		iCommonService.insertData("hr.addCrtfct", params);
+		try {
+			switch(gbn) {
+			case "addCrtfct" :
+				iCommonService.insertData("hr.addCrtfct", params);
+				break;
+			case "print" :
+				HashMap<String,String> pCont = iCommonService.getData("getAdminRqstCont", params);
+				modelMap.put("pCont", pCont);
+				break;
+			}
+			modelMap.put("res", "success");
+		} catch(Throwable e) {
+			e.printStackTrace();
+	       modelMap.put("res", "failed");
+		}
 		
 		return mapper.writeValueAsString(modelMap); 
     }

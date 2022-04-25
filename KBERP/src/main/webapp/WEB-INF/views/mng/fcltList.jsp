@@ -62,6 +62,7 @@ $(document).ready(function() {
 		
 		reloadList();
 	});
+	
 	$("#add_btn").on("click",function(){
 		$("#searchGbn").val($("#oldSearchGbn").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());

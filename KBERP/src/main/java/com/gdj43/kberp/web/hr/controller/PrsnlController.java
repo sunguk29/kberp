@@ -65,9 +65,6 @@ public class PrsnlController {
 			if (menuAthrty != 0) { // 읽기, 쓰기 권한이 있을 때
 				mav.addObject("menuAthrty", menuAthrty);
 				
-				//HashMap<String, String> basicInfoData = iCommonService.getData("prsnl.getBasicInfo", params);
-				
-				//mav.addObject("basicInfoData", basicInfoData);
 				mav.setViewName("hr/prsnlCard");
 			} else { // 권한 없을 때
 				mav.setViewName("exception/PAGE_NOT_FOUND");

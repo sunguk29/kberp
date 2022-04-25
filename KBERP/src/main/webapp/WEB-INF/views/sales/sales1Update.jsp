@@ -1,14 +1,23 @@
 <!-- 
 	영업기회 수정 : sales1Update
  -->
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now() ;	
+	request.setAttribute("version", version);		//캐시 처리
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>영업기회 수정</title>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -532,15 +541,15 @@ textarea {
 }
 .popup_cont2 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-	font-weight: 600;
+	font-size: 12pt;
+	font-weight: bold;
 	text-align: center;
 	line-height: 100px;
 }
 .popup_cont3 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-    font-weight: 600;
+	font-size: 12pt;
+    font-weight: bold;
     text-align: center;
     height: 40px;
     line-height: 50px;
@@ -548,8 +557,8 @@ textarea {
 }
 .popup_cont4 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-    font-weight: 600;
+	font-size: 12pt;
+    font-weight: bold;
     text-align: center;
     height: 40px;
     line-height: 40px;
@@ -612,66 +621,80 @@ $(document).ready(function() {
 	
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
+		if(isNaN($("#expctnLoanScale").val())) {
+			makeAlert("필수 항목 알림", popContOneLine("예상 대출 규모는 숫자만 입력 가능합니다."), function() {
+				$("#expctnLoanScale").val("");
+				$("#expctnLoanScale").focus();
+			});
+		} else {
 		
-		var html = "";
-		
-		html += "<div class=\"popup_cont2\">저장하시겠습니까?</div>";
-		
-		makePopup({
-			bg : true,
-			bgClose : false,
-			title : "알림",
-			contents : html,
-			contentsEvent : function() {
-				$("#popup1").draggable();
-			},
-			buttons : [ {
-				name : "확인",
-				func : function() {
-					/* 여기에 넣기 */
-					var updateForm = $("#updateForm");
-
-					updateForm.ajaxForm({
-						success : function(res) {
-							// 물리파일명 보관
-							if (res.fileName.length > 0) {
-								$("#attFile").val(res.fileName[0]);
-							}
-
-							// 글 수정
-							var params = $("#updateForm").serialize();
-
-							$.ajax({
-								type : "post",
-								url : "salesMng1ActionAjax/update",
-								dataType : "json",
-								data : params,
-								success : function(res) {
-									if (res.res == "success") {
-										$("#backForm").submit();
-									} else {
-										alert("수정중 문제가 발생하였습니다.");
-									}
-								},
-								error : function(request, status, error) {
-									console.log(request.responseText);
+			var html = "";
+			
+			html += "<div class=\"popup_cont2\">저장하시겠습니까?</div>";
+			
+			makePopup({
+				bg : true,
+				bgClose : false,
+				title : "알림",
+				contents : html,
+				contentsEvent : function() {
+					$("#popup1").draggable();
+				},
+				buttons : [ {
+					name : "확인",
+					func : function() {
+						/* 여기에 넣기 */
+						var updateForm = $("#updateForm");
+	
+						updateForm.ajaxForm({
+							success : function(res) {
+								// 물리파일명 보관
+								if (res.fileName.length > 0) {
+									$("#attFile").val(res.fileName[0]);
 								}
-							});
-						},
-						error : function(req) {
-							console.log(req.responseText);
-						}
-					}); // ajaxForm end
-
-					updateForm.submit();
-					console.log("One!");
-					closePopup();
-				}
-			}, {
-				name : "취소"
-			} ]
-		}); // makePopup end
+	
+								// 글 수정
+								var params = $("#updateForm").serialize();
+	
+								$.ajax({
+									type : "post",
+									url : "salesMng1ActionAjax/update",
+									dataType : "json",
+									data : params,
+									success : function(res) {
+										if (res.res == "success") {
+											$("#backForm").submit();
+										} else {
+											makeAlert("알림", popContOneLine("수정중 문제가 발생하였습니다."));
+										}
+									},
+									error : function(request, status, error) {
+										console.log(request.responseText);
+									}
+								});
+							},
+							error : function(req) {
+								console.log(req.responseText);
+							}
+						}); // ajaxForm end
+	
+						updateForm.submit();
+						console.log("One!");
+						closePopup();
+					}
+				}, {
+					name : "취소"
+				} ]
+			}); // makePopup end
+		}
 	}); // saveBtn end
+	
+	// 선택박스 초기값
+	$("#loanCauseNum").val(${data.LOAN_CAUSE_NUM}).prop("selected", true);
+	$("#loanHopeType").val(${data.LOAN_HOPE_TYPE}).prop("selected", true);
+	$("#loanHopeTime").val(${data.LOAN_HOPE_TIME}).prop("selected", true);
+	$("#expctdBsnsType").val(${data.EXPCTD_BSNS_TYPE}).prop("selected", true);
+	
 	
 	// 담당자 조회 버튼
 	$("#userIcon").on("click", function() {
@@ -861,6 +884,12 @@ function uploadName(e) {
 		<input type="hidden" name="menuNum" value="${param.menuNum}" />
 		<input type="hidden" name="menuType" value="${param.menuType}" />
 		<input type="hidden" id="salesNum" name="salesNum" value="${param.salesNum}" />
+		<input type="hidden" name="prgrsStage1" value="${param.prgrsStage1}" />
+		<input type="hidden" name="prgrsStage2" value="${param.prgrsStage2}" />
+		<input type="hidden" name="mngName" value="${param.mngName}" />
+		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+		<input type="hidden" name="listSort" value="${param.listSort}" />
 		<!-- 영업번호 -->
 	</form>
 	<!-- top & left -->
@@ -976,34 +1005,10 @@ function uploadName(e) {
 									</td>
 									<td colspan="3">
 										<select class="txt" id="loanCauseNum" name="loanCauseNum" required>
-											<optgroup>
-												<c:choose>
-													<c:when test="${data.LOAN_CAUSE_NUM eq 0}">
-														<option value="0" selected="selected">사업확장</option>
-														<option value="1">제품개발</option>
-														<option value="2">토지매매</option>
-														<option value="3">기타</option>
-													</c:when>
-													<c:when test="${data.LOAN_CAUSE_NUM eq 1}">
-														<option value="0" >사업확장</option>
-														<option value="1" selected="selected">제품개발</option>
-														<option value="2">토지매매</option>
-														<option value="3">기타</option>
-													</c:when>
-													<c:when test="${data.LOAN_CAUSE_NUM eq 2}">
-														<option value="0" >사업확장</option>
-														<option value="1">제품개발</option>
-														<option value="2" selected="selected">토지매매</option>
-														<option value="3">기타</option>
-													</c:when>
-													<c:when test="${data.LOAN_CAUSE_NUM eq 3}">
-														<option value="0" >사업확장</option>
-														<option value="1">제품개발</option>
-														<option value="2">토지매매</option>
-														<option value="3" selected="selected">기타</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+											<option value="0">사업확장</option>
+											<option value="1">제품개발</option>
+											<option value="2">토지매매</option>
+											<option value="3">기타</option>
 										</select>
 									</td>
 								</tr>
@@ -1021,18 +1026,8 @@ function uploadName(e) {
 									</td>
 									<td colspan="3">
 										<select class="txt" id="loanHopeType" name="loanHopeType" required>
-											<optgroup>
-												<c:choose>
-													<c:when test="${data.LOAN_HOPE_TYPE eq 0}">
-														<option value="0" selected="selected">장기대출</option>
-														<option value="1">단기대출</option>
-													</c:when>
-													<c:when test="${data.LOAN_HOPE_TYPE eq 1}">
-														<option value="0">장기대출</option>
-														<option value="1" selected="selected">단기대출</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+											<option value="0">장기대출</option>
+											<option value="1">단기대출</option>
 										</select>
 									</td>
 								</tr>
@@ -1042,34 +1037,10 @@ function uploadName(e) {
 									</td>
 									<td colspan="3">
 										<select class="txt" id="loanHopeTime" name="loanHopeTime" required>
-											<optgroup>
-												<c:choose>
-													<c:when test="${data.LOAN_HOPE_TIME eq 0}">
-														<option value="0" selected="selected">근시일 내</option>
-														<option value="1">3개월 이후</option>
-														<option value="2">6개월 이후</option>
-														<option value="3">1년 이후</option>
-													</c:when>
-													<c:when test="${data.LOAN_HOPE_TIME eq 1}">
-														<option value="0">근시일 내</option>
-														<option value="1" selected="selected">3개월 이후</option>
-														<option value="2">6개월 이후</option>
-														<option value="3">1년 이후</option>
-													</c:when>
-													<c:when test="${data.LOAN_HOPE_TIME eq 2}">
-														<option value="0">근시일 내</option>
-														<option value="1">3개월 이후</option>
-														<option value="2" selected="selected">6개월 이후</option>
-														<option value="3">1년 이후</option>
-													</c:when>
-													<c:when test="${data.LOAN_HOPE_TIME eq 3}">
-														<option value="0">근시일 내</option>
-														<option value="1">3개월 이후</option>
-														<option value="2">6개월 이후</option>
-														<option value="3" selected="selected">1년 이후</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+											<option value="0">근시일 내</option>
+											<option value="1">3개월 이후</option>
+											<option value="2">6개월 이후</option>
+											<option value="3">1년 이후</option>
 										</select>
 									</td>
 								</tr>
@@ -1099,25 +1070,9 @@ function uploadName(e) {
 									</td>
 									<td colspan="3">
 										<select class="txt" id="expctdBsnsType" name="expctdBsnsType" value="${data.EXPCTD_BSNS_TYPE}">
-											<optgroup>
-												<c:choose>
-													<c:when test="${data.EXPCTD_BSNS_TYPE eq 0}">
-														<option value="0" selected="selected">민수 사업</option>
-														<option value="1">관공 사업</option>
-														<option value="2">기타</option>
-													</c:when>
-													<c:when test="${data.EXPCTD_BSNS_TYPE eq 1}">
-														<option value="0">민수 사업</option>
-														<option value="1" selected="selected">관공 사업</option>
-														<option value="2">기타</option>
-													</c:when>
-													<c:when test="${data.EXPCTD_BSNS_TYPE eq 2}">
-														<option value="0">민수 사업</option>
-														<option value="1">관공 사업</option>
-														<option value="2" selected="selected">기타</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+											<option value="0">민수 사업</option>
+											<option value="1">관공 사업</option>
+											<option value="2">기타</option>
 										</select>
 									</td>
 								</tr>
@@ -1151,7 +1106,7 @@ function uploadName(e) {
 									<input type="text" id="fileName" readonly="readonly" />
 							</div>
 						<input type=file id="att" name="att" onchange="uploadName(this)" />
-						<input type="hidden" id="attFile" name="attFile" />
+						<input type="hidden" id="attFile" name="attFile" value="${data.ATT_FILE_NAME}" />
 						</div>
 					</form>
 					<!-- 끝 -->

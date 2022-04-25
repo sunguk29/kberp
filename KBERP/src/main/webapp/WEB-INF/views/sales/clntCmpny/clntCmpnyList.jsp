@@ -1,12 +1,21 @@
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now() ;	
+	request.setAttribute("version", version);		//캐시 처리
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>카카오뱅크 ERP - 고객사</title>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -14,7 +23,6 @@
 .cont_wrap {
 	width: 1013px;
 }
-
 /* 개인 작업 영역 */
 .body {
 	display: block;
@@ -117,7 +125,6 @@ select {
 	text-align: left;
 	table-layout: fixed;
 }
-
 .list_table thead th {
 	font-weight: bold;
 }
@@ -127,15 +134,12 @@ select {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
-
 .list_table thead tr:nth-child(1) {
 	border-top: 2px solid gray;
 }
-
 .list_table thead tr:nth-child(3) {
 	border-bottom: 2px solid gray;
 }
-
 .list_table tbody tr:nth-child(3) {
 	border-bottom: 1px solid gray;
 }
@@ -194,24 +198,24 @@ select {
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	/* 고객사 분류 초기값 */
+	// 고객사 분류
 	if('${param.clntCmpnyClsfyNum}' != '') {
 		$("#clntCmpnyClsfyNum").val('${param.clntCmpnyClsfyNum}');
 	} else {
 		$("#oldClntCmpnyClsfyNum").val("9");
 	}
 	
-	/* 검색어 분류 초기값 */
+	// 검색분류
 	if('${param.searchType}' != '') {
 		$("#searchType").val('${param.searchType}');
 	} else {
 		$("#oldSearchType").val("0");
 	}
 	
-	/* 고객사 목록 */
+	// 고객사
 	reloadList();
 	
-	/* 검색 상단 고객사분류버튼 클릭시 */
+	// 검색상단
 	$(".sts").on("click", ".sts_list", function() {
 		if($(this).attr("num") != "9") {
 			$(".sts").children(".sts_list_on").attr("class", "sts_list");
@@ -222,65 +226,94 @@ $(document).ready(function() {
 		}
 		
 		$("#page").val("1");
-		
 		$("#clntCmpnyClsfyNum").val($(this).attr("num"));
+		$("#oldClntCmpnyClsfyNum").val($(this).attr("num"));
+		$("#listSort").val("9");
 		
 		if($("#searchTxt").val() != "") { // 검색어 txt가 비어있지 않으면 초기화
 			var txt = document.getElementById("searchTxt");
-			
 			txt.value = "";
+			var oldtxt = document.getElementById("oldSearchTxt");
+			oldtxt.value = "";
+			
 		}
 		
 		reloadList();
 		
 	});
 	
-	/* 페이지버튼 클릭시 */
+	// 페이지
 	$(".pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
-		$("#listSort").val("9");
-		
 		$("#clntCmpnyClsfyNum").val($("#oldClntCmpnyClsfyNum").val());
 		$("#searchType").val($("#oldSearchType").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
-				
 		reloadList();
 	});
 	
-	/* 등록버튼 클릭시 */
+	// 등록
 	$("#addBtn").on("click", function() {
 		$("#actionForm").attr("action", "clntCmpnyReg");
 		$("#actionForm").submit();
 	});
 	
-	/* 검색칸에 엔터입력시 */
+	// 검색어
 	$("#searchTxt").on("keypress", function(event) {
 		if(event.keyCode == 13) {
 			$("#searchBtn").click(); 
-			
 			return false;
 		}
 	});
 	
-	/* 검색버튼 클릭시 */
+	// 검색
 	$("#searchBtn").on("click", function() {
-		$("#page").val("1");
-		
-		$("#oldClntCmpnyClsfyNum").val($("#clntCmpnyClsfyNum").val());
-		$("#oldSearchType").val($("#searchType").val());
-		$("#oldSearchTxt").val($("#searchTxt").val());
-		
-		reloadList();
+		var clsfyNum = $("#clntCmpnyClsfyNum").val();
+		if($("#searchType").val() == 1){
+			if(isNaN($("#searchTxt").val())) {
+				makeAlert("알림", popContOneLine("고객사번호 검색시 숫자만 입력해주세요(CC01 -> 01)"), function() {
+					$("#searchTxt").val("");
+					$("#searchTxt").focus();
+				});
+			} else {
+				if(clsfyNum != "9") {
+					$(".sts").children(".sts_list_on").attr("class", "sts_list");
+					$("#sts" + clsfyNum + "").removeClass();
+					$("#sts" + clsfyNum + "").addClass("sts_list_on");
+				} else {
+					$(".sts").children(".sts_list_on").attr("class", "sts_list");
+				}
+				
+				$("#page").val("1");
+				$("#oldClntCmpnyClsfyNum").val($("#clntCmpnyClsfyNum").val());
+				$("#oldSearchType").val($("#searchType").val());
+				$("#oldSearchTxt").val($("#searchTxt").val());
+				reloadList();
+			}
+		} else {
+			if(clsfyNum != "9") {
+				$(".sts").children(".sts_list_on").attr("class", "sts_list");
+				$("#sts" + clsfyNum + "").removeClass();
+				$("#sts" + clsfyNum + "").addClass("sts_list_on");
+			} else {
+				$(".sts").children(".sts_list_on").attr("class", "sts_list");
+			}
+			
+			$("#page").val("1");
+			$("#oldClntCmpnyClsfyNum").val($("#clntCmpnyClsfyNum").val());
+			$("#oldSearchType").val($("#searchType").val());
+			$("#oldSearchTxt").val($("#searchTxt").val());
+			reloadList();
+		}
 	});
 	
-	/* 정렬버튼 클릭시 */
+	/// 정렬
 	$("#sortBtn").on("click", function() {
 		reloadList();
 	});
 	
 });
 
-/* 고객사 목록 Ajax */
+// 고객사 목록 ajax
 function reloadList() {
 	var params = $("#actionForm").serialize();
 	
@@ -301,7 +334,7 @@ function reloadList() {
 	
 }
 
-/* 고객사 검색 개수 html */
+// 고객사 목록 개수
 function drawSearchCnt(listCnt) {
 	var html = "";
 	html += "<h3>"; 
@@ -312,7 +345,7 @@ function drawSearchCnt(listCnt) {
 	
 }
 
-/* 고객사 목록 html */
+// 고객사 목록
 function drawList(list) {
 	var html = "";
 	
@@ -364,7 +397,7 @@ function drawList(list) {
  	
 	$(".list_table").html(html);
 	
-	/* 고객사이름 클릭시 */
+	// 상세보기
 	$(".list_table tbody").on("click", "tr:nth-child(2) td:nth-child(2)", function() {
 		$("#ccn").val($(this).attr("ccn"));
 
@@ -374,7 +407,7 @@ function drawList(list) {
 	
 }
 
-/* 고객사 목록 페이징 */
+// 고객사 페이징
 function drawPaging(pb) {
 	var html = "";
 	
@@ -409,7 +442,6 @@ function drawPaging(pb) {
 <input type="hidden" id="oldClntCmpnyClsfyNum" value="${param.clntCmpnyClsfyNum}" />
 <input type="hidden" id="oldSearchType" value="${param.searchType}" />
 <input type="hidden" id="oldSearchTxt" value="${param.searchTxt}" />
-
 <!-- top & left -->
 <c:import url="/topLeft">
 	<c:param name="top">${param.top}</c:param>
@@ -423,25 +455,35 @@ function drawPaging(pb) {
 		<div class="page_title_bar">
 			<div class="page_title_text">고객사 목록</div>
 			<!-- 검색영역 선택적 사항 -->
-			
+			<!-- <div class="page_srch_area">
+				<select class="srch_sel">
+					<option>제목</option>
+					<option>내용</option>
+					<option>작성자</option>
+				</select>
+				<div class="srch_text_wrap">
+					<input type="text" />
+				</div>
+				<div class="cmn_btn_ml">검색</div>
+			</div> -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
-	<input type="hidden" id="ccn" name="ccn" />
-	<input type="hidden" id="page" name="page" value="${page}" />
-	<input type="hidden" name="top" value="${param.top}" />
-	<input type="hidden" name="menuNum" value="${param.menuNum}" />
-	<input type="hidden" name="menuType" value="${param.menuType}" />
+			<input type="hidden" id="ccn" name="ccn" />
+			<input type="hidden" id="page" name="page" value="${page}" />
+			<input type="hidden" name="top" value="${param.top}" />
+			<input type="hidden" name="menuNum" value="${param.menuNum}" />
+			<input type="hidden" name="menuType" value="${param.menuType}" />
 			<div class="bodyWrap">
 				<div class="sts">
-					<div class="sts_list" num="9">전체: ${AllCnt}건</div>
-					<div class="sts_list" num="0">거래고객사: ${CntrctCnt}건</div>
-					<div class="sts_list" num="1">파트너사: ${PartnerCnt}건</div>
-					<div class="sts_list" num="2">해지고객사: ${TmnCnt}건</div>
-					<div class="sts_list" num="3">정지고객사: ${SspsCnt}건</div>
-					<div class="sts_list" num="4">외국파트너사: ${ForeignCnt}건</div>
-					<div class="sts_list" num="5">기타: ${EtcCnt}건</div>
+					<div class="sts_list" id="sts9" num="9">전체: ${AllCnt}건</div>
+					<div class="sts_list" id="sts0" num="0">거래고객사: ${CntrctCnt}건</div>
+					<div class="sts_list" id="sts1" num="1">파트너사: ${PartnerCnt}건</div>
+					<div class="sts_list" id="sts2" num="2">해지고객사: ${TmnCnt}건</div>
+					<div class="sts_list" id="sts3" num="3">정지고객사: ${SspsCnt}건</div>
+					<div class="sts_list" id="sts4" num="4">외국파트너사: ${ForeignCnt}건</div>
+					<div class="sts_list" id="sts5" num="5">기타: ${EtcCnt}건</div>
 				</div>
 				<div class="tLine"></div>
 				<table class="srch_table">
@@ -488,7 +530,6 @@ function drawPaging(pb) {
 						</tr>
 					</tbody>
 				</table>
-
 				<div class="SearchResult"></div>
 				<div class="cont_table">
 					<table class="list_table"></table>
@@ -499,9 +540,9 @@ function drawPaging(pb) {
 						<div class="cmn_btn" id="addBtn">등록</div>
 					</div>
 				</div>
-			</div> <!-- bodyWrap end -->
-		</div> <!-- cont_area end -->
-	</div> <!--cont_wrap end -->
+			</div>
+		</div> 
+	</div>
 </form>		
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>

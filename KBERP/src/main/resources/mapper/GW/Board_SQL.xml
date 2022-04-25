@@ -23,13 +23,28 @@
 	</select>
 <select id ="getBoardList" resultType="hashmap" parameterType="hashmap">
 		SELECT *
-        FROM(SELECT *
-		FROM (  SELECT B.WRTNG_NUM, B.BOARD_TITLE, E.EMP_NAME, B.BOARD_ADMNSTRTN_NUM,
+FROM(SELECT *
+		FROM (  SELECT B.WRTNG_NUM, B.BOARD_TITLE, E.EMP_NAME, B.BOARD_ADMNSTRTN_NUM, B.DEL_CHECK,
                B.BOARD_HITS, TO_CHAR(BOARD_WRTNG_DATE, 'YYYY-MM-DD') AS BOARD_WRTNG_DATE, B.BOARD_CONT,
                ROW_NUMBER() OVER(ORDER BY B.WRTNG_NUM DESC) AS RNUM
 		        FROM BOARD B INNER JOIN EMP E
 		                                ON B.EMP_NUM = E.EMP_NUM
-		        WHERE B.DEL_CHECK = 1
+		        
+		     	WHERE B.DEL_CHECK = 1	AND BOARD_ADMNSTRTN_NUM = #{menuNum}
+		    ) A
+		WHERE A.RNUM BETWEEN #{startCount} AND #{endCount}
+
+   UNION
+        
+         SELECT *
+		FROM (  SELECT B.WRTNG_NUM, B.BOARD_TITLE, E.EMP_NAME, B.BOARD_ADMNSTRTN_NUM, B.DEL_CHECK,
+               B.BOARD_HITS, TO_CHAR(BOARD_WRTNG_DATE, 'YYYY-MM-DD') AS BOARD_WRTNG_DATE, B.BOARD_CONT,
+               ROW_NUMBER() OVER(ORDER BY B.WRTNG_NUM DESC) AS RNUM
+		        FROM BOARD B INNER JOIN EMP E
+		                                ON B.EMP_NUM = E.EMP_NUM
+		        
+		     	WHERE B.DEL_CHECK = 1	AND BOARD_ADMNSTRTN_NUM = 0
+		      
 		        <if test="searchTxt != null and searchTxt != ''">
 					<choose>
 						<when test="searchGbn == 0">
@@ -45,8 +60,10 @@
 					</choose>
 				</if>
 		    ) A
-		WHERE A.RNUM BETWEEN #{startCount} AND #{endCount})
-		WHERE BOARD_ADMNSTRTN_NUM = #{menuNum}
+		 WHERE A.RNUM BETWEEN #{startCount} AND #{endCount}     
+       )
+ORDER BY BOARD_ADMNSTRTN_NUM ASC,  RNUM ASC
+
 	</select>
 	<select id="boardView" resultType="hashmap" parameterType="hashmap">
 	SELECT B.WRTNG_NUM, B.BOARD_TITLE, B.BOARD_CONT, E.EMP_NAME,
@@ -63,12 +80,14 @@
 	<insert id="boardWrite" parameterType="hashmap">
 			INSERT INTO BOARD(WRTNG_NUM, BOARD_TITLE, EMP_NUM, BOARD_CONT, BOARD_ADMNSTRTN_NUM, 
 			ATCHD_FILE )
-			VALUES(BOARD_SEQ.NEXTVAL, #{title}, #{writer}, #{con} , #{menuNum},  #{attFile})
+			VALUES(BOARD_SEQ.NEXTVAL, #{title}, #{writer}, #{con} , #{admnstrtn_num} ,  #{attFile})
 	</insert>
 	<update id="boardUpdate" parameterType="hashmap">
-		UPDATE BOARD SET BOARD_TITLE = #{title},
-             	 	    BOARD_CONT = #{con},
-             	 	   
+		UPDATE BOARD SET BOARD_TITLE = #{title}, 
+			   			 BOARD_CONT = #{con}
+			   		
+            
+               	 	   
 		WHERE WRTNG_NUM = #{no}
 	</update>
 	
@@ -125,4 +144,13 @@
 		UPDATE BOARD_ADMNSTRTN SET DEL_CHECK = 0
 		WHERE CTGRY_NAME = #{admstrName}
 	</delete>
+	<select id ="getBoardntcList" resultType="hashmap" parameterType="hashmap">
+		SELECT B.WRTNG_NUM, B.BOARD_TITLE, E.EMP_NAME, B.BOARD_ADMNSTRTN_NUM,
+               B.BOARD_HITS, TO_CHAR(BOARD_WRTNG_DATE, 'YYYY-MM-DD') AS BOARD_WRTNG_DATE, B.BOARD_CONT,
+               ROW_NUMBER() OVER(ORDER BY B.WRTNG_NUM DESC) AS RNUM
+             FROM BOARD B INNER JOIN EMP E
+		                                ON B.EMP_NUM = E.EMP_NUM
+	
+		WHERE BOARD_ADMNSTRTN_NUM = 0
+	</select>
 </mapper>

@@ -14,6 +14,9 @@
 .cont_wrap {
 	width: 1013px;;
 }
+input[type="text"], #ccGrade, #rp {
+	font-size: 9pt;
+}
 /* 팝업 조회영역 */
 .popup_title_mid {
 	width: calc(100% + 20px);
@@ -37,18 +40,6 @@
 	text-align: center;
 	line-height: 80px;
 }
-/* 리스트 팝업 개인 작업 영역 */
-.msg_1 {
-	width: 380px;
-	height: 30px;
-	padding-top: 10px;
-}
-.msg_2 {
-	width: 380px;
-	height: 30px;
-	padding-bottom: 10px;
-}
-
 .ptm_left {
 	display: inline-block;
 	vertical-align: top;
@@ -351,6 +342,9 @@ tr:nth-child(9) td:nth-child(1){
 td:nth-child(1) {
 	text-align: center;
 }
+tr:nth-child(7) {
+	border: none;
+}
 .btn{
 	width : 90px;
 	height: 40px;
@@ -613,7 +607,6 @@ hr { /* 구분선 */
 	vertical-align: middle;
 	font-weight: bold;
 	margin-bottom: 5px;
-	/* margin-left: 25px; */
 }
 #userIcon {
 	margin-top: 5px;
@@ -631,12 +624,16 @@ hr { /* 구분선 */
 	line-height: 33px;
 	border: none;	
 }
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+#a {
+	color : red;
+	font-size: 9pt;
+	display : none;
 }
 </style>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	//목록 버튼 클릭시 
@@ -644,18 +641,12 @@ $(document).ready(function() {
 		// 내용이 입력되어있으면 팝업창 띄움
 		if($("#leadName").val() != "" || $("#clntName").val() != ""  || 
 		   $("#ccName").val() != "" || $("#mngEmp").val() != "" || $("#psblCheck").val() != "") {
-			var html = "";
-			
-			html += "<div class=\"popup_cont1\">";
-			html += 	"<div class=\"msg_1\">내용이 저장되지 않았습니다.</div>";
-			html += 	"<div class=\"msg_2\">페이지를 나가시겠습니까?</div>";
-			html += "</div>";
 			
 			makePopup({
 				bg : true,
 				bgClose : false,
 				title : "알림",
-				contents : html,
+				contents : popContTwoLine("내용이 저장되지 않았습니다.<br/>페이지를 나가시겠습니까?"),
 				contentsEvent : function() {
 					
 				},
@@ -679,30 +670,39 @@ $(document).ready(function() {
 		$("#att").click();
 	});
 
+	// 가능여부 숫자 100 넘어가면 초기화 
+	$("#psblCheck").on("change", function() {
+		if($(this).val() * 1 > 100) {
+			$(this).val("");
+			a.style.display = "block";
+		} else {
+			a.style.display = "";
+		}
+	});
+	
 	// 저장버튼
 	$("#writeBtn").on("click", function() {
 		if(checkEmpty("#leadName")) {
-			alert("리드명을 입력하세요.");
-			$("#leadName").focus();
+			makeAlert("필수 정보 알림", popContOneLine("리드명을 입력하세요."), function() {
+				$("#leadName").focus();				
+			});
 		} else if(checkEmpty("#clntName")) {
-			alert("고객명을 입력하세요.");
-			$("#clntName").focus();
+			makeAlert("필수 정보 알림", popContOneLine("고객명을 입력하세요."), function() {
+				$("#clntName").focus();				
+			});
 		} else if(checkEmpty("#ccName")) {
-			alert("고객사명을 입력하세요.");
-			$("#ccName").focus();
-		} else if(checkEmpty("#rp")) {
-			alert("인지경로를 입력하세요.");
-			$("#rp").focus();
+			makeAlert("필수 정보 알림", popContOneLine("고객사명을 입력하세요."), function() {
+				$("#ccName").focus();				
+			});
 		} else if(checkEmpty("#mngEmp")) {
-			alert("담당자를 입력하세요.");
-			$("#mngEmp").focus();
-		} else if(checkEmpty("#psblCheck")) {
-			alert("가능여부를 입력하세요.");
-			$("#psblCheck").focus();
+			makeAlert("필수 정보 알림", popContOneLine("담당자를 입력하세요."), function() {
+				$("#mngEmp").focus();				
+			})
+		} else if(checkEmpty("#psblCheck")) {	
+			makeAlert("필수 정보 알림", popContOneLine("가능여부를 입력하세요."), function() {
+				$("#psblCheck").focus();									
+			});
 		} else {	
-			var html = "";
-			
-			html += "<div class=\"popup_cont2\">저장하시겠습니까?</div>";
 			
 			makePopup({
 				depth : 1,
@@ -711,22 +711,17 @@ $(document).ready(function() {
 				title : "알림",
 				width : 400,
 				height : 200,
-				contents : html,
-				contentsEvent : function() {					
-				},
+				contents : popContOneLine("저장하시겠습니까?"),
 				buttons : [{
-					name : "저장",
+					name : "확인",
 					func:function() {
-						var html = "";
-						
-						html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
 						
 						makePopup({
 							depth : 2,
 							bg : true,
 							bgClose : false,
-							title : "저장 완료",
-							contents : html,
+							title : "알림",
+							contents : popContOneLine("저장되었습니다."),
 							width : 400,
 							height : 180,
 							buttons : {
@@ -752,7 +747,7 @@ $(document).ready(function() {
 													if(res.res == "success") {
 														$("#listForm").submit();
 													} else {
-														alert("작성중 문제가 발생하였습니다.");
+														makeAlert("알림", popContOneLine("작성중 문제가 발생하였습니다."));
 													}
 												},
 												error : function(request, status, error) {
@@ -807,13 +802,17 @@ $(document).ready(function() {
 					var ecn = $(this).children("#ecn").val();
 					var cnn = $(this).children("#cnn").val();
 					var ccn = $(this).children("#ccn").val();
-					var ccgNum = $(this).children("#ccgNum").val();					
+					var ccgNum = $(this).children("#ccgNum").val();	
+					var mnge = $(this).children("#mnge").val();
+					var mgee = $(this).children("#mgee").val();
 					
 					document.getElementById("clntName").value = ecnm;
 					document.getElementById("clntNum").value = ecn;			
 					document.getElementById("ccName").value = cnn;
 					document.getElementById("ccNum").value = ccn;
 					document.getElementById("ccGrade").value = ccgNum;
+					document.getElementById("mngEmp").value = mnge;
+					document.getElementById("mngNum").value = mgee;
 					
 					closePopup();					
 				});
@@ -855,68 +854,6 @@ $(document).ready(function() {
 			}]
 		});			
 	});
-	// 담당자 조회 팝업
-	$("#userIcon").on("click", function() {
-		var html = "";
-		
-		html += "<div class=\"popup_title_mid\" id=\"mngrS\">"; 
-		html += "</div>";
-		html += "<div class=\"popup_cont pc_back\">";
-		html +=		"<div class=\"popup_box\" id=\"mngrBox\"></div>";
-		html += 	"<div class=\"board_bottom2\">";
-		html +=			"<div class=\"pgn_area\" id=\"mngrpb\"></div>";
-		html +=		"</div>";
-		html += "</div>";
-		
-		makePopup({
-			bg : true,
-			bgClose : false,
-			title : "담당자 조회",
-			contents : html,
-			contentsEvent : function() {
-				mngrSearchBox();
-				mngrList();
-				
-				$("#mngrBox").on("click", ".popup_box_in", function() {
-					var mng = $(this).children("#mng").val();
-					var mge = $(this).children("#mge").val();
-					document.getElementById("mngEmp").value = mng;
-					document.getElementById("mngNum").value = mge;
-					closePopup();
-				});
-				
-				//페이징 
-				$("#mngrpb").on("click", "div", function() {
-					$("#page").val($(this).attr("page"));
-					
-					mngrList();
-				});
-				// 검색버튼
-				$("#mngrBtn").on("click", function () {
-					$("#page").val("1");
-					
-					mngrList();	
-				});
-				
-				$("#searchT").on("keypress", function(event) {
-					if(event.keyCode == 13 ) {
-						$("#mngrBtn").click();
-						
-						return false;
-					}
-				});
-			},
-			width : 600,
-			height : 500,
-			buttons : {
-				name : "닫기",
-				func:function() {
-					console.log("One!");
-					closePopup();
-				}
-			}
-		});
-	});
 });
 /* ******************************************* 고객 추가 팝업 ******************************************* */
 function ecAddPopup() {
@@ -925,7 +862,7 @@ function ecAddPopup() {
 	html += "<div class=\"popup_cont pc_back\">";
 	html += "<form action=\"#\" id=\"ccAddForm\" method=\"post\">";
 	html += 	"<div class=\"popup_table\">";
-	html += 		"<div class=\"btn2\">고객</div>";
+	html += 		"<div class=\"btn2\">고객 *</div>";
 	html += 		"<div class=\"txt2\"><input type=\"text\" class=\"txt3\" id=\"clntName\" name=\"clntName\" /></div>";
 	html += 		"<div class=\"btn2\">고객사 *</div>";
 	html += 		"<div class=\"txt2\"><input type=\"text\" class=\"txt3\" id=\"clntCmpnyName\" name=\"clntCmpnyName\" />";
@@ -1096,52 +1033,67 @@ function ecAddPopup() {
 		buttons : [{
 			name : "등록",
 			func:function() {
-				var html = "";
 				
-				html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
-				
-				makePopup({
-					depth : 4,
-					bg : true,
-					bgClose : true,
-					title : "저장 완료",
-					contents : html,
-					width : 400,
-					height : 180,
-					buttons : {
-						name : "확인",
-						func : function() {
-							var params = $("#ccAddForm").serialize(); 
-							
-							$.ajax({
-								type : "post",
-								url : "leadAction/ecInsert", 
-								dataType : "json",
-								data : params,
-								success : function(res) {
-									if(res.res == "success") {
-										$("#ecSearchTxt").val("");
-										$("#ecPopupForm #page").val("1");
-										$("#ecBtn").click(); 
-										closePopup(4);
-										closePopup(2);
-									} else {
-										alert("작성 중 문제가 발생하였습니다.");
-									}
-								},
-								error : function(request, status, error) {
-									console.log(request.responseText);
+				if(checkEmpty("#clntName")) {
+					makeAlert("필수 정보 입력", popContOneLine("고객명을 입력하세요."), function() {
+						$("#clntName").focus();						
+					});
+				} else if(checkEmpty("#clntCmpnyName")) {
+					makeAlert("필수 정보 입력", popContOneLine("고객사명을 입력하세요."), function() {
+						$("#clntCmpnyName").focus();						
+					});
+				} else if(checkEmpty("#mbl")) {
+					makeAlert("필수 정보 입력", popContOneLine("휴대폰번호를 입력하세요."), function() {
+						$("#mbl").focus();											
+					});
+				} else if (checkEmpty("#mngName")) {
+					makeAlert("필수 정보 입력", popContOneLine("담당자를 입력하세요."), function() {
+						$("#mngName").focus();						
+					});
+				} else {
+						makePopup({
+							depth : 4,
+							bg : true,
+							bgClose : true,
+							title : "저장 완료",
+							contents : popContOneLine("저장되었습니다."),
+							width : 400,
+							height : 180,
+							buttons : {
+								name : "확인",
+								func : function() {
+									var params = $("#ccAddForm").serialize(); 
+									
+									$.ajax({
+										type : "post",
+										url : "leadAction/ecInsert", 
+										dataType : "json",
+										data : params,
+										success : function(res) {
+											if(res.res == "success") {
+												$("#ecSearchTxt").val("");
+												$("#ecPopupForm #page").val("1");
+												$("#ecBtn").click(); 
+												closePopup(4);
+												closePopup(2);
+											} else {
+												alert("작성 중 문제가 발생하였습니다.");
+											}
+										},
+										error : function(request, status, error) {
+											console.log(request.responseText);
+										}
+									});
 								}
-							});
-						}
-					}
-				}); // 저장완료 makePopup end
-			} // 등록 func end
-		}, {
-			name : "취소"
-		}]
-	});
-} 
+							}
+						}); // 저장완료 makePopup end					
+					} // else end				
+				} // 등록 func end
+			}, {
+				name : "취소"
+			}]
+		});
+	}
 /* ******************************************* 고객 조회 팝업 ******************************************* */
 function ecSearchBox() {
 	var html = "";
@@ -1195,6 +1147,8 @@ function ecDrawList(list) {
 		html += "<input type=\"hidden\" id=\"cnn\" value=\"" + data.CLNT_CMPNY_NAME + "\" />";
 		html += "<input type=\"hidden\" id=\"ccn\" value=\"" + data.CLNT_CMPNY_NUM + "\" />";
 		html += "<input type=\"hidden\" id=\"ccgNum\" value=\"" + data.GRADE_NUM + "\" />";
+		html += "<input type=\"hidden\" id=\"mnge\" value=\"" + data.EMP_NAME + "\" />";
+		html += "<input type=\"hidden\" id=\"mgee\" value=\"" + data.EMP_NUM + "\" />";
 		html += "<div class=\"popup_cc_box_left\">";
 		html += "<span><img alt=\"고객이미지\" class=\"company\" src=\"resources/images/sales/clnt.png\"></span>";
 		html += "</div>";
@@ -1395,13 +1349,6 @@ function drawPaging(pb, sel) {
 	
 	$(sel).html(html);
 }
-function checkEmpty(sel) {
-	if($.trim($(sel).val()) == "") {
-		return true;
-	} else {
-		return false;
-	}
-}	
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
@@ -1469,7 +1416,7 @@ function uploadName(e) {
 								<tr>
 									<td><input type="button" class="btn" value="고객사 *" readonly="readonly"/></td>
 									<td colspan="3">
-										<input type="text" class="txt" id="ccName" name="ccName" />
+										<input type="text" class="txt" id="ccName" name="ccName" readonly="readonly" pla />
 										<input type="hidden" id="ccNum" name="ccNum" />
 									</td>
 								</tr>
@@ -1505,14 +1452,20 @@ function uploadName(e) {
 									<td><input type="button" class="btn" value="담당자 *" readonly="readonly"/></td>
 									<td>
 										<input type="hidden" id="mngNum" name="mngNum" />
-										<input type="text" class="mngTxt" id="mngEmp" name="mngEmp" />
-										<img class="btnImg_in" id="userIcon" alt="담당자아이콘" src="resources/images/sales/usericon.png" />
+										<input type="text" class="mngTxt" id="mngEmp" name="mngEmp"/>
 									</td>
 									<td><input type="button" class="btn" value="가능여부 *" readonly="readonly"/></td>
 									<td>
-										<input type="text" class="txt" id="psblCheck" name="psblCheck" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" style="text-align: right;"/>
+										<input type="text" class="txt" id="psblCheck" name="psblCheck" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" style="text-align: right;" maxlength="3"/>
 										<div id="percent">%</div>
+										
 									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th><span id="a">숫자 0~100까지만 입력가능합니다.</span></th>
 								</tr>													
 							</tbody>
 						</table>

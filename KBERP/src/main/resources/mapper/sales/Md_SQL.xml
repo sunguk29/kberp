@@ -14,22 +14,22 @@
 	
 	<!-- 판매상태 --> 
 	<choose>
-		<when test= 'sales_sts == "1"'> <!-- 판매상태 0:판매중 -->
+		<when test= 'sales_sts == "0"'> <!-- 판매상태 0:판매중 -->
 			AND SALES_STS_NUM = '0'
 		</when>
-		<when test= 'sales_sts == "2"'> <!-- 판매상태 1:판매중단 -->
+		<when test= 'sales_sts == "1"'> <!-- 판매상태 1:판매중단 -->
 			AND SALES_STS_NUM = '1'
 		</when>
-		<when test= 'sales_sts == "3"'> <!-- 판매상태 2:출시예정 -->
+		<when test= 'sales_sts == "2"'> <!-- 판매상태 2:출시예정 -->
 			AND SALES_STS_NUM = '2'
 		</when>
-		<when test= 'sales_sts == "12"'>
+		<when test= 'sales_sts == "01"'>
 			AND (SALES_STS_NUM = '0' OR SALES_STS_NUM = '1')
 		</when>
-		<when test= 'sales_sts == "13"'> 
+		<when test= 'sales_sts == "02"'> 
 			AND (SALES_STS_NUM = '0' OR SALES_STS_NUM = '2')
 		</when>
-		<when test= 'sales_sts == "23"'> 
+		<when test= 'sales_sts == "12"'> 
 			AND (SALES_STS_NUM = '1' OR SALES_STS_NUM = '2')
 		</when>
 	</choose> 
@@ -40,7 +40,7 @@
 	</if>
 	<!-- 판매 종료일 -->
 	<if test="sales_end_date != null and sales_end_date !=''"> 
-		AND SALES_END_DATE  <![CDATA[ <= ]]>  #{sales_end_date}
+		AND SALES_START_DATE  <![CDATA[ <= ]]>  #{sales_end_date}
 	</if>
 	
 	
@@ -91,7 +91,7 @@
       ,R.SALES_START_DATE
       ,R.SALES_END_DATE
       ,R.SALES_STS_NUM
-      ,ROWNUM AS RNUM
+      ,R.RNUM AS RNUM
 FROM (SELECT MD_NUM
 			,MD_GRADE_NUM
 			,INTRST_RATE
@@ -100,7 +100,24 @@ FROM (SELECT MD_NUM
 			,TO_CHAR(SALES_START_DATE, 'YYYY-MM-DD')AS SALES_START_DATE
 			,TO_CHAR(SALES_END_DATE,'YYYY-MM-DD')AS SALES_END_DATE
 			,SALES_STS_NUM
-            ,ROW_NUMBER() OVER (ORDER BY MD_NUM DESC) AS RNUM
+	<!-- 정렬 -->
+	<choose>
+		<when test='sort_gbn == "0" '> <!--선택 안함 : 등록일 DESC -->
+			,ROW_NUMBER() OVER(ORDER BY RGSTRTN_DATE DESC) AS RNUM
+		</when>
+		<when test='sort_gbn == "1" '> <!--등록일 기준 -->
+			,ROW_NUMBER() OVER(ORDER BY RGSTRTN_DATE ASC) AS RNUM
+		</when>
+		<when test='sort_gbn == "2" '> <!-- 상품이름 기준 -->
+			,ROW_NUMBER() OVER(ORDER BY MD_NAME ASC) AS RNUM
+		</when>
+		<when test='sort_gbn == "3" '> <!-- 상품등급 기준 -->
+			,ROW_NUMBER() OVER(ORDER BY MD_GRADE_NUM ASC) AS RNUM
+		</when>
+		<when test='sort_gbn == "4" '> <!-- 한도 금액 기준 -->
+			,ROW_NUMBER() OVER(ORDER BY LIMIT_AMNT ASC) AS RNUM
+		</when>
+	</choose>
      FROM MD
      WHERE DEL_CHECK IS NULL
 
@@ -125,51 +142,37 @@ FROM (SELECT MD_NUM
 	
 	<!-- 판매상태 --> 
 	<choose>
-		<when test= 'sales_sts == "1"'> <!-- 판매상태 0:판매중 -->
+		<when test= 'sales_sts == "0"'> <!-- 판매상태 0:판매중 -->
 			AND SALES_STS_NUM = '0'
 		</when>
-		<when test= 'sales_sts == "2"'> <!-- 판매상태 1:판매중단 -->
+		<when test= 'sales_sts == "1"'> <!-- 판매상태 1:판매중단 -->
 			AND SALES_STS_NUM = '1'
 		</when>
-		<when test= 'sales_sts == "3"'> <!-- 판매상태 2:출시예정 -->
+		<when test= 'sales_sts == "2"'> <!-- 판매상태 2:출시예정 -->
 			AND SALES_STS_NUM = '2'
 		</when>
-		<when test= 'sales_sts == "12"'>
+		<when test= 'sales_sts == "01"'>
 			AND (SALES_STS_NUM = '0' OR SALES_STS_NUM = '1')
 		</when>
-		<when test= 'sales_sts == "13"'> 
+		<when test= 'sales_sts == "02"'> 
 			AND (SALES_STS_NUM = '0' OR SALES_STS_NUM = '2')
 		</when>
-		<when test= 'sales_sts == "23"'> 
+		<when test= 'sales_sts == "12"'> 
 			AND (SALES_STS_NUM = '1' OR SALES_STS_NUM = '2')
 		</when>
 	</choose> 
 
 	
-	<!-- 판매 시작일 -->
+	<!-- 검색할 기간 시작일 -->
 	<if test="sales_start_date != null and sales_start_date !=''"> 
 		AND SALES_START_DATE <![CDATA[ >= ]]> #{sales_start_date}
 	</if>
-	<!-- 판매 종료일 -->
+	<!-- 검색할 기간 종료일 -->
 	<if test="sales_end_date != null and sales_end_date !=''"> 
-		AND SALES_END_DATE  <![CDATA[ <= ]]>  #{sales_end_date}
+		AND SALES_START_DATE  <![CDATA[ <= ]]>  #{sales_end_date}
 	</if>
-
-
-	<!-- 정렬 -->
-	<choose>
-		<when test="sort_gbn == 0 "> <!--등록일 기준 -->
-			ORDER BY RGSTRTN_DATE DESC
-		</when>
-		<when test="sort_gbn == 1"> <!-- 상품이름 기준 -->
-			ORDER BY MD_NAME DESC
-		</when>
-		<when test="sort_gbn == 2"> <!-- 상품등급 기준 -->
-			ORDER BY MD_GRADE_NUM
-		</when>
-	</choose>
      ) R
-WHERE R.RNUM BETWEEN #{startCount} AND #{endCount}   
+WHERE R.RNUM BETWEEN #{startCount}  AND #{endCount}    
 </select>
 
 <!--============================= 상세보기  ====================================-->
@@ -182,9 +185,7 @@ WHERE R.RNUM BETWEEN #{startCount} AND #{endCount}
 	        ,LIMIT_AMNT                              
 	        ,TO_CHAR(SALES_START_DATE, 'YYYY-MM-DD') AS SALES_START_DATE
 	        ,TO_CHAR(SALES_END_DATE, 'YYYY-MM-DD')   AS SALES_END_DATE
-	        ,INTRST_RATE                            
-	        ,INTRST_PYMNT_MTHD_NUM                  
-	        ,PRNCPL_PYMNT_MTHD_NUM                   
+	        ,INTRST_RATE                                           
 	        ,MID_RDMPTN_PSBL_CHECK                  
 	        ,LOAN_PRD                               
 	        ,MD_DSCRPTN                            
@@ -204,15 +205,12 @@ WHERE R.RNUM BETWEEN #{startCount} AND #{endCount}
 	                ,SALES_START_DATE
 	                ,SALES_END_DATE
 	                ,INTRST_RATE
-	                ,INTRST_PYMNT_MTHD_NUM
-	                ,PRNCPL_PYMNT_MTHD_NUM
 	                ,MID_RDMPTN_PSBL_CHECK
 	                ,LOAN_PRD
 	                ,MD_DSCRPTN
 	                ,RGSTRTN_DATE )
 	        VALUES ( MD_SEQ.NEXTVAL
 	        		,#{sEmpNum}
-	                <!-- ,'2022000002' --> 
 	                ,#{md_name}
 	                ,#{md_type}
 	                ,#{md_grade}
@@ -221,8 +219,6 @@ WHERE R.RNUM BETWEEN #{startCount} AND #{endCount}
 	                ,#{sales_start_date}
 	                ,#{sales_end_date}
 	                ,#{intrst_rate}
-	                ,#{intrst_pymnt_mthd}
-	                ,#{prncpl_pymnt_mthd}
 	                ,#{mid_prdmptn_psbl_check}
 	                ,#{loan_prd}
 	                ,#{md_dscrptn}
@@ -239,8 +235,6 @@ WHERE R.RNUM BETWEEN #{startCount} AND #{endCount}
 	             ,SALES_START_DATE = #{sales_start_date}
 	             ,SALES_END_DATE = #{sales_end_date}
 	             ,INTRST_RATE = #{intrst_rate}
-	             ,INTRST_PYMNT_MTHD_NUM = #{intrst_pymnt_mthd}
-	             ,PRNCPL_PYMNT_MTHD_NUM = #{prncpl_pymnt_mthd}
 	             ,MID_RDMPTN_PSBL_CHECK = #{mid_prdmptn_psbl_check}
 	             ,LOAN_PRD = #{loan_prd}
 	             ,MD_DSCRPTN = #{md_dscrptn}
