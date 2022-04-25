@@ -277,7 +277,7 @@ public class AcntncController {
 			// 지출결의서관리 상세보기로 이동
 			mav.addObject("res", "expnsRsltnGo");
 			mav.addObject("top", "34");
-			mav.addObject("menuNum", "84");
+			mav.addObject("menuNum", "39");
 			mav.addObject("menuType", "M");
 			
 			
@@ -289,12 +289,19 @@ public class AcntncController {
 				// 내부비용관리 상세보기로 이동
 				mav.addObject("res", "intrnlCostGo");
 				mav.addObject("top", "34");
-				mav.addObject("menuNum", "38");
+				mav.addObject("menuNum", "39");
 				mav.addObject("menuType", "M");
 				
 			} else {
-				System.out.println("조회된 전표가 없음!");
-				mav.addObject("res", "failed");
+				
+				int cntrctCheck = iCommonService.getIntData("ChitMng.cntrctCheck", params);
+				
+				if(cntrctCheck == 1) {
+					mav.addObject("res", "cntrctGo");
+					mav.addObject("top", "34");
+					mav.addObject("menuNum", "39");
+					mav.addObject("menuType", "M");
+				}
 			}
 		}
 		
@@ -395,6 +402,18 @@ public class AcntncController {
 		mav.addObject("data", data);
 		
 		mav.setViewName("mng/expnsRsltnadmnstrEmpMnthly");
+		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/cntrctDtlView")
+	public ModelAndView cntrctDtlView(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("ChitMng.cntrctDtlView", params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("mng/cntrctDtlView");
 		
 		return mav;
 	}

@@ -68,6 +68,14 @@
 	margin-top: 20px;
 }
 
+.aprvl_check {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 10.5pt;
+	font-weight: bold;
+	margin-right: 10px;
+}
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -175,14 +183,27 @@ function reloadList() {
 	});
 }
 
+// 전표 목록 그리기
 function drawList(list) {
 	var html = "";
 	
 	for(data of list) {
 		html += "<tr>";
 		html += "<td class=\"board_table_hover\" id=\"chitNum\" chitnum=\"" + data.CHIT_NUM + "\">" + data.CHIT_NUM + "</td>";
-		html += "<td>" + data.AMNT + "원</td>";
-		html += "<td>-</td>";
+		
+		if(data.DEVIT_AMNT != null) {
+			html += "<td>" + data.DEVIT_AMNT + "원</td>";			
+		} else {
+			html += "<td>-</td>";			
+		}
+		
+		if(data.CREDIT_AMNT != null) {
+			html += "<td>" + data.CREDIT_AMNT + "원</td>";			
+		} else {
+			html += "<td>-</td>";						
+		}
+		
+		html += "<td>" + data.ACNT_NAME + "</td>";
 		if(data.RMRKS != null) {
 			html += "<td>" + data.RMRKS + "</td>";			
 		} else {
@@ -196,7 +217,7 @@ function drawList(list) {
 }
 
 
-
+// 페이징 버튼 그리기
 function drawPaging(pb) {
 	var html = "";
 	
@@ -228,12 +249,13 @@ function drawPaging(pb) {
 	
 }
 
+// 합계 데이터 그리기
 function drawSum(data) {
 	var html = "";
 	
 	html += "<tr>";
 	html += "<td>차변 합계</td>";
-	if(data != null) {
+	if(data.DEVIT_SUM != null) {
 		html += "<td>" + data.DEVIT_SUM + "원</td>";		
 	} else {
 		html += "<td>0원</td>";
@@ -241,7 +263,11 @@ function drawSum(data) {
 	html += "</tr>";
 	html += "<tr>";
 	html += "<td>대변 합계</td>";
-	html += "<td>0원</td>";
+	if(data.CREDIT_SUM != null) {
+		html += "<td>" + data.CREDIT_SUM + "원</td>";		
+	} else {
+		html += "<td>0원</td>";
+	}
 	html += "</tr>";
 	
 	$("#totalTbody").html(html);
@@ -273,6 +299,7 @@ function drawSum(data) {
 		<div class="page_title_bar">
 			<div class="page_title_text">매입전표 / 매출전표</div>
 			<div class="page_srch_area">
+				<div class="aprvl_check">결재 현황 : -</div>
 				<input type="month" class="srch_month" id="srchMonth" value="${mon}"/>
 			</div>
 		</div>
@@ -284,12 +311,14 @@ function drawSum(data) {
 					<col width="200">
 					<col width="200">
 					<col width="200">
+					<col width="200">
 					<col width="300">
 				</colgroup>
 				<thead>
 					<tr>
 						<td rowspan="2">전표번호</td>
 						<td colspan="2">금액</td>
+						<td rowspan="2">계정명</td>
 						<td rowspan="2">비고</td>
 					</tr>
 					<tr>
