@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
+import com.gdj43.kberp.web.GW.service.IAprvlService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 import com.gdj43.kberp.web.mng.service.IAcntncService;
 
@@ -34,6 +35,9 @@ public class AcntncController {
 	
 	@Autowired
 	public IAcntncService iAcntncService;
+	
+	@Autowired
+	public IAprvlService iAprvlService;
 	
 	// 지출결의서 상세보기
 	@RequestMapping(value = "/expnsRsltnDtlView")
@@ -406,6 +410,7 @@ public class AcntncController {
 		return mav;
 	}
 	
+	// 영업매출 상세보기
 	@RequestMapping(value = "/cntrctDtlView")
 	public ModelAndView cntrctDtlView(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
@@ -418,5 +423,6 @@ public class AcntncController {
 		return mav;
 	}
 	
+	// 결재요청
 	
 }

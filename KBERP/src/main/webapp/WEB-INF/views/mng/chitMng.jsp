@@ -63,6 +63,7 @@
 	background-color: #F2F2F2;
 }
 
+/* 결재요청 팝업 css */
 .aprvl_rqst_wrap {
 	text-align: right;
 	margin-top: 20px;
@@ -75,6 +76,236 @@
 	font-weight: bold;
 	margin-right: 10px;
 }
+
+.aprvl_popup_area {
+	/*display: inline-block; */
+    /* vertical-align: top; */
+    width: 455px;
+    height: 280px;
+    /* border: 1px solid #d7d7d7; */
+    padding: 10px;
+}
+
+.aprvl_title_wrap {
+	display: block;
+	width: 450px;
+    height: 50px;
+    text-align: left;
+}
+
+.aprvl_title_txt {
+	display: inline-block;
+    vertical-align: top;
+    width: 62px;
+    height: 30px;
+    color: #444444;
+    text-align: right;
+    margin-right: 6px;
+    line-height: 26px;
+}
+
+.aprvl_title_input {
+    display: inline-block;
+    vertical-align: top;
+    width: 342px;
+    height: 25px;
+    border: 1px solid #d7d7d7;
+    margin-bottom: 9px;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+
+.aprvl_cont_wrap {
+	display: block;
+    width: 458px;
+    height: 125px;
+    text-align: left;
+    border-bottom: solid 1px #d7d7d7;
+}
+
+.aprvl_cont_txt {
+    display: inline-block;
+    vertical-align: top;
+    width: 62px;
+    height: 30px;
+    color: #444444;
+    text-align: right;
+    margin-right: 6px;
+    line-height: 29px;
+}
+
+.aprvl_cont_input {
+	display: inline-block;
+    vertical-align: top;
+    width: 342px;
+    height: 99px;
+    border: solid 1px #d7d7d7;
+    border-radius: 5px;
+    padding-left: 10px;
+    resize: none;
+}
+
+.aprvler_wrap {
+    display: block;
+    width: 450px;
+    height: 40px;
+    text-align: left;
+    margin-top: 29px;
+}
+
+.aprvler_txt {
+    display: inline-block;
+    vertical-align: top;
+    width: 62px;
+    height: 30px;
+    color: #444444;
+    text-align: right;
+    margin-right: 6px;
+    line-height: 29px;
+}
+
+.aprvler_input {
+    display: inline-block;
+    vertical-align: top;
+    width: 308px;
+    height: 26px;
+    border: 1px solid #d7d7d7;
+    padding-left: 10px;
+    border-radius: 5px;
+}
+
+.aprvler_btn {
+    display: inline-block;
+    vertical-align: top;
+    height: 24px;
+    width: 24px;
+    margin-left: 7px;
+    background-image: url(resources/images/hr/srch_icon.png);
+    background-size: 100%;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.rfrnc_wrap {
+    display: block;
+    width: 450px;
+    height: 50px;
+    text-align: left;
+}
+
+.rfrnc_txt {
+display: inline-block;
+    vertical-align: top;
+    width: 62px;
+    height: 30px;
+    color: #444444;
+    text-align: right;
+    margin-right: 6px;
+    line-height: 29px;
+}
+
+.rfrnc_input {
+    display: inline-block;
+    vertical-align: top;
+    width: 308px;
+    height: 26px;
+    border: 1px solid #d7d7d7;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+
+.rfrnc_btn {
+display: inline-block;
+    vertical-align: top;
+    height: 24px;
+    width: 24px;
+    margin-left: 7px;
+    background-image: url(resources/images/hr/srch_icon.png);
+    background-size: 100%;
+    cursor: pointer;
+    line-height: 66px;
+    margin-top: 4px;
+}
+
+/* 결재권자 선택 팝업 */
+.popup_emp_srch_area {
+	display: inline-block;
+	vertical-align: top;
+	width: 567px;
+	height: 31px;
+	text-align: center;
+	margin: 0 5px;
+}
+
+.popup_srch_box {
+	display: inline-block;
+}
+
+.emp_srch_select {
+	border: solid 1px #b7b7b7;
+	border-radius: 3px;
+	min-width: 100px;
+	height: 29px;
+}
+
+.popup_srch_input {
+	display: inline-block;
+	vertical-align: top;
+	width: 366px;
+	height: 28px;
+	margin-left: 10px;
+	margin-right: 10px;
+	text-align: center;
+	border: 1px solid #d7d7d7;
+	line-height: 26px;
+}
+
+.popup_srch_input input {
+	width: 93%;
+	height: 23px;
+	padding-left: 11px;
+	vertical-align: middle;
+	border: none;
+}
+
+.empinqry_area {
+	margin: 12px;
+	display: inline-block;
+	vertical-align: top;
+	height: 250px;
+	/* width: 545px;*/
+	/* border: solid 1px #d7d7d7;*/
+	/* overflow: hidden; */
+}
+
+.empinqry_list {
+	display: inline-table;
+	border-collapse: collapse;
+	width: 553px;
+	margin-bottom: 15px;
+}
+
+.empinqry_list thead tr {
+	background-color: #f1f1f1;
+	border-bottom: 1px solid #d7d7d7;
+	height: 30px;
+	font-size: 10pt;
+	position: sticky;
+	top: 0;
+}
+
+.empinqry_list tbody tr {
+	border-bottom: 1px solid #d7d7d7;
+	height: 26px;
+	text-align: center;
+	color: #222222;
+	font-size: 9.5pt;
+}
+
+.empinqry_list tbody tr:hover {
+	background-color: rgb(200, 218, 248);
+}
+
 
 </style>
 <script type="text/javascript">
@@ -133,12 +364,161 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
+	/* 결재요청 */
 	$("#aprvlRqst").on("click", function() {
+		
+		var html = "";
+		
+		html += "<div class=\"aprvl_popup_area\">                          ";
+		html += "	<div class=\"aprvl_title_wrap\">                       ";
+		html += "		<div class=\"aprvl_title_txt\">제목</div>          ";
+		html += "		<input type=\"text\" class=\"aprvl_title_input\" id=\"aprvlTitle\" name=\"aprvlTitle\"/> ";
+		html += "	</div>			                                       ";
+		html += "	<div class=\"aprvl_cont_wrap\">                        ";
+		html += "		<div class=\"aprvl_cont_txt\">내용</div>           ";
+		html += "		<textarea class=\"aprvl_cont_input\"id=\"aprvlCont\" name=\"aprvlCont\"/>  ";
+		html += "	</div>			                                       ";
+		html += "	<div class=\"aprvler_wrap\">                           ";
+		html += "		<div class=\"aprvler_txt\">결재권자</div>          ";
+		html += "		<input type=\"text\" readonly=\"readonly\" id=\"aprvlerInput\" class=\"aprvler_input\"/>     ";
+		html += "		<div class=\"aprvler_btn\" id=\"aprvlerBtn\"  ></div>                  ";
+		html += "	</div>			                                       ";
+		html += "	<div class=\"rfrnc_wrap\">                             ";
+		html += "		<div class=\"rfrnc_txt\">참조인</div>              ";
+		html += "		<input type=\"text\" readonly=\"readonly\" id=\"rfrncInput\" class=\"rfrnc_input\"/>       ";
+		html += "		<div class=\"rfrnc_btn\" id=\"rfrncBtn\"></div>                    ";
+		html += "	</div>			                                       ";
+		html += "</div>";  
+		
+		/* 결재요청 팝업 시작 */
 		makePopup({
-			bg : true,
+			depth : 1,
+			bg : false,
 			bgClose : false,
-			title : "결재요청확인",
-			contents : "결재를 요청하시겠습니까?",
+			width: 500,
+			height: 400,
+			title : "결재요청",
+			contents : html,
+			draggable : true,
+			contentsEvent : function() {
+				
+				/* 결재권자 검색 버튼 클릭 */
+				$("#aprvlerBtn").on("click", function() {
+					
+					var html2 = "";
+					html2 += "<form action=\"#\" id=\"inqryForm\" method=\"post\">" ;
+					html2 += "<input type=\"hidden\" id=\"inqryNo\" name=\"inqryNo\"  />" ;
+					html2 += "<div class=\"popup_emp_srch_area\">         ";
+					html2 += "<select class=\"emp_srch_select\" id=\"inqryGbn\" name=\"inqryGbn\">          ";
+					html2 += "	<option value=\"0\" selected>전체</option>";
+					html2 += "	<option value=\"1\">부서명</option>      ";
+					html2 += "	<option value=\"2\">사원명</option>      ";
+					html2 += "	<option value=\"3\">직급명</option>      ";
+					html2 += "</select>                                   ";
+					html2 += "<div class=\"popup_srch_input\">	                 ";
+					html2 += "	<input type=\"text\" id=\"inqryTxt\" name=\"inqryTxt\"/>                  ";
+					html2 += "</div>                                      ";
+					html2 += "<div class=\"cmn_btn\" id=\"inqryBtn\">검색</div>           ";
+					html2 += "</div>                                      ";
+					html2 += "</form>";														
+					html2 += "<div class=\"empinqry_area\">        ";
+		            html2 += " <table class=\"empinqry_list\">   ";
+		            html2 += "   <colgroup>                      ";
+		            html2 += "      <col width=\"30\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "   </colgroup>                     ";
+		            html2 += "   <thead>                         ";
+		            html2 += "      <tr>                         ";
+		            html2 += "         <th>선택</th>             ";
+		            html2 += "         <th>부서</th>             ";
+		            html2 += "         <th>직급</th>             ";
+		            html2 += "         <th>사원명</th>           ";
+		            html2 += "         <th>사원번호</th>         ";
+		            html2 += "      </tr>                        ";
+		            html2 += "   </thead>                        ";
+		            html2 += "   <tbody id=\"aprvlerInqry_tbody\">   ";
+		            html2 += "   </tbody>                        ";
+		            html2 += "  </table>                         ";
+		            html2 += "</div>                             ";
+		            
+		            /* 결재권자 팝업 시작 */
+		            makePopup({
+		            	depth : 2,
+						bg : false,
+						bgClose : false,
+						width: 600,
+						height: 400,
+						title : "결재권자 선택",
+						contents : html2, 
+						draggable : true,
+						contentsEvent : function() {
+							var params = $("#inqryForm").serialize();	
+							$.ajax({
+								type : "post",
+							    url : "apntmListAjax/inqryList",
+							    dataType : "json",
+							    data : params,
+							    success : function(res) {
+							    	
+							    	console.log(res);
+							    	drawAprvlerInqryList(res.inqryList);
+							    }, 
+							    error : function(req) {
+							       console.log(req.responseText);
+							    }
+							});
+							
+							// 사원 검색 엔터 처리
+						 	$("#inqryTxt").on("keypress", function(event) {
+					 			if(event.keyCode == 13) {
+					 				$("#inqryBtn").click();
+					 				return false;
+					 			}
+						 	});
+							
+							// 검색 버튼 클릭 이벤트
+						 	$("#inqryBtn").on("click", function() {
+					   		    console.log("결재권자 선택팝업 버튼클릭!")
+							   	var params = $("#inqryForm").serialize();	
+							   	console.log("inqryGbn  : " + $("#inqryGbn").val())
+							 	$.ajax({
+									type : "post",
+									url : "apntmListAjax/inqryList",
+									dataType : "json",
+									data : params,
+									success : function(res) {
+									    console.log(res);
+									    drawAprvlerInqryList(res.inqryList);
+									}, 
+									error : function(req) {
+									    console.log(req.responseText);
+									}
+								});
+						   	});
+						 	
+							 // tr 선택시 체크박스 선택처리
+						   	 $("#aprvlerInqry_tbody").on("click", "tr", function() {
+						   		 var checkbox = $(this).find("td:first-child :checkbox");
+						   		 
+						   	 	 if(checkbox.prop("checked")) {
+						   		 	checkbox.prop("checked", false);
+						   	 	 } else {
+						   	 		checkbox.prop("checked", true);
+						   	 	 }
+						   	 });
+							 
+							
+						}
+		            }); /* 결재권자 팝업 끝 */
+		            
+		            $(".empinqry_area").slimScroll({height: "255px"},{width: "450px"}); // 슬림스크롤
+		            
+		            
+				});
+			},
 			buttons : [{
 				name : "요청",
 				func:function() {
@@ -147,10 +527,10 @@ $(document).ready(function() {
 				}
 			}, {
 				name : "취소"
-			}]
-		});
+			}] /* 팝업 버튼 끝 */
+		}); /* 결재요청 팝업 끝 */
 		
-	});
+	}); /* 결재요청 버튼 끝 */
 	
 	
 	$("#listTbody").on("click", "#chitNum", function() {
@@ -273,6 +653,21 @@ function drawSum(data) {
 	$("#totalTbody").html(html);
 }
 
+// 사원조회 리스트 생성
+function drawAprvlerInqryList(inqryList) {
+	var html = "";
+	
+    for(var data of inqryList) {
+        html += "<tr no=\"" + data.EMP_NUM + "\">"   
+        html += " 	<td><input type=\"checkbox\" aprvlerNum=\""+data.EMP_NUM+"\" aprvlerRankNum=\""+data.RANK_NUM+"\" id=\"aprvlerChk\" name=\"aprvlerChk\" aprvlerName=\"" + data.EMP_NAME + "\"/></td> ";
+        html += " 	<td>" + data.DEPT_NAME + "</td> ";
+        html += " 	<td>" + data.RANK_NAME + "</td> ";
+        html += " 	<td>" + data.EMP_NAME + "</td> ";
+        html += " 	<td>" + data.EMP_NUM + "</td> ";
+        html += " </tr>                       ";
+    }
+	$("#aprvlerInqry_tbody").html(html);
+}
 
 </script>
 </head>
