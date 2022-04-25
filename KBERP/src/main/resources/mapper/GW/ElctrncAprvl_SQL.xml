@@ -75,7 +75,7 @@ FROM APRVL_LINE AL INNER JOIN APNTM A
                     			ON AL.APRVL_NUM = AR.APRVL_NUM
                     INNER JOIN EMP E
                     			ON AL.EMP_NUM = E.EMP_NUM
-WHERE 1=1
+WHERE AL.EMP_NUM = #{employ_no}
 		<if test="searchTxt != null and searchTxt != ''"> 
 					<choose>
 						<when test="searchGbn == 0">
@@ -87,13 +87,13 @@ WHERE 1=1
 					</choose>
 				</if>
 				) AB
-				WHERE AB.RNUM BETWEEN #{startCount} AND #{endCount}
+				WHERE AB.RNUM BETWEEN #{startCount} AND #{endCount} 
 </select>
 
 <select id = "aprvlResult" resultType="String">
-	SELECT  DISTINCT CASE WHEN APRVL_STS = 0 THEN '대기'
-        				  WHEN APRVL_STS = 1 THEN '승인'
-        				  WHEN APRVL_STS = 2 THEN '거부'
+	SELECT  DISTINCT CASE WHEN APRVL_STS = 0 THEN '결재진행중'
+        				  WHEN APRVL_STS = 1 THEN '결재완료'
+        				  WHEN APRVL_STS = 2 THEN '결재반려'
     END AS  APRVL_STS
 	FROM APRVL_LINE
 	WHERE APRVL_NUM = #{aprvl_num} 
@@ -121,5 +121,33 @@ WHERE TMPLT_NUM = #{no}
 		</if>
 		
 	</select>
+	
+<select id="aprvlList" resultType="hashmap" parameterType="hashmap">
+SELECT *
+FROM(
+SELECT AL.APRVL_NUM, AL.APRVL_STS, AL.STS_CHNG_DATE, AL.CMNT, AL.APRVL_TURN, E.EMP_NAME, A.EMP_NUM, AR.DRAFT_DATE, A.DEPT_NUM, D.DEPT_NAME, AR.TITLE, AR.CONT, ROW_NUMBER() OVER(ORDER BY AL.APRVL_NUM DESC) AS RNUM
+FROM APRVL_LINE AL INNER JOIN APNTM A
+                   			 	ON AL.EMP_NUM = A.EMP_NUM
+                    INNER JOIN DEPT D
+                    			ON A.DEPT_NUM = D.DEPT_NUM 
+                    INNER JOIN APRVL AR
+                    			ON AL.APRVL_NUM = AR.APRVL_NUM
+                    INNER JOIN EMP E
+                    			ON AL.EMP_NUM = E.EMP_NUM
+WHERE AL.APRVL_NUM = #{no} AND A.EMP_NUM = #{employ_no} 
+)
+
+</select>
+
+<select id="aprvlProcess" resultType="hashmap" parameterType="hashmap">
+SELECT AL.APRVL_STS, AL.STS_CHNG_DATE, AL.CMNT, E.EMP_NAME, D.DEPT_NAME 
+FROM APRVL_LINE AL INNER JOIN EMP E
+                            ON AL.EMP_NUM = E.EMP_NUM
+                    INNER JOIN APNTM AT
+                            ON E.EMP_NUM = AT.EMP_NUM
+                    INNER JOIN DEPT D
+                              ON AT.DEPT_NUM = D.DEPT_NUM
+WHERE E.EMP_NAME = #{employ_name} AND D.DEPT_NAME = #{employ_dept} 
+</select>
 
 </mapper>

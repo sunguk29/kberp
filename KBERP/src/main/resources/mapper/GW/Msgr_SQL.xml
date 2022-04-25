@@ -126,23 +126,6 @@
 		FROM MSGR_CONT
 	</select>
 	
-	<select id="getContList" parameterType="hashmap" resultType="hashmap">
-		SELECT MC.CHAT_NUM, MC.CONT_NUM, MC.EMP_NUM, MC.CONT, MC.RGSTRTN_DT, R.RANK_NAME, E.EMP_NAME, D.DEPT_NAME
-		FROM (SELECT CHAT_NUM, CONT_NUM, EMP_NUM, CONT, TO_CHAR(RGSTRTN_DT, 'MM/DD HH24:MI') AS RGSTRTN_DT
-		        FROM MSGR_CONT
-		        WHERE #{lastContNo} > CONT_NUM
-		        AND CHAT_NUM = #{chatNum}
-		        ORDER BY CONT_NUM ASC) MC INNER JOIN EMP E
-		                                    ON MC.EMP_NUM = E.EMP_NUM
-		                                  INNER JOIN APNTM A
-					                        ON E.EMP_NUM = A.EMP_NUM
-		                                  INNER JOIN DEPT D
-					                        ON A.DEPT_NUM = D.DEPT_NUM
-		                                  INNER JOIN RANK R
-					                        ON A.RANK_NUM = R.RANK_NUM
-	</select>
-	
-	
 	
 <!-- lastChatNo 기준으로 이전 채팅 읽어오기, 이후 채팅 불러오기 -->	
 	<select id="getCont" parameterType="hashmap" resultType="hashmap">
@@ -164,6 +147,33 @@
 <!--처음입장할땐 등록이후의 채팅을가져와야하고
 	추가 글을 가져올때 -->	
 	
+
+
+<select id="getContList" parameterType="hashmap" resultType="hashmap">
+	SELECT CONT, RGSTRTN_DT, EMP_NAME, DEPT_NAME, RANK_NAME, EMP_NUM 
+	FROM (SELECT MC.CHAT_NUM, CONT_NUM, MC.CONT, E.EMP_NUM, JOIN_DT, TO_CHAR(MC.RGSTRTN_DT, 'MM/DD HH24:MI') AS RGSTRTN_DT, MHC.LAST_VIEW_NUM,ROW_NUMBER()OVER(ORDER BY CONT_NUM ASC) AS RNUM, 
+                EMP_NAME, DEPT_NAME, RANK_NAME
+	FROM MSGR M INNER JOIN MSGR_CONT MC
+	                            	ON M.CHAT_NUM = MC.CHAT_NUM
+	                            INNER JOIN MSGR_HEAD_COUNT MHC
+	                            	ON MC.CHAT_NUM = MHC.CHAT_NUM
+	                            INNER JOIN EMP E
+	                            	ON MC.EMP_NUM = E.EMP_NUM
+	                            INNER JOIN APNTM A
+                               		ON E.EMP_NUM = A.EMP_NUM
+                            	INNER JOIN DEPT D
+                                	ON A.DEPT_NUM = D.DEPT_NUM
+                            	INNER JOIN RANK R
+                                	ON A.RANK_NUM = R.RANK_NUM
+	WHERE MHC.EMP_NUM = #{sEmpNum} AND MC.RGSTRTN_DT > JOIN_DT AND MC.CHAT_NUM = #{chatNum} )
+	ORDER BY RNUM
+</select>
+
+
+
+
+
+
 
 	
 </mapper>

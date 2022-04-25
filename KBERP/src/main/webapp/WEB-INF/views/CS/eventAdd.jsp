@@ -158,7 +158,8 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
-											location.href = "prgrsEvent";
+											$("#actionForm").attr("action", "prgrsEvent");
+											$("#actionForm").submit();
 										} else {
 											alert("작성중 문제가 발생하였습니다.");
 										}
@@ -204,6 +205,15 @@ function checkEmpty(sel) {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
+	<form action="#" id="actionForm" method="post">
+		<input type="hidden" name="no" value="${param.no}" />
+		<input type="hidden" name="page" value="${param.page}" />
+		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+		<input type="hidden" id="top" name="top" value="${param.top}"/>
+		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
+		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
+	</form>
 	<form action="event" id="backForm" method="post">
 		<input type="hidden" name="no" value="${param.no}" />
 		<input type="hidden" name="page" value="${param.page}" />

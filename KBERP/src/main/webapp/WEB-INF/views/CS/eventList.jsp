@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,19 +15,15 @@
 }
 
 td:nth-child(2) {
-	
 	color: #222222;
 	font-weight: bold;
 	cursor: pointer;
-	
 }
 
 td:nth-child(2):hover {
-
 	color: #4B94F2;
 	text-decoration: underline;
 }
-
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -164,7 +160,7 @@ function drawPaging(pb) {
 </script>
 </head>
 <body>
-<!-- top & left -->
+	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
 		<c:param name="menuNum">${param.menuNum}</c:param>
@@ -180,20 +176,21 @@ function drawPaging(pb) {
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
 				<form action="#" id="actionForm" method="post">
-					<input type="hidden" id="no" name="no" />
-					<input type="hidden" id="page" name="page" value="${page}" />
-					<input type="hidden" id="top" name="top" value="${param.top}"/>
-					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
-					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
-						<select class="srch_sel" id="searchGbn" name="searchGbn">
-							<option value="0">제목</option>
-							<option value="1">작성자</option>
-							<option value="2">작성일</option>
-						</select>
-						<div class="srch_text_wrap">
-							<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
-						</div>
-						<div class="cmn_btn_ml" id="searchBtn">검색</div>
+					<input type="hidden" id="no" name="no" /> 
+					<input type="hidden" id="page" name="page" value="${page}" /> 
+					<input type="hidden" id="top" name="top" value="${param.top}" /> 
+					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" /> 
+					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" /> 
+					<select class="srch_sel" id="searchGbn" name="searchGbn">
+						<option value="0">제목</option>
+						<option value="1">작성자</option>
+						<option value="2">작성일</option>
+					</select>
+					<div class="srch_text_wrap">
+						<input type="text" name="searchTxt" id="searchTxt"
+							value="${param.searchTxt}" />
+					</div>
+					<div class="cmn_btn_ml" id="searchBtn">검색</div>
 				</form>
 			</div>
 		</div>
@@ -202,11 +199,11 @@ function drawPaging(pb) {
 			<!-- 여기부터 쓰면 됨 -->
 			<table class="board_table">
 				<colgroup>
-					<col width="50"/>
-					<col width="150"/>
-					<col width="50"/>
-					<col width="50"/>
-					<col width="50"/>
+					<col width="50" />
+					<col width="150" />
+					<col width="50" />
+					<col width="50" />
+					<col width="50" />
 				</colgroup>
 				<thead>
 					<tr>

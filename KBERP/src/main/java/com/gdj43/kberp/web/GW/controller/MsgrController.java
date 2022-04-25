@@ -208,12 +208,12 @@ public class MsgrController {
 		System.out.println("#######" + params.get("lastContNo"));
 		System.out.println("$$$$$$$" + params.get("chatNum"));
 		System.out.println("%%%%%%%" + params);
-		
+		System.out.println(params.get("sEmpNum"));
 		
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		int lastContNo = Integer.parseInt(request.getParameter("lastContNo"));
+	//	int lastContNo = Integer.parseInt(request.getParameter("lastContNo"));
 		
 		
 		try {

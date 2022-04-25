@@ -157,6 +157,10 @@ public class EventController {
 			try {
 				switch(gbn) {
 				case "insert":
+					
+					int cmnt_num = iCommonService.getIntData("ev.getEventCmntCnt",params);
+					params.put("cmnt_num", Integer.toString(cmnt_num + 1));
+					System.out.println("현재 comment 수 : " + Integer.toString(cmnt_num));
 					iCommonService.insertData("ev.EventCmntAdd", params);
 					break;
 				case "update":
