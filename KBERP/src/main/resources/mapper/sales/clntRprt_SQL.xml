@@ -8,8 +8,29 @@
 				     COUNT(CASE WHEN TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM') THEN 1 END) THAT,
 				     COUNT(CASE WHEN RGSTRTN_DATE BETWEEN ADD_MONTHS(SYSDATE,-3) AND SYSDATE THEN 1 END) AVG,
 				     COUNT(*) AS CNT
-		FROM CLNT_CMPNY
-		WHERE DEL_CHECK IS NULL) CC
+		FROM CLNT_CMPNY CC INNER JOIN EMP E
+                           ON CC.EMP_NUM = E.EMP_NUM
+                   INNER JOIN APNTM A
+				           ON E.EMP_NUM = A.EMP_NUM
+		WHERE DEL_CHECK IS NULL
+		<if test="deptNum != 0"> 
+			<choose>
+				<when test="deptNum == 1">
+					AND A.DEPT_NUM = 6
+				</when>
+				<when test="deptNum == 2">
+					AND A.DEPT_NUM = 7
+				</when>
+				<when test="deptNum == 3">
+					AND A.DEPT_NUM = 8
+				</when>				
+			</choose>
+		</if>
+		<choose>
+			<when test="mngEmp != null and mngEmp != ''"> <!-- 담당자텍스트 박스 -->
+				AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'
+			</when>
+		</choose>) CC
 	</select>
 
 <!-- 신규고객 개수 -->
@@ -36,7 +57,12 @@
 					AND A.DEPT_NUM = 8
 				</when>				
 			</choose>
-		</if>) EC
+		</if>
+		<choose>
+			<when test="mngEmp != null and mngEmp != ''"> <!-- 담당자텍스트 박스 -->
+				AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'
+			</when>
+		</choose>) EC
 		
 	</select>
 <!-- 고객등급 개수 -->	
@@ -46,8 +72,29 @@
 		       COUNT(CASE WHEN GRADE_NUM = '2' THEN 1 END) AS B,
 		       COUNT(CASE WHEN GRADE_NUM = '3' THEN 1 END) AS C,
 		       COUNT(CASE WHEN GRADE_NUM = '4' THEN 1 END) AS D
-		FROM CLNT_CMPNY
+		FROM CLNT_CMPNY CC INNER JOIN EMP E
+                           ON CC.EMP_NUM = E.EMP_NUM
+                   INNER JOIN APNTM A
+				           ON E.EMP_NUM = A.EMP_NUM
 		WHERE DEL_CHECK IS NULL
+		<if test="deptNum != 0"> 
+			<choose>
+				<when test="deptNum == 1">
+					AND A.DEPT_NUM = 6
+				</when>
+				<when test="deptNum == 2">
+					AND A.DEPT_NUM = 7
+				</when>
+				<when test="deptNum == 3">
+					AND A.DEPT_NUM = 8
+				</when>				
+			</choose>
+		</if>
+		<choose>
+			<when test="mngEmp != null and mngEmp != ''"> <!-- 담당자텍스트 박스 -->
+				AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'
+			</when>
+		</choose>		
 	</select>
 
 <!-- 영업 고객수 -->
@@ -73,5 +120,10 @@
 				</when>				
 			</choose>
 		</if>
+		<choose>
+			<when test="mngEmp != null and mngEmp != ''"> <!-- 담당자텍스트 박스 -->
+				AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'
+			</when>
+		</choose>
 	</select>
 </mapper>
