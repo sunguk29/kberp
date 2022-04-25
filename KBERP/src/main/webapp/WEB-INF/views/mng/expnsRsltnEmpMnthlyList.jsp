@@ -28,6 +28,9 @@
 	vertical-align: top;
 	height: 27px;
 }
+.board_table thead {
+	background-color: #F2F2F2;
+}
 
 .emp_name{
 	font-size: 11pt;
