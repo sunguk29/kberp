@@ -482,8 +482,10 @@ td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 <script type="text/javascript">
 var refreshInterval = null;
 
+
+
 $(document).ready(function() {
-	
+
 	reloadList();
 	
 	$("#main_msgr_btn, .srch_img").on("click", function() {
@@ -586,7 +588,9 @@ $(document).ready(function() {
 	
 	
 	$("body").on("click", ".chat_list1", function() {	
+		
 		clearInterval(refreshInterval);
+		
 		refreshInterval = setInterval(readCont, 1000);
 		
 		$("#chatNum").val($(this).attr("chatNum"));
@@ -595,7 +599,7 @@ $(document).ready(function() {
 		
 		html += "		<div class = \"right_box\">                                                      ";
 		html += "			<div class = \"rcpnt_rank_box\">                                                 ";
-		html += "				<div id = \"rcpnt_rank\"> ${param.empNum} ${RankName} ${EmpName} </div>";
+		html += "				<div id = \"rcpnt_rank\"> ${empNum} ${RankName} ${EmpName} </div>";
 		html += "			</div>		                                                                  	 ";
 		html += "			                                                                              	 ";
 		html += "			<div class = \"chat_room\">                                                      ";
@@ -809,7 +813,7 @@ function insertCont() {
 	
 
 function readCont() {
-	clearInterval(refreshInterval);
+//	clearInterval(refreshInterval);
 	// 채팅 인서트는 성공했지만, 리스트띄우는건 실패. 오류명 undefined 'parsererror' 
 	var params = $("#readForm").serialize();
 	$.ajax({
@@ -994,6 +998,7 @@ function init() {
 			<form action = "#" id = "readForm">
 				<input type="text" id = "lastContNo" name = "lastContNo" value = "${maxNo}">
 				<input type ="text" id = "chatNum" name = "chatNum" value = "${chatNum}"/>
+				<input type ="text" id = "sEmpNum" name = "sEmpNum" value = "${sEmpNum}"/>
 			</form>
 			
 				<div class = "main_box">
