@@ -281,7 +281,7 @@ select {
 
 /* 각 그래프 영역 크기 */
 .bsns_type{
-	min-width: 415px;
+	width: 100%;
 	height: 195px;
 	margin : 0 auto;
 }
@@ -290,20 +290,45 @@ select {
 	vertical-align: top;
 	width: 430px;
 	height: 100%;
-	padding-right: 33.5px;	
 }
 .cont_left {
 	display: inline-block;
 	vertical-align: top;
 	width: 430px;
 	height: 100%;
-	padding-left: 33.5px;	
+	padding-right: 33.5px;		
+}
+.ingArea{
+	font-size: 10pt;
+	font-weight : bold;
+}
+.cir {
+	display:inline-block;
+	width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+.half_cir {
+	display:inline-block;
+	width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+.rec {
+	display:inline-block;
+	width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #808080;
 }
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
 	
 	getData();
+	getPrgrsCnt();
+	
+	
 
 	/* 담당자 팝업 */
 	$("#mngBtn").on("click", function() {
@@ -439,11 +464,35 @@ $(document).ready(function() {
 	        }]
 		});
 	}
-
+	
+	/* 진행상태 데이터 가져오기  */
+	function getPrgrsCnt() {
+		var params = $("#getForm").serialize();
+		$.ajax({
+			type : "post",
+			url : "prgrsChartAjax",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				drawPrgrsList(res.ingCnt, res.endCnt, res.failCnt);
+			},
+			error : function(request, status, error) {
+				console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+			}
+		});
+	}
 }); //jqeury End
 
-
-
+/* 진행상태 그리기  */
+function drawPrgrsList(ingCnt, endCnt, failCnt) {
+	var html = "";
+	
+	html += "<div class=\"cir fir\" style=\"background-color:rgb(255,194,54);\">진행중</div><div class=\"half_cir\" style=\"background-color:rgb(255,194,54);\">10%</div><div class = \"rec\">"+ingCnt+"건</div><br/>";
+	html += "<div class=\"cir sec\" style=\"background-color:rgb(96,187,135);\">성공</div><div class=\"half_cir\" style=\"background-color:rgb(96,187,135);\">10%</div><div class = \"rec\">"+endCnt+"건</div><br/>";
+	html += "<div class=\"cir thr\" style=\"background-color:rgb(88,193,183);\">실패</div><div class=\"half_cir\" style=\"background-color:rgb(88,193,183);\">10%</div><div class = \"rec\">"+failCnt+"건</div>";
+	
+	$(".ingArea").html(html);
+}
 
 /* 담당자 팝업 Ajax */
 function drawMngList() {
@@ -604,51 +653,43 @@ function drawMngPaging(pb) {
 						</table>
 						<form action="#" id="getForm" method="post">
 						<input type="hidden" name="size" value="3" />
-						<dlv class="cont_right">
-							<div class="new_sales_actvty">
-							<div class="sales_text">
-								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />진행상태
-								</div>
-								<div class="actvty_tLine1"></div>
-							</div>
-							<div class="sales_text_bot">
-							</div>
-						</div>
 						<div class="new_sales_actvty">
-							<div class="sales_text">
-								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />진행단계
-								</div>
-							</div>
-							<div class="sales_text_bot">
-								<div class="prgrs_stage"></div>
-							</div>
-						</div>
-
-						</dlv>
-						<dlv class="cont_left">
-							<div class="new_sales_actvty">
 								<div class="sales_text">
 									<div class="sales_text_top">
 										<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />사업유형
 									</div>
-									<span class="bsns_type"></span>
+									<div class="bsns_type"></div>
 								</div>
-							</div>
+						</div>
+						<br/>
+						<div class="cont_left">
 							<div class="new_sales_actvty">
-							<div class="sales_text">
-								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />영업담당
+								<div class="sales_text">
+									<div class="sales_text_top">
+										<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />진행상태
+									</div>
+									<div class="actvty_tLine1"></div>
 								</div>
-								<div class="actvty_cntrct"></div>
-							</div>
-							<div class="sales_text_bot">
+								<div class="sales_text_bot">
+									<div class = "ingArea">
+										
+									</div>
+								</div>
 							</div>
 						</div>
-
-						</dlv>
-					
+						<div class="cont_right">
+							<div class="new_sales_actvty">
+								<div class="sales_text">
+									<div class="sales_text_top">
+										<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />진행단계
+									</div>
+								</div>
+								<div class="sales_text_bot">
+									<div class="prgrs_stage"></div>
+								</div>
+							</div>
+						</div>
+						</form>
 					<!-- class="bodyWrap" end -->
 					</div>
 				<!-- class="body" end -->

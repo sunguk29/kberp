@@ -98,6 +98,7 @@ public class RprtController {
 	/* 영업 차트 */
 	@RequestMapping(value = "/salesChart")
 	public ModelAndView salesChart(ModelAndView mav) throws Throwable{
+		
 		mav.setViewName("sales/salesChart");
 		
 		return mav;
@@ -212,4 +213,26 @@ public class RprtController {
         return mapper.writeValueAsString(modelMap);
 	}
 	
+	
+	// 영업 차트 진행상태 개수
+	@RequestMapping(value = "/prgrsChartAjax", method=RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String prgrsChartAjax(HashMap<String, String> params, ModelAndView mav) throws Throwable{
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		//영업 종료(실패)개수
+		int failCnt = iCommonService.getIntData("salesRprt.getFailCnt", params);
+		//영업 종료(성공)개수
+		int endCnt = iCommonService.getIntData("salesRprt.getEndCnt", params);
+		//영업 진행중 개수
+		int ingCnt = iCommonService.getIntData("salesRprt.getIngCnt", params);
+		
+		modelMap.put("failCnt", failCnt);
+		modelMap.put("endCnt", endCnt);
+		modelMap.put("ingCnt", ingCnt);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 }
