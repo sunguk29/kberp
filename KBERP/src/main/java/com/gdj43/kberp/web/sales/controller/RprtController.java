@@ -73,7 +73,6 @@ public class RprtController {
 		
 		//영업팀별 고객수
 		HashMap<String, String> sc = iCommonService.getData("clntRprt.salesCnt", params);
-
 	
 		if(params.get("startDate") == null || params.get("startDate") == "") {
 			params.put("startDate", startDate); 
