@@ -3,9 +3,9 @@
 <mapper namespace="expnsRsltn">
 	<select id="getexpnsRsltnCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*)AS CNT
- 		FROM(SELECT S.DATE_MON, S.CRP, S.IND, S.TOTAL
+ 		FROM(SELECT S.DATE_MON, TO_CHAR(S.CRP, '999,999,999,999') AS CRP, TO_CHAR(S.IND, '999,999,999,999') AS IND, TO_CHAR(S.TOTAL, '999,999,999,999') AS TOTAL
 		FROM (  SELECT TO_CHAR(DATE_HR, 'YYYY-MM') AS DATE_MON, EMP_NUM, SUM(DECODE(EXPNS_TYPE, '법인', AMNT)) AS CRP, 
-		     		   SUM(DECODE(EXPNS_TYPE, '개인', AMNT)) AS IND, SUM(AMNT) AS TOTAL,ROW_NUMBER()OVER( ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
+		     	SUM(DECODE(EXPNS_TYPE, '개인', AMNT)) AS IND, SUM(AMNT) AS TOTAL,ROW_NUMBER()OVER( ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
 				FROM EXPNS_RSLTN
 				WHERE EMP_NUM = #{sesEmpNum}
 				<if test="searchMonth != null and searchMonth != ''">
@@ -17,7 +17,7 @@
             
 	</select>
 	<select id="getexpnsRsltnList" resultType="hashmap" parameterType="hashmap">
-		SELECT S.DATE_MON, S.CRP, S.IND, S.TOTAL
+		SELECT S.DATE_MON, TO_CHAR(S.CRP, '999,999,999,999') AS CRP, TO_CHAR(S.IND, '999,999,999,999') AS IND, TO_CHAR(S.TOTAL, '999,999,999,999') AS TOTAL
 		FROM (  SELECT TO_CHAR(DATE_HR, 'YYYY-MM') AS DATE_MON, EMP_NUM, SUM(DECODE(EXPNS_TYPE, '법인', AMNT)) AS CRP, 
 		     		   SUM(DECODE(EXPNS_TYPE, '개인', AMNT)) AS IND, SUM(AMNT) AS TOTAL,ROW_NUMBER()OVER( ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
 				FROM EXPNS_RSLTN 
@@ -63,7 +63,7 @@
 	</select>
 	
 	<select id="expnsRsltnDtl" resultType="hashmap" parameterType="hashmap">
-	SELECT TO_CHAR(ER.RGSTRTN_DATE_HR, 'YYYY-MM-DD') AS RGS_DATE, ER.CHIT_NUM,ER.ACNT_NUM, AC.ACNT_NAME, ER.EXPNS, ER.AMNT,
+	SELECT TO_CHAR(ER.RGSTRTN_DATE_HR, 'YYYY-MM-DD') AS RGS_DATE, ER.CHIT_NUM,ER.ACNT_NUM, AC.ACNT_NAME, ER.EXPNS, TO_CHAR(ER.AMNT,'999,999,999,999') AS AMNT,
 		       TO_CHAR(ER.DATE_HR, 'YYYY-MM-DD') AS DATE_D, ER.EXPNS_TYPE, ER.RMRKS, ER.ATT_FILE
 		FROM EXPNS_RSLTN ER INNER JOIN ACNT_CODE AC
 		                       ON ER.ACNT_NUM = AC.SUB_CTGR_ACNT_CODE
@@ -93,16 +93,35 @@
 	</select>
 	
 	<insert id = "WriteExpnsRsltn" parameterType="hashmap">
+	<selectKey order="BEFORE" keyProperty="CHIT_NUM" resultType="BigInteger">
+			SELECT TO_NUMBER(TO_CHAR(SYSDATE, 'YYMMDD') || NVL(TO_CHAR(MAX(SUBSTR(CHIT_NUM, 7))), '0000')) + 1
+			FROM (  SELECT CHIT_NUM, RGSTRTN_DATE_HR
+			        FROM INTRNL_COST_MNG
+			        UNION
+			        SELECT CHIT_NUM, RGSTRTN_DATE_HR
+			        FROM EXPNS_RSLTN  )
+			WHERE TO_CHAR(RGSTRTN_DATE_HR, 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD')
+		</selectKey>
 	INSERT INTO EXPNS_RSLTN (CHIT_NUM,EMP_NUM,ACNT_NUM,EXPNS,AMNT,DATE_HR,EXPNS_TYPE,RMRKS,ATT_FILE)
 	
-	VALUES(EXPNS_RSLTN_SEQ.NEXTVAL,#{sesEmpNum},#{sendAcntCode},#{expns},#{amnt},#{date_hr},#{expns_type},#{rmrks},#{attFile})
+	VALUES(#{CHIT_NUM},#{sesEmpNum},#{sendAcntCode},#{expns},#{amnt},#{date_hr},#{expns_type},#{rmrks},#{attFile})
 	</insert>
+	
+	<select id="expnsRsltnDtlUpdate" resultType="hashmap" parameterType="hashmap">
+	SELECT TO_CHAR(ER.RGSTRTN_DATE_HR, 'YYYY-MM-DD') AS RGS_DATE, ER.CHIT_NUM,ER.ACNT_NUM, AC.ACNT_NAME, ER.EXPNS, ER.AMNT,
+		       TO_CHAR(ER.DATE_HR, 'YYYY-MM-DD') AS DATE_D, ER.EXPNS_TYPE, ER.RMRKS, ER.ATT_FILE
+		FROM EXPNS_RSLTN ER INNER JOIN ACNT_CODE AC
+		                       ON ER.ACNT_NUM = AC.SUB_CTGR_ACNT_CODE
+		              AND AC.MAIN_CTGR_ACNT_CODE = 1
+        WHERE ER.CHIT_NUM = #{sendChitNum}
+	</select>
 	
 	<update id = "UpdateExpnsRsltn" parameterType="hashmap">
 	UPDATE EXPNS_RSLTN SET ACNT_NUM = #{sendAcntCode}, EXPNS = #{expns}, AMNT = #{amnt}, DATE_HR = #{date_hr} , EXPNS_TYPE = #{expns_type},RMRKS = #{rmrks}, ATT_FILE = #{attFile}
 	WHERE CHIT_NUM = #{sendChitNum}
 	
 	</update>
+	
 	
 	<delete id ="DeleteExpnsRsltn" parameterType="hashmap">
 	DELETE FROM EXPNS_RSLTN
