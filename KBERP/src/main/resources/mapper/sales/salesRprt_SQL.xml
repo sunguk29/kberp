@@ -72,15 +72,31 @@
 		                                                WHERE EXPCTD_BSNS_TYPE = 2) C
 		                                             ON 1 = 1
 	</select>
-	
-	<!-- 종합차트 영업순위 -->
-	<select id="getTotalNewSalesRank" parameterType="hashmap" resultType="hashmap">
-		SELECT COUNT(*) CNT
-		FROM SALES S INNER JOIN EMP E
-		                     ON S.MNGR_EMP_NUM = E.EMP_NUM           
-		WHERE TO_CHAR(START_DATE, 'YY-MM') =  TO_CHAR(SYSDATE, 'YY-MM')
-		GROUP BY E.EMP_NAME
-		HAVING COUNT(*) = 6
+
+	<!-- 당월 매출 실적 차트(내용) -->	
+	<select id="getSalesRvn" resultType="hashmap">
+		SELECT E.EMP_NAME AS NAME, C.MONTH_INTRST_AMNT AS RVN
+		FROM SALES S INNER JOIN CNTRCT C
+		                     ON S.SALES_NUM = C.SALES_NUM
+		             INNER JOIN EMP E
+		                     ON S.MNGR_EMP_NUM = E.EMP_NUM 
+	</select>
+	<!-- 당월 매출 실적 차트(상품_내용) -->	
+	<select id="getSalesMdRvn" resultType="hashmap">
+		SELECT M.MD_NAME AS NAME, C.MONTH_INTRST_AMNT AS RVN
+		FROM CNTRCT C INNER JOIN QTN Q
+		                      ON C.SALES_NUM = Q.SALES_NUM  
+		                     AND Q.QTN_STS_NUM = 0
+		              INNER JOIN MD M
+		                      ON Q.MD_NUM = M.MD_NUM 
+	</select>
+	<!-- 당월 매출 실적 차트(개수) -->	
+	<select id="getSalesRvnCnt" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SALES S INNER JOIN CNTRCT C
+		                     ON S.SALES_NUM = C.SALES_NUM
+		             INNER JOIN EMP E
+		                     ON S.MNGR_EMP_NUM = E.EMP_NUM
 	</select>
 	
 	<!-- 영업 종료(실패) 개수 -->
@@ -102,5 +118,11 @@
 		SELECT COUNT(*) AS CNT
 		FROM SALES
 		WHERE SUBSTR(PRGRS_STS_NUM, 2, 1) = 7 
+	</select>
+	
+	<!-- 영업 전체 개수 -->
+	<select id="getTotalCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SALES
 	</select>
 </mapper>

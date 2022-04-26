@@ -234,7 +234,7 @@ display: inline-block;
 	width: 567px;
 	height: 31px;
 	text-align: center;
-	margin: 0 5px;
+	margin: 10px 10px;
 }
 
 .popup_srch_box {
@@ -269,10 +269,10 @@ display: inline-block;
 }
 
 .empinqry_area {
-	margin: 12px;
+	margin: 0 12px;
 	display: inline-block;
 	vertical-align: top;
-	height: 250px;
+	height: 240px;
 	/* width: 545px;*/
 	/* border: solid 1px #d7d7d7;*/
 	/* overflow: hidden; */
@@ -282,7 +282,6 @@ display: inline-block;
 	display: inline-table;
 	border-collapse: collapse;
 	width: 553px;
-	margin-bottom: 15px;
 }
 
 .empinqry_list thead tr {
@@ -514,9 +513,142 @@ $(document).ready(function() {
 						}
 		            }); /* 결재권자 팝업 끝 */
 		            
-		            $(".empinqry_area").slimScroll({height: "255px"},{width: "450px"}); // 슬림스크롤
+		            $(".empinqry_area").slimScroll({height: "240px"},{width: "450px"}); // 슬림스크롤
 		            
 		            
+				}); /* 결재권자 검색 버튼 클릭 이벤트 끝 */
+				
+				/* 참조자 검색 버튼 클릭 이벤트 */
+				$("#rfrncBtn").on("click", function() {
+					var html2 = "";
+					html2 += "<form action=\"#\" id=\"inqryForm\" method=\"post\">" ;
+					html2 += "<input type=\"hidden\" id=\"inqryNo\" name=\"inqryNo\"  />" ;
+					html2 += "<div class=\"popup_emp_srch_area\">         ";
+					html2 += "<select class=\"emp_srch_select\" id=\"inqryGbn\" name=\"inqryGbn\">          ";
+					html2 += "	<option value=\"0\" selected>전체</option>";
+					html2 += "	<option value=\"1\">부서명</option>      ";
+					html2 += "	<option value=\"2\">사원명</option>      ";
+					html2 += "	<option value=\"3\">직급명</option>      ";
+					html2 += "</select>                                   ";
+					html2 += "<div class=\"popup_srch_input\">	                 ";
+					html2 += "	<input type=\"text\" id=\"inqryTxt\" name=\"inqryTxt\"/>                  ";
+					html2 += "</div>                                      ";
+					html2 += "<div class=\"cmn_btn\" id=\"inqryBtn\">검색</div>           ";
+					html2 += "</div>                                      ";
+					html2 += "</form>";														
+					html2 += "<div class=\"empinqry_area\">        ";
+		            html2 += " <table class=\"empinqry_list\">   ";
+		            html2 += "   <colgroup>                      ";
+		            html2 += "      <col width=\"30\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "   </colgroup>                     ";
+		            html2 += "   <thead>                         ";
+		            html2 += "      <tr>                         ";
+		            html2 += "         <th>선택</th>             ";
+		            html2 += "         <th>부서</th>             ";
+		            html2 += "         <th>직급</th>             ";
+		            html2 += "         <th>사원명</th>           ";
+		            html2 += "         <th>사원번호</th>         ";
+		            html2 += "      </tr>                        ";
+		            html2 += "   </thead>                        ";
+		            html2 += "   <tbody id=\"aprvlerInqry_tbody\">   ";
+		            html2 += "   </tbody>                        ";
+		            html2 += "  </table>                         ";
+		            html2 += "</div>                             ";
+		            
+		            // 참조자 선택 팝업
+					makePopup({
+						depth : 2,
+						bg : false,
+						bgClose : false,
+						width: 600,
+						height: 400,
+						title : "참조인 선택",
+						contents : html2,
+						draggable : true,
+						contentsEvent : function() {
+							var params = $("#inqryForm").serialize();	
+							
+							$.ajax({
+							    type : "post",
+							    url : "apntmListAjax/inqryList",
+							    dataType : "json",
+							    data : params,
+							    success : function(res) {
+							    	console.log(res);
+							    	drawAprvlerInqryList(res.inqryList);
+							    }, 
+							   	error : function(req) {
+								console.log(req.responseText);
+							    }
+						    });
+							
+							 /* 엔터 시 클릭이벤트 */
+							$("#inqryTxt").on("keypress", function(event) {
+					 			if(event.keyCode == 13) {
+					 				$("#inqryBtn").click();
+					 				return false;
+					 			}
+						 	});
+							
+							 $("#inqryBtn").on("click", function() {
+					   		     console.log("결재권자 선택팝업 버튼클릭!")
+							   	 var params = $("#inqryForm").serialize();	
+							   	 console.log("inqryGbn  : " + $("#inqryGbn").val())
+							 	 $.ajax({
+									 type : "post",
+									 url : "apntmListAjax/inqryList",
+									 dataType : "json",
+								     data : params,
+								     success : function(res) {
+								         console.log(res);
+								    	 drawAprvlerInqryList(res.inqryList);
+								     }, 
+								     error : function(req) {
+								         console.log(req.responseText);
+								     }
+							 	 }); 
+						   	 });
+							 
+							// tr 선택시 체크박스 선택처리
+						   	 $("#aprvlerInqry_tbody").on("click", "tr", function() {
+						   		 var checkbox = $(this).find("td:first-child :checkbox");
+						   		 
+						   	 	 if(checkbox.prop("checked")) {
+						   		 	checkbox.prop("checked", false);
+						   	 	 } else {
+						   	 		checkbox.prop("checked", true);
+						   	 	 }
+						   	 });
+							
+						}
+						buttons : [{
+							name : "확인",
+							func: function() {
+						    	// 참조인 체크 된 값 가져오기
+					  	    	var rfrnc_emp_num_arr = [];
+					   	    	var rfrnc_emp_name_arr = [];
+					   	    	$("input[name=aprvlerChk]:checked").each(function() {
+					   		    	var empNum = $(this).attr("aprvlerNum");
+					   		    	var empName = $(this).attr("aprvlerName");
+					   				rfrnc_emp_num_arr.push(empNum);
+					   				rfrnc_emp_name_arr.push(empName);
+					   	    	});
+					   	    	console.log("참조인 체크값 : " + rfrnc_emp_num_arr, rfrnc_emp_name_arr)
+					   	    	$("#rfrncInput").val(rfrnc_emp_name_arr);
+					   	    	$("#rfrncList").val(rfrnc_emp_num_arr);
+					   	    	closePopup(2);
+							}
+						}, {
+							name : "취소"
+						}]
+					}); /* 참조자 선택 팝업 끝 */
+					
+					$(".empinqry_area").slimScroll({height: "255px"},{width: "450px"}); // 슬림 스크롤
+					
 				});
 			},
 			buttons : [{
