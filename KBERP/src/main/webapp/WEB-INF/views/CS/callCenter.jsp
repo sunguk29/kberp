@@ -1342,9 +1342,9 @@ $(document).ready(function() {
 								if(res.res == "success") {
 									console.log(res);
 									closePopup();
+									
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
-									closePopup();
 								}
 
 							},
@@ -1354,7 +1354,6 @@ $(document).ready(function() {
 							}
 						}); // ajax end
 					} // else end
-					closePopup();
 				}
 			}, {
 				name : "닫기"
@@ -1431,7 +1430,7 @@ $(document).ready(function() {
 	
 }); // document 끝
 
-// 다음 우편번호
+// 다음 우편번호 스크립트
 function execDaumPostcode() {
     daum.postcode.load(function(){
         new daum.Postcode({
@@ -1492,23 +1491,23 @@ function checkEmpty(sel) {
 						</div>
 		    			<div class="clnt_info_cont_row1">	  
 			    			<div class="clnt_name">고객명</div>
-			    				<input type="text" class="info_txt" id="name" name="name">
+			    				<input type="text" class="info_txt" id="name" name="name" readonly="readonly"/>
 			    			<div class="clnt_grade">고객등급</div>
-			    				<input type="number" class="info_txt" id="grade" name="grade">
+			    				<input type="number" class="info_txt" id="grade" name="grade" readonly="readonly"/>
 			    		</div>
 			    		<div class="clnt_info_cont_row2">
 			    			<div class="phone_num_1">전화번호 1</div>
-			    				<input type="tel" class="info_txt" id="phn_num_1" name="phn_num_1">
+			    				<input type="tel" class="info_txt" id="phn_num_1" name="phn_num_1" readonly="readonly"/>
 			    			<div class="phone_num_2">전화번호 2</div>
-			    				<input type="tel" class="info_txt" id="phn_num_2" name="phn_num_2">
+			    				<input type="tel" class="info_txt" id="phn_num_2" name="phn_num_2" readonly="readonly"/>
 			    		</div>	
 			    		<div class="clnt_info_cont_row4">	  
 			    			<div class="adrs">주소</div>
-			    				<input class="zip_input" type="text" id="zip" name="zip"/>
+			    				<input class="zip_input" type="text" id="zip" name="zip" readonly="readonly"/>
 			    				<br/>
-			    				<input class="adrs_input" type="text" id="adr" name="adr">
+			    				<input class="adrs_input" type="text" id="adr" name="adr" readonly="readonly"/>
 			    				<br/>
-			    				<input class="adrs_input_dtls" type="text" id="dtl_adr" name="dtl_adr">
+			    				<input class="adrs_input_dtls" type="text" id="dtl_adr" name="dtl_adr" readonly="readonly"/>
 			    		</div>	
 		    			<div class="cmn_btn_mr" id="saveBtn">신규고객 등록</div>
 		    		</form>

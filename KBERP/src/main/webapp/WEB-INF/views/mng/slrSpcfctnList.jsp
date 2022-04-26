@@ -119,7 +119,11 @@ $(document).ready(function() {
 	});
 	
 	$("tbody").on("click", "#empName", function() {
-		makeAlert("급여명세서 상세보기로 이동시켜야 함", "급여명세서 상세보기로 이동시켜야 함");
+		$("#empNum").val($(this).attr("empNum"));
+		$("#stndrYearMonth").val($(this).attr("stndrYearMonth"));
+		
+		$("#actionForm").attr("action", "slrSpcfctnViewMng");
+		$("#actionForm").submit();
 	});
 	
 	
@@ -151,7 +155,7 @@ function drawList(list) {
 		html += "<tr>";
 		html += "<td>" + data.DEPT_NAME + "</td>";
 		html += "<td>" + data.RANK_NAME + "</td>";
-		html += "<td class=\"board_table_hover\" id=\"empName\" empNum=\"" + data.EMP_NUM + "\">" + data.EMP_NAME + "</td>";
+		html += "<td class=\"board_table_hover\" id=\"empName\" stndrYearMonth=\"" + data.STNDR_YEAR_MONTH + "\"  empNum=\"" + data.EMP_NUM + "\">" + data.EMP_NAME + "</td>";
 		html += "<td>" + data.SLRY + "원</td>";
 		html += "<td>" + data.BNFT + "원</td>";
 		html += "<td>" + data.WH + "원</td>";
@@ -200,7 +204,8 @@ function drawPaging(pb) {
 		<input type="hidden" id="mon" name="mon" value="${mon}">
 		<input type="hidden" id="page" name="page" value="${page}">
 		<input type="hidden" id="searchTxt" name="searchTxt">
-		
+		<input type="hidden" id="empNum" name="empNum">
+		<input type="hidden" id="stndrYearMonth" name="stndrYearMonth">
 		<input type="hidden" name="top" value="${param.top}">
 		<input type="hidden" name="menuNum" value="${param.menuNum}">
 		<input type="hidden" name="menuType" value="${param.menuType}">

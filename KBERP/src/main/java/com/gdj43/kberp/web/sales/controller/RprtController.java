@@ -188,6 +188,7 @@ public class RprtController {
 	}
 	
 	// 종합차트 화면
+<<<<<<< HEAD
  	@RequestMapping(value = "/totalChart")
 	public ModelAndView totalChart(ModelAndView mav) throws Throwable {
 		
@@ -207,6 +208,21 @@ public class RprtController {
 		
 		return mav;
 	}
+=======
+	 	@RequestMapping(value = "/totalChart")
+		public ModelAndView totalChart(ModelAndView mav) throws Throwable {
+			
+			int salesRvnCnt = iCommonService.getIntData("salesRprt.getSalesRvnCnt");
+			int sumRvn = iCommonService.getIntData("salesRprt.getSalesMdSumRvn");
+			
+			mav.addObject("salesRvnCnt", salesRvnCnt); // 당월 매출 실적
+			mav.addObject("sumRvn", sumRvn); // 당월 매출 합계
+			
+			mav.setViewName("sales/rprt/totalChart");
+			
+			return mav;
+		}
+>>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 	
 	// 당월 매출 실적
 	@RequestMapping(value = "/salesRvnAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
@@ -238,6 +254,9 @@ public class RprtController {
         return mapper.writeValueAsString(modelMap);
 	}
 	
+
+	
+	
 	// 영업 차트 진행상태 개수
 	@RequestMapping(value = "/prgrsChartAjax", method=RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
@@ -263,19 +282,44 @@ public class RprtController {
 		return mapper.writeValueAsString(modelMap);
 	}
 	
-	// 당월 매출 실적
-	@RequestMapping(value = "/saleMdRvnAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	// 영업 차트 진행단계 개수
+	@RequestMapping(value = "/prgrsStepAjax", method=RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String saleMdRvnAjax(HttpServletRequest request) throws Throwable {
-		
+	public String prgrsStepAjax(HashMap<String, String> params, ModelAndView mav) throws Throwable{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		List<HashMap<String, String>> mdRvnList = iCommonService.getDataList("salesRprt.getSalesMdRvn");
+		//영업기회 개수
+		int salesChncCnt = iCommonService.getIntData("salesRprt.getSalesChncCnt", params);
+		//제안 개수
+		int sgstnCnt = iCommonService.getIntData("salesRprt.getSgstnCnt", params);
+		//견적 개수
+		int qtnCnt = iCommonService.getIntData("salesRprt.getQtnCnt", params);
+		//계약 개수
+		int cntrctCnt = iCommonService.getIntData("salesRprt.getCntrctCnt", params);
 		
-		modelMap.put("mdRvnList", mdRvnList);
+		modelMap.put("salesChncCnt", salesChncCnt);
+		modelMap.put("sgstnCnt", sgstnCnt);
+		modelMap.put("qtnCnt", qtnCnt);
+		modelMap.put("cntrctCnt", cntrctCnt);
 		
-        return mapper.writeValueAsString(modelMap);
+		return mapper.writeValueAsString(modelMap);
 	}
+	
+	//당월 매출 실적
+		@RequestMapping(value = "/saleMdRvnAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+		@ResponseBody
+		public String saleMdRvnAjax(HttpServletRequest request) throws Throwable {
+			
+			ObjectMapper mapper = new ObjectMapper();
+			
+			Map<String, Object> modelMap = new HashMap<String, Object>();
+			
+			List<HashMap<String, String>> mdRvnList = iCommonService.getDataList("salesRprt.getSalesMdRvn");
+			
+			modelMap.put("mdRvnList", mdRvnList);
+			
+	        return mapper.writeValueAsString(modelMap);
+		}
 }
