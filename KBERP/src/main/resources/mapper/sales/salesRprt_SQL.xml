@@ -138,4 +138,23 @@
 		SELECT COUNT(*) AS CNT
 		FROM SALES
 	</select>
+	
+	<!-- 당월 고객사 등록 개수 -->
+	<select id="getClntRegCnt" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM CLNT_CMPNY
+		WHERE TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
+	</select>
+	<!-- 당월 고객 등록 개수 -->
+	<select id="getCcRegCnt" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM ENTRPRS_CLNT
+		WHERE TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
+	</select>
+	<!-- 당월 리드 등록 개수 -->
+	<select id="getRegLeadCnt" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM LEAD
+		WHERE TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
+	</select>
 </mapper>

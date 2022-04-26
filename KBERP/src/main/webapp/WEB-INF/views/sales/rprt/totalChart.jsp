@@ -159,6 +159,101 @@ select {
 	border-top: 1px solid #D3D3D3;
 	position: relative;
 }
+i[class^=stt_]:after {
+    content: '';
+    display: block;
+    clear: both;
+    vertical-align: middle;
+    background: url(https://app.crm.co.kr/res/images/all/status_con.png) no-repeat;
+    background-position: 0 0;
+    width: 20px;
+    height: 20px;
+    margin: 0 auto;
+}
+.stt_building:after {
+    background-position: 0 -40px !important;
+}
+.stt_user:after {
+    background-position: -20px -40px !important;
+}
+.stt_userlock:after {
+    background-position: -40px -40px !important;
+}
+.left {
+	float: left;
+}
+.right {
+	float: right;
+}
+.cus, .coms {
+    border: 1px solid #e1e6eb;
+    width: 32%;
+    display: inline-block;
+    height: 150px;
+    padding-top: 1.5%;
+    border-radius: 5px;
+    color: #fff;
+    margin-top: 5px;
+}
+.com {
+    border: 1px solid #e1e6eb;
+    width: 32%;
+    display: inline-block;
+    height: 150px;
+    padding-top: 1.5%;
+    border-radius: 5px;
+    color: #fff;
+    margin-left: 5.5px; 
+    margin-top: 5px;
+}
+div.cusbox {
+    height: 60px;
+    margin: 15px 0;
+    color: #b3323e;
+    text-align: center;
+}    
+div.combox {
+    height: 60px;
+    margin: 15px 0;
+    color: #d46872;  
+    text-align: center;
+}
+div.comsbox {
+    height: 60px;
+    margin: 15px 0;
+    color: #fe9546;
+    text-align: center;
+}
+.cus p {
+    padding: 0 !important;
+    width: 80%;
+    height: 25px;
+    margin: 0 auto;
+    background: #b3323e;
+    color: #fff;
+    line-height: 25px;
+    text-align: center;
+}
+.com p {
+    padding: 0 !important;
+    width: 80%;
+    height: 25px;
+    margin: 0 auto;
+    background: #d46872;
+    color: #fff;
+    line-height: 25px;
+    text-align: center;
+}
+.coms p {
+    padding: 0 !important;
+    width: 80%;
+    height: 25px;
+    margin: 0 auto;
+    background: #fe9546;
+    color: #fff;
+    line-height: 25px;
+    text-align: center;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -278,7 +373,6 @@ function drawSalesMdRvnList(list) {
 							<col width="100" />
 						</colgroup>
 						<tbody>
-							<!-- col=4 -->
 							<tr>
 								<td>
 									<span class="srch_name">부서</span>
@@ -338,15 +432,27 @@ function drawSalesMdRvnList(list) {
 									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />신규 영업 활동
 								</div>
 								<div class="actvty_tLine1"></div>
-							</div>
-							<div class="sales_text_bot"></div>
-						</div>
-						<div class="new_sales_actvty">
-							<div class="sales_text">
-								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />당월 영업 실적 차트
+								<div class="cus left">
+									<div class="cusbox">
+										<i class="stt_building"></i>
+										<strong class="ng-binding">${clCnt}</strong>
+									</div>
+									<p> 고객사</p>
 								</div>
-								<div class="actvty_tLine1"></div>
+								<div class="com">
+									<div class="combox">
+										<i class="stt_user"></i>
+										<strong class="ng-binding">${ccCnt}</strong>
+									</div>
+									<p>고객</p>
+								</div>
+								<div class="coms right">
+									<div class="comsbox">
+										<i class="stt_userlock"></i>
+										<strong class="ng-binding">${ldCnt}</strong>
+									</div>
+									<p>잠재고객</p>
+								</div>
 							</div>
 							<div class="sales_text_bot"></div>
 						</div>
@@ -360,17 +466,6 @@ function drawSalesMdRvnList(list) {
 								<div class="actvty_tLine1"></div>
 							</div>
 							<div class="sales_text_bot" id="sales_rvn_chart"></div>
-						</div>
-					<div class="new_sales_actvty" >
-					</div>
-						<div class="new_sales_actvty">
-							<div class="sales_text">
-								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />당월 영업 실적
-								</div>
-								<div class="actvty_tLine1"></div>
-							</div>
-							<div class="sales_text_bot"></div>
 						</div>
 					</div>
 				</div>
