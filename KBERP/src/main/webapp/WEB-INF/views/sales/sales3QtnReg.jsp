@@ -922,19 +922,34 @@ pre {
 $(document).ready(function() {
 	console.log(${param.salesNum});
 	
+	// 메뉴 클릭
+	$(".left_area, .top_area").on("click", function() {
+		var params = $("#listForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "qtnBackAjax",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				closePopup();
+				$("#listForm").attr("action", "sales3QtnCont");
+				$("#listForm").submit();
+			},
+			error : function(req) {
+				console.log(req.responseText);
+			}
+		});
+	});
+	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
-		
-		var html = "";
-		
-		html += "<div class=\"popup_cont3\">작성중인 내용이 저장되지 않습니다.</div>";
-		html += "<div class=\"popup_cont4\">나가시겠습니까?</div>";
 		
 		makePopup({
 			bg : false,
 			bgClose : false,
 			title : "알림",
-			contents : html,
+			contents : popContTwoLine("작성중인 내용이 저장되지 않습니다.<br/>나가시겠습니까?"),
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
@@ -962,6 +977,7 @@ $(document).ready(function() {
 				name : "취소"
 			} ]
 		});
+		
 	});
 	
 	// 견적 - 상세정보 - 첨부파일
@@ -1672,9 +1688,6 @@ function drawList(list) {
 	}
 
 	$(".popup_box_md").html(html);
-	
-	
-	
 	
 }
 

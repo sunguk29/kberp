@@ -185,7 +185,21 @@ hr { /* 구분선 */
 	margin-left: 47.5px;
 	overflow-y: auto;
 }
+/* 의견 cont */
 .OpinionBox {
+	width: 830px;
+	height: 90px;
+	font-size: 10pt;
+	border: 1px solid gray;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+	margin-bottom: 5px;
+	background-color: #F2F2F2;
+}
+/* 예정된 일정 cont */
+.OpinionBox2 {
 	width: 830px;
 	height: 70px;
 	font-size: 10pt;
@@ -375,7 +389,7 @@ textarea {
 }
 .opbx {
 	width: 860px;
-	height: 305px;
+	height: 292px;
 	margin-left: 47.5px;
 	overflow-y: auto;
 }
@@ -634,6 +648,15 @@ pre {
 	cursor: pointer;
 	text-decoration: underline;
 }
+/* 의견 목록 cont */
+#opCont {
+	width: 750px;
+    height: 20px;
+    border: none;
+    margin: 5px 0px;
+    background: #F2F2F2;
+    padding-left: 0;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -656,7 +679,7 @@ $(document).ready(function() {
 			type : "post",
 			url : "qtnAddAjax",
 			dataType : "json",
-			data : params,
+// 			data : params,
 			success : function(res) {
 				$("#addForm").submit();
 			},
@@ -664,7 +687,6 @@ $(document).ready(function() {
 				console.log(req.responseText);
 			}
 		});
-
 	});
 	
 	// 다음 단계로 전환하기 버튼 : 계약 등록 페이지
@@ -1490,7 +1512,7 @@ function drawOpList(list) {
 	for(var data of list) {
 		html += "<div class=\"OpinionBox\">";
 		html += "<div class=\"name\">" + data.EMP_NAME + "(" + data.DEPT_NAME + " / " + data.RANK_NAME + ")" + "</div>";
-		html += "<div class=\"txtOp\">" + data.CONT + "</div>";
+		html += "<div class=\"txtOp\"><textarea id=\"opCont\">" + data.CONT + "</textarea></div>";
 		html += "<div class=\"dt\">" + data.RGSTRTN_DATE + "</div>";
 		if(data.EMP_NUM == ${sEmpNum}) {
 			html += "<div class=\"del\">삭제";
@@ -1587,7 +1609,7 @@ function drawSScList(list) {
 	var html = "";
 	
 	for(var data of list){
-		html += "<div class=\"OpinionBox\">";
+		html += "<div class=\"OpinionBox2\">";
 		html += "<div class=\"schdl_box_in\">";
 		html += "";
 		html += "";
