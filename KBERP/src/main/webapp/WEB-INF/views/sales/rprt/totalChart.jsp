@@ -46,14 +46,14 @@
 	margin-top: 10px;
 	font-size: 11pt;
 }
-.cont_right {
+.cont_left {
 	display: inline-block;
 	vertical-align: top;
 	width: 430px;
 	height: 100%;
 	padding-right: 33.5px;	
 }
-.cont_left {
+.cont_right {
 	display: inline-block;
 	vertical-align: top;
 	width: 430px;
@@ -133,6 +133,20 @@ select {
 	margin-right: 10px;
 	margin-left: 10px;
 }
+.mdRvnList {
+	width: 430px;
+	height: 20px;
+	border-bottom: 1px solid #D3D3D3;
+	position: relative;
+}
+.mfs {
+	font-size: 10pt;
+	color: #808080;
+}
+.mRvn {
+    position: absolute;
+    left: 62%;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -141,14 +155,14 @@ $(document).ready(function() {
 
 // 차트 데이터
 function getData() {
-	var params = $("#getForm").serialize();
+	var params =  $("#getForm").serialize();
 	$.ajax({
 		type : "post",
-		url : "totalNewSalesRankAjax",
+		url : "salesRvnAjax",
 		dataType : "json",
 		data : params,
 		success : function(res) {
-			makeChart(res.list);
+			salesRvnChart(res.salesRvnlist);
 		},
 		error : function(request, status, error) {
 			console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -156,27 +170,53 @@ function getData() {
 	});
 }
 
-// 차트 그래프
-function makeChart(list) {
-	console.log(list);
-	$('.sales_text_bot').highcharts({
-		chart: {
-			type: 'pie',
-			zoomType: 'x'
+// 당월 매출 실적 차트
+function salesRvnChart(list) {
+	$('#sales_rvn_chart').highcharts({
+		chart : {
+			type : 'column'
 		},
-		colors: ['#5CB3FF'],
-        series : [{
-        	name: '개수',
-        	data : list
-        }]
+		title : {
+			text : ''
+		},
+		xAxis : {
+			categories : [ list.name ],
+		},
+		yAxis : [ {
+			title : {
+				text : ''
+			},
+			labels: {
+			    format: '{value:,.0f}'
+			}
+		} ],
+		series : [ {
+			name : '매출',
+			data : list
+		} ]
 	});
 }
+
+function reloadSalesMdRvnList() {
+	$.ajax({
+		type : "post",
+		url : "saleMdRvnAjax",
+	});
+}
+
+function drawSalesMdRvnList(list) {
+	var html = "";
+	
+	html += "<div class=\"mdRvnList\"><span class=\"mfs\">상품이름</span><span class=\"mfs mRvn\">상품매출</span></div>";
+	
+	$("#sales_md_rvn_list").html(html);
+}
+
 </script>
 </head>
 <body>
-<form action="#" id="getForm" method="post">
-	<input type="hidden" name="size" value="4" />
-	<input type="hidden" name="series" value="1" />
+<form action="#" id="getForm">
+	<input type="hidden" name="rvnSize" value="${salesRvnCnt}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -259,26 +299,27 @@ function makeChart(list) {
 							</tr>
 						</tbody>
 					</table>
-					<dlv class="cont_right">
+					<div class="cont_left">
 						<div class="new_sales_actvty">
-						<div class="sales_text">
-							<div class="sales_text_top">
-								<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />당월 매출실적(상품별 실적)
+							<div class="sales_text">
+								<div class="sales_text_top">
+									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />당월 매출실적(상품별 실적)
+								</div>
+								<div class="actvty_tLine1"></div>
 							</div>
-							<div class="actvty_tLine1"></div>
-						</div>
-						<div class="sales_text_bot"></div>
-					</div>
-					<div class="new_sales_actvty">
-						<div class="sales_text">
-							<div class="sales_text_top">
-								<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />신규 영업 활동
+							<div class="sales_text_bot" id="sales_md_rvn_list">
 							</div>
-							<div class="actvty_tLine1"></div>
 						</div>
-						<div class="sales_text_bot"></div>
-					</div>
-					<div class="new_sales_actvty">
+						<div class="new_sales_actvty">
+							<div class="sales_text">
+								<div class="sales_text_top">
+									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />신규 영업 활동
+								</div>
+								<div class="actvty_tLine1"></div>
+							</div>
+							<div class="sales_text_bot"></div>
+						</div>
+						<div class="new_sales_actvty">
 							<div class="sales_text">
 								<div class="sales_text_top">
 									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />당월 영업실적차트
@@ -287,8 +328,8 @@ function makeChart(list) {
 							</div>
 							<div class="sales_text_bot"></div>
 						</div>
-					</dlv>
-					<dlv class="cont_left">
+					</div>
+					<div class="cont_right">
 						<div class="new_sales_actvty">
 							<div class="sales_text">
 								<div class="sales_text_top">
@@ -296,7 +337,7 @@ function makeChart(list) {
 								</div>
 								<div class="actvty_tLine1"></div>
 							</div>
-							<div class="sales_text_bot"></div>
+							<div class="sales_text_bot" id="sales_rvn_chart"></div>
 						</div>
 					<div class="new_sales_actvty" >
 					</div>
@@ -309,7 +350,7 @@ function makeChart(list) {
 							</div>
 							<div class="sales_text_bot"></div>
 						</div>
-					</dlv>
+					</div>
 				</div>
 			</div>
 			<!-- 페이징 영역 -->
