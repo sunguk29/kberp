@@ -679,7 +679,7 @@ $(document).ready(function() {
 			type : "post",
 			url : "qtnAddAjax",
 			dataType : "json",
-// 			data : params,
+ 			data : params,
 			success : function(res) {
 				$("#addForm").submit();
 			},
@@ -1473,7 +1473,7 @@ $(document).ready(function() {
 	}); // 일정 삭제 function end
 	
 	
-	
+	console.log("${data3.QTN_NUM}");
 	
 }); // document.ready End
 
