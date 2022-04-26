@@ -20,14 +20,10 @@
 	color: black;
 	font-weight: normal;
 }
-.board_table .board_table_hover td  {
-	color: #222222;
-	cursor: pointer;
+.board_table thead {
+	background-color: #F2F2F2;
 }
-.board_table .board_table_hover:hover  {
-	color: #4B94F2;
-	text-decoration: underline;
-}
+
 .srch_month {
 	display: inline-block;
 	vertical-align: top;
@@ -44,7 +40,7 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
-	$("#mainlist").on("click", "tr", function() {
+	$("#mainlist").on("click", "#clickmon", function() {
 		
 		$("#mon").val($(this).attr("mon"));
 		$("#actionForm").attr("action", "expnsRsltnEmpMnthlyList");
@@ -87,8 +83,8 @@ $(document).ready(function() {
 		
 		for(var data of list){
 			
-			html += "<tr class =\"board_table_hover\"  mon=\"" + data.DATE_MON + "\">";
-			html += "<td>" + data.DATE_MON +"</td>";
+			html += "<tr>";
+			html += "<td class=\"board_table_hover\" id =\"clickmon\" mon=\"" + data.DATE_MON + "\" >" + data.DATE_MON +"</td>";
 			if(data != null){
 				if(data.CRP){
 					html += "<td>" + data.CRP + "</td>";

@@ -3,103 +3,127 @@
 <mapper namespace="clntRprt">
 <!-- 신규고객사 개수 -->
 	<select id="ccAllCnt" resultType="hashmap" parameterType="hashmap">
-		SELECT CC.LAST, CC.THAT, CC.AVG, CC.CNT
-		FROM (SELECT  COUNT(*) AS LAST
-		   	  FROM CLNT_CMPNY
-			  WHERE TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM')
-		      AND DEL_CHECK IS NULL) CC
-		      INNER JOIN (SELECT  COUNT(*) AS THAT 
-		                  FROM CLNT_CMPNY 
-		                  WHERE TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
-		                  AND DEL_CHECK IS NULL) CC
-		       ON 1 = 1
-		       INNER JOIN (SELECT ROUND((CNT / 3), 1) AS AVG 
-		                   FROM (SELECT COUNT(*) AS CNT FROM CLNT_CMPNY 
-		                   WHERE RGSTRTN_DATE BETWEEN ADD_MONTHS(SYSDATE,-3) AND SYSDATE
-		                   AND DEL_CHECK IS NULL)) CC
-		       ON 1 = 1
-		       INNER JOIN (SELECT COUNT(*) AS CNT
-		                   FROM CLNT_CMPNY
-		                   WHERE DEL_CHECK IS NULL) CC
-		       ON 1 = 1
+		SELECT CC.LAST, CC.THAT, ROUND((CC.CNT / 3), 1) AS AVG, CC.CNT
+		FROM (SELECT COUNT(CASE WHEN TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM') THEN 1 END) LAST,
+				     COUNT(CASE WHEN TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM') THEN 1 END) THAT,
+				     COUNT(CASE WHEN RGSTRTN_DATE BETWEEN ADD_MONTHS(SYSDATE,-3) AND SYSDATE THEN 1 END) AVG,
+				     COUNT(*) AS CNT
+		FROM CLNT_CMPNY CC INNER JOIN EMP E
+                           ON CC.EMP_NUM = E.EMP_NUM
+                   INNER JOIN APNTM A
+				           ON E.EMP_NUM = A.EMP_NUM
+		WHERE DEL_CHECK IS NULL
+		<if test="deptNum != 0"> 
+			<choose>
+				<when test="deptNum == 1">
+					AND A.DEPT_NUM = 6
+				</when>
+				<when test="deptNum == 2">
+					AND A.DEPT_NUM = 7
+				</when>
+				<when test="deptNum == 3">
+					AND A.DEPT_NUM = 8
+				</when>				
+			</choose>
+		</if>
+		<choose>
+			<when test="mngEmp != null and mngEmp != ''"> <!-- 담당자텍스트 박스 -->
+				AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'
+			</when>
+		</choose>) CC
 	</select>
 
 <!-- 신규고객 개수 -->
 	<select id="ecAllCnt" resultType="hashmap" parameterType="hashmap">
-		SELECT EC.LAST, EC.THAT, EC.AVG, EC.CNT
-		FROM (SELECT  COUNT(*) AS LAST
-		   	  FROM ENTRPRS_CLNT
-			  WHERE TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM')
-		      AND DEL_CHECK IS NULL) EC
-		      INNER JOIN (SELECT  COUNT(*) AS THAT 
-		                  FROM ENTRPRS_CLNT
-		                  WHERE TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
-		                  AND DEL_CHECK IS NULL) EC
-		       ON 1 = 1
-		       INNER JOIN (SELECT ROUND((CNT / 3), 1) AS AVG 
-		                   FROM (SELECT COUNT(*) AS CNT FROM ENTRPRS_CLNT
-		                   WHERE RGSTRTN_DATE BETWEEN ADD_MONTHS(SYSDATE,-3) AND SYSDATE
-		                   AND DEL_CHECK IS NULL)) EC
-		       ON 1 = 1
-		       INNER JOIN (SELECT COUNT(*) AS CNT
-		                   FROM ENTRPRS_CLNT
-		                   WHERE DEL_CHECK IS NULL) EC
-		       ON 1 = 1
+		SELECT EC.LAST, EC.THAT, ROUND((EC.CNT / 3), 1) AS AVG, EC.CNT
+		FROM (SELECT COUNT(CASE WHEN TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM') THEN 1 END) LAST,
+		      		 COUNT(CASE WHEN TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM') THEN 1 END) THAT,
+		       		 COUNT(CASE WHEN RGSTRTN_DATE BETWEEN ADD_MONTHS(SYSDATE,-3) AND SYSDATE THEN 1 END) AVG,
+		       		 COUNT(*) AS CNT
+		FROM ENTRPRS_CLNT EC INNER JOIN EMP E
+			                 ON EC.MNGR_EMP_NUM = E.EMP_NUM
+			         INNER JOIN APNTM A
+			                 ON E.EMP_NUM = A.EMP_NUM
+		WHERE DEL_CHECK IS NULL
+		<if test="deptNum != 0"> 
+			<choose>
+				<when test="deptNum == 1">
+					AND A.DEPT_NUM = 6
+				</when>
+				<when test="deptNum == 2">
+					AND A.DEPT_NUM = 7
+				</when>
+				<when test="deptNum == 3">
+					AND A.DEPT_NUM = 8
+				</when>				
+			</choose>
+		</if>
+		<choose>
+			<when test="mngEmp != null and mngEmp != ''"> <!-- 담당자텍스트 박스 -->
+				AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'
+			</when>
+		</choose>) EC
+		
 	</select>
 <!-- 고객등급 개수 -->	
 	<select id="clntGrade" resultType="hashmap" parameterType="hashmap">
-		SELECT CCG.S, CCG.A, CCG.B, CCG.C, CCG.D
-		FROM (SELECT COUNT(*) AS S
-			  FROM CLNT_CMPNY
-			  WHERE GRADE_NUM = 0
-		      AND DEL_CHECK IS NULL) CCG 
-		      INNER JOIN ( SELECT COUNT(*) AS A
-		                   FROM CLNT_CMPNY
-		                   WHERE GRADE_NUM = 1
-		                   AND DEL_CHECK IS NULL) CCG
-		      ON 1 = 1
-		      INNER JOIN (SELECT COUNT(*) AS B
-		                  FROM CLNT_CMPNY
-		                  WHERE GRADE_NUM = 2
-		                  AND DEL_CHECK IS NULL) CCG
-		      ON 1 = 1
-		      INNER JOIN (SELECT COUNT(*) AS C
-		                  FROM CLNT_CMPNY
-		                  WHERE GRADE_NUM = 3
-		                  AND DEL_CHECK IS NULL) CCG
-		      ON 1 = 1 
-		      INNER JOIN (SELECT COUNT(*) AS D
-		                  FROM CLNT_CMPNY
-		                  WHERE GRADE_NUM = 4
-		                  AND DEL_CHECK IS NULL) CCG
-		              ON 1 = 1
+		SELECT COUNT(CASE WHEN GRADE_NUM = '0' THEN 1 END) AS S,
+		       COUNT(CASE WHEN GRADE_NUM = '1' THEN 1 END) AS A,
+		       COUNT(CASE WHEN GRADE_NUM = '2' THEN 1 END) AS B,
+		       COUNT(CASE WHEN GRADE_NUM = '3' THEN 1 END) AS C,
+		       COUNT(CASE WHEN GRADE_NUM = '4' THEN 1 END) AS D
+		FROM CLNT_CMPNY CC INNER JOIN EMP E
+                           ON CC.EMP_NUM = E.EMP_NUM
+                   INNER JOIN APNTM A
+				           ON E.EMP_NUM = A.EMP_NUM
+		WHERE DEL_CHECK IS NULL
+		<if test="deptNum != 0"> 
+			<choose>
+				<when test="deptNum == 1">
+					AND A.DEPT_NUM = 6
+				</when>
+				<when test="deptNum == 2">
+					AND A.DEPT_NUM = 7
+				</when>
+				<when test="deptNum == 3">
+					AND A.DEPT_NUM = 8
+				</when>				
+			</choose>
+		</if>
+		<choose>
+			<when test="mngEmp != null and mngEmp != ''"> <!-- 담당자텍스트 박스 -->
+				AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'
+			</when>
+		</choose>		
 	</select>
 
 <!-- 영업 고객수 -->
 	<select id="salesCnt" resultType="hashmap" parameterType="hashmap">
-		SELECT SC.CNT, SC.CNT1, SC.CNT2
-		FROM (SELECT COUNT(*) AS CNT
-			  FROM ENTRPRS_CLNT EC INNER JOIN EMP E
-			                               ON EC.MNGR_EMP_NUM = E.EMP_NUM
-				                   INNER JOIN APNTM A
-				                           ON E.EMP_NUM = A.EMP_NUM
-				WHERE A.DEPT_NUM = 6
-				AND EC.DEL_CHECK IS NULL) SC
-		      INNER JOIN (SELECT COUNT(*) AS CNT1
-		                  FROM ENTRPRS_CLNT EC INNER JOIN EMP E
-		                                               ON EC.MNGR_EMP_NUM = E.EMP_NUM
-		                                       INNER JOIN APNTM A
-		                                               ON E.EMP_NUM = A.EMP_NUM
-		                  WHERE A.DEPT_NUM = 7
-		                  AND EC.DEL_CHECK IS NULL) SC
-		      ON 1 = 1
-		      INNER JOIN (SELECT COUNT(*) AS CNT2
-		                  FROM ENTRPRS_CLNT EC INNER JOIN EMP E
-		                                               ON EC.MNGR_EMP_NUM = E.EMP_NUM
-		                                       INNER JOIN APNTM A
-		                                               ON E.EMP_NUM = A.EMP_NUM
-		                  WHERE A.DEPT_NUM = 8
-		                  AND EC.DEL_CHECK IS NULL) SC
-		     ON 1 = 1
+		SELECT COUNT(CASE WHEN A.DEPT_NUM = 6 THEN 1 END) CNT,
+    		   COUNT(CASE WHEN A.DEPT_NUM = 7 THEN 1 END) CNT1,
+   			   COUNT(CASE WHEN A.DEPT_NUM = 8 THEN 1 END) CNT2
+		FROM ENTRPRS_CLNT EC INNER JOIN EMP E
+					                 ON EC.MNGR_EMP_NUM = E.EMP_NUM
+					         INNER JOIN APNTM A
+					                 ON E.EMP_NUM = A.EMP_NUM
+		WHERE DEL_CHECK IS NULL
+		<if test="deptNum != 0"> 
+			<choose>
+				<when test="deptNum == 1">
+					AND A.DEPT_NUM = 6
+				</when>
+				<when test="deptNum == 2">
+					AND A.DEPT_NUM = 7
+				</when>
+				<when test="deptNum == 3">
+					AND A.DEPT_NUM = 8
+				</when>				
+			</choose>
+		</if>
+		<choose>
+			<when test="mngEmp != null and mngEmp != ''"> <!-- 담당자텍스트 박스 -->
+				AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'
+			</when>
+		</choose>
 	</select>
 </mapper>

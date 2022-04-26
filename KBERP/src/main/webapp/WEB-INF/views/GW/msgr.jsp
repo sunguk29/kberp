@@ -482,8 +482,10 @@ td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 <script type="text/javascript">
 var refreshInterval = null;
 
+
+
 $(document).ready(function() {
-	
+
 	reloadList();
 	
 	$("#main_msgr_btn, .srch_img").on("click", function() {
@@ -585,10 +587,11 @@ $(document).ready(function() {
 	
 	
 	
-	$("div").on("click", ".chat_list1", function() {	
-	//	refreshInterval = setInterval(readCont, 1000);
-	//	clearInterval(refreshInterval);
-		readCont();
+	$("body").on("click", ".chat_list1", function() {	
+		
+		clearInterval(refreshInterval);
+		
+		refreshInterval = setInterval(readCont, 1000);
 		
 		$("#chatNum").val($(this).attr("chatNum"));
 		
@@ -596,7 +599,7 @@ $(document).ready(function() {
 		
 		html += "		<div class = \"right_box\">                                                      ";
 		html += "			<div class = \"rcpnt_rank_box\">                                                 ";
-		html += "				<div id = \"rcpnt_rank\"> ${param.empNum} ${RankName} ${EmpName} </div>";
+		html += "				<div id = \"rcpnt_rank\"> ${empNum} ${RankName} ${EmpName} </div>";
 		html += "			</div>		                                                                  	 ";
 		html += "			                                                                              	 ";
 		html += "			<div class = \"chat_room\">                                                      ";
@@ -624,11 +627,15 @@ $(document).ready(function() {
 		html += "				</div>";
 		html += "			</div>";
 		html += "		</div>";
-		init();
+	//	init();
 		
 		$(".msgr_main").remove();
 		$(".right_box").html(html);
-		$(".chat_dtl").slimScroll({height:"545px"});
+		
+		readCont();
+		
+		$(".chat_dtl").slimScroll({height:"545px",
+								  start: "bottom"});
 		
 		
 		$("#insertBtn").on("click", function() {
@@ -806,10 +813,9 @@ function insertCont() {
 	
 
 function readCont() {
-	clearInterval(refreshInterval);
+//	clearInterval(refreshInterval);
 	// 채팅 인서트는 성공했지만, 리스트띄우는건 실패. 오류명 undefined 'parsererror' 
 	var params = $("#readForm").serialize();
-	console.log(params);
 	$.ajax({
 		type : "post",
 		url : "getContListAjax",
@@ -817,6 +823,8 @@ function readCont() {
 		data : params,
 		success : function(res) {
 			console.log("성공")
+				console.log(res.list);
+				console.log(res);
 			if(res.list.length != 0) {
 				var html = "";
 				for(var i = 0 ; i < res.list.length; i++) {
@@ -836,7 +844,7 @@ function readCont() {
 					}
 				
 					$(".chat_dtl").append(html);
-					$("#lastChatNo").val(res.list[res.list.length -1].CONT_NUM);
+					$("#lastContNo").val(res.list[res.list.length -1].CONT_NUM);
 					
 					scrollDown()
 				}
@@ -896,8 +904,7 @@ function reloadList() {
 
 function scrollDown() {
  $(".chat_dtl").scrollTop($(".chat_dtl")[0].scrollHeight);
- 	scrollTo = "500"
- 
+ 	
 }
 
 
@@ -942,6 +949,7 @@ var chat_list1 = document.getElementsByClassName("chat_list1");
 
 function handleClick(event) {
     console.log(event.target);
+    console.log(this);
     console.log(event.target.classList);
 
     if(event.target.classList[1] == "clicked") {
@@ -975,9 +983,9 @@ function init() {
 	
 	
 	<!-- 내용영역 -->
-<!-- 		<div class="page_title_bar">
-			<div class="page_title_text">메신저</div>
-		</div> -->
+		<!-- <div class="page_title_bar">
+			 <div class="page_title_text">메신저</div>
+			 </div> -->
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
@@ -988,8 +996,9 @@ function init() {
 			</form>
 			
 			<form action = "#" id = "readForm">
-				<input type="text" id = "lastChatNo" name = "lastChatNo" value = "${maxNo}">
+				<input type="text" id = "lastContNo" name = "lastContNo" value = "${maxNo}">
 				<input type ="text" id = "chatNum" name = "chatNum" value = "${chatNum}"/>
+				<input type ="text" id = "sEmpNum" name = "sEmpNum" value = "${sEmpNum}"/>
 			</form>
 			
 				<div class = "main_box">

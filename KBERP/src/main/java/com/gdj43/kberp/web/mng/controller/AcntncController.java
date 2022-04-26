@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
+import com.gdj43.kberp.web.GW.service.IAprvlService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 import com.gdj43.kberp.web.mng.service.IAcntncService;
 
@@ -34,6 +35,9 @@ public class AcntncController {
 	
 	@Autowired
 	public IAcntncService iAcntncService;
+	
+	@Autowired
+	public IAprvlService iAprvlService;
 	
 	// 지출결의서 상세보기
 	@RequestMapping(value = "/expnsRsltnDtlView")
@@ -277,7 +281,7 @@ public class AcntncController {
 			// 지출결의서관리 상세보기로 이동
 			mav.addObject("res", "expnsRsltnGo");
 			mav.addObject("top", "34");
-			mav.addObject("menuNum", "84");
+			mav.addObject("menuNum", "39");
 			mav.addObject("menuType", "M");
 			
 			
@@ -289,12 +293,19 @@ public class AcntncController {
 				// 내부비용관리 상세보기로 이동
 				mav.addObject("res", "intrnlCostGo");
 				mav.addObject("top", "34");
-				mav.addObject("menuNum", "38");
+				mav.addObject("menuNum", "39");
 				mav.addObject("menuType", "M");
 				
 			} else {
-				System.out.println("조회된 전표가 없음!");
-				mav.addObject("res", "failed");
+				
+				int cntrctCheck = iCommonService.getIntData("ChitMng.cntrctCheck", params);
+				
+				if(cntrctCheck == 1) {
+					mav.addObject("res", "cntrctGo");
+					mav.addObject("top", "34");
+					mav.addObject("menuNum", "39");
+					mav.addObject("menuType", "M");
+				}
 			}
 		}
 		
@@ -399,5 +410,19 @@ public class AcntncController {
 		return mav;
 	}
 	
+	// 영업매출 상세보기
+	@RequestMapping(value = "/cntrctDtlView")
+	public ModelAndView cntrctDtlView(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("ChitMng.cntrctDtlView", params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("mng/cntrctDtlView");
+		
+		return mav;
+	}
+	
+	// 결재요청
 	
 }

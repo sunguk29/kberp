@@ -649,6 +649,10 @@ hr { /* 구분선 */
 	display : none;
 }
 </style>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	//목록 버튼 클릭시 
@@ -656,21 +660,12 @@ $(document).ready(function() {
 		// 내용이 입력되어있으면 팝업창 띄움
 		if($("#leadName").val() != "" || $("#clntName").val() != ""  || 
 		   $("#ccName").val() != "" || $("#mngEmp").val() != "" ) {
-			var html = "";
-			
-			html += "<div class=\"popup_cont1\">";
-			html += 	"<div class=\"msg_1\">내용이 저장되지 않았습니다.</div>";
-			html += 	"<div class=\"msg_2\">페이지를 나가시겠습니까?</div>";
-			html += "</div>";
 			
 			makePopup({
 				bg : true,
 				bgClose : false,
 				title : "알림",
-				contents : html,
-				contentsEvent : function() {
-					
-				},
+				contents : popContTwoLine("내용이 저장되지 않았습니다.<br/>페이지를 나가시겠습니까?"),
 				buttons : [{
 				name : "확인",
 				func:function() {
@@ -722,56 +717,48 @@ $(document).ready(function() {
 	// 저장버튼
 	$("#writeBtn").on("click", function() {
 		if(checkEmpty("#leadName")) {
-			alert("리드명을 입력하세요.");
-			$("#leadName").focus();
+			makeAlert("필수 정보 알림", popContOneLine("리드명을 입력하세요."), function() {
+				$("#leadName").focus();				
+			});
 		} else if(checkEmpty("#clntName")) {
-			alert("고객명을 입력하세요.");
-			$("#clntName").focus();
+			makeAlert("필수 정보 알림", popContOneLine("고객명을 입력하세요."), function() {
+				$("#clntName").focus();				
+			});
 		} else if(checkEmpty("#ccName")) {
-			alert("고객사명을 입력하세요.");
-			$("#ccName").focus();
-		} else if(checkEmpty("#rp")) {
-			alert("인지경로를 입력하세요.");
-			$("#rp").focus();
+			makeAlert("필수 정보 알림", popContOneLine("고객사명을 입력하세요."), function() {
+				$("#ccName").focus();				
+			});
 		} else if(checkEmpty("#mngEmp")) {
-			alert("담당자를 입력하세요.");
-			$("#mngEmp").focus();
-		} else if(checkEmpty("#psblCheck")) {
-			alert("가능여부를 입력하세요.");
-			$("#psblCheck").focus();		
+			makeAlert("필수 정보 알림", popContOneLine("담당자를 입력하세요."), function() {
+				$("#mngEmp").focus();				
+			})
+		} else if(checkEmpty("#psblCheck")) {	
+			makeAlert("필수 정보 알림", popContOneLine("가능여부를 입력하세요."), function() {
+				$("#psblCheck").focus();									
+			});	
 		} else {	
-			var html = "";
-			
-			html += "<div class=\"popup_cont2\">저장하시겠습니까?</div>";
 			
 			makePopup({
 				depth : 1,
 				bg : false,
 				bgClose : false,
 				title : "알림",
-				contents : html,
+				contents : popContOneLine("저장하시겠습니까?"),
 				contentsEvent : function() {					
 				},
 				buttons : [{
 					name : "저장",
-					func:function() {
-						var html = "";
-						
-						html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
-						
+					func:function() {						
 						// 셀렉트박스로 진행상태-영업기회전환 수정 시 영업기회 등록페이지로 이동 
 						// 영업기회 등록에서 저장안할 시 psNum은 업데이트 안됨 
 						if($("#psNum").val() == 2) {
-							var ltshtml = "";
-							
-							ltshtml += "<div class=\"popup_cont2\">해당 리드가 영업기회로 전환되었습니다.</div>";
 							
 							makePopup({
 								depth : 2,
 								bg : true,
 								bgClose : false,
 								title : "영업기회로 전환",
-								contents : ltshtml,
+								contents : popContOneLine("해당 리드가 영업기회로 전환되었습니다."),
 								width : 400,
 								height : 180,
 								buttons : {
@@ -798,7 +785,7 @@ $(document).ready(function() {
 															$("#listForm").attr("action", "sales1SalesChncReg"); 
 															$("#listForm").submit(); 
 														} else {
-															alert("수정중 문제가 발생하였습니다.");
+															makeAlert("알림", popContOneLine("수정중 문제가 발생하였습니다."));
 														}
 													},
 													error : function(request, status, error) {
@@ -820,7 +807,7 @@ $(document).ready(function() {
 								bg : true,
 								bgClose : false,
 								title : "저장 완료",
-								contents : html,
+								contents : popContOneLine("저장되었습니다."),
 								width : 400,
 								height : 180,
 								buttons : {
@@ -846,7 +833,7 @@ $(document).ready(function() {
 														if(res.res == "success") {
 															$("#listForm").submit();
 														} else {
-															alert("수정중 문제가 발생하였습니다.");
+															makeAlert("알림", popContOneLine("수정중 문제가 발생하였습니다."));
 														}
 													},
 													error : function(request, status, error) {
@@ -1133,46 +1120,60 @@ function ecAddPopup() {
 		buttons : [{
 			name : "등록",
 			func:function() {
-				var html = "";
-				
-				html += "<div class=\"popup_cont2\">저장되었습니다.</div>";
-				
-				makePopup({
-					depth : 4,
-					bg : true,
-					bgClose : true,
-					title : "저장 완료",
-					contents : html,
-					width : 400,
-					height : 180,
-					buttons : {
-						name : "확인",
-						func : function() {
-							var params = $("#ccAddForm").serialize(); 
-							
-							$.ajax({
-								type : "post",
-								url : "leadAction/ecInsert", 
-								dataType : "json",
-								data : params,
-								success : function(res) {
-									if(res.res == "success") {
-										$("#ecSearchTxt").val("");
-										$("#ecPopupForm #page").val("1");
-										$("#ecBtn").click(); 
-										closePopup(4);
-										closePopup(2);
-									} else {
-										alert("작성 중 문제가 발생하였습니다.");
+				if(checkEmpty("#clntName")) {
+					makeAlert("필수 정보 입력", popContOneLine("고객명을 입력하세요."), function() {
+						$("#clntName").focus();						
+					});
+				} else if(checkEmpty("#clntCmpnyName")) {
+					makeAlert("필수 정보 입력", popContOneLine("고객사명을 입력하세요."), function() {
+						$("#clntCmpnyName").focus();						
+					});
+				} else if(checkEmpty("#mbl")) {
+					makeAlert("필수 정보 입력", popContOneLine("휴대폰번호를 입력하세요."), function() {
+						$("#mbl").focus();											
+					});
+				} else if (checkEmpty("#mngName")) {
+					makeAlert("필수 정보 입력", popContOneLine("담당자를 입력하세요."), function() {
+						$("#mngName").focus();						
+					});
+				} else {
+					makePopup({
+						depth : 4,
+						bg : true,
+						bgClose : true,
+						title : "저장 완료",
+						contents : popContOneLine("저장되었습니다."),
+						width : 400,
+						height : 180,
+						buttons : {
+							name : "확인",
+							func : function() {
+								var params = $("#ccAddForm").serialize(); 
+								
+								$.ajax({
+									type : "post",
+									url : "leadAction/ecInsert", 
+									dataType : "json",
+									data : params,
+									success : function(res) {
+										if(res.res == "success") {
+											$("#ecSearchTxt").val("");
+											$("#ecPopupForm #page").val("1");
+											$("#ecBtn").click(); 
+											closePopup(4);
+											closePopup(2);
+										} else {
+											makeAlert("알림", popContOneLine("작성중 문제가 발생하였습니다."));
+										}
+									},
+									error : function(request, status, error) {
+										console.log(request.responseText);
 									}
-								},
-								error : function(request, status, error) {
-									console.log(request.responseText);
-								}
-							});
+								});
+							}
 						}
-					}
-				}); // 저장완료 makePopup end
+					}); // 저장완료 makePopup end
+				} // else end
 			} // 등록 func end
 		}, {
 			name : "취소"
@@ -1434,13 +1435,6 @@ function drawPaging(pb, sel) {
 	
 	$(sel).html(html);
 }
-function checkEmpty(sel) {
-	if($.trim($(sel).val()) == "") {
-		return true;
-	} else {
-		return false;
-	}
-}	
 function uploadName(e) {
 	var files = e.files;
 	var leadfilename = files[0].name;

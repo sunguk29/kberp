@@ -39,10 +39,6 @@
 	color: #000000;
 }
 
-.board_table thead {
-	background-color: #F2F2F2;
-}
-
 .total {
 	border-collapse: collapse;
 	font-size: 10.5pt;

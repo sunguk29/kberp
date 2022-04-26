@@ -273,15 +273,16 @@ select {
 
 .sales_text_bot{
 	width: 428px;
-	height: 200px;
-	border: 1px solid #000;
-	margin-top: 10px;
-	font-size: 11pt;
+    height: 230px;
+    border: 1px solid #000;
+    margin-top: 10px;
+    font-size: 11pt;
+    position: relative;
 }
 
 /* 각 그래프 영역 크기 */
 .bsns_type{
-	min-width: 415px;
+	width: 100%;
 	height: 195px;
 	margin : 0 auto;
 }
@@ -290,20 +291,68 @@ select {
 	vertical-align: top;
 	width: 430px;
 	height: 100%;
-	padding-right: 33.5px;	
 }
 .cont_left {
 	display: inline-block;
 	vertical-align: top;
 	width: 430px;
 	height: 100%;
-	padding-left: 33.5px;	
+	padding-right: 33.5px;		
+}
+.ingArea{
+	font-size: 10pt;
+	font-weight : bold;
+}
+.cir {
+	display: inline-block;
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    line-height: 85px;
+    text-align: center;
+    margin-top: 5px;
+    margin-left: 45px;
+}
+.half_cir {
+	display: inline-block;
+    width: 50px;
+    height: 35px;
+    border-radius: 35px;
+    line-height: 35px;
+    text-align: center;
+}
+.rec {
+	display: inline-block;
+    background-color: #f2f3f5;
+    border-right: 7px solid #e6e6e6;
+    width: 180px;
+    height: 54px;
+    line-height: 54px;
+    text-align: center;
+    vertical-align: middle;
+}
+.actvty_tLine1 {
+    background-color: #4B94F2;
+    width: 100%;
+    height: 2px;
+}
+.prgrs_step_img {
+	background-image: url(resources/images/sales/prgrs_step.png);
+    background-size: 100px 280px;
+    background-repeat: no-repeat;
+    background-position: 0px center;
+    width: 100px;
+    height: 280px;
+    margin-top: 10px;
 }
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
 	
 	getData();
+	getPrgrsCnt();
+	
+	
 
 	/* 담당자 팝업 */
 	$("#mngBtn").on("click", function() {
@@ -439,11 +488,43 @@ $(document).ready(function() {
 	        }]
 		});
 	}
-
+	
+	/* 진행상태 데이터 가져오기  */
+	function getPrgrsCnt() {
+		var params = $("#getForm").serialize();
+		$.ajax({
+			type : "post",
+			url : "prgrsChartAjax",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				drawPrgrsList(res.ingCnt, res.endCnt, res.failCnt, res.totalCnt);
+			},
+			error : function(request, status, error) {
+				console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+			}
+		});
+	}
 }); //jqeury End
 
+/* 진행상태 그리기  */
+function drawPrgrsList(ingCnt, endCnt, failCnt, totalCnt) {
+	var html = "";
+	
+	html += "<div class=\"cir\" style=\"background-color:rgb(255,194,54);\">진행중</div><div class=\"half_cir\" style=\"background-color:rgb(255,194,54);\">"+Math.round((ingCnt/totalCnt*100))+"%</div><div class = \"rec\">"+ingCnt+"건</div><br/>";
+	html += "<div class=\"cir\" style=\"background-color:rgb(96,187,135);\">성공</div><div class=\"half_cir\" style=\"background-color:rgb(96,187,135);\">"+Math.round((endCnt/totalCnt*100))+"%</div><div class = \"rec\">"+endCnt+"건</div><br/>";
+	html += "<div class=\"cir\" style=\"background-color:rgb(88,193,183);\">실패</div><div class=\"half_cir\" style=\"background-color:rgb(88,193,183);\">"+Math.round((failCnt/totalCnt*100))+"%</div><div class = \"rec\">"+failCnt+"건</div>";
+	
+	$(".ingArea").html(html);
+}
 
-
+function drawPrgrsStep(){
+	var html = "";
+	
+	html += "";
+	
+	$(".prgrs_step").html(html);
+}
 
 /* 담당자 팝업 Ajax */
 function drawMngList() {
@@ -604,51 +685,42 @@ function drawMngPaging(pb) {
 						</table>
 						<form action="#" id="getForm" method="post">
 						<input type="hidden" name="size" value="3" />
-						<dlv class="cont_right">
-							<div class="new_sales_actvty">
-							<div class="sales_text">
-								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />진행상태
-								</div>
-								<div class="actvty_tLine1"></div>
-							</div>
-							<div class="sales_text_bot">
-							</div>
-						</div>
 						<div class="new_sales_actvty">
-							<div class="sales_text">
-								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />진행단계
-								</div>
-							</div>
-							<div class="sales_text_bot">
-								<div class="prgrs_stage"></div>
-							</div>
-						</div>
-
-						</dlv>
-						<dlv class="cont_left">
-							<div class="new_sales_actvty">
 								<div class="sales_text">
 									<div class="sales_text_top">
 										<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />사업유형
 									</div>
-									<span class="bsns_type"></span>
+									<div class="actvty_tLine1"></div>
+									<div class="bsns_type"></div>
 								</div>
-							</div>
+						</div>
+						<br/>
+						<div class="cont_left">
 							<div class="new_sales_actvty">
-							<div class="sales_text">
-								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />영업담당
+								<div class="sales_text">
+									<div class="sales_text_top">
+										<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />진행상태
+									</div>
+									<div class="actvty_tLine1"></div>
 								</div>
-								<div class="actvty_cntrct"></div>
-							</div>
-							<div class="sales_text_bot">
+								<div class="ingArea"></div>
 							</div>
 						</div>
-
-						</dlv>
-					
+						<div class="cont_right">
+							<div class="new_sales_actvty">
+								<div class="sales_text">
+									<div class="sales_text_top">
+										<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />진행단계
+									</div>
+									<div class="actvty_tLine1"></div>
+								</div>
+								<div class="prgrs_step_img"></div>
+								<div class="prgrs_step">
+							
+								</div>
+							</div>
+						</div>
+						</form>
 					<!-- class="bodyWrap" end -->
 					</div>
 				<!-- class="body" end -->
