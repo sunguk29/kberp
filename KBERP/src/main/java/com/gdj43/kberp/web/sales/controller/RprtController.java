@@ -222,6 +222,8 @@ public class RprtController {
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
+		//영업 전체 개수
+		int totalCnt = iCommonService.getIntData("salesRprt.getTotalCnt", params);
 		//영업 종료(실패)개수
 		int failCnt = iCommonService.getIntData("salesRprt.getFailCnt", params);
 		//영업 종료(성공)개수
@@ -229,6 +231,7 @@ public class RprtController {
 		//영업 진행중 개수
 		int ingCnt = iCommonService.getIntData("salesRprt.getIngCnt", params);
 		
+		modelMap.put("totalCnt", totalCnt);
 		modelMap.put("failCnt", failCnt);
 		modelMap.put("endCnt", endCnt);
 		modelMap.put("ingCnt", ingCnt);
