@@ -188,7 +188,6 @@ public class RprtController {
 	}
 	
 	// 종합차트 화면
-<<<<<<< HEAD
  	@RequestMapping(value = "/totalChart")
 	public ModelAndView totalChart(ModelAndView mav) throws Throwable {
 		
@@ -208,21 +207,6 @@ public class RprtController {
 		
 		return mav;
 	}
-=======
-	 	@RequestMapping(value = "/totalChart")
-		public ModelAndView totalChart(ModelAndView mav) throws Throwable {
-			
-			int salesRvnCnt = iCommonService.getIntData("salesRprt.getSalesRvnCnt");
-			int sumRvn = iCommonService.getIntData("salesRprt.getSalesMdSumRvn");
-			
-			mav.addObject("salesRvnCnt", salesRvnCnt); // 당월 매출 실적
-			mav.addObject("sumRvn", sumRvn); // 당월 매출 합계
-			
-			mav.setViewName("sales/rprt/totalChart");
-			
-			return mav;
-		}
->>>>>>> branch 'main' of https://github.com/axia911/gdj43.git
 	
 	// 당월 매출 실적
 	@RequestMapping(value = "/salesRvnAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
