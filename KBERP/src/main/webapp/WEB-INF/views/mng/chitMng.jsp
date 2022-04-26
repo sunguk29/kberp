@@ -559,7 +559,7 @@ $(document).ready(function() {
 		            html2 += "  </table>                         ";
 		            html2 += "</div>                             ";
 		            
-		            //참조자 선택 팝업
+		            // 참조자 선택 팝업
 					makePopup({
 						depth : 2,
 						bg : false,
@@ -625,7 +625,30 @@ $(document).ready(function() {
 						   	 });
 							
 						}
-					});
+						buttons : [{
+							name : "확인",
+							func: function() {
+						    	// 참조인 체크 된 값 가져오기
+					  	    	var rfrnc_emp_num_arr = [];
+					   	    	var rfrnc_emp_name_arr = [];
+					   	    	$("input[name=aprvlerChk]:checked").each(function() {
+					   		    	var empNum = $(this).attr("aprvlerNum");
+					   		    	var empName = $(this).attr("aprvlerName");
+					   				rfrnc_emp_num_arr.push(empNum);
+					   				rfrnc_emp_name_arr.push(empName);
+					   	    	});
+					   	    	console.log("참조인 체크값 : " + rfrnc_emp_num_arr, rfrnc_emp_name_arr)
+					   	    	$("#rfrncInput").val(rfrnc_emp_name_arr);
+					   	    	$("#rfrncList").val(rfrnc_emp_num_arr);
+					   	    	closePopup(2);
+							}
+						}, {
+							name : "취소"
+						}]
+					}); /* 참조자 선택 팝업 끝 */
+					
+					$(".empinqry_area").slimScroll({height: "255px"},{width: "450px"}); // 슬림 스크롤
+					
 				});
 			},
 			buttons : [{
