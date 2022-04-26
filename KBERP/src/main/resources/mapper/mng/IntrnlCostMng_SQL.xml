@@ -85,8 +85,8 @@
 	</select>
 	
 	<insert id="writeIntrnlCostMng" parameterType="hashmap">
-		<selectKey order="BEFORE" keyProperty="CHIT_NUM" resultType="int">
-			SELECT TO_NUMBER(TO_CHAR(SYSDATE, 'YYMMDD') || NVL(TO_CHAR(MAX(SUBSTR(CHIT_NUM, 7))), '00')) + 1
+		<selectKey order="BEFORE" keyProperty="CHIT_NUM" resultType="BigInteger">
+			SELECT TO_NUMBER(TO_CHAR(SYSDATE, 'YYMMDD') || NVL(TO_CHAR(MAX(SUBSTR(CHIT_NUM, 7))), '0000')) + 1
 			FROM (  SELECT CHIT_NUM, RGSTRTN_DATE_HR
 			        FROM INTRNL_COST_MNG
 			        UNION

@@ -551,16 +551,16 @@
 		       WHERE DEL_CHECK IS NULL ) M
 		WHERE M.RNUM BETWEEN #{startCount} AND #{endCount}
 		AND M.SALES_STS = '판매가능'
-		AND M.MD_GRADE = #{mdGrade}
 	</select>
 	
 	<!-- 견적(등록) 상품 리스트 -->
 	<select id="mdList" parameterType="hashmap" resultType="hashmap">
 		SELECT CC.CLNT_CMPNY_NAME, MD.MD_NAME, MD.INTRST_RATE, DECODE(MD_GRADE_NUM, 0, 'S', 1, 'A', 2, 'B', 3, 'C', 4, 'D', 5, 'E') AS MD_GRADE, 
-		       DECODE(MD.LOAN_PRD, 0, '6개월', 1, '1년', 2, '3년', 3, '5년') AS LOAN_PRD, MD.LIMIT_AMNT, MD.MD_NUM
+		       DECODE(MD.LOAN_PRD, 0, '6개월', 1, '1년', 2, '3년', 3, '5년') AS LOAN_PRD, MD.LIMIT_AMNT, MD.MD_NUM, MD.SALES_STS_NUM
 		FROM CLNT_CMPNY CC INNER JOIN MD MD
 		                           ON CC.GRADE_NUM = MD.MD_GRADE_NUM
-		WHERE CC.CLNT_CMPNY_NUM = #{ccn}
+		WHERE MD.SALES_STS_NUM = 0
+		AND CC.CLNT_CMPNY_NUM = #{ccn}
 	</select>
 	
 	
