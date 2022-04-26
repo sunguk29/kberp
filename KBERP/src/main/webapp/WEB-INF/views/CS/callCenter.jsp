@@ -1360,7 +1360,7 @@ $(document).ready(function() {
 				name : "닫기"
 			}]
 		});
-	});
+	}); // 신규고객 팝업 끝
 	
 	
 	// 상담노트 저장 팝업
@@ -1431,11 +1431,12 @@ $(document).ready(function() {
 	
 }); // document 끝
 
+// 다음 우편번호
 function execDaumPostcode() {
     daum.postcode.load(function(){
         new daum.Postcode({
             oncomplete: function(data) {
-              // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+              // 팝업에서 검색결과 항목을 클릭했을때 해당 입력칸에 값 넘기기
               $("#zip_code").val(data.zonecode);
               $("#adrs").val(data.roadAddress);
             }
