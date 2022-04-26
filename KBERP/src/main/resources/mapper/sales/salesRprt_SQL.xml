@@ -125,4 +125,32 @@
 		SELECT COUNT(*) AS CNT
 		FROM SALES
 	</select>
+	
+	<!-- 영업기회 개수 -->
+	<select id="getSalesChncCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SALES
+		WHERE PRGRS_STS_NUM = 17
+	</select>
+	
+	<!-- 제안 개수 -->
+	<select id="getSgstnCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SALES
+		WHERE PRGRS_STS_NUM = 27
+	</select>
+	
+	<!-- 견적 개수 -->
+	<select id="getQtnCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SALES
+		WHERE PRGRS_STS_NUM = 37
+	</select>
+	
+	<!-- 계약 개수 -->
+	<select id="getCntrctCnt" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM SALES
+		WHERE PRGRS_STS_NUM = 47
+	</select>
 </mapper>

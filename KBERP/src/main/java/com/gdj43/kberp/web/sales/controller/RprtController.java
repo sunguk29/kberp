@@ -257,4 +257,29 @@ public class RprtController {
 		
 		return mapper.writeValueAsString(modelMap);
 	}
+	
+	// 영업 차트 진행단계 개수
+	@RequestMapping(value = "/prgrsStepAjax", method=RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String prgrsStepAjax(HashMap<String, String> params, ModelAndView mav) throws Throwable{
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		//영업기회 개수
+		int salesChncCnt = iCommonService.getIntData("salesRprt.getSalesChncCnt", params);
+		//제안 개수
+		int sgstnCnt = iCommonService.getIntData("salesRprt.getSgstnCnt", params);
+		//견적 개수
+		int qtnCnt = iCommonService.getIntData("salesRprt.getQtnCnt", params);
+		//계약 개수
+		int cntrctCnt = iCommonService.getIntData("salesRprt.getCntrctCnt", params);
+		
+		modelMap.put("salesChncCnt", salesChncCnt);
+		modelMap.put("sgstnCnt", sgstnCnt);
+		modelMap.put("qtnCnt", qtnCnt);
+		modelMap.put("cntrctCnt", cntrctCnt);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 }

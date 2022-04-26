@@ -303,6 +303,11 @@ select {
 	font-size: 10pt;
 	font-weight : bold;
 }
+.prgrs{
+	font-size: 10pt;
+    font-weight: bold;
+    padding-left: 45px;
+}
 .cir {
 	display: inline-block;
     width: 85px;
@@ -337,6 +342,7 @@ select {
     height: 2px;
 }
 .prgrs_step_img {
+	display: inline-block;
 	background-image: url(resources/images/sales/prgrs_step.png);
     background-size: 100px 280px;
     background-repeat: no-repeat;
@@ -345,13 +351,35 @@ select {
     height: 280px;
     margin-top: 10px;
 }
+.prgrs_step{
+	display: inline-block;
+	font-size: 10pt;
+	font-weight : bold;
+}
+ul{
+	display: inline-block;
+	vertical-align : top;
+	list-style: none;
+	margin-top: 0;
+}
+.prgrs_step_cont{
+	display:inline-block;
+	width : 200px;
+	height : 100px;
+}
+.step{	
+	margin-top : 15px;
+}
+li span{
+	margin-right : 10px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
 	
 	getData();
 	getPrgrsCnt();
-	
+	getPrgrsStepCnt();
 	
 
 	/* 담당자 팝업 */
@@ -505,6 +533,23 @@ $(document).ready(function() {
 			}
 		});
 	}
+	
+	/* 진행단계 데이터 가져오기 */
+	function getPrgrsStepCnt() {
+		var params = $("#getForm").serialize();
+		$.ajax({
+			type : "post",
+			url : "prgrsStepAjax",
+			dataType: "json",
+			data : params,
+			success : function(res) {
+				drawPrgrsStep(res.salesChncCnt, res.sgstnCnt, res.qtnCnt, res.cntrctCnt);
+			},
+			error : function(request,status, error) {
+				console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+			}
+		});
+	}
 }); //jqeury End
 
 /* 진행상태 그리기  */
@@ -518,10 +563,23 @@ function drawPrgrsList(ingCnt, endCnt, failCnt, totalCnt) {
 	$(".ingArea").html(html);
 }
 
-function drawPrgrsStep(){
+function drawPrgrsStep(salesChncCnt, sgstnCnt, qtnCnt, cntrctCnt){
 	var html = "";
 	
-	html += "";
+	
+	html += "<div class=\"prgrs\">";
+	
+	html += "<div class=\"prgrs_step_img\"></div>";
+	html += "<ul>";
+	html += "<li class=\"step\"><span>기회</span><div class = \"rec\">"+salesChncCnt+"건</div></li>";
+	html += "<li class=\"step\"><span>제안</span><div class = \"rec\">"+sgstnCnt+"건</div></li>";
+	html += "<li class=\"step\"><span>견적</span><div class = \"rec\">"+qtnCnt+"건</div></li>";
+	html += "<li class=\"step\"><span>계약</span><div class = \"rec\">"+cntrctCnt+"건</div></li>";
+	html += "</ul>";
+	html += "</div>";
+	
+	
+	
 	
 	$(".prgrs_step").html(html);
 }
@@ -714,10 +772,7 @@ function drawMngPaging(pb) {
 									</div>
 									<div class="actvty_tLine1"></div>
 								</div>
-								<div class="prgrs_step_img"></div>
-								<div class="prgrs_step">
-							
-								</div>
+								<div class="prgrs_step"></div>
 							</div>
 						</div>
 						</form>
