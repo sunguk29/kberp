@@ -89,7 +89,18 @@
 		                      ON C.SALES_NUM = Q.SALES_NUM  
 		                     AND Q.QTN_STS_NUM = 0
 		              INNER JOIN MD M
-		                      ON Q.MD_NUM = M.MD_NUM 
+		                      ON Q.MD_NUM = M.MD_NUM
+		WHERE TO_CHAR(C.CNTRCT_END_DATE, 'YYYY-MM') >= TO_CHAR(SYSDATE, 'YYYY-MM') 
+	</select>
+   <!-- 상품 매출 합계 -->
+	<select id="getSalesMdSumRvn" resultType="Integer">
+		SELECT SUM(C.MONTH_INTRST_AMNT) AS SRVN
+		FROM CNTRCT C INNER JOIN QTN Q
+		                      ON C.SALES_NUM = Q.SALES_NUM  
+		                     AND Q.QTN_STS_NUM = 0
+		              INNER JOIN MD M
+		                      ON Q.MD_NUM = M.MD_NUM
+		WHERE TO_CHAR(C.CNTRCT_END_DATE, 'YYYY-MM') >= TO_CHAR(SYSDATE, 'YYYY-MM')
 	</select>
 	<!-- 당월 매출 실적 차트(개수) -->	
 	<select id="getSalesRvnCnt" resultType="Integer">
@@ -98,6 +109,7 @@
 		                     ON S.SALES_NUM = C.SALES_NUM
 		             INNER JOIN EMP E
 		                     ON S.MNGR_EMP_NUM = E.EMP_NUM
+		WHERE TO_CHAR(C.CNTRCT_END_DATE, 'YYYY-MM') >= TO_CHAR(SYSDATE, 'YYYY-MM')
 	</select>
 	
 	<!-- 영업 종료(실패) 개수 -->

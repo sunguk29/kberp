@@ -192,8 +192,10 @@ public class RprtController {
 	public ModelAndView totalChart(ModelAndView mav) throws Throwable {
 		
 		int salesRvnCnt = iCommonService.getIntData("salesRprt.getSalesRvnCnt");
+		int sumRvn = iCommonService.getIntData("salesRprt.getSalesMdSumRvn");
 		
 		mav.addObject("salesRvnCnt", salesRvnCnt); // 당월 매출 실적
+		mav.addObject("sumRvn", sumRvn); // 당월 매출 합계
 		
 		mav.setViewName("sales/rprt/totalChart");
 		

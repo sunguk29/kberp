@@ -656,7 +656,7 @@ $(document).ready(function() {
 			type : "post",
 			url : "qtnAddAjax",
 			dataType : "json",
-			data : params,
+// 			data : params,
 			success : function(res) {
 				$("#addForm").submit();
 			},
@@ -664,7 +664,6 @@ $(document).ready(function() {
 				console.log(req.responseText);
 			}
 		});
-
 	});
 	
 	// 다음 단계로 전환하기 버튼 : 계약 등록 페이지
