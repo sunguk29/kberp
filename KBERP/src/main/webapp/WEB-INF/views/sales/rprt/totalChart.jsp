@@ -46,6 +46,12 @@
 	margin-top: 10px;
 	font-size: 11pt;
 }
+.sales_md_rvn_list {
+	width: 430px;
+	height: 179px;
+	margin-top: 10px;
+	font-size: 11pt;
+}
 .cont_left {
 	display: inline-block;
 	vertical-align: top;
@@ -136,8 +142,8 @@ select {
 .mdRvnList {
 	width: 430px;
 	height: 20px;
-	border-bottom: 1px solid #D3D3D3;
 	position: relative;
+	overflow-y: auto;
 }
 .mfs {
 	font-size: 10pt;
@@ -147,10 +153,17 @@ select {
     position: absolute;
     left: 62%;
 }
+.md_sum_rvn {
+	width: 430px;
+	height: 20px;
+	border-top: 1px solid #D3D3D3;
+	position: relative;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
 	getData();
+	reloadSalesMdRvnList();
 });
 
 // 차트 데이터
@@ -201,15 +214,24 @@ function reloadSalesMdRvnList() {
 	$.ajax({
 		type : "post",
 		url : "saleMdRvnAjax",
+		dataType : "json",
+		success : function(res)	{
+			drawSalesMdRvnList(res.mdRvnList);
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
 	});
 }
 
 function drawSalesMdRvnList(list) {
 	var html = "";
 	
-	html += "<div class=\"mdRvnList\"><span class=\"mfs\">상품이름</span><span class=\"mfs mRvn\">상품매출</span></div>";
+	for(var data of list){
+		html += "<div class=\"mdRvnList\"><span class=\"mfs\">" + data.NAME + "</span><span class=\"mfs mRvn\">" + data.RVN + "</span></div>";
+	}
 	
-	$("#sales_md_rvn_list").html(html);
+	$(".sales_md_rvn_list").html(html);
 }
 
 </script>
@@ -303,12 +325,12 @@ function drawSalesMdRvnList(list) {
 						<div class="new_sales_actvty">
 							<div class="sales_text">
 								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />당월 매출실적(상품별 실적)
+									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />당월 매출 실적(상품별)
 								</div>
 								<div class="actvty_tLine1"></div>
 							</div>
-							<div class="sales_text_bot" id="sales_md_rvn_list">
-							</div>
+							<div class="sales_md_rvn_list"></div>
+							<div class="md_sum_rvn"><span class="mfs" style="color: #B22222;">합계</span><span class="mfs mRvn" style="color: #B22222;">${sumRvn}</span></div>
 						</div>
 						<div class="new_sales_actvty">
 							<div class="sales_text">
@@ -322,7 +344,7 @@ function drawSalesMdRvnList(list) {
 						<div class="new_sales_actvty">
 							<div class="sales_text">
 								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />당월 영업실적차트
+									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />당월 영업 실적 차트
 								</div>
 								<div class="actvty_tLine1"></div>
 							</div>
@@ -333,7 +355,7 @@ function drawSalesMdRvnList(list) {
 						<div class="new_sales_actvty">
 							<div class="sales_text">
 								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />당월 매출실적차트
+									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />당월 매출 실적 차트
 								</div>
 								<div class="actvty_tLine1"></div>
 							</div>

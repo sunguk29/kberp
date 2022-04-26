@@ -568,8 +568,6 @@ public class SalesMngController {
 
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 
-		System.out.println("여기실행댐?");
-
 		iCommonService.updateData("salesMng.salesQtnAddUpdate", params);
 
 		return mapper.writeValueAsString(modelMap);

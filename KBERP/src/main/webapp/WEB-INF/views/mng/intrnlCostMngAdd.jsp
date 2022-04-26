@@ -83,7 +83,6 @@
 
 .intrnl_cost_admnstrtn_new td {
 	height: 40px;
-	font-weight: bold;
 }
 
 .intrnl_cost_admnstrtn_new td:nth-child(odd) {
@@ -121,7 +120,7 @@
 }
 
 .acnt_code_input {
-	width: 625px;
+	width: 600px;
 	height: 20px;
 	vertical-align: middle;
 }
