@@ -81,14 +81,14 @@ p {
 
 	padding-bottom: -5px;
 	
-	margin-top: 10px;
+	margin-top: 15px;
 
 }
 		
 .eventAdd_btn {
 	float: right;
-	margin-top: -30px;
-	margin-right: 37px;
+	margin-top: 15px;
+	margin-right: 80px;
 }
 
 #cont{
@@ -158,7 +158,8 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
-											location.href = "prgrsEvent";
+											$("#actionForm").attr("action", "prgrsEvent");
+											$("#actionForm").submit();
 										} else {
 											alert("작성중 문제가 발생하였습니다.");
 										}
@@ -204,6 +205,15 @@ function checkEmpty(sel) {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
+	<form action="#" id="actionForm" method="post">
+		<input type="hidden" name="no" value="${param.no}" />
+		<input type="hidden" name="page" value="${param.page}" />
+		<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+		<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+		<input type="hidden" id="top" name="top" value="${param.top}"/>
+		<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
+		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
+	</form>
 	<form action="event" id="backForm" method="post">
 		<input type="hidden" name="no" value="${param.no}" />
 		<input type="hidden" name="page" value="${param.page}" />
@@ -238,11 +248,11 @@ function checkEmpty(sel) {
 				<input type="text" name="title" id="title" placeholder="제목을 입력하세요">
 				<p id="content_line">글내용</p>
 				<textarea name="cont" id="cont" placeholder="내용을 입력하세요" ></textarea>
-				<div class="add_file">
+				<!-- <div class="add_file">
 						<input type="file" name="event_file" />
 						<input type="text" id="event_att" name="event_att" readonly="readonly"/>
 						<input type="hidden" id="event_attFile" name="event_attFile"/>
-				</div>
+				</div> -->
 				<!--<div><input type="file" value="첨부파일" id="btn_file"></div>-->
 				<div class="eventAdd_btn">
 					<div class="cmn_btn_mr" id="writeBtn">등록</div>

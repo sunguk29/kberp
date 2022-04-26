@@ -639,7 +639,7 @@ function printCrtfct(cont){
    printDiv.style.display = 'none'; */ 
 }
 function PrintDiv(id) {
-	var a = window.open('', '', 'height=1000, width=1000');
+	var a = window.open('', '', 'height=550, width=1000');
     a.document.write('<html>');
     a.document.write('<body >');
     a.document.write($(id).html());

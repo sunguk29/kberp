@@ -176,8 +176,6 @@ function drawPaging(pb) {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
-	<!-- 내용영역 -->
-	<div class="right_area">
 		<!-- 내용영역 -->
 		<div class="cont_wrap">
 			<div class="page_title_bar">
@@ -222,7 +220,6 @@ function drawPaging(pb) {
 				</div>
 			</div>
 		</div>
-	</div>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

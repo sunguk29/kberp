@@ -530,9 +530,9 @@ function reloadList(){
 		
 		for(var data of list){
 			
-			html += "<tr no=\"" + data.SUB_CTGR_ACNT_CODE + "\" class=\"board_table_hover\" tit=\""+ data.ACNT_NAME +"\">";
+			html += "<tr>";
 			html += "<td>" + data.SUB_CTGR_ACNT_CODE +"</td>";
-			html += "<td>" + data.ACNT_NAME +"</td>";
+			html += "<td no=\"" + data.SUB_CTGR_ACNT_CODE + "\" class=\"board_table_hover\" tit=\""+ data.ACNT_NAME +"\">" + data.ACNT_NAME +"</td>";
 			html +="</tr>";
 			
 		}
@@ -578,9 +578,9 @@ function drawsubList(sublist){
 	if($("#no").val() != "" ){
 	for(var data of sublist){
 		
-		html += "<tr sub_no=\"" + data.SUB_CTGR_ACNT_CODE + "\" class=\"sub_board_table_hover\" tit=\""+ data.ACNT_NAME +"\"abs=\""+data.ABSTRCT +"\">";
+		html += "<tr>";
 		html += "<td>" + data.SUB_CTGR_ACNT_CODE +"</td>";
-		html += "<td>" + data.ACNT_NAME +"</td>";
+		html += "<td sub_no=\"" + data.SUB_CTGR_ACNT_CODE + "\" class=\"board_table_hover\" tit=\""+ data.ACNT_NAME +"\"abs=\""+data.ABSTRCT +"\">" + data.ACNT_NAME +"</td>";
 		html +="</tr>";
 	}
 	}

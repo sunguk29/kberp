@@ -208,12 +208,12 @@ public class MsgrController {
 		System.out.println("#######" + params.get("lastContNo"));
 		System.out.println("$$$$$$$" + params.get("chatNum"));
 		System.out.println("%%%%%%%" + params);
-		
+		System.out.println(params.get("sEmpNum"));
 		
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		int lastContNo = Integer.parseInt(request.getParameter("lastContNo"));
+	//	int lastContNo = Integer.parseInt(request.getParameter("lastContNo"));
 		
 		
 		try {
@@ -222,7 +222,6 @@ public class MsgrController {
 			HashMap<String, String> data =  ims.getCont(params);
 			// params로 넘겨야함.
 			// params로 받았을 경우, 내가 읽은번호 업데이트로 업데이트
-			
 			
 			
 			System.out.println("6666666666" + params);

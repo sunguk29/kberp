@@ -37,11 +37,6 @@
 	color: black;
 }
 
-.board_table thead {
-	background-color: #F2F2F2;
-}
-
-
 .srch_year {
 	width: 120px;
 	height: 30px;

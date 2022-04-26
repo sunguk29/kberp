@@ -408,6 +408,10 @@ input:focus {
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	if('${param.deptNum}' != '') {
+		$("#deptNum").val('${param.deptNum}');
+	}
+	
 	$(".cmn_btn").on("click", function() {
 		
 		$("#actionForm").attr("action", "clntChart");
@@ -664,6 +668,7 @@ function drawPaging(pb, sel) {
 </script>
 </head>
 <body>
+<input type="hidden" id="olddeptNum" value="${param.deptNum}" />
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -704,12 +709,11 @@ function drawPaging(pb, sel) {
 									<span class="srch_name">부서</span>
 								</td>
 								<td>
-									<select>
-										<option>부서전체</option>
-										<option>영업 1팀</option>
-										<option>영업 2팀</option>
-										<option>영업 3팀</option>
-										<option>영업 지원팀</option>
+									<select id="deptNum" name="deptNum">
+										<option value="0">부서전체</option>
+										<option value="1">영업부</option>
+										<option value="2">영업1팀</option>
+										<option value="3">영업2팀</option>										
 									</select>
 								</td>
 								<td>
@@ -717,7 +721,7 @@ function drawPaging(pb, sel) {
 								</td>
 								<td>
 									<div class="findEmp_box">
-										<input type="text" maxlength="20" class="findEmp_box2" id="mngEmp" name="mngEmp" style="border:0 solid black" />
+										<input type="text" maxlength="20" class="findEmp_box2" id="mngEmp" name="mngEmp" value ="${param.mngEmp}" style="border:0 solid black" />
 										<input type="hidden" id="mngNum" name="mngNum" />
 										<span><img alt="담당자이미지" class="userIcon" src="resources/images/sales/usericon.png"> </span>
 									</div>								
