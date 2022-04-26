@@ -188,17 +188,19 @@ public class RprtController {
 	}
 	
 	// 종합차트 화면
- 	@RequestMapping(value = "/totalChart")
-	public ModelAndView totalChart(ModelAndView mav) throws Throwable {
-		
-		int salesRvnCnt = iCommonService.getIntData("salesRprt.getSalesRvnCnt");
-		
-		mav.addObject("salesRvnCnt", salesRvnCnt); // 당월 매출 실적
-		
-		mav.setViewName("sales/rprt/totalChart");
-		
-		return mav;
-	}
+	 	@RequestMapping(value = "/totalChart")
+		public ModelAndView totalChart(ModelAndView mav) throws Throwable {
+			
+			int salesRvnCnt = iCommonService.getIntData("salesRprt.getSalesRvnCnt");
+			int sumRvn = iCommonService.getIntData("salesRprt.getSalesMdSumRvn");
+			
+			mav.addObject("salesRvnCnt", salesRvnCnt); // 당월 매출 실적
+			mav.addObject("sumRvn", sumRvn); // 당월 매출 합계
+			
+			mav.setViewName("sales/rprt/totalChart");
+			
+			return mav;
+		}
 	
 	// 당월 매출 실적
 	@RequestMapping(value = "/salesRvnAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
@@ -282,4 +284,20 @@ public class RprtController {
 		
 		return mapper.writeValueAsString(modelMap);
 	}
+	
+	//당월 매출 실적
+		@RequestMapping(value = "/saleMdRvnAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+		@ResponseBody
+		public String saleMdRvnAjax(HttpServletRequest request) throws Throwable {
+			
+			ObjectMapper mapper = new ObjectMapper();
+			
+			Map<String, Object> modelMap = new HashMap<String, Object>();
+			
+			List<HashMap<String, String>> mdRvnList = iCommonService.getDataList("salesRprt.getSalesMdRvn");
+			
+			modelMap.put("mdRvnList", mdRvnList);
+			
+	        return mapper.writeValueAsString(modelMap);
+		}
 }

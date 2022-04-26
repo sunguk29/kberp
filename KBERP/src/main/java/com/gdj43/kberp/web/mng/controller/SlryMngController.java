@@ -77,4 +77,18 @@ public class SlryMngController {
 		
 		return mapper.writeValueAsString(modelMap);
 	}
+
+	//급여명세서 상세보기(관리자)
+		@RequestMapping(value = "/slrSpcfctnViewMng")
+		public ModelAndView slrSpcfctnViewMng(@RequestParam HashMap<String, String> params, 
+									 ModelAndView mav) throws Throwable {
+		
+			HashMap<String, String> data = iCommonService.getData("SlryMng.slrSpcfctnView", params);
+			
+			mav.addObject("data", data);
+			
+			mav.setViewName("mng/slrSpcfctnViewMng");
+			
+			return mav;
+		}
 }
