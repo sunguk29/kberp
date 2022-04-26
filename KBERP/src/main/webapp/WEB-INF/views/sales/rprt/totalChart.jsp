@@ -151,6 +151,7 @@ select {
 <script type="text/javascript">
 $(document).ready(function() {
 	getData();
+	reloadSalesMdRvnList();
 });
 
 // 차트 데이터
@@ -201,13 +202,22 @@ function reloadSalesMdRvnList() {
 	$.ajax({
 		type : "post",
 		url : "saleMdRvnAjax",
+		dataType : "json",
+		success : function(res)	{
+			drawSalesMdRvnList(res.mdRvnList);
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
 	});
 }
 
 function drawSalesMdRvnList(list) {
 	var html = "";
 	
-	html += "<div class=\"mdRvnList\"><span class=\"mfs\">상품이름</span><span class=\"mfs mRvn\">상품매출</span></div>";
+	for(var data of list){
+		html += "<div class=\"mdRvnList\"><span class=\"mfs\">" + data.NAME + "</span><span class=\"mfs mRvn\">" + data.RVN + "</span></div>";
+	}
 	
 	$("#sales_md_rvn_list").html(html);
 }
@@ -303,7 +313,7 @@ function drawSalesMdRvnList(list) {
 						<div class="new_sales_actvty">
 							<div class="sales_text">
 								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />당월 매출실적(상품별 실적)
+									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />당월 매출 실적(상품별)
 								</div>
 								<div class="actvty_tLine1"></div>
 							</div>
@@ -322,7 +332,7 @@ function drawSalesMdRvnList(list) {
 						<div class="new_sales_actvty">
 							<div class="sales_text">
 								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />당월 영업실적차트
+									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />당월 영업 실적 차트
 								</div>
 								<div class="actvty_tLine1"></div>
 							</div>
@@ -333,7 +343,7 @@ function drawSalesMdRvnList(list) {
 						<div class="new_sales_actvty">
 							<div class="sales_text">
 								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />당월 매출실적차트
+									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />당월 매출 실적 차트
 								</div>
 								<div class="actvty_tLine1"></div>
 							</div>

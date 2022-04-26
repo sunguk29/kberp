@@ -79,7 +79,8 @@
 		FROM SALES S INNER JOIN CNTRCT C
 		                     ON S.SALES_NUM = C.SALES_NUM
 		             INNER JOIN EMP E
-		                     ON S.MNGR_EMP_NUM = E.EMP_NUM 
+		                     ON S.MNGR_EMP_NUM = E.EMP_NUM
+		WHERE TO_CHAR(CNTRCT_END_DATE, 'YYYY-MM') >= TO_CHAR(SYSDATE, 'YYYY-MM') 
 	</select>
 	<!-- 당월 매출 실적 차트(상품_내용) -->	
 	<select id="getSalesMdRvn" resultType="hashmap">
