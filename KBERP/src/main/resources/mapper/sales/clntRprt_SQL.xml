@@ -16,14 +16,11 @@
 		<if test="deptNum != 0"> 
 			<choose>
 				<when test="deptNum == 1">
-					AND A.DEPT_NUM = 6
-				</when>
-				<when test="deptNum == 2">
 					AND A.DEPT_NUM = 7
 				</when>
-				<when test="deptNum == 3">
+				<when test="deptNum == 2">
 					AND A.DEPT_NUM = 8
-				</when>				
+				</when>
 			</choose>
 		</if>
 		<choose>
@@ -48,14 +45,11 @@
 		<if test="deptNum != 0"> 
 			<choose>
 				<when test="deptNum == 1">
-					AND A.DEPT_NUM = 6
-				</when>
-				<when test="deptNum == 2">
 					AND A.DEPT_NUM = 7
 				</when>
-				<when test="deptNum == 3">
+				<when test="deptNum == 2">
 					AND A.DEPT_NUM = 8
-				</when>				
+				</when>			
 			</choose>
 		</if>
 		<choose>
@@ -66,40 +60,19 @@
 		
 	</select>
 <!-- 고객등급 개수 -->	
-	<select id="clntGrade" resultType="hashmap" parameterType="hashmap">
-		SELECT COUNT(CASE WHEN GRADE_NUM = '0' THEN 1 END) AS S,
-		       COUNT(CASE WHEN GRADE_NUM = '1' THEN 1 END) AS A,
-		       COUNT(CASE WHEN GRADE_NUM = '2' THEN 1 END) AS B,
-		       COUNT(CASE WHEN GRADE_NUM = '3' THEN 1 END) AS C,
-		       COUNT(CASE WHEN GRADE_NUM = '4' THEN 1 END) AS D
-		FROM CLNT_CMPNY CC INNER JOIN EMP E
-                           ON CC.EMP_NUM = E.EMP_NUM
-                   INNER JOIN APNTM A
-				           ON E.EMP_NUM = A.EMP_NUM
-		WHERE DEL_CHECK IS NULL
-		<if test="deptNum != 0"> 
-			<choose>
-				<when test="deptNum == 1">
-					AND A.DEPT_NUM = 6
-				</when>
-				<when test="deptNum == 2">
-					AND A.DEPT_NUM = 7
-				</when>
-				<when test="deptNum == 3">
-					AND A.DEPT_NUM = 8
-				</when>				
-			</choose>
-		</if>
-		<choose>
-			<when test="mngEmp != null and mngEmp != ''"> <!-- 담당자텍스트 박스 -->
-				AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'
-			</when>
-		</choose>		
+	<select id="clntGrade" resultType="hashmap" >
+		SELECT COUNT(CASE WHEN GRADE_NUM = '0' THEN 1 END) AS GRADENUM0,
+		       COUNT(CASE WHEN GRADE_NUM = '1' THEN 1 END) AS GRADENUM1,
+		       COUNT(CASE WHEN GRADE_NUM = '2' THEN 1 END) AS GRADENUM2,
+		       COUNT(CASE WHEN GRADE_NUM = '3' THEN 1 END) AS GRADENUM3,
+		       COUNT(CASE WHEN GRADE_NUM = '4' THEN 1 END) AS GRADENUM4
+		FROM CLNT_CMPNY 
+		WHERE DEL_CHECK IS NULL	
 	</select>
 
 <!-- 영업 고객수 -->
 	<select id="salesCnt" resultType="hashmap" parameterType="hashmap">
-		SELECT COUNT(CASE WHEN A.DEPT_NUM = 6 THEN 1 END) CNT,
+		SELECT COUNT(A.DEPT_NUM) CNT,
     		   COUNT(CASE WHEN A.DEPT_NUM = 7 THEN 1 END) CNT1,
    			   COUNT(CASE WHEN A.DEPT_NUM = 8 THEN 1 END) CNT2
 		FROM ENTRPRS_CLNT EC INNER JOIN EMP E
@@ -110,14 +83,11 @@
 		<if test="deptNum != 0"> 
 			<choose>
 				<when test="deptNum == 1">
-					AND A.DEPT_NUM = 6
-				</when>
-				<when test="deptNum == 2">
 					AND A.DEPT_NUM = 7
 				</when>
-				<when test="deptNum == 3">
+				<when test="deptNum == 2">
 					AND A.DEPT_NUM = 8
-				</when>				
+				</when>			
 			</choose>
 		</if>
 		<choose>
