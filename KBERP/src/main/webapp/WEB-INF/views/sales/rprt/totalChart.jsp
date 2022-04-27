@@ -596,10 +596,13 @@ function salesRvnChart(list) {
 }
 
 function reloadSalesMdRvnList() {
+	var params =  $("#getForm").serialize();
+	
 	$.ajax({
 		type : "post",
 		url : "saleMdRvnAjax",
 		dataType : "json",
+		data : params,
 		success : function(res)	{
 			drawSalesMdRvnList(res.mdRvnList);
 		},
@@ -760,7 +763,6 @@ function drawMngPaging(mngPb) {
 				<div class="bodyWrap">
 					<!-- 검색창 -->
 					<form action="#" id="getForm" method="post">
-					<input type="hidden" name="rvnSize" value="${salesRvnCnt}" />
 					<table class="srch_table">
 						<colgroup>
 							<col width="100" />

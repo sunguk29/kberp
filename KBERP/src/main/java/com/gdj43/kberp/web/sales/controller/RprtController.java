@@ -242,11 +242,9 @@ public class RprtController {
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		int salesRvnCnt = iSchdlService.getIntData("salesRprt.getSalesRvnCnt", params); // 당월 매출 실적
+		int rvnSize = iSchdlService.getIntData("salesRprt.getSalesRvnCnt", params); // 당월 매출 실적
 		
-		modelMap.put("salesRvnCnt", salesRvnCnt); // 당월 매출 실적
-		
-		int rvnSize = Integer.parseInt(request.getParameter("rvnSize"));
+//		int rvnSize = Integer.parseInt(request.getParameter("rvnSize"));
 		
 		ArrayList<HashMap<String, Object>> salesRvnlist = new ArrayList<HashMap<String, Object>>();
 		

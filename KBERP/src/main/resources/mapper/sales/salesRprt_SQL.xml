@@ -107,7 +107,20 @@
 		                     ON S.SALES_NUM = C.SALES_NUM
 		             INNER JOIN EMP E
 		                     ON S.MNGR_EMP_NUM = E.EMP_NUM
-		WHERE TO_CHAR(CNTRCT_END_DATE, 'YYYY-MM') >= TO_CHAR(SYSDATE, 'YYYY-MM') 
+		             INNER JOIN APNTM A
+		                             ON E.EMP_NUM = A.EMP_NUM
+                     INNER JOIN DEPT D
+                             ON A.DEPT_NUM = D.DEPT_NUM        
+		WHERE 1 = 1
+		AND TO_CHAR(CNTRCT_END_DATE, 'YYYY-MM') >= TO_CHAR(SYSDATE, 'YYYY-MM') 
+		<choose>
+			<when test="teamClsfi != 9">
+				AND D.DEPT_NUM = ${teamClsfi}
+			</when>
+		</choose>
+		<if test="mngEmp != '' and mngEmp != null">
+			AND E.EMP_NAME = #{mngEmp}
+		</if>
 	</select>
 	<!-- 당월 매출 실적 차트(상품_내용) -->	
 	<select id="getSalesMdRvn" resultType="hashmap">
@@ -136,7 +149,20 @@
 		                     ON S.SALES_NUM = C.SALES_NUM
 		             INNER JOIN EMP E
 		                     ON S.MNGR_EMP_NUM = E.EMP_NUM
-		WHERE TO_CHAR(C.CNTRCT_END_DATE, 'YYYY-MM') >= TO_CHAR(SYSDATE, 'YYYY-MM')
+		             INNER JOIN APNTM A
+		                             ON E.EMP_NUM = A.EMP_NUM
+                     INNER JOIN DEPT D
+                             ON A.DEPT_NUM = D.DEPT_NUM        
+		WHERE 1 = 1
+		AND TO_CHAR(C.CNTRCT_END_DATE, 'YYYY-MM') >= TO_CHAR(SYSDATE, 'YYYY-MM')
+		<choose>
+			<when test="teamClsfi != 9">
+				AND D.DEPT_NUM = ${teamClsfi}
+			</when>
+		</choose>
+		<if test="mngEmp != '' and mngEmp != null">
+			AND E.EMP_NAME = #{mngEmp}
+		</if>
 	</select>
 	
 	<!-- 영업 종료(실패) 개수 -->
