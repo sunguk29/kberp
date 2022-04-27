@@ -210,13 +210,13 @@
 	position: absolute;
 	top: 35px;
 	left: 10px;
-	background-color: #b3323e;
+	background-color: #FF6384;
 }
 .clnt {
 	position: absolute;
 	top: 90px;
 	left: 10px;
-	background-color: #d46872;
+	background-color: #4169e1;
 }
 .ccTxt {
 	display: inline-block;
