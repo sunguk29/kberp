@@ -559,7 +559,10 @@ $(document).ready(function() {
  	        series : [{
         		name: '등급',
         		data : list
-        	}]
+        	}],
+            credits: {
+                enabled: false
+            }
 		});
 	}
 });
