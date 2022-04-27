@@ -67,6 +67,17 @@ INSERT INTO INDVDL_CLNT(CLNT_NUM, CLNT_NAME, CLNT_GRADE, PHONE_NUM_1, PHONE_NUM_
 VALUES (#{clntSeq}, #{clnt_name}, #{clnt_grade}, #{phon_num_1}, #{phon_num_2}, #{zip_code}, #{adrs}, #{dtl_adrs})
 </insert>
 
+<update id="clntUpdate" parameterType="hashmap">
+UPDATE INDVDL_CLNT SET CLNT_NAME = #{clnt_name},
+                       CLNT_GRADE = #{clnt_grade},
+                       PHONE_NUM_1 = #{phon_num_1},
+                       PHONE_NUM_2 = #{phon_num_2},
+                       ZIP_CODE = #{zip_code},
+                       ADRS = #{adrs},
+                       DTL_ADRS = #{dtl_adrs}
+WHERE CLNT_NUM = #{clnt_num}
+</update>
+
 <!-- 상담노트 저장 -->
 <insert id="noteSave" parameterType="hashmap">
 INSERT INTO CNSL_NOTE(CNSL_NUM, CLNT_NUM, EMP_NUM, CNSL_TYPE_NUM, CONT, CNSL_RSLT_NUM, WRITE_DATE)

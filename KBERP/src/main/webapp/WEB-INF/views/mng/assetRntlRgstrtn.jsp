@@ -73,6 +73,15 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
+
+	$("#assetNum").on("click", function() {
+		$("#srchAsset").click();
+	});
+
+	$("#useEmpName").on("click", function() {
+		$("#srchEmp").click();
+	});
+	
 	
 	$("#rgstrtnBtn").on("click", function() {
 		if(checkEmpty("#assetNum")) {

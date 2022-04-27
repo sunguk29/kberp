@@ -1379,6 +1379,7 @@ $(document).ready(function() {
 	}); // 신규고객 등록 팝업 끝
 	
 	
+	
 	// 상담노트 저장 팝업
 	$(".note_cmn_btn_mr").on("click", function() {
 		
@@ -1444,7 +1445,6 @@ $(document).ready(function() {
 			}]
 		});
 	}); // 상담노트 저장 팝업 끝
-	
 }); // document 끝
 
 // 다음 우편번호 스크립트
