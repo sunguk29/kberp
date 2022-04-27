@@ -210,13 +210,13 @@
 	position: absolute;
 	top: 35px;
 	left: 10px;
-	background-color: #2c7da0;
+	background-color: #b3323e;
 }
 .clnt {
 	position: absolute;
 	top: 90px;
 	left: 10px;
-	background-color: #61a5c2;
+	background-color: #d46872;
 }
 .ccTxt {
 	display: inline-block;
@@ -398,11 +398,8 @@ input:focus {
 	margin-left: 10px;
 }
 #pie-chart {
-	width: 350px;
+	width: 428px;
 	height: 250px;
-	margin: auto;
-/* 	margin-left: 39px;
-	margin-right: 39px; */
 }
 </style>
 <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -547,9 +544,17 @@ $(document).ready(function() {
 			title: {
 				text: ''
 			},
-			tooltip: {
-				pointFormat: '{series.name}:'
-			},
+		    plotOptions: {
+		        pie: {
+		            allowPointSelect: true,
+		            cursor: 'pointer',
+		            dataLabels: {
+		                enabled: true,
+		                format: '{point.percentage:.1f} %({point.y}명)'
+		            },
+		            showInLegend: true
+		        }
+		    },
 			colors: ['#FF6384', '#ffd950', '#02bc77', '#28c3d7','#4169e1'],
  	        series : [{
         		name: '등급',
@@ -695,7 +700,7 @@ function drawPaging(pb, sel) {
 									<span class="srch_name">기간</span>
 								</td>
 								<td colspan="4">
-									<input type="date" class="date" value="${startDate}" /> ~ <input type="date" class="date" value="${endDate}" />
+									<input type="date" class="date" /> ~ <input type="date" class="date" />
 								</td>
 								<td>
 									<span class="cmn_btn">검색</span>

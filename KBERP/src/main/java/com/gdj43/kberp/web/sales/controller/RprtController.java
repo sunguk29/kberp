@@ -109,15 +109,15 @@ public class RprtController {
 			HashMap<String, Object> temp = new HashMap<String, Object>();
 			
 			if(i == 0) {
-				temp.put("name", "S");
+				temp.put("name", "S등급");
 			} else if(i == 1) {
-				temp.put("name", "A");
+				temp.put("name", "A등급");
 			} else if(i == 2) {
-				temp.put("name", "B");
+				temp.put("name", "B등급");
 			} else if(i == 3) {
-				temp.put("name", "C");
+				temp.put("name", "C등급");
 			} else {
-				temp.put("name", "D");
+				temp.put("name", "D등급");
 			}
 			temp.put("y", Integer.parseInt(String.valueOf(clntList.get("GRADENUM"+i))));
 			
