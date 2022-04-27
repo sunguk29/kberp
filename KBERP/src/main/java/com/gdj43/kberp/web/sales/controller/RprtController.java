@@ -68,9 +68,6 @@ public class RprtController {
 		// 고객 개수
 		HashMap<String, String> ec = iCommonService.getData("clntRprt.ecAllCnt", params);
 		
-		//고객 등급
-		HashMap<String, String> ccg = iCommonService.getData("clntRprt.clntGrade", params);
-		
 		//영업팀별 고객수
 		HashMap<String, String> sc = iCommonService.getData("clntRprt.salesCnt", params);
 
@@ -87,14 +84,50 @@ public class RprtController {
 
 		mav.addObject("cc", cc);
 		mav.addObject("ec", ec);
-		mav.addObject("ccg", ccg);
 		mav.addObject("sc", sc);		
 		
 		mav.setViewName("sales/rprt/clntChart");
 		return mav;
 		
 	} 
+	//고객 보고서
+	@RequestMapping(value = "/clntRprtDataAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8" )
+	@ResponseBody
+	public String clntRprtDataAjax(HttpServletRequest request) throws Throwable{
 	
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		int clntsize = Integer.parseInt(request.getParameter("clntsize"));
+		
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		
+		HashMap<String, Object> clntList = iClntRprtService.getData("clntRprt.clntGrade");
+			
+		for(int i = 0 ; i < clntsize ; i++) {
+			HashMap<String, Object> temp = new HashMap<String, Object>();
+			
+			if(i == 0) {
+				temp.put("name", "S");
+			} else if(i == 1) {
+				temp.put("name", "A");
+			} else if(i == 2) {
+				temp.put("name", "B");
+			} else if(i == 3) {
+				temp.put("name", "C");
+			} else {
+				temp.put("name", "D");
+			}
+			temp.put("y", Integer.parseInt(String.valueOf(clntList.get("GRADENUM"+i))));
+			
+			list.add(temp);
+		}
+
+		modelMap.put("list", list);
+		
+		return mapper.writeValueAsString(modelMap);		
+	}
 	
 	/* 영업 차트 */
 	@RequestMapping(value = "/salesChart")

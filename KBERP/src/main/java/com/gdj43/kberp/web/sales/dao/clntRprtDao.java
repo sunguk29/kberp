@@ -13,13 +13,8 @@ public class clntRprtDao implements IClntRprtDao {
 	public SqlSession sqlSession;
 
 	@Override
-	public double clntAvgCnt(HashMap<String, String> params) throws Throwable {
-		return sqlSession.selectOne("clntRprt.clntAvgCnt", params);
-	}
-
-	@Override
-	public double ccAvgCnt(HashMap<String, String> params) throws Throwable {
-		return sqlSession.selectOne("clntRprt.ccAvgCnt", params);
+	public HashMap<String, Object> getData(String string) throws Throwable {
+		return sqlSession.selectOne(string);
 	}
 
 }
