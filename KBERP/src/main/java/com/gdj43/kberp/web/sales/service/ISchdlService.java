@@ -11,6 +11,8 @@ public interface ISchdlService {
 	
 	public HashMap<String, Object> getData(String sql, HashMap<String, Object> params) throws Throwable;
 
+	public int getIntData(String sql, HashMap<String, Object> params) throws Throwable;
+
 	
 
 }
