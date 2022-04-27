@@ -15,6 +15,14 @@
 	width: 900px;
 }
 
+.page_title_text {
+	width: 300px;
+}
+
+.page_srch_area {
+	width: calc(100% - 300px);
+}
+
 /* 개인 작업 영역 */
 
 .srch_month {
@@ -286,9 +294,7 @@ display: inline-block;
 	background-color: rgb(200, 218, 248);
 }
 
-.cmn_btn #aprvlRqst {
-	display: none;
-}
+
 /* 결재요청 팝업 css 끝 */
 
 </style>
@@ -334,9 +340,13 @@ $(document).ready(function() {
 	
 	
 	reloadList();
+	$("#aprvlRqst").css('display', 'none');
+	$("#aprvlAgainRqst").css('display', 'none');
+	
 	
 	$("#srchMonth").on("change", function() {
 		$("#mon").val($("#srchMonth").val());
+		$("#aprvlMon").val($("#srchMonth").val());
 		$("#searchTxt").val(null);
 		$("#txt").val(null);
 		reloadList();
@@ -362,7 +372,7 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
-	$("#aprvlBtn").on("click", function() {
+	$("#aprvlRqst").on("click", function() {
 		
 		var html = "";
 		html += "<div class=\"aprvl_popup_area\">                          ";
@@ -696,7 +706,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 					      type : "post",
-					      url : "aprvlRqstAjax/rqst",
+					      url : "slryAprvlRqstAjax/rqst",
 					      dataType : "json",
 					      data : params,
 					      success : function(res) { /* 결재 요청 성공시 */
@@ -704,21 +714,13 @@ $(document).ready(function() {
 			    	 			  
 			    	 			  /* 결재번호 받아서 aprvlNum에 넣기 */
 								  $("#aprvlNum").val(res.aprvlNum);
-								  console.log("결재번호  : " + $("#aprvlNum").val())
+								  console.log("결재번호  : " + $("#aprvlNum").val());
 								  
-								  // - 결재해야하는 사원번호 받아오기
-			    	 			  // $("#emp_num_list").val(res.empNameList)
-			    	 			  
-			    	 			  /* for(data of res.empNameList) {
-			    	 				  var html = "";
-			    	 				  html += "<input type=\"hidden\" id=\"\">"
-			    	 			  } */
 								  
-									  
 								  var params = $("#aprvlSuccessForm").serialize();
 			    				  $.ajax({
 			    					  type : "post",
-			    					  url : "aprvlRqstAjax/slryAprvlOk",
+			    					  url : "slryAprvlRqstAjax/aprvlOk",
 			    				      dataType : "json",
 			    					  data : params,
 			    					  success : function(res) {
@@ -1151,6 +1153,7 @@ function reloadList() {
 			console.log(res);
 			drawList(res.list);
 			drawPaging(res.pb);
+			drawAprvlSts(res.aprvlSts, res.list);
 		},
 		error : function(request, status, error) {
 			console.log(request.responseText);
@@ -1170,23 +1173,8 @@ function drawList(list) {
 		html += "<td>" + data.BNFT + "원</td>";
 		html += "<td>" + data.WH + "원</td>";
 		html += "<td>" + data.RESULT + "원</td>";
-		if(data.APRVL_STS != null) {
-			switch(data.APRVL_STS) {
-			case 0 :
-				html += "<td style=\"color:#F2B705\"><b>결재 진행중</b></td>";
-				break;
-			case 1 :
-				html += "<td style=\"color:#2E83F2\"><b>결재 완료</b></td>";
-				break;
-			case 2 :
-				html += "<td style=\"color:#ff6f60\"><b>결재 반려</b></td>";
-				break;
-			}
-		} else {
-			html += "<td>-</td>";
-		}
-		html += "</tr>";
 		
+		html += "</tr>";
 	}
 	
 	$("tbody").html(html);
@@ -1240,6 +1228,46 @@ function drawAprvlerInqryList(inqryList) {
 	$("#aprvlerInqry_tbody").html(html);
 }
 
+//결재 현황 조회
+function drawAprvlSts(aprvlSts, list) {
+	
+	
+	var html = "";
+	html += "<div class=\"aprvl_check_sts\">결재 현황 :</div>"; 
+	console.log("list : " + list);
+	
+	if(list != "") {
+
+		if(aprvlSts == null) {
+			html += "<div class=\"aprvl_check_res\">-</div>"
+			$("#aprvlRqst").css('display', 'inline-block');
+			$("#aprvlAgainRqst").css('display', 'none');
+			
+		} else if(aprvlSts.APRVL_STS == 0) { /* 결재 진행중 */
+			html += "<div class=\"aprvl_check_res\">결재 진행중</div>";
+			$("#aprvlRqst").css('display', 'none');
+			$("#aprvlAgainRqst").css('display', 'none');
+			console.log("결재 진행중");
+		} else if(aprvlSts.APRVL_STS == 1) { /* 결재 완료 */
+			html += "<div class=\"aprvl_check_res\" style=\"color:#2E83F2;\">결재 완료</div>";
+			$("#aprvlRqst").css('display', 'none');
+			$("#aprvlAgainRqst").css('display', 'none');
+		} else { /* 결재 반려 */
+			html += "<div class=\"aprvl_check_res\" style=\"color:#ff6f60;\">결재 반려</div>";
+			$("#aprvlRqst").css('display', 'none');
+			$("#aprvlAgainRqst").css('display', 'inline-block');
+		}
+		
+	} else {
+		html += "<div class=\"aprvl_check_res\">-</div>"
+		$("#aprvlRqst").css('display', 'none');
+		$("#aprvlAgainRqst").css('display', 'none');
+	}
+	
+		
+	$("#aprvlCheck").html(html);
+}
+
 
 </script>
 </head>
@@ -1249,7 +1277,7 @@ function drawAprvlerInqryList(inqryList) {
 	<form action="#" id="aprvlSuccessForm" method="post">
 		<input type="hidden" id="aprvlNum" name="aprvlNum" />
 		<input type="hidden" id="aprvlMon" name="mon" value="${mon}"/>
-		<input type="hidden" id="emp_num_list" name="empNumList" />
+		<input type="hidden" id="emp_num" name="empNum" value="${sEmpNum}" />
 	</form>
 
 	<!-- 결재 데이터 넘기는 폼 -->
@@ -1286,6 +1314,7 @@ function drawAprvlerInqryList(inqryList) {
 		<div class="page_title_bar">
 			<div class="page_title_text">급여명세서조회(관리자)</div>
 			<div class="page_srch_area">
+				<div class="aprvl_check_wrap" id="aprvlCheck"></div>
 				<input type="month" class="srch_month" id="srchMonth" value="${mon}">
 
 				<div class="srch_text_wrap">
@@ -1304,7 +1333,6 @@ function drawAprvlerInqryList(inqryList) {
 				<col width="150">
 				<col width="150">
 				<col width="150">
-				<col width="150">
 			</colgroup>
 			<thead>
 				<tr>
@@ -1315,7 +1343,6 @@ function drawAprvlerInqryList(inqryList) {
 					<th>수당합계액</th>
 					<th>공제합계액</th>
 					<th>실지급액</th>
-					<th>결재상태</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -1324,7 +1351,10 @@ function drawAprvlerInqryList(inqryList) {
 		<div class="board_bottom">
 			<div class="pgn_area" id="pgn_area">
 			</div>
-			<div class="cmn_btn_ml" id="aprvlBtn">결재</div>
+			<div class="aprvl_rqst_wrap">
+				<div class="cmn_btn" id="aprvlRqst">결재요청</div>
+				<div class="cmn_btn" id="aprvlAgainRqst">결재 재요청</div>
+			</div>
 		</div>
 	</div>
 	<!-- bottom -->

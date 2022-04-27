@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="SlryMng">
 	
+	<!-- 급여명세서조회(관리자) 개수 조회 -->
 	<select id="getSlryMngCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
 		FROM (  SELECT D.DEPT_NAME, R.RANK_NAME, E.EMP_NUM, E.EMP_NAME, S.SLRY, SUM(B.AMNT) AS BNFT, S.STNDR_YEAR_MONTH, SC.APRVL_STS
@@ -31,6 +32,7 @@
 		</if>
 	</select>
 	
+	<!-- 급여명세서조회(관리자) 목록 조회 -->
 	<select id="getSlryMngList" resultType="hashmap" parameterType="hashmap">
 		SELECT STNDR_YEAR_MONTH, DEPT_NAME, RANK_NAME, EMP_NAME, EMP_NUM, TO_CHAR(SLRY, '999,999,999,999') AS SLRY, NVL(TO_CHAR(BNFT, '999,999,999,999'), 0) AS BNFT,
 		       TO_CHAR((SLRY * 0.045) + (SLRY * 0.0343) + (SLRY * 0.0343 * 0.1152) + (SLRY * 0.008) + (SLRY * 0.04) + (SLRY * 0.04 * 0.1), '999,999,999,999') AS WH,
@@ -62,8 +64,9 @@
 			AND EMP_NAME LIKE '%' || #{searchTxt} || '%'
 		</if>
 	</select>
-
-	 <select id="slrSpcfctnView" resultType="hashmap" parameterType="hashmap">
+	
+	<!-- 급여명세서조회(관리자) 상세보기 -->
+	<select id="slrSpcfctnView" resultType="hashmap" parameterType="hashmap">
 		WITH MAIN AS(
     SELECT E.EMP_NUM, E.EMP_NAME,D.DEPT_NAME, R.RANK_NAME,BK.BANK_NAME,SA.DPSTR,SA.ACNT_NUM,S.SLRY AS SLRY,
           SUM((CASE WHEN B.BNFT_LIST_NUM = 1  THEN B.AMNT ELSE 0 END)) AS BNFT_1,
@@ -134,4 +137,26 @@
    FROM MAIN
  GROUP BY EMP_NUM, EMP_NAME, DEPT_NAME, RANK_NAME, BANK_NAME, DPSTR, ACNT_NUM, SLRY
 	</select>
+	
+	<!-- 급여 결재 성공 -->
+	<insert id="aprvlOk" parameterType="hashmap">
+		INSERT INTO SLRY_CLTN (STNDR_YEAR_MONTH, APRVL_NUM, EMP_NUM)
+		VALUES (#{mon}, #{aprvlNum}, #{empNum})
+	</insert>
+	
+	<!-- 급여 재결재 성공 -->
+	<update id="aprvlAgainOk" parameterType="hashmap">
+		UPDATE SLRY_CLTN SET APRVL_NUM = #{aprvlNum},
+						     EMP_NUM = #{empNum},
+						     APRVL_STS = '1'
+		WHERE STNDR_YEAR_MONTH = #{mon}
+	</update>
+	
+	<!-- 급여 결재 상태 조회 -->
+	<select id="getSlryMngAprvlSts" parameterType="hashmap" resultType="hashmap">
+		SELECT APRVL_STS
+		FROM SLRY_CLTN
+		WHERE STNDR_YEAR_MONTH = #{mon}
+	</select>
+	
 </mapper>

@@ -86,7 +86,7 @@
 }
 
 .intrnl_cost_admnstrtn_new td:nth-child(odd) {
-	width: 80px;
+	width: 100%;
 	font-weight: bold;
 	text-align: center;
 }
@@ -94,13 +94,13 @@
 .intrnl_cost_admnstrtn_new td:nth-child(3) {
 	text-align: right;
 	padding-right: 20px;
-	width: 30px;
+	width: 20px;
 }
 
 .intrnl_cost_admnstrtn_new td:nth-child(5) {
 	text-align: right;
 	padding-right: 20px;
-	width: 30px;
+	width: 20px;
 }
 
 .intrnl_cost_admnstrtn_new td:nth-child(even) {
@@ -108,19 +108,19 @@
 }
 
 .input {
-	width: 100%;
+	width: 700px;
 	height: 20px;
 	padding: 0px 5px;
 }
 
 .input_short {
-	width: 100%;
+	width: 100px;
 	height: 20px;
 	padding: 0px 5px;
 }
 
 .acnt_code_input {
-	width: 600px;
+	width: 120px;
 	height: 20px;
 	vertical-align: middle;
 }

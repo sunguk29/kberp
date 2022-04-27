@@ -15,6 +15,7 @@
 	width: 900px;
 }
 
+
 /* 개인 작업 영역 */
 .srch_month {
 	height: 27px;
@@ -320,10 +321,6 @@ display: inline-block;
 	background-color: rgb(200, 218, 248);
 }
 
-.cmn_btn #aprvlRqst {
-	display: none;
-}
-
 
 
 </style>
@@ -539,6 +536,16 @@ $(document).ready(function() {
 						   	 		checkbox.prop("checked", true);
 						   	 	 }
 						   	 });
+							 
+							 $("#aprvlerChk").on("click", function() {
+								 var checkbox = $(this).find("td:first-child :checkbox");
+						   		 
+						   	 	 if(checkbox.prop("checked")) {
+						   		 	checkbox.prop("checked", false);
+						   	 	 } else {
+						   	 		checkbox.prop("checked", true);
+						   	 	 }
+							 });
 						},
 						buttons : [{
 							name : "확인",
@@ -669,7 +676,7 @@ $(document).ready(function() {
 							 	 }); 
 						   	 });
 							 
-							// tr 선택시 체크박스 선택처리
+							 // tr 선택시 체크박스 선택처리
 						   	 $("#aprvlerInqry_tbody").on("click", "tr", function() {
 						   		 var checkbox = $(this).find("td:first-child :checkbox");
 						   		 
@@ -679,6 +686,17 @@ $(document).ready(function() {
 						   	 		checkbox.prop("checked", true);
 						   	 	 }
 						   	 });
+							
+							// 체크박스 클릭 처리
+						   	$("#aprvlerChk").on("click", function() {
+								 var checkbox = $(this).find("td:first-child :checkbox");
+						   		 
+						   	 	 if(checkbox.prop("checked")) {
+						   		 	checkbox.prop("checked", false);
+						   	 	 } else {
+						   	 		checkbox.prop("checked", true);
+						   	 	 }
+							 });
 						},
 						buttons : [{
 							name : "확인",
@@ -910,6 +928,18 @@ $(document).ready(function() {
 						   	 		checkbox.prop("checked", true);
 						   	 	 }
 						   	 });
+							 
+							 // 체크박스 클릭 처리
+						   	 $("#aprvlerChk").on("click", function() {
+								 var checkbox = $(this).find("td:first-child :checkbox");
+						   		 
+						   	 	 if(checkbox.prop("checked")) {
+						   		 	checkbox.prop("checked", false);
+						   	 	 } else {
+						   	 		checkbox.prop("checked", true);
+						   	 	 }
+							 });
+							 
 						},
 						buttons : [{
 							name : "확인",
@@ -1040,7 +1070,7 @@ $(document).ready(function() {
 							 	 }); 
 						   	 });
 							 
-							// tr 선택시 체크박스 선택처리
+							 // tr 선택시 체크박스 선택처리
 						   	 $("#aprvlerInqry_tbody").on("click", "tr", function() {
 						   		 var checkbox = $(this).find("td:first-child :checkbox");
 						   		 
@@ -1050,6 +1080,18 @@ $(document).ready(function() {
 						   	 		checkbox.prop("checked", true);
 						   	 	 }
 						   	 });
+							
+						 	 // 체크박스 클릭 처리
+						   	 $("#aprvlerChk").on("click", function() {
+								 var checkbox = $(this).find("td:first-child :checkbox");
+						   		 
+						   	 	 if(checkbox.prop("checked")) {
+						   		 	checkbox.prop("checked", false);
+						   	 	 } else {
+						   	 		checkbox.prop("checked", true);
+						   	 	 }
+							 });
+							
 						},
 						buttons : [{
 							name : "확인",
