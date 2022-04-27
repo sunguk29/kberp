@@ -62,15 +62,42 @@
 	<select id="getSalesBsnChart" resultType="hashmap">
 		SELECT A.CNT AS bsnType0, B.CNT AS bsnType1, C.CNT AS bsnType2
 		FROM ( SELECT COUNT(*) AS CNT
-		       FROM EXPCTD_BSNS_INFO
-		       WHERE EXPCTD_BSNS_TYPE = 0) A INNER JOIN ( SELECT COUNT(*) AS CNT
-		                                                FROM EXPCTD_BSNS_INFO
-		                                                WHERE EXPCTD_BSNS_TYPE = 1 ) B
-		                                             ON 1 = 1    
-		                                     INNER JOIN ( SELECT COUNT(*) AS CNT
-		                                                FROM EXPCTD_BSNS_INFO
-		                                                WHERE EXPCTD_BSNS_TYPE = 2) C
-		                                             ON 1 = 1
+       		   FROM EXPCTD_BSNS_INFO EBI INNER JOIN SALES S
+		                                         ON EBI.SALES_NUM = S.SALES_NUM
+		       WHERE EBI.EXPCTD_BSNS_TYPE = 0
+		       <choose>
+		       	<when test="mngNum != null and mngNum != ''">
+			       AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
+		       	</when>
+		       </choose>
+		       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
+			       AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
+		       	</if>) A INNER JOIN ( SELECT COUNT(*) AS CNT
+                                      FROM EXPCTD_BSNS_INFO EBI INNER JOIN SALES S
+                                                                        ON EBI.SALES_NUM = S.SALES_NUM
+                                      WHERE EBI.EXPCTD_BSNS_TYPE = 1
+									  <choose>
+								       	<when test="mngNum != null and mngNum != ''">
+									       AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
+								       	</when>
+								       </choose>
+									  <if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
+									 	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
+									  </if>) B
+                                  ON 1 = 1    
+                          INNER JOIN (SELECT COUNT(*) AS CNT
+                                      FROM EXPCTD_BSNS_INFO EBI INNER JOIN SALES S
+                                                                        ON EBI.SALES_NUM = S.SALES_NUM
+                                      WHERE EBI.EXPCTD_BSNS_TYPE = 2
+									  <choose>
+								       	<when test="mngNum != null and mngNum != ''">
+									       AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
+								       	</when>
+								       </choose>
+									  <if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
+										AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
+									  </if>) C
+                        		   ON 1 = 1
 	</select>
 
 	<!-- 당월 매출 실적 차트(내용) -->	

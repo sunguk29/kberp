@@ -8,6 +8,8 @@ public interface ISchdlService {
 	public List<HashMap<String, Object>> getDataList(String sql) throws Throwable;
 
 	public HashMap<String, Object> getData(String sql) throws Throwable;
+	
+	public HashMap<String, Object> getData(String sql, HashMap<String, Object> params) throws Throwable;
 
 	
 

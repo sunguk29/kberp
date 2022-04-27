@@ -140,7 +140,7 @@ public class RprtController {
 	/* 영업 차트 데이터 가져오기 */
 	@RequestMapping(value = "/salesgetChartDataAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String salesgetChartDataAjax(HttpServletRequest request) throws Throwable{
+	public String salesgetChartDataAjax(@RequestParam HashMap<String, Object> params, HttpServletRequest request) throws Throwable{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -149,8 +149,8 @@ public class RprtController {
 		
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		
-		HashMap<String, Object> bsnList = iSchdlService.getData("salesRprt.getSalesBsnChart");
-			
+		HashMap<String, Object> bsnList = iSchdlService.getData("salesRprt.getSalesBsnChart", params);
+		
 		for(int i = 0 ; i < size ; i++) {
 			HashMap<String, Object> temp = new HashMap<String, Object>();
 			
@@ -244,7 +244,7 @@ public class RprtController {
 	// 영업 차트 진행상태 개수
 	@RequestMapping(value = "/prgrsChartAjax", method=RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String prgrsChartAjax(HashMap<String, String> params, ModelAndView mav) throws Throwable{
+	public String prgrsChartAjax(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -269,7 +269,7 @@ public class RprtController {
 	// 영업 차트 진행단계 개수
 	@RequestMapping(value = "/prgrsStepAjax", method=RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String prgrsStepAjax(HashMap<String, String> params, ModelAndView mav) throws Throwable{
+	public String prgrsStepAjax(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();

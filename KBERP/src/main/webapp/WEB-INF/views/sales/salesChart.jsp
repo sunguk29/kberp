@@ -381,6 +381,12 @@ $(document).ready(function() {
 	getPrgrsCnt();
 	getPrgrsStepCnt();
 	
+	/* 검색 */
+	$(".cmn_btn").on("click",function() {
+		getData();
+		/* drawPrgrsList();
+		drawPrgrsStep(); */
+	});
 
 	/* 담당자 팝업 */
 	$("#mngBtn").on("click", function() {
@@ -509,6 +515,9 @@ $(document).ready(function() {
 			title: {
 				text: ''
 			},
+		    credits: {
+                enabled: false
+            },
 			colors: ['#5CB3FF', '#D462FF', '#FBB917'],
 	        series : [{
 	        	name: '건 수',
@@ -674,6 +683,8 @@ function drawMngPaging(pb) {
 			<div class="body">
 					<div class="bodyWrap">
 						<!-- 검색창 -->
+						<form action="#" id="getForm" method="post">
+						<input type="hidden" name="size" value="3" />
 						<table class="srch_table">
 							<colgroup>
 								<col width="50" />
@@ -682,7 +693,6 @@ function drawMngPaging(pb) {
 								<col width="100" />
 							</colgroup>
 							<tbody>
-								<!-- col=4 -->
 								<tr>
 									<td>
 										<span class="srch_name">내영업 조회</span>
@@ -693,10 +703,10 @@ function drawMngPaging(pb) {
 								</tr>
 								<tr>
 									<td>
-										<span class="srch_name">부서</span>
+										<span class="srch_name">팀분류</span>
 									</td>
 									<td colspan="3">
-										<select>
+										<select id="deptS" name="deptS">
 											<option value="9">영업부</option>
 											<option value="1">영업 1팀</option>
 											<option value="2">영업 2팀</option>
@@ -704,45 +714,31 @@ function drawMngPaging(pb) {
 									</td>
 								</tr>
 								<tr>
-									<td>
-										<span class="srch_name">기간</span>
-									</td>
-									<td colspan="3">
-										<input type="date" /> ~ <input type="date" />
-									</td>
-								</tr>
+								<td>
+									<span class="srch_name">기간</span>
+								</td>
+								<td colspan="3">
+									<input type="date" class="date" value="${sdate}" /> ~ <input type="date" class="date" value="${edate}" />
+								</td>
+							</tr>
 								<tr>
 									<td>
 										<span class="srch_name">담당자</span>
 									</td>
-									<td colspan="3">
+									<td colspan="2">
 										<div class="findEmp_box">
 											<input type="text" id="mngName" name="mngName" />
-											<input type="hidden" id="mngNum" />
+											<input type="hidden" id="mngNum" name="mngNum" />
 											<img class="userIcon" src="resources/images/sales/usericon.png" id="mngBtn">
 										</div>									
 									</td>
-								</tr>
-								<tr>
 									<td>
-										<span class="srch_name">정렬</span>
+									<span class="cmn_btn">검색</span>
 									</td>
-									<td>
-										<select>
-											<option selected="selected">선택안함</option>
-											<option>오름차순</option>
-											<option>내림차순 </option>
-										</select>
-									</td>
-									<td>
-										<span class="cmn_btn">검색</span>
-									</td>
-									<td></td>
 								</tr>
 							</tbody>
 						</table>
-						<form action="#" id="getForm" method="post">
-						<input type="hidden" name="size" value="3" />
+						</form>
 						<div class="new_sales_actvty">
 								<div class="sales_text">
 									<div class="sales_text_top">
@@ -775,7 +771,6 @@ function drawMngPaging(pb) {
 								<div class="prgrs_step"></div>
 							</div>
 						</div>
-						</form>
 					<!-- class="bodyWrap" end -->
 					</div>
 				<!-- class="body" end -->
