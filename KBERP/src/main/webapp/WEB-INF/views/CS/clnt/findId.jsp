@@ -172,6 +172,16 @@ line-height
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	
+	$("#id,#phone_num1").on("keypress", function(event) {
+		if(event.keyCode == 13) {
+			$(".find_Btn").click();
+				
+			return false;
+		}
+	});
+	
+	
 	$(".find_Btn").on("click", function() {
 		
 
