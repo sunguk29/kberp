@@ -38,11 +38,11 @@
                          ON SA.BANK_NUM = BK.BANK_NUM
                  INNER JOIN BNFT B
                          ON E.EMP_NUM = B.EMP_NUM
-                        AND S.STNDR_YEAR_MONTH = B.STNDR_YEAR_MONTH
+                        AND S.STNDR_YEAR_MONTH = TO_CHAR(B.STNDR_YEAR_MONTH, 'YYYY-MM')
                  INNER JOIN BNFT_LIST BL
                          ON B.BNFT_LIST_NUM = BL.BNFT_LIST_NUM
     WHERE 1=1
-      AND TO_CHAR(S.STNDR_YEAR_MONTH, 'YYYY-MM') = #{mon}
+      AND S.STNDR_YEAR_MONTH = #{mon}
       AND E.EMP_NUM = #{sEmpNum}
     GROUP BY D.DEPT_NAME, R.RANK_NAME, E.EMP_NAME, E.EMP_NUM, S.SLRY, S.STNDR_YEAR_MONTH,BK.BANK_NAME,B.AMNT,SA.DPSTR,SA.ACNT_NUM
  )

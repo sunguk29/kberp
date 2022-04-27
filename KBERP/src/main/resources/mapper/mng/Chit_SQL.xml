@@ -123,4 +123,9 @@
 		WHERE STNDR_YEAR_MONTH = #{mon}
 	</update>
 	
+	<!-- 급여 결재 성공 -->
+	<insert id="slryAprvlOk" parameterType="hashmap">
+		
+	</insert>
+	
 </mapper>

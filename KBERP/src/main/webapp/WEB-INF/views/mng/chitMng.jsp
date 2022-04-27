@@ -243,7 +243,6 @@ display: inline-block;
     margin-top: 4px;
 }
 
-/* 결재권자 선택 팝업 */
 .popup_emp_srch_area {
 	display: inline-block;
 	vertical-align: top;
@@ -372,6 +371,8 @@ $(document).ready(function() {
 	});
 	
 	reloadList();
+	$("#aprvlRqst").css('display', 'none');
+	$("#aprvlAgainRqst").css('display', 'none');
 	
 	$("#pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
@@ -1151,7 +1152,7 @@ function reloadList() {
 			drawList(res.list);
 			drawPaging(res.pb);
 			drawSum(res.data);
-			drawAprvlSts(res.aprvlSts);
+			drawAprvlSts(res.aprvlSts, res.list);
 		},
 		error : function(request, status, error) {
 			console.log(request.responseText);
@@ -1162,6 +1163,8 @@ function reloadList() {
 // 전표 목록 그리기
 function drawList(list) {
 	var html = "";
+	
+	console.log(list);
 	
 	for(data of list) {
 		html += "<tr>";
@@ -1231,7 +1234,7 @@ function drawSum(data) {
 	
 	html += "<tr>";
 	html += "<td>차변 합계</td>";
-	if(data.DEVIT_SUM != null) {
+	if(data != null && data.DEVIT_SUM != null) {
 		html += "<td>" + data.DEVIT_SUM + "원</td>";		
 	} else {
 		html += "<td>0원</td>";
@@ -1239,8 +1242,8 @@ function drawSum(data) {
 	html += "</tr>";
 	html += "<tr>";
 	html += "<td>대변 합계</td>";
-	if(data.CREDIT_SUM != null) {
-		html += "<td>" + data.CREDIT_SUM + "원</td>";		
+	if(data != null && data.CREDIT_SUM != null) {
+		html += "<td>" + data.CREDIT_SUM + "원</td>";
 	} else {
 		html += "<td>0원</td>";
 	}
@@ -1267,28 +1270,40 @@ function drawAprvlerInqryList(inqryList) {
 }
 
 // 결재 현황 조회
-function drawAprvlSts(aprvlSts) {
+function drawAprvlSts(aprvlSts, list) {
+	
+	
 	var html = "";
 	html += "<div class=\"aprvl_check_sts\">결재 현황 :</div>"; 
+	console.log("list : " + list);
 	
-	if(aprvlSts == null) {
-		html += "<div class=\"aprvl_check_res\"> - </div>"
-		$("#aprvlRqst").css('display', 'inline-block');
-		$("#aprvlAgainRqst").css('display', 'none');
+	if(list != "") {
+
+		if(aprvlSts == null) {
+			html += "<div class=\"aprvl_check_res\">-</div>"
+			$("#aprvlRqst").css('display', 'inline-block');
+			$("#aprvlAgainRqst").css('display', 'none');
+			
+		} else if(aprvlSts.APRVL_STS == 0) { /* 결재 진행중 */
+			html += "<div class=\"aprvl_check_res\">결재 진행중</div>";
+			$("#aprvlRqst").css('display', 'none');
+			$("#aprvlAgainRqst").css('display', 'none');
+		} else if(aprvlSts.APRVL_STS == 1) { /* 결재 완료 */
+			html += "<div class=\"aprvl_check_res\" style=\"color:#2E83F2;\">결재 완료</div>";
+			$("#aprvlRqst").css('display', 'none');
+			$("#aprvlAgainRqst").css('display', 'none');
+		} else { /* 결재 반려 */
+			html += "<div class=\"aprvl_check_res\" style=\"color:#ff6f60;\">결재 반려</div>";
+			$("#aprvlRqst").css('display', 'none');
+			$("#aprvlAgainRqst").css('display', 'inline-block');
+		}
 		
-	} else if(aprvlSts.APRVL_STS == 0) { /* 결재 진행중 */
-		html += "<div class=\"aprvl_check_res\">결재 진행중</div>";
+	} else {
+		html += "<div class=\"aprvl_check_res\">-</div>"
 		$("#aprvlRqst").css('display', 'none');
 		$("#aprvlAgainRqst").css('display', 'none');
-	} else if(aprvlSts.APRVL_STS == 1) { /* 결재 완료 */
-		html += "<div class=\"aprvl_check_res\" style=\"color:#2E83F2;\">결재 완료</div>";
-		$("#aprvlRqst").css('display', 'none');
-		$("#aprvlAgainRqst").css('display', 'none');
-	} else { /* 결재 반려 */
-		html += "<div class=\"aprvl_check_res\" style=\"color:#ff6f60;\">결재 반려</div>";
-		$("#aprvlRqst").css('display', 'none');
-		$("#aprvlAgainRqst").css('display', 'inline-block');
 	}
+	
 		
 	$("#aprvlCheck").html(html);
 	

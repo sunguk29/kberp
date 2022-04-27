@@ -38,9 +38,11 @@ $(document).ready(function() {
 	
 	// 파일 데이터가 있다면 View에 출력
 	var uploadFileName = "${fileData.ATT_FILE_NAME}";
-	if(uploadFileName != null) {
+	if(uploadFileName != "") {
 		$('#fileName').val(uploadFileName.substring(20));
 		$("#attCnt").text("(1)");
+	} else {
+		$("#attCnt").text("(0)");
 	}
 
 	
@@ -102,8 +104,10 @@ function fileDownLoad(){
 		<div class="page_title_bar">
 			<div class="page_title_text">상품관리 상세보기</div>
 			<div class="imgPos">
-				<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" id="deleteBtn" />
-				<img alt="수정버튼" src="resources/images/sales/pencil.png"  class="btnImg" id="updateBtn"/>
+				<c:if test="${data.EMP_NUM eq params.sEmpNum}">
+					<img alt="삭제버튼" src="resources/images/sales/garbage.png" class="btnImg" id="deleteBtn" />
+					<img alt="수정버튼" src="resources/images/sales/pencil.png"  class="btnImg" id="updateBtn"/>
+				</c:if>
 				<img alt="목록버튼" src="resources/images/sales/list.png"    class="btnImg" id="listBtn"/>
 			</div>
 		</div>

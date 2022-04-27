@@ -274,19 +274,19 @@ public class RprtController {
 	// 영업 차트 진행상태 개수
 	@RequestMapping(value = "/prgrsChartAjax", method=RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String prgrsChartAjax(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable{
+	public String prgrsChartAjax(@RequestParam HashMap<String, Object> params, ModelAndView mav) throws Throwable{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		//영업 전체 개수
-		int totalCnt = iCommonService.getIntData("salesRprt.getTotalCnt", params);
+		int totalCnt = iSchdlService.getIntData("salesRprt.getTotalCnt", params);
 		//영업 종료(실패)개수
-		int failCnt = iCommonService.getIntData("salesRprt.getFailCnt", params);
+		int failCnt = iSchdlService.getIntData("salesRprt.getFailCnt", params);
 		//영업 종료(성공)개수
-		int endCnt = iCommonService.getIntData("salesRprt.getEndCnt", params);
+		int endCnt = iSchdlService.getIntData("salesRprt.getEndCnt", params);
 		//영업 진행중 개수
-		int ingCnt = iCommonService.getIntData("salesRprt.getIngCnt", params);
+		int ingCnt = iSchdlService.getIntData("salesRprt.getIngCnt", params);
 		
 		modelMap.put("totalCnt", totalCnt);
 		modelMap.put("failCnt", failCnt);
@@ -299,19 +299,19 @@ public class RprtController {
 	// 영업 차트 진행단계 개수
 	@RequestMapping(value = "/prgrsStepAjax", method=RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String prgrsStepAjax(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable{
+	public String prgrsStepAjax(@RequestParam HashMap<String, Object> params, ModelAndView mav) throws Throwable{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		//영업기회 개수
-		int salesChncCnt = iCommonService.getIntData("salesRprt.getSalesChncCnt", params);
+		int salesChncCnt = iSchdlService.getIntData("salesRprt.getSalesChncCnt", params);
 		//제안 개수
-		int sgstnCnt = iCommonService.getIntData("salesRprt.getSgstnCnt", params);
+		int sgstnCnt = iSchdlService.getIntData("salesRprt.getSgstnCnt", params);
 		//견적 개수
-		int qtnCnt = iCommonService.getIntData("salesRprt.getQtnCnt", params);
+		int qtnCnt = iSchdlService.getIntData("salesRprt.getQtnCnt", params);
 		//계약 개수
-		int cntrctCnt = iCommonService.getIntData("salesRprt.getCntrctCnt", params);
+		int cntrctCnt = iSchdlService.getIntData("salesRprt.getCntrctCnt", params);
 		
 		modelMap.put("salesChncCnt", salesChncCnt);
 		modelMap.put("sgstnCnt", sgstnCnt);
