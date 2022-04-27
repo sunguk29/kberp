@@ -53,6 +53,11 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	
+	$("#mngrName").on("click", function() {
+		$("#srchEmp").click();
+	});
+	
 	$("#cnclBtn").on("click", function(){
 		$("#cnclForm").submit();
 	});

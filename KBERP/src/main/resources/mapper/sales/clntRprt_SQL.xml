@@ -71,7 +71,7 @@
 	</select>
 
 <!-- 영업 고객수 -->
-	<select id="salesCnt" resultType="hashmap" parameterType="hashmap">
+	<select id="salesClntCnt" resultType="hashmap" parameterType="hashmap">
 		SELECT COUNT(A.DEPT_NUM) CNT,
     		   COUNT(CASE WHEN A.DEPT_NUM = 7 THEN 1 END) CNT1,
    			   COUNT(CASE WHEN A.DEPT_NUM = 8 THEN 1 END) CNT2
@@ -80,6 +80,32 @@
 					         INNER JOIN APNTM A
 					                 ON E.EMP_NUM = A.EMP_NUM
 		WHERE DEL_CHECK IS NULL
+		<if test="deptNum != 0"> 
+			<choose>
+				<when test="deptNum == 1">
+					AND A.DEPT_NUM = 7
+				</when>
+				<when test="deptNum == 2">
+					AND A.DEPT_NUM = 8
+				</when>			
+			</choose>
+		</if>
+		<choose>
+			<when test="mngEmp != null and mngEmp != ''"> <!-- 담당자텍스트 박스 -->
+				AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'
+			</when>
+		</choose>
+	</select>
+<!-- 영업 고객사수 -->	
+	<select id="salesCCcnt" resultType="hashmap" parameterType="hashmap">
+		SELECT COUNT(A.DEPT_NUM) CNT,
+		       COUNT(CASE WHEN A.DEPT_NUM = 7 THEN 1 END) CNT1,
+		   	   COUNT(CASE WHEN A.DEPT_NUM = 8 THEN 1 END) CNT2
+		FROM CLNT_CMPNY CC INNER JOIN EMP E
+		   		                   ON CC.EMP_NUM = E.EMP_NUM
+					       INNER JOIN APNTM A
+					               ON E.EMP_NUM = A.EMP_NUM 
+		WHERE CC.DEL_CHECK IS NULL
 		<if test="deptNum != 0"> 
 			<choose>
 				<when test="deptNum == 1">

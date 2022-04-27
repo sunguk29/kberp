@@ -119,6 +119,13 @@ public class CallCntrController {
 					case "NoteSave":
 						iCommonService.insertData("CC.noteSave", params);
 						break;
+					case "ClntUpdate":
+						
+						iCommonService.updateData("CC.clntUpdate", params);
+						// modelMap에 시퀀스 추가
+						HashMap<String, String> data2 = iCommonService.getData("CC.clntUpParam", params);
+						modelMap.put("data", data2);
+						break;
 					}
 					modelMap.put("res", "success");
 					

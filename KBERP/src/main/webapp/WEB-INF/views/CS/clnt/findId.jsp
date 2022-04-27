@@ -129,7 +129,7 @@ body {
 	display: inline-block;
 }
 
-.login_Btn {
+.find_Btn {
 	display: block;
     width: 420px;
     height: 50px;
@@ -148,7 +148,20 @@ body {
 	user-select:none;
 }
 
+thead{
+text-align: center;
+font-size: 2pt;
+font-weight: strong;
+}
 
+.user{
+font-size: 10pt;
+}
+
+.popup_cont{
+text-align
+line-height 
+}
 </style>
 <!-- jQuery js 파일 -->
 <script type="text/javascript" src="resources/script/jquery/jquery-1.12.4.min.js"></script>
@@ -159,53 +172,114 @@ body {
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	$(".login_Btn").on("click", function() {
-		if(checkEmpty("#loginId")) {
-			makeAlert("로그인 안내", "아이디를 입력해 주세요.", function() {
-				$("#loginId").focus();
-			});
-		} else if(checkEmpty("#loginPw")) {
-			makeAlert("로그인 안내", "비밀번호를 입력해 주세요.", function() {
-				$("#loginPw").focus();
-			});
-		} else {
-			var params = $("#loginForm").serialize();
+	
+	$("#id,#phone_num1").on("keypress", function(event) {
+		if(event.keyCode == 13) {
+			$(".find_Btn").click();
+				
+			return false;
+		}
+	});
+	
+	
+	$(".find_Btn").on("click", function() {
+		
+
+
+		if($("#id").val()=="") {
+			alert("이름을 입력해주세요");
+			$("#id").focus();
+			}
+		 else if($("#phone_num1").val()=="") {
+			alert("핸드폰 번호를 입력해주세요");
+			$("#phone_num1").focus();
+			}
+		 else if($("#phone_num1").val().length!=11) {
+				alert("핸드폰 번호 11자리를 입력해주세요");
+				$("#phone_num1").val("");
+				$("#phone_num1").focus();
+		 }
+		 else {
+			var html=""
 			
-			$.ajax({
-				type : "post",
-				url : "indvdlLoginAjax",
-				dataType : "json",
-				data : params,
-				success : function(result) {
-					if(result.res == "SUCCESS") {
-						location.href = "cmbnInfo";
-					} else if(result.res == "FAILED") {
-						makeAlert("로그인 실패", "아이디나 비밀번호가 틀렸습니다.");
-					} else {
-						makeAlert("로그인 경고", "로그인 중 문제가 발생하였습니다.");
-					}
+			html+="<table class=\"board_table\">";
+			html+="<thead>";
+			html+="<tr>";
+			html+="<td>이름</td>";
+			html+="<td>아이디</td>";
+			html+="</tr>";
+			html+="</thead>";
+			html+="<tbody></tbody>";
+			html+="</table>";
+			makePopup({
+				depth : 1,
+				bg : true,
+				width : 400,
+				height : 200,
+				title:"아이디 찾기",
+				contents:html,
+				contentsEvent:function(){
+					var params= $("#findidForm").serialize();
+					
+					$.ajax({
+						type: "post", // 전송형태
+						url : "findIdAjax/select" , //통신 주소
+						dataType : "json", //받을 데이터 형태
+						data : params, //보낼 데이터. 보낼 것이 없으면 안씀
+						success : function(res){ // 성공 시 실행 함수. 인자는 받아온 데이터
+						//받아온 데이터중의 list를 그리겠다.
+						if(res.res=="failed"){
+							users();
+						}
+						else{
+							drawList(res.list);
+						}
+							
+						},
+						error: function(request, status, error){ // 문제 발생 시 실행 함수
+							console.log(request.responseText); //결과텍스트. 스프링 실행 결과
+						}
+					});
 				},
-				error : function(request, status, error) {
-					console.log("status : " + request.status);
-					console.log("text : " + request.responseText);
-					console.log("error : " + error);
+				buttons : {
+					name : "닫기",
+					func:function() {
+						console.log("One!");
+						closePopup();
+					}
 				}
 			});
 			
 		}
 	}); // login_Btn END
 	
-		$("#sign").on("click", function() {
-			$("#signForm").attr("action", "signUp");
-			$("#signForm").submit();
-		});
 		
-		$("#center").on("click", function() {
-			$("#centerForm").attr("action", "clientCenter");
-			$("#centerForm").submit();
-		});
 		
 }); // document.ready END
+
+
+//아이디 불러오기
+function drawList(list){
+	var html ="";
+	
+	// of: list 하나씩 꺼내오는 for문
+	for(var data of list){
+		html+="<tr>";
+		html+="<td>"+data.CLNT_NAME+"</td>";
+		html+="<td>"+data.ID+"</td>";
+		html+="</tr>";
+	}
+	$("tbody").html(html);
+}
+
+//회원정보 없을시
+function users(){
+	var html="";
+		html+="회원정보가 없습니다";
+		$(".popup_cont").css("text-align","center");
+		$(".popup_cont").css("line-height","100px");
+	$(".popup_cont").html(html);
+}
 </script>
 </head>
 <body>
@@ -214,20 +288,22 @@ $(document).ready(function() {
 		<div class="login_middle">
 			<div id="findHead">
 	            <div class="findIdLogo"></div>
-		    </div>
+		    </div>\
+		    <form action="#" id="findidForm" method="post">
 			<div class="login_area">
 				<div class="input_id">
-					<input type="text" placeholder="이름">
+					<input type="text" name="id" id="id" placeholder="이름">
 					<div class="country_code">
 						<select id="internationalCode" name="internationalCode" title="국가코드" class="country_sel" >
 							<option value="" selected disabled hidden>+82</option>
 					  	 	<option value="82">대한민국 +82</option>
 						</select>
-							<input type="text" id="phone_num1" placeholder="핸드폰번호">
+							<input type="text" id="phone_num1" name="phone_num1"placeholder="핸드폰번호">
 					</div>
 				</div>
-				<div class="login_Btn">아이디 찾기</div>
+				<div class="find_Btn">아이디 찾기</div>
 			</div>
+			</form>
 		</div>
 		<div class="login_logo">
 			<div class="kabang_icon">
@@ -239,5 +315,6 @@ $(document).ready(function() {
 		</div>
 	</div>
 </div>
+
 </body>
 </html>
