@@ -1518,6 +1518,7 @@ function checkEmpty(sel) {
 			    				<br/>
 			    				<input class="adrs_input_dtls" type="text" id="dtl_adr" name="dtl_adr" readonly="readonly"/>
 			    		</div>	
+		    			<div class="cmn_btn_mr" id="updateBtn">고객정보 수정</div>
 		    			<div class="cmn_btn_mr" id="saveBtn">신규고객 등록</div>
 		    		</form>
 		    		</div>
