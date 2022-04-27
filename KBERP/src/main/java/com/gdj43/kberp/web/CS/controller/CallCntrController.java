@@ -102,10 +102,25 @@ public class CallCntrController {
 				try {
 					switch(gbn) {
 					case "ClntSave":
-						iCommonService.getData("CC.clntSave", params);
+						//시퀀스 취득
+						String seq = iCommonService.getStringData("CC.clntSeq");
+						// params에 시퀀스 추가
+						params.put("clntSeq", seq);
+						
+						iCommonService.insertData("CC.clntSave", params);
+						
+						// modelMap에 시퀀스 추가
+						
+						HashMap<String, String> data = iCommonService.getData("CC.clntParam", params);
+						modelMap.put("data", data);
+						modelMap.put("clntSeq", seq);
+						
 						break;
 					case "NoteSave":
-						iCommonService.getData("CC.noteSave", params);
+						iCommonService.insertData("CC.noteSave", params);
+						break;
+					case "ClntUpdate":
+						iCommonService.updateData("CC.clntUpdate", params);
 						break;
 					}
 					modelMap.put("res", "success");

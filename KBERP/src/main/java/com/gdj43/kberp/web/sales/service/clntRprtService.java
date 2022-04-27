@@ -14,12 +14,8 @@ public class clntRprtService implements IClntRprtService {
 	public IClntRprtDao iClntRprtDao;
 
 	@Override
-	public double clntAvgCnt(HashMap<String, String> params) throws Throwable {
-		return iClntRprtDao.clntAvgCnt(params);
+	public HashMap<String, Object> getData(String string) throws Throwable {
+		return iClntRprtDao.getData(string);
 	}
 
-	@Override
-	public double ccAvgCnt(HashMap<String, String> params) throws Throwable {
-		return iClntRprtDao.ccAvgCnt(params);
-	}
 }

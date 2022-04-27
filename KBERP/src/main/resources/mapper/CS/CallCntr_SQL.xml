@@ -64,8 +64,19 @@ WHERE CNSL_NUM = #{cnsl_num}
 <!-- 고객정보 저장 -->
 <insert id="clntSave" parameterType="hashmap">
 INSERT INTO INDVDL_CLNT(CLNT_NUM, CLNT_NAME, CLNT_GRADE, PHONE_NUM_1, PHONE_NUM_2, ZIP_CODE, ADRS, DTL_ADRS)
-VALUES (INDVDL_CLNT_SEQ.NEXTVAL, #{clnt_name}, #{clnt_grade}, #{phon_num_1}, #{phon_num_2}, #{zip_code}, #{adrs}, #{dtl_adrs})
+VALUES (#{clntSeq}, #{clnt_name}, #{clnt_grade}, #{phon_num_1}, #{phon_num_2}, #{zip_code}, #{adrs}, #{dtl_adrs})
 </insert>
+
+<update id="clntUpdate" parameterType="hashmap">
+UPDATE INDVDL_CLNT SET CLNT_NAME = #{clnt_name},
+                       CLNT_GRADE = #{clnt_grade},
+                       PHONE_NUM_1 = #{phon_num_1},
+                       PHONE_NUM_2 = #{phon_num_2},
+                       ZIP_CODE = #{zip_code},
+                       ADRS = #{adrs},
+                       DTL_ADRS = #{dtl_adrs}
+WHERE CLNT_NUM = #{clnt_num}
+</update>
 
 <!-- 상담노트 저장 -->
 <insert id="noteSave" parameterType="hashmap">
@@ -78,6 +89,22 @@ VALUES (CNSL_NOTE_SEQ.NEXTVAL, #{clnt_num}, #{emp_num}, #{cnsl_type_num}, #{cont
 SELECT CLNT_NUM, CLNT_NAME, CLNT_GRADE, PHONE_NUM_1, PHONE_NUM_2, ZIP_CODE, ADRS, DTL_ADRS
 FROM INDVDL_CLNT
 WHERE CLNT_NUM = #{clnt_num}
+</select>
+
+<!-- 신규고객 등록 팝업에서 고객정보로 데이터 전달 -->
+<select id="clntSeq" resultType="String">
+SELECT INDVDL_CLNT_SEQ.NEXTVAL
+FROM DUAL
+</select>
+
+<select id="clntParam" parameterType="hashmap" resultType="hashmap">
+SELECT N.CLNT_NUM, N.CLNT_NAME, N.CLNT_GRADE, N.PHONE_NUM_1, N.PHONE_NUM_2, N.ZIP_CODE, N.ADRS, N.DTL_ADRS
+FROM(SELECT I.CLNT_NUM, I.CLNT_NAME, I.CLNT_GRADE, I.PHONE_NUM_1, I.PHONE_NUM_2, I.ZIP_CODE, I.ADRS, I.DTL_ADRS, I.RNUM
+     FROM (SELECT CLNT_NUM, CLNT_NAME, CLNT_GRADE, PHONE_NUM_1, PHONE_NUM_2, ZIP_CODE, ADRS, DTL_ADRS,
+                  ROW_NUMBER() OVER(ORDER BY CLNT_NUM DESC) AS RNUM
+           FROM INDVDL_CLNT) I
+           WHERE I.RNUM = 1) N
+WHERE N.CLNT_NUM = #{clntSeq}
 </select>
 
 <!-- 대응가이드 파트 -->
