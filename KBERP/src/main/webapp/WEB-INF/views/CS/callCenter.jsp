@@ -1341,8 +1341,17 @@ $(document).ready(function() {
 							success : function(res) {
 								if(res.res == "success") {
 									console.log(res);
-									closePopup();
+									$("#name").val(res.data.CLNT_NAME);
+									$("#grade").val(res.data.CLNT_GRADE);
+									$("#phn_num_1").val(res.data.PHONE_NUM_1);
+									$("#phn_num_2").val(res.data.PHONE_NUM_2);
+									$("#zip").val(res.data.ZIP_CODE);
+									$("#adr").val(res.data.ADRS);
+									$("#dtl_adr").val(res.data.DTL_ADRS);
+									$("#noteSaveForm #clnt_num").val(res.data.CLNT_NUM);
 									
+									closePopup();
+								
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
 								}
