@@ -210,13 +210,13 @@
 	position: absolute;
 	top: 35px;
 	left: 10px;
-	background-color: #FF6384;
+	background-color: #F2B705;
 }
 .clnt {
 	position: absolute;
 	top: 90px;
 	left: 10px;
-	background-color: #4169e1;
+	background-color: #F2CB05;
 }
 .ccTxt {
 	display: inline-block;
@@ -401,9 +401,50 @@ input:focus {
 	width: 428px;
 	height: 250px;
 }
+#bar-chart {
+	width: 927px;
+	height: 260px;
+}
+#datatable {
+    font-family: Verdana, sans-serif;
+    border-collapse: collapse;
+    border: 1px solid #ebebeb;
+    margin: 10px auto;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+#datatable caption {
+    padding: 1em 0;
+    font-size: 1.2em;
+    color: #555;
+}
+
+#datatable th {
+    font-weight: 600;
+    padding: 0.5em;
+}
+
+#datatable td,
+#datatable th,
+#datatable caption {
+    padding: 0.5em;
+}
+
+#datatable thead tr,
+#datatable tr:nth-child(even) {
+    background: #f8f8f8;
+}
+
+#datatable tr:hover {
+    background: #f1f7ff;
+}
 </style>
 <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
 <script src=" https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	
@@ -536,6 +577,7 @@ $(document).ready(function() {
 	/* 차트 그리기 */
 	function clntMakeChart(list) {
 		console.log(list);
+		//고객등급 차트
 		$('#pie-chart').highcharts({
 			chart: {
 				type: 'pie',
@@ -557,12 +599,46 @@ $(document).ready(function() {
 		    },
 			colors: ['#FF6384', '#ffd950', '#02bc77', '#28c3d7','#4169e1'],
  	        series : [{
-        		name: '등급',
+        		name: '고객사',
         		data : list
         	}],
             credits: {
                 enabled: false
             }
+		});
+		//영업부서 차트
+		$('#bar-chart').highcharts({
+		    data: {
+		        table: 'datatable'
+		    },
+			chart: {
+				type: 'column',
+			},
+			title: {
+				text: ''
+			},
+		    yAxis: {
+		        title: {
+		            text: ''
+		        }
+		    },
+			legend: {
+				enabled: true
+			},
+		    xAxis: {
+		        type: 'category'
+		    },
+		    tooltip: {
+		    },
+            credits: { //워터마크 숨김
+                enabled: false
+            },
+            colors: ["#F2B705", "#F2CB05"],
+            series: [{
+            	pointWidth: 50 // bar 너비 지정
+            }, {
+            	pointWidth: 50 // bar 너비 지정
+            }]
 		});
 	}
 });
@@ -753,7 +829,34 @@ function drawPaging(pb, sel) {
 						</div>
 						<div class="sales_text_bot2">
 							<div class="pie-bot">
-								<canvas id="bar-chart" width="927" height="240"></canvas>
+								<div id="bar-chart">
+								    <table id="datatable">
+							        <thead>
+							            <tr>
+							                <th></th>
+							                <th>고객사</th>
+							                <th>고객</th>
+							            </tr>
+							        </thead>
+							        <tbody>
+							            <tr>
+							                <th>영업부</th>
+							                <td>${clntCmpnyCnt.CNT}</td>
+							                <td>${clntCnt.CNT}</td>
+							            </tr>
+							            <tr>
+							                <th>영업1팀</th>
+							                <td>${clntCmpnyCnt.CNT1}</td>
+							                <td>${clntCnt.CNT1}</td>
+							            </tr>
+							            <tr>
+							                <th>영업2팀</th>
+							                <td>${clntCmpnyCnt.CNT2}</td>
+							                <td>${clntCnt.CNT2}</td>
+							            </tr>
+							        </tbody>
+							    </table>									
+								</div>
 							</div>							
 						</div>
 					</div>
