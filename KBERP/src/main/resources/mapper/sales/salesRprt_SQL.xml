@@ -62,41 +62,62 @@
 	<select id="getSalesBsnChart" resultType="hashmap">
 		SELECT A.CNT AS bsnType0, B.CNT AS bsnType1, C.CNT AS bsnType2
 		FROM ( SELECT COUNT(*) AS CNT
-       		   FROM EXPCTD_BSNS_INFO EBI INNER JOIN SALES S
-		                                         ON EBI.SALES_NUM = S.SALES_NUM
-		       WHERE EBI.EXPCTD_BSNS_TYPE = 0
-		       <choose>
-		       	<when test="mngNum != null and mngNum != ''">
+			   FROM EXPCTD_BSNS_INFO EBI INNER JOIN SALES S
+				                                 ON EBI.SALES_NUM = S.SALES_NUM
+				                         INNER JOIN EMP E
+				                                 ON S.MNGR_EMP_NUM = E.EMP_NUM
+				                         INNER JOIN APNTM A
+				                                 ON E.EMP_NUM = A.EMP_NUM
+				                         INNER JOIN DEPT D
+				                                 ON A.DEPT_NUM = D.DEPT_NUM
+				WHERE EBI.EXPCTD_BSNS_TYPE = 0				                                 
+		       	<if test="mngNum != null and mngNum != ''">
 			       AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
-		       	</when>
-		       </choose>
+		       	</if>
 		       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
 			       AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
+		       	</if>
+		       	<if test="deptS != 9">
+		       	 	AND D.DEPT_NUM = #{deptS}
 		       	</if>) A INNER JOIN ( SELECT COUNT(*) AS CNT
-                                      FROM EXPCTD_BSNS_INFO EBI INNER JOIN SALES S
-                                                                        ON EBI.SALES_NUM = S.SALES_NUM
-                                      WHERE EBI.EXPCTD_BSNS_TYPE = 1
-									  <choose>
-								       	<when test="mngNum != null and mngNum != ''">
+									  FROM EXPCTD_BSNS_INFO EBI INNER JOIN SALES S
+										                                ON EBI.SALES_NUM = S.SALES_NUM
+										                        INNER JOIN EMP E
+										                                ON S.MNGR_EMP_NUM = E.EMP_NUM
+										                        INNER JOIN APNTM A
+										                                ON E.EMP_NUM = A.EMP_NUM
+										                        INNER JOIN DEPT D
+										                                ON A.DEPT_NUM = D.DEPT_NUM
+									  WHERE EBI.EXPCTD_BSNS_TYPE = 1   
+								       	<if test="mngNum != null and mngNum != ''">
 									       AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
-								       	</when>
-								       </choose>
-									  <if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
-									 	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
-									  </if>) B
+								       	</if>
+								       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
+									       AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
+								       	</if>
+								       	<if test="deptS != 9">
+								       	 	AND D.DEPT_NUM = #{deptS}
+								       	</if>) B
                                   ON 1 = 1    
                           INNER JOIN (SELECT COUNT(*) AS CNT
-                                      FROM EXPCTD_BSNS_INFO EBI INNER JOIN SALES S
-                                                                        ON EBI.SALES_NUM = S.SALES_NUM
-                                      WHERE EBI.EXPCTD_BSNS_TYPE = 2
-									  <choose>
-								       	<when test="mngNum != null and mngNum != ''">
+									  FROM EXPCTD_BSNS_INFO EBI INNER JOIN SALES S
+										                                ON EBI.SALES_NUM = S.SALES_NUM
+										                        INNER JOIN EMP E
+										                                ON S.MNGR_EMP_NUM = E.EMP_NUM
+										                        INNER JOIN APNTM A
+										                                ON E.EMP_NUM = A.EMP_NUM
+										                        INNER JOIN DEPT D
+										                                ON A.DEPT_NUM = D.DEPT_NUM
+									  WHERE EBI.EXPCTD_BSNS_TYPE = 2   
+								       	<if test="mngNum != null and mngNum != ''">
 									       AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
-								       	</when>
-								       </choose>
-									  <if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
-										AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
-									  </if>) C
+								       	</if>
+								       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
+									       AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
+								       	</if>
+								       	<if test="deptS != 9">
+								       	 	AND D.DEPT_NUM = #{deptS}
+								       	</if>) C
                         		   ON 1 = 1
 	</select>
 
@@ -142,28 +163,75 @@
 	<!-- 영업 종료(실패) 개수 -->
 	<select id="getFailCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
-		FROM SALES
-		WHERE SUBSTR(PRGRS_STS_NUM, 2, 1) = 6 
+		FROM SALES S INNER JOIN EMP E
+		                     ON S.MNGR_EMP_NUM = E.EMP_NUM
+		             INNER JOIN APNTM A
+		                     ON E.EMP_NUM = A.EMP_NUM
+		             INNER JOIN DEPT D
+		                     ON A.DEPT_NUM = D.DEPT_NUM
+		WHERE SUBSTR(PRGRS_STS_NUM, 2, 1) = 6
+		<if test="mngNum != null and mngNum != ''">
+        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
+      	</if>
+      	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
+        	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
+      	</if>
+      	<if test="deptS != 9">
+      	 	AND D.DEPT_NUM = #{deptS}
+      	</if> 
 	</select>
 	
 	<!-- 영업 종료(성공) 개수 -->
 	<select id="getEndCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
-		FROM SALES
-		WHERE SUBSTR(PRGRS_STS_NUM, 2, 1) = 5 
+		FROM SALES S INNER JOIN EMP E
+		                     ON S.MNGR_EMP_NUM = E.EMP_NUM
+		             INNER JOIN APNTM A
+		                     ON E.EMP_NUM = A.EMP_NUM
+		             INNER JOIN DEPT D
+		                     ON A.DEPT_NUM = D.DEPT_NUM
+		WHERE SUBSTR(PRGRS_STS_NUM, 2, 1) = 5
+		<if test="mngNum != null and mngNum != ''">
+        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
+      	</if>
+      	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
+        	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
+      	</if>
+      	<if test="deptS != 9">
+      	 	AND D.DEPT_NUM = #{deptS}
+      	</if> 
 	</select>
 	
 	<!-- 영업 진행중 개수 -->
 	<select id="getIngCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
-		FROM SALES
-		WHERE SUBSTR(PRGRS_STS_NUM, 2, 1) = 7 
+		FROM SALES S INNER JOIN EMP E
+		                     ON S.MNGR_EMP_NUM = E.EMP_NUM
+		             INNER JOIN APNTM A
+		                     ON E.EMP_NUM = A.EMP_NUM
+		             INNER JOIN DEPT D
+		                     ON A.DEPT_NUM = D.DEPT_NUM
+		WHERE SUBSTR(PRGRS_STS_NUM, 2, 1) = 7
+		<if test="mngNum != null and mngNum != ''">
+        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
+      	</if>
+      	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
+        	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
+      	</if>
+      	<if test="deptS != 9">
+      	 	AND D.DEPT_NUM = #{deptS}
+      	</if> 
 	</select>
 	
 	<!-- 영업 전체 개수 -->
 	<select id="getTotalCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
-		FROM SALES
+		FROM SALES S INNER JOIN EMP E
+		                     ON S.MNGR_EMP_NUM = E.EMP_NUM
+		             INNER JOIN APNTM A
+		                     ON E.EMP_NUM = A.EMP_NUM
+		             INNER JOIN DEPT D
+		                     ON A.DEPT_NUM = D.DEPT_NUM
 	</select>
 	
 	<!-- 당월 고객사 등록 개수 -->
@@ -217,28 +285,84 @@
 	<!-- 영업기회 개수 -->
 	<select id="getSalesChncCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
-		FROM SALES
-		WHERE PRGRS_STS_NUM = 17
-	</select>
+		FROM SALES S INNER JOIN EMP E
+		                    ON S.MNGR_EMP_NUM = E.EMP_NUM
+		             INNER JOIN APNTM A
+		                     ON E.EMP_NUM = A.EMP_NUM
+		             INNER JOIN DEPT D
+		                     ON A.DEPT_NUM = D.DEPT_NUM
+		WHERE S.PRGRS_STS_NUM = 17
+		<if test="mngNum != null and mngNum != ''">
+        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
+      	</if>
+      	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
+        	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
+      	</if>
+      	<if test="deptS != 9">
+      	 	AND D.DEPT_NUM = #{deptS}
+      	</if>
+	    </select>
 	
 	<!-- 제안 개수 -->
 	<select id="getSgstnCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
-		FROM SALES
-		WHERE PRGRS_STS_NUM = 27
+		FROM SALES S INNER JOIN EMP E
+		                    ON S.MNGR_EMP_NUM = E.EMP_NUM
+		             INNER JOIN APNTM A
+		                     ON E.EMP_NUM = A.EMP_NUM
+		             INNER JOIN DEPT D
+		                     ON A.DEPT_NUM = D.DEPT_NUM
+		WHERE S.PRGRS_STS_NUM = 27
+		<if test="mngNum != null and mngNum != ''">
+        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
+      	</if>
+      	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
+        	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
+      	</if>
+      	<if test="deptS != 9">
+      	 	AND D.DEPT_NUM = #{deptS}
+      	</if>
 	</select>
 	
 	<!-- 견적 개수 -->
 	<select id="getQtnCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
-		FROM SALES
-		WHERE PRGRS_STS_NUM = 37
+		FROM SALES S INNER JOIN EMP E
+		                    ON S.MNGR_EMP_NUM = E.EMP_NUM
+		             INNER JOIN APNTM A
+		                     ON E.EMP_NUM = A.EMP_NUM
+		             INNER JOIN DEPT D
+		                     ON A.DEPT_NUM = D.DEPT_NUM
+		WHERE S.PRGRS_STS_NUM = 37
+		<if test="mngNum != null and mngNum != ''">
+        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
+      	</if>
+      	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
+        	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
+      	</if>
+      	<if test="deptS != 9">
+      	 	AND D.DEPT_NUM = #{deptS}
+      	</if>
 	</select>
 	
 	<!-- 계약 개수 -->
 	<select id="getCntrctCnt" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
-		FROM SALES
-		WHERE PRGRS_STS_NUM = 47
+		FROM SALES S INNER JOIN EMP E
+		                    ON S.MNGR_EMP_NUM = E.EMP_NUM
+		             INNER JOIN APNTM A
+		                     ON E.EMP_NUM = A.EMP_NUM
+		             INNER JOIN DEPT D
+		                     ON A.DEPT_NUM = D.DEPT_NUM
+		WHERE S.PRGRS_STS_NUM = 47
+		<if test="mngNum != null and mngNum != ''">
+        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
+      	</if>
+      	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
+        	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
+      	</if>
+      	<if test="deptS != 9">
+      	 	AND D.DEPT_NUM = #{deptS}
+      	</if>
 	</select>
 </mapper>

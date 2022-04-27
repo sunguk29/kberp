@@ -384,8 +384,8 @@ $(document).ready(function() {
 	/* 검색 */
 	$(".cmn_btn").on("click",function() {
 		getData();
-		/* drawPrgrsList();
-		drawPrgrsStep(); */
+		getPrgrsCnt();
+		getPrgrsStepCnt();
 	});
 
 	/* 담당자 팝업 */
@@ -518,10 +518,21 @@ $(document).ready(function() {
 		    credits: {
                 enabled: false
             },
+            plotOptions: {
+		        pie: {
+		            allowPointSelect: true,
+		            cursor: 'pointer',
+		            dataLabels: {
+		                enabled: false
+		            },
+		            showInLegend: true
+		        }
+		    },
 			colors: ['#5CB3FF', '#D462FF', '#FBB917'],
 	        series : [{
 	        	name: '건 수',
-	        	data : list
+	        	data : list,
+	        	innerSize : '75%'
 	        }]
 		});
 	}
@@ -708,8 +719,8 @@ function drawMngPaging(pb) {
 									<td colspan="3">
 										<select id="deptS" name="deptS">
 											<option value="9">영업부</option>
-											<option value="1">영업 1팀</option>
-											<option value="2">영업 2팀</option>
+											<option value="7">영업 1팀</option>
+											<option value="8">영업 2팀</option>
 										</select>
 									</td>
 								</tr>
