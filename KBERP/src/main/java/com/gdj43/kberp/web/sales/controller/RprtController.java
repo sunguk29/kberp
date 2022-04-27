@@ -69,7 +69,10 @@ public class RprtController {
 		HashMap<String, String> ec = iCommonService.getData("clntRprt.ecAllCnt", params);
 		
 		//영업팀별 고객수
-		HashMap<String, String> sc = iCommonService.getData("clntRprt.salesCnt", params);
+		HashMap<String, String> clntCnt = iCommonService.getData("clntRprt.salesClntCnt", params);
+		
+		//영업팀별 고객사수
+		HashMap<String, String> clntCmpnyCnt = iCommonService.getData("clntRprt.salesCCcnt", params);
 
 	
 		if(params.get("startDate") == null || params.get("startDate") == "") {
@@ -84,7 +87,8 @@ public class RprtController {
 
 		mav.addObject("cc", cc);
 		mav.addObject("ec", ec);
-		mav.addObject("sc", sc);		
+		mav.addObject("clntCnt", clntCnt);		
+		mav.addObject("clntCmpnyCnt", clntCmpnyCnt);		
 		
 		mav.setViewName("sales/rprt/clntChart");
 		return mav;
