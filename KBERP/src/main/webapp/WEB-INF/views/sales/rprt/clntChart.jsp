@@ -210,13 +210,13 @@
 	position: absolute;
 	top: 35px;
 	left: 10px;
-	background-color: #2c7da0;
+	background-color: #FF6384;
 }
 .clnt {
 	position: absolute;
 	top: 90px;
 	left: 10px;
-	background-color: #61a5c2;
+	background-color: #4169e1;
 }
 .ccTxt {
 	display: inline-block;
@@ -398,15 +398,16 @@ input:focus {
 	margin-left: 10px;
 }
 #pie-chart {
-	margin-left: 39px;
-	margin-right: 39px;
+	width: 428px;
+	height: 250px;
 }
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src=" https://code.highcharts.com/modules/exporting.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+	
+	getData();
 	
 	if('${param.deptNum}' != '') {
 		$("#deptNum").val('${param.deptNum}');
@@ -416,90 +417,6 @@ $(document).ready(function() {
 		
 		$("#actionForm").attr("action", "clntChart");
 		$("#actionForm").submit();
-	});
-	
-	var pie = $("#pie-chart");
-	var bar = $("#bar-chart");
-
-	var pieLabels = ["S", "A", "B", "C", "D"];
-	var barLabels = ["영업부", "영업1팀", "영업2팀"];
-
-	var pieData = [${ccg.S},${ccg.A},${ccg.B},${ccg.C},${ccg.D}];
-	var barData = [${sc.CNT},${sc.CNT1},${sc.CNT2}];
-
-// 고객 등급 차트
-	var pieChart = new Chart(pie, {
-		
-	    type: 'pie',
-	    data: {
-	        labels: pieLabels,
-	        datasets: [{
-	            data: pieData,
-	            backgroundColor: ["#2c7da0","#468faf","#61a5c2","#89c2d9","#a9d6e5"],
-	        	pointStyle: 'circle'
-	        }]
-	    },
-	    options: {
-	    	responsive: false, 
-	    	plugins: {
-		    	legend: { // 툴팁 위치 지정
-		    		display: true,
-		    		position: 'bottom',
-		    		usePointStyle: true		    		
-		    	},
-    			datalabels: { // 차트 글씨 꾸미기
-    				color: '#ffffff',
-    				anchor: 'end', // 글씨 어디에올지 위치 지정 start,end,center .. 
-    				align: 'center', 
-    				offset: -10,
-    				borderWidth: 2,
-    				borderColor: '#ffffff',
-    				borderRadius: 25,
-    				padding: {
-    					bottom: 5,
-    					top: 5,
-    					left: 5,
-    					right: 5
-    				},
-    				backgroundColor: (context) => { // 글씨 배경색이랑 차트배경색이랑 똑같게
-    					return context.dataset.backgroundColor;
-    				},
-    				font: {
-    					weight: 'bold',
-    					size: '10',
-    					family: "맑은 고딕"   					
-    				},
-    				formatter: (value, context) => { // 값 보여주기
-    				
-    					var sum = 0;
-    					var valueArr = context.chart.data.datasets[0].data;
-    					for(var i in valueArr) {
-    						sum += parseInt(valueArr[i]);
-    					}
-    					var percentage = (value * 100 / sum).toFixed(1) + "% (" + value + "명)";
-    					
-    					return percentage;
-    				}
-    			}
-	    	}
-	    },
-	    plugins: [ChartDataLabels]
-	});
-// 부서 차트
-	var barChart = new Chart(bar, {
-	    type: 'bar',
-	    data: {
-	        labels: barLabels,
-	        datasets: [{
-	            label: '고객',
-	            data: barData,
-	            barThickness: 40, // 바 두께 설정
-	            backgroundColor: ["#89c2d9", "#a9d6e5"]
-	        }]
-	    },
-	    options: {
-	    	responsive: false // 위치 자동으로 설정안되게
-	    }
 	});
 	
 	/* 담당자 팝업  */
@@ -599,6 +516,55 @@ $(document).ready(function() {
 			}
 		});
 	});
+	
+	/* 차트에 데이터 가져오기 */
+	function getData() {
+		var params = $("#actionForm").serialize();
+		$.ajax({
+			type : "post",
+			url : "clntRprtDataAjax",
+			dataType : "json",
+			data: params,
+			success : function(res) {
+				clntMakeChart(res.list);
+			},
+			error : function(request, status, error) {
+				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		});
+	}
+	/* 차트 그리기 */
+	function clntMakeChart(list) {
+		console.log(list);
+		$('#pie-chart').highcharts({
+			chart: {
+				type: 'pie',
+				zoomType: 'x'
+			},
+			title: {
+				text: ''
+			},
+		    plotOptions: {
+		        pie: {
+		            allowPointSelect: true,
+		            cursor: 'pointer',
+		            dataLabels: {
+		                enabled: true,
+		                format: '{point.percentage:.1f} %({point.y}명)'
+		            },
+		            showInLegend: true
+		        }
+		    },
+			colors: ['#FF6384', '#ffd950', '#02bc77', '#28c3d7','#4169e1'],
+ 	        series : [{
+        		name: '등급',
+        		data : list
+        	}],
+            credits: {
+                enabled: false
+            }
+		});
+	}
 });
 /****************** 담당자 조회 팝업 *********************/
 function mngrList() {
@@ -710,10 +676,9 @@ function drawPaging(pb, sel) {
 								</td>
 								<td>
 									<select id="deptNum" name="deptNum">
-										<option value="0">부서전체</option>
-										<option value="1">영업부</option>
-										<option value="2">영업1팀</option>
-										<option value="3">영업2팀</option>										
+										<option value="0">영업부</option>
+										<option value="1">영업1팀</option>
+										<option value="2">영업2팀</option>										
 									</select>
 								</td>
 								<td>
@@ -738,7 +703,7 @@ function drawPaging(pb, sel) {
 									<span class="srch_name">기간</span>
 								</td>
 								<td colspan="4">
-									<input type="date" class="date" value="${startDate}" /> ~ <input type="date" class="date" value="${endDate}" />
+									<input type="date" class="date" /> ~ <input type="date" class="date" />
 								</td>
 								<td>
 									<span class="cmn_btn">검색</span>
@@ -803,7 +768,8 @@ function drawPaging(pb, sel) {
 						</div>
 						<div class="sales_text_bot">
 							<div class="pie-bot">
-								<canvas id="pie-chart" width="350" height="250"></canvas>
+								<input type="hidden" name="clntsize" value="5" />
+								<div id="pie-chart"></div>
 							</div>	
 						</div>
 					</div> 

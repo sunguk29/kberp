@@ -102,4 +102,25 @@
 		WHERE C.SALES_NUM = #{sendChitNum}
 	</select>
 	
+	<!-- 전표 결재 성공 -->
+	<insert id="aprvlOk" parameterType="hashmap">
+		INSERT INTO PRCHS_RVN_APRVL (STNDR_YEAR_MONTH, APRVL_NUM, EMP_NUM)
+		VALUES (#{mon}, #{aprvlNum}, #{empNum})
+	</insert>
+	
+	<!-- 매입매출결재 결재상태 조회 -->
+	<select id="getChitMngAprvlSts" parameterType="hashmap" resultType="hashmap">
+		SELECT APRVL_STS
+		FROM PRCHS_RVN_APRVL
+		WHERE STNDR_YEAR_MONTH = #{mon}
+	</select>
+	
+	<!-- 매입매출결재 결재 재요청 성공 -->
+	<update id="aprvlAgainOk" parameterType="hashmap">
+		UPDATE PRCHS_RVN_APRVL SET APRVL_NUM = #{aprvlNum},
+								   EMP_NUM = #{empNum},
+								   APRVL_STS = '1'
+		WHERE STNDR_YEAR_MONTH = #{mon}
+	</update>
+	
 </mapper>

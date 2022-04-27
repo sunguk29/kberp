@@ -813,8 +813,8 @@ $(document).ready(function() {
 					<div class="body">
 						<div class="bodyWrap">
 							<div class="sc_title">
-								<span class="marg"> 팀분류 <select class="boxsize"
-									id="deptS" name="deptS">
+								<span class="marg"> 팀분류
+								<select class="boxsize"id="deptS" name="deptS">
 										<option value="6">영업부</option>
 										<option value="7">영업1팀</option>
 										<option value="8">영업2팀</option>
