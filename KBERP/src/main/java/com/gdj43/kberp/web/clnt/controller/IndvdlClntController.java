@@ -126,10 +126,52 @@ public class IndvdlClntController {
 	
 	// 아이디 찾기
 	@RequestMapping(value = "/findId")
-	public ModelAndView findId(ModelAndView mav) {
+	public ModelAndView findId(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		
+		
 		mav.setViewName("CS/clnt/findId");
-
 		return mav;
+	}
+	
+	@RequestMapping(value="/userAjax", method=RequestMethod.POST, 
+			produces="text/json;charset=UTF-8")
+	@ResponseBody // View로 인식 시킴
+	public String userAjax(@RequestParam HashMap<String,String> params) throws Throwable {
+	
+		ObjectMapper mapper = new ObjectMapper();
+		
+		//데이터를 담을 객체
+		Map<String,Object> modelMap = new HashMap<String,Object>();
+				
+		int cnt = iCommonService.getIntData("cl.findId2",params);
+		
+		modelMap.put("cnt",cnt);
+		
+		return mapper.writeValueAsString(modelMap); 
+	}
+	
+	
+	//아이디 찾기 Ajax
+	
+	@RequestMapping(value="/findIdAjax/{gbn}", method=RequestMethod.POST, 
+			produces="text/json;charset=UTF-8")
+	@ResponseBody // View로 인식 시킴
+	public String findIdAjax(@RequestParam HashMap<String,String> params,
+							@PathVariable String gbn) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String,Object> modelMap = new HashMap<String,Object>();
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("cl.findId",params);
+		int cnt = iCommonService.getIntData("cl.findId2",params);
+		modelMap.put("list",list);
+		modelMap.put("cnt",cnt);
+		// 정보 없을시
+		if(cnt==0) {
+			modelMap.put("res", "failed");
+		}
+		return mapper.writeValueAsString(modelMap);
 	}
 	
 	// 비밀번호 찾기
