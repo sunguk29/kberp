@@ -261,6 +261,13 @@
 	float: right;
 }
 
+.add #updateBtn{
+	display: none;
+}
+
+.update #saveBtn{
+	display: none;
+}
 /* 상담노트 파트 */
 .cnsl_note_top {
 	display: inline-block;
@@ -1105,6 +1112,7 @@ $(document).ready(function() {
 							$("#adr").val(res.data.ADRS);
 							$("#dtl_adr").val(res.data.DTL_ADRS);
 							$("#noteSaveForm #clnt_num").val(res.data.CLNT_NUM);
+							$(".add").attr("class", "update");
 						},
 						error : function(request, status, error) {
 							console.log(request.responseText);
@@ -1349,7 +1357,7 @@ $(document).ready(function() {
 									$("#adr").val(res.data.ADRS);
 									$("#dtl_adr").val(res.data.DTL_ADRS);
 									$("#noteSaveForm #clnt_num").val(res.data.CLNT_NUM);
-									
+									$(".add").attr("class", "update");
 									closePopup();
 								
 								} else {
@@ -1368,7 +1376,7 @@ $(document).ready(function() {
 				name : "닫기"
 			}]
 		});
-	}); // 신규고객 팝업 끝
+	}); // 신규고객 등록 팝업 끝
 	
 	
 	// 상담노트 저장 팝업
@@ -1517,9 +1525,11 @@ function checkEmpty(sel) {
 			    				<input class="adrs_input" type="text" id="adr" name="adr" readonly="readonly"/>
 			    				<br/>
 			    				<input class="adrs_input_dtls" type="text" id="dtl_adr" name="dtl_adr" readonly="readonly"/>
-			    		</div>	
-		    			<div class="cmn_btn_mr" id="updateBtn">고객정보 수정</div>
-		    			<div class="cmn_btn_mr" id="saveBtn">신규고객 등록</div>
+			    		</div>
+			    		<div class="add">
+			    			<div class="cmn_btn_mr" id="updateBtn">고객정보 수정</div>
+			    			<div class="cmn_btn_mr" id="saveBtn">신규고객 등록</div>
+		    			</div>	
 		    		</form>
 		    		</div>
 		    	</div> <!-- 고객정보 div 끝 -->
