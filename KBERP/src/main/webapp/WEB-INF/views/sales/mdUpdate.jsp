@@ -38,10 +38,12 @@ $(document).ready(function() {
 	$('#loan_prd').val(${data.LOAN_PRD}).prop("selected", true);
 	
 	// 파일 데이터가 있다면 View에 출력 
-	let uploadFileName = "${fileData.ATT_FILE_NAME}";
-	if(uploadFileName != null) {
-		$('#fileName').val(uploadFileName.substring(20));
+	var uploadFileName = "${fileData.ATT_FILE_NAME}";
+	if(uploadFileName != "") {
+		$('#fileName').text(uploadFileName.substring(20));
 		$("#attCnt").text("(1)");
+	} else {
+		$("#attCnt").text("(0)");
 	}
 	
 	//목록으로 버튼(#listBtn) 클릭시, mdList(#actionForm)로 이동 하는 함수
@@ -67,7 +69,7 @@ function fileUpdate(){
 function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
-	$("#fileName").val(filename);
+	$("#fileName").text(filename);
 }
 
 </script>
@@ -220,7 +222,9 @@ function uploadName(e) {
 						</div>
 						<input type="hidden" id="attFile" name="attFile" />
 						<div class="cntrct_box_in">
-							<input type="text" id="fileName" name="fileName" readonly="readonly" />
+							<span id="fileName" name="fileName" class="fileName">filename</span>
+								<!-- <input type="text" id="fileName" name="fileName" class="fileName" readonly="readonly" /> -->
+								<input type="button" value="삭제" class="fileNameDel" />
 						</div> 
 					</div>
 				</div>	

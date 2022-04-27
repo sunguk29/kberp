@@ -177,7 +177,8 @@ WHERE R.RNUM BETWEEN #{startCount}  AND #{endCount}
 
 <!--============================= 상세보기  ====================================-->
 <select id="getMdContData" resultType="hashmap" parameterType="hashmap">
-	SELECT  MD_NUM                                  
+	SELECT  MD_NUM
+			,EMP_NUM                                  
 	        ,MD_NAME                                 
 	        ,MD_TYPE_NUM                            
 	        ,MD_GRADE_NUM                           
