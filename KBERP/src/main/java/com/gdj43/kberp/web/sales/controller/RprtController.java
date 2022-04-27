@@ -173,7 +173,7 @@ public class RprtController {
 	/* 영업 차트 데이터 가져오기 */
 	@RequestMapping(value = "/salesgetChartDataAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String salesgetChartDataAjax(HttpServletRequest request) throws Throwable{
+	public String salesgetChartDataAjax(@RequestParam HashMap<String, Object> params, HttpServletRequest request) throws Throwable{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -182,8 +182,8 @@ public class RprtController {
 		
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		
-		HashMap<String, Object> bsnList = iSchdlService.getData("salesRprt.getSalesBsnChart");
-			
+		HashMap<String, Object> bsnList = iSchdlService.getData("salesRprt.getSalesBsnChart", params);
+		
 		for(int i = 0 ; i < size ; i++) {
 			HashMap<String, Object> temp = new HashMap<String, Object>();
 			
@@ -224,17 +224,9 @@ public class RprtController {
  	@RequestMapping(value = "/totalChart")
 	public ModelAndView totalChart(ModelAndView mav) throws Throwable {
 		
-		int salesRvnCnt = iCommonService.getIntData("salesRprt.getSalesRvnCnt"); // 당월 매출 실적
 		int sumRvn = iCommonService.getIntData("salesRprt.getSalesMdSumRvn"); // 당월 매출 합계
-		int clCnt = iCommonService.getIntData("salesRprt.getClntRegCnt"); // 당월 고객사 등록 수
-		int ccCnt = iCommonService.getIntData("salesRprt.getCcRegCnt"); // 당월 고객 등록 수
-		int ldCnt = iCommonService.getIntData("salesRprt.getRegLeadCnt"); // 당월 잠재고객 등록 수
 
-		mav.addObject("salesRvnCnt", salesRvnCnt); // 당월 매출 실적
 		mav.addObject("sumRvn", sumRvn); // 당월 매출 합계
-		mav.addObject("clCnt", clCnt); // 당월 고객사 등록 수
-		mav.addObject("ccCnt", ccCnt); // 당월 고객 등록 수
-		mav.addObject("ldCnt", ldCnt); // 당월 잠재고객 등록 수
 		
 		mav.setViewName("sales/rprt/totalChart");
 		
@@ -244,18 +236,19 @@ public class RprtController {
 	// 당월 매출 실적
 	@RequestMapping(value = "/salesRvnAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String salesRvnAjax(HttpServletRequest request) throws Throwable {
+	public String salesRvnAjax(HttpServletRequest request, @RequestParam HashMap<String, Object> params) throws Throwable {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		int rvnSize = Integer.parseInt(request.getParameter("rvnSize"));
+		int rvnSize = iSchdlService.getIntData("salesRprt.getSalesRvnCnt", params); // 당월 매출 실적
+		
+//		int rvnSize = Integer.parseInt(request.getParameter("rvnSize"));
 		
 		ArrayList<HashMap<String, Object>> salesRvnlist = new ArrayList<HashMap<String, Object>>();
 		
-		HashMap<String, Object> rvn = iSchdlService.getData("salesRprt.getSalesRvn");
-		
+		HashMap<String, Object> rvn = iSchdlService.getData("salesRprt.getSalesRvn", params);
 		
 		for(int i = 0 ; i < rvnSize ; i++) {
 			HashMap<String, Object> temp = new HashMap<String, Object>();
@@ -277,7 +270,7 @@ public class RprtController {
 	// 영업 차트 진행상태 개수
 	@RequestMapping(value = "/prgrsChartAjax", method=RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String prgrsChartAjax(HashMap<String, String> params, ModelAndView mav) throws Throwable{
+	public String prgrsChartAjax(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -302,7 +295,7 @@ public class RprtController {
 	// 영업 차트 진행단계 개수
 	@RequestMapping(value = "/prgrsStepAjax", method=RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String prgrsStepAjax(HashMap<String, String> params, ModelAndView mav) throws Throwable{
+	public String prgrsStepAjax(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -325,18 +318,36 @@ public class RprtController {
 	}
 	
 	//당월 매출 실적
-		@RequestMapping(value = "/saleMdRvnAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
-		@ResponseBody
-		public String saleMdRvnAjax(HttpServletRequest request) throws Throwable {
-			
-			ObjectMapper mapper = new ObjectMapper();
-			
-			Map<String, Object> modelMap = new HashMap<String, Object>();
-			
-			List<HashMap<String, String>> mdRvnList = iCommonService.getDataList("salesRprt.getSalesMdRvn");
-			
-			modelMap.put("mdRvnList", mdRvnList);
-			
-	        return mapper.writeValueAsString(modelMap);
-		}
+	@RequestMapping(value = "/saleMdRvnAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String saleMdRvnAjax(HttpServletRequest request) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		List<HashMap<String, String>> mdRvnList = iCommonService.getDataList("salesRprt.getSalesMdRvn");
+		
+		modelMap.put("mdRvnList", mdRvnList);
+		
+        return mapper.writeValueAsString(modelMap);
+	}
+	
+	//신규 영업 활동
+	@RequestMapping(value = "/newSalesRegAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String newSalesRegAjax(HttpServletRequest request, @RequestParam HashMap<String, String> params) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		int ccCnt = iCommonService.getIntData("salesRprt.getCcRegCnt", params); // 당월 고객 등록 수
+		int ldCnt = iCommonService.getIntData("salesRprt.getRegLeadCnt", params); // 당월 잠재고객 등록 수
+		
+		modelMap.put("ccCnt", ccCnt);
+		modelMap.put("ldCnt", ldCnt);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 }
