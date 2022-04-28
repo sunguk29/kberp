@@ -223,7 +223,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type: "post", // 전송형태
-						url : "findIdAjax/select" , //통신 주소
+						url : "findIdAjax" , //통신 주소
 						dataType : "json", //받을 데이터 형태
 						data : params, //보낼 데이터. 보낼 것이 없으면 안씀
 						success : function(res){ // 성공 시 실행 함수. 인자는 받아온 데이터
