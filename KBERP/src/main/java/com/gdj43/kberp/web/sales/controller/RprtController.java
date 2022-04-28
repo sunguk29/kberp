@@ -187,17 +187,12 @@ public class RprtController {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		
 		HashMap<String, Object> bsnList = iSchdlService.getData("salesRprt.getSalesBsnChart", params);
+		HashMap<String, Object> bsnName = iSchdlService.getData("salesRprt.getSalesBsnName");
 		
 		for(int i = 0 ; i < size ; i++) {
 			HashMap<String, Object> temp = new HashMap<String, Object>();
 			
-			if(i == 0) {
-				temp.put("name", "민수");
-			} else if(i == 1) {
-				temp.put("name", "관공");
-			} else {
-				temp.put("name", "기타");
-			}
+			temp.put("name", String.valueOf(bsnName.get("COL"+i)));
 			temp.put("y", Integer.parseInt(String.valueOf(bsnList.get("BSNTYPE"+i))));
 			
 			list.add(temp);
