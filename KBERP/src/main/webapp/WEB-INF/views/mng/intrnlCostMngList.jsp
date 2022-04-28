@@ -99,7 +99,7 @@ function drawList(list) {
 	for(data of list) {
 		html += "<tr>";
 		html += "<td class=\"board_table_hover\" id=\"clickMon\" mon=\"" + data.DATE_MON +  "\">" + data.DATE_MON + "</td>";
-		html += "<td>" + data.AMNT_SUM + "원</td>";
+		html += "<td>" + data.AMNT_SUM + " 원</td>";
 		html += "</tr>";
 	}
 

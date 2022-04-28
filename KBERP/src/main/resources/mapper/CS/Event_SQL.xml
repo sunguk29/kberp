@@ -64,8 +64,8 @@
 	</select>
 	
 	<insert id="EventCmntAdd" parameterType="hashmap">
-		INSERT INTO EVENT_CMNT(CMNT_NUM, CLNT_NUM, EVENT_NUM, EMP_NUM, CMNT_CONT) 
-		VALUES(#{cmnt_num}, #{clnt_num}, #{no}, #{emp_num}, #{cmnt_cont})
+		INSERT INTO EVENT_CMNT(CMNT_NUM, EVENT_NUM, EMP_NUM, CMNT_CONT) 
+		VALUES(#{cmnt_num}, #{no}, #{emp_num}, #{cmnt_cont})
 	</insert>
 	
 	<update id="updateHit" parameterType="hashmap">

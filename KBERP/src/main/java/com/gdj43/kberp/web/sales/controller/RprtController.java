@@ -63,17 +63,7 @@ public class RprtController {
 		String  tMonth = month.format(mon);
 		
 		// 고객사 개수
-		HashMap<String, String> cc = iCommonService.getData("clntRprt.ccAllCnt", params);
-		
-		// 고객 개수
-		HashMap<String, String> ec = iCommonService.getData("clntRprt.ecAllCnt", params);
-		
-		//영업팀별 고객수
-		HashMap<String, String> clntCnt = iCommonService.getData("clntRprt.salesClntCnt", params);
-		
-		//영업팀별 고객사수
-		HashMap<String, String> clntCmpnyCnt = iCommonService.getData("clntRprt.salesCCcnt", params);
-
+		HashMap<String, String> ccAll = iCommonService.getData("clntRprt.allCnt", params);
 	
 		if(params.get("startDate") == null || params.get("startDate") == "") {
 			params.put("startDate", startDate); 
@@ -85,19 +75,16 @@ public class RprtController {
 		mav.addObject("startDate", params.get("startDate"));
 		mav.addObject("endDate", params.get("endDate"));
 
-		mav.addObject("cc", cc);
-		mav.addObject("ec", ec);
-		mav.addObject("clntCnt", clntCnt);		
-		mav.addObject("clntCmpnyCnt", clntCmpnyCnt);		
+		mav.addObject("ccAll", ccAll);		
 		
 		mav.setViewName("sales/rprt/clntChart");
 		return mav;
 		
 	} 
-	//고객 보고서
+	//고객등급 차트가져오기
 	@RequestMapping(value = "/clntRprtDataAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8" )
 	@ResponseBody
-	public String clntRprtDataAjax(HttpServletRequest request) throws Throwable{
+	public String clntRprtDataAjax(HttpServletRequest request, @RequestParam HashMap<String, Object> params) throws Throwable{
 	
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -107,7 +94,7 @@ public class RprtController {
 		
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		
-		HashMap<String, Object> clntList = iClntRprtService.getData("clntRprt.clntGrade");
+		HashMap<String, Object> clntList = iClntRprtService.getData("clntRprt.allCnt", params);
 			
 		for(int i = 0 ; i < clntsize ; i++) {
 			HashMap<String, Object> temp = new HashMap<String, Object>();
@@ -187,17 +174,12 @@ public class RprtController {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		
 		HashMap<String, Object> bsnList = iSchdlService.getData("salesRprt.getSalesBsnChart", params);
+		HashMap<String, Object> bsnName = iSchdlService.getData("salesRprt.getSalesBsnName");
 		
 		for(int i = 0 ; i < size ; i++) {
 			HashMap<String, Object> temp = new HashMap<String, Object>();
 			
-			if(i == 0) {
-				temp.put("name", "민수");
-			} else if(i == 1) {
-				temp.put("name", "관공");
-			} else {
-				temp.put("name", "기타");
-			}
+			temp.put("name", String.valueOf(bsnName.get("COL"+i)));
 			temp.put("y", Integer.parseInt(String.valueOf(bsnList.get("BSNTYPE"+i))));
 			
 			list.add(temp);

@@ -14,8 +14,8 @@ public class clntRprtService implements IClntRprtService {
 	public IClntRprtDao iClntRprtDao;
 
 	@Override
-	public HashMap<String, Object> getData(String string) throws Throwable {
-		return iClntRprtDao.getData(string);
+	public HashMap<String, Object> getData(String string, HashMap<String, Object> params) throws Throwable {
+		return iClntRprtDao.getData(string, params);
 	}
 
 }

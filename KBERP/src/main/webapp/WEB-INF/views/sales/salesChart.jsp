@@ -523,7 +523,12 @@ $(document).ready(function() {
 		            allowPointSelect: true,
 		            cursor: 'pointer',
 		            dataLabels: {
-		                enabled: false
+		                enabled: true,
+		                formatter: function() {
+							if(this.y > 0) {
+								return this.key + "(" + this.y + "명)";
+							}
+						}
 		            },
 		            showInLegend: true
 		        }
@@ -532,7 +537,7 @@ $(document).ready(function() {
 	        series : [{
 	        	name: '건 수',
 	        	data : list,
-	        	innerSize : '75%'
+	        	innerSize : '50%'
 	        }]
 		});
 	}

@@ -102,7 +102,7 @@
 		WHERE C.SALES_NUM = #{sendChitNum}
 	</select>
 	
-	<!-- 전표 결재 성공 -->
+	<!-- 매입매출결재 결재 성공 -->
 	<insert id="aprvlOk" parameterType="hashmap">
 		INSERT INTO PRCHS_RVN_APRVL (STNDR_YEAR_MONTH, APRVL_NUM, EMP_NUM)
 		VALUES (#{mon}, #{aprvlNum}, #{empNum})

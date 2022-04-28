@@ -13,8 +13,8 @@ public class clntRprtDao implements IClntRprtDao {
 	public SqlSession sqlSession;
 
 	@Override
-	public HashMap<String, Object> getData(String string) throws Throwable {
-		return sqlSession.selectOne(string);
+	public HashMap<String, Object> getData(String string, HashMap<String, Object> params) throws Throwable {
+		return sqlSession.selectOne(string, params);
 	}
 
 }

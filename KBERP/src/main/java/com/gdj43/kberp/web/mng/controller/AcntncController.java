@@ -260,8 +260,10 @@ public class AcntncController {
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
+		// 전표 목록 조회
 		List<HashMap<String, String>> list = iCommonService.getDataList("ChitMng.getChitMngList", params);
 		
+		// 대변 합계, 차변 합계 조회
 		HashMap<String, String> data = iCommonService.getData("ChitMng.getChitMngData", params);
 		
 		// 결재 진행 상태 확인
@@ -455,7 +457,6 @@ public class AcntncController {
 	    	    String aprvl_num = iAprvlService.aprvlAdd(params.get("emp_num"), params.get("title"), params.get("cont"), aprvlerList, rfrncList, null);
 	    	    modelMap.put("aprvlNum", aprvl_num);
 	    	    System.out.println("결재번호 : " + aprvl_num);
-	    	   
 	    	    break;
 			case "aprvlOk" :
 				iCommonService.insertData("ChitMng.aprvlOk", params);

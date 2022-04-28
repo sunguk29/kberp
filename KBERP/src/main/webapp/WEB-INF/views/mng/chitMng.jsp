@@ -15,6 +15,7 @@
 	width: 900px;
 }
 
+
 /* 개인 작업 영역 */
 .srch_month {
 	height: 27px;
@@ -243,7 +244,6 @@ display: inline-block;
     margin-top: 4px;
 }
 
-/* 결재권자 선택 팝업 */
 .popup_emp_srch_area {
 	display: inline-block;
 	vertical-align: top;
@@ -321,10 +321,6 @@ display: inline-block;
 	background-color: rgb(200, 218, 248);
 }
 
-.cmn_btn #aprvlRqst {
-	display: none;
-}
-
 
 
 </style>
@@ -372,6 +368,8 @@ $(document).ready(function() {
 	});
 	
 	reloadList();
+	$("#aprvlRqst").css('display', 'none');
+	$("#aprvlAgainRqst").css('display', 'none');
 	
 	$("#pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
@@ -538,6 +536,16 @@ $(document).ready(function() {
 						   	 		checkbox.prop("checked", true);
 						   	 	 }
 						   	 });
+							 
+							 $("#aprvlerChk").on("click", function() {
+								 var checkbox = $(this).find("td:first-child :checkbox");
+						   		 
+						   	 	 if(checkbox.prop("checked")) {
+						   		 	checkbox.prop("checked", false);
+						   	 	 } else {
+						   	 		checkbox.prop("checked", true);
+						   	 	 }
+							 });
 						},
 						buttons : [{
 							name : "확인",
@@ -668,7 +676,7 @@ $(document).ready(function() {
 							 	 }); 
 						   	 });
 							 
-							// tr 선택시 체크박스 선택처리
+							 // tr 선택시 체크박스 선택처리
 						   	 $("#aprvlerInqry_tbody").on("click", "tr", function() {
 						   		 var checkbox = $(this).find("td:first-child :checkbox");
 						   		 
@@ -678,6 +686,17 @@ $(document).ready(function() {
 						   	 		checkbox.prop("checked", true);
 						   	 	 }
 						   	 });
+							
+							// 체크박스 클릭 처리
+						   	$("#aprvlerChk").on("click", function() {
+								 var checkbox = $(this).find("td:first-child :checkbox");
+						   		 
+						   	 	 if(checkbox.prop("checked")) {
+						   		 	checkbox.prop("checked", false);
+						   	 	 } else {
+						   	 		checkbox.prop("checked", true);
+						   	 	 }
+							 });
 						},
 						buttons : [{
 							name : "확인",
@@ -909,6 +928,18 @@ $(document).ready(function() {
 						   	 		checkbox.prop("checked", true);
 						   	 	 }
 						   	 });
+							 
+							 // 체크박스 클릭 처리
+						   	 $("#aprvlerChk").on("click", function() {
+								 var checkbox = $(this).find("td:first-child :checkbox");
+						   		 
+						   	 	 if(checkbox.prop("checked")) {
+						   		 	checkbox.prop("checked", false);
+						   	 	 } else {
+						   	 		checkbox.prop("checked", true);
+						   	 	 }
+							 });
+							 
 						},
 						buttons : [{
 							name : "확인",
@@ -1039,7 +1070,7 @@ $(document).ready(function() {
 							 	 }); 
 						   	 });
 							 
-							// tr 선택시 체크박스 선택처리
+							 // tr 선택시 체크박스 선택처리
 						   	 $("#aprvlerInqry_tbody").on("click", "tr", function() {
 						   		 var checkbox = $(this).find("td:first-child :checkbox");
 						   		 
@@ -1049,6 +1080,18 @@ $(document).ready(function() {
 						   	 		checkbox.prop("checked", true);
 						   	 	 }
 						   	 });
+							
+						 	 // 체크박스 클릭 처리
+						   	 $("#aprvlerChk").on("click", function() {
+								 var checkbox = $(this).find("td:first-child :checkbox");
+						   		 
+						   	 	 if(checkbox.prop("checked")) {
+						   		 	checkbox.prop("checked", false);
+						   	 	 } else {
+						   	 		checkbox.prop("checked", true);
+						   	 	 }
+							 });
+							
 						},
 						buttons : [{
 							name : "확인",
@@ -1151,7 +1194,7 @@ function reloadList() {
 			drawList(res.list);
 			drawPaging(res.pb);
 			drawSum(res.data);
-			drawAprvlSts(res.aprvlSts);
+			drawAprvlSts(res.aprvlSts, res.list);
 		},
 		error : function(request, status, error) {
 			console.log(request.responseText);
@@ -1163,18 +1206,20 @@ function reloadList() {
 function drawList(list) {
 	var html = "";
 	
+	console.log(list);
+	
 	for(data of list) {
 		html += "<tr>";
 		html += "<td class=\"board_table_hover\" id=\"chitNum\" chitnum=\"" + data.CHIT_NUM + "\">" + data.CHIT_NUM + "</td>";
 		
 		if(data.DEVIT_AMNT != null) {
-			html += "<td>" + data.DEVIT_AMNT + "원</td>";			
+			html += "<td>" + data.DEVIT_AMNT + " 원</td>";			
 		} else {
 			html += "<td>-</td>";			
 		}
 		
 		if(data.CREDIT_AMNT != null) {
-			html += "<td>" + data.CREDIT_AMNT + "원</td>";			
+			html += "<td>" + data.CREDIT_AMNT + " 원</td>";			
 		} else {
 			html += "<td>-</td>";						
 		}
@@ -1231,16 +1276,16 @@ function drawSum(data) {
 	
 	html += "<tr>";
 	html += "<td>차변 합계</td>";
-	if(data.DEVIT_SUM != null) {
-		html += "<td>" + data.DEVIT_SUM + "원</td>";		
+	if(data != null && data.DEVIT_SUM != null) {
+		html += "<td>" + data.DEVIT_SUM + " 원</td>";		
 	} else {
 		html += "<td>0원</td>";
 	}
 	html += "</tr>";
 	html += "<tr>";
 	html += "<td>대변 합계</td>";
-	if(data.CREDIT_SUM != null) {
-		html += "<td>" + data.CREDIT_SUM + "원</td>";		
+	if(data != null && data.CREDIT_SUM != null) {
+		html += "<td>" + data.CREDIT_SUM + " 원</td>";
 	} else {
 		html += "<td>0원</td>";
 	}
@@ -1267,28 +1312,40 @@ function drawAprvlerInqryList(inqryList) {
 }
 
 // 결재 현황 조회
-function drawAprvlSts(aprvlSts) {
+function drawAprvlSts(aprvlSts, list) {
+	
+	
 	var html = "";
 	html += "<div class=\"aprvl_check_sts\">결재 현황 :</div>"; 
+	console.log("list : " + list);
 	
-	if(aprvlSts == null) {
-		html += "<div class=\"aprvl_check_res\"> - </div>"
-		$("#aprvlRqst").css('display', 'inline-block');
-		$("#aprvlAgainRqst").css('display', 'none');
+	if(list != "") {
+
+		if(aprvlSts == null) {
+			html += "<div class=\"aprvl_check_res\">-</div>"
+			$("#aprvlRqst").css('display', 'inline-block');
+			$("#aprvlAgainRqst").css('display', 'none');
+			
+		} else if(aprvlSts.APRVL_STS == 0) { /* 결재 진행중 */
+			html += "<div class=\"aprvl_check_res\">결재 진행중</div>";
+			$("#aprvlRqst").css('display', 'none');
+			$("#aprvlAgainRqst").css('display', 'none');
+		} else if(aprvlSts.APRVL_STS == 1) { /* 결재 완료 */
+			html += "<div class=\"aprvl_check_res\" style=\"color:#2E83F2;\">결재 완료</div>";
+			$("#aprvlRqst").css('display', 'none');
+			$("#aprvlAgainRqst").css('display', 'none');
+		} else { /* 결재 반려 */
+			html += "<div class=\"aprvl_check_res\" style=\"color:#ff6f60;\">결재 반려</div>";
+			$("#aprvlRqst").css('display', 'none');
+			$("#aprvlAgainRqst").css('display', 'inline-block');
+		}
 		
-	} else if(aprvlSts.APRVL_STS == 0) { /* 결재 진행중 */
-		html += "<div class=\"aprvl_check_res\">결재 진행중</div>";
+	} else {
+		html += "<div class=\"aprvl_check_res\">-</div>"
 		$("#aprvlRqst").css('display', 'none');
 		$("#aprvlAgainRqst").css('display', 'none');
-	} else if(aprvlSts.APRVL_STS == 1) { /* 결재 완료 */
-		html += "<div class=\"aprvl_check_res\" style=\"color:#2E83F2;\">결재 완료</div>";
-		$("#aprvlRqst").css('display', 'none');
-		$("#aprvlAgainRqst").css('display', 'none');
-	} else { /* 결재 반려 */
-		html += "<div class=\"aprvl_check_res\" style=\"color:#ff6f60;\">결재 반려</div>";
-		$("#aprvlRqst").css('display', 'none');
-		$("#aprvlAgainRqst").css('display', 'inline-block');
 	}
+	
 		
 	$("#aprvlCheck").html(html);
 	

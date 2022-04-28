@@ -154,6 +154,14 @@ height : 21px;
 margin-left : auto;
 margin-right : auto;
 }
+.subpgn_area {
+	display: inline-block;
+	min-width: 300px;
+	text-align:center;
+	height: 30px;
+	position: absolute;
+	left: calc(50% - 150px);
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {

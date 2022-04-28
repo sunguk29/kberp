@@ -256,8 +256,9 @@ div.comsbox {
 }
 .btnImg_in {
     position: absolute;
-    left: 184px;
-    width: 20px;
+    left: 175px;
+    top: 2px;
+    width: 18px;
     cursor: pointer;
 }
 .imgName {

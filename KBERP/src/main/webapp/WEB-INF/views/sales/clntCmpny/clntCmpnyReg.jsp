@@ -357,6 +357,10 @@ $(document).ready(function() {
 											
 											$("#listForm").attr("action", "clntCmpnyCont");
 											$("#listForm").submit();
+										} else if(res.res == "overlap") {
+											makeAlert("알림", popContOneLine("중복된 고객명입니다."), function() {
+												$("#ccName").focus();
+											});
 										} else {
 											makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 										}
