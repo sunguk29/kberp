@@ -251,15 +251,15 @@ $(document).ready(function() {
 							</c:otherwise>
 						</c:choose>
 						<td>단가</td>
-						<td><fmt:formatNumber value="${data.UNIT_PRICE}" pattern="###,###,###,###"/>원</td>
+						<td><fmt:formatNumber value="${data.UNIT_PRICE}" pattern="###,###,###,###"/> 원</td>
 					</tr>
 					<tr>
 						<td>공급가액</td>
-						<td colspan="5"><fmt:formatNumber value="${data.SPLY_PRICE}" pattern="###,###,###,###"/>원</td>
+						<td colspan="5"><fmt:formatNumber value="${data.SPLY_PRICE}" pattern="###,###,###,###"/> 원</td>
 					</tr>
 					<tr>
 						<td>부가세</td>
-						<td colspan="5"><fmt:formatNumber value="${data.SRTX}" pattern="###,###,###,###"/>원</td>
+						<td colspan="5"><fmt:formatNumber value="${data.SRTX}" pattern="###,###,###,###"/> 원</td>
 					</tr>
 					<tr>
 						<td>사업자번호</td>
@@ -267,7 +267,7 @@ $(document).ready(function() {
 					</tr>
 					<tr>
 						<td>합계</td>
-						<td colspan="5"><b><fmt:formatNumber value="${data.AMNT}" pattern="###,###,###,###"/>원</b></td>
+						<td colspan="5"><b><fmt:formatNumber value="${data.AMNT}" pattern="###,###,###,###"/> 원</b></td>
 					</tr>
 					<tr>
 						<td>비고</td>
