@@ -153,7 +153,7 @@ $(document).ready(function() {
 					</tr>
 					<tr>
 						<td>지출금액</td>
-						<td>${data.AMNT}원</td>
+						<td><b>${data.AMNT} 원</b></td>
 					</tr>
 					<tr>
 						<td>지출일시</td>

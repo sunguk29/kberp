@@ -142,7 +142,7 @@ function drawList(list) {
 		html += "<td>" + data.EXPNS_DATE + "</td>";
 		html += "<td class=\"board_table_hover\" id=\"chitNum\" chitnum=\"" + data.CHIT_NUM + "\">" + data.CHIT_NUM + "</td>";
 		html += "<td>" + data.EXPNS_TYPE + "</td>";
-		html += "<td>" + data.AMNT + "원</td>";
+		html += "<td>" + data.AMNT + " 원</td>";
 		html += "<td>" + data.EXPNS + "</td>";
 		html += "<td>" + data.ACNT_NAME + "</td>";
 		html += "</tr>"
@@ -189,29 +189,29 @@ function drawSum(data) {
 	html += "<td>개인 지출 합계</td>";
 	if(data != null) {
 		if(data.IND) {
-			html += "<td>" + data.IND + "원</td>";
+			html += "<td>" + data.IND + " 원</td>";
 		} else {
-			html += "<td>0원</td>";
+			html += "<td>0 원</td>";
 		}
 	} else {
-		html += "<td>0원</td>";
+		html += "<td> 0원</td>";
 	}
 	html += "</tr>";
 	
 	html += "<tr>";
 	html += "<td>법인 지출 합계</td>";
 	if((data != null) ? data.CRP : undefined) {
-		html += "<td>" + data.CRP + "원</td>";
+		html += "<td>" + data.CRP + " 원</td>";
 	} else {
-		html += "<td>0원</td>";
+		html += "<td>0 원</td>";
 	}
 	html += "</tr>";
 	html += "<tr>";
 	html += "<td>총 합계</td>";
 	if((data != null) ? data.TOTAL : undefined) {
-		html += "<td>" + data.TOTAL + "원</td>";
+		html += "<td>" + data.TOTAL + " 원</td>";
 	} else {
-		html += "<td>0원</td>";
+		html += "<td> 0원</td>";
 	}
 	html += "</tr>";
 	
