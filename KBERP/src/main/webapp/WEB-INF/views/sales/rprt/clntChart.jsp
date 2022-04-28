@@ -592,7 +592,11 @@ $(document).ready(function() {
 		            cursor: 'pointer',
 		            dataLabels: {
 		                enabled: true,
-		                format: '{point.percentage:.1f} %({point.y}명)'
+			        	formatter: function() {
+				        	if(this.y > 0) {
+				        		return this.percentage.toFixed(1) + "%(" + this.y + "명)";
+				        	}
+				       	}
 		            },
 		            showInLegend: true
 		        }
@@ -636,12 +640,16 @@ $(document).ready(function() {
 		    plotOptions: {
 		        column: {
 		           borderRadius: 5,
-		           borderWidth: 0
+		           borderWidth: 0,
 		         },
 		         series: {
 		        	 dataLabels: {
 		        		 enabled: true,
-		        		 format: '{point.y}' // 데이터 숫자표시
+			        	 formatter: function() {
+			        		if(this.y > 1) {
+			        			return this.y;
+			        		}
+			        	}
 		        	 }
 		         }
 		    },
