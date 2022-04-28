@@ -288,7 +288,7 @@ function users(){
 		<div class="login_middle">
 			<div id="findHead">
 	            <div class="findIdLogo"></div>
-		    </div>\
+		    </div>
 		    <form action="#" id="findidForm" method="post">
 			<div class="login_area">
 				<div class="input_id">
