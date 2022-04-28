@@ -633,11 +633,23 @@ $(document).ready(function() {
             credits: { //워터마크 숨김
                 enabled: false
             },
+		    plotOptions: {
+		        column: {
+		           borderRadius: 5,
+		           borderWidth: 0
+		         },
+		         series: {
+		        	 dataLabels: {
+		        		 enabled: true,
+		        		 format: '{point.y}' // 데이터 숫자표시
+		        	 }
+		         }
+		    },
             colors: ["#F2B705", "#F2CB05"],
             series: [{
-            	pointWidth: 50 // bar 너비 지정
+            	pointWidth: 50 // 고객사 bar 너비 지정
             }, {
-            	pointWidth: 50 // bar 너비 지정
+            	pointWidth: 50 // 고객 bar 너비 지정
             }]
 		});
 	}
@@ -779,7 +791,7 @@ function drawPaging(pb, sel) {
 									<span class="srch_name">기간</span>
 								</td>
 								<td colspan="4">
-									<input type="date" class="date" /> ~ <input type="date" class="date" />
+									<input type="date" class="date" value="${startDate}" /> ~ <input type="date" class="date" value="${endDate}" />
 								</td>
 								<td>
 									<span class="cmn_btn">검색</span>
@@ -806,17 +818,17 @@ function drawPaging(pb, sel) {
 							</div>
 							<span class="ccTxt cc">고객사</span>
 							<div class="chartData">
-								<span class="ccMonth ago">${cc.LAST}</span>	
-								<span class="ccMonth mon">${cc.THAT}</span>	
-								<span class="ccMonth mon">${cc.AVG}</span>	
-								<span class="ccMonth all">${cc.CNT}</span>	
+								<span class="ccMonth ago">${ccAll.CC_LAST}</span>	
+								<span class="ccMonth mon">${ccAll.CC_THAT}</span>	
+								<span class="ccMonth mon">${ccAll.CC_AVG}</span>	
+								<span class="ccMonth all">${ccAll.CC_ALLCNT}</span>	
 							</div>
 							<span class="ccTxt clnt">고객</span>
 							<div class="chartData">
-								<span class="ccMonth ago">${ec.LAST}</span>	
-								<span class="ccMonth mon">${ec.THAT}</span>	
-								<span class="ccMonth mon">${ec.AVG}</span>	
-								<span class="ccMonth all">${ec.CNT}</span>	
+								<span class="ccMonth ago">${ccAll.EC_LAST}</span>	
+								<span class="ccMonth mon">${ccAll.EC_THAT}</span>	
+								<span class="ccMonth mon">${ccAll.EC_AVG}</span>	
+								<span class="ccMonth all">${ccAll.EC_ALLCNT}</span>	
 							</div>
 						</div>
 					</div>
@@ -841,18 +853,18 @@ function drawPaging(pb, sel) {
 							        <tbody>
 							            <tr>
 							                <th>영업부</th>
-							                <td>${clntCmpnyCnt.CNT}</td>
-							                <td>${clntCnt.CNT}</td>
+							                <td>${ccAll.CC_DEPTCNT}</td>
+							                <td>${ccAll.EC_CNT}</td>
 							            </tr>
 							            <tr>
 							                <th>영업1팀</th>
-							                <td>${clntCmpnyCnt.CNT1}</td>
-							                <td>${clntCnt.CNT1}</td>
+							                <td>${ccAll.CC_DEPTCNT1}</td>
+							                <td>${ccAll.EC_CNT1}</td>
 							            </tr>
 							            <tr>
 							                <th>영업2팀</th>
-							                <td>${clntCmpnyCnt.CNT2}</td>
-							                <td>${clntCnt.CNT2}</td>
+							                <td>${ccAll.CC_DEPTCNT2}</td>
+							                <td>${ccAll.EC_CNT2}</td>
 							            </tr>
 							        </tbody>
 							    </table>									
