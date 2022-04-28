@@ -75,11 +75,20 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
+	$("#assetName").on("click", function() {
+		$("#srchAsset").click();
+	});
+
+	$("#useEmpName").on("click", function() {
+		$("#srchEmp").click();
+	});
+
+	
 	$("#rgstrtnBtn").on("click", function() {
 		
-		if(checkEmpty("#assetNum")) {
-			alert("자산코드를 입력하세요.");
-			$("#assetNum").focus();
+		if(checkEmpty("#assetName")) {
+			alert("자산명을 입력하세요.");
+			$("#assetName").focus();
 		}  else if(checkEmpty("#qunty")) {
 			alert("수량을 선택하세요.");
 			$("#qunty").focus();

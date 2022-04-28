@@ -261,6 +261,13 @@
 	float: right;
 }
 
+.add #updateBtn{
+	display: none;
+}
+
+.update #saveBtn{
+	display: none;
+}
 /* 상담노트 파트 */
 .cnsl_note_top {
 	display: inline-block;
@@ -1105,6 +1112,7 @@ $(document).ready(function() {
 							$("#adr").val(res.data.ADRS);
 							$("#dtl_adr").val(res.data.DTL_ADRS);
 							$("#noteSaveForm #clnt_num").val(res.data.CLNT_NUM);
+							$(".add").attr("class", "update");
 						},
 						error : function(request, status, error) {
 							console.log(request.responseText);
@@ -1341,8 +1349,17 @@ $(document).ready(function() {
 							success : function(res) {
 								if(res.res == "success") {
 									console.log(res);
+									$("#name").val(res.data.CLNT_NAME);
+									$("#grade").val(res.data.CLNT_GRADE);
+									$("#phn_num_1").val(res.data.PHONE_NUM_1);
+									$("#phn_num_2").val(res.data.PHONE_NUM_2);
+									$("#zip").val(res.data.ZIP_CODE);
+									$("#adr").val(res.data.ADRS);
+									$("#dtl_adr").val(res.data.DTL_ADRS);
+									$("#noteSaveForm #clnt_num").val(res.data.CLNT_NUM);
+									$(".add").attr("class", "update");
 									closePopup();
-									
+								
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
 								}
@@ -1359,8 +1376,105 @@ $(document).ready(function() {
 				name : "닫기"
 			}]
 		});
-	}); // 신규고객 팝업 끝
+	}); // 신규고객 등록 팝업 끝
 	
+	// 고객정보 수정 팝업
+	$("#updateBtn").on("click", function() {
+		
+		var html = "";
+		
+		html += "<form action=\"#\" id=\"updateForm\" method=\"post\">";
+		html += "<input type=\"hidden\" id=\"clnt_num\" name=\"clnt_num\" value=\"" + $("#clntForm #clnt_num").val() + "\"/>";
+		html += "<div class=\"page_title_text\" id=\"pop_title\">고객정보 수정</div>";
+		html += "<div class=\"call_clnt_cont\">";
+		html += "	<div class=\"pop_title\">고객명</div>";
+		html += "	<input type=\"text\" class=\"name\" id=\"clnt_name\" name=\"clnt_name\" value=\"" + $("#name").val() + "\"/>";
+		html += "</div>";
+		html += "<div class=\"call_clnt_cont\">";
+		html += "	<div class=\"pop_title\">고객등급</div>";
+		html += "	<input type=\"number\" class=\"grade\" id=\"clnt_grade\" name=\"clnt_grade\" value=\"" + $("#grade").val() + "\"/>";
+		html += "</div>";
+		html += "<div class=\"call_clnt_cont\">";
+		html += "	<div class=\"pop_title\">전화번호 1</div>";
+		html += "	<input type=\"tel\" class=\"phon\" id=\"phon_num_1\" name=\"phon_num_1\" value=\"" + $("#phn_num_1").val() + "\"/>";
+		html += "	<div class=\"pop_title\">전화번호 2</div>";
+		html += "	<input type=\"tel\" class=\"phon\" id=\"phon_num_2\" name=\"phon_num_2\" value=\"" + $("#phn_num_2").val() + "\"/>";
+		html += "</div>";
+		html += "<div class=\"call_clnt_cont\">";
+		html += "	<div class=\"pop_title\">주소</div>";
+		html += "	<input type=\"text\" class=\"clnt_zip\" id=\"zip_code\" name=\"zip_code\" value=\"" + $("#zip").val() + "\"/>";
+		html += "	<button type=\"button\" id=\"zip_btn\" style=\"width:60px; height:32px;\" onclick=\"execDaumPostcode()\">검색</button><br>";
+		html += "	<input type=\"text\" class=\"clnt_adrs\" id=\"adrs\" name=\"adrs\" value=\"" + $("#adr").val() + "\"/>";
+		html += "	<input type=\"text\" class=\"clnt_dtl\" id=\"dtl_adrs\" name=\"dtl_adrs\" value=\"" + $("#dtl_adr").val() + "\"/>";
+		html += "</div>";
+		html += "</form>";
+		
+		makePopup({
+			bg : false,
+			bgClose : false,
+			width : 640,
+			height : 500,
+			title : "고객정보 수정",
+			contents : html,
+			draggable : true,
+			buttons : [{
+				name : "수정",
+				func:function() {
+					if(checkEmpty("#clnt_name")) {
+						alert("고객명을 입력하세요.");
+						$("#clnt_name").focus();
+					} else if(checkEmpty("#clnt_grade")) {
+						alert("고객등급을 입력하세요.");
+						$("#clnt_grade").focus();
+					} else if(checkEmpty("#phon_num_1")) {
+						alert("전화번호를 입력하세요.");
+						$("#phon_num_1").focus();
+					} else if(checkEmpty("#zip_code")) {
+						alert("우편번호를 입력하세요.");
+						$("#zip_code").focus();
+					} else if(checkEmpty("#dtl_adrs")) {
+						alert("상세주소를 입력하세요.");
+						$("#dtl_adrs").focus();
+					}else {
+						// 수정
+						var params = $("#updateForm").serialize();
+						
+						$.ajax({
+							type : "post",
+							url : "callCenterAction/ClntUpdate",
+							dataType : "json",
+							data : params,
+							success : function(res) {
+								if(res.res == "success") {
+									console.log(res);
+									$("#name").val(res.data.CLNT_NAME);
+									$("#grade").val(res.data.CLNT_GRADE);
+									$("#phn_num_1").val(res.data.PHONE_NUM_1);
+									$("#phn_num_2").val(res.data.PHONE_NUM_2);
+									$("#zip").val(res.data.ZIP_CODE);
+									$("#adr").val(res.data.ADRS);
+									$("#dtl_adr").val(res.data.DTL_ADRS);
+									$("#noteSaveForm #clnt_num").val(res.data.CLNT_NUM);
+									$(".add").attr("class", "update");
+									closePopup();
+								
+								} else {
+									alert("작성중 문제가 발생하였습니다.");
+								}
+
+							},
+							error : function(request, status, error) {
+								console.log(request.responseText);
+
+							}
+						}); // ajax end
+					} // else end
+				}
+			}, {
+				name : "닫기"
+			}]
+		});
+	});// 고객정보 수정 팝업 끝
 	
 	// 상담노트 저장 팝업
 	$(".note_cmn_btn_mr").on("click", function() {
@@ -1427,7 +1541,6 @@ $(document).ready(function() {
 			}]
 		});
 	}); // 상담노트 저장 팝업 끝
-	
 }); // document 끝
 
 // 다음 우편번호 스크립트
@@ -1508,8 +1621,11 @@ function checkEmpty(sel) {
 			    				<input class="adrs_input" type="text" id="adr" name="adr" readonly="readonly"/>
 			    				<br/>
 			    				<input class="adrs_input_dtls" type="text" id="dtl_adr" name="dtl_adr" readonly="readonly"/>
-			    		</div>	
-		    			<div class="cmn_btn_mr" id="saveBtn">신규고객 등록</div>
+			    		</div>
+			    		<div class="add">
+			    			<div class="cmn_btn_mr" id="updateBtn">고객정보 수정</div>
+			    			<div class="cmn_btn_mr" id="saveBtn">신규고객 등록</div>
+		    			</div>	
 		    		</form>
 		    		</div>
 		    	</div> <!-- 고객정보 div 끝 -->

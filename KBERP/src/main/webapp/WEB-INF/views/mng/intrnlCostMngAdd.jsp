@@ -86,7 +86,7 @@
 }
 
 .intrnl_cost_admnstrtn_new td:nth-child(odd) {
-	width: 80px;
+	width: 125px;
 	font-weight: bold;
 	text-align: center;
 }
@@ -94,33 +94,33 @@
 .intrnl_cost_admnstrtn_new td:nth-child(3) {
 	text-align: right;
 	padding-right: 20px;
-	width: 30px;
+	width: 60px;
 }
 
 .intrnl_cost_admnstrtn_new td:nth-child(5) {
 	text-align: right;
 	padding-right: 20px;
-	width: 30px;
+	width: 60px;
 }
 
 .intrnl_cost_admnstrtn_new td:nth-child(even) {
-	width: 50px;
+	width: 75px;
 }
 
 .input {
-	width: 100%;
+	width: 700px;
 	height: 20px;
 	padding: 0px 5px;
 }
 
 .input_short {
-	width: 100%;
+	width: 167px;
 	height: 20px;
 	padding: 0px 5px;
 }
 
 .acnt_code_input {
-	width: 600px;
+	width: 120px;
 	height: 20px;
 	vertical-align: middle;
 }
@@ -497,9 +497,9 @@ function drawPaging(pb) {
 							<td>품목명</td>
 							<td><input type="text" class="input_short" id="item" name="item"></td>
 							<td>수량</td>
-							<td><input type="number" class="input_short" id="qunty" name="qunty" value="1"></td>
+							<td><input type="number" class="input_short" id="qunty" name="qunty" value="1" placeholder="숫자 입력"></td>
 							<td>단가</td>
-							<td><input type="number" class="input_short" id="unitPrice" name="unitPrice"></td>
+							<td><input type="number" class="input_short" id="unitPrice" name="unitPrice" placeholder="숫자 입력"></td>
 						</tr>
 						<tr>
 							<td>공급가액</td>
@@ -512,12 +512,11 @@ function drawPaging(pb) {
 						</tr>
 						<tr>
 							<td>사업자번호</td>
-							<td colspan="5"><input type="number" class="input" id="bsnsmnNum" name="bsnsmnNum"></td>
+							<td colspan="5"><input type="number" class="input" id="bsnsmnNum" name="bsnsmnNum" placeholder="숫자 입력"></td>
 						</tr>
 						<tr>
 							<td>합계</td>
-							<td colspan="5"><input type="number" class="input"
-								placeholder="공급가액+공급가액*10% 자동출력" readonly="readonly" id="amnt" name="amnt"></td>
+							<td colspan="5"><input type="number" class="input" placeholder="공급가액+공급가액*10% 자동출력" readonly="readonly" id="amnt" name="amnt"></td>
 						</tr>
 						<tr>
 							<td>비고</td>

@@ -15,6 +15,7 @@
 	width: 900px;
 }
 
+
 /* 개인 작업 영역 */
 .srch_month {
 	height: 27px;
@@ -69,12 +70,28 @@
 	margin-top: 20px;
 }
 
-.aprvl_check {
+.aprvl_check_wrap {
 	display: inline-block;
 	vertical-align: top;
 	font-size: 10.5pt;
-	font-weight: bold;
 	margin-right: 10px;
+	font-weight: bold;
+	text-align: center;
+	background-color: #F2F2F2;
+}
+
+.aprvl_check_sts {
+	display: inline-block;
+	vertical-align: top;
+	width: 80px;
+}
+
+.aprvl_check_res {
+	display: inline-block;
+	vertical-align: top;
+	width: 100px;
+	height: 30px;
+		
 }
 
 .aprvl_popup_area {
@@ -227,7 +244,6 @@ display: inline-block;
     margin-top: 4px;
 }
 
-/* 결재권자 선택 팝업 */
 .popup_emp_srch_area {
 	display: inline-block;
 	vertical-align: top;
@@ -306,6 +322,7 @@ display: inline-block;
 }
 
 
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -351,6 +368,8 @@ $(document).ready(function() {
 	});
 	
 	reloadList();
+	$("#aprvlRqst").css('display', 'none');
+	$("#aprvlAgainRqst").css('display', 'none');
 	
 	$("#pgn_area").on("click", "div", function() {
 		$("#page").val($(this).attr("page"));
@@ -360,6 +379,7 @@ $(document).ready(function() {
 	$("#srchMonth").on("change", function() {
 		$("#page").val("1");
 		$("#mon").val($("#srchMonth").val());
+		$("#aprvlMon").val($("#srchMonth").val());
 		reloadList();
 	});
 	
@@ -400,6 +420,14 @@ $(document).ready(function() {
 			contents : html,
 			draggable : true,
 			contentsEvent : function() {
+				
+				/* 입력칸 클릭 시 버튼 클릭 */
+				$("#aprvlerInput").on("click", function() {
+					$("#aprvlerBtn").click();
+				});
+				$("#rfrncInput").on("click", function() {
+					$("#rfrncBtn").click();
+				});
 				
 				/* 결재권자 검색 버튼 클릭 */
 				$("#aprvlerBtn").on("click", function() {
@@ -509,8 +537,43 @@ $(document).ready(function() {
 						   	 	 }
 						   	 });
 							 
-							
-						}
+							 $("#aprvlerChk").on("click", function() {
+								 var checkbox = $(this).find("td:first-child :checkbox");
+						   		 
+						   	 	 if(checkbox.prop("checked")) {
+						   		 	checkbox.prop("checked", false);
+						   	 	 } else {
+						   	 		checkbox.prop("checked", true);
+						   	 	 }
+							 });
+						},
+						buttons : [{
+							name : "확인",
+							func:function() { 
+							    // 결재권자 체크된 값 가져오기
+						   	    var aprvler_emp_num_arr = [];
+						   	    var aprvler_emp_name_arr = [];
+						   	    var aprvler_rank_num_arr = [];
+						   	    $("input[name=aprvlerChk]:checked").each(function() {
+						   		    var empNum = $(this).attr("aprvlerNum");
+						   		    var empName = $(this).attr("aprvlerName");
+						   		    var rankNum = $(this).attr("aprvlerRankNum");
+							   	    aprvler_emp_num_arr.push(empNum);
+							   	    aprvler_emp_name_arr.push(empName);
+							   	    aprvler_rank_num_arr.push(rankNum);
+							   	    aprvler_rank_num_arr.sort(function(a,b){
+							   		    return b-a; // 결재순번 rank_num 내림차순 정렬
+							   	    }) ; 
+						   	    });
+						   	    console.log("결재권자 체크값 : " + aprvler_emp_num_arr, aprvler_emp_name_arr, aprvler_rank_num_arr)
+						   	    $("#aprvlerInput").val(aprvler_emp_name_arr);
+						   	    $("#aprvlerList").val(aprvler_emp_num_arr);
+						   	    $("#aprvlTurn").val(aprvler_rank_num_arr);
+						   	    closePopup(2);
+							}
+						}, {
+							name : "취소"
+						}]
 		            }); /* 결재권자 팝업 끝 */
 		            
 		            $(".empinqry_area").slimScroll({height: "240px"},{width: "450px"}); // 슬림스크롤
@@ -613,7 +676,7 @@ $(document).ready(function() {
 							 	 }); 
 						   	 });
 							 
-							// tr 선택시 체크박스 선택처리
+							 // tr 선택시 체크박스 선택처리
 						   	 $("#aprvlerInqry_tbody").on("click", "tr", function() {
 						   		 var checkbox = $(this).find("td:first-child :checkbox");
 						   		 
@@ -624,7 +687,17 @@ $(document).ready(function() {
 						   	 	 }
 						   	 });
 							
-						}
+							// 체크박스 클릭 처리
+						   	$("#aprvlerChk").on("click", function() {
+								 var checkbox = $(this).find("td:first-child :checkbox");
+						   		 
+						   	 	 if(checkbox.prop("checked")) {
+						   		 	checkbox.prop("checked", false);
+						   	 	 } else {
+						   	 		checkbox.prop("checked", true);
+						   	 	 }
+							 });
+						},
 						buttons : [{
 							name : "확인",
 							func: function() {
@@ -647,15 +720,54 @@ $(document).ready(function() {
 						}]
 					}); /* 참조자 선택 팝업 끝 */
 					
-					$(".empinqry_area").slimScroll({height: "255px"},{width: "450px"}); // 슬림 스크롤
+					$(".empinqry_area").slimScroll({height: "240px"},{width: "450px"}); // 슬림스크롤
 					
-				});
+				}); /* 참조자 검색 버튼 클릭 이벤트 끝 */
 			},
 			buttons : [{
-				name : "요청",
-				func:function() {
-					console.log("요청!");
-					closePopup();
+				name : "확인",
+				func:function() {	
+					$("#title").val($("#aprvlTitle").val());
+					$("#cont").val($("#aprvlCont").val());
+					$("#aprvlTurn").val($("#aprvlTitle").val());
+					
+					var params = $("#aprvlForm").serialize();
+					console.log("결재폼값" + params)
+					
+					$.ajax({
+					      type : "post",
+					      url : "aprvlRqstAjax/rqst",
+					      dataType : "json",
+					      data : params,
+					      success : function(res) {
+			    	 		  if(res.res=="success") {
+								  $("#aprvlNum").val(res.aprvlNum);
+								  console.log("결재번호  : " + $("#aprvlNum").val())
+									  
+								  var params = $("#aprvlSuccessForm").serialize();
+			    				  $.ajax({
+			    					  type : "post",
+			    					  url : "aprvlRqstAjax/aprvlOk",
+			    				      dataType : "json",
+			    					  data : params,
+			    					  success : function(res) {
+			    					      if(res.res=="success") {
+			    							  makeAlert("알림", "결재가 요청되었습니다.", function() {
+			    							      location.reload();
+			    	    	 				      console.table(res); 
+			    							  });
+			    					      }
+			    					  },
+			    					  error : function(req) {
+			    						  console.log(req.responseText);
+			    					  }
+			    			      }); 
+			    	 	     }
+					      },
+					      error : function(req) {
+					          console.log(req.responseText);
+					      }
+					}); 
 				}
 			}, {
 				name : "취소"
@@ -664,6 +776,400 @@ $(document).ready(function() {
 		
 	}); /* 결재요청 버튼 끝 */
 	
+	/* 결재 재요청 버튼 */
+	$("#aprvlAgainRqst").on("click", function() {
+		var html = "";
+		
+		html += "<div class=\"aprvl_popup_area\">                          ";
+		html += "	<div class=\"aprvl_title_wrap\">                       ";
+		html += "		<div class=\"aprvl_title_txt\">제목</div>          ";
+		html += "		<input type=\"text\" class=\"aprvl_title_input\" id=\"aprvlTitle\" name=\"aprvlTitle\"/> ";
+		html += "	</div>			                                       ";
+		html += "	<div class=\"aprvl_cont_wrap\">                        ";
+		html += "		<div class=\"aprvl_cont_txt\">내용</div>           ";
+		html += "		<textarea class=\"aprvl_cont_input\"id=\"aprvlCont\" name=\"aprvlCont\"/>  ";
+		html += "	</div>			                                       ";
+		html += "	<div class=\"aprvler_wrap\">                           ";
+		html += "		<div class=\"aprvler_txt\">결재권자</div>          ";
+		html += "		<input type=\"text\" readonly=\"readonly\" id=\"aprvlerInput\" class=\"aprvler_input\"/>     ";
+		html += "		<div class=\"aprvler_btn\" id=\"aprvlerBtn\"  ></div>                  ";
+		html += "	</div>			                                       ";
+		html += "	<div class=\"rfrnc_wrap\">                             ";
+		html += "		<div class=\"rfrnc_txt\">참조인</div>              ";
+		html += "		<input type=\"text\" readonly=\"readonly\" id=\"rfrncInput\" class=\"rfrnc_input\"/>       ";
+		html += "		<div class=\"rfrnc_btn\" id=\"rfrncBtn\"></div>                    ";
+		html += "	</div>			                                       ";
+		html += "</div>";  
+		
+		/* 결재 재요청 팝업 시작 */
+		makePopup({
+			depth : 1,
+			bg : false,
+			bgClose : false,
+			width: 500,
+			height: 400,
+			title : "결재 재요청",
+			contents : html,
+			draggable : true,
+			contentsEvent : function() {
+				
+				/* 입력칸 클릭 시 버튼 클릭 */
+				$("#aprvlerInput").on("click", function() {
+					$("#aprvlerBtn").click();
+				});
+				$("#rfrncInput").on("click", function() {
+					$("#rfrncBtn").click();
+				});
+				
+				/* 결재권자 검색 버튼 클릭 */
+				$("#aprvlerBtn").on("click", function() {
+					
+					var html2 = "";
+					html2 += "<form action=\"#\" id=\"inqryForm\" method=\"post\">" ;
+					html2 += "<input type=\"hidden\" id=\"inqryNo\" name=\"inqryNo\"  />" ;
+					html2 += "<div class=\"popup_emp_srch_area\">         ";
+					html2 += "<select class=\"emp_srch_select\" id=\"inqryGbn\" name=\"inqryGbn\">          ";
+					html2 += "	<option value=\"0\" selected>전체</option>";
+					html2 += "	<option value=\"1\">부서명</option>      ";
+					html2 += "	<option value=\"2\">사원명</option>      ";
+					html2 += "	<option value=\"3\">직급명</option>      ";
+					html2 += "</select>                                   ";
+					html2 += "<div class=\"popup_srch_input\">	                 ";
+					html2 += "	<input type=\"text\" id=\"inqryTxt\" name=\"inqryTxt\"/>                  ";
+					html2 += "</div>                                      ";
+					html2 += "<div class=\"cmn_btn\" id=\"inqryBtn\">검색</div>           ";
+					html2 += "</div>                                      ";
+					html2 += "</form>";														
+					html2 += "<div class=\"empinqry_area\">        ";
+		            html2 += " <table class=\"empinqry_list\">   ";
+		            html2 += "   <colgroup>                      ";
+		            html2 += "      <col width=\"30\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "   </colgroup>                     ";
+		            html2 += "   <thead>                         ";
+		            html2 += "      <tr>                         ";
+		            html2 += "         <th>선택</th>             ";
+		            html2 += "         <th>부서</th>             ";
+		            html2 += "         <th>직급</th>             ";
+		            html2 += "         <th>사원명</th>           ";
+		            html2 += "         <th>사원번호</th>         ";
+		            html2 += "      </tr>                        ";
+		            html2 += "   </thead>                        ";
+		            html2 += "   <tbody id=\"aprvlerInqry_tbody\">   ";
+		            html2 += "   </tbody>                        ";
+		            html2 += "  </table>                         ";
+		            html2 += "</div>                             ";
+		            
+		            /* 결재권자 팝업 시작 */
+		            makePopup({
+		            	depth : 2,
+						bg : false,
+						bgClose : false,
+						width: 600,
+						height: 400,
+						title : "결재권자 선택",
+						contents : html2, 
+						draggable : true,
+						contentsEvent : function() {
+							var params = $("#inqryForm").serialize();	
+							$.ajax({
+								type : "post",
+							    url : "apntmListAjax/inqryList",
+							    dataType : "json",
+							    data : params,
+							    success : function(res) {
+							    	
+							    	console.log(res);
+							    	drawAprvlerInqryList(res.inqryList);
+							    }, 
+							    error : function(req) {
+							       console.log(req.responseText);
+							    }
+							});
+							
+							// 사원 검색 엔터 처리
+						 	$("#inqryTxt").on("keypress", function(event) {
+					 			if(event.keyCode == 13) {
+					 				$("#inqryBtn").click();
+					 				return false;
+					 			}
+						 	});
+							
+							// 검색 버튼 클릭 이벤트
+						 	$("#inqryBtn").on("click", function() {
+					   		    console.log("결재권자 선택팝업 버튼클릭!")
+							   	var params = $("#inqryForm").serialize();	
+							   	console.log("inqryGbn  : " + $("#inqryGbn").val())
+							 	$.ajax({
+									type : "post",
+									url : "apntmListAjax/inqryList",
+									dataType : "json",
+									data : params,
+									success : function(res) {
+									    console.log(res);
+									    drawAprvlerInqryList(res.inqryList);
+									}, 
+									error : function(req) {
+									    console.log(req.responseText);
+									}
+								});
+						   	});
+						 	
+							 // tr 선택시 체크박스 선택처리
+						   	 $("#aprvlerInqry_tbody").on("click", "tr", function() {
+						   		 var checkbox = $(this).find("td:first-child :checkbox");
+						   		 
+						   	 	 if(checkbox.prop("checked")) {
+						   		 	checkbox.prop("checked", false);
+						   	 	 } else {
+						   	 		checkbox.prop("checked", true);
+						   	 	 }
+						   	 });
+							 
+							 // 체크박스 클릭 처리
+						   	 $("#aprvlerChk").on("click", function() {
+								 var checkbox = $(this).find("td:first-child :checkbox");
+						   		 
+						   	 	 if(checkbox.prop("checked")) {
+						   		 	checkbox.prop("checked", false);
+						   	 	 } else {
+						   	 		checkbox.prop("checked", true);
+						   	 	 }
+							 });
+							 
+						},
+						buttons : [{
+							name : "확인",
+							func:function() { 
+							    // 결재권자 체크된 값 가져오기
+						   	    var aprvler_emp_num_arr = [];
+						   	    var aprvler_emp_name_arr = [];
+						   	    var aprvler_rank_num_arr = [];
+						   	    $("input[name=aprvlerChk]:checked").each(function() {
+						   		    var empNum = $(this).attr("aprvlerNum");
+						   		    var empName = $(this).attr("aprvlerName");
+						   		    var rankNum = $(this).attr("aprvlerRankNum");
+							   	    aprvler_emp_num_arr.push(empNum);
+							   	    aprvler_emp_name_arr.push(empName);
+							   	    aprvler_rank_num_arr.push(rankNum);
+							   	    aprvler_rank_num_arr.sort(function(a,b){
+							   		    return b-a; // 결재순번 rank_num 내림차순 정렬
+							   	    }) ; 
+						   	    });
+						   	    console.log("결재권자 체크값 : " + aprvler_emp_num_arr, aprvler_emp_name_arr, aprvler_rank_num_arr)
+						   	    $("#aprvlerInput").val(aprvler_emp_name_arr);
+						   	    $("#aprvlerList").val(aprvler_emp_num_arr);
+						   	    $("#aprvlTurn").val(aprvler_rank_num_arr);
+						   	    closePopup(2);
+							}
+						}, {
+							name : "취소"
+						}]
+		            }); /* 결재권자 팝업 끝 */
+		            
+		            $(".empinqry_area").slimScroll({height: "240px"},{width: "450px"}); // 슬림스크롤
+		            
+		            
+				}); /* 결재권자 검색 버튼 클릭 이벤트 끝 */
+				
+				/* 참조자 검색 버튼 클릭 이벤트 */
+				$("#rfrncBtn").on("click", function() {
+					var html2 = "";
+					html2 += "<form action=\"#\" id=\"inqryForm\" method=\"post\">" ;
+					html2 += "<input type=\"hidden\" id=\"inqryNo\" name=\"inqryNo\"  />" ;
+					html2 += "<div class=\"popup_emp_srch_area\">         ";
+					html2 += "<select class=\"emp_srch_select\" id=\"inqryGbn\" name=\"inqryGbn\">          ";
+					html2 += "	<option value=\"0\" selected>전체</option>";
+					html2 += "	<option value=\"1\">부서명</option>      ";
+					html2 += "	<option value=\"2\">사원명</option>      ";
+					html2 += "	<option value=\"3\">직급명</option>      ";
+					html2 += "</select>                                   ";
+					html2 += "<div class=\"popup_srch_input\">	                 ";
+					html2 += "	<input type=\"text\" id=\"inqryTxt\" name=\"inqryTxt\"/>                  ";
+					html2 += "</div>                                      ";
+					html2 += "<div class=\"cmn_btn\" id=\"inqryBtn\">검색</div>           ";
+					html2 += "</div>                                      ";
+					html2 += "</form>";														
+					html2 += "<div class=\"empinqry_area\">        ";
+		            html2 += " <table class=\"empinqry_list\">   ";
+		            html2 += "   <colgroup>                      ";
+		            html2 += "      <col width=\"30\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "      <col width=\"100\"/>         ";
+		            html2 += "   </colgroup>                     ";
+		            html2 += "   <thead>                         ";
+		            html2 += "      <tr>                         ";
+		            html2 += "         <th>선택</th>             ";
+		            html2 += "         <th>부서</th>             ";
+		            html2 += "         <th>직급</th>             ";
+		            html2 += "         <th>사원명</th>           ";
+		            html2 += "         <th>사원번호</th>         ";
+		            html2 += "      </tr>                        ";
+		            html2 += "   </thead>                        ";
+		            html2 += "   <tbody id=\"aprvlerInqry_tbody\">   ";
+		            html2 += "   </tbody>                        ";
+		            html2 += "  </table>                         ";
+		            html2 += "</div>                             ";
+		            
+		            // 참조자 선택 팝업
+					makePopup({
+						depth : 2,
+						bg : false,
+						bgClose : false,
+						width: 600,
+						height: 400,
+						title : "참조인 선택",
+						contents : html2,
+						draggable : true,
+						contentsEvent : function() {
+							var params = $("#inqryForm").serialize();	
+							
+							$.ajax({
+							    type : "post",
+							    url : "apntmListAjax/inqryList",
+							    dataType : "json",
+							    data : params,
+							    success : function(res) {
+							    	console.log(res);
+							    	drawAprvlerInqryList(res.inqryList);
+							    }, 
+							   	error : function(req) {
+								console.log(req.responseText);
+							    }
+						    });
+							
+							 /* 엔터 시 클릭이벤트 */
+							$("#inqryTxt").on("keypress", function(event) {
+					 			if(event.keyCode == 13) {
+					 				$("#inqryBtn").click();
+					 				return false;
+					 			}
+						 	});
+							
+							 $("#inqryBtn").on("click", function() {
+					   		     console.log("결재권자 선택팝업 버튼클릭!")
+							   	 var params = $("#inqryForm").serialize();	
+							   	 console.log("inqryGbn  : " + $("#inqryGbn").val())
+							 	 $.ajax({
+									 type : "post",
+									 url : "apntmListAjax/inqryList",
+									 dataType : "json",
+								     data : params,
+								     success : function(res) {
+								         console.log(res);
+								    	 drawAprvlerInqryList(res.inqryList);
+								     }, 
+								     error : function(req) {
+								         console.log(req.responseText);
+								     }
+							 	 }); 
+						   	 });
+							 
+							 // tr 선택시 체크박스 선택처리
+						   	 $("#aprvlerInqry_tbody").on("click", "tr", function() {
+						   		 var checkbox = $(this).find("td:first-child :checkbox");
+						   		 
+						   	 	 if(checkbox.prop("checked")) {
+						   		 	checkbox.prop("checked", false);
+						   	 	 } else {
+						   	 		checkbox.prop("checked", true);
+						   	 	 }
+						   	 });
+							
+						 	 // 체크박스 클릭 처리
+						   	 $("#aprvlerChk").on("click", function() {
+								 var checkbox = $(this).find("td:first-child :checkbox");
+						   		 
+						   	 	 if(checkbox.prop("checked")) {
+						   		 	checkbox.prop("checked", false);
+						   	 	 } else {
+						   	 		checkbox.prop("checked", true);
+						   	 	 }
+							 });
+							
+						},
+						buttons : [{
+							name : "확인",
+							func: function() {
+						    	// 참조인 체크 된 값 가져오기
+					  	    	var rfrnc_emp_num_arr = [];
+					   	    	var rfrnc_emp_name_arr = [];
+					   	    	$("input[name=aprvlerChk]:checked").each(function() {
+					   		    	var empNum = $(this).attr("aprvlerNum");
+					   		    	var empName = $(this).attr("aprvlerName");
+					   				rfrnc_emp_num_arr.push(empNum);
+					   				rfrnc_emp_name_arr.push(empName);
+					   	    	});
+					   	    	console.log("참조인 체크값 : " + rfrnc_emp_num_arr, rfrnc_emp_name_arr)
+					   	    	$("#rfrncInput").val(rfrnc_emp_name_arr);
+					   	    	$("#rfrncList").val(rfrnc_emp_num_arr);
+					   	    	closePopup(2);
+							}
+						}, {
+							name : "취소"
+						}]
+					}); /* 참조자 선택 팝업 끝 */
+					
+					$(".empinqry_area").slimScroll({height: "240px"},{width: "450px"}); // 슬림스크롤
+					
+				}); /* 참조자 검색 버튼 클릭 이벤트 끝 */
+			},
+			buttons : [{
+				name : "확인",
+				func:function() {
+					$("#title").val($("#aprvlTitle").val());
+					$("#cont").val($("#aprvlCont").val());
+					$("#aprvlTurn").val($("#aprvlTitle").val());
+					
+					var params = $("#aprvlForm").serialize();
+					console.log("결재폼값" + params)
+					
+					$.ajax({
+					      type : "post",
+					      url : "aprvlRqstAjax/rqst",
+					      dataType : "json",
+					      data : params,
+					      success : function(res) {
+			    	 		  if(res.res=="success") {
+								  $("#aprvlNum").val(res.aprvlNum);
+								  console.log("결재번호  : " + $("#aprvlNum").val())
+									  
+								  var params = $("#aprvlSuccessForm").serialize();
+			    				  $.ajax({
+			    					  type : "post",
+			    					  url : "aprvlRqstAjax/aprvlAgainOk",
+			    				      dataType : "json",
+			    					  data : params,
+			    					  success : function(res) {
+			    					      if(res.res=="success") {
+			    							  makeAlert("알림", "결재가 재요청되었습니다.", function() {
+			    							      location.reload();
+			    	    	 				      console.table(res); 
+			    							  });
+			    					      }
+			    					  },
+			    					  error : function(req) {
+			    						  console.log(req.responseText);
+			    					  }
+			    			      }); 
+			    	 	     }
+					      },
+					      error : function(req) {
+					          console.log(req.responseText);
+					      }
+					}); 
+				}
+			}, {
+				name : "취소"
+			}] /* 팝업 버튼 끝 */
+		}); /* 결재요청 팝업 끝 */
+		
+	});
 	
 	$("#listTbody").on("click", "#chitNum", function() {
 		$("#sendChitNum").val($(this).attr("chitnum"));
@@ -688,6 +1194,7 @@ function reloadList() {
 			drawList(res.list);
 			drawPaging(res.pb);
 			drawSum(res.data);
+			drawAprvlSts(res.aprvlSts, res.list);
 		},
 		error : function(request, status, error) {
 			console.log(request.responseText);
@@ -699,18 +1206,20 @@ function reloadList() {
 function drawList(list) {
 	var html = "";
 	
+	console.log(list);
+	
 	for(data of list) {
 		html += "<tr>";
 		html += "<td class=\"board_table_hover\" id=\"chitNum\" chitnum=\"" + data.CHIT_NUM + "\">" + data.CHIT_NUM + "</td>";
 		
 		if(data.DEVIT_AMNT != null) {
-			html += "<td>" + data.DEVIT_AMNT + "원</td>";			
+			html += "<td>" + data.DEVIT_AMNT + " 원</td>";			
 		} else {
 			html += "<td>-</td>";			
 		}
 		
 		if(data.CREDIT_AMNT != null) {
-			html += "<td>" + data.CREDIT_AMNT + "원</td>";			
+			html += "<td>" + data.CREDIT_AMNT + " 원</td>";			
 		} else {
 			html += "<td>-</td>";						
 		}
@@ -767,16 +1276,16 @@ function drawSum(data) {
 	
 	html += "<tr>";
 	html += "<td>차변 합계</td>";
-	if(data.DEVIT_SUM != null) {
-		html += "<td>" + data.DEVIT_SUM + "원</td>";		
+	if(data != null && data.DEVIT_SUM != null) {
+		html += "<td>" + data.DEVIT_SUM + " 원</td>";		
 	} else {
 		html += "<td>0원</td>";
 	}
 	html += "</tr>";
 	html += "<tr>";
 	html += "<td>대변 합계</td>";
-	if(data.CREDIT_SUM != null) {
-		html += "<td>" + data.CREDIT_SUM + "원</td>";		
+	if(data != null && data.CREDIT_SUM != null) {
+		html += "<td>" + data.CREDIT_SUM + " 원</td>";
 	} else {
 		html += "<td>0원</td>";
 	}
@@ -798,12 +1307,73 @@ function drawAprvlerInqryList(inqryList) {
         html += " 	<td>" + data.EMP_NUM + "</td> ";
         html += " </tr>                       ";
     }
+    
 	$("#aprvlerInqry_tbody").html(html);
+}
+
+// 결재 현황 조회
+function drawAprvlSts(aprvlSts, list) {
+	
+	
+	var html = "";
+	html += "<div class=\"aprvl_check_sts\">결재 현황 :</div>"; 
+	console.log("list : " + list);
+	
+	if(list != "") {
+
+		if(aprvlSts == null) {
+			html += "<div class=\"aprvl_check_res\">-</div>"
+			$("#aprvlRqst").css('display', 'inline-block');
+			$("#aprvlAgainRqst").css('display', 'none');
+			
+		} else if(aprvlSts.APRVL_STS == 0) { /* 결재 진행중 */
+			html += "<div class=\"aprvl_check_res\">결재 진행중</div>";
+			$("#aprvlRqst").css('display', 'none');
+			$("#aprvlAgainRqst").css('display', 'none');
+		} else if(aprvlSts.APRVL_STS == 1) { /* 결재 완료 */
+			html += "<div class=\"aprvl_check_res\" style=\"color:#2E83F2;\">결재 완료</div>";
+			$("#aprvlRqst").css('display', 'none');
+			$("#aprvlAgainRqst").css('display', 'none');
+		} else { /* 결재 반려 */
+			html += "<div class=\"aprvl_check_res\" style=\"color:#ff6f60;\">결재 반려</div>";
+			$("#aprvlRqst").css('display', 'none');
+			$("#aprvlAgainRqst").css('display', 'inline-block');
+		}
+		
+	} else {
+		html += "<div class=\"aprvl_check_res\">-</div>"
+		$("#aprvlRqst").css('display', 'none');
+		$("#aprvlAgainRqst").css('display', 'none');
+	}
+	
+		
+	$("#aprvlCheck").html(html);
+	
+
 }
 
 </script>
 </head>
 <body>
+	
+	<!-- 결재 요청 성공시 결재진행중 상태로 변경 -->
+	<form action="#" id="aprvlSuccessForm" method="post">
+		<input type="hidden" id="aprvlNum" name="aprvlNum" />
+		<input type="hidden" id="aprvlMon" name="mon" value="${mon}"/>
+		<input type="hidden" id="emp_num" name="empNum" value="${sEmpNum}" />
+	</form>
+	
+	<!-- 결재 데이터 넘기는 폼 -->
+	<form action="#" id="aprvlForm" method="post">
+		<input type="hidden" id="emp_num" name="emp_num" value="${sEmpNum}" />
+		<input type="hidden" id="title" name="title" />
+		<input type="hidden" id="cont" name="cont" />
+		<input type="hidden" id="aprvlerList" name="aprvlerList" />
+		<input type="hidden" id="rfrncList" name="rfrncList" />
+		<input type="hidden" id="att" name="att" />
+		<input type="hidden" id="aprvlTurn" name="aprvlTurn" />
+	</form>
+	
 	<form action="#" id="actionForm" method="post">
 		<input type="hidden" id="mon" name="mon" value="${mon}">
 		<input type="hidden" id="page" name="page" value="${page}">
@@ -812,7 +1382,6 @@ function drawAprvlerInqryList(inqryList) {
 		<input type="hidden" name="menuNum" value="${param.menuNum}">
 		<input type="hidden" name="menuType" value="${param.menuType}">
 	</form>
-
 
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -826,7 +1395,7 @@ function drawAprvlerInqryList(inqryList) {
 		<div class="page_title_bar">
 			<div class="page_title_text">매입전표 / 매출전표</div>
 			<div class="page_srch_area">
-				<div class="aprvl_check">결재 현황 : -</div>
+				<div class="aprvl_check_wrap" id="aprvlCheck"></div>
 				<input type="month" class="srch_month" id="srchMonth" value="${mon}"/>
 			</div>
 		</div>
@@ -873,6 +1442,7 @@ function drawAprvlerInqryList(inqryList) {
 				</table>
 				<div class="aprvl_rqst_wrap">
 					<div class="cmn_btn" id="aprvlRqst">결재요청</div>
+					<div class="cmn_btn" id="aprvlAgainRqst">결재 재요청</div>
 				</div>
 			</div>
 		</div>

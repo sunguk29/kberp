@@ -303,6 +303,11 @@ select {
 	font-size: 10pt;
 	font-weight : bold;
 }
+.prgrs{
+	font-size: 10pt;
+    font-weight: bold;
+    padding-left: 45px;
+}
 .cir {
 	display: inline-block;
     width: 85px;
@@ -337,6 +342,7 @@ select {
     height: 2px;
 }
 .prgrs_step_img {
+	display: inline-block;
 	background-image: url(resources/images/sales/prgrs_step.png);
     background-size: 100px 280px;
     background-repeat: no-repeat;
@@ -345,14 +351,42 @@ select {
     height: 280px;
     margin-top: 10px;
 }
+.prgrs_step{
+	display: inline-block;
+	font-size: 10pt;
+	font-weight : bold;
+}
+ul{
+	display: inline-block;
+	vertical-align : top;
+	list-style: none;
+	margin-top: 0;
+}
+.prgrs_step_cont{
+	display:inline-block;
+	width : 200px;
+	height : 100px;
+}
+.step{	
+	margin-top : 15px;
+}
+li span{
+	margin-right : 10px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
 	
 	getData();
 	getPrgrsCnt();
+	getPrgrsStepCnt();
 	
-	
+	/* 검색 */
+	$(".cmn_btn").on("click",function() {
+		getData();
+		getPrgrsCnt();
+		getPrgrsStepCnt();
+	});
 
 	/* 담당자 팝업 */
 	$("#mngBtn").on("click", function() {
@@ -481,10 +515,29 @@ $(document).ready(function() {
 			title: {
 				text: ''
 			},
+		    credits: {
+                enabled: false
+            },
+            plotOptions: {
+		        pie: {
+		            allowPointSelect: true,
+		            cursor: 'pointer',
+		            dataLabels: {
+		                enabled: true,
+		                formatter: function() {
+							if(this.y > 0) {
+								return this.key + "(" + this.y + "명)";
+							}
+						}
+		            },
+		            showInLegend: true
+		        }
+		    },
 			colors: ['#5CB3FF', '#D462FF', '#FBB917'],
 	        series : [{
 	        	name: '건 수',
-	        	data : list
+	        	data : list,
+	        	innerSize : '50%'
 	        }]
 		});
 	}
@@ -505,6 +558,23 @@ $(document).ready(function() {
 			}
 		});
 	}
+	
+	/* 진행단계 데이터 가져오기 */
+	function getPrgrsStepCnt() {
+		var params = $("#getForm").serialize();
+		$.ajax({
+			type : "post",
+			url : "prgrsStepAjax",
+			dataType: "json",
+			data : params,
+			success : function(res) {
+				drawPrgrsStep(res.salesChncCnt, res.sgstnCnt, res.qtnCnt, res.cntrctCnt);
+			},
+			error : function(request,status, error) {
+				console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+			}
+		});
+	}
 }); //jqeury End
 
 /* 진행상태 그리기  */
@@ -518,10 +588,23 @@ function drawPrgrsList(ingCnt, endCnt, failCnt, totalCnt) {
 	$(".ingArea").html(html);
 }
 
-function drawPrgrsStep(){
+function drawPrgrsStep(salesChncCnt, sgstnCnt, qtnCnt, cntrctCnt){
 	var html = "";
 	
-	html += "";
+	
+	html += "<div class=\"prgrs\">";
+	
+	html += "<div class=\"prgrs_step_img\"></div>";
+	html += "<ul>";
+	html += "<li class=\"step\"><span>기회</span><div class = \"rec\">"+salesChncCnt+"건</div></li>";
+	html += "<li class=\"step\"><span>제안</span><div class = \"rec\">"+sgstnCnt+"건</div></li>";
+	html += "<li class=\"step\"><span>견적</span><div class = \"rec\">"+qtnCnt+"건</div></li>";
+	html += "<li class=\"step\"><span>계약</span><div class = \"rec\">"+cntrctCnt+"건</div></li>";
+	html += "</ul>";
+	html += "</div>";
+	
+	
+	
 	
 	$(".prgrs_step").html(html);
 }
@@ -616,6 +699,8 @@ function drawMngPaging(pb) {
 			<div class="body">
 					<div class="bodyWrap">
 						<!-- 검색창 -->
+						<form action="#" id="getForm" method="post">
+						<input type="hidden" name="size" value="3" />
 						<table class="srch_table">
 							<colgroup>
 								<col width="50" />
@@ -624,7 +709,6 @@ function drawMngPaging(pb) {
 								<col width="100" />
 							</colgroup>
 							<tbody>
-								<!-- col=4 -->
 								<tr>
 									<td>
 										<span class="srch_name">내영업 조회</span>
@@ -635,56 +719,42 @@ function drawMngPaging(pb) {
 								</tr>
 								<tr>
 									<td>
-										<span class="srch_name">부서</span>
+										<span class="srch_name">팀분류</span>
 									</td>
 									<td colspan="3">
-										<select>
+										<select id="deptS" name="deptS">
 											<option value="9">영업부</option>
-											<option value="1">영업 1팀</option>
-											<option value="2">영업 2팀</option>
+											<option value="7">영업 1팀</option>
+											<option value="8">영업 2팀</option>
 										</select>
 									</td>
 								</tr>
 								<tr>
-									<td>
-										<span class="srch_name">기간</span>
-									</td>
-									<td colspan="3">
-										<input type="date" /> ~ <input type="date" />
-									</td>
-								</tr>
+								<td>
+									<span class="srch_name">기간</span>
+								</td>
+								<td colspan="3">
+									<input type="date" class="date" value="${sdate}" /> ~ <input type="date" class="date" value="${edate}" />
+								</td>
+							</tr>
 								<tr>
 									<td>
 										<span class="srch_name">담당자</span>
 									</td>
-									<td colspan="3">
+									<td colspan="2">
 										<div class="findEmp_box">
 											<input type="text" id="mngName" name="mngName" />
-											<input type="hidden" id="mngNum" />
+											<input type="hidden" id="mngNum" name="mngNum" />
 											<img class="userIcon" src="resources/images/sales/usericon.png" id="mngBtn">
 										</div>									
 									</td>
-								</tr>
-								<tr>
 									<td>
-										<span class="srch_name">정렬</span>
+									<span class="cmn_btn">검색</span>
 									</td>
-									<td>
-										<select>
-											<option selected="selected">선택안함</option>
-											<option>오름차순</option>
-											<option>내림차순 </option>
-										</select>
-									</td>
-									<td>
-										<span class="cmn_btn">검색</span>
-									</td>
-									<td></td>
 								</tr>
 							</tbody>
 						</table>
-						<form action="#" id="getForm" method="post">
-						<input type="hidden" name="size" value="3" />
+						</form>
 						<div class="new_sales_actvty">
 								<div class="sales_text">
 									<div class="sales_text_top">
@@ -714,13 +784,9 @@ function drawMngPaging(pb) {
 									</div>
 									<div class="actvty_tLine1"></div>
 								</div>
-								<div class="prgrs_step_img"></div>
-								<div class="prgrs_step">
-							
-								</div>
+								<div class="prgrs_step"></div>
 							</div>
 						</div>
-						</form>
 					<!-- class="bodyWrap" end -->
 					</div>
 				<!-- class="body" end -->
