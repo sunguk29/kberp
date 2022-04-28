@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.common.service.ICommonService;
-import com.gdj43.kberp.web.sales.service.IClntRprtService;
 import com.gdj43.kberp.web.sales.service.ISchdlService;
 
 
@@ -37,11 +36,7 @@ public class RprtController {
 	public IPagingService iPagingService;
 	
 	@Autowired
-	public ISchdlService iSchdlService; 
-	
-	@Autowired
-	public IClntRprtService iClntRprtService;
-	
+	public ISchdlService iSchdlService; 	
 	
 	//고객차트 보고서
 	@RequestMapping(value = "/clntChart")
