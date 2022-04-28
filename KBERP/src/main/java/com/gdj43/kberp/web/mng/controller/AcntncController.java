@@ -457,28 +457,12 @@ public class AcntncController {
 	    	    String aprvl_num = iAprvlService.aprvlAdd(params.get("emp_num"), params.get("title"), params.get("cont"), aprvlerList, rfrncList, null);
 	    	    modelMap.put("aprvlNum", aprvl_num);
 	    	    System.out.println("결재번호 : " + aprvl_num);
-	    	    
-	    	    // 사원번호 리스트를 조회해서 ajax 성공값에 넘겨주기
-//	    	    List<HashMap<String, String>> list = iCommonService.getDataList("SlryMng.getSlryMngList", params);
-//	    	    modelMap.put("empNameList", list);
-	    	    
-	    	    
 	    	    break;
 			case "aprvlOk" :
 				iCommonService.insertData("ChitMng.aprvlOk", params);
 				break;
 			case "aprvlAgainOk" :
 				iCommonService.updateData("ChitMng.aprvlAgainOk", params);
-				break;
-			case "slryAprvlOk" :
-				
-//				List<HashMap<String, String>> list = params.get("empNumList");
-//				iCommonService.insertData("ChitMng.slryAprvlOk", params);
-				
-				
-				
-				
-				
 				break;
 			}
 			modelMap.put("res", "success");

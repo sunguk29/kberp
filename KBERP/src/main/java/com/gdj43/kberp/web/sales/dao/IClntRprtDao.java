@@ -4,6 +4,6 @@ import java.util.HashMap;
 
 public interface IClntRprtDao {
 
-	public HashMap<String, Object> getData(String string) throws Throwable;
+	public HashMap<String, Object> getData(String string, HashMap<String, Object> params) throws Throwable;
 
 }
