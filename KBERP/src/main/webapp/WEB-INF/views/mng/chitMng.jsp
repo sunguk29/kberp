@@ -1213,13 +1213,13 @@ function drawList(list) {
 		html += "<td class=\"board_table_hover\" id=\"chitNum\" chitnum=\"" + data.CHIT_NUM + "\">" + data.CHIT_NUM + "</td>";
 		
 		if(data.DEVIT_AMNT != null) {
-			html += "<td>" + data.DEVIT_AMNT + "원</td>";			
+			html += "<td>" + data.DEVIT_AMNT + " 원</td>";			
 		} else {
 			html += "<td>-</td>";			
 		}
 		
 		if(data.CREDIT_AMNT != null) {
-			html += "<td>" + data.CREDIT_AMNT + "원</td>";			
+			html += "<td>" + data.CREDIT_AMNT + " 원</td>";			
 		} else {
 			html += "<td>-</td>";						
 		}
@@ -1277,7 +1277,7 @@ function drawSum(data) {
 	html += "<tr>";
 	html += "<td>차변 합계</td>";
 	if(data != null && data.DEVIT_SUM != null) {
-		html += "<td>" + data.DEVIT_SUM + "원</td>";		
+		html += "<td>" + data.DEVIT_SUM + " 원</td>";		
 	} else {
 		html += "<td>0원</td>";
 	}
@@ -1285,7 +1285,7 @@ function drawSum(data) {
 	html += "<tr>";
 	html += "<td>대변 합계</td>";
 	if(data != null && data.CREDIT_SUM != null) {
-		html += "<td>" + data.CREDIT_SUM + "원</td>";
+		html += "<td>" + data.CREDIT_SUM + " 원</td>";
 	} else {
 		html += "<td>0원</td>";
 	}
