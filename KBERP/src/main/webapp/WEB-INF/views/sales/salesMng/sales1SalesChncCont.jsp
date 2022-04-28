@@ -1495,6 +1495,7 @@ function uploadName(e) {
 	var filename = files[0].name;
 	$("#fileName").val(filename);
 }
+
 </script>
 </head>
 <body>
@@ -1611,7 +1612,7 @@ function uploadName(e) {
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="예상 대출 규모"/></td>
-									<td colspan="3"><input type="text" class="txt" readonly="readonly" value="${data.EXPCTN_LOAN_SCALE}" /></td>								
+									<td colspan="3"><input type="text" class="txt" readonly="readonly" id="expctnLoanScale" value="${data.EXPCTN_LOAN_SCALE}" /></td>								
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="대출 희망 유형*" /></td>

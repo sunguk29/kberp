@@ -798,6 +798,20 @@
 		AND A.SALES_NUM = #{salesNum}
 	</select>
 	
+	<!-- 지난 견적서 상세보기 -->
+	<select id="pQCont" parameterType="hashmap" resultType="hashmap">
+		SELECT Q.SALES_NUM, Q.QTN_NUM, Q.QTN_NAME, TO_CHAR(Q.QTN_DATE, 'YYYY-MM-DD') AS QTN_DATE,
+	       Q.LOAN_AMNT, Q.SPLY_PRICE, Q.TAX_AMNT, (Q.SPLY_PRICE + Q.TAX_AMNT) AS TOTAL,
+	       Q.SRTX, Q.INTRST_RATE, Q.PYMNT_DATE, Q.RMKS, Q.PRNCPL_PYMNT_MTHD_NUM,
+	       M.MD_TYPE_NUM, M.MID_RDMPTN_PSBL_CHECK, M.LOAN_PRD,
+	       QAF.ATT_FILE_NAME
+	FROM  QTN Q INNER JOIN MD M
+	                     ON Q.MD_NUM = M.MD_NUM
+	            INNER JOIN QTN_ATT_FILE QAF
+	                    ON Q.QTN_NUM = QAF.QTN_NUM              
+	WHERE Q.QTN_NUM = #{pQNum}
+	</select>
+	
 </mapper>
 
 
