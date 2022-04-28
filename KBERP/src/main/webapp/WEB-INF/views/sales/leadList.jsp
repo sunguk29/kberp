@@ -785,7 +785,7 @@ function drawPaging(pb, sel) {
 	$(sel).html(html);
 }
 
-/* 체크박스 */
+/* 가능여부 체크박스 */
 function checkOnly(chk) {
 	var obj = document.getElementsByName("sales_sts");
 	for(var i = 0; i<obj.length; i++) {

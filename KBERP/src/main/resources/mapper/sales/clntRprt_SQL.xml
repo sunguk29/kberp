@@ -21,7 +21,9 @@
 		                           ON CC.EMP_NUM = E.EMP_NUM
 		                   INNER JOIN APNTM A
 						           ON E.EMP_NUM = A.EMP_NUM
-				WHERE DEL_CHECK IS NULL
+						   INNER JOIN DEPT D
+                           		   ON A.DEPT_NUM = D.DEPT_NUM
+				WHERE CC.DEL_CHECK IS NULL
 				<if test="deptNum != 0"> 
 					<choose>
 						<when test="deptNum == 1">
@@ -36,8 +38,11 @@
 					<when test="mngEmp != null and mngEmp != ''"> <!-- 담당자텍스트 박스 -->
 						AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'
 					</when>
-					<when test="date != '' and date != null">
-						AND TO_CHAR(EC.RGSTRTN_DATE, 'YYYY-MM-DD') = #{startDate}
+				</choose>
+				<choose>
+					<when test="salesCheck == 1">
+						AND E.EMP_NAME = #{sEmpName}
+						AND D.DEPT_NAME = #{sDeptName}
 					</when>
 				</choose>) CC 
 		        INNER JOIN 
@@ -53,7 +58,9 @@
 					                 ON EC.MNGR_EMP_NUM = E.EMP_NUM
 					         INNER JOIN APNTM A
 					                 ON E.EMP_NUM = A.EMP_NUM
-				WHERE DEL_CHECK IS NULL
+					         INNER JOIN DEPT D
+                           			 ON A.DEPT_NUM = D.DEPT_NUM
+				WHERE EC.DEL_CHECK IS NULL
 				<if test="deptNum != 0"> 
 					<choose>
 						<when test="deptNum == 1">
@@ -68,8 +75,11 @@
 					<when test="mngEmp != null and mngEmp != ''"> <!-- 담당자텍스트 박스 -->
 						AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'
 					</when>
-					<when test="date != '' and date != null">
-						AND TO_CHAR(EC.RGSTRTN_DATE, 'YYYY-MM-DD') = #{startDate}
+				</choose>
+				<choose>
+					<when test="salesCheck == 1">
+						AND E.EMP_NAME = #{sEmpName}
+						AND D.DEPT_NAME = #{sDeptName}
 					</when>
 				</choose>) EC) EC
 		        ON 1 = 1		

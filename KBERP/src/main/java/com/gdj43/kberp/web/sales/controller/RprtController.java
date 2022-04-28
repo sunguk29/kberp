@@ -43,37 +43,26 @@ public class RprtController {
 	public IClntRprtService iClntRprtService;
 	
 	
-	//고객 보고서
+	//고객차트 보고서
 	@RequestMapping(value = "/clntChart")
 	public ModelAndView clntList(@RequestParam HashMap<String, String> params, 
 								 ModelAndView mav) throws Throwable {
 		
-		Date dt = new Date();
 		Date mon = new Date();
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat month = new SimpleDateFormat("yyyy.MM");
 		
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(dt);
+		Calendar cal = Calendar.getInstance();;
 		cal.add(Calendar.DATE, -60);
-		
-		String startDate = sdf.format(cal.getTime());
-		String endDate = sdf.format(dt);
+	
 		String  tMonth = month.format(mon);
 		
 		// 고객사 개수
 		HashMap<String, String> ccAll = iCommonService.getData("clntRprt.allCnt", params);
 	
-		if(params.get("startDate") == null || params.get("startDate") == "") {
-			params.put("startDate", startDate); 
-			params.put("endDate", endDate); // 넘어오는게 없으면 현재날짜뽑아온거를 추가.
-		}
 		params.put("tMonth", tMonth);
 		
 		mav.addObject("tMonth", params.get("tMonth"));
-		mav.addObject("startDate", params.get("startDate"));
-		mav.addObject("endDate", params.get("endDate"));
 
 		mav.addObject("ccAll", ccAll);		
 		
@@ -81,44 +70,6 @@ public class RprtController {
 		return mav;
 		
 	} 
-	//고객등급 차트가져오기
-	@RequestMapping(value = "/clntRprtDataAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8" )
-	@ResponseBody
-	public String clntRprtDataAjax(HttpServletRequest request, @RequestParam HashMap<String, Object> params) throws Throwable{
-	
-		ObjectMapper mapper = new ObjectMapper();
-		
-		Map<String, Object> modelMap = new HashMap<String, Object>();
-		
-		int clntsize = Integer.parseInt(request.getParameter("clntsize"));
-		
-		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
-		
-		HashMap<String, Object> clntList = iClntRprtService.getData("clntRprt.allCnt", params);
-			
-		for(int i = 0 ; i < clntsize ; i++) {
-			HashMap<String, Object> temp = new HashMap<String, Object>();
-			
-			if(i == 0) {
-				temp.put("name", "S등급");
-			} else if(i == 1) {
-				temp.put("name", "A등급");
-			} else if(i == 2) {
-				temp.put("name", "B등급");
-			} else if(i == 3) {
-				temp.put("name", "C등급");
-			} else {
-				temp.put("name", "D등급");
-			}
-			temp.put("y", Integer.parseInt(String.valueOf(clntList.get("GRADENUM"+i))));
-			
-			list.add(temp);
-		}
-
-		modelMap.put("list", list);
-		
-		return mapper.writeValueAsString(modelMap);		
-	}
 	
 	/* 영업 차트 */
 	@RequestMapping(value = "/salesChart")

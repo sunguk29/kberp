@@ -448,12 +448,16 @@ input:focus {
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	getData();
-	
 	if('${param.deptNum}' != '') {
 		$("#deptNum").val('${param.deptNum}');
 	}
 	
+	// 검색 후 체크박스 유지 
+	if('${param.salesCheck}' == "1") {
+		$("[name='salesCheck']").prop("checked", true);
+	} 
+	
+	// 검색
 	$(".cmn_btn").on("click", function() {
 		
 		$("#actionForm").attr("action", "clntChart");
@@ -557,110 +561,109 @@ $(document).ready(function() {
 			}
 		});
 	});
-	
-	/* 차트에 데이터 가져오기 */
-	function getData() {
-		var params = $("#actionForm").serialize();
-		$.ajax({
-			type : "post",
-			url : "clntRprtDataAjax",
-			dataType : "json",
-			data: params,
-			success : function(res) {
-				clntMakeChart(res.list);
-			},
-			error : function(request, status, error) {
-				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-			}
-		});
-	}
-	/* 차트 그리기 */
-	function clntMakeChart(list) {
-		console.log(list);
-		//고객등급 차트
-		$('#pie-chart').highcharts({
-			chart: {
-				type: 'pie',
-				zoomType: 'x'
-			},
-			title: {
-				text: ''
-			},
-		    plotOptions: {
-		        pie: {
-		            allowPointSelect: true,
-		            cursor: 'pointer',
-		            dataLabels: {
-		                enabled: true,
-			        	formatter: function() {
-				        	if(this.y > 0) {
-				        		return this.percentage.toFixed(1) + "%(" + this.y + "명)";
-				        	}
-				       	}
-		            },
-		            showInLegend: true
-		        }
-		    },
-			colors: ['#FF6384', '#ffd950', '#02bc77', '#28c3d7','#4169e1'],
- 	        series : [{
-        		name: '고객사',
-        		data : list
-        	}],
-            credits: {
-                enabled: false
-            }
-		});
-		//영업부서 차트
-		$('#bar-chart').highcharts({
-		    data: {
-		        table: 'datatable'
-		    },
-			chart: {
-				type: 'column',
-			},
-			title: {
-				text: ''
-			},
-		    yAxis: {
-		        title: {
-		            text: ''
-		        }
-		    },
-			legend: {
-				enabled: true
-			},
-		    xAxis: {
-		        type: 'category'
-		    },
-		    tooltip: {
-		    },
-            credits: { //워터마크 숨김
-                enabled: false
-            },
-		    plotOptions: {
-		        column: {
-		           borderRadius: 5,
-		           borderWidth: 0,
-		         },
-		         series: {
-		        	 dataLabels: {
-		        		 enabled: true,
-			        	 formatter: function() {
-			        		if(this.y > 1) {
-			        			return this.y;
-			        		}
+	//고객등급 차트
+	$('#pie-chart').highcharts({
+		chart: {
+			type: 'pie',
+			zoomType: 'x'
+		},
+		title: {
+			text: ''
+		},
+        legend: {
+        	verticalAlign: 'bottom',
+        	floating: false
+        },	
+	    plotOptions: {
+	        pie: {
+	            allowPointSelect: true,
+	            cursor: 'pointer',
+	            dataLabels: {
+	                enabled: true,
+		        	formatter: function() {
+			        	if(this.y > 0) {
+			        		return this.percentage.toFixed(1) + "%(" + this.y + "명)";
 			        	}
-		        	 }
-		         }
-		    },
-            colors: ["#F2B705", "#F2CB05"],
-            series: [{
-            	pointWidth: 50 // 고객사 bar 너비 지정
-            }, {
-            	pointWidth: 50 // 고객 bar 너비 지정
-            }]
-		});
-	}
+			       	}
+	            },
+	            showInLegend: true
+	        }	        	
+	    },
+		colors: ['#FF6384', '#ffd950', '#02bc77', '#28c3d7','#4169e1'],
+	        series : [{
+    		name: '고객사',
+    		colorByPoint: true,
+    		data : [{
+    			name: 'S등급',
+    			y: ${ccAll.GRADENUM0}
+    		}, {
+    			name: 'A등급',
+    			y: ${ccAll.GRADENUM1}
+    		}, {
+    			name: 'B등급',
+    			y: ${ccAll.GRADENUM2}
+    		}, {
+    			name: 'C등급',
+    			y: ${ccAll.GRADENUM3}
+    		}, {
+    			name: 'D등급',
+    			y: ${ccAll.GRADENUM4}
+    		}]
+    	}],
+        credits: {
+            enabled: false
+        }
+	});
+	//영업부서 차트
+	$('#bar-chart').highcharts({
+	    data: {
+	        table: 'datatable'
+	    },
+		chart: {
+			type: 'column',
+		},
+		title: {
+			text: ''
+		},
+	    yAxis: {
+	        title: {
+	            text: ''
+	        }
+	    },
+		legend: {
+			enabled: true
+		},
+	    xAxis: {
+	        type: 'category'
+	    },
+	    tooltip: {
+	    },
+        credits: { //워터마크 숨김
+            enabled: false
+        },
+	    plotOptions: {
+	        column: {
+	           borderRadius: 5,
+	           borderWidth: 0,
+	         },
+	         series: {
+	        	 dataLabels: {
+	        		 enabled: true,
+		        	 formatter: function() {
+		        		if(this.y > 1) {
+		        			return this.y;
+		        		}
+		        	}
+	        	 }
+	         }
+	    },
+        colors: ["#F2B705", "#F2CB05"],
+        series: [{
+        	pointWidth: 50 // 고객사 bar 너비 지정
+        }, {
+        	pointWidth: 50 // 고객 bar 너비 지정
+        }]
+	});
 });
 /****************** 담당자 조회 팝업 *********************/
 function mngrList() {
@@ -789,9 +792,12 @@ function drawPaging(pb, sel) {
 								</td>
 								<td>
 									<span class="srch_name">내영업 조회</span>
+									<input type="hidden" name="sEmpNum" value="${sEmpNum}">
+									<input type="hidden" name="sEmpName" value="${sEmpName}">
+									<input type="hidden" name="sDeptName" value="${sDeptName}">
 								</td>
 								<td colspan="3">
-									<input type="checkbox"/>
+									<input type="checkbox" id="salesCheck" name="salesCheck" value="1"/>
 								</td>
 							</tr>
 							<tr>
@@ -799,7 +805,7 @@ function drawPaging(pb, sel) {
 									<span class="srch_name">기간</span>
 								</td>
 								<td colspan="4">
-									<input type="date" class="date" value="${startDate}" /> ~ <input type="date" class="date" value="${endDate}" />
+									<input type="date" class="date" /> ~ <input type="date" class="date" />
 								</td>
 								<td>
 									<span class="cmn_btn">검색</span>
@@ -885,7 +891,7 @@ function drawPaging(pb, sel) {
 					<div class="new_sales_actvty">
 						<div class="sales_text">
 							<div class="sales_text_top">
-								<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />고객 등급
+								<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />고객사 등급
 							</div>
 							<div class="actvty_tLine1"></div>
 						</div>
