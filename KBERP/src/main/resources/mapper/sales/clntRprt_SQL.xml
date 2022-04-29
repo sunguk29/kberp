@@ -34,6 +34,9 @@
 						</when>
 					</choose>
 				</if>
+				<if test="startDate != null and startDate != '' and endDate != null and endDate != ''" >		       	
+			       AND TO_CHAR(CC.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
+		       	</if>
 				<choose>
 					<when test="mngEmp != null and mngEmp != ''"> <!-- 담당자텍스트 박스 -->
 						AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'
@@ -71,6 +74,9 @@
 						</when>
 					</choose>
 				</if>
+				<if test="startDate != null and startDate != '' and endDate != null and endDate != ''" >		       	
+			       AND TO_CHAR(EC.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
+		       	</if>
 				<choose>
 					<when test="mngEmp != null and mngEmp != ''"> <!-- 담당자텍스트 박스 -->
 						AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'

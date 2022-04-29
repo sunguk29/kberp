@@ -2,7 +2,6 @@ package com.gdj43.kberp.web.sales.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,26 +44,71 @@ public class RprtController {
 		Date mon = new Date();
 		
 		SimpleDateFormat month = new SimpleDateFormat("yyyy.MM");
-		
-		Calendar cal = Calendar.getInstance();;
-		cal.add(Calendar.DATE, -60);
 	
 		String  tMonth = month.format(mon);
-		
-		// 고객사 개수
-		HashMap<String, String> ccAll = iCommonService.getData("clntRprt.allCnt", params);
-	
 		params.put("tMonth", tMonth);
 		
 		mav.addObject("tMonth", params.get("tMonth"));
 
-		mav.addObject("ccAll", ccAll);		
-		
 		mav.setViewName("sales/rprt/clntChart");
 		return mav;
 		
-	} 
+	}
+	// 신규고객, 부서별 차트
+	@RequestMapping(value = "/clntRprtAjax", method=RequestMethod.POST, 
+					produces = "text/json;chartset=UTF-8")
+	@ResponseBody
+	public String clntRprtAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		HashMap<String, String> ccAll = iCommonService.getData("clntRprt.allCnt", params);
+		
+		modelMap.put("ccAll", ccAll);
+		return mapper.writeValueAsString(modelMap);
+	}
 	
+	//고객등급 원형차트
+	@RequestMapping(value = "/clntRprtDataAjax", method = RequestMethod.POST, 
+					produces = "text/json;charset=UTF-8" )
+	@ResponseBody
+	public String clntRprtDataAjax(HttpServletRequest request, @RequestParam HashMap<String, Object> params) throws Throwable{
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+			
+		int clntsize = Integer.parseInt(request.getParameter("clntsize"));
+			
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		
+		HashMap<String, Object> clntList = iSchdlService.getData("clntRprt.allCnt", params);
+				
+		for(int i = 0 ; i < clntsize ; i++) {
+			HashMap<String, Object> temp = new HashMap<String, Object>();
+			
+			if(i == 0) {
+				temp.put("name", "S등급");
+			} else if(i == 1) {
+				temp.put("name", "A등급");
+			} else if(i == 2) {
+				temp.put("name", "B등급");
+			} else if(i == 3) {
+				temp.put("name", "C등급");
+			} else {
+				temp.put("name", "D등급");
+			}
+			temp.put("y", Integer.parseInt(String.valueOf(clntList.get("GRADENUM"+i))));
+				
+			list.add(temp);
+		}
+		modelMap.put("list", list);
+			
+		return mapper.writeValueAsString(modelMap);		
+	}
+
 	/* 영업 차트 */
 	@RequestMapping(value = "/salesChart")
 	public ModelAndView salesChart(ModelAndView mav) throws Throwable{
