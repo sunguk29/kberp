@@ -646,10 +646,10 @@ function savePop() {
 					var clnm = $(this).children("#clnm").val();
 					
 					// 본문에 해당하는 아이디에 값 넣어줌
-					document.getElementById("sNum").value = snm;
-					document.getElementById("sName").value = sna;
-					document.getElementById("ccName").value = ccnm;
-					document.getElementById("clName").value = clnm;
+					$("#sNum").attr("value", snm);
+					$("#sName").attr("value", sna);
+					$("#ccName").attr("value", ccnm);
+					$("#clName").attr("value", clnm);
 					
 					if($("#lName").val() != ""){ // 리드명이 비워져있지 않을때, 리드 선택했을 경우 동시 입력 방지
 						$("#lName").val("");
@@ -819,10 +819,10 @@ function savePop() {
 					var clnm = $(this).children("#clnm").val();
 					
 					// 본문에 해당 아이디와 일치하는 곳에 값 넣어줌
-					document.getElementById("lNum").value = lnm;
-					document.getElementById("lName").value = lna;
-					document.getElementById("ccName").value = ccnm;
-					document.getElementById("clName").value = clnm;
+					$("#lNum").attr("value", lnm);
+					$("#lName").attr("value", lna);
+					$("#ccName").attr("value", ccnm);
+					$("#clName").attr("value", clnm);
 					
 					if($("#sName").val() != ""){ // 영업명이 비워져있지 않을때, 영업 선택했을 경우 동시 입력 방지
 						$("#sName").val("");

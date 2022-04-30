@@ -696,10 +696,10 @@ function updatePop() {
 					var clnm = $(this).children("#clnm").val();
 					
 					// 본문에 해당하는 아이디에 값 넣어줌
-					document.getElementById("sNum").value = snm;
-					document.getElementById("sName").value = sna;
-					document.getElementById("ccName").value = ccnm;
-					document.getElementById("clName").value = clnm;
+					$("#sNum").attr("value", snm);
+					$("#sName").attr("value", sna);
+					$("#ccName").attr("value", ccnm);
+					$("#clName").attr("value", clnm);
 					closePopup();
 				});
 			},
@@ -863,10 +863,10 @@ function updatePop() {
 					var clnm = $(this).children("#clnm").val();
 					
 					// 본문에 해당 아이디와 일치하는 곳에 값 넣어줌
-					document.getElementById("lNum").value = lnm;
-					document.getElementById("lName").value = lna;
-					document.getElementById("ccName").value = ccnm;
-					document.getElementById("clName").value = clnm;
+					$("#lNum").attr("value", lnm);
+					$("#lName").attr("value", lna);
+					$("#ccName").attr("value", ccnm);
+					$("#clName").attr("value", clnm)
 					closePopup();
 				});
 			},
@@ -1029,6 +1029,10 @@ function uploadName(e) {
 								<td><input type="button" class="btn" value="일정명 *" readonly="readonly"/></td>
 								<td colspan="5"><input type="text" class="txt" id="ssname" name="ssname" value="${data.SCHDL_NAME}"/></td>
 							</tr>
+							<c:choose>
+							<c:when test="${!empty data.LEAD_NAME || !empty data.SALES_NAME }">
+							<c:choose>
+								<c:when test="${empty data.LEAD_NAME}">
 							<tr>
 								<td><input type="button" class="btn" value="영업" /></td>
 								<td colspan="5">
@@ -1039,6 +1043,8 @@ function uploadName(e) {
 									</div>
 								</td>
 							</tr>
+								</c:when>
+								<c:when test="${empty data.SALES_NAME}">
 							<tr>
 								<td><input type="button" class="btn" value="리드" readonly="readonly"/></td>
 								<td colspan="5">
@@ -1049,6 +1055,8 @@ function uploadName(e) {
 									</div>
 								</td>
 							</tr>
+								</c:when>
+							</c:choose>
 							<tr>
 								<td><input type="button" class="btn" value="고객명" readonly="readonly"/></td>
 								<td colspan="5">
@@ -1075,6 +1083,8 @@ function uploadName(e) {
 									</c:choose>
 								</td>
 							</tr>
+							</c:when>
+							</c:choose>
 							<tr>
 								<td><input type="button" class="btn" value="활동분류 *" readonly="readonly"/></td>
 								<td colspan="5">
