@@ -621,7 +621,6 @@ function uploadName(e) {
 	var filename = files[0].name;
 	$("#fileName").val(filename);
 }
-
 </script>
 </head>
 <body>

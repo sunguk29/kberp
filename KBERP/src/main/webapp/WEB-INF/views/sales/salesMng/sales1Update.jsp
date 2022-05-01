@@ -695,6 +695,8 @@ $(document).ready(function() {
 	$("#loanHopeTime").val(${data.LOAN_HOPE_TIME}).prop("selected", true);
 	$("#expctdBsnsType").val(${data.EXPCTD_BSNS_TYPE}).prop("selected", true);
 	
+	$("#expctnLoanScale").attr("value", rmComma($("#expctnLoanScale").val()));
+
 	
 	// 담당자 조회 버튼
 	$("#userIcon").on("click", function() {
@@ -873,6 +875,14 @@ function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
 	$("#fileName").val(filename);
+}
+
+function rmComma(str) {
+
+	n = parseInt(str.replace(/,/g,""));
+
+	return n;
+
 }
 
 </script>
