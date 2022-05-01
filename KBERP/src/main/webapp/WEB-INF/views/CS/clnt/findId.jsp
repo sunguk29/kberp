@@ -173,7 +173,7 @@ line-height
 $(document).ready(function() {
 	
 	
-	$("#id,#phone_num1").on("keypress", function(event) {
+	$("#name,#phone_num1").on("keypress", function(event) {
 		if(event.keyCode == 13) {
 			$(".find_Btn").click();
 				
@@ -186,14 +186,18 @@ $(document).ready(function() {
 		
 
 
-		if($("#id").val()=="") {
+		if($("#name").val()=="") {
 			alert("이름을 입력해주세요");
-			$("#id").focus();
+			$("#name").focus();
 			}
 		 else if($("#phone_num1").val()=="") {
 			alert("핸드폰 번호를 입력해주세요");
 			$("#phone_num1").focus();
 			}
+		 else if($("#phone_num1").val().includes("-")) {
+				alert("- (하이픈)을 제외하고 입력해주세요.");
+				$("#phone_num1").focus();
+		 }
 		 else if($("#phone_num1").val().length!=11) {
 				alert("핸드폰 번호 11자리를 입력해주세요");
 				$("#phone_num1").val("");
@@ -251,7 +255,7 @@ $(document).ready(function() {
 			});
 			
 		}
-	}); // login_Btn END
+	}); // find_Btn END
 	
 		
 		
@@ -292,7 +296,7 @@ function users(){
 		    <form action="#" id="findidForm" method="post">
 			<div class="login_area">
 				<div class="input_id">
-					<input type="text" name="id" id="id" placeholder="이름">
+					<input type="text" name="name" id="name" placeholder="이름">
 					<div class="country_code">
 						<select id="internationalCode" name="internationalCode" title="국가코드" class="country_sel" >
 							<option value="" selected disabled hidden>+82</option>
