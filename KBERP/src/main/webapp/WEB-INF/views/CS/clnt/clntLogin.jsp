@@ -213,6 +213,15 @@ $(document).ready(function() {
 		});
 		
 }); // document.ready END
+
+function checkEmpty(sel) {
+	if($.trim($(sel).val()) == "") {
+		return true;
+	} else {
+		return false;
+	}
+
+}
 </script>
 </head>
 <body>

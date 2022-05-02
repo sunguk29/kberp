@@ -698,7 +698,8 @@ $(document).ready(function() {
 	
 	
  	//대출금액
-	var loanAmnt = ${data3.LOAN_AMNT};
+	var loanAmnt = $("#LoanAmnt").attr('value', rmComma($("#LoanAmnt").val()));
+ 	
 	//대출기간
 	var loanPrd
 	if(${data3.LOAN_PRD eq 0}) {
@@ -751,6 +752,15 @@ function uploadName(e) {
 	var filename = files[0].name;
 	$("#fileName").val(filename);
 }
+
+function rmComma(str) {
+
+	n = parseInt(str.replace(/,/g,""));
+
+	return n;
+
+}
+
 </script>
 </head>
 <body>
