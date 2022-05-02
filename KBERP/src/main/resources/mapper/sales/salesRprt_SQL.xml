@@ -79,6 +79,9 @@
 		       	</if>
 		       	<if test="deptS != 9">
 		       	 	AND D.DEPT_NUM = #{deptS}
+		       	</if>
+		       	<if test="salesCheck == 1">
+		       		AND S.MNGR_EMP_NUM = #{sEmpNum}	
 		       	</if>) A INNER JOIN ( SELECT COUNT(*) AS CNT
 									  FROM EXPCTD_BSNS_INFO EBI INNER JOIN SALES S
 										                                ON EBI.SALES_NUM = S.SALES_NUM
@@ -97,6 +100,9 @@
 								       	</if>
 								       	<if test="deptS != 9">
 								       	 	AND D.DEPT_NUM = #{deptS}
+								       	</if>
+								       	<if test="salesCheck == 1">
+								       		AND S.MNGR_EMP_NUM = #{sEmpNum}	
 								       	</if>) B
                                   ON 1 = 1    
                           INNER JOIN (SELECT COUNT(*) AS CNT
@@ -117,6 +123,9 @@
 								       	</if>
 								       	<if test="deptS != 9">
 								       	 	AND D.DEPT_NUM = #{deptS}
+								       	</if>
+								       	<if test="salesCheck == 1">
+								       		AND S.MNGR_EMP_NUM = #{sEmpNum}	
 								       	</if>) C
                         		   ON 1 = 1
 	</select>
@@ -184,6 +193,9 @@
 		<if test="mngEmp != '' and mngEmp != null">
 			AND E.EMP_NAME = #{mngEmp}
 		</if>
+		<if test="salesCheck == 1">
+			AND S.MNGR_EMP_NUM = #{sEmpNum}	
+		</if>
 	</select>
 	
 	<!-- 영업 종료(실패) 개수 -->
@@ -204,7 +216,10 @@
       	</if>
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
-      	</if> 
+      	</if>
+      	<if test="salesCheck == 1">
+			AND S.MNGR_EMP_NUM = #{sEmpNum}	
+		</if> 
 	</select>
 	
 	<!-- 영업 종료(성공) 개수 -->
@@ -225,7 +240,10 @@
       	</if>
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
-      	</if> 
+      	</if>
+      	<if test="salesCheck == 1">
+			AND S.MNGR_EMP_NUM = #{sEmpNum}	
+		</if> 
 	</select>
 	
 	<!-- 영업 진행중 개수 -->
@@ -246,7 +264,10 @@
       	</if>
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
-      	</if> 
+      	</if>
+      	<if test="salesCheck == 1">
+			AND S.MNGR_EMP_NUM = #{sEmpNum}	
+		</if> 
 	</select>
 	
 	<!-- 영업 전체 개수 -->
@@ -327,6 +348,9 @@
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
+      	<if test="salesCheck == 1">
+			AND S.MNGR_EMP_NUM = #{sEmpNum}	
+		</if>
 	    </select>
 	
 	<!-- 제안 개수 -->
@@ -348,6 +372,9 @@
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
+      	<if test="salesCheck == 1">
+			AND S.MNGR_EMP_NUM = #{sEmpNum}	
+		</if>
 	</select>
 	
 	<!-- 견적 개수 -->
@@ -369,6 +396,9 @@
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
+      	<if test="salesCheck == 1">
+			AND S.MNGR_EMP_NUM = #{sEmpNum}	
+		</if>
 	</select>
 	
 	<!-- 계약 개수 -->
@@ -390,6 +420,9 @@
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
+      	<if test="salesCheck == 1">
+			AND S.MNGR_EMP_NUM = #{sEmpNum}	
+		</if>
 	</select>
 	
 	<!-- 사업명 가져오기 -->

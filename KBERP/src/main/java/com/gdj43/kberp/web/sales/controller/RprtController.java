@@ -325,4 +325,20 @@ public class RprtController {
 		
 		return mapper.writeValueAsString(modelMap);
 	}
+	
+	//영업 - 보고서 내 영업 조회
+	@RequestMapping(value = "/checkMySalesAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String checkMySalesAjax(HttpServletRequest request, @RequestParam HashMap<String, Object> params) throws Throwable{
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		String a = "good";
+		
+		modelMap.put("success", a);
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 }

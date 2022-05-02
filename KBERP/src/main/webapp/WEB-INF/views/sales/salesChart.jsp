@@ -575,6 +575,54 @@ $(document).ready(function() {
 			}
 		});
 	}
+	
+	/*  내 영업 조회 */
+	$("#salesCheck").on("click", function() {
+		
+		
+		console.log("클릭됨");
+		
+		var checked = $("#salesCheck").is(':checked');
+		
+		if(checked) {
+			$("#salesCheck").attr("value", 1);
+			
+			var params = $("#getForm").serialize();
+			$.ajax({
+				type : "post",
+				url : "checkMySalesAjax",
+				dataType: "json",
+				data : params,
+				success: function(res) {
+					getData();
+					getPrgrsCnt();
+					getPrgrsStepCnt();
+				},
+				error : function(request,status, error) {
+					console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+				}
+			});
+		} else {
+			$("#salesCheck").attr("value", 0);
+			
+			var params = $("#getForm").serialize();
+			$.ajax({
+				type : "post",
+				url : "checkMySalesAjax",
+				dataType: "json",
+				data : params,
+				success: function(res) {
+					getData();
+					getPrgrsCnt();
+					getPrgrsStepCnt();
+				},
+				error : function(request,status, error) {
+					console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+				}
+			});
+		}
+		
+	});
 }); //jqeury End
 
 /* 진행상태 그리기  */
@@ -676,7 +724,9 @@ function drawMngPaging(pb) {
 	
 	$(".pgn_area").html(html);
 
-} 
+}
+
+
 </script>
 </head>
 <body>
@@ -701,6 +751,7 @@ function drawMngPaging(pb) {
 						<!-- 검색창 -->
 						<form action="#" id="getForm" method="post">
 						<input type="hidden" name="size" value="3" />
+						<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
 						<table class="srch_table">
 							<colgroup>
 								<col width="50" />
@@ -714,7 +765,7 @@ function drawMngPaging(pb) {
 										<span class="srch_name">내영업 조회</span>
 									</td>
 									<td colspan="3">
-										<input type="checkbox"/>
+										<input type="checkbox" id="salesCheck" name="salesCheck"/>
 									</td>
 								</tr>
 								<tr>
