@@ -587,39 +587,15 @@ $(document).ready(function() {
 		if(checked) {
 			$("#salesCheck").attr("value", 1);
 			
-			var params = $("#getForm").serialize();
-			$.ajax({
-				type : "post",
-				url : "checkMySalesAjax",
-				dataType: "json",
-				data : params,
-				success: function(res) {
-					getData();
-					getPrgrsCnt();
-					getPrgrsStepCnt();
-				},
-				error : function(request,status, error) {
-					console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-				}
-			});
+			getData();
+			getPrgrsCnt();
+			getPrgrsStepCnt();
 		} else {
 			$("#salesCheck").attr("value", 0);
 			
-			var params = $("#getForm").serialize();
-			$.ajax({
-				type : "post",
-				url : "checkMySalesAjax",
-				dataType: "json",
-				data : params,
-				success: function(res) {
-					getData();
-					getPrgrsCnt();
-					getPrgrsStepCnt();
-				},
-				error : function(request,status, error) {
-					console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-				}
-			});
+			getData();
+			getPrgrsCnt();
+			getPrgrsStepCnt();
 		}
 		
 	});
