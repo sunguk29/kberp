@@ -418,8 +418,8 @@
 
 .btnImg_in {
 	position: absolute;
-	left: 204px;
-	top: 9px;
+	left: 195px;
+	top: 5px;
 	width: 20px;
 	height: 20px;
 	cursor: pointer;

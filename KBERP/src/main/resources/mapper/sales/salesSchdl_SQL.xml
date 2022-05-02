@@ -56,7 +56,7 @@
                                                ON CL.CLNT_NUM = L.CLNT_NUM
                                       LEFT OUTER JOIN CLNT_CMPNY CC
                                                 ON CC.CLNT_NAME = CL.CLNT_NAME
-        WHERE TRIM(#{ctt}) BETWEEN SUBSTR(A.START_DATE_HR, 1, 10) AND NVL(SUBSTR(A.END_DATE_HR, 1, 10), SUBSTR(A.START_DATE_HR, 1, 10))
+        WHERE TRIM(#{ctt}) BETWEEN SUBSTR(A.START_DATE_HR, 1, 10) AND NVL(SUBSTR(A.END_DATE_HR, 1, 10),SUBSTR(A.START_DATE_HR, 1, 10))
         AND A.DEL_CHECK IS NULL                                		 		   
 	</select>
 	<!-- 영업 상세보기  -->

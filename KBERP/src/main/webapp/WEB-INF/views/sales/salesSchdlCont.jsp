@@ -1038,7 +1038,7 @@ function uploadName(e) {
 								<td colspan="5">
 									<div class="imgP">
 										<input type="text" class="txt imgName" id="sName" name="sName" value="${data.SALES_NAME}" />
-										<input type="hidden" id="sNum" name="sNum"/>
+										<input type="hidden" id="sNum" name="sNum" value="${data.SALES_NUM}"/>
 										<img class="btnImg_in" id="salesPop" src="resources/images/sales/popup.png">	
 									</div>
 								</td>
@@ -1050,7 +1050,7 @@ function uploadName(e) {
 								<td colspan="5">
 									<div class="imgP">
 										<input type="text" class="txt imgName" id="lName" name="lName" value="${data.LEAD_NAME}"/>
-										<input type="hidden" id="lNum" name="lNum"/>
+										<input type="hidden" id="lNum" name="lNum" value="${data.LEAD_NUM}"/>
 										<img class="btnImg_in" id="leadPop" src="resources/images/sales/popup.png">	
 									</div>
 								</td>

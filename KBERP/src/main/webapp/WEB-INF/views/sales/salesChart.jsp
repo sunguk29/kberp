@@ -734,7 +734,7 @@ function drawMngPaging(pb) {
 									<span class="srch_name">기간</span>
 								</td>
 								<td colspan="3">
-									<input type="date" class="date" value="${sdate}" /> ~ <input type="date" class="date" value="${edate}" />
+									<input type="date" class="date" name="sdate" value="${sdate}" /> ~ <input type="date" class="date" name="edate" value="${edate}" />
 								</td>
 							</tr>
 								<tr>
