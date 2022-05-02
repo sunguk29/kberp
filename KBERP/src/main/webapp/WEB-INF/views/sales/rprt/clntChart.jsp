@@ -455,11 +455,12 @@ $(document).ready(function() {
 	if('${param.deptNum}' != '') {
 		$("#deptNum").val('${param.deptNum}');
 	}
-	
+
+		
 	// 검색 후 체크박스 유지 
-	if('${param.salesCheck}' == "1") {
+	/* if('${param.salesCheck}' == "1") {
 		$("[name='salesCheck']").prop("checked", true);
-	} 
+	}  */
 	
 	// 검색
 	$(".cmn_btn").on("click", function() {
@@ -565,6 +566,53 @@ $(document).ready(function() {
 				}
 			}
 		});
+	});
+	
+	/*  내 영업 조회 */
+	$("#salesCheck").on("click", function() {
+		
+		
+		console.log("클릭됨");
+		
+		var checked = $("#salesCheck").is(':checked');
+		
+		if(checked) {
+			$("#salesCheck").attr("value", 1);
+			
+			var params = $("#actionForm").serialize();
+			$.ajax({
+				type : "post",
+				url : "checkMySalesAjax",
+				dataType: "json",
+				data : params,
+				success: function(res) {
+					reloadList();
+					getData();
+					barList();
+				},
+				error : function(request,status, error) {
+					console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+				}
+			});
+		} else {
+			$("#salesCheck").attr("value", 0);
+			
+			var params = $("#actionForm").serialize();
+			$.ajax({
+				type : "post",
+				url : "checkMySalesAjax",
+				dataType: "json",
+				data : params,
+				success: function(res) {
+					reloadList();
+					getData();
+					barList();
+				},
+				error : function(request,status, error) {
+					console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+				}
+			});
+		}
 	});
 }); // JQuery end
 
@@ -702,7 +750,7 @@ function barList() {
 			         },
 			         series: {
 			        	 dataLabels: {
-			        		 enabled: true,
+			        		 enabled: false,
 				        	 formatter: function() {
 				        		if(this.y > 0) {
 				        			return this.y;
@@ -750,6 +798,15 @@ function clntMakeChart(list) {
 	            },
 	            showInLegend: true
 	        }
+	    },
+	    legend: {
+	          enabled: true,
+	          labelFormatter: function() {
+	              if(this.y > 0) {
+	                 
+	                 return this.name;
+	              }  
+	          }
 	    },
 		colors: ['#FF6384', '#ffd950', '#02bc77', '#28c3d7','#4169e1'],
 	        series : [{
@@ -894,7 +951,7 @@ function drawPaging(pb, sel) {
 									<input type="hidden" name="sDeptName" value="${sDeptName}">
 								</td>
 								<td colspan="3">
-									<input type="checkbox" id="salesCheck" name="salesCheck" value="1"/>
+									<input type="checkbox" id="salesCheck" name="salesCheck"/>
 								</td>
 							</tr>
 							<tr>
@@ -915,7 +972,7 @@ function drawPaging(pb, sel) {
 							<div class="sales_text">
 								<div class="sales_text_top">
 									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />신규고객 (${tMonth})
-									<input type="hidden" id="tMonth" name="tMonth" value="${tMonth}">
+									<%-- <input type="hidden" id="tMonth" name="tMonth" value="${tMonth}"> --%>
 								</div>
 								<div class="actvty_tLine1"></div>
 							</div>
