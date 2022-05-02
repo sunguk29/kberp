@@ -15,9 +15,9 @@
 	</select>
 	
 	<select id="getEvent" resultType="hashmap" parameterType="hashmap">
-		SELECT EVENT.EVENT_NUM, EVENT.EMP_NUM, event_title, event_cont, write_date, event_hits, del_check
-		FROM EVENT
-		WHERE EVENT.EVENT_NUM = #{no}
+		SELECT EV.EVENT_NUM, EV.EMP_NUM, EV.event_title, EV.event_cont, EV.write_date, EV.event_hits, EV.del_check, EM.EMP_NAME AS EMP_NAME
+		FROM EVENT EV LEFT OUTER JOIN EMP EM ON EV.EMP_NUM = EM.EMP_NUM
+		WHERE EV.EVENT_NUM = #{no}
 	</select>
 	
 	<select id="getEventCnt" resultType="Integer" parameterType="hashmap">
@@ -50,6 +50,12 @@
 		WHERE EVENT_NUM = #{no}
 	</select>
 	
+	
+	<select id="getEventCmntCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM EVENT_CMNT 
+	</select>
+	
 	<select id="getEventCmnt" resultType="hashmap" parameterType="hashmap">
 		SELECT CMNT_NUM, CLNT_NUM, EVENT_NUM, EMP.EMP_NUM, CMNT_CONT, DEL_CHECK, EMP.EMP_NAME AS WRITER_NAME
 		FROM EVENT_CMNT, EMP
@@ -58,8 +64,8 @@
 	</select>
 	
 	<insert id="EventCmntAdd" parameterType="hashmap">
-		INSERT INTO EVENT_CMNT(CMNT_NUM, CLNT_NUM, EVENT_NUM, EMP_NUM, CMNT_CONT) 
-		VALUES(#{cmnt_num}, #{clnt_num}, #{no}, #{emp_num}, #{cmnt_cont})
+		INSERT INTO EVENT_CMNT(CMNT_NUM, EVENT_NUM, EMP_NUM, CMNT_CONT) 
+		VALUES(#{cmnt_num}, #{no}, #{emp_num}, #{cmnt_cont})
 	</insert>
 	
 	<update id="updateHit" parameterType="hashmap">

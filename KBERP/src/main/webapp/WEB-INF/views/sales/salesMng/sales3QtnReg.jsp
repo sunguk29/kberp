@@ -1,14 +1,23 @@
 <!-- 
 	견적 등록 : sales3QtnReg
  -->
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now() ;	
+	request.setAttribute("version", version);		//캐시 처리
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>견적 등록</title>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -468,6 +477,13 @@ hr { /* 구분선 */
 	padding-top: 5px;
 	padding-left: 20px;
 }
+.name2 {
+	margin-top: 3px;
+	font-weight: lighter;
+	color: gray;
+	padding-top: 5px;
+	padding-left: 20px;	
+}
 .txtOp, .dt, .del {
 	padding-left: 20px;
 }
@@ -523,41 +539,7 @@ textarea {
 	margin-top: 15px;
 	margin-right: 5px;
 }
-/* 지난 견적서 */
-pre{
-	font-family: "맑은 고딕";
-	margin-top: 3px;
-}
-.qtnBox {
-	width: 830px;
-	height: 60px;
-	font-size: 10pt;
-	border: 1px solid gray;
-	border-top-left-radius: 12px;
-	border-top-right-radius: 12px;
-	border-bottom-left-radius: 12px;
-	border-bottom-right-radius: 12px;
-	margin: 5px;
-	background-color: #F2F2F2;
-}
-.qtnBox:hover {
-	cursor: pointer;
-	outline: 2px solid #F2B705;
-}
-.plus_btn_top {
-	display:inline-block;
-	vertical-align: middle;
-	width: 18px;
-	height: 18px;
-	background-image: url("resources/images/sales/plus.png");
-	background-size: 18px 18px;
-	float: right;
-	margin-right: 10px;
-	margin-top: 7.5px;
-}
-.plus_btn_top:hover {
-	cursor: pointer;
-}
+
 /* 견적 상품  */
 .mdBox {
 	width: 800px;
@@ -844,14 +826,7 @@ pre{
 .mdCont_table tr:nth-child(8) td:nth-child(2) {
     border: none;
 }
-.qtnDiv {
-	width: 100%;
-	height: 100%;
-}
-.PQ_title {
-	position: relative;
-	font-size: 11pt;
-}
+
 .drop_btn_bot {
 	position: absolute;
 	top: 7px;
@@ -864,6 +839,92 @@ pre{
 }
 .drop_btn_bot:hover {
 	cursor: pointer;
+}
+
+/* **** 저장 팝업 **** */
+.popup_cont2 {
+	/* 내용 변경용 */
+	font-size: 12pt;
+	font-weight: bold;
+	text-align: center;
+	line-height: 100px;
+}
+.popup_cont3 {
+	/* 내용 변경용 */
+	font-size: 12pt;
+    font-weight: bold;
+    text-align: center;
+    height: 40px;
+    line-height: 50px;
+    padding-top: 10px;
+}
+.popup_cont4 {
+	/* 내용 변경용 */
+	font-size: 12pt;
+    font-weight: bold;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    padding-bottom: 10px;
+}
+/* 지난 견적서 */
+#pQtnName {
+	margin-top: 3px;
+	font-weight: bold;
+	padding-top: 5px;
+	padding-left: 5px;	
+}
+#pQtnName:hover {
+	color: #4b94f2;
+	cursor: pointer;
+	text-decoration: underline;
+}
+.wave {
+	display: inline-block;
+	padding-left: 20px;
+	padding-right: 27px;
+}
+pre{
+	font-family: "맑은 고딕";
+	margin-top: 3px;
+}
+.qtnBox {
+	width: 830px;
+	height: 60px;
+	font-size: 10pt;
+	border: 1px solid gray;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+	margin: 5px;
+	background-color: #F2F2F2;
+}
+.qtnBox:hover {
+	cursor: pointer;
+	outline: 2px solid #F2B705;
+}
+.plus_btn_top {
+	display:inline-block;
+	vertical-align: middle;
+	width: 18px;
+	height: 18px;
+	background-image: url("resources/images/sales/plus.png");
+	background-size: 18px 18px;
+	float: right;
+	margin-right: 10px;
+	margin-top: 7.5px;
+}
+.plus_btn_top:hover {
+	cursor: pointer;
+}
+.qtnDiv {
+	width: 100%;
+	height: 100%;
+}
+.PQ_title {
+	position: relative;
+	font-size: 11pt;
 }
 .qtnBox {
     width: 830px;
@@ -879,53 +940,83 @@ pre{
 }
 pre {
 	font-family: "맑은 고딕";
-    margin-top: 3px;
+    margin-top: 6px;
 }
-/* **** 저장 팝업 **** */
-.popup_cont2 {
-	/* 내용 변경용 */
-	font-size: 13pt;
-	font-weight: 600;
-	text-align: center;
-	line-height: 100px;
+/* 지난 견적서 팝업 */
+.popup_table {
+	border-collapse: collapse;
+	display: table-cell;
+	margin: 0px;
+	table-layout: fixed;
 }
-.popup_cont3 {
-	/* 내용 변경용 */
-	font-size: 13pt;
-    font-weight: 600;
-    text-align: center;
-    height: 40px;
-    line-height: 50px;
-    padding-top: 10px;
+.pop_cntrct_box_in {
+    width: 538px;
+    height: 50px;
+    border: 1px solid #d7d7d7;
+    border-radius: 7px;
+    font-size: 10pt;
 }
-.popup_cont4 {
-	/* 내용 변경용 */
-	font-size: 13pt;
-    font-weight: 600;
-    text-align: center;
-    height: 40px;
-    line-height: 40px;
-    padding-bottom: 10px;
+.pop_rvn_txt {
+    height: 25px;
+    width: 538px;
+    padding: 0 15px;
+    font-size: 14px;
+    color: black;
+    box-sizing: border-box;
+    outline: none;
+    border-radius: 3px;
+    line-height: 25px;
+    border: 1px solid #d7d7d7;
+    background-color: #F2F2F2;
+    text-align: left;
+    font-weight: bold;
+	margin-top: 10px;
+    margin-bottom: 5px;
 }
-
+#fileName, #popFileName {
+	border: hidden;
+	outline: none;
+	font-size: 10pt;
+}
+#attFileName {
+	font-size: 10pt;
+}
+#att{
+	display: none;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
 	console.log(${param.salesNum});
 	
+	// 메뉴 클릭
+	$(".left_area, .top_area").on("click", function() {
+		var params = $("#listForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "qtnBackAjax",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				closePopup();
+				$("#listForm").attr("action", "sales3QtnCont");
+				$("#listForm").submit();
+			},
+			error : function(req) {
+				console.log(req.responseText);
+			}
+		});
+	});
+	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
-		
-		var html = "";
-		
-		html += "<div class=\"popup_cont3\">작성중인 내용이 저장되지 않습니다.</div>";
-		html += "<div class=\"popup_cont4\">나가시겠습니까?</div>";
 		
 		makePopup({
 			bg : false,
 			bgClose : false,
 			title : "알림",
-			contents : html,
+			contents : popContTwoLine("작성중인 내용이 저장되지 않습니다.<br/>나가시겠습니까?"),
 			contentsEvent : function() {
 				$("#popup1").draggable();
 			},
@@ -953,6 +1044,7 @@ $(document).ready(function() {
 				name : "취소"
 			} ]
 		});
+		
 	});
 	
 	// 견적 - 상세정보 - 첨부파일
@@ -960,39 +1052,58 @@ $(document).ready(function() {
 		$("#att").click();
 	});
 	
+	$("#fileDelete").on("click", function() {
+		$("#file_name").remove();
+		$(this).remove();
+		
+		var html = "";
+		
+		html += "<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
+		
+		$("#uploadBtn").html(html);
+	});
+	
+	$(".adc_txt").on("click", ".aff_btn", function() {
+		$("#att").click();
+	});
+	
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
 		if(checkEmpty("#qtnName")) {
-			makeAlert("필수 항목 알림", "견적명을 입력하세요.", function() {				
+			makeAlert("필수 항목 알림", popContOneLine("견적명을 입력하세요."), function() {				
 				$("#qtnName").focus();
 			});
 		} else if($("#mdType").val() == 9) {
-			makeAlert("필수 항목 알림", "상품을 선택하세요.", function() {
+			makeAlert("필수 항목 알림", popContOneLine("상품유형을 선택하세요."), function() {
 				$("#mdType").focus();			
 			});
 		}  else if($("#prdmptn_psbl_check").val() == 9) {
-			makeAlert("필수 항목 알림", "상품을 선택하세요.", function() {
+			makeAlert("필수 항목 알림", popContOneLine("중도상환 가능여부를 선택하세요."), function() {
 				$("#prdmptn_psbl_check").focus();			
 			});
 		} else if(checkEmpty("#LoanAmnt")) {
-			makeAlert("필수 항목 알림", "대출금액을 입력하세요.", function() {
+			makeAlert("필수 항목 알림", popContOneLine("대출금액을 입력하세요."), function() {
 				$("#LoanAmnt").focus();				
 			});
 		} else if(isNaN($("#LoanAmnt").val())) {
-			makeAlert("알림", "대출금액은 숫자만 입력 가능합니다.", function() {
+			makeAlert("알림", popContOneLine("대출금액은 숫자만 입력 가능합니다."), function() {
 				$("#LoanAmnt").val("");
 				$("#LoanAmnt").focus();
 			});
 		} else if($("#srtx").val() == 9) {
-			makeAlert("필수 항목 알림", "부가세 옵션을 선택하세요", function() {
+			makeAlert("필수 항목 알림", popContOneLine("부가세 옵션을 선택하세요"), function() {
 				$("#srtx").focus();
 			});
+		} else if($("#prncpl_pymnt").val() == 9) {
+			makeAlert("필수 항목 알림", popContOneLine("원금상환방식을 선택하세요."), function() {
+				$("#prncpl_pymnt").focus();			
+			});
 		} else if(checkEmpty("#pymntDate")) {
-			makeAlert("필수 항목 알림", "납부일을 입력하세요.", function() {
+			makeAlert("필수 항목 알림", popContOneLine("납부일을 입력하세요."), function() {
 				$("#pymntDate").focus();			
 			});
 		} else if(isNaN($("#pymntDate").val())) {
-			makeAlert("알림", "납부일은 숫자만 입력 가능합니다.", function() {
+			makeAlert("알림", popContOneLine("납부일은 숫자만 입력 가능합니다."), function() {
 				$("#pymntDate").val("");
 				$("#pymntDate").focus();
 			});
@@ -1051,7 +1162,7 @@ $(document).ready(function() {
 														$("#contForm").attr("action", "sales3QtnCont");
 														$("#contForm").submit();
 													} else {
-														alert("등록중 문제가 발생하였습니다.");
+														makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 													}
 												},
 												error : function(request, status, error) {
@@ -1076,6 +1187,16 @@ $(document).ready(function() {
 			}); // makePopup depth 1 end
 		} // else end
 	});
+	
+	// 선택박스 초기값
+	$("#loanCauseNum").val(${data.LOAN_CAUSE_NUM}).prop("selected", true);
+	$("#loanHopeType").val(${data.LOAN_HOPE_TYPE}).prop("selected", true);
+	$("#loanHopeTime").val(${data.LOAN_HOPE_TIME}).prop("selected", true);
+	$("#expctdBsnsType").val(${data.EXPCTD_BSNS_TYPE}).prop("selected", true);
+	
+	$("#sgstnloanCauseNum").val(${data2.SGSTN_LOAN_CAUSE_NUM}).prop("selected", true);
+	$("#sgstnloanType").val(${data2.SGSTN_LOAN_TYPE}).prop("selected", true);	
+	
 	
 	// 상품 아이콘 클릭 시
 	$("#mdPop").on("click", function() {
@@ -1558,6 +1679,242 @@ $(document).ready(function() {
 		
 	});
 	
+	/* 지난 견적서 상세 팝업 */
+	$(".qBox").on("click", "#pQtnName", function() {
+		var pQNum = $(this).children("#pQListNumber").val();
+		document.getElementById("pQNumber").value = pQNum;
+		
+		var params = $("#pQForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "pQAjax",
+			dataType : "json",
+			data : params,
+			success : function(pQData) {
+				var html = "";
+				
+				$.each(pQData, function(index, data) {
+					
+					html += "<form action=\"fileUploadAjax\" id=\"pQRegForm\" method=\"post\" enctype=\"multipart/form-data\">";
+					html += "<table class=\"popup_table\">                                                                                                                                                          ";
+					html += "<colgroup>                                                                                                                                                       ";
+					html += "	<col width=\"200\" />                                                                                                                                         ";
+					html += "	<col width=\"250\" />                                                                                                                                         ";
+					html += "	<col width=\"200\" />                                                                                                                                         ";
+					html += "	<col width=\"250\" />                                                                                                                                         ";
+					html += "</colgroup>                                                                                                                                                      ";
+					html += "<tbody>                                                                                                                                                          ";
+					html += "	<tr height=\"40\">                                                                                                                                            ";
+					html += "		<td><input type=\"button\" class=\"btn\" value=\"견적명*\" readonly=\"readonly\" /></td>                                                                  ";
+					html += "		<td colspan=\"3\"><input type=\"text\" class=\"txt\" id=\"qtnName\" name=\"qtnName\" value=\"" + data.QTN_NAME +"\" readonly=\"readonly\" /></td>		                                                      ";
+					html += "		<input type=\"hidden\" id=\"pQNum\" name=\"pQNum\" value=\"${param.pQNum}\" />";
+					html += "	</tr>                                                                                                                                                         ";
+					html += "	<tr height=\"40\">                                                                                                                                            ";
+					html += "		<td><input type=\"button\" class=\"btn\" value=\"상품유형\" /></td>                                                                                       ";
+					html += "		<td colspan=\"3\">                                                                                                                                        ";
+					html += "			<select class=\"txt\" id=\"mdType\" name=\"mdType\" disabled=\"disabled\">                                                                                                  ";
+					html += "			 	<optgroup>                                                                                                                                      ";
+					html += "			 		<option value=\"9\">선택 하세요</option>                                                                                                      ";
+					if(data.MD_TYPE_NUM == 0) {
+						html += "			 		<option value=\"0\" selected=\"selected\">개인사업</option>                                                                                                         ";
+						html += "			 		<option value=\"1\">법인사업</option>                                                                                                         ";
+						html += "			 		<option value=\"2\">공공사업</option>                                                                                                         ";
+					}
+					if(data.MD_TYPE_NUM == 1) {
+						html += "			 		<option value=\"0\">개인사업</option>                                                                                                         ";
+						html += "			 		<option value=\"1\" selected=\"selected\">법인사업</option>                                                                                                         ";
+						html += "			 		<option value=\"2\">공공사업</option>                                                                                                         ";
+					}
+					if(data.MD_TYPE_NUM == 2) {
+						html += "			 		<option value=\"0\">개인사업</option>                                                                                                         ";
+						html += "			 		<option value=\"1\">법인사업</option>                                                                                                         ";
+						html += "			 		<option value=\"2\" selected=\"selected\">공공사업</option>                                                                                                         ";
+					}
+					html += "			 	</optgroup>                                                                                                                                       ";
+					html += "			</select>                                                                                                                                             ";
+					html += "		</td>                                                                                                                                                     ";
+					html += "	</tr>                                                                                                                                                         ";
+					html += "	<tr height=\"40\">                                                                                                                                            ";
+					html += "			<td><input type=\"button\" class=\"btn\" value=\"대출금액*\" readonly=\"readonly\" /></td>                                                            ";
+					html += "			<td colspan=\"3\"><input type=\"text\" class=\"txt\" id=\"LoanAmnt\" name=\"LoanAmnt\" value=\"" + data.LOAN_AMNT + "\" readonly=\"readonly\" /></td>						";		
+					html += "	</tr>                                                                                                                                                         ";
+					html += "	<tr height=\"40\">                                                                                                                                            ";
+					html += "			<td><input type=\"button\" class=\"btn\" value=\"공급가액*\" readonly=\"readonly\" /></td>                                                            ";
+					html += "			<td colspan=\"3\"><input type=\"text\" class=\"txt\" id=\"splyPrice\" name=\"splyPrice\" value=\"" + data.SPLY_PRICE + "\" readonly=\"readonly\" /></td>		                          ";
+					html += "	</tr>                                                                                                                                                         ";
+					html += "	<tr height=\"40\">                                                                                                                                            ";
+					html += "			<td><input type=\"button\" class=\"btn\" value=\"세액*\" readonly=\"readonly\" /></td>                                                                ";
+					html += "			<td colspan=\"3\"><input type=\"text\" class=\"txt\" id=\"taxAmnt\" name=\"taxAmnt\" value=\"" + data.TAX_AMNT + "\" readonly=\"readonly\" /></td>                                    ";
+					html += "	</tr>                                                                                                                                                         ";
+					html += "	<tr height=\"40\">                                                                                                                                            ";
+					html += "			<td><input type=\"button\" class=\"btn\" value=\"합계액*\" readonly=\"readonly\" /></td>                                                              ";
+					html += "			<td colspan=\"3\"><input type=\"text\" class=\"txt\" id=\"sumAmnt\" name=\"sumAmnt\" value=\"" + data.TOTAL + "\" readonly=\"readonly\" /></td>                                    ";
+					html += "	</tr>                                                                                                                                                         ";
+					html += "	<tr height=\"40\">                                                                                                                                            ";
+					html += "			<td><input type=\"button\" class=\"btn\" value=\"중도상환가능여부\" readonly=\"readonly\" /></td>                                                     ";
+					html += "			<td>                                                                                                                                                  ";
+					html += "				<select class=\"txt\" id=\"prdmptn_psbl_check\" name=\"prdmptnPsbl\" disabled=\"disabled\">                                                                             ";
+					html += "					<optgroup>                                                                                                                                    ";
+					html += "						<option value=\"9\">선택하세요</option>                                                                                                   ";
+					if(data.MID_RDMPTN_PSBL_CHECK == 0) {
+						html += "						<option value=\"0\" selected=\"selected\">가능</option>                                                                                                         ";
+						html += "						<option value=\"1\">불가능</option>                                                                                                       ";
+					}
+					if(data.MID_RDMPTN_PSBL_CHECK == 1) {
+						html += "						<option value=\"0\">가능</option>                                                                                                         ";
+						html += "						<option value=\"1\" selected=\"selected\">불가능</option>                                                                                                       ";
+					}
+					html += "					</optgroup>                                                                                                                                   ";
+					html += "				</select>                                                                                                                                         ";
+					html += "			</td>                                                                                                                                                 ";
+					html += "			<td><input type=\"button\" class=\"btn\" value=\"부가세*\" readonly=\"readonly\" /></td>                                                              ";
+					html += "			<td>                                                                                                                                                  ";
+					html += "				<select class=\"txt\" id=\"srtx\" name=\"srtx\" onchange=\"test(this);\" disabled=\"disabled\">                                                                         ";
+					html += "				 	<optgroup>                                                                                                                                    ";
+					html += "				 		<option value=\"9\">선택 하세요</option>                                                                                                  ";
+					if(data.SRTX == 0) {
+						html += "				 		<option value=\"0\" selected=\"selected\">포함</option>                                                                                                         ";
+						html += "				 		<option value=\"1\">미포함</option>                                                                                                       ";
+						html += "				 		<option value=\"2\">면세</option>                                                                                                         ";
+					}
+					if(data.SRTX == 1) {
+						html += "				 		<option value=\"0\">포함</option>                                                                                                         ";
+						html += "				 		<option value=\"1\" selected=\"selected\">미포함</option>                                                                                                       ";
+						html += "				 		<option value=\"2\">면세</option>                                                                                                         ";
+					}
+					if(data.SRTX == 2) {
+						html += "				 		<option value=\"0\">포함</option>                                                                                                         ";
+						html += "				 		<option value=\"1\">미포함</option>                                                                                                       ";
+						html += "				 		<option value=\"2\" selected=\"selected\">면세</option>                                                                                                         ";
+					}
+					html += "				 	</optgroup>                                                                                                                                   ";
+					html += "				</select>                                                                                                                                         ";
+					html += "			</td>                                                                                                                                                 ";
+					html += "	</tr>                                                                                                                                                         ";
+					html += "	<tr height=\"40\">                                                                                                                                            ";
+					html += "		<td><input type=\"button\" class=\"btn\" value=\"대출기간\" readonly=\"readonly\" /></td>                                                                 ";
+					html += "		<td>                                                                                                                                                      ";
+					html += "			<select class=\"txt\" id=\"loanPrd\" name=\"loanPrd\" disabled=\"disabled\">                                                                                                ";
+					html += "				<optgroup>                                                                                                                                        ";
+					html += "					<option value=\"9\">선택하세요</option>                                                                                                       ";
+					if(data.LOAN_PRD == 0) {
+					html += "					<option value=\"0\" selected=\"selected\">6개월</option>                                                                                                            ";
+					html += "					<option value=\"1\">1년</option>                                                                                                              ";
+					html += "					<option value=\"2\">3년</option>                                                                                                              ";
+					html += "					<option value=\"3\">5년</option>                                                                                                              ";
+					}
+					if(data.LOAN_PRD == 1) {
+					html += "					<option value=\"0\">6개월</option>                                                                                                            ";
+					html += "					<option value=\"1\" selected=\"selected\">1년</option>                                                                                                              ";
+					html += "					<option value=\"2\">3년</option>                                                                                                              ";
+					html += "					<option value=\"3\">5년</option>                                                                                                              ";
+					}
+					if(data.LOAN_PRD == 2) {
+					html += "					<option value=\"0\">6개월</option>                                                                                                            ";
+					html += "					<option value=\"1\">1년</option>                                                                                                              ";
+					html += "					<option value=\"2\" selected=\"selected\">3년</option>                                                                                                              ";
+					html += "					<option value=\"3\">5년</option>                                                                                                              ";
+					}
+					if(data.LOAN_PRD == 3) {
+					html += "					<option value=\"0\">6개월</option>                                                                                                            ";
+					html += "					<option value=\"1\">1년</option>                                                                                                              ";
+					html += "					<option value=\"2\">3년</option>                                                                                                              ";
+					html += "					<option value=\"3\" selected=\"selected\">5년</option>                                                                                                              ";
+					}
+					html += "				</optgroup>                                                                                                                                       ";
+					html += "			</select>	                                                                                                                                          ";
+					html += "		</td>                                                                                                                                                     ";
+					html += "		<td><input type=\"button\" class=\"btn\" value=\"원금상환방식\" readonly=\"readonly\" /></td>                                                             ";
+					html += "		<td colspan=\"2\">                                                                                                                                        ";
+					html += "			<select class=\"txt\" id=\"prncpl_pymnt\" name=\"prncplPymnt\" disabled=\"disabled\">                                                                                       ";
+					html += "				<optgroup>                                                                                                                                        ";
+					html += "					<option value=\"9\">선택하세요</option>                                                                                                       ";
+					if(data.PRNCPL_PYMNT_MTHD_NUM == 0) {
+						html += "					<option value=\"0\" selected=\"selected\">원금 균등 상환</option>                                                                                                   ";
+						html += "					<option value=\"1\">원리금 균등 상환</option>                                                                                                 ";
+						html += "					<option value=\"2\">만기 일시 상환</option>                                                                                                   ";
+					}
+					if(data.PRNCPL_PYMNT_MTHD_NUM == 1) {
+						html += "					<option value=\"0\">원금 균등 상환</option>                                                                                                   ";
+						html += "					<option value=\"1\" selected=\"selected\">원리금 균등 상환</option>                                                                                                 ";
+						html += "					<option value=\"2\">만기 일시 상환</option>                                                                                                   ";
+					}
+					if(data.PRNCPL_PYMNT_MTHD_NUM == 2) {
+						html += "					<option value=\"0\">원금 균등 상환</option>                                                                                                   ";
+						html += "					<option value=\"1\">원리금 균등 상환</option>                                                                                                 ";
+						html += "					<option value=\"2\" selected=\"selected\">만기 일시 상환</option>                                                                                                   ";
+					}
+					html += "				</optgroup>                                                                                                                                       ";
+					html += "			</select>                                                                                                                                             ";
+					html += "		</td>                                                                                                                                                     ";
+					html += "		<td colspan=\"2\" style=\"border:none;\"></td>                                                                                                            ";
+					html += "	</tr>                                                                                                                                                         ";
+					html += "	<tr height=\"40\">                                                                                                                                            ";
+					html += "		<td><input type=\"button\" class=\"btn\" value=\"이자율(%)\" readonly=\"readonly\" /></td>                                                                ";
+					html += "		<td><input type=\"text\" class=\"txt\" id=\"intrstRate\" name=\"intrstRate\" value=\"" + data.INTRST_RATE + "\" readonly=\"readonly\" /></td>                                                ";
+					html += "		<td><input type=\"button\" class=\"btn\" value=\"납부일*\" readonly=\"readonly\" /></td>                                                                  ";
+					html += "		<td colspan=\"2\"><input type=\"text\" class=\"txt\" id=\"pymntDate\" name=\"pymntDate\" value=\"" + data.PYMNT_DATE + "\" readonly=\"readonly\" /></td>                               ";
+					html += "	</tr>                                                                                                                                                         ";
+					html += "	<tr height=\"40\">                                                                                                                                            ";
+					html += "		<td><input type=\"button\" class=\"btn\" value=\"비고\" readonly=\"readonly\"/></td>                                                                      ";
+					html += "		<td colspan=\"3\"><input type=\"text\" class=\"rmks\" name=\"rmksCont\" value=\"" + data.RMKS + "\" readonly=\"readonly\" /></td>                                                                           ";
+					html += "	</tr>							                                                                                                                              ";
+					html += "</tbody>                                                                                                                                                         ";
+					html += "</table>                                                                                                                                                         ";
+					if(data.ATT_FILE_NAME != null) {
+						var fileLength = data.ATT_FILE_NAME.length;
+						var fileName = data.ATT_FILE_NAME.substring(20, fileLength);
+					}
+					html += "<div class=\"pop_rvn_txt\"> 첨부파일";
+					html += "<span id=\"uploadBtn\">";
+					if(data.ATT_FILE_NAME == null) {
+						html += "	<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
+					}
+					html += "</span>";
+					html += "</div>";
+					html += "<div class=\"pop_cntrct_box_in\">";
+					if(data.ATT_FILE_NAME != "" && data.ATT_FILE_NAME != null) {
+						html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
+					}
+					/* 파일 등록시 파일명이 들어갈곳 */				
+					html += "<input type=\"text\" id=\"fileName\" readonly=\"readonly\" />";
+					html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />   ";
+					html += "	<input type=\"hidden\" id=\"schdlnum\" name=\"schdlnum\" />           ";
+					html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" value=\"" + data.ATT_FILE_NAME + "\" />";	
+					html += "</div>  ";	
+					html += "</form>";
+					
+				}); // each end
+				
+			makePopup({
+				depth : 1,
+				bg : true,
+				bgClose : false,
+				title : "지난 견적서 상세보기",
+				contents : html,
+				contentsEvent : function() {
+					$("#popup1").draggable();
+				},
+				draggable : true,
+				width : 600,
+				height : 620,
+				buttons : [{
+					name : "확인",
+					func : function() {
+							closePopup();
+							}
+						}]// button 함수 end
+											
+					});
+			}, // success end
+			error : function(request) {
+				console.log(request.responseTxt);
+			}
+		}); // ajax end
+		
+	});
+	
 	
 	$(".salesCont").hide();
 	$(".sgstnCont").hide();
@@ -1634,9 +1991,6 @@ function drawList(list) {
 	}
 
 	$(".popup_box_md").html(html);
-	
-	
-	
 	
 }
 
@@ -1749,8 +2103,8 @@ function drawPQList(list) {
 	
 	for(var data of list) {
 		html +="<div class=\"qtnBox\">";
-		html +="<div class=\"name\">" + data.QTN_NAME + " (" + data.QTN_DATE +")</div>";
-		html +="<div class=\"txtOp\"><pre>" + data.MD_TYPE_NUM + "  " + data.MD_NAME + " " + data.INTRST_RATE + "%    " + data.LIMIT_AMNT + "원</pre></div>";
+		html +="<div class=\"name\">견적명 : <span id=\"pQtnName\"><input type=\"hidden\" id=\"pQListNumber\" value=\"" + data.QTN_NUM + "\" />" + data.QTN_NAME + "</span>  <span class=\"name2\">견적일 : " + data.QTN_DATE +"</span></div>";
+		html +="<div class=\"txtOp\"><pre>상품명 : " + data.MD_TYPE_NUM + " / " + data.MD_NAME + "  /  이자율 : " + data.INTRST_RATE + "%  /  대출한도 : " + data.LIMIT_AMNT + "원</pre></div>";
 		html +="</div>";
 	}
 	$(".qBox").html(html);
@@ -1799,24 +2153,34 @@ function test(t) {
 	<input type="hidden" id="no" name="no" /> <!-- 상품 번호 -->
 </form>
 <form action="#" id="mdListForm" method="post">
- <input type="hidden" name="ccn"  value="${data.CLNT_CMPNY_NUM}" /> <!-- 고객사 등급 번호 -->
- <input type="hidden" id="getMdNum" name="no" /> <!-- 상품 번호 -->
+	<input type="hidden" name="ccn"  value="${data.CLNT_CMPNY_NUM}" /> <!-- 고객사 등급 번호 -->
+	<input type="hidden" id="getMdNum" name="no" /> <!-- 상품 번호 -->
 </form>
-	<form action="#" id="listForm" method="post">
-		<input type="hidden" id="page" name="page" value="${page}" />
-		<input type="hidden" name="top" value="${param.top}" />
-		<input type="hidden" name="menuNum" value="${param.menuNum}" />
-		<input type="hidden" name="menuType" value="${param.menuType}" />
-		<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
-		<input type="hidden" name="qtnNum" value="${param.qtnNum}" />
-	</form>
-	<form action="#" id="contForm" method="post">
-		<input type="hidden" id="page" name="page" value="${page}" />
-		<input type="hidden" name="top" value="${param.top}" />
-		<input type="hidden" name="menuNum" value="${param.menuNum}" />
-		<input type="hidden" name="menuType" value="${param.menuType}" />
-		<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
-	</form>
+<!-- 지난 견적서 상세 -->
+<form action="#" id="pQForm" method="post">
+	<input type="hidden" id="pQNumber" name="pQNum" />
+</form>
+<form action="#" id="listForm" method="post">
+	<input type="hidden" id="page" name="page" value="${page}" />
+	<input type="hidden" name="top" value="${param.top}" />
+	<input type="hidden" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" name="salesNum" value="${param.salesNum}" />
+	<input type="hidden" name="qtnNum" value="${param.qtnNum}" />
+	<input type="hidden" name="prgrsStage1" value="${param.prgrsStage1}" />
+	<input type="hidden" name="prgrsStage2" value="${param.prgrsStage2}" />
+	<input type="hidden" name="mngName" value="${param.mngName}" />
+	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+	<input type="hidden" name="listSort" value="${param.listSort}" />
+</form>
+<form action="#" id="contForm" method="post">
+	<input type="hidden" id="page" name="page" value="${page}" />
+	<input type="hidden" name="top" value="${param.top}" />
+	<input type="hidden" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" name="salesNum" value="${param.salesNum}" />
+</form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -1919,35 +2283,11 @@ function test(t) {
 										<input type="button" class="btn" value="대출 원인*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="loanCauseNum" name="loanCauseNum" value="${data.LOAN_CAUSE_NUM}" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${data.LOAN_CAUSE_NUM eq 0}">
-														<option value="0" selected="selected">사업확장</option>
-														<option value="1">제품개발</option>
-														<option value="2">토지매매</option>
-														<option value="3">기타</option>
-													</c:when>
-													<c:when test="${data.LOAN_CAUSE_NUM eq 1}">
-														<option value="0">사업확장</option>
-														<option value="1" selected="selected">제품개발</option>
-														<option value="2">토지매매</option>
-														<option value="3">기타</option>
-													</c:when>
-													<c:when test="${data.LOAN_CAUSE_NUM eq 2}">
-														<option value="0">사업확장</option>
-														<option value="1">제품개발</option>
-														<option value="2" selected="selected">토지매매</option>
-														<option value="3">기타</option>
-													</c:when>
-													<c:when test="${data.LOAN_CAUSE_NUM eq 3}">
-														<option value="0">사업확장</option>
-														<option value="1">제품개발</option>
-														<option value="2">토지매매</option>
-														<option value="3" selected="selected">기타</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+										<select class="txt" id="loanCauseNum" name="loanCauseNum" disabled="disabled">
+											<option value="0">사업확장</option>
+											<option value="1">제품개발</option>
+											<option value="2">토지매매</option>
+											<option value="3">기타</option>
 										</select>
 									</td>
 								</tr>
@@ -1964,19 +2304,9 @@ function test(t) {
 										<input type="button" class="btn" value="대출 희망 유형*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="loanHopeType" name="loanHopeType" value="${data.LOAN_HOPE_TYPE}" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${data.LOAN_HOPE_TYPE eq 0}">
-														<option value="0" selected="selected">장기대출</option>
-														<option value="1">단기대출</option>
-													</c:when>
-													<c:when test="${data.LOAN_HOPE_TYPE eq 1}">
-														<option value="0">장기대출</option>
-														<option value="1" selected="selected">단기대출</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+										<select class="txt" id="loanHopeType" name="loanHopeType" disabled="disabled">
+											<option value="0">장기대출</option>
+											<option value="1">단기대출</option>
 										</select>
 									</td>
 								</tr>
@@ -1985,35 +2315,11 @@ function test(t) {
 										<input type="button" class="btn" value="대출 희망 시기*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="loanHopeTime" name="loanHopeTime" value="${data.LOAN_HOPE_TIME}" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${data.LOAN_HOPE_TIME eq 0}">
-														<option value="0" selected="selected">근시일 내</option>
-														<option value="1">3개월 이후</option>
-														<option value="2">6개월 이후</option>
-														<option value="3">1년 이후</option>
-													</c:when>
-													<c:when test="${data.LOAN_HOPE_TIME eq 1}">
-														<option value="0">근시일 내</option>
-														<option value="1" selected="selected">3개월 이후</option>
-														<option value="2">6개월 이후</option>
-														<option value="3">1년 이후</option>
-													</c:when>
-													<c:when test="${data.LOAN_HOPE_TIME eq 2}">
-														<option value="0">근시일 내</option>
-														<option value="1">3개월 이후</option>
-														<option value="2" selected="selected">6개월 이후</option>
-														<option value="3">1년 이후</option>
-													</c:when>
-													<c:when test="${data.LOAN_HOPE_TIME eq 3}">
-														<option value="0">근시일 내</option>
-														<option value="1">3개월 이후</option>
-														<option value="2">6개월 이후</option>
-														<option value="3" selected="selected">1년 이후</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+										<select class="txt" id="loanHopeTime" name="loanHopeTime" disabled="disabled">
+											<option value="0">근시일 내</option>
+											<option value="1">3개월 이후</option>
+											<option value="2">6개월 이후</option>
+											<option value="3">1년 이후</option>
 										</select>
 									</td>
 								</tr>
@@ -2042,26 +2348,10 @@ function test(t) {
 										<input type="button" class="btn" value="예정 사업 형태" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="expctdBsnsType" name="expctdBsnsType" value="${data.EXPCTD_BSNS_TYPE}" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${data.EXPCTD_BSNS_TYPE eq 0}">
-														<option value="0" selected="selected">민수 사업</option>
-														<option value="1">관공 사업</option>
-														<option value="2">기타</option>
-													</c:when>
-													<c:when test="${data.EXPCTD_BSNS_TYPE eq 1}">
-														<option value="0">민수 사업</option>
-														<option value="1" selected="selected">관공 사업</option>
-														<option value="2">기타</option>
-													</c:when>
-													<c:when test="${data.EXPCTD_BSNS_TYPE eq 2}">
-														<option value="0">민수 사업</option>
-														<option value="1">관공 사업</option>
-														<option value="2" selected="selected">기타</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+										<select class="txt" id="expctdBsnsType" name="expctdBsnsType" disabled="disabled">
+											<option value="0">민수 사업</option>
+											<option value="1">관공 사업</option>
+											<option value="2">기타</option>
 										</select>
 									</td>
 								</tr>
@@ -2112,35 +2402,11 @@ function test(t) {
 										<input type="button" class="btn" value="대출 원인*" readonly="readonly" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="sgstnloanCauseNum" name="sgstnloanCauseNum" value="${data2.SGSTN_LOAN_CAUSE_NUM}" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${data2.SGSTN_LOAN_CAUSE_NUM eq 0}">
-														<option value="0" selected="selected">사업확장</option>
-														<option value="1">제품개발</option>
-														<option value="2">토지매매</option>
-														<option value="3">기타</option>
-													</c:when>
-													<c:when test="${data2.SGSTN_LOAN_CAUSE_NUM eq 1}">
-														<option value="0">사업확장</option>
-														<option value="1" selected="selected">제품개발</option>
-														<option value="2">토지매매</option>
-														<option value="3">기타</option>
-													</c:when>
-													<c:when test="${data2.SGSTN_LOAN_CAUSE_NUM eq 2}">
-														<option value="0">사업확장</option>
-														<option value="1">제품개발</option>
-														<option value="2" selected="selected">토지매매</option>
-														<option value="3">기타</option>
-													</c:when>
-													<c:when test="${data2.SGSTN_LOAN_CAUSE_NUM eq 3}">
-														<option value="0">사업확장</option>
-														<option value="1">제품개발</option>
-														<option value="2">토지매매</option>
-														<option value="3" selected="selected">기타</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+										<select class="txt" id="sgstnloanCauseNum" name="sgstnloanCauseNum" disabled="disabled">
+											<option value="0">사업확장</option>
+											<option value="1">제품개발</option>
+											<option value="2">토지매매</option>
+											<option value="3">기타</option>
 										</select>
 									</td>
 								</tr>
@@ -2157,19 +2423,9 @@ function test(t) {
 										<input type="button" class="btn" value="대출 유형*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="sgstnloanType" name="sgstnloanType" value="${data2.SGSTN_LOAN_TYPE}" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${data2.SGSTN_LOAN_TYPE eq 0}">
-														<option value="0" selected="selected">장기 대출</option>
-														<option value="1">단기 대출</option>
-													</c:when>
-													<c:when test="${data2.SGSTN_LOAN_TYPE eq 1}">
-														<option value="0">장기 대출</option>
-														<option value="1" selected="selected">단기 대출</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+										<select class="txt" id="sgstnloanType" name="sgstnloanType" disabled="disabled">
+											<option value="0">장기 대출</option>
+											<option value="1">단기 대출</option>
 										</select>
 									</td>
 								</tr>
@@ -2392,31 +2648,12 @@ function test(t) {
 								</td>
 								<td colspan="2" style="border:none;"></td>
 							</tr>
-							<!-- <tr height="40"> -->
-<!-- 								<td><input type="button" class="btn" value="이자납부방식" readonly="readonly" /></td>
-								<td>
-									<select class="txt" id="intrst_pymnt" name="intrstPymnt">
-										<optgroup>
-											<option value="-1">선택 하세요</option>
-											<option value="0">원금 균등 상환</option>
-											<option value="1">원리금 균등 상환</option>
-											<option value="2">만기 일시 상환</option>
-										</optgroup>
-									</select>
-								</td> -->
-							<!-- </tr> -->
 							<tr height="40">
 								<td><input type="button" class="btn" value="이자율(%)" readonly="readonly" /></td>
 								<td><input type="text" class="txt" id="intrstRate" name="intrstRate" readonly="readonly" /></td>
 								<td><input type="button" class="btn" value="납부일*" readonly="readonly" /></td>
 								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" placeholder="매달    일" /></td>
 							</tr>
-							<!-- <tr height="40">
-								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>
-								<td><input type="text" class="txt" id="monthPymntAmnt" name="monthPymntAmnt" readonly="readonly" /></td>
-								<td><input type="button" class="btn" value="월 이자액" readonly="readonly" /></td>
-								<td colspan="2"><input type="text" class="txt" id="monthIntrstAmnt" name="monthIntrstAmnt" readonly="readonly" /></td>
-							</tr> -->
 							<tr height="40">
 								<td><input type="button" class="btn" value="비고" readonly="readonly"/></td>
 								<td colspan="3"><input type="text" class="rmks" name="rmksCont" /></td>
@@ -2425,17 +2662,27 @@ function test(t) {
 					</table>
 					
 					<!-- 첨부자료 -->
+					<c:set var="qtnFileLength" value="${fn:length(data3.ATT_FILE_NAME)}"></c:set>
+						<c:set var="qtnFileName" value="${fn:substring(data3.ATT_FILE_NAME, 20, qtnFileLength)}"></c:set>
+						<div class="spc">
+							<div class="adc_txt">
+								첨부자료
+								<span id="uploadBtn">
+									<c:if test="${empty data3.ATT_FILE_NAME}">
+										<img class="plus_btn aff_btn" src="resources/images/sales/plus.png" />
+									</c:if>
+								</span>
+							</div>
+							<div class="cntrct_box_in">
+							<span id="file_name">${qtnFileName}</span>
+								<c:if test="${!empty data3.ATT_FILE_NAME}">
+									<input type="button" id="fileDelete" value="삭제" />
+								</c:if>
+								<input type="text" id="fileName" readonly="readonly" />
+							</div>
+						</div>
 					<input type=file id="att" name="att" onchange="uploadName(this)" />
-					<input type="hidden" id="attFile" name="attFile" />
-					<div class="spc">
-						<div class="adc_txt">
-							첨부자료
-							<img class="plus_btn att_btn" src="resources/images/sales/plus.png" />
-						</div>
-						<div class="cntrct_box_in">
-							<input type="text" id="fileName" readonly="readonly" />
-						</div>
-					</div>
+					<input type="hidden" id="attFile" name="attFile" value="${data3.ATT_FILE_NAME}" />
 				</form>
 				<!-- ******************** 지난 견적서 ******************** -->
 				<div class="qtnDiv">

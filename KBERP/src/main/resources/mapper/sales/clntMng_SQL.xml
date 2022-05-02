@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="clntCmpnyMng">
+
+	<!-- 고객 시퀀스 담기 -->
+	<select id="clntSeq" resultType="String">
+		SELECT ENTRPRS_CLNT_SEQ.NEXTVAL
+		FROM DUAL
+	</select>
+	
+	<!-- 고객사 시퀀스 담기 -->
+	<select id="clntCmpnySeq" resultType="String">
+		SELECT CLNT_CMPNY_SEQ.NEXTVAL
+		FROM DUAL
+	</select>
+	
+	<!-- 고객사명 중복 체크 -->
+	<select id="ccNameCnt" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM CLNT_CMPNY
+		WHERE CLNT_CMPNY_NAME = #{ccName}
+	</select>
+
 	<!-- 고객사 목록 -->
 	<select id="getClntCmpntList" parameterType="hashmap" resultType="hashmap">
 		SELECT A.RNUM, A.CLNT_CMPNY_NUM, A.GRADE_NAME, A.CLNT_CMPNY_CLSFY_NAME, A.CLNT_CMPNY_NAME, A.ADRS, TRIM(TO_CHAR(RVN, 'L999,999,999,999,999')) AS RVN, A.CNT, A.DEL_CHECK
@@ -30,15 +50,15 @@
 		                                                 INNER JOIN CLNT_CMPNY_CLSFY CCC
 		                                                         ON CC.CLNT_CMPNY_CLSFY_NUM = CCC.CLNT_CMPNY_CLSFY_NUM ) A 
                                                     LEFT OUTER JOIN (	SELECT CC.CLNT_CMPNY_NAME, COUNT(*) AS CNT
-																		FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
-																		                           ON CC.CLNT_NAME = EC.CLNT_NAME
-																		                   INNER JOIN LEAD L
-																		                           ON L.CLNT_NUM = EC.CLNT_NUM 
-																		                   LEFT OUTER JOIN SALES S
-																		                           ON S.LEAD_NUM = L.LEAD_NUM
-																		                   LEFT OUTER JOIN CNTRCT C
-																		                           ON C.SALES_NUM = S.SALES_NUM                        
-																		GROUP BY CC.CLNT_CMPNY_NAME  ) B
+		                                                                FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
+		                                                                                           ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
+		                                                                                   INNER JOIN LEAD L
+		                                                                                           ON L.CLNT_NUM = EC.CLNT_NUM 
+		                                                                                   INNER JOIN SALES S
+		                                                                                           ON S.LEAD_NUM = L.LEAD_NUM
+		                                                                                   INNER JOIN CNTRCT C
+		                                                                                           ON C.SALES_NUM = S.SALES_NUM                        
+		                                                                GROUP BY CC.CLNT_CMPNY_NAME  ) B
 		                                                           ON A.CLNT_CMPNY_NAME = B.CLNT_CMPNY_NAME ) A
 		                WHERE A.DEL_CHECK IS NULL ) A
 		WHERE 1 = 1
@@ -104,7 +124,7 @@
 	<insert id="ClntCmpnyAdd" parameterType="hashmap">
 		INSERT INTO CLNT_CMPNY (CLNT_CMPNY_NUM, CLNT_CMPNY_CLSFY_NUM, GRADE_NUM, RCGNTN_PATH_NUM, CLNT_CMPNY_NAME, BSNSMN_RGSTRTN_NUM,
 							    CLNT_NAME, PHONE_NUM, FAX, HMPG, ZIP_CODE_NUM, ADRS, DTL_ADRS, RVN, EMP_NUM)
-		VALUES (CLNT_CMPNY_SEQ.NEXTVAL, #{ccClsfy}, #{ccGrade}, #{rp}, #{ccName}, #{brNum}, #{cName}, #{phoneNum}, #{fax}, #{hmpg},
+		VALUES (#{ccs}, #{ccClsfy}, #{ccGrade}, #{rp}, #{ccName}, #{brNum}, #{cName}, #{phoneNum}, #{fax}, #{hmpg},
 			    #{zipCodeNum}, #{adrs}, #{dtlAdrs}, #{rvn}, #{sEmpNum})
 	</insert>
 	
@@ -196,7 +216,7 @@
 	
 	<!-- 고객 목록 -->
 	<select id="getClntList" parameterType="hashmap" resultType="hashmap">
-		SELECT EC.CLNT_NUM, NVL(EC.DEPT, ' ') AS DEPT, NVL(EC.DUTY, ' ') AS DUTY, NVL(EC.EMAIL, ' ') AS EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM
+		SELECT EC.CLNT_NUM, NVL(EC.DEPT, ' ') AS DEPT, NVL(EC.DUTY, ' ') AS DUTY, NVL(EC.EMAIL, ' ') AS EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, REGEXP_REPLACE(EC.MBL, '(.{3})(.+)(.{4})', '\1-\2-\3') AS MBL, EC.RNUM
 		FROM (  SELECT EC.CLNT_NUM, EC.DEPT, EC.DUTY, EC.EMAIL, EC.CLNT_CMPNY_NAME, EC.CLNT_NAME, EC.MBL, EC.RNUM,
 		               ROW_NUMBER() OVER(ORDER BY 
 		                <choose>
@@ -272,7 +292,7 @@
 	<select id="clntCmpnyCont" parameterType="hashmap" resultType="hashmap">
 		SELECT CC.CLNT_CMPNY_NAME, CC.CLNT_CMPNY_CLSFY_NUM, CC.GRADE_NUM, CC.BSNSMN_RGSTRTN_NUM, CC.CLNT_NAME,
 		       CC.PHONE_NUM, CC.FAX, CC.HMPG, CC.ZIP_CODE_NUM, CC.ADRS, CC.DTL_ADRS, 
-		       TRIM(TO_CHAR(CC.RVN, '999999999999999')) AS RVN, CC.RCGNTN_PATH_NUM,
+		       TRIM(TO_CHAR(CC.RVN, '999,999,999,999,999')) AS RVN, CC.RCGNTN_PATH_NUM,
 		       CCA.ATT_FILE_NAME, CC.CLNT_CMPNY_NUM
 		FROM CLNT_CMPNY CC LEFT OUTER JOIN CLNT_CMPNY_ATT_FILE CCA
 		                           ON CC.CLNT_CMPNY_NUM = CCA.CLNT_CMPNY_NUM
@@ -281,7 +301,7 @@
 	
 	<!-- 고객 상세보기 -->
 	<select id="clntCont" parameterType="hashmap" resultType="hashmap">
-		SELECT EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, EC.DEPT, EC.DUTY, EC.MBL, EC.EMAIL,
+		SELECT EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, EC.DEPT, EC.DUTY, REGEXP_REPLACE(EC.MBL, '(.{3})(.+)(.{4})', '\1-\2-\3') AS MBL, EC.EMAIL,
 		       E.EMP_NAME, CAF.ATT_FILE_NAME, EC.RGSTRTN_EMP_NUM, EC.MNGR_EMP_NUM, EC.CLNT_CMPNY_NUM
 		FROM ENTRPRS_CLNT EC INNER JOIN CLNT_CMPNY CC
 		                             ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
@@ -307,7 +327,7 @@
 	<!-- 고객 등록 -->
 	<select id="clntAdd" parameterType="hashmap" resultType="hashmap">
 		INSERT INTO ENTRPRS_CLNT (CLNT_NUM, CLNT_NAME, CLNT_CMPNY_NUM, MNGR_EMP_NUM, RGSTRTN_EMP_NUM, DEPT, DUTY, MBL, EMAIL)
-		VALUES (ENTRPRS_CLNT_SEQ.NEXTVAL, #{cName}, #{ccNum}, #{mngNum}, #{sEmpNum}, #{dept}, #{duty}, #{mbl}, #{email})
+		VALUES (#{cs}, #{cName}, #{ccNum}, #{mngNum}, #{sEmpNum}, #{dept}, #{duty}, #{mbl}, #{email})
 	</select>
 	
 	<!-- (팝업) 고객사 목록 개수 -->
@@ -444,7 +464,8 @@
 	
 	<!-- 고객사 상세보기/고객 목록 -->
 	<select id="getClList" parameterType="hashmap" resultType="hashmap">
-		SELECT EC.CLNT_NAME, NVL(EC.DUTY, ' ') AS DUTY, NVL(EC.DEPT, ' ') AS DEPT, EC.MBL, NVL(EC.EMAIL, ' ') AS EMAIL
+		SELECT EC.CLNT_NAME, NVL(EC.DUTY, ' ') AS DUTY, NVL(EC.DEPT, ' ') AS DEPT, REGEXP_REPLACE(CC.PHONE_NUM, '(.{3})(.+)(.{4})', '\1-\2-\3') AS PHONE_NUM, NVL(EC.EMAIL, ' ') AS EMAIL,
+			   REGEXP_REPLACE(EC.MBL, '(.{3})(.+)(.{4})', '\1-\2-\3') AS MBL	
 		FROM CLNT_CMPNY CC INNER JOIN ENTRPRS_CLNT EC
 		                           ON CC.CLNT_CMPNY_NUM = EC.CLNT_CMPNY_NUM
 		WHERE CC.CLNT_CMPNY_NUM = #{ccn}
@@ -467,7 +488,7 @@
 	</select>
 	
 	<!-- 고객 의견 삭제 -->
-	<update id="clOpContUpdate" parameterType="hashmap">
+	<update id="clOpContUpdate" parameterType="hashmap">	
 		UPDATE CLNT_CMNT SET DEL_CHECK = SYSDATE
 		WHERE CMNT_NUM = #{cmntNum}
 	</update>

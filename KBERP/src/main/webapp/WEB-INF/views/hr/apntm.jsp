@@ -1025,10 +1025,9 @@ $(document).ready(function() {
 			    	$("#addStart").attr("disabled", false);
 			    }
 		  }); 
-		
+		//발령추가
 		$("body").on("click", "#addApntmBtn", function() {
 			console.log("등록클릭!")
-			// 발령등록 
 			if($('#addDvsnNum option:selected').val() != 1) { //발령구분 퇴사 아닐 시 
 				if ($("#addEmpNum").val() == '') {
 					makeAlert("알림", "돋보기를 눌러 발령사원을 선택하세요.", function(){

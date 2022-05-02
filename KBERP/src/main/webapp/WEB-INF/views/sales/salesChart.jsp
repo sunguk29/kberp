@@ -273,15 +273,16 @@ select {
 
 .sales_text_bot{
 	width: 428px;
-	height: 200px;
-	border: 1px solid #000;
-	margin-top: 10px;
-	font-size: 11pt;
+    height: 230px;
+    border: 1px solid #000;
+    margin-top: 10px;
+    font-size: 11pt;
+    position: relative;
 }
 
 /* 각 그래프 영역 크기 */
 .bsns_type{
-	min-width: 415px;
+	width: 100%;
 	height: 195px;
 	margin : 0 auto;
 }
@@ -290,20 +291,102 @@ select {
 	vertical-align: top;
 	width: 430px;
 	height: 100%;
-	padding-right: 33.5px;	
 }
 .cont_left {
 	display: inline-block;
 	vertical-align: top;
 	width: 430px;
 	height: 100%;
-	padding-left: 33.5px;	
+	padding-right: 33.5px;		
+}
+.ingArea{
+	font-size: 10pt;
+	font-weight : bold;
+}
+.prgrs{
+	font-size: 10pt;
+    font-weight: bold;
+    padding-left: 45px;
+}
+.cir {
+	display: inline-block;
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    line-height: 85px;
+    text-align: center;
+    margin-top: 5px;
+    margin-left: 45px;
+}
+.half_cir {
+	display: inline-block;
+    width: 50px;
+    height: 35px;
+    border-radius: 35px;
+    line-height: 35px;
+    text-align: center;
+}
+.rec {
+	display: inline-block;
+    background-color: #f2f3f5;
+    border-right: 7px solid #e6e6e6;
+    width: 180px;
+    height: 54px;
+    line-height: 54px;
+    text-align: center;
+    vertical-align: middle;
+}
+.actvty_tLine1 {
+    background-color: #4B94F2;
+    width: 100%;
+    height: 2px;
+}
+.prgrs_step_img {
+	display: inline-block;
+	background-image: url(resources/images/sales/prgrs_step.png);
+    background-size: 100px 280px;
+    background-repeat: no-repeat;
+    background-position: 0px center;
+    width: 100px;
+    height: 280px;
+    margin-top: 10px;
+}
+.prgrs_step{
+	display: inline-block;
+	font-size: 10pt;
+	font-weight : bold;
+}
+ul{
+	display: inline-block;
+	vertical-align : top;
+	list-style: none;
+	margin-top: 0;
+}
+.prgrs_step_cont{
+	display:inline-block;
+	width : 200px;
+	height : 100px;
+}
+.step{	
+	margin-top : 15px;
+}
+li span{
+	margin-right : 10px;
 }
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
 	
 	getData();
+	getPrgrsCnt();
+	getPrgrsStepCnt();
+	
+	/* 검색 */
+	$(".cmn_btn").on("click",function() {
+		getData();
+		getPrgrsCnt();
+		getPrgrsStepCnt();
+	});
 
 	/* 담당자 팝업 */
 	$("#mngBtn").on("click", function() {
@@ -432,18 +515,123 @@ $(document).ready(function() {
 			title: {
 				text: ''
 			},
+		    credits: {
+                enabled: false
+            },
+            plotOptions: {
+		        pie: {
+		            allowPointSelect: true,
+		            cursor: 'pointer',
+		            dataLabels: {
+		                enabled: true,
+		                formatter: function() {
+							if(this.y > 0) {
+								return this.key + "(" + this.y + "명)";
+							}
+						}
+		            },
+		            showInLegend: true
+		        }
+		    },
 			colors: ['#5CB3FF', '#D462FF', '#FBB917'],
 	        series : [{
 	        	name: '건 수',
-	        	data : list
+	        	data : list,
+	        	innerSize : '50%'
 	        }]
 		});
 	}
-
+	
+	/* 진행상태 데이터 가져오기  */
+	function getPrgrsCnt() {
+		var params = $("#getForm").serialize();
+		$.ajax({
+			type : "post",
+			url : "prgrsChartAjax",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				drawPrgrsList(res.ingCnt, res.endCnt, res.failCnt, res.totalCnt);
+			},
+			error : function(request, status, error) {
+				console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+			}
+		});
+	}
+	
+	/* 진행단계 데이터 가져오기 */
+	function getPrgrsStepCnt() {
+		var params = $("#getForm").serialize();
+		$.ajax({
+			type : "post",
+			url : "prgrsStepAjax",
+			dataType: "json",
+			data : params,
+			success : function(res) {
+				drawPrgrsStep(res.salesChncCnt, res.sgstnCnt, res.qtnCnt, res.cntrctCnt);
+			},
+			error : function(request,status, error) {
+				console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+			}
+		});
+	}
+	
+	/*  내 영업 조회 */
+	$("#salesCheck").on("click", function() {
+		
+		
+		console.log("클릭됨");
+		
+		var checked = $("#salesCheck").is(':checked');
+		
+		if(checked) {
+			$("#salesCheck").attr("value", 1);
+			
+			getData();
+			getPrgrsCnt();
+			getPrgrsStepCnt();
+		} else {
+			$("#salesCheck").attr("value", 0);
+			
+			getData();
+			getPrgrsCnt();
+			getPrgrsStepCnt();
+		}
+		
+	});
 }); //jqeury End
 
+/* 진행상태 그리기  */
+function drawPrgrsList(ingCnt, endCnt, failCnt, totalCnt) {
+	var html = "";
+	
+	html += "<div class=\"cir\" style=\"background-color:rgb(255,194,54);\">진행중</div><div class=\"half_cir\" style=\"background-color:rgb(255,194,54);\">"+Math.round((ingCnt/totalCnt*100))+"%</div><div class = \"rec\">"+ingCnt+"건</div><br/>";
+	html += "<div class=\"cir\" style=\"background-color:rgb(96,187,135);\">성공</div><div class=\"half_cir\" style=\"background-color:rgb(96,187,135);\">"+Math.round((endCnt/totalCnt*100))+"%</div><div class = \"rec\">"+endCnt+"건</div><br/>";
+	html += "<div class=\"cir\" style=\"background-color:rgb(88,193,183);\">실패</div><div class=\"half_cir\" style=\"background-color:rgb(88,193,183);\">"+Math.round((failCnt/totalCnt*100))+"%</div><div class = \"rec\">"+failCnt+"건</div>";
+	
+	$(".ingArea").html(html);
+}
 
-
+function drawPrgrsStep(salesChncCnt, sgstnCnt, qtnCnt, cntrctCnt){
+	var html = "";
+	
+	
+	html += "<div class=\"prgrs\">";
+	
+	html += "<div class=\"prgrs_step_img\"></div>";
+	html += "<ul>";
+	html += "<li class=\"step\"><span>기회</span><div class = \"rec\">"+salesChncCnt+"건</div></li>";
+	html += "<li class=\"step\"><span>제안</span><div class = \"rec\">"+sgstnCnt+"건</div></li>";
+	html += "<li class=\"step\"><span>견적</span><div class = \"rec\">"+qtnCnt+"건</div></li>";
+	html += "<li class=\"step\"><span>계약</span><div class = \"rec\">"+cntrctCnt+"건</div></li>";
+	html += "</ul>";
+	html += "</div>";
+	
+	
+	
+	
+	$(".prgrs_step").html(html);
+}
 
 /* 담당자 팝업 Ajax */
 function drawMngList() {
@@ -512,7 +700,9 @@ function drawMngPaging(pb) {
 	
 	$(".pgn_area").html(html);
 
-} 
+}
+
+
 </script>
 </head>
 <body>
@@ -535,6 +725,9 @@ function drawMngPaging(pb) {
 			<div class="body">
 					<div class="bodyWrap">
 						<!-- 검색창 -->
+						<form action="#" id="getForm" method="post">
+						<input type="hidden" name="size" value="3" />
+						<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
 						<table class="srch_table">
 							<colgroup>
 								<col width="50" />
@@ -543,112 +736,84 @@ function drawMngPaging(pb) {
 								<col width="100" />
 							</colgroup>
 							<tbody>
-								<!-- col=4 -->
 								<tr>
 									<td>
 										<span class="srch_name">내영업 조회</span>
 									</td>
 									<td colspan="3">
-										<input type="checkbox"/>
+										<input type="checkbox" id="salesCheck" name="salesCheck"/>
 									</td>
 								</tr>
 								<tr>
 									<td>
-										<span class="srch_name">부서</span>
+										<span class="srch_name">팀분류</span>
 									</td>
 									<td colspan="3">
-										<select>
+										<select id="deptS" name="deptS">
 											<option value="9">영업부</option>
-											<option value="1">영업 1팀</option>
-											<option value="2">영업 2팀</option>
+											<option value="7">영업 1팀</option>
+											<option value="8">영업 2팀</option>
 										</select>
 									</td>
 								</tr>
 								<tr>
-									<td>
-										<span class="srch_name">기간</span>
-									</td>
-									<td colspan="3">
-										<input type="date" /> ~ <input type="date" />
-									</td>
-								</tr>
+								<td>
+									<span class="srch_name">기간</span>
+								</td>
+								<td colspan="3">
+									<input type="date" class="date" name="sdate" value="${sdate}" /> ~ <input type="date" class="date" name="edate" value="${edate}" />
+								</td>
+							</tr>
 								<tr>
 									<td>
 										<span class="srch_name">담당자</span>
 									</td>
-									<td colspan="3">
+									<td colspan="2">
 										<div class="findEmp_box">
 											<input type="text" id="mngName" name="mngName" />
-											<input type="hidden" id="mngNum" />
+											<input type="hidden" id="mngNum" name="mngNum" />
 											<img class="userIcon" src="resources/images/sales/usericon.png" id="mngBtn">
 										</div>									
 									</td>
-								</tr>
-								<tr>
 									<td>
-										<span class="srch_name">정렬</span>
+									<span class="cmn_btn">검색</span>
 									</td>
-									<td>
-										<select>
-											<option selected="selected">선택안함</option>
-											<option>오름차순</option>
-											<option>내림차순 </option>
-										</select>
-									</td>
-									<td>
-										<span class="cmn_btn">검색</span>
-									</td>
-									<td></td>
 								</tr>
 							</tbody>
 						</table>
-						<form action="#" id="getForm" method="post">
-						<input type="hidden" name="size" value="3" />
-						<dlv class="cont_right">
-							<div class="new_sales_actvty">
-							<div class="sales_text">
-								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />진행상태
-								</div>
-								<div class="actvty_tLine1"></div>
-							</div>
-							<div class="sales_text_bot">
-							</div>
-						</div>
+						</form>
 						<div class="new_sales_actvty">
-							<div class="sales_text">
-								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />진행단계
-								</div>
-							</div>
-							<div class="sales_text_bot">
-								<div class="prgrs_stage"></div>
-							</div>
-						</div>
-
-						</dlv>
-						<dlv class="cont_left">
-							<div class="new_sales_actvty">
 								<div class="sales_text">
 									<div class="sales_text_top">
 										<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />사업유형
 									</div>
-									<span class="bsns_type"></span>
+									<div class="actvty_tLine1"></div>
+									<div class="bsns_type"></div>
 								</div>
-							</div>
+						</div>
+						<br/>
+						<div class="cont_left">
 							<div class="new_sales_actvty">
-							<div class="sales_text">
-								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />영업담당
+								<div class="sales_text">
+									<div class="sales_text_top">
+										<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />진행상태
+									</div>
+									<div class="actvty_tLine1"></div>
 								</div>
-								<div class="actvty_cntrct"></div>
-							</div>
-							<div class="sales_text_bot">
+								<div class="ingArea"></div>
 							</div>
 						</div>
-
-						</dlv>
-					
+						<div class="cont_right">
+							<div class="new_sales_actvty">
+								<div class="sales_text">
+									<div class="sales_text_top">
+										<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />진행단계
+									</div>
+									<div class="actvty_tLine1"></div>
+								</div>
+								<div class="prgrs_step"></div>
+							</div>
+						</div>
 					<!-- class="bodyWrap" end -->
 					</div>
 				<!-- class="body" end -->

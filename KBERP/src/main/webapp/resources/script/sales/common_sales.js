@@ -86,12 +86,12 @@ function dateFormatter(targetDate){
 
 // 팝업 한줄 내용
 function popContOneLine(cont) {
-	var content = "<span class=\"popContOneLine\">" + cont + "</span>";
+	var content = "<div class=\"cont_bin\"><span class=\"popContOneLine\">" + cont + "</span></div>";
 	return content;
 }
 
 // 팝업 두줄 내용
 function popContTwoLine(cont) {
-	var content = "<div class=\"popContTwoLine\">" + cont + "</div>";
+	var content = "<div class=\"cont_bin\"><div class=\"popContTwoLine\">" + cont + "</div></div>";
 	return content;
 }

@@ -53,7 +53,7 @@ public class SalesMngController {
 
 		mav.addObject("page", params.get("page"));
 
-		mav.setViewName("sales/salesList");
+		mav.setViewName("sales/salesMng/salesList");
 
 		return mav;
 	}
@@ -75,7 +75,7 @@ public class SalesMngController {
 
 		modelMap.put("RsltCnt", RsltCnt);
 
-		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), RsltCnt, 10, 5);
+		PagingBean pb = iPagingService.getPagingBean(Integer.parseInt(params.get("page")), RsltCnt, 3, 5);
 
 		// 데이터 시작, 종료 할당
 		params.put("startCount", Integer.toString(pb.getStartCount()));
@@ -108,7 +108,7 @@ public class SalesMngController {
 		mav.addObject("tday", sdf.format(tday));
 		mav.addObject("ln", leadData);
 
-		mav.setViewName("sales/sales1SalesChncReg");
+		mav.setViewName("sales/salesMng/sales1SalesChncReg");
 
 		return mav;
 	}
@@ -164,7 +164,7 @@ public class SalesMngController {
 
 		mav.addObject("data", data);
 
-		mav.setViewName("sales/sales1SalesChncCont");
+		mav.setViewName("sales/salesMng/sales1SalesChncCont");
 
 		return mav;
 	}
@@ -177,7 +177,7 @@ public class SalesMngController {
 
 		mav.addObject("data", data);
 
-		mav.setViewName("sales/sales1Update");
+		mav.setViewName("sales/salesMng/sales1Update");
 
 		return mav;
 	}
@@ -196,7 +196,7 @@ public class SalesMngController {
 		mav.addObject("loan", sales1DataLoan);
 		mav.addObject("bsns", sales1DataBsns);
 
-		mav.setViewName("sales/sales2SgstnReg");
+		mav.setViewName("sales/salesMng/sales2SgstnReg");
 
 		return mav;
 	}
@@ -252,7 +252,7 @@ public class SalesMngController {
 		mav.addObject("data", data);
 		mav.addObject("data2", data2);
 
-		mav.setViewName("sales/sales2SgstnCont");
+		mav.setViewName("sales/salesMng/sales2SgstnCont");
 
 		return mav;
 	}
@@ -267,7 +267,7 @@ public class SalesMngController {
 		mav.addObject("data", data);
 		mav.addObject("data2", data2);
 
-		mav.setViewName("sales/sales2Update");
+		mav.setViewName("sales/salesMng/sales2Update");
 
 		return mav;
 	}
@@ -284,7 +284,7 @@ public class SalesMngController {
 		mav.addObject("data", data);
 		mav.addObject("data2", data2);
 		mav.addObject("data3", data3);
-		mav.setViewName("sales/sales3QtnReg");
+		mav.setViewName("sales/salesMng/sales3QtnReg");
 		 
 		return mav;
 	 }
@@ -456,7 +456,6 @@ public class SalesMngController {
 			case "insert":
 				iCommonService.insertData("salesMng.sales3QtnAdd", params); // 견적
 				iCommonService.insertData("salesMng.sales3QtnAttAdd", params); // 견적 첨부파일
-//				iCommonService.getDataList("salesMng.getQtnPQList", params); // 지난견적서
 				iCommonService.updateData("salesMng.sales2to3", params); // 진행 단계 전환
 				break;
 			case "update":
@@ -487,7 +486,7 @@ public class SalesMngController {
 		mav.addObject("data2", data2);
 		mav.addObject("data3", data3);
 
-		mav.setViewName("sales/sales3QtnCont");
+		mav.setViewName("sales/salesMng/sales3QtnCont");
 
 		return mav;
 	}
@@ -569,8 +568,6 @@ public class SalesMngController {
 
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 
-		System.out.println("여기실행댐?");
-
 		iCommonService.updateData("salesMng.salesQtnAddUpdate", params);
 
 		return mapper.writeValueAsString(modelMap);
@@ -604,7 +601,7 @@ public class SalesMngController {
 		mav.addObject("data2", data2);
 		mav.addObject("data3", data3);
 
-		mav.setViewName("sales/sales4CntrctReg");
+		mav.setViewName("sales/salesMng/sales4CntrctReg");
 
 		return mav;
 	}
@@ -660,7 +657,7 @@ public class SalesMngController {
 		  /* 계약 내용 가져온거 보내는 부분 */
 		  mav.addObject("data4", data4);
 		  
-		  mav.setViewName("sales/sales4CntrctCont");
+		  mav.setViewName("sales/salesMng/sales4CntrctCont");
 		  return mav; 
 	  }
 	  
@@ -727,7 +724,7 @@ public class SalesMngController {
 			mav.addObject("data3", data3);
 			mav.addObject("data4", data4);
 			  
-			mav.setViewName("sales/sales4Update");
+			mav.setViewName("sales/salesMng/sales4Update");
 			return mav; 
 		}
 
@@ -763,6 +760,23 @@ public class SalesMngController {
 			HashMap<String, String> SSData = iCommonService.getData("salesMng.SSchdlCont", params);
 			
 			modelMap.put("SSData", SSData);
+			
+			return mapper.writeValueAsString(modelMap); 
+		}
+		
+		// 영업관리 지난 견적서 상세보기
+		@RequestMapping(value ="/pQAjax", method = RequestMethod.POST,
+				produces = "text/json;charset=UTF-8")
+		@ResponseBody
+		public String pQAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+			
+			ObjectMapper mapper = new ObjectMapper();
+			
+			Map<String, Object> modelMap = new HashMap<String, Object>();
+			
+			HashMap<String, String> pQData = iCommonService.getData("salesMng.pQCont", params);
+			
+			modelMap.put("pQData", pQData);
 			
 			return mapper.writeValueAsString(modelMap); 
 		}

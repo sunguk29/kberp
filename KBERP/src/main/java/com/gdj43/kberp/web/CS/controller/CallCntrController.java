@@ -102,10 +102,29 @@ public class CallCntrController {
 				try {
 					switch(gbn) {
 					case "ClntSave":
-						iCommonService.getData("CC.clntSave", params);
+						//시퀀스 취득
+						String seq = iCommonService.getStringData("CC.clntSeq");
+						// params에 시퀀스 추가
+						params.put("clntSeq", seq);
+						
+						iCommonService.insertData("CC.clntSave", params);
+						
+						// modelMap에 시퀀스 추가
+						
+						HashMap<String, String> data = iCommonService.getData("CC.clntParam", params);
+						modelMap.put("data", data);
+						modelMap.put("clntSeq", seq);
+						
 						break;
 					case "NoteSave":
-						iCommonService.getData("CC.noteSave", params);
+						iCommonService.insertData("CC.noteSave", params);
+						break;
+					case "ClntUpdate":
+						
+						iCommonService.updateData("CC.clntUpdate", params);
+						// modelMap에 시퀀스 추가
+						HashMap<String, String> data2 = iCommonService.getData("CC.clntUpParam", params);
+						modelMap.put("data", data2);
 						break;
 					}
 					modelMap.put("res", "success");
@@ -163,7 +182,7 @@ public class CallCntrController {
 			int cnt = iCommonService.getIntData("CC.getRspndCnt", params);
 			
 			// 페이징 계산
-			PagingBean pb = ips.getPagingBean(Integer.parseInt(params.get("page")), cnt, 4, 5);
+			PagingBean pb = ips.getPagingBean(Integer.parseInt(params.get("page")), cnt, 3, 5);
 			
 			params.put("startCnt", Integer.toString(pb.getStartCount()));
 			params.put("endCnt", Integer.toString(pb.getEndCount()));

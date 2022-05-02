@@ -99,11 +99,15 @@ public class MdController {
 	//////상세보기 view
 	@RequestMapping(value="/mdCont")
 	public ModelAndView mdCont(@RequestParam HashMap<String, String> params,
-							ModelAndView mav) throws Throwable {
+							ModelAndView mav, HttpSession session) throws Throwable {
 		
 		HashMap<String, String> data = iCommonService.getData("md.getMdContData", params);
 		HashMap<String, String> fileData = null;
 		Object fileDataObj = iCommonService.getData("md.getMdAttFile", params);
+		
+		//로그인된 사원 번호
+		BigDecimal sEmpNum = (BigDecimal)session.getAttribute("sEmpNum");
+		params.put("sEmpNum", sEmpNum.toString());
 		
 		if(fileDataObj != null) {
 			fileData = (HashMap<String, String>)fileDataObj;

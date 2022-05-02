@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="salesSchdl">
+	<!-- 일정 시퀀스 생성 -->
+	<select id="schdlSeq" resultType="String">
+		SELECT SALES_SCHDL_SEQ.NEXTVAL
+		FROM DUAL
+	</select>
 	<!-- 영업 일정 등록 시 첨부파일 뺴고 저장 -->
 	<insert id="salesSchdlAdd" parameterType="hashmap">
 		INSERT INTO  SALES_SCHDL(SCHDL_NUM, EMP_NUM, SALES_NUM
 		, LEAD_NUM
 		, ACTVTY_CLSFY_NUM, START_DATE_HR, END_DATE_HR, ACTVTY_CONT, SCHDL_NAME)
-		VALUES (SALES_SCHDL_SEQ.NEXTVAL, #{sEmpNum}, #{sNum, jdbcType=VARCHAR}
+		VALUES (#{schdlSeq}, #{sEmpNum}, #{sNum, jdbcType=VARCHAR}
 		, #{lNum, jdbcType=VARCHAR}
 		, #{ssactvtyclsfy}, #{sdt}, #{edt}, #{ssactvtycont}, #{ssname})
 	</insert>
@@ -51,7 +56,7 @@
                                                ON CL.CLNT_NUM = L.CLNT_NUM
                                       LEFT OUTER JOIN CLNT_CMPNY CC
                                                 ON CC.CLNT_NAME = CL.CLNT_NAME
-        WHERE TRIM(#{ctt}) BETWEEN SUBSTR(A.START_DATE_HR, 1, 10) AND NVL(SUBSTR(A.END_DATE_HR, 1, 10), SUBSTR(A.START_DATE_HR, 1, 10))
+        WHERE TRIM(#{ctt}) BETWEEN SUBSTR(A.START_DATE_HR, 1, 10) AND NVL(SUBSTR(A.END_DATE_HR, 1, 10),SUBSTR(A.START_DATE_HR, 1, 10))
         AND A.DEL_CHECK IS NULL                                		 		   
 	</select>
 	<!-- 영업 상세보기  -->

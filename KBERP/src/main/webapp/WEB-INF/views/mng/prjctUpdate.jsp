@@ -36,6 +36,7 @@
    text-align: left;
    padding: 5px 0px 0px 5px;
     outline: none;
+   margin-bottom: 10px;
 }
 #prjt_rmrks:focus,#prjt_cont:focus{
 	outline: none;
@@ -87,26 +88,38 @@
    font-size: 14.6667px;
    border-top: none;
 }
+.prjct_name{
+	width:130px;
+	margin-left: -15px;
+}
+.cont_box{
+	width:100%;
+	height:50px;
+	margin-bottom: 10px;
+}
 </style>
 <script type="text/javascript">
 
 $(document).ready(function() {
+
 	$("#cancelBtn").on("click", function(){
 		$("#backForm").submit();
 	});
-	
-	$("#updateBtn").on("click",function(){
-		$("#actionForm").attr("action","prjctUpdate");
-		$("#actionForm").submit();
-	});
+
 	
 	$("#updateBtn").on("click", function() {
-		if(checkEmpty("#issue_dt")) {
-			alert("발급일자를 입력하세요.")
-			$("#issue_dt").focus();
-		} else if(checkEmpty("#end_dt")) {
+		if(checkEmpty("#prjct_name")) {
+			alert("프로젝트 이름을 입력하세요.")
+			$("#prjct_name").focus();
+		} else if(checkEmpty("#start_date")) {
+			alert("시작일자를 입력하세요.")
+			$("#start_date").focus();
+		} else if(checkEmpty("#end_date")) {
 			alert("종료일자를 입력하세요.")
-			$("#end_dt").focus();
+			$("#end_date").focus();
+		} else if(checkEmpty("#cont")) {
+			alert("내용을 입력하세요.")
+			$("#cont").focus();	
 		} else {
 			var updateForm = $("#updateForm");
 			
@@ -163,18 +176,18 @@ $(document).ready(function() {
 			<!-- 검색영역 선택적 사항 -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
-	<form action="#" id="hstryForm" method="post">
-		<input type="hidden" name="num" value="${param.num}"/>
-		<input type="hidden" name="mng_num" value="${param.prjct_num}" />
-		<input type="hidden" id="page" name=page value=1> 
-	</form>
+	<form action="prjctView" id="backForm" method="post">
+	<input type="hidden" name="prjct_num" value="${param.prjct_num}" />
+	<input type="hidden" id="top" name="top" value="${param.top}" />
+	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+</form>
 
 	<form action="#" id="updateForm" method="post">
 	<input type="hidden" id="top" name="top" value="${param.top}" />
 	<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 	<input type="hidden"  name="page" value="${param.page}" />
-	<input type="hidden" id ="no" name="no" value="${param.no}" />
 	<input type="hidden" id="prjct_num" name="prjct_num" value="${param.prjct_num}"/>
 			<!-- 여기부터 쓰면 됨 -->
        <div class="cont_area">
@@ -182,22 +195,20 @@ $(document).ready(function() {
 	            <div id="cont_top">
 				<div class ="fclt_use_rsrv_top">
 					<div class="fclt_use_rsrv_txt" style="float: left; width: 16%;">프로젝트 명 :</div>
-					<div class="fclt_use_rsrv" style="float: left; width: 16%;"><input type="text" name="prjct_name" value="${data.PRJCT_NAME}"></div>
-					<div class="fclt_use_rsrv_txt" style="float: left; width: 16%;">프로젝트 시작일 :</div>
-					 <div class="fclt_use_rsrv" style="float: left; width: 16%;"><input type="date" name="start_date" value="${data.START_DATE}"></div>
+					<div class="fclt_use_rsrv" style="float: left; width: 16%;"><input type="text" class="prjct_name" id="prjct_name" name="prjct_name" value="${data.PRJCT_NAME}"></div>
+					<div class="fclt_use_rsrv_txt" style="float: left; width: 16%; margin-left: 10px;">프로젝트 시작일 :</div>
+					 <div class="fclt_use_rsrv" style="float: left; width: 16%;"><input type="date"  name="start_date"   id="start_date" value="${data.START_DATE}"></div>
 					<div class="fclt_use_rsrv_txt" style="float: left; width: 16%;">프로젝트 종료일 :</div>
-					<div class="fclt_use_rsrv" style="float: left; width: 16%;"><input type="date" name="end_date" value="${data.END_DATE}"></div>					
+					<div class="fclt_use_rsrv" style="float: left; width: 16%;"><input type="date" id="end_date" name="end_date" value="${data.END_DATE}"></div>					
 				</div>
 
 			</div>		
 				<div id="cont_bottom">
 				<br/>
 					<div class="prjct_text">프로젝트 내용 :</div>
-					<textarea cols="100" rows="50" id = "prjt_cont" name="cont" >${data.CONT}
-					</textarea>
+					<div><input type="text"  class="cont_box" name="cont"   id="cont" value="${data.CONT}"></div>
 					<div class="prjct_text">비고 :</div>
-					<textarea cols="100" rows="40" id = "prjt_rmrks" name="rmrks">${data.RMRKS}
-					</textarea>
+					<div><input type="text" class="cont_box" name="rmrks"   id="rmrks" value="${data.RMRKS}"></div>
 				</div>
 			<div class="board_bottom">
 				<<div class="cmn_btn" id="updateBtn">수정</div>

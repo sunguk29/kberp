@@ -1,6 +1,7 @@
 package com.gdj43.kberp.web.mng.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
+import com.gdj43.kberp.web.GW.service.IAprvlService;
 import com.gdj43.kberp.web.common.service.ICommonService;
 import com.gdj43.kberp.web.mng.service.IAcntncService;
 
@@ -34,6 +36,9 @@ public class AcntncController {
 	
 	@Autowired
 	public IAcntncService iAcntncService;
+	
+	@Autowired
+	public IAprvlService iAprvlService;
 	
 	// 지출결의서 상세보기
 	@RequestMapping(value = "/expnsRsltnDtlView")
@@ -255,10 +260,16 @@ public class AcntncController {
 		params.put("startCount", Integer.toString(pb.getStartCount()));
 		params.put("endCount", Integer.toString(pb.getEndCount()));
 		
+		// 전표 목록 조회
 		List<HashMap<String, String>> list = iCommonService.getDataList("ChitMng.getChitMngList", params);
 		
+		// 대변 합계, 차변 합계 조회
 		HashMap<String, String> data = iCommonService.getData("ChitMng.getChitMngData", params);
 		
+		// 결재 진행 상태 확인
+		HashMap<String, String> aprvlSts = iCommonService.getData("ChitMng.getChitMngAprvlSts", params);
+		
+		modelMap.put("aprvlSts", aprvlSts);
 		modelMap.put("list", list); 
 		modelMap.put("pb", pb); 
 		modelMap.put("data", data); 
@@ -277,9 +288,8 @@ public class AcntncController {
 			// 지출결의서관리 상세보기로 이동
 			mav.addObject("res", "expnsRsltnGo");
 			mav.addObject("top", "34");
-			mav.addObject("menuNum", "84");
+			mav.addObject("menuNum", "39");
 			mav.addObject("menuType", "M");
-			
 			
 		} else {
 			
@@ -289,12 +299,19 @@ public class AcntncController {
 				// 내부비용관리 상세보기로 이동
 				mav.addObject("res", "intrnlCostGo");
 				mav.addObject("top", "34");
-				mav.addObject("menuNum", "38");
+				mav.addObject("menuNum", "39");
 				mav.addObject("menuType", "M");
 				
 			} else {
-				System.out.println("조회된 전표가 없음!");
-				mav.addObject("res", "failed");
+				
+				int cntrctCheck = iCommonService.getIntData("ChitMng.cntrctCheck", params);
+				
+				if(cntrctCheck == 1) {
+					mav.addObject("res", "cntrctGo");
+					mav.addObject("top", "34");
+					mav.addObject("menuNum", "39");
+					mav.addObject("menuType", "M");
+				}
 			}
 		}
 		
@@ -399,5 +416,62 @@ public class AcntncController {
 		return mav;
 	}
 	
+	// 영업매출 상세보기
+	@RequestMapping(value = "/cntrctDtlView")
+	public ModelAndView cntrctDtlView(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
+		
+		HashMap<String, String> data = iCommonService.getData("ChitMng.cntrctDtlView", params);
+		
+		mav.addObject("data", data);
+		
+		mav.setViewName("mng/cntrctDtlView");
+		
+		return mav;
+	}
+	
+	// 결재 요청
+	@RequestMapping(value = "/aprvlRqstAjax/{gbn}", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String aprvlRqstAjax(@RequestParam HashMap<String, String> params, @PathVariable String gbn) throws Throwable {
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		try {
+			switch(gbn) {
+			case "rqst" :
+				String[] aprvler = null;
+	    	    String[] rfrnc = null;
+	    	    List<String> aprvlerList = null;
+	    	    List<String> rfrncList = null;
+	    	    
+	    	    if(params.get("aprvlerList") != null && !params.get("aprvlerList").equals("") ) {
+	    		    aprvler = params.get("aprvlerList").split(",");
+	    		    aprvlerList = Arrays.asList(aprvler);
+	    	    }
+	    	    
+	    	    if(params.get("rfrncList") != null && !params.get("rfrncList").equals("") ) {
+	    		    rfrnc = params.get("rfrncList").split(",");
+	    		    rfrncList = Arrays.asList(rfrnc);
+	    	    }
+	    	    
+	    	    String aprvl_num = iAprvlService.aprvlAdd(params.get("emp_num"), params.get("title"), params.get("cont"), aprvlerList, rfrncList, null);
+	    	    modelMap.put("aprvlNum", aprvl_num);
+	    	    System.out.println("결재번호 : " + aprvl_num);
+	    	    break;
+			case "aprvlOk" :
+				iCommonService.insertData("ChitMng.aprvlOk", params);
+				break;
+			case "aprvlAgainOk" :
+				iCommonService.updateData("ChitMng.aprvlAgainOk", params);
+				break;
+			}
+			modelMap.put("res", "success");
+		} catch (Throwable e) {
+			e.printStackTrace();
+			modelMap.put("res", "failed");
+		}
+		
+		return mapper.writeValueAsString(modelMap);
+	}
 	
 }

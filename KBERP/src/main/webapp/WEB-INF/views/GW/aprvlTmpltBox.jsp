@@ -104,6 +104,8 @@
 	background-color: #b7b7b7;
 }
 
+
+
 /* 개인 작업 영역 */
 
 </style>
@@ -111,6 +113,8 @@
 $(document).ready(function() {
 	
 	reloadList();
+	
+	
 	
 });
 
@@ -138,15 +142,29 @@ function drawList(list) {
 	var html = "";
 	
 	for(var data of list){
+		
+		let time = data.DRAFT_DATE;
+		
 		html += "<tr no=\"" + data.APRVL_NUM + "\">";
-		html += "<td>" + data.APRVL_NUM + "</td>";
-		html += "<td></td>";
+		html += "<td>" + data.APRVL_NUM + "</td>";		
 		html += "<td>" + data.TITLE + "</td>";
 		html += "<td>" + data.EMP_NAME + "</td>";
 		html += "<td>" + data.DEPT_NAME + "</td>";
-		console.log(${APRVL_NUM});
+		html += "<td>" + new Date(time).getFullYear()+'-'+(new Date(time).getMonth()+1)+'-'+ new Date(time).getDate() + "</td>";
+		time = data.STS_CHNG_DATE;
+		html += "<td>" + new Date(time).getFullYear()+'-'+(new Date(time).getMonth()+1)+'-'+ new Date(time).getDate() + "</td>";
+		html += "<td>" + data.APRVL_STS + "</td>";
+		html += "<td class=\"view\">" + "..." + "</td>";
 	}
 	$("tbody").html(html);
+	$("tbody").on("click", "tr", function() {
+		
+		$("#no").val($(this).attr("no"));
+		
+		$("#actionForm").attr("action","aprvlTmpltBoxAdd");
+		$("#actionForm").submit();
+	})
+	
 }
 
 function drawPaging(pb) {
@@ -178,6 +196,9 @@ function drawPaging(pb) {
 		
 	$(".pgn_area").html(html);
 }
+
+
+
 </script>
 </head>
 <body>
@@ -194,18 +215,17 @@ function drawPaging(pb) {
 			<div class="page_title_text">프로젝트 관리</div>
 			<!-- 검색영역 선택적 사항 -->
 		<div class="page_srch_area">
-			<form action="#" id="actionForm" method="post">
+			<form action="aprvlTmpltBoxAdd" id="actionForm" method="post">
 					<input type="hidden" id="top" name="top" value="${param.top}" />
 					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
-					<input type="hidden" id="no" name="no" value = "${param.APRVL_NUM}"/>
+					<input type="hidden" id="no" name="no"/>
 					<input type="hidden" id="page" name="page" value="${page}"/>
-					
 					<select id="searchGbn" name="searchGbn">
 						<option value="0">결재번호</option>
 						<option value="1">제목</option>
 					</select>
-				
+				<input type="button" id="nextgo" name="nextgo" value="버튼">
 				<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
 				<div class="cmn_btn_ml" id="searchBtn">검색</div>
 			</form>
@@ -220,8 +240,7 @@ function drawPaging(pb) {
 			<table class="content_table">
 				<thead>
 					<tr>
-						<th>결재번호</th>
-						<th>서식명</th>
+						<th>결재번호</th>						
 						<th>문서제목</th>
 						<th>기안자</th>
 						<th>기안부서</th>
@@ -254,6 +273,15 @@ function drawPaging(pb) {
 	
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
+	<script>
+	$("#nextgo").on("click", function(){
+		
+		$("#actionForm").attr("action","aprvlTmpltBoxAdd");
+		$("#actionForm").submit();
+	});
+	
+	
+	</script>
 
 </body>
 </html>

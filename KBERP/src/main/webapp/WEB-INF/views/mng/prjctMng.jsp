@@ -36,6 +36,12 @@ $(document).ready(function() {
 		
 		reloadList();
 	});
+	
+	$("#addBtn").on("click", function() {
+
+		$("#actionForm").attr("action", "prjctWrite");
+		$("#actionForm").submit();
+});
 });
 
 function reloadList() { // 목록 조회용 + 페이징 조회용
@@ -68,8 +74,11 @@ function drawList(list) {
 		html += "<td>" + data.EMP_NAME 		+ "</td>";
 		html += "<td>" + data.START_DATE 	+ "</td><td>~</td>";
 		html += "<td>" + data.END_DATE 		+ "</td>";
+		if(data.RMRKS!=null)
 		html += "<td>" + data.RMRKS 		+ "</td>";
-	
+		 else
+         	html += "<td></td>";
+		
 	}
 	console.log(html);
 	$("tbody").html(html);

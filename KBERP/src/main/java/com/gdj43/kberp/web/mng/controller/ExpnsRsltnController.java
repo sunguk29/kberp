@@ -200,7 +200,7 @@ public class ExpnsRsltnController {
 		
 		params.put("sesEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
 		
-		HashMap<String, String> data = iCommonService.getData("expnsRsltn.expnsRsltnDtl", params);
+		HashMap<String, String> data = iCommonService.getData("expnsRsltn.expnsRsltnDtlUpdate", params);
 		
 		mav.addObject("data", data);
 

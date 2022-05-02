@@ -83,32 +83,47 @@
 	font-weight: bold;
 }
 
-.board_table th {
+.board_table th  {
+	background-color: #F2F2F2;
+}
+.sub_board_table th  {
 	background-color: #F2F2F2;
 }
 
-.board_table tbody td  {
-	color: black;
-	font-weight: normal;
+.sub_board_table {
+	display: inline-table;
+	border-collapse: collapse;
+	width: 100%;
+	margin-bottom: 15px;
 }
 
-.board_table .board_table_hover td  {
-	color: #222222;
-	cursor: pointer;
+.sub_board_table thead tr {
+	border-top: 2px solid #222222;
+	border-bottom: 1px solid #d7d7d7;
+	height: 40px;
+	font-size: 11pt;
 }
-.sub_board_table_hover td{
+
+.sub_board_table tbody tr {
+	border-bottom: 1px solid #d7d7d7;
+	height: 40px;
+	text-align: center;
+	color: #7b7b7b;
+	font-size: 10.5pt;
+}
+
+.sub_board_table .board_cont_left {
+	text-align: left;
+}
+
+.sub_board_table .sub_board_table_hover {
 	color: #222222;
+	font-weight: bold;
 	cursor: pointer;
 }
 
-.board_table .board_table_hover:hover  {
+.sub_board_table .sub_board_table_hover:hover {
 	color: #4B94F2;
-	font-weight: bold;
-	text-decoration: underline;
-}
-.sub_board_table_hover:hover{
-	color: #4B94F2;
-	font-weight: bold;
 	text-decoration: underline;
 }
 
@@ -138,6 +153,14 @@ height : 21px;
 .req{
 margin-left : auto;
 margin-right : auto;
+}
+.subpgn_area {
+	display: inline-block;
+	min-width: 300px;
+	text-align:center;
+	height: 30px;
+	position: absolute;
+	left: calc(50% - 150px);
 }
 </style>
 <script type="text/javascript">
@@ -465,7 +488,7 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
-	$(".board_table").on("click",".sub_board_table_hover",function(){
+	$(".sub_board_table").on("click",".sub_board_table_hover",function(){
 		$("#updatesub_no").val($(this).attr("sub_no"));
 		$("#deletesub_no").val($(this).attr("sub_no"));
 		$(".jyjk2").val($(this).attr("sub_no"));
@@ -530,9 +553,9 @@ function reloadList(){
 		
 		for(var data of list){
 			
-			html += "<tr no=\"" + data.SUB_CTGR_ACNT_CODE + "\" class=\"board_table_hover\" tit=\""+ data.ACNT_NAME +"\">";
+			html += "<tr>";
 			html += "<td>" + data.SUB_CTGR_ACNT_CODE +"</td>";
-			html += "<td>" + data.ACNT_NAME +"</td>";
+			html += "<td no=\"" + data.SUB_CTGR_ACNT_CODE + "\" class=\"board_table_hover\" tit=\""+ data.ACNT_NAME +"\">" + data.ACNT_NAME +"</td>";
 			html +="</tr>";
 			
 		}
@@ -578,9 +601,9 @@ function drawsubList(sublist){
 	if($("#no").val() != "" ){
 	for(var data of sublist){
 		
-		html += "<tr sub_no=\"" + data.SUB_CTGR_ACNT_CODE + "\" class=\"sub_board_table_hover\" tit=\""+ data.ACNT_NAME +"\"abs=\""+data.ABSTRCT +"\">";
+		html += "<tr>";
 		html += "<td>" + data.SUB_CTGR_ACNT_CODE +"</td>";
-		html += "<td>" + data.ACNT_NAME +"</td>";
+		html += "<td sub_no=\"" + data.SUB_CTGR_ACNT_CODE + "\" class=\"sub_board_table_hover\" tit=\""+ data.ACNT_NAME +"\"abs=\""+data.ABSTRCT +"\">" + data.ACNT_NAME +"</td>";
 		html +="</tr>";
 	}
 	}
@@ -747,7 +770,7 @@ function drawsubMaxCnt(submaxcnt){
 									<div class="cmn_btn" id ="new_btn">신규</div>
 								</div>
 							</div>
-							<table class="board_table">
+							<table class="sub_board_table">
 								<colgroup>
 									<col width="100">
 									<col width="100">

@@ -127,21 +127,33 @@ public class ClntMngController {
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
+		int cnt = iCommonService.getIntData("clntCmpnyMng.ccNameCnt", params);
+		
 		try {
 			switch(gbn) {
 			case "insert" :
-				iCommonService.insertData("clntCmpnyMng.ClntCmpnyAdd", params); 
-				iCommonService.insertData("clntCmpnyMng.ClntCmpnyAddAttFile", params); 
+				if(cnt == 0) {
+					String seq = iCommonService.getStringData("clntCmpnyMng.clntCmpnySeq"); // 고객 시퀀스 가져오기
+					params.put("ccs", seq); // 고객사 시퀀스 넣어주기
+					modelMap.put("seq", seq); // 고객사 등록 후 고객사 상세보기로 이동할 때 필요.
+					iCommonService.insertData("clntCmpnyMng.ClntCmpnyAdd", params); 
+					iCommonService.insertData("clntCmpnyMng.ClntCmpnyAddAttFile", params);
+					modelMap.put("res", "success");
+				} else {
+					modelMap.put("res", "overlap");
+				}
 				break;
 			case "update" :
 				iCommonService.updateData("clntCmpnyMng.ClntCmpnyAttFileUpdate", params);
 				iCommonService.updateData("clntCmpnyMng.ClntCmpnyUpdate", params);
+				modelMap.put("res", "success");
 				break;
 			case "delete" :
 				iCommonService.updateData("clntCmpnyMng.ccDelete", params);
+				modelMap.put("res", "success");
 				break;
 			}
-			modelMap.put("res", "success");
+			
 		} catch (Throwable e) {
 			e.printStackTrace();
 			modelMap.put("res", "faild");
@@ -236,6 +248,9 @@ public class ClntMngController {
 		try {
 			switch(gbn) {
 			case "insert" :
+				String seq = iCommonService.getStringData("clntCmpnyMng.clntSeq"); // 고객 시퀀스 가져오기
+				params.put("cs", seq); // 고객 시퀀스 넣어주기
+				modelMap.put("seq", seq); // 고객 등록 후 고객 상세보기로 이동할 때 필요.
 				iCommonService.getData("clntCmpnyMng.clntAdd", params);
 				iCommonService.getData("clntCmpnyMng.clntAttAdd", params);
 				break;

@@ -415,6 +415,7 @@ input {
 <script type="text/javascript">
 $(document).ready(function() {
 
+	console.log("${param.dt}");
 	
 	$("#alertBtn").on("click", function() {
 		makeAlert("하이", "내용임");
@@ -426,12 +427,12 @@ $(document).ready(function() {
 			bg : true,
 			bgClose : false,
 			title : "알림",
-			contents : "나가면 저장되지않습니다, 나가시겠습니까?",
+			contents : popContTwoLine("내용이 저장되지 않았습니다.<br/>페이지를 나가시겠습니까?"),
 			contentsEvent : function() {
 				
 			},
 			buttons : [{
-				name : "나가기",
+				name : "확인",
 				func:function() {
 					$("#backForm").submit();
 				}
@@ -469,7 +470,7 @@ $(document).ready(function() {
 				bg : false,
 				bgClose : false,
 				title : "저장",
-				contents : "저장하시겠습니까?",
+				contents : popContOneLine("저장하시겠습니까?"),
 				contentsEvent : function() {
 					$("#popup").draggable();
 				},
@@ -497,6 +498,7 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success"){
+											$("#schdlnum").val(res.schdlnum);
 											savePop();								
 										} else {
 											makeAlert("알림", popContTwoLine("등록 중 문제가 발생하였습니다.<br/>나가시겠습니까?"));
@@ -551,7 +553,7 @@ function savePop() {
 		buttons : [{
 			name : "확인",
 			func:function() {
-				$("#backForm").submit();
+				$("#actionForm").submit();
 			}
 		}]
 	});
@@ -644,10 +646,10 @@ function savePop() {
 					var clnm = $(this).children("#clnm").val();
 					
 					// 본문에 해당하는 아이디에 값 넣어줌
-					document.getElementById("sNum").value = snm;
-					document.getElementById("sName").value = sna;
-					document.getElementById("ccName").value = ccnm;
-					document.getElementById("clName").value = clnm;
+					$("#sNum").attr("value", snm);
+					$("#sName").attr("value", sna);
+					$("#ccName").attr("value", ccnm);
+					$("#clName").attr("value", clnm);
 					
 					if($("#lName").val() != ""){ // 리드명이 비워져있지 않을때, 리드 선택했을 경우 동시 입력 방지
 						$("#lName").val("");
@@ -817,10 +819,10 @@ function savePop() {
 					var clnm = $(this).children("#clnm").val();
 					
 					// 본문에 해당 아이디와 일치하는 곳에 값 넣어줌
-					document.getElementById("lNum").value = lnm;
-					document.getElementById("lName").value = lna;
-					document.getElementById("ccName").value = ccnm;
-					document.getElementById("clName").value = clnm;
+					$("#lNum").attr("value", lnm);
+					$("#lName").attr("value", lna);
+					$("#ccName").attr("value", ccnm);
+					$("#clName").attr("value", clnm);
 					
 					if($("#sName").val() != ""){ // 영업명이 비워져있지 않을때, 영업 선택했을 경우 동시 입력 방지
 						$("#sName").val("");
@@ -920,7 +922,14 @@ function uploadName(e) {
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="deptS" value="${param.deptS}" />
 	<input type="hidden" name="usrsrchTxt" value="${param.usrsrchTxt}" />
-	<input type="hidden" name="initialDate" value="${param.initialDate}"/>
+	<input type="hidden" name="clndrDate" value="${param.clndrDate}"/>
+</form>
+<form action="salesSchdlCont" id="actionForm" method="post">
+	<input type="hidden" name="top" value="${param.top}" />
+	<input type="hidden" name="menuNum" value="${param.menuNum}" />
+	<input type="hidden" name="menuType" value="${param.menuType}" />
+	<input type="hidden" id="schdlnum" name="schdlnum"/>
+	<input type="hidden" name="clndrDate" value="${param.clndrDate}"/>
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">

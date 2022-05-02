@@ -9,6 +9,7 @@
 <title>카카오뱅크 ERP Sample</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js?autoload=false"></script>
 <style type="text/css">
 /* 가로 사이즈 조정용 */
 .cont_wrap {
@@ -236,26 +237,37 @@
 	margin-top: 30px;
 	margin-left: 10px;
 }
-
-.adrs_input {
+.zip_input{
 	width: 100px;
+}
+.adrs_input {
+	width: 300px;
 	height: 16px;
+	margin-top: 1px;
+	margin-left: 82px;
 }
 .adrs_input_dtls{
-	width: 330px;
+	width: 300px;
 	height: 16px;
 	margin-top: 1px;
 	margin-left: 82px;
 }
 
-#saveForm .cmn_btn_mr {
+#clntForm .cmn_btn_mr {
 	height: 25px;
 	line-height: 25px;
-	margin-top: 28px;
+	margin-top: 10px;
 	margin-right: 10px;
 	float: right;
 }
 
+.add #updateBtn{
+	display: none;
+}
+
+.update #saveBtn{
+	display: none;
+}
 /* 상담노트 파트 */
 .cnsl_note_top {
 	display: inline-block;
@@ -629,8 +641,15 @@
 	margin-left: 5px;
 }
 /* 대응가이드 팝업 */
+#guide_table {
+	margin-top: 70px;
+	text-align: center;
+}
+
 #guide_wrap {
-	width: 783px;
+	width: 830px;
+	text-align: left;
+	line-height: 18px;
 }
 #guide_title_text{
 	font-size: 12pt;
@@ -644,12 +663,29 @@
 	font-size: 8pt;
 }
 
-#clnt_type, #type_case{
+#clnt_type {
+	display: inline-block;
+	height: 15px;
+	width: 100px;
+} 
+
+#type_case {
+	display: inline-block;
 	width: 100px;
 }
+
+#type_case_div {
+	display: inline-block;
+}
+
+#type_case {
+	display: inline;
+}
+
 #rspndAddBtn, #rspndUpBtn, #rspndCanBtn{
 	float:right;
-	margin-bottom: 5px;
+	margin-top: -31px;
+    margin-bottom: 22px;
 }
 
 .add #rspndUpBtn, .add #rspndCanBtn{
@@ -663,6 +699,8 @@
 	vertical-align: top;
 	resize: none;
 	margin-bottom: 5px;
+	white-space: pre-wrap;
+	text-overflow: ellipsis;
 }
 .rspndPopTxt{
 	display: inline-block;
@@ -675,11 +713,74 @@
 	border-radius: 2px;
 }
 
+.rspnd_top_row1{
+	height: 30px;
+}
+
+
+
 #rspndActionForm input:focus {
 	outline: 2px solid #F2CB05;
 }
 #rspndActionForm textarea:focus{
 	outline: 2px solid #F2CB05;
+}
+
+/* 신규고객 저장 팝업 */
+.call_clnt_cont{
+	margin-top: 20px;
+}
+.pop_title{
+	display: inline-block;
+	vertical-align: top;
+	width: 100px;
+	height: 30px;
+	background-color: #f2cb05;
+	font-size: 12pt;
+	font-weight: bold;
+	text-align: center;
+	line-height: 28px;
+	border-radius: 2px;
+}
+
+.name, .grade{
+	display: inline-block;
+	vertical-align: top;
+	height: 24px;
+	margin-left: -3px;
+}
+.phon{
+	display: inline-block;
+	vertical-align: top;
+	height: 24px;
+	width: 190px;
+	margin-left: -3px;
+}
+.clnt_zip{
+	display: inline-block;
+	vertical-align: top;
+	height: 24px;
+	width: 190px;
+	margin-left: -3px;
+}
+
+.clnt_adrs, .clnt_dtl{
+	display: inline-block;
+	vertical-align: top;
+	height: 24px;
+	width: 500px;
+	margin-left: 100px;
+	margin-top: 2px;
+	
+}
+#pop_title{
+	margin-bottom: 30px;
+}
+
+#zip_btn{
+	background-color: #F2CB05;
+	font-weight: bold;
+	border-radius: 2px;
 }
 </style>
 <script type="text/javascript">
@@ -692,19 +793,21 @@ $(document).ready(function() {
 		html += "	<div class=\"page_title_bar\">";
 		html += "		<div class=\"page_title_text\" id=\"guide_title_text\">대응가이드(콜센터)</div>";
 		html += "	</div>";
-		html += "	<div class=\"cont_area\">";
+		html += "	<div class=\"rspnd_cont_area\">";
 		html += "		<form action=\"#\" id=\"rspndActionForm\" method=\"post\">";
 		html += "			<input type=\"hidden\" id=\"page\" name=\"page\" value=\"1\"/>";
 		html += "			<input type=\"hidden\" id=\"gbn\" name=\"gbn\"/>";
 		html += "			<input type=\"hidden\" id=\"guide_num\" name=\"guide_num\"/>";
 		html += "			<input type=\"hidden\" id=\"emp_num\" name=\"emp_num\" value=\"" + $("#emp_num").val() + "\"/>";
+		html += "			<div class=\"rspnd_top_row1\">";
 		html += "			<div class=\"rspndPopTxt\">고객유형</div><input type=\"text\" id=\"clnt_type\" name=\"clnt_type\"/>";
-		html += "			<div class=\"rspndPopTxt\">유형별 사례</div><input type=\"text\" id=\"type_case\" name=\"type_case\"/>";
-		html += "			<div class=\"rspndPopTxt\">대응방안</div><textarea rows=\"3\" cols=\"24\" id=\"rspns_plan\" name=\"rspns_plan\"></textarea>";
+		html += "			<div class=\"rspndPopTxt\">대응방안</div><textarea rows=\"7\" cols=\"58\" id=\"rspns_plan\" name=\"rspns_plan\"></textarea>";
+		html += "			</div>";
+		html += "			<div class=\"rspndPopTxt\" id=\"type_case_div\">유형별 사례</div><input type=\"text\" id=\"type_case\" name=\"type_case\"/>";
 		html += "			<span class=\"add\">";
-		html += "			<div class=\"cmn_btn_mr\" id=\"rspndAddBtn\">등록</div>";
-		html += "			<div class=\"cmn_btn_mr\" id=\"rspndCanBtn\">취소</div>";
-		html += "			<div class=\"cmn_btn_mr\" id=\"rspndUpBtn\">수정</div>";
+		html += "				<div class=\"cmn_btn_mr\" id=\"rspndAddBtn\">등록</div>";
+		html += "				<div class=\"cmn_btn_mr\" id=\"rspndCanBtn\">취소</div>";
+		html += "				<div class=\"cmn_btn_mr\" id=\"rspndUpBtn\">수정</div>";
 		html += "			</span>";
 		html += "		</form>";
 		html += "		<table class=\"board_table\" id=\"guide_table\">";
@@ -733,8 +836,8 @@ $(document).ready(function() {
 		makePopup({
 			bg : false,
 			bgClose : false,
-			width: 800,
-			height: 600,
+			width: 850,
+			height: 700,
 			title : "대응가이드",
 			contents : html,
 			contentsEvent : function() {
@@ -989,10 +1092,10 @@ $(document).ready(function() {
 				
 				// 고객정보 팝업 tr 클릭
 				$("#clntPop").on("click", "tr" , function() {
-					$("#saveForm #clnt_num").val($(this).attr("no"));
+					$("#clntForm #clnt_num").val($(this).attr("no"));
 					$("#cnslForm #clnt_num").val($(this).attr("no"));
 					
-					var params = $("#saveForm").serialize();
+					var params = $("#clntForm").serialize();
 					
 					$.ajax({
 						type : "post",
@@ -1001,13 +1104,15 @@ $(document).ready(function() {
 						data : params,
 						success : function(res) {
 							console.log(res);
-							$("#clnt_name").val(res.data.CLNT_NAME);
-							$("#clnt_grade").val(res.data.CLNT_GRADE);
-							$("#phon_num_1").val(res.data.PHONE_NUM_1);
-							$("#phon_num_2").val(res.data.PHONE_NUM_2);
-							$("#adrs").val(res.data.ADRS);
-							$("#dtl_adrs").val(res.data.DTL_ADRS);
+							$("#name").val(res.data.CLNT_NAME);
+							$("#grade").val(res.data.CLNT_GRADE);
+							$("#phn_num_1").val(res.data.PHONE_NUM_1);
+							$("#phn_num_2").val(res.data.PHONE_NUM_2);
+							$("#zip").val(res.data.ZIP_CODE);
+							$("#adr").val(res.data.ADRS);
+							$("#dtl_adr").val(res.data.DTL_ADRS);
 							$("#noteSaveForm #clnt_num").val(res.data.CLNT_NUM);
+							$(".add").attr("class", "update");
 						},
 						error : function(request, status, error) {
 							console.log(request.responseText);
@@ -1175,37 +1280,64 @@ $(document).ready(function() {
 		$("#clntPop").html(html);
 	}
 	
-	
-	// 고객정보 저장 팝업
-	$(".cmn_btn_mr").on("click", function() {
+	// 신규고객 등록 팝업
+	$("#saveBtn").on("click", function() {
 		
 		var html = "";
 		
-		html += "<div class=\"save_cont\">지금까지의 내용을 저장 하시겠습니까?</div>";
+		html += "<form action=\"#\" id=\"saveForm\" method=\"post\">";
+		html += "<input type=\"hidden\" id=\"clnt_num\" name=\"clnt_num\"/>";
+		html += "<div class=\"page_title_text\" id=\"pop_title\">신규고객 등록</div>";
+		html += "<div class=\"call_clnt_cont\">";
+		html += "	<div class=\"pop_title\">*고객명</div>";
+		html += "	<input type=\"text\" class=\"name\" id=\"clnt_name\" name=\"clnt_name\"/>";
+		html += "</div>";
+		html += "<div class=\"call_clnt_cont\">";
+		html += "	<div class=\"pop_title\">*고객등급</div>";
+		html += "	<input type=\"number\" class=\"grade\" id=\"clnt_grade\" name=\"clnt_grade\"/>";
+		html += "</div>";
+		html += "<div class=\"call_clnt_cont\">";
+		html += "	<div class=\"pop_title\">*전화번호 1</div>";
+		html += "	<input type=\"tel\" class=\"phon\" id=\"phon_num_1\" name=\"phon_num_1\"/>";
+		html += "	<div class=\"pop_title\">전화번호 2</div>";
+		html += "	<input type=\"tel\" class=\"phon\" id=\"phon_num_2\" name=\"phon_num_2\"/>";
+		html += "</div>";
+		html += "<div class=\"call_clnt_cont\">";
+		html += "	<div class=\"pop_title\">*주소</div>";
+		html += "	<input type=\"text\" class=\"clnt_zip\" id=\"zip_code\" name=\"zip_code\" placeholder=\"우편번호\"/>";
+		html += "	<button type=\"button\" id=\"zip_btn\" style=\"width:60px; height:32px;\" onclick=\"execDaumPostcode()\">검색</button><br>";
+		html += "	<input type=\"text\" class=\"clnt_adrs\" id=\"adrs\" name=\"adrs\" placeholder=\"도로명 주소\"/>";
+		html += "	<input type=\"text\" class=\"clnt_dtl\" id=\"dtl_adrs\" name=\"dtl_adrs\" placeholder=\"상세주소\"/>";
+		html += "</div>";
+		html += "</form>";
 		
 		makePopup({
-			depth : 1,
-			bg : true,
-			width : 400,
-			height : 220,
-			title : "저장",
+			bg : false,
+			bgClose : false,
+			width : 640,
+			height : 500,
+			title : "신규고객 등록",
 			contents : html,
-			buttons :  [{
-				name : "확인",
+			draggable : true,
+			buttons : [{
+				name : "등록",
 				func:function() {
 					if(checkEmpty("#clnt_name")) {
 						alert("고객명을 입력하세요.");
 						$("#clnt_name").focus();
-						closePopup();
 					} else if(checkEmpty("#clnt_grade")) {
 						alert("고객등급을 입력하세요.");
 						$("#clnt_grade").focus();
-						closePopup();
 					} else if(checkEmpty("#phon_num_1")) {
 						alert("전화번호를 입력하세요.");
 						$("#phon_num_1").focus();
-						closePopup();
-					} else {
+					} else if(checkEmpty("#zip_code")) {
+						alert("우편번호를 입력하세요.");
+						$("#zip_code").focus();
+					} else if(checkEmpty("#dtl_adrs")) {
+						alert("상세주소를 입력하세요.");
+						$("#dtl_adrs").focus();
+					}else {
 						// 저장
 						var params = $("#saveForm").serialize();
 						
@@ -1217,10 +1349,19 @@ $(document).ready(function() {
 							success : function(res) {
 								if(res.res == "success") {
 									console.log(res);
+									$("#name").val(res.data.CLNT_NAME);
+									$("#grade").val(res.data.CLNT_GRADE);
+									$("#phn_num_1").val(res.data.PHONE_NUM_1);
+									$("#phn_num_2").val(res.data.PHONE_NUM_2);
+									$("#zip").val(res.data.ZIP_CODE);
+									$("#adr").val(res.data.ADRS);
+									$("#dtl_adr").val(res.data.DTL_ADRS);
+									$("#noteSaveForm #clnt_num").val(res.data.CLNT_NUM);
+									$(".add").attr("class", "update");
 									closePopup();
+								
 								} else {
 									alert("작성중 문제가 발생하였습니다.");
-									closePopup();
 								}
 
 							},
@@ -1232,10 +1373,108 @@ $(document).ready(function() {
 					} // else end
 				}
 			}, {
-				name : "취소"
+				name : "닫기"
 			}]
 		});
-	}); // 고객정보 저장 팝업 끝
+	}); // 신규고객 등록 팝업 끝
+	
+	// 고객정보 수정 팝업
+	$("#updateBtn").on("click", function() {
+		
+		var html = "";
+		
+		html += "<form action=\"#\" id=\"updateForm\" method=\"post\">";
+		html += "<input type=\"hidden\" id=\"clnt_num\" name=\"clnt_num\" value=\"" + $("#clntForm #clnt_num").val() + "\"/>";
+		html += "<div class=\"page_title_text\" id=\"pop_title\">고객정보 수정</div>";
+		html += "<div class=\"call_clnt_cont\">";
+		html += "	<div class=\"pop_title\">고객명</div>";
+		html += "	<input type=\"text\" class=\"name\" id=\"clnt_name\" name=\"clnt_name\" value=\"" + $("#name").val() + "\"/>";
+		html += "</div>";
+		html += "<div class=\"call_clnt_cont\">";
+		html += "	<div class=\"pop_title\">고객등급</div>";
+		html += "	<input type=\"number\" class=\"grade\" id=\"clnt_grade\" name=\"clnt_grade\" value=\"" + $("#grade").val() + "\"/>";
+		html += "</div>";
+		html += "<div class=\"call_clnt_cont\">";
+		html += "	<div class=\"pop_title\">전화번호 1</div>";
+		html += "	<input type=\"tel\" class=\"phon\" id=\"phon_num_1\" name=\"phon_num_1\" value=\"" + $("#phn_num_1").val() + "\"/>";
+		html += "	<div class=\"pop_title\">전화번호 2</div>";
+		html += "	<input type=\"tel\" class=\"phon\" id=\"phon_num_2\" name=\"phon_num_2\" value=\"" + $("#phn_num_2").val() + "\"/>";
+		html += "</div>";
+		html += "<div class=\"call_clnt_cont\">";
+		html += "	<div class=\"pop_title\">주소</div>";
+		html += "	<input type=\"text\" class=\"clnt_zip\" id=\"zip_code\" name=\"zip_code\" value=\"" + $("#zip").val() + "\"/>";
+		html += "	<button type=\"button\" id=\"zip_btn\" style=\"width:60px; height:32px;\" onclick=\"execDaumPostcode()\">검색</button><br>";
+		html += "	<input type=\"text\" class=\"clnt_adrs\" id=\"adrs\" name=\"adrs\" value=\"" + $("#adr").val() + "\"/>";
+		html += "	<input type=\"text\" class=\"clnt_dtl\" id=\"dtl_adrs\" name=\"dtl_adrs\" value=\"" + $("#dtl_adr").val() + "\"/>";
+		html += "</div>";
+		html += "</form>";
+		
+		makePopup({
+			bg : false,
+			bgClose : false,
+			width : 640,
+			height : 500,
+			title : "고객정보 수정",
+			contents : html,
+			draggable : true,
+			buttons : [{
+				name : "수정",
+				func:function() {
+					if(checkEmpty("#clnt_name")) {
+						alert("고객명을 입력하세요.");
+						$("#clnt_name").focus();
+					} else if(checkEmpty("#clnt_grade")) {
+						alert("고객등급을 입력하세요.");
+						$("#clnt_grade").focus();
+					} else if(checkEmpty("#phon_num_1")) {
+						alert("전화번호를 입력하세요.");
+						$("#phon_num_1").focus();
+					} else if(checkEmpty("#zip_code")) {
+						alert("우편번호를 입력하세요.");
+						$("#zip_code").focus();
+					} else if(checkEmpty("#dtl_adrs")) {
+						alert("상세주소를 입력하세요.");
+						$("#dtl_adrs").focus();
+					}else {
+						// 수정
+						var params = $("#updateForm").serialize();
+						
+						$.ajax({
+							type : "post",
+							url : "callCenterAction/ClntUpdate",
+							dataType : "json",
+							data : params,
+							success : function(res) {
+								if(res.res == "success") {
+									console.log(res);
+									$("#name").val(res.data.CLNT_NAME);
+									$("#grade").val(res.data.CLNT_GRADE);
+									$("#phn_num_1").val(res.data.PHONE_NUM_1);
+									$("#phn_num_2").val(res.data.PHONE_NUM_2);
+									$("#zip").val(res.data.ZIP_CODE);
+									$("#adr").val(res.data.ADRS);
+									$("#dtl_adr").val(res.data.DTL_ADRS);
+									$("#noteSaveForm #clnt_num").val(res.data.CLNT_NUM);
+									$(".add").attr("class", "update");
+									closePopup();
+								
+								} else {
+									alert("작성중 문제가 발생하였습니다.");
+								}
+
+							},
+							error : function(request, status, error) {
+								console.log(request.responseText);
+
+							}
+						}); // ajax end
+					} // else end
+				}
+			}, {
+				name : "닫기"
+			}]
+		});
+	});// 고객정보 수정 팝업 끝
 	
 	// 상담노트 저장 팝업
 	$(".note_cmn_btn_mr").on("click", function() {
@@ -1302,8 +1541,20 @@ $(document).ready(function() {
 			}]
 		});
 	}); // 상담노트 저장 팝업 끝
-	
 }); // document 끝
+
+// 다음 우편번호 스크립트
+function execDaumPostcode() {
+    daum.postcode.load(function(){
+        new daum.Postcode({
+            oncomplete: function(data) {
+              // 팝업에서 검색결과 항목을 클릭했을때 해당 입력칸에 값 넘기기
+              $("#zip_code").val(data.zonecode);
+              $("#adrs").val(data.roadAddress);
+            }
+        }).open();
+    });
+}
 
 function checkEmpty(sel) {
 	if($.trim($(sel).val()) == "") {
@@ -1337,7 +1588,7 @@ function checkEmpty(sel) {
 			<!-- 고객정보 파트 -->
 				<div class="top">
 					<div class="clnt_info_cont">
-					<form action="#" id="saveForm" method="post">
+					<form action="#" id="clntForm" method="post">
 					<input type="hidden" id="clnt_num" name="clnt_num"/>
 						<div class="clnt_info_Header">
 							<div class="clnt_info">고객정보</div>
@@ -1353,23 +1604,28 @@ function checkEmpty(sel) {
 						</div>
 		    			<div class="clnt_info_cont_row1">	  
 			    			<div class="clnt_name">고객명</div>
-			    				<input type="text" class="info_txt" id="clnt_name" name="clnt_name">
+			    				<input type="text" class="info_txt" id="name" name="name" readonly="readonly"/>
 			    			<div class="clnt_grade">고객등급</div>
-			    				<input type="number" class="info_txt" id="clnt_grade" name="clnt_grade">
+			    				<input type="number" class="info_txt" id="grade" name="grade" readonly="readonly"/>
 			    		</div>
 			    		<div class="clnt_info_cont_row2">
 			    			<div class="phone_num_1">전화번호 1</div>
-			    				<input type="tel" class="info_txt" id="phon_num_1" name="phon_num_1">
+			    				<input type="tel" class="info_txt" id="phn_num_1" name="phn_num_1" readonly="readonly"/>
 			    			<div class="phone_num_2">전화번호 2</div>
-			    				<input type="tel" class="info_txt" id="phon_num_2" name="phon_num_2">
+			    				<input type="tel" class="info_txt" id="phn_num_2" name="phn_num_2" readonly="readonly"/>
 			    		</div>	
 			    		<div class="clnt_info_cont_row4">	  
 			    			<div class="adrs">주소</div>
-			    				<input class="adrs_input" type="text" id="adrs" name="adrs">
+			    				<input class="zip_input" type="text" id="zip" name="zip" readonly="readonly"/>
 			    				<br/>
-			    				<input class="adrs_input_dtls" type="text" id="dtl_adrs" name="dtl_adrs">
-			    		</div>	
-		    			<div class="cmn_btn_mr" id="saveBtn">저장</div>
+			    				<input class="adrs_input" type="text" id="adr" name="adr" readonly="readonly"/>
+			    				<br/>
+			    				<input class="adrs_input_dtls" type="text" id="dtl_adr" name="dtl_adr" readonly="readonly"/>
+			    		</div>
+			    		<div class="add">
+			    			<div class="cmn_btn_mr" id="updateBtn">고객정보 수정</div>
+			    			<div class="cmn_btn_mr" id="saveBtn">신규고객 등록</div>
+		    			</div>	
 		    		</form>
 		    		</div>
 		    	</div> <!-- 고객정보 div 끝 -->

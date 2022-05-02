@@ -18,11 +18,6 @@ public class MsgrDao implements IMsgrDao {
 	}
 	
 	@Override
-	public List<HashMap<String, String>> getContList(int lastChatNo) throws Throwable {
-		return sqlSession.selectList("msgr.getContList", lastChatNo);
-	}
-	
-	@Override
 	public void insertCont(HashMap<String, String> params) throws Throwable {
 		sqlSession.insert("msgr.insertCont", params);
 	}
@@ -31,6 +26,18 @@ public class MsgrDao implements IMsgrDao {
 	public void insertChat(HashMap<String, String> params) throws Throwable {
 		sqlSession.insert("msgr.insertChat", params);
 	}
+
+	@Override
+	public List<HashMap<String, String>> getContList(HashMap<String, String> params) throws Throwable {
+		return sqlSession.selectList("msgr.getContList", params);
+	}
+
+	@Override
+	public HashMap<String, String> getCont(HashMap<String, String> params) throws Throwable {
+		return sqlSession.selectOne("msgr.getCont", params);
+	}
+
+
 
 	
 }

@@ -1,14 +1,23 @@
 <!-- 
 	제안 등록 : sales2SgstnReg
  -->
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now() ;	
+	request.setAttribute("version", version);		//캐시 처리
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>제안 등록</title>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -377,15 +386,15 @@ hr { /* 구분선 */
 /* **** 저장 팝업 **** */
 .popup_cont2 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-	font-weight: 600;
+	font-size: 12pt;
+	font-weight: bold;
 	text-align: center;
 	line-height: 100px;
 }
 .popup_cont3 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-    font-weight: 600;
+	font-size: 12pt;
+    font-weight: bold;
     text-align: center;
     height: 40px;
     line-height: 50px;
@@ -393,8 +402,8 @@ hr { /* 구분선 */
 }
 .popup_cont4 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-    font-weight: 600;
+	font-size: 12pt;
+    font-weight: bold;
     text-align: center;
     height: 40px;
     line-height: 40px;
@@ -443,60 +452,64 @@ $(document).ready(function() {
 	// 저장 버튼
 	$("#saveBtn").on("click", function() {
 		if($("#sgstnloanCauseNum").val() == 9) {
-			makeAlert("필수 항목 알림", "대출 원인을 선택하세요.", function() {
+			makeAlert("필수 정보 알림", popContOneLine("대출 원인을 입력하세요."), function() {
 				$("#sgstnloanCauseNum").focus();
 			});
 		} else if(checkEmpty("#sgstnLoanScale")) {
-			makeAlert("필수 항목 알림", "대출 규모를 입력하세요.", function() {
+			makeAlert("필수 정보 알림", popContOneLine("대출 규모를 입력하세요."), function() {
 				$("#sgstnLoanScale").focus();
 			});
 		} else if(isNaN($("#sgstnLoanScale").val())) {
-			makeAlert("알림", "대출 규모는 숫자만 입력 가능합니다.", function() {
+			makeAlert("알림", popContOneLine("대출 규모는 숫자만 입력 가능합니다."), function() {
 				$("#sgstnLoanScale").val("");
 				$("#sgstnLoanScale").focus();
 			});
 		} else if($("#sgstnloanType").val() == 9) {
-			makeAlert("필수 항목 알림", "대출 유형을 선택하세요.", function() {
+			makeAlert("필수 정보 알림", popContOneLine("대출 유형을 선택하세요."), function() {
 				$("#sgstnloanType").focus();
 			});
 		} else if(checkEmpty("#sgstnloanTime")) {
-			makeAlert("필수 항목 알림", "대출 시기를 선택하세요.", function() {
+			makeAlert("필수 정보 알림", popContOneLine("대출 시기를 선택하세요."), function() {
 				$("#sgstnloanTime").focus();
 			});
 		} else if(checkEmpty("#sgstnRdmptnTime")) {
-			makeAlert("필수 항목 알림", "상환 시기를 선택하세요.", function() {
+			makeAlert("필수 정보 알림", popContOneLine("상환 시기를 선택하세요."), function() {
+				$("#sgstnRdmptnTime").focus();
+			});
+		} else if($("#sgstnloanTime").val() > $("#sgstnRdmptnTime").val()) {
+			makeAlert("알림", popContOneLine("상환 시기는 대출 시기보다 빠를 수 없습니다."), function() {
 				$("#sgstnRdmptnTime").focus();
 			});
 		} else if(checkEmpty("#sgstnTotalAmnt")) {
-			makeAlert("필수 항목 알림", "자산 총액을 입력하세요.", function() {
+			makeAlert("필수 정보 알림", popContOneLine("자산 총액을 입력하세요."), function() {
 				$("#sgstnTotalAmnt").focus();
 			});
 		} else if(isNaN($("#sgstnTotalAmnt").val())) {
-			makeAlert("알림", "자산 총액은 숫자만 입력 가능합니다.", function() {
+			makeAlert("알림", popContOneLine("자산 총액은 숫자만 입력 가능합니다."), function() {
 				$("#sgstnTotalAmnt").val("");
 				$("#sgstnTotalAmnt").focus();
 			});
 		} else if(checkEmpty("#sgstnDebtAmnt")) {
-			makeAlert("필수 항목 알림", "부채액을 입력하세요.", function() {
+			makeAlert("필수 정보 알림", popContOneLine("부채액을 입력하세요."), function() {
 				$("#sgstnDebtAmnt").focus();
 			});
 		} else if(isNaN($("#sgstnDebtAmnt").val())) {
-			makeAlert("알림", "부채액은 숫자만 입력 가능합니다.", function() {
+			makeAlert("알림", popContOneLine("부채액은 숫자만 입력 가능합니다."), function() {
 				$("#sgstnDebtAmnt").val("");
 				$("#sgstnDebtAmnt").focus();
 			});
 		} else if(isNaN($("#sgstnAvgRvnAmnt").val())) {
-			makeAlert("알림", "평균 매출액은 숫자만 입력 가능합니다.", function() {
+			makeAlert("알림", popContOneLine("평균 매출액은 숫자만 입력 가능합니다."), function() {
 				$("#sgstnAvgRvnAmnt").val("");
 				$("#sgstnAvgRvnAmnt").focus();
 			});
 		} else if(isNaN($("#sgstnEmpCount").val())) {
-			makeAlert("알림", "사원 수는 숫자만 입력 가능합니다.", function() {
+			makeAlert("알림", popContOneLine("사원 수는 숫자만 입력 가능합니다."), function() {
 				$("#sgstnEmpCount").val("");
 				$("#sgstnEmpCount").focus();
 			});
 		} else if(checkEmpty("#dtlCont")) {
-			makeAlert("필수 항목 알림", "상세내용을 입력하세요.", function() {
+			makeAlert("필수 정보 알림", popContOneLine("상세내용을 입력하세요."), function() {
 				$("#dtlCont").focus();
 			});
 		} else {
@@ -554,7 +567,7 @@ $(document).ready(function() {
 														$("#listForm").attr("action", "sales2SgstnCont");
 														$("#listForm").submit();
 													} else {
-														alert("등록중 문제가 발생하였습니다.");
+														makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 													}
 												},
 												error : function(request, status, error) {
@@ -580,6 +593,13 @@ $(document).ready(function() {
 		} // else end
 	});
 	
+	// 선택박스 초기값
+	$("#loanCauseNum").val(${data.LOAN_CAUSE_NUM}).prop("selected", true);
+	$("#loanHopeType").val(${data.LOAN_HOPE_TYPE}).prop("selected", true);
+	$("#loanHopeTime").val(${data.LOAN_HOPE_TIME}).prop("selected", true);
+	$("#expctdBsnsType").val(${data.EXPCTD_BSNS_TYPE}).prop("selected", true);	
+	
+	
 	$(".salesCont").hide();
 	
 	$("#sales_btn").on("click", "#salesContBtn_h", function() {
@@ -601,7 +621,6 @@ function uploadName(e) {
 	var filename = files[0].name;
 	$("#fileName").val(filename);
 }
-
 </script>
 </head>
 <body>
@@ -714,35 +733,11 @@ function uploadName(e) {
 										<input type="button" class="btn" value="대출 원인*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="loanCauseNum" name="loanCauseNum" value="${loan.LOAN_CAUSE_NUM}" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${loan.LOAN_CAUSE_NUM eq 0}">
-														<option value="0" selected="selected">사업확장</option>
-														<option value="1">제품개발</option>
-														<option value="2">토지매매</option>
-														<option value="3">기타</option>
-													</c:when>
-													<c:when test="${loan.LOAN_CAUSE_NUM eq 1}">
-														<option value="0">사업확장</option>
-														<option value="1" selected="selected">제품개발</option>
-														<option value="2">토지매매</option>
-														<option value="3">기타</option>
-													</c:when>
-													<c:when test="${loan.LOAN_CAUSE_NUM eq 2}">
-														<option value="0">사업확장</option>
-														<option value="1">제품개발</option>
-														<option value="2" selected="selected">토지매매</option>
-														<option value="3">기타</option>
-													</c:when>
-													<c:when test="${loan.LOAN_CAUSE_NUM eq 3}">
-														<option value="0">사업확장</option>
-														<option value="1">제품개발</option>
-														<option value="2">토지매매</option>
-														<option value="3" selected="selected">기타</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+										<select class="txt" id="loanCauseNum" name="loanCauseNum" disabled="disabled">
+											<option value="0">사업확장</option>
+											<option value="1">제품개발</option>
+											<option value="2">토지매매</option>
+											<option value="3">기타</option>
 										</select>
 									</td>
 								</tr>
@@ -759,19 +754,9 @@ function uploadName(e) {
 										<input type="button" class="btn" value="대출 희망 유형*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="loanHopeType" name="loanHopeType" value="${loan.LOAN_HOPE_TYPE}" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${loan.LOAN_HOPE_TYPE eq 0}">
-														<option value="0" selected="selected">장기대출</option>
-														<option value="1">단기대출</option>
-													</c:when>
-													<c:when test="${loan.LOAN_HOPE_TYPE eq 1}">
-														<option value="0">장기대출</option>
-														<option value="1" selected="selected">단기대출</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+										<select class="txt" id="loanHopeType" name="loanHopeType" disabled="disabled">
+												<option value="0">장기대출</option>
+												<option value="1">단기대출</option>
 										</select>
 									</td>
 								</tr>
@@ -780,35 +765,11 @@ function uploadName(e) {
 										<input type="button" class="btn" value="대출 희망 시기*" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="loanHopeTime" name="loanHopeTime" value="${loan.LOAN_HOPE_TIME}" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${loan.LOAN_HOPE_TIME eq 0}">
-														<option value="0" selected="selected">근시일 내</option>
-														<option value="1">3개월 이후</option>
-														<option value="2">6개월 이후</option>
-														<option value="3">1년 이후</option>
-													</c:when>
-													<c:when test="${loan.LOAN_HOPE_TIME eq 1}">
-														<option value="0">근시일 내</option>
-														<option value="1" selected="selected">3개월 이후</option>
-														<option value="2">6개월 이후</option>
-														<option value="3">1년 이후</option>
-													</c:when>
-													<c:when test="${loan.LOAN_HOPE_TIME eq 2}">
-														<option value="0">근시일 내</option>
-														<option value="1">3개월 이후</option>
-														<option value="2" selected="selected">6개월 이후</option>
-														<option value="3">1년 이후</option>
-													</c:when>
-													<c:when test="${loan.LOAN_HOPE_TIME eq 3}">
-														<option value="0">근시일 내</option>
-														<option value="1">3개월 이후</option>
-														<option value="2">6개월 이후</option>
-														<option value="3" selected="selected">1년 이후</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+										<select class="txt" id="loanHopeTime" name="loanHopeTime" disabled="disabled">
+											<option value="0">근시일 내</option>
+											<option value="1">3개월 이후</option>
+											<option value="2">6개월 이후</option>
+											<option value="3">1년 이후</option>
 										</select>
 									</td>
 								</tr>
@@ -837,26 +798,10 @@ function uploadName(e) {
 										<input type="button" class="btn" value="예정 사업 형태" />
 									</td>
 									<td colspan="3">
-										<select class="txt" id="expctdBsnsType" name="expctdBsnsType" value="${bsns.EXPCTD_BSNS_TYPE}" disabled="disabled">
-											<optgroup>
-												<c:choose>
-													<c:when test="${bsns.EXPCTD_BSNS_TYPE eq 0}">
-														<option value="0" selected="selected">민수 사업</option>
-														<option value="1">관공 사업</option>
-														<option value="2">기타</option>
-													</c:when>
-													<c:when test="${bsns.EXPCTD_BSNS_TYPE eq 1}">
-														<option value="0">민수 사업</option>
-														<option value="1" selected="selected">관공 사업</option>
-														<option value="2">기타</option>
-													</c:when>
-													<c:when test="${bsns.EXPCTD_BSNS_TYPE eq 2}">
-														<option value="0">민수 사업</option>
-														<option value="1">관공 사업</option>
-														<option value="2" selected="selected">기타</option>
-													</c:when>
-												</c:choose>
-											</optgroup>
+										<select class="txt" id="expctdBsnsType" name="expctdBsnsType" disabled="disabled">
+											<option value="0">민수 사업</option>
+											<option value="1">관공 사업</option>
+											<option value="2">기타</option>
 										</select>
 									</td>
 								</tr>

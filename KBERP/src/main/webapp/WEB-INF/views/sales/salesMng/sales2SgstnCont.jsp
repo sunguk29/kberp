@@ -1,14 +1,23 @@
 <!-- 
-	견적 상세보기 : sales3QtnCont
+	제안 상세보기 : sales2SgstnCont
  -->
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now() ;	
+	request.setAttribute("version", version);		//캐시 처리
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>견적 상세보기</title>
+<title>제안 상세보기</title>
+<!-- popup css파일  -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}"></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -164,7 +173,7 @@ hr { /* 구분선 */
 .bot_title { 
 	font-size: 11pt;
 }
-.qBox {
+.bx { /* 스크롤때문에 div 박스 추가 */
 	width: 860px;
 	height: 305px;
 	margin-left: 47.5px;
@@ -176,7 +185,21 @@ hr { /* 구분선 */
 	margin-left: 47.5px;
 	overflow-y: auto;
 }
+/* 의견 cont */
 .OpinionBox {
+	width: 830px;
+	height: 90px;
+	font-size: 10pt;
+	border: 1px solid gray;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+	margin-bottom: 5px;
+	background-color: #F2F2F2;
+}
+/* 예정된 일정 cont */
+.OpinionBox2 {
 	width: 830px;
 	height: 70px;
 	font-size: 10pt;
@@ -366,7 +389,7 @@ textarea {
 }
 .opbx {
 	width: 860px;
-	height: 305px;
+	height: 292px;
 	margin-left: 47.5px;
 	overflow-y: auto;
 }
@@ -374,60 +397,10 @@ textarea {
 	width: 927px;
 	height: 1138px;
 }
-.plus_btn {
-	display: inline-block;
-	vertical-align: middle;
-	width: 18px;
-	height: 18px;
-	background-image: url("resources/images/sales/plus.png");
-	background-size: 18px 18px;
-	float: right;
-	margin-right: 5px;
-    margin-top: 5.5px;
-}
-
-/* 끝 */
-.PQ_title {
-	position: relative;
-	font-size: 11pt;
-}
-.drop_btn_bot {
-	position: absolute;
-	top: 7px;
-	left: 909px;
-	width: 18px;
-	height: 18px;
-	background-image: url("resources/images/sales/downarrow.png");
-	background-size: 18px 18px;
-	float: right;
-}
-.drop_btn_bot:hover {
-	cursor: pointer;
-}
-.qtnBox {
-    width: 830px;
-    height: 60px;
-    font-size: 10pt;
-    border: 1px solid gray;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-    margin: 5px;
-    background-color: #F2F2F2;
-}
-pre {
-	font-family: "맑은 고딕";
-    margin-top: 3px;
-}
-.qtnDiv {
-	width: 100%;
-	height: 100%;
-}
 .popup_cont2 {
 	/* 내용 변경용 */
-	font-size: 13pt;
-	font-weight: 600;
+	font-size: 12pt;
+	font-weight: bold;
 	text-align: center;
 	line-height: 100px;
 }
@@ -614,10 +587,32 @@ pre {
 #att{
 	display: none;
 }
+#scName {
+	margin-top: 3px;
+	font-weight: bold;
+	padding-top: 5px;
+	padding-left: 5px;	
+}
+#scName:hover {
+	color: #4b94f2;
+	cursor: pointer;
+	text-decoration: underline;
+}
+/* 의견 목록 cont */
+#opCont {
+	width: 750px;
+    height: 20px;
+    border: none;
+    margin: 5px 0px;
+    background: #F2F2F2;
+    padding-left: 0;
+}
+/* 끝 */
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	reloadSgstnList();
+
+	console.log(${param.salesNum});
 	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
@@ -626,30 +621,16 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-	// 인쇄 버튼
-	//$("#printBtn")
-	
-	// 견적서 추가(수정) 버튼
+	// 수정 버튼
 	$("#updateBtn").on("click", function() {
-		var params = $("#addForm").serialize();
-		$.ajax({
-			type : "post",
-			url : "qtnAddAjax",
-			dataType : "json",
-			data : params,
-			success : function(res) {
-				$("#addForm").submit();
-			},
-			error : function(req) {
-				console.log(req.responseText);
-			}
-		});
-
+		
+		$("#actionForm").attr("action", "sales2Update");
+		$("#actionForm").submit();
 	});
 	
-	// 다음 단계로 전환하기 버튼 : 계약 등록 페이지
+	// 다음 단계로 전환하기 버튼 : 견적 등록 페이지
 	$("#nextStageBtn").on("click", function() {
-		$("#actionForm").attr("action", "sales4CntrctReg");
+		$("#actionForm").attr("action", "sales3QtnReg");
 		$("#actionForm").submit();
 	});
 	
@@ -678,7 +659,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "salesMng3ActionAjax/failure",
+						url : "salesMng2ActionAjax/failure",
 						dataType : "json",
 						data : params,
 						success : function(res) {
@@ -686,7 +667,7 @@ $(document).ready(function() {
 								$("#updateForm").attr("action", "salesList");
 								$("#updateForm").submit();
 							} else {
-								alert("영업 종료중 문제가 발생하였습니다.");
+								makeAlert("알림", popContOneLine("영업 종료중 문제가 발생하였습니다."));
 							}
 						},
 						error : function(request, status, error) { // 문제 발생 시 실행 함수
@@ -702,7 +683,7 @@ $(document).ready(function() {
 			}]
 		});
 	});
-
+	
 	
 	// 선택박스 초기값
 	$("#loanCauseNum").val(${data.LOAN_CAUSE_NUM}).prop("selected", true);
@@ -713,12 +694,6 @@ $(document).ready(function() {
 	$("#sgstnloanCauseNum").val(${data2.SGSTN_LOAN_CAUSE_NUM}).prop("selected", true);
 	$("#sgstnloanType").val(${data2.SGSTN_LOAN_TYPE}).prop("selected", true);
 	
-	$("#mdType").val(${data3.MD_TYPE_NUM}).prop("selected", true);
-	$("#prdmptn_psbl_check").val(${data3.MID_RDMPTN_PSBL_CHECK}).prop("selected", true);
-	$("#srtx").val(${data3.SRTX}).prop("selected", true);
-	$("#prncpl_pymnt").val(${data3.PRNCPL_PYMNT_MTHD_NUM}).prop("selected", true);
-	$("#loanPrd").val(${data3.LOAN_PRD}).prop("selected", true);
-		
 	
 	/* 의견 목록 */
 	reloadOpList();
@@ -753,7 +728,7 @@ $(document).ready(function() {
 			
 			$.ajax({
 				type : "post",
-				url : "qtnBotActionAjax/insert",
+				url : "sgstnBotActionAjax/insert",
 				dataType : "json",
 				data : params,
 				success : function(res) {
@@ -761,7 +736,7 @@ $(document).ready(function() {
 						$("#tatacont").val("");
 						reloadOpList();
 					} else {
-						alert("등록중 문제가 발생하였습니다.");
+						makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
 					}
 				},
 				error : function(request, status, error) {
@@ -797,14 +772,14 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "qtnBotActionAjax/update",
+						url : "sgstnBotActionAjax/update",
 						dataType : "json",
 						data : params,
 						success : function(res) {
 							if(res.res == "success") {
 								reloadOpList();
 							} else {
-								alert("삭제중 문제가 발생하였습니다.");
+								makeAlert("알림", popContOneLine("삭제중 문제가 발생하였습니다."));
 							}
 						},
 						error : function(request, status, error) {
@@ -822,8 +797,6 @@ $(document).ready(function() {
 		
 	});
 	$(".salesCont").hide();
-	$(".sgstnCont").hide();
-	// 영업기회 탭 접기펼치기
 	$("#sales_btn").on("click", "#salesContBtn_h", function() {
 		$(".salesCont").hide();
 		html = "<div class=\"up_btn\" id=\"salesContBtn_s\"></div>";
@@ -834,19 +807,6 @@ $(document).ready(function() {
 		$(".salesCont").show();
 		html = "<div class=\"drop_btn\" id=\"salesContBtn_h\"></div>";
 		$("#sales_btn").html(html);
-	});
-	
-	// 제안 탭 접기펼치기
-	$("#sgstn_btn").on("click", "#sgstnContBtn_h", function() {
-		$(".sgstnCont").hide();
-		html = "<div class=\"up_btn\" id=\"sgstnContBtn_s\"></div>";
-		$("#sgstn_btn").html(html);
-	});
-	
-	$("#sgstn_btn").on("click", "#sgstnContBtn_s", function() {
-		$(".sgstnCont").show();
-		html = "<div class=\"drop_btn\" id=\"sgstnContBtn_h\"></div>";
-		$("#sgstn_btn").html(html);
 	});
 	
 	/* ***** 예정된 일정 접기 펼치기 ***** */
@@ -864,147 +824,301 @@ $(document).ready(function() {
 	
 	
 	// 예정된 일정 실행
-	reloadSScList();	
-
+	reloadSScList();
+	
 	/* 예정된 일정 등록 팝업 */
 	$(".schdl_title").on("click", ".plus_btn_bot", function() {
-		
-		var html = "";
-		
-		html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
-		html += "<input type=\"hidden\" name=\"sEmpNum\" value=\"${sEmpNum}\" />";
-		html += "<table class=\"popup_table\">";
-		html += "	<tbody>";
-		html += "		<tr height=\"10\">                                                                                                          ";
-		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"일정명 *\" readonly=\"readonly\" /></td>";
-		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ssname\" name=\"ssname\"/></td>";
-		html += "		</tr>";
-		html += "		<tr height=\"10\">                                                                                                          ";
-		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"영업\" readonly=\"readonly\" /></td>";
-		html += "			<td>";
-		html += "				<div class=\"imgP\">";
-		html += "					<input type=\"text\" class=\"pop_txt imgName\" id=\"lName\" name=\"lName\" value=\"${data.LEAD_NAME}\" readonly=\"readonly\" />";
-		html += "					<input type=\"hidden\" id=\"SSNum\" name=\"sNum\" value=\"${param.salesNum}\" />";
-		html += "				</div>";
-		html += "			</td>";
-		html += "		</tr>";
-		html += "		<tr height=\"10\">                                                                                                          ";
-		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객명\" readonly=\"readonly\" /></td>";
-		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"clName\" name=\"clName\" value=\"${data.CLNT_NAME}\" readonly=\"readonly\" /></td>";
-		html += "		</tr>";
-		html += "		<tr height=\"10\">                                                                                                          ";
-		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객사\" readonly=\"readonly\" /></td>";
-		html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ccName\" name=\"ccName\"  value=\"${data.CLNT_CMPNY_NAME}\" readonly=\"readonly\" /></td>";
-		html += "		</tr>";
-		html += "		<tr height=\"10\">                                                                                                          ";
-		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동분류 *\" readonly=\"readonly\" /></td>";
-		html += "			<td><select class=\"pop_txt_in\" id=\"ssactvtyclsfy\" name=\"ssactvtyclsfy\">";
-		html += "					<optgroup>";
-		html += "						<option value=\"9\">선택하세요</option>";
-		html += "						<option value=\"0\">전화</option>";
-		html += "						<option value=\"1\">메일</option>";
-		html += "						<option value=\"2\">방문</option>";
-		html += "						<option value=\"3\">기타</option>";
-		html += "					</optgroup>";
-		html += "			</select></td>";
-		html += "		</tr>";
-		html += "		<tr height=\"10\">                                                                                                          ";
-		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"날짜 *\" readonly=\"readonly\" /></td>";
-		html += "			<td><input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"sdt\" name=\"sdt\" />";
-		html += "				<div class=\"wave\">" + " ~ "  + "</div>";
-		html += "			<input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\" /></td>";
-		html += "		</tr>";
-		html += "		<tr height=\"10\">                                                                                                          ";
-		html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동내용 *\" readonly=\"readonly\" /></td>";
-		html += "			<td style=\"border-bottom: none\"><textarea class=\"ta_box\" id=\"ssactvtycont\" name=\"ssactvtycont\"></textarea></td>";
-		html += "		</tr>";
-		html += "	</tbody>";
-		html += "</table>";				
-		html += "<div class=\"pop_rvn_txt\"> 첨부파일  ";
-		html += "	<img class=\"plus_btn aff_btn\"  src=\"resources/images/sales/plus.png\" />"; 
-		html += "</div>";
-		html += "<div class=\"pop_cntrct_box_in\">";
-		html += "	<input type=\"text\" id=\"popFileName\" name=\"fileName\" readonly=\"readonly\">";
-		html += "</div>";
-		html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"popuploadName(this)\" />";
-		html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />";	
-		html += "</form>";
-		
-		makePopup({
-			depth : 1,
-			bg : false,
-			bgClose : false,
-			title : "예정된 일정 등록",
-			contents : html,
-			contentsEvent : function() {
-				$(".aff_btn").on("click", function() {
-					$("#att").click();
-				});
-			},
-			width : 600,
-			height : 520,
-			buttons : [{
-				name : "등록",
-				func : function() {
-						if(checkEmpty("#ssname")){
-							makeAlert("필수입력", "일정명을 입력하세요");
-							$("#ssname").focus();
-						} else if($("#ssactvtyclsfy").val() == 9){
-							makeAlert("필수입력", "활동분류를 입력하세요");
-							$("#ssactvtyclsfy").focus();
-						} else if(checkEmpty("#sdt")){
-							makeAlert("필수입력", "시작일을 입력하세요");
-							$("#sdt").focus();
-						} else if(checkEmpty("#ssactvtycont")){
-							makeAlert("필수입력", "활동내용을 입력하세요");
-							$("#ssactvtycont").focus();
-						} else {					
-								
-								console.log(${sEmpNum});
-								var RegForm = $("#RegForm");
-										
-								RegForm.ajaxForm({
-								success: function(res) {
-										if(res.fileName.length > 0) {
-											$("#schdlAttFile").val(res.fileName[0]);
-										}
-										
-										var params = $("#RegForm").serialize();
-												
-										$.ajax({
-										type  : "post",
-										url : "salesSchdlAction/insert",
-										dataType : "json",
-										data : params,
-										success : function(res) {
-											if(res.res == "success"){
-												reloadSScList();								
-											} else {
-													alert("등록중 문제가 발생하였습니다.");
-													}
-											},
-											error : function(request, status, error) {
-												console.log(request.responseTxt);
+		if(${data.MNGR_EMP_NUM eq sEmpNum}) {
+			
+			var html = "";
+			
+			html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
+			html += "<input type=\"hidden\" name=\"sEmpNum\" value=\"${sEmpNum}\" />";
+			html += "<table class=\"popup_table\">";
+			html += "	<tbody>";
+			html += "		<tr height=\"10\">                                                                                                          ";
+			html += "			<td><input type=\"button\" class=\"popBtn\" value=\"일정명 *\" readonly=\"readonly\" /></td>";
+			html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ssname\" name=\"ssname\"/></td>";
+			html += "		</tr>";
+			html += "		<tr height=\"10\">                                                                                                          ";
+			html += "			<td><input type=\"button\" class=\"popBtn\" value=\"영업\" readonly=\"readonly\" /></td>";
+			html += "			<td>";
+			html += "				<div class=\"imgP\">";
+			html += "					<input type=\"text\" class=\"pop_txt imgName\" id=\"lName\" name=\"lName\" value=\"${data.LEAD_NAME}\" readonly=\"readonly\" />";
+			html += "					<input type=\"hidden\" id=\"SSNum\" name=\"sNum\" value=\"${param.salesNum}\" />";
+			html += "				</div>";
+			html += "			</td>";
+			html += "		</tr>";
+			html += "		<tr height=\"10\">                                                                                                          ";
+			html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객명\" readonly=\"readonly\" /></td>";
+			html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"clName\" name=\"clName\" value=\"${data.CLNT_NAME}\" readonly=\"readonly\" /></td>";
+			html += "		</tr>";
+			html += "		<tr height=\"10\">                                                                                                          ";
+			html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객사\" readonly=\"readonly\" /></td>";
+			html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ccName\" name=\"ccName\"  value=\"${data.CLNT_CMPNY_NAME}\" readonly=\"readonly\" /></td>";
+			html += "		</tr>";
+			html += "		<tr height=\"10\">                                                                                                          ";
+			html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동분류 *\" readonly=\"readonly\" /></td>";
+			html += "			<td><select class=\"pop_txt_in\" id=\"ssactvtyclsfy\" name=\"ssactvtyclsfy\">";
+			html += "					<optgroup>";
+			html += "						<option value=\"9\">선택하세요</option>";
+			html += "						<option value=\"0\">전화</option>";
+			html += "						<option value=\"1\">메일</option>";
+			html += "						<option value=\"2\">방문</option>";
+			html += "						<option value=\"3\">기타</option>";
+			html += "					</optgroup>";
+			html += "			</select></td>";
+			html += "		</tr>";
+			html += "		<tr height=\"10\">                                                                                                          ";
+			html += "			<td><input type=\"button\" class=\"popBtn\" value=\"날짜 *\" readonly=\"readonly\" /></td>";
+			html += "			<td><input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"sdt\" name=\"sdt\" />";
+			html += "				<div class=\"wave\">" + " ~ "  + "</div>";
+			html += "			<input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\" /></td>";
+			html += "		</tr>";
+			html += "		<tr height=\"10\">                                                                                                          ";
+			html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동내용 *\" readonly=\"readonly\" /></td>";
+			html += "			<td style=\"border-bottom: none\"><textarea class=\"ta_box\" id=\"ssactvtycont\" name=\"ssactvtycont\"></textarea></td>";
+			html += "		</tr>";
+			html += "	</tbody>";
+			html += "</table>";				
+			html += "<div class=\"pop_rvn_txt\"> 첨부파일  ";
+			html += "	<img class=\"plus_btn aff_btn\"  src=\"resources/images/sales/plus.png\" />"; 
+			html += "</div>";
+			html += "<div class=\"pop_cntrct_box_in\">";
+			html += "	<input type=\"text\" id=\"popFileName\" name=\"fileName\" readonly=\"readonly\">";
+			html += "</div>";
+			html += "<input type=\"file\" id=\"att\" name=\"att\" onchange=\"popuploadName(this)\" />";
+			html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" />";	
+			html += "</form>";
+			
+			makePopup({
+				depth : 1,
+				bg : false,
+				bgClose : false,
+				title : "예정된 일정 등록",
+				contents : html,
+				contentsEvent : function() {
+					$(".aff_btn").on("click", function() {
+						$("#att").click();
+					});
+				},
+				width : 600,
+				height : 520,
+				buttons : [{
+					name : "등록",
+					func : function() {
+							if(checkEmpty("#ssname")){
+								makeAlert("필수 정보 알림", popContOneLine("일정명을 입력하세요."), function() {
+									$("#ssname").focus();
+								});
+							} else if($("#ssactvtyclsfy").val() == 9){
+								makeAlert("필수 정보 알림", popContOneLine("활동분류를 입력하세요."), function() {
+									$("#ssactvtyclsfy").focus();
+								});
+							} else if(checkEmpty("#sdt")){
+								makeAlert("필수 정보 알림", popContOneLine("시작일을 입력하세요."), function() {
+									$("#sdt").focus();
+								});
+							} else if(checkEmpty("#edt")){
+								makeAlert("필수 정보 알림", popContOneLine("종료일을 입력하세요."), function() {
+									$("#edt").focus();
+								});
+							} else if($("#sdt").val() > $("#edt").val()) {
+								makeAlert("알림", popContOneLine("종료일이 시작일보다 빠를 수 없습니다."), function() {
+									$("#edt").focus();
+								});
+							} else if(checkEmpty("#ssactvtycont")){
+								makeAlert("필수 정보 알림", popContOneLine("활동내용을 입력하세요."), function() {
+									$("#ssactvtycont").focus();
+								});
+							} else {					
+									
+									console.log(${sEmpNum});
+									var RegForm = $("#RegForm");
+											
+									RegForm.ajaxForm({
+									success: function(res) {
+											if(res.fileName.length > 0) {
+												$("#schdlAttFile").val(res.fileName[0]);
 											}
-										});
-									},
-								error : function(req) {
-										console.log(req.responseTxt);
-								}
-							});
-								
-							RegForm.submit();
-							closePopup(1);
-							reloadSScList();
-							} //if else문 end
-						}
-					}, {
-						name : "취소"
-					}]// button 함수 end
-										
-				});
+											
+											var params = $("#RegForm").serialize();
+													
+											$.ajax({
+											type  : "post",
+											url : "salesSchdlAction/insert",
+											dataType : "json",
+											data : params,
+											success : function(res) {
+												if(res.res == "success"){
+													reloadSScList();								
+												} else {
+													makeAlert("알림", popContOneLine("등록중 문제가 발생하였습니다."));
+														}
+												},
+												error : function(request, status, error) {
+													console.log(request.responseTxt);
+												}
+											});
+										},
+									error : function(req) {
+											console.log(req.responseTxt);
+									}
+								});
+									
+								RegForm.submit();
+								closePopup(1);
+								reloadSScList();
+								} //if else문 end
+							}
+						}, {
+							name : "취소"
+						}]// button 함수 end
+											
+					});
+		} else {
+			makeAlert("알림", popContOneLine("권한이 없습니다."));
+		}
 	});
 
+	/* 예정된 일정 상세 팝업 */
+	$(".sBox").on("click", "#scName", function() {
+		var slNum = $(this).children("#schdlListNumber").val();
+		var sNum = $(this).children("#salesListNumber").val();
+		document.getElementById("schdlNumber").value = slNum;
+		document.getElementById("salesNumber").value = sNum;
+		
+		var params = $("#ssForm").serialize();
+		
+		$.ajax({
+			type : "post",
+			url : "SSchdlAjax",
+			dataType : "json",
+			data : params,
+			success : function(SSData) {
+				var html = "";
+				
+				$.each(SSData, function(index, data) {
+					
+					html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
+					html += "<input type=\"hidden\" name=\"sEmpNum\" value=\"${sEmpNum}\" />";
+					html += "<input type=\"hidden\" name=\"lNum\" value=\"\"/>";
+					html += "<table class=\"popup_table\">";
+					html += "	<tbody>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"일정명 *\" readonly=\"readonly\"/></td>";
+					html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ssname\" name=\"ssname\" value=\"" + data.SCHDL_NAME + "\" readonly=\"readonly\" /></td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"영업\" readonly=\"readonly\"/></td>";
+					html += "			<td>";
+					html += "				<div class=\"imgP\">";
+					html += "					<input type=\"text\" class=\"pop_txt imgName\" id=\"lName\" name=\"lName\" value=\"" + data.SALES_NAME + "\" readonly=\"readonly\" />";
+					html += "					<input type=\"hidden\" id=\"SSNum\" name=\"sNum\" value=\"${param.salesNum}\" />";
+					html += "				</div>";
+					html += "			</td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객명\" readonly=\"readonly\"/></td>";
+					html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"clName\" name=\"clName\" value=\"" + data.SALES_CLNT_NAME + "\" readonly=\"readonly\" /></td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"고객사\" readonly=\"readonly\"/></td>";
+					html += "			<td><input type=\"text\" class=\"pop_txt\" id=\"ccName\" name=\"ccName\"  value=\"" + data.SALES_CLNT_CMPNY_NAME + "\" readonly=\"readonly\" /></td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동분류 *\" readonly=\"readonly\"/></td>";
+					html += "			<td><select class=\"pop_txt_in\" id=\"ssactvtyclsfy\" name=\"ssactvtyclsfy\" disabled=\"disabled\" >";
+					html += "					<optgroup>";
+					html += "						<option value=\"9\">선택하세요</option>";
+					if(data.ACTVTY_CLSFY_NUM == 0) {
+						html += "						<option value=\"0\" selected=\"selected\">전화</option>";
+						html += "						<option value=\"1\">메일</option>";
+						html += "						<option value=\"2\">방문</option>";
+						html += "						<option value=\"3\">기타</option>";
+					} else if (data.ACTVTY_CLSFY_NUM == 1) {
+						html += "						<option value=\"0\">전화</option>";
+						html += "						<option value=\"1\" selected=\"selected\">메일</option>";
+						html += "						<option value=\"2\">방문</option>";
+						html += "						<option value=\"3\">기타</option>";
+					} else if (data.ACTVTY_CLSFY_NUM == 2) {
+						html += "						<option value=\"0\">전화</option>";
+						html += "						<option value=\"1\">메일</option>";
+						html += "						<option value=\"2\" selected=\"selected\">방문</option>";
+						html += "						<option value=\"3\">기타</option>";
+					} else if (data.ACTVTY_CLSFY_NUM == 3) {
+						html += "						<option value=\"0\">전화</option>";
+						html += "						<option value=\"1\">메일</option>";
+						html += "						<option value=\"2\">방문</option>";
+						html += "						<option value=\"3\" selected=\"selected\">기타</option>";
+					}
+					html += "					</optgroup>";
+					html += "			</select></td>";
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"날짜 *\" readonly=\"readonly\"/></td>";
+					html += "			<td><input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"sdt\" name=\"sdt\" value=\"" + data.START_DATE_HR + "\" readonly=\"readonly\" />";
+					html += "				<div class=\"wave\">" + " ~ "  + "</div>";
+					if(data.END_DATE_HR == null) {
+						html += "			<input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\" /></td>";
+					} else {
+						html += "			<input type=\"datetime-local\" class=\"pop_dt_txt\" id=\"edt\" name=\"edt\" value=\"" + data.END_DATE_HR + "\" readonly=\"readonly\" /></td>";
+					}
+					html += "		</tr>";
+					html += "		<tr height=\"10\">                                                                                                          ";
+					html += "			<td><input type=\"button\" class=\"popBtn\" value=\"활동내용 *\" readonly=\"readonly\"/></td>";
+					html += "			<td style=\"border-bottom: none\"><textarea class=\"ta_box\" id=\"ssactvtycont\" name=\"ssactvtycont\" readonly=\"readonly\">" + data.ACTVTY_CONT + "</textarea></td>";
+					html += "		</tr>";
+					html += "	</tbody>";
+					html += "</table>";
+					if(data.ATT_FILE_NAME != null) {
+						var fileLength = data.ATT_FILE_NAME.length;
+						var fileName = data.ATT_FILE_NAME.substring(20, fileLength);
+					}
+					html += "<div class=\"pop_rvn_txt\"> 첨부파일";
+					html += "<span id=\"uploadBtn\">";
+					if(data.ATT_FILE_NAME == null) {
+						html += "	<img class=\"plus_btn aff_btn\" src=\"resources/images/sales/plus.png\" />";
+					}
+					html += "</span>";
+					html += "</div>";
+					html += "<div class=\"pop_cntrct_box_in\">";
+					if(data.ATT_FILE_NAME != "" && data.ATT_FILE_NAME != null) {
+						html += "<a href=\"resources/upload/" + data.ATT_FILE_NAME + "\" download=\"" + fileName + "\"><span id=\"file_name\">" + fileName + "</span></a>";
+					}
+					/* 파일 등록시 파일명이 들어갈곳 */				
+					html += "<input type=\"text\" id=\"fileName\" readonly=\"readonly\" />";
+					html += "	<input type=\"file\" id=\"att\" name=\"att\" onchange=\"uploadName(this)\" />   ";
+					html += "	<input type=\"hidden\" id=\"schdlnum\" name=\"schdlnum\" />           ";
+					html += "<input type=\"hidden\" id=\"schdlAttFile\" name=\"schdlAttFile\" value=\"" + data.ATT_FILE_NAME + "\" />";	
+					html += "</div>                                                                     ";
+					html += "</form>";
+				}); // each end
+				
+			makePopup({
+				depth : 1,
+				bg : false,
+				bgClose : false,
+				title : "예정된 일정 상세보기",
+				contents : html,
+				width : 600,
+				height : 520,
+				buttons : [{
+					name : "확인",
+					func : function() {
+							closePopup();
+							}
+						}]// button 함수 end
+											
+					});
+			}, // success end
+			error : function(request) {
+				console.log(request.responseTxt);
+			}
+		}); // ajax end
+		
+	});
+	
 	/* 예정된 일정 수정 팝업 */
 	$(".sBox").on("click", ".sch_re", function() {
 		var slNum = $(this).children("#schdlListNumber").val();
@@ -1153,19 +1267,28 @@ $(document).ready(function() {
 					name : "수정",
 					func : function() {
 							if(checkEmpty("#ssname")){
-								makeAlert("필수입력", "일정명을 입력하세요");
-								$("#ssname").focus();
+								makeAlert("필수 정보 알림", popContOneLine("일정명을 입력하세요."), function() {
+									$("#ssname").focus();
+								});
 							} else if($("#ssactvtyclsfy").val() == 9){
-								makeAlert("필수입력", "활동분류를 입력하세요");
-								$("#ssactvtyclsfy").focus();
+								makeAlert("필수 정보 알림", popContOneLine("활동분류를 입력하세요."), function() {
+									$("#ssactvtyclsfy").focus();
+								});
 							} else if(checkEmpty("#sdt")){
-								makeAlert("필수입력", "시작일을 입력하세요");
-								$("#sdt").focus();
+								makeAlert("필수 정보 알림", popContOneLine("시작일을 입력하세요."), function() {
+									$("#sdt").focus();
+								});
+							}  else if($("#sdt").val() > $("#edt").val()) {
+								makeAlert("알림", popContOneLine("종료일이 시작일보다 빠를 수 없습니다."), function() {
+									$("#edt").focus();
+								});
 							} else if(checkEmpty("#ssactvtycont")){
-								makeAlert("필수입력", "활동내용을 입력하세요");
-								$("#ssactvtycont").focus();
+								makeAlert("필수 정보 알림", popContOneLine("활동내용을 입력하세요."), function() {
+									$("#ssactvtycont").focus();
+								});
 							} else {					
 									
+									console.log(${sEmpNum});
 									var RegForm = $("#RegForm");
 											
 									RegForm.ajaxForm({
@@ -1185,7 +1308,7 @@ $(document).ready(function() {
 												if(res.res == "success"){
 													reloadSScList();								
 												} else {
-														alert("수정중 문제가 발생하였습니다.");
+													makeAlert("알림", popContOneLine("수정중 문제가 발생하였습니다."));
 														}
 												},
 												error : function(request, status, error) {
@@ -1252,7 +1375,7 @@ $(document).ready(function() {
 							if(res.res == "success") {
 								reloadSScList();
 							} else {
-								alert("삭제중 문제가 발생하였습니다.");
+								makeAlert("알림", popContOneLine("삭제중 문제가 발생하였습니다."));
 							}
 						},
 						error : function(request, status, error) {
@@ -1268,9 +1391,7 @@ $(document).ready(function() {
 	}); // 일정 삭제 function end
 	
 	
-	
-	
-}); // document.ready End
+}); // document.ready end
 
 /* 의견 목록 Ajax */
 function reloadOpList() {
@@ -1278,7 +1399,7 @@ function reloadOpList() {
 	
 	$.ajax({
 		type : "post",
-		url : "qtnOpBotListAjax",
+		url : "sgstnOpBotListAjax",
 		data : params,
 		dataType : "json",
 		success : function(res) {
@@ -1307,67 +1428,20 @@ function drawOpList(list) {
 	for(var data of list) {
 		html += "<div class=\"OpinionBox\">";
 		html += "<div class=\"name\">" + data.EMP_NAME + "(" + data.DEPT_NAME + " / " + data.RANK_NAME + ")" + "</div>";
-		html += "<div class=\"txtOp\">" + data.CONT + "</div>";
+		html += "<div class=\"txtOp\"><textarea id=\"opCont\">" + data.CONT + "</textarea></div>";
 		html += "<div class=\"dt\">" + data.RGSTRTN_DATE + "</div>";
-		html += "<div class=\"del\">삭제";
-		html += "<input type=\"hidden\" id=\"cmntNum\" name=\"cmntNum\" value=\"" + data.CMNT_NUM + "\" />";
-		html += "</div>";
+		if(data.EMP_NUM == ${sEmpNum}) {
+			html += "<div class=\"del\">삭제";
+			html += "<input type=\"hidden\" id=\"cmntNum\" name=\"cmntNum\" value=\"" + data.CMNT_NUM + "\" />";
+			html += "</div>";
+		}
+		
 		html += "</div>";
 	}
 	
 	$(".opbx").html(html);
 	
 }
-
-//*************** 지난견적서 목록 Ajax *************** 
-function reloadSgstnList() {
-	var params = $("#pastQtnActionForm").serialize();
-	
-	$.ajax({
-		type : "post",
-		url : "PQListAjax",
-		dataType : "json",
-		data : params,
-		success : function(res) {
-			if(res.PQListCnt != 0) {
-				drawPQCnt(res.PQListCnt);
-				drawPQList(res.list);
-				$(".qtnDiv").show();
-			} else {
-				$(".qtnDiv").hide();
-			}
-		},
-		error : function(req) {
-			console.log(req.responseText);
-		}
-	});
-}
-
-/* 지난견적서 목록 개수 html */
-function drawPQCnt(PQListCnt) {
-	var html = "";
-	
-	html = "<h3>지난 견적서(" + PQListCnt + ")</h3><div class=\"drop_btn_bot\"></div>";
-	
-	$(".PQ_title").html(html);
-}
-
-/* 지난견적서 목록 html */
-function drawPQList(list) {
-	var html = "";
-	
-	for(var data of list) {
-		html +="<div class=\"qtnBox\">";
-		html +="<div class=\"name\">" + data.QTN_NAME + " (" + data.QTN_DATE +")</div>";
-		html +="<div class=\"txtOp\"><pre>" + data.MD_TYPE_NUM + "  " + data.MD_NAME + " " + data.INTRST_RATE + "%    " + data.LIMIT_AMNT + "원</pre></div>";
-		html +="</div>";
-	}
-	$(".qBox").html(html);
-}
-
-
-// *************** 지난견적서 목록 끝
-
 
 
 /* ******************** 예정된 일정 영역 ******************** */
@@ -1392,7 +1466,7 @@ function reloadSScList(){
 function drawSScCnt(SScListCnt) {
 	var html = "";
 	
-	html = "<h3>예정된 일정(" + SScListCnt + ")</h3><div id=\"scListCnt_right\"><div class=\"drop_btn_bot\"></div><div class=\"plus_btn_bot\"></div>";
+		html = "<h3>예정된 일정(" + SScListCnt + ")</h3><div id=\"scListCnt_right\"><div class=\"drop_btn_bot\"></div><div class=\"plus_btn_bot\"></div>";
 	
 	$(".schdl_title").html(html);
 }
@@ -1401,13 +1475,17 @@ function drawSScList(list) {
 	var html = "";
 	
 	for(var data of list){
-		html += "<div class=\"OpinionBox\">";
+		html += "<div class=\"OpinionBox2\">";
 		html += "<div class=\"schdl_box_in\">";
 		html += "";
 		html += "";
-		html +=	"<div class=\"name\">일정명   :" + data.SCHDL_NAME + "</div>";
+		html +=	"<div class=\"name\">일정명   :<span id=\"scName\"><input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"salesListNumber\" value=\"" + ${param.salesNum} + "\" />" + data.SCHDL_NAME + "</span></div>";
 		html +=	"<div class=\"txtOp\">기간   " + data.START_DATE_HR +  " ~ " + data.END_DATE_HR + "</div>";
-		html +=	"<div class=\"txtOp sche\">담당자   :" + data.EMP_NAME + "</div><span class=\"sch_re\" >수정<input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"salesListNumber\" value=\"" + ${param.salesNum} + "\" /></span><span> | </span><span class=\"sch_del\" >삭제<input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"salesListNumber\" value=\"" + ${param.salesNum} + "\" /></span>";
+		if(data.EMP_NUM == ${sEmpNum}) {
+			html +=	"<div class=\"txtOp sche\">담당자   :" + data.EMP_NAME + "</div><span class=\"sch_re\" >수정<input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"salesListNumber\" value=\"" + ${param.salesNum} + "\" /></span><span> | </span><span class=\"sch_del\" >삭제<input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"salesListNumber\" value=\"" + ${param.salesNum} + "\" /></span>";
+		} else {
+			html +=	"<div class=\"txtOp sche\">담당자   :" + data.EMP_NAME + "</div>";
+		}
 		html += "</div>";
 		html += "</div>";
 	}
@@ -1432,25 +1510,21 @@ function uploadName(e) {
 </head>
 <body>
 <form action="#" id="ssForm" method="post">
-	<input type="hidden" id="schdlNumber" name="schdlNum" />
-	<input type="hidden" id="salesNumber" name="salesNum" />
+	<input type="hidden" id="schdlNumber" name="schdlNum"  />
+	<input type="hidden" id="salesNumber" name="salesNum"  />
 </form>	
 <form action="#" id="actionForm" method="post">
 	<input type="hidden" id="page" name="page" value="${page}" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
-	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업번호 -->
-	<input type="hidden" name="qtnNum" value="${param.qtnNum}" /> <!-- 견적 번호 -->
-	<input type="hidden" name="mdName" value="${param.mdName}" /> <!-- 상품 이름 -->
-	<input type="hidden" name="loanPrd" value="${data3.LOAN_PRD}" /> <!-- 상품 이름 -->
-</form>
-<form action="sales3QtnReg" id="addForm" method="post">
-	<input type="hidden" name="top" value="${param.top}" />
-	<input type="hidden" name="menuNum" value="${param.menuNum}" />
-	<input type="hidden" name="menuType" value="${param.menuType}" />
-	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업번호 -->
-	<input type="hidden" name="qtnNum" value="${data3.QTN_NUM}" />
+	<input type="hidden" id="salesNum" name="salesNum" value="${data.SALES_NUM}" /> <!-- 영업번호 -->
+	<input type="hidden" name="prgrsStage1" value="${param.prgrsStage1}" />
+	<input type="hidden" name="prgrsStage2" value="${param.prgrsStage2}" />
+	<input type="hidden" name="mngName" value="${param.mngName}" />
+	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
+	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+	<input type="hidden" name="listSort" value="${param.listSort}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -1463,11 +1537,10 @@ function uploadName(e) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">영업관리 - 견적 상세보기</div>
+			<div class="page_title_text">영업관리 - 제안 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
-				<!-- <img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" id="printBtn" /> -->
 				<c:if test="${data.MNGR_EMP_NUM eq sEmpNum}">
-					<img alt="수정버튼" src="resources/images/sales/newAdd.png" class="btnImg" id="updateBtn" data-toggle="tooltip" title="견적서 추가하기" />
+					<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
 				</c:if>
 			<!-- 검색영역 선택적 사항 -->
 		</div>
@@ -1557,8 +1630,8 @@ function uploadName(e) {
 									<td><input type="button" class="btn" value="대출 희망 유형*" /></td>
 									<td colspan="3">
 										<select class="txt" id="loanHopeType" name="loanHopeType" disabled="disabled">
-											<option value="0" selected="selected">장기대출</option>
-											<option value="1" selected="selected">단기대출</option>
+											<option value="0">장기대출</option>
+											<option value="1">단기대출</option>
 										</select>
 									</td>
 							</tr>
@@ -1624,10 +1697,7 @@ function uploadName(e) {
 					<hr class="hr_bot" color="#4B94F2" width="925px">
 					<!-- *************** 제안 부분 시작 **************** -->
 					
-						<div class="bot_title">
-							<h3>제안<span id="sgstn_btn"><div class="up_btn" id="sgstnContBtn_s"></div></span></h3>
-						</div>
-					<div class="sgstnCont">
+						<div class="bot_title"><h3>제안</h3></div>
 						<div class="page_cont_title_text">대출 상세정보</div>
 						<hr class="hr_width">
 						<table class="detailList">
@@ -1772,137 +1842,14 @@ function uploadName(e) {
 								<a href="resources/upload/${data2.ATT_FILE_NAME}"  download="${sgstnFileName}">${sgstnFileName}</a>
 							</div> 
 						</div>
-					</div>
-<!-- *************************************** 견적 시작 *************************************** -->			
-	<hr class="hr_bot" color="#4B94F2" width="925px">
-	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
-					<input type="hidden" id= "mdNum" name="mdNum" /> <!-- 영업기회에서 가져온 영업번호 -->
-					<div class="bot_title"><h3>견적</h3></div>
-					 <hr class="hr_bot" color="white" width="925px"> 
-					<div class="hr_bot"></div>
-					<table>
-						<colgroup>
-							<col width="200" />
-							<col width="250" />
-							<col width="200" />
-							<col width="250" />
-						</colgroup>
-						<tbody>
-							<tr height="40">
-								<td><input type="button" class="btn" value="견적명*" readonly="readonly" /></td>
-								<td colspan="3"><input type="text" class="txt" id="qtnName" name="qtnName" value="${data3.QTN_NAME}" readonly="readonly" /></td>		
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="상품유형" readonly="readonly" /></td>
-								<td colspan="3">
-									<select class="txt" id="mdType" name="mdType" disabled="disabled">
-								 		<option value="0">개인사업</option>
-								 		<option value="1">법인사업</option>
-								 		<option value="2">공공사업</option>
-									</select>
-								</td>
-							</tr>
-							<tr height="40">
-									<td><input type="button" class="btn" value="견적일*" readonly="readonly" /></td>
-									<td colspan="3"><input type="date" class="txt" id="qtnDate" name="qtnDate" value="${data3.QTN_DATE}" readonly="readonly" /></td>
-							</tr>
-							<tr height="40">
-									<td><input type="button" class="btn" value="대출금액*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" id="LoanAmnt" name="LoanAmnt" value="${data3.LOAN_AMNT}" readonly="readonly" /></td>		
-							</tr> 
-							<tr height="40">
-									<td><input type="button" class="btn" value="공급가액*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" id="splyPrice" name="sqlyPrice" value="${data3.SPLY_PRICE}" readonly="readonly" /></td>		
-							</tr> 
-							<tr height="40">
-									<td><input type="button" class="btn" value="세액*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" id="taxAmnt" name="taxAmnt" value="${data3.TAX_AMNT}" readonly="readonly" /></td>
-							</tr>
-							<tr height="40">
-									<td><input type="button" class="btn" value="합계액*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" id="sumAmnt" name="sumAmnt" value="${data3.TOTAL}" readonly="readonly" /></td>
-							</tr>
-							<tr height="40">
-									<td><input type="button" class="btn" value="중도상환가능여부" readonly="readonly" /></td>
-									<td>
-										<select class="txt" id="prdmptn_psbl_check" name="prdmptnPsbl"  disabled="disabled">
-											<option value="0">가능</option>
-											<option value="1">불가능</option>
-										</select>
-									</td>
-									<td><input type="button" class="btn" value="부가세*" readonly="readonly" /></td>
-									<td>
-										<select class="txt" id="srtx" name="srtx" onchange="test(this);" disabled="disabled">
-							 				<option value="0">미포함</option>
-							 				<option value="1">포함</option>
-							 				<option value="2">면세</option>
-										</select>
-									</td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="대출기간" readonly="readonly" /></td>
-								<td>
-									<select class="txt" id="loanPrd" name="loanPrd" disabled="disabled">
-										<option value="0">6개월</option>
-										<option value="1">1년</option>
-										<option value="2">3년</option>
-										<option value="3">5년</option>
-									</select>	
-								</td>
-								
-								<td><input type="button" class="btn" value="원금상환방식" readonly="readonly" /></td>
-								<td colspan="2">
-									<select class="txt" id="prncpl_pymnt" name="prncplPymnt" disabled="disabled">
-										<option value="0">원금 균등 상환</option>
-										<option value="1">원리금 균등 상환</option>
-										<option value="2">만기 일시 상환</option>
-									</select>
-								</td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="이자율(%)" /></td>
-								<td><input type="text" class="txt" id="intrstRate" name="intrstRate" value="${data3.INTRST_RATE}" readonly="readonly" /></td>
-								<td><input type="button" class="btn" value="납부일*" readonly="readonly" /></td>
-								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" value="${data3.PYMNT_DATE}" readonly="readonly" placeholder="매달    일" /></td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="비고" readonly="readonly"/></td>
-								<td colspan="3"><input type="text" class="rmks" name="rmksCont" value="${data3.RMKS}" readonly="readonly" /></td>
-							</tr>							
-						</tbody>
-					</table>
-					<!-- 첨부자료 -->
-					<c:set var="qtnFileLength" value="${fn:length(data3.ATT_FILE_NAME)}"></c:set>
-						<c:set var="qtnFileName" value="${fn:substring(data3.ATT_FILE_NAME, 20, qtnFileLength)}"></c:set>
-						<div class="spc">
-							<div class="adc_txt">
-								첨부자료
-							</div>
-							<div class="cntrct_box_in">
-								<a href="resources/upload/${data3.ATT_FILE_NAME}"  download="${qtnFileName}">${qtnFileName}</a>
-							</div> 
-						</div>		
-<!-- *************************************** 견적 끝 *************************************** -->						
 					<div class="next_bot">
 						<c:if test="${data.MNGR_EMP_NUM eq sEmpNum}">
 							<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
 						</c:if>
 					</div>
-				</form>	
-				<div class="qtnDiv">
-				<form action="#" id="pastQtnActionForm" method="post">
-					<input type="hidden" name="salesNum" value="${param.salesNum}" />
-					<input type="hidden" name="qtnNum" value="${param.qtnNum}" />
-					<!-- 지난 견적서 -->
-					<div class="mgtop"></div>
-					<div class="PQ_title"></div>
-					<hr color="#F2B705" width="925px">
-					<div class="qBox"></div>
-				</form>		
-				</div>		
-					<!-- ********* 견적 끝 ********* -->
+				</form>					
 				<form action="#" id="botOpActionForm" method="post">
-					<input type="hidden" name="qtnNum" value="${data3.QTN_NUM}" />
+					<input type="hidden" name="salesNum" value="${param.salesNum}" />
 					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
 					<input type="hidden" id="cmntNum" name="cmntNum" />
 					<!-- 의견 -->
@@ -1926,12 +1873,16 @@ function uploadName(e) {
 				</form>
 					<hr class="hr_bot" color="white" width="925px">
 					<hr class="hr_bot" color="white" width="925px">
-					<div class="salesOver_btn nb">영업 종료하기</div>
+					<c:if test="${data.MNGR_EMP_NUM eq sEmpNum}">
+						<div class="salesOver_btn nb">영업 종료하기</div>
+					</c:if>
 					<!-- 끝 -->
-					</div>
+					
+					
 				</div>
 			</div>	
 		</div>
+	</div>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

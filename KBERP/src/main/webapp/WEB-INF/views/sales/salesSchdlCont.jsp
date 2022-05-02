@@ -1,12 +1,21 @@
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	LocalDateTime version = LocalDateTime.now();
+	request.setAttribute("version", version);
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>카카오뱅크 ERP - 일정</title>
+<!-- popup css파일 -->
+<link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
+<!-- popup javaScript파일 -->
+<script type="text/javascript" src="resources/script/sales/common_sales.js?version=${version}" /></script>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -414,9 +423,6 @@ input {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#alertBtn").on("click", function() {
-		makeAlert("하이", "내용임");
-	});
 	
 	/* 목록 이동 이벤트 */
 	$("#listBtn").on("click", function() {
@@ -424,7 +430,7 @@ $(document).ready(function() {
 			bg : true,
 			bgClose : false,
 			title : "알림",
-			contents : "나가면 저장되지않습니다, 나가시겠습니까?",
+			contents : popContTwoLine("내용이 저장되지 않았습니다.<br/>나가시겠습니까?"),
 			contentsEvent : function() {
 				
 			},
@@ -459,7 +465,7 @@ $(document).ready(function() {
 				bg : false,
 				bgClose : false,
 				title : "수정",
-				contents : "수정하시겠습니까?",
+				contents : popContOneLine("수정하시겠습니까?"),
 				contentsEvent : function() {
 					$("#popup").draggable();
 				},
@@ -490,7 +496,7 @@ $(document).ready(function() {
 											closePopup();
 											updatePop();								
 										} else {
-											alert("수정중 문제가 발생하였습니다.");
+											makeAlert("알림", popContTwoLine("수정 중 문제가 발생하였습니다.<br/>나가시겠습니까?"));
 										}
 									},
 									error : function(request, status, error) {
@@ -519,7 +525,7 @@ $(document).ready(function() {
 			bg : false,
 			bgClose : false,
 			title : "삭제",
-			contents : "삭제하시겠습니까?",
+			contents : popContOneLine("삭제하시겠습니까?"),
 			contentsEvent : function() {
 				$("#popup").draggable();
 			},
@@ -549,7 +555,7 @@ $(document).ready(function() {
 									if(res.res == "success"){
 										$("#backForm").submit();								
 									} else {
-										alert("삭제중 문제가 발생하였습니다.");
+										makeAlert("알림", popContTwoLine("삭제 중 문제가 발생하였습니다.<br/>나가시겠습니까?"));
 									}
 								},
 								error : function(request, status, error) {
@@ -690,10 +696,10 @@ function updatePop() {
 					var clnm = $(this).children("#clnm").val();
 					
 					// 본문에 해당하는 아이디에 값 넣어줌
-					document.getElementById("sNum").value = snm;
-					document.getElementById("sName").value = sna;
-					document.getElementById("ccName").value = ccnm;
-					document.getElementById("clName").value = clnm;
+					$("#sNum").attr("value", snm);
+					$("#sName").attr("value", sna);
+					$("#ccName").attr("value", ccnm);
+					$("#clName").attr("value", clnm);
 					closePopup();
 				});
 			},
@@ -857,10 +863,10 @@ function updatePop() {
 					var clnm = $(this).children("#clnm").val();
 					
 					// 본문에 해당 아이디와 일치하는 곳에 값 넣어줌
-					document.getElementById("lNum").value = lnm;
-					document.getElementById("lName").value = lna;
-					document.getElementById("ccName").value = ccnm;
-					document.getElementById("clName").value = clnm;
+					$("#lNum").attr("value", lnm);
+					$("#lName").attr("value", lna);
+					$("#ccName").attr("value", ccnm);
+					$("#clName").attr("value", clnm)
 					closePopup();
 				});
 			},
@@ -980,6 +986,7 @@ function uploadName(e) {
 	<input type="hidden" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="deptS" value="${param.deptS}" />
 	<input type="hidden" name="usrsrchTxt" value="${param.usrsrchTxt}" />
+	<input type="hidden" name="clndrDate" value="${param.clndrDate}"/>
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -1022,26 +1029,34 @@ function uploadName(e) {
 								<td><input type="button" class="btn" value="일정명 *" readonly="readonly"/></td>
 								<td colspan="5"><input type="text" class="txt" id="ssname" name="ssname" value="${data.SCHDL_NAME}"/></td>
 							</tr>
+							<c:choose>
+							<c:when test="${!empty data.LEAD_NAME || !empty data.SALES_NAME }">
+							<c:choose>
+								<c:when test="${empty data.LEAD_NAME}">
 							<tr>
 								<td><input type="button" class="btn" value="영업" /></td>
 								<td colspan="5">
 									<div class="imgP">
 										<input type="text" class="txt imgName" id="sName" name="sName" value="${data.SALES_NAME}" />
-										<input type="hidden" id="sNum" name="sNum"/>
+										<input type="hidden" id="sNum" name="sNum" value="${data.SALES_NUM}"/>
 										<img class="btnImg_in" id="salesPop" src="resources/images/sales/popup.png">	
 									</div>
 								</td>
 							</tr>
+								</c:when>
+								<c:when test="${empty data.SALES_NAME}">
 							<tr>
 								<td><input type="button" class="btn" value="리드" readonly="readonly"/></td>
 								<td colspan="5">
 									<div class="imgP">
 										<input type="text" class="txt imgName" id="lName" name="lName" value="${data.LEAD_NAME}"/>
-										<input type="hidden" id="lNum" name="lNum"/>
+										<input type="hidden" id="lNum" name="lNum" value="${data.LEAD_NUM}"/>
 										<img class="btnImg_in" id="leadPop" src="resources/images/sales/popup.png">	
 									</div>
 								</td>
 							</tr>
+								</c:when>
+							</c:choose>
 							<tr>
 								<td><input type="button" class="btn" value="고객명" readonly="readonly"/></td>
 								<td colspan="5">
@@ -1068,6 +1083,8 @@ function uploadName(e) {
 									</c:choose>
 								</td>
 							</tr>
+							</c:when>
+							</c:choose>
 							<tr>
 								<td><input type="button" class="btn" value="활동분류 *" readonly="readonly"/></td>
 								<td colspan="5">

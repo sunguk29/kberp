@@ -624,7 +624,7 @@ function printCrtfct(cont){
 	html += "</div>                                                                                ";
 	$(".pArea").html(html);
 	
-	window.print();
+	PrintDiv("#printArea");
 	  
 /*    var html = document.querySelector('html');
    var printContents = document.querySelector('#printArea').innerHTML;
@@ -638,7 +638,16 @@ function printCrtfct(cont){
    document.body.style.display = 'block';
    printDiv.style.display = 'none'; */ 
 }
-
+function PrintDiv(id) {
+	var a = window.open('', '', 'height=550, width=1000');
+    a.document.write('<html>');
+    a.document.write('<body >');
+    a.document.write($(id).html());
+    a.document.write('</body></html>');
+    a.document.close();
+    a.print();
+    a.close();
+}
 </script>
 </head>
 <body>

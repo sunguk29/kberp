@@ -170,7 +170,7 @@
 	height: 260px;
 	margin-bottom: 30px; 
 }
-.sales_text_bot{
+.sales_text_bot, .cc_text_bot {
 	width: 428px;
 	height: 200px;
 	/* border: 1px solid #000; */
@@ -181,7 +181,7 @@
 }
 .sales_text_bot2{
 	width: 927px;
-	height: 200px;
+	height: 240px;
 	/* border: 1px solid #000; */
 	border: none;
 	margin-top: 10px;
@@ -288,8 +288,8 @@
 	margin: 10px 0px 50px 0;
 	border-top: 1.5px solid #4B94F2;
 }
-.srch_table tr:nth-child(3) {
-	border-top: 2.5px solid #d7d7d7;
+.srch_table tr:nth-child(2) {
+	border-bottom: 2.5px solid #d7d7d7;
 }
 .srch_table tr {
 	height: 40px;
@@ -398,57 +398,76 @@ input:focus {
 	margin-left: 10px;
 }
 #pie-chart {
-	margin-left: 39px;
-	margin-right: 39px;
+	width: 428px;
+	height: 250px;
+}
+#bar-chart {
+	width: 927px;
+	height: 260px;
+}
+#datatable {
+    font-family: Verdana, sans-serif;
+    border-collapse: collapse;
+    border: 1px solid #ebebeb;
+    margin: 10px auto;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+#datatable caption {
+    padding: 1em 0;
+    font-size: 1.2em;
+    color: #555;
+}
+
+#datatable th {
+    font-weight: 600;
+    padding: 0.5em;
+}
+
+#datatable td,
+#datatable th,
+#datatable caption {
+    padding: 0.5em;
+}
+
+#datatable thead tr,
+#datatable tr:nth-child(even) {
+    background: #f8f8f8;
+}
+
+#datatable tr:hover {
+    background: #f1f7ff;
 }
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src=" https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	var pie = $("#pie-chart");
-	var bar = $("#bar-chart");
-
-	var pieLabels = ["S", "A", "B", "C", "D"];
-	var barLabels = ["영업부", "영업1팀", "영업2팀"];
-
-	var pieData = [${clntGradeS},${clntGradeA},${clntGradeB},${clntGradeC},${clntGradeD}];
-	var barData = [${salesCnt},${salesCnt1},${salesCnt2}];
+	reloadList();
+	getData();
+	barList();
 	
-	var pieColors = ["#FFAB00","#FFC107","#FFD740","#FFEB3B","#FFF59D"];
+	if('${param.deptNum}' != '') {
+		$("#deptNum").val('${param.deptNum}');
+	}
 
-	var pieChart = new Chart(pie, {
-	    type: 'pie',
-	    data: {
-	        labels: pieLabels,
-	        datasets: [{
-	            label: '고객등급',
-	            data: pieData,
-	            backgroundColor: pieColors
-	        }]
-	    },
-	    options: {
-	    	responsive: false
-	    },
-	    plugins: [ChartDataLabels]
-	});
-
-	var barChart = new Chart(bar, {
-	    type: 'bar',
-	    data: {
-	        labels: barLabels,
-	        datasets: [{
-	            label: '고객',
-	            data: barData,
-	            backgroundColor: "#F2CB05"
-	        }]
-	    },
-	    options: {
-	    	responsive: false
-	    },
-	    plugins: [ChartDataLabels]
+		
+	// 검색 후 체크박스 유지 
+	/* if('${param.salesCheck}' == "1") {
+		$("[name='salesCheck']").prop("checked", true);
+	}  */
+	
+	// 검색
+	$(".cmn_btn").on("click", function() {
+		
+		reloadList();
+		getData();
+		barList();
 	});
 	
 	/* 담당자 팝업  */
@@ -548,7 +567,258 @@ $(document).ready(function() {
 			}
 		});
 	});
-});
+	
+	/*  내 영업 조회 */
+	$("#salesCheck").on("click", function() {
+		
+		
+		console.log("클릭됨");
+		
+		var checked = $("#salesCheck").is(':checked');
+		
+		if(checked) {
+			$("#salesCheck").attr("value", 1);
+			
+			var params = $("#actionForm").serialize();
+			$.ajax({
+				type : "post",
+				url : "checkMySalesAjax",
+				dataType: "json",
+				data : params,
+				success: function(res) {
+					reloadList();
+					getData();
+					barList();
+				},
+				error : function(request,status, error) {
+					console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+				}
+			});
+		} else {
+			$("#salesCheck").attr("value", 0);
+			
+			var params = $("#actionForm").serialize();
+			$.ajax({
+				type : "post",
+				url : "checkMySalesAjax",
+				dataType: "json",
+				data : params,
+				success: function(res) {
+					reloadList();
+					getData();
+					barList();
+				},
+				error : function(request,status, error) {
+					console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+				}
+			});
+		}
+	});
+}); // JQuery end
+
+//신규고객 ajax
+function reloadList() {
+	var params = $("#actionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "clntRprtAjax",
+		dataType : "json",
+		data : params,
+		success : function(ccAll) {
+			var html = "";
+			
+			$.each(ccAll, function(month, data) {
+				html += "<div class=\"mhPos\">";
+				html += "<div class=\"mhTxt\"></div>";
+				html += "<div class=\"mhTxt\">전월</div>";
+				html += "<div class=\"mhTxt\">당월</div>";
+				html += "<div class=\"mhTxt\">평균(3개월)</div>";
+				html += "<div class=\"mhTxt\">전체</div>";
+				html += "</div>";
+				html += "<span class=\"ccTxt cc\">고객사</span>";
+				html += "<div class=\"chartData\">";
+				html += "<span class=\"ccMonth ago\">" + data.CC_LAST + "</span>";	
+				html += "<span class=\"ccMonth mon\">" + data.CC_THAT + "</span>";	
+				html += "<span class=\"ccMonth mon\">" + data.CC_AVG + "</span>";	
+				html += "<span class=\"ccMonth all\">" + data.CC_ALLCNT + "</span>";	
+				html += "</div>";
+				html += "<span class=\"ccTxt clnt\">고객</span>";
+				html += "<div class=\"chartData\">";
+				html +=	"<span class=\"ccMonth ago\">" + data.EC_LAST + "</span>";	
+				html += "<span class=\"ccMonth mon\">" + data.EC_THAT + "</span>";	
+				html += "<span class=\"ccMonth mon\">" + data.EC_AVG + "</span>";	
+				html += "<span class=\"ccMonth all\">" + data.EC_ALLCNT + "</span>";	
+				html += "</div>";
+			});
+			$(".cc_text_bot").html(html);
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	});	
+}	
+/* 차트에 데이터 가져오기 */
+function getData() {
+	var params = $("#actionForm").serialize();
+	$.ajax({
+		type : "post",
+		url : "clntRprtDataAjax",
+		dataType : "json",
+		data: params,
+		success : function(res) {
+			clntMakeChart(res.list);
+		},
+		error : function(request, status, error) {
+			console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		}
+	});
+}
+//신규고객 ajax
+function barList() {
+	var params = $("#actionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "clntRprtAjax",
+		dataType : "json",
+		data : params,
+		success : function(ccAll) {
+			var html = "";
+			
+			$.each(ccAll, function(dept, data) {
+				html += "<table id=\"datatable\">";
+		        html += "<thead>";
+		        html += "<tr>";
+		        html += "<th></th>";
+		        html += "<th>고객사</th>";
+		        html += "<th>고객</th>";
+		        html += "</tr>";
+		        html += "</thead>";
+		        html += "<tbody>";
+		        html += "<tr>";
+		        html += "<th>영업부</th>";
+		        html += "<td>" + data.CC_DEPTCNT + "</td>";
+		        html += "<td>" + data.EC_CNT + "</td>";
+		        html += "</tr>";
+		        html += "<tr>";
+		        html += "<th>영업1팀</th>";
+		        html += "<td>" + data.CC_DEPTCNT1 + "</td>";
+		        html += "<td>" + data.EC_CNT1 + "</td>";
+		        html += "</tr>";
+		        html += "<tr>";
+		        html += "<th>영업2팀</th>";
+		        html += "<td>" + data.CC_DEPTCNT2 + "</td>";
+		        html += "<td>" + data.EC_CNT2 + "</td>";
+		        html += "</tr>";
+		        html += "</tbody>";
+	    		html += "</table>";	
+			});
+			$("#bar-chart").html(html);
+			
+			//영업부서 차트
+			$('#bar-chart').highcharts({
+			    data: {
+			        table: 'datatable'
+			    },
+				chart: {
+					type: 'column',
+				},
+				title: {
+					text: ''
+				},
+			    yAxis: {
+			        title: {
+			            text: ''
+			        }
+			    },
+				legend: {
+					enabled: true
+				},
+			    xAxis: {
+			        type: 'category'
+			    },
+			    tooltip: {
+			    },
+		        credits: { //워터마크 숨김
+		            enabled: false
+		        },
+			    plotOptions: {
+			        column: {
+			           borderRadius: 5,
+			           borderWidth: 0
+			         },
+			         series: {
+			        	 dataLabels: {
+			        		 enabled: false,
+				        	 formatter: function() {
+				        		if(this.y > 0) {
+				        			return this.y;
+				        		}
+				        	}
+			        	 }
+			         }
+			    },
+		        colors: ["#F2B705", "#F2CB05"],
+		        series: [{
+		        	pointWidth: 50 // 고객사 bar 너비 지정
+		        }, {
+		        	pointWidth: 50 // 고객 bar 너비 지정
+		        }]
+			});
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	});	
+}	
+//고객등급 ajax
+function clntMakeChart(list) {
+	console.log(list);
+	//고객등급 차트
+	$('#pie-chart').highcharts({
+		chart: {
+			type: 'pie',
+			zoomType: 'x'
+		},
+		title: {
+			text: ''
+		},
+	    plotOptions: {
+	        pie: {
+	            allowPointSelect: true,
+	            cursor: 'pointer',
+	            dataLabels: {
+	                enabled: true,
+		        	formatter: function() {
+			        	if(this.y > 0) {
+			        		return this.percentage.toFixed(1) + "%(" + this.y + "명)";
+			        	}
+			       	}
+	            },
+	            showInLegend: true
+	        }
+	    },
+	    legend: {
+	          enabled: true,
+	          labelFormatter: function() {
+	              if(this.y > 0) {
+	                 
+	                 return this.name;
+	              }  
+	          }
+	    },
+		colors: ['#FF6384', '#ffd950', '#02bc77', '#28c3d7','#4169e1'],
+	        series : [{
+    		name: '고객사',
+    		data : list
+    	}],
+        credits: {
+            enabled: false
+        }
+	});
+}
+	
 /****************** 담당자 조회 팝업 *********************/
 function mngrList() {
 	var params = $("#popupMngrForm").serialize();
@@ -614,10 +884,10 @@ function drawPaging(pb, sel) {
 	
 	$(sel).html(html);
 }
-
 </script>
 </head>
 <body>
+<input type="hidden" id="olddeptNum" value="${param.deptNum}" />
 	<!-- top & left -->
 	<c:import url="/topLeft">
 		<c:param name="top">${param.top}</c:param>
@@ -630,7 +900,7 @@ function drawPaging(pb, sel) {
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
-</form>
+
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">고객 차트</div>
@@ -658,12 +928,10 @@ function drawPaging(pb, sel) {
 									<span class="srch_name">부서</span>
 								</td>
 								<td>
-									<select>
-										<option>부서전체</option>
-										<option>영업 1팀</option>
-										<option>영업 2팀</option>
-										<option>영업 3팀</option>
-										<option>영업 지원팀</option>
+									<select id="deptNum" name="deptNum">
+										<option value="0">영업부</option>
+										<option value="1">영업1팀</option>
+										<option value="2">영업2팀</option>										
 									</select>
 								</td>
 								<td>
@@ -671,16 +939,19 @@ function drawPaging(pb, sel) {
 								</td>
 								<td>
 									<div class="findEmp_box">
-										<input type="text" maxlength="20" class="findEmp_box2" id="mngEmp" name="mngEmp" style="border:0 solid black" />
+										<input type="text" maxlength="20" class="findEmp_box2" id="mngEmp" name="mngEmp" value ="${param.mngEmp}" style="border:0 solid black" />
 										<input type="hidden" id="mngNum" name="mngNum" />
 										<span><img alt="담당자이미지" class="userIcon" src="resources/images/sales/usericon.png"> </span>
 									</div>								
 								</td>
 								<td>
 									<span class="srch_name">내영업 조회</span>
+									<input type="hidden" name="sEmpNum" value="${sEmpNum}">
+									<input type="hidden" name="sEmpName" value="${sEmpName}">
+									<input type="hidden" name="sDeptName" value="${sDeptName}">
 								</td>
 								<td colspan="3">
-									<input type="checkbox"/>
+									<input type="checkbox" id="salesCheck" name="salesCheck"/>
 								</td>
 							</tr>
 							<tr>
@@ -688,27 +959,11 @@ function drawPaging(pb, sel) {
 									<span class="srch_name">기간</span>
 								</td>
 								<td colspan="4">
-									<input type="date" class="date" value="${startDate}" /> ~ <input type="date" class="date" value="${endDate}" />
+									<input type="date" class="date" id="startDate" name="startDate" value="${startDate}"/> ~ <input type="date" class="date" id="endDate" name="endDate"value="${endDate}" />
 								</td>
 								<td>
 									<span class="cmn_btn">검색</span>
 								</td>
-							</tr>
-							<tr>
-								<td>
-									<span class="srch_name">정렬</span>
-								</td>
-								<td>
-									<select>
-										<option selected="selected">선택안함</option>
-										<option>오름차순</option>
-										<option>내림차순 </option>
-									</select>
-								</td>
-								<td>
-									<img class="asc_btn cmn_btn" id="soltBtn" alt="정렬버튼" src="resources/images/sales/asc.png" />
-								</td>
-								<td></td>
 							</tr>
 						</tbody>
 					</table>
@@ -717,33 +972,11 @@ function drawPaging(pb, sel) {
 							<div class="sales_text">
 								<div class="sales_text_top">
 									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />신규고객 (${tMonth})
-									<input type="hidden" id="tMonth" name="tMonth" value="${startDate}">
+									<%-- <input type="hidden" id="tMonth" name="tMonth" value="${tMonth}"> --%>
 								</div>
 								<div class="actvty_tLine1"></div>
 							</div>
-						<div class="sales_text_bot">
-							<div class="mhPos">
-								<div class="mhTxt"></div>
-								<div class="mhTxt">전월</div>
-								<div class="mhTxt">당월</div>
-								<div class="mhTxt">평균(3개월)</div>
-								<div class="mhTxt">전체</div>
-							</div>
-							<span class="ccTxt cc">고객사</span>
-							<div class="chartData">
-								<span class="ccMonth ago">${ccLastMonthCnt}</span>	
-								<span class="ccMonth mon">${ccThatMonthCnt}</span>	
-								<span class="ccMonth mon">${ccAvgCnt}</span>	
-								<span class="ccMonth all">${AllCnt}</span>	
-							</div>
-							<span class="ccTxt clnt">고객</span>
-							<div class="chartData">
-								<span class="ccMonth ago">${clntLastMonthCnt}</span>	
-								<span class="ccMonth mon">${clntThatMonthCnt}</span>	
-								<span class="ccMonth mon">${clntAvgCnt}</span>	
-								<span class="ccMonth all">${clntAllCnt}</span>	
-							</div>
-						</div>
+							<div class="cc_text_bot"></div>
 					</div>
 					<div class="new_sales_actvty">
 						<div class="sales_text">
@@ -754,7 +987,7 @@ function drawPaging(pb, sel) {
 						</div>
 						<div class="sales_text_bot2">
 							<div class="pie-bot">
-								<canvas id="bar-chart" width="927" height="240"></canvas>
+								<div id="bar-chart"></div>
 							</div>							
 						</div>
 					</div>
@@ -763,13 +996,14 @@ function drawPaging(pb, sel) {
 					<div class="new_sales_actvty">
 						<div class="sales_text">
 							<div class="sales_text_top">
-								<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />고객 등급
+								<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />고객사 등급
 							</div>
 							<div class="actvty_tLine1"></div>
 						</div>
 						<div class="sales_text_bot">
 							<div class="pie-bot">
-								<canvas id="pie-chart" width="350" height="240"></canvas>
+								<input type="hidden" name="clntsize" value="5" />
+								<div id="pie-chart"></div>
 							</div>	
 						</div>
 					</div> 
@@ -778,6 +1012,7 @@ function drawPaging(pb, sel) {
 		</div>
 	</div>
 </div>
+</form>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

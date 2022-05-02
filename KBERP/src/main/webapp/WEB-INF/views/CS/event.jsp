@@ -365,6 +365,8 @@ $(document).ready(function() {
 						data : params, 
 						success : function(res) { 
 							if(res.res == "success") {
+ 								// page를 이동할 때, 
+								$("#actionForm").attr("action", "prgrsEvent");
 								$("#actionForm").submit();
 							} else {
 								alert("삭제중 문제가 발생하였습니다.");
@@ -394,9 +396,10 @@ $(document).ready(function() {
 				name : "예",
 				func:function() {
 		/* 			$("#cont").val(CKEDITOR.instances['cont'].getData()); */
-					if(checkEmpty("#cmnt_cont")) {
+		//"co_cont"
+					if(checkEmpty("#co_cont")) {
 						alert("댓글 내용을 입력하세요.");
-						$("#cmnt_cont").focus();
+						$("#co_cont").focus();
 					} else {
 						var CmntAddForm = $("#CmntAddForm");
 						
@@ -409,6 +412,7 @@ $(document).ready(function() {
 								
 								// 글 저장
 								var params =  $("#CmntAddForm").serialize();
+								console.log(params);
 						
 								$.ajax({
 									type : "post",
@@ -417,7 +421,8 @@ $(document).ready(function() {
 									data : params,
 									success : function(res) {
 										if(res.res == "success") {
-											location.href = "event";
+											$("#actionForm").attr("action", "#");
+											$("#actionForm").submit();
 										} else {
 											alert("댓글 작성중 문제가 발생하였습니다.");
 										}
@@ -475,7 +480,7 @@ $(document).ready(function() {
 				<div class="title">${data.EVENT_TITLE}</div>
 				<div class="writer_area">
 					<div class="write_info">
-						<div class="writer">${EMP_NAME}</div>
+						<div class="writer">${data.EMP_NAME}</div>
 						<div class="date">${data.WRITE_DATE}</div>
 					</div>
 				</div>
@@ -513,19 +518,15 @@ $(document).ready(function() {
 				</c:forEach>
 				
 				<div id="comment_write">
-				<form action="fileUploadAjax" id="CmntAddForm" method="post"
-							  enctype="multipart/form-data">
-				<input type="hidden" name="no" value="${param.no}" />
-							<input type="hidden" id="emp_num" name="emp_num" value="${sEmpNum}" />
-							<!--<input type="hidden" id="emp_name" name="emp_name" value="${data.EMP_NAME}" />-->
-							<input type="hidden" id="top" name="top" value="${param.top}"/>
-							<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
-							<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
-					<div id="co_writer">
-					${sEmpName}
-					</div>
-					<div id="co_content"><textarea id="co_cont"></textarea></div>
-					<div><input type="submit" value="댓글 쓰기" id="btn_cowrite"></div>		
+				<form action="#" id="CmntAddForm" method="post">
+					<input type="hidden" name="no" value="${param.no}" />
+					<input type="hidden" id="emp_num" name="emp_num" value="${sEmpNum}" />
+					<input type="hidden" id="top" name="top" value="${param.top}"/>
+					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
+					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
+					<div id="co_writer" name=""> ${sEmpName} </div>
+					<div id="co_content"><textarea name="cmnt_cont" id="co_cont"></textarea></div>
+					<div><input value="댓글 쓰기" id="btn_cowrite"></div>		
 				</form>
 				</div>
 				
