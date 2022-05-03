@@ -570,48 +570,20 @@ $(document).ready(function() {
 	
 	/*  내 영업 조회 */
 	$("#salesCheck").on("click", function() {
-		
-		
+				
 		console.log("클릭됨");
-		
 		var checked = $("#salesCheck").is(':checked');
 		
 		if(checked) {
-			$("#salesCheck").attr("value", 1);
-			
-			var params = $("#actionForm").serialize();
-			$.ajax({
-				type : "post",
-				url : "checkMySalesAjax",
-				dataType: "json",
-				data : params,
-				success: function(res) {
+			$("#salesCheck").attr("value", 1);			
 					reloadList();
 					getData();
 					barList();
-				},
-				error : function(request,status, error) {
-					console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-				}
-			});
 		} else {
-			$("#salesCheck").attr("value", 0);
-			
-			var params = $("#actionForm").serialize();
-			$.ajax({
-				type : "post",
-				url : "checkMySalesAjax",
-				dataType: "json",
-				data : params,
-				success: function(res) {
+			$("#salesCheck").attr("value", 0);			
 					reloadList();
 					getData();
 					barList();
-				},
-				error : function(request,status, error) {
-					console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-				}
-			});
 		}
 	});
 }); // JQuery end
