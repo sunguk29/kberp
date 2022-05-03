@@ -1,5 +1,5 @@
 <!-- 
-	견적 상세보기 : sales3QtnCont
+	영업기회 상세보기 : sales1SalesChncCont
  -->
 <%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -13,7 +13,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>견적 상세보기</title>
+<title>영업기회 상세보기</title>
 <!-- popup css파일  -->
 <link rel="stylesheet" type="text/css" href="resources/css/sales/common_sales.css?version=${version}" />
 <!-- popup javaScript파일 -->
@@ -126,7 +126,17 @@ tr:nth-child(9) td:nth-child(3){
 	background-color: #F2F2F2;
 	
 }
-
+.plus_btn {
+   display:inline-block;
+   vertical-align: middle;
+   width: 18px;
+   height: 18px;
+   background-image: url("resources/images/sales/plus.png");
+   background-size: 18px 18px;
+   float: right;
+   margin-right: 5px;
+   margin-top: 5.5px;
+}
 .drop_btn {
 	display:inline-block;
 	vertical-align: middle;
@@ -146,7 +156,7 @@ tr:nth-child(9) td:nth-child(3){
 	float: right;
 	margin-top: 7.5px;
 }
-.drop_btn:hover, .up_btn:hover {
+.plus_btn:hover, .drop_btn:hover, .up_btn:hover {
 	cursor: pointer;
 }
 .rmks{
@@ -173,7 +183,7 @@ hr { /* 구분선 */
 .bot_title { 
 	font-size: 11pt;
 }
-.qBox {
+.bx { /* 스크롤때문에 div 박스 추가 */
 	width: 860px;
 	height: 305px;
 	margin-left: 47.5px;
@@ -185,7 +195,21 @@ hr { /* 구분선 */
 	margin-left: 47.5px;
 	overflow-y: auto;
 }
+/* 의견 cont */
 .OpinionBox {
+	width: 830px;
+	height: 90px;
+	font-size: 10pt;
+	border: 1px solid gray;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+	margin-bottom: 5px;
+	background-color: #F2F2F2;
+}
+/* 예정된 일정 cont */
+.OpinionBox2 {
 	width: 830px;
 	height: 70px;
 	font-size: 10pt;
@@ -314,6 +338,8 @@ textarea {
     margin-bottom: 18px;
     margin-left: 45px;
     font-size: 10pt;
+    text-indent: 12px;
+    line-height: 40px;
 }
 .btnImg_in{
 	display: inline-block;
@@ -365,7 +391,6 @@ textarea {
 	width: 680px; 
 }
 
-
 [href] {
 	color: black;
 	text-decoration: none;
@@ -375,63 +400,9 @@ textarea {
 }
 .opbx {
 	width: 860px;
-	height: 305px;
+	height: 292px;
 	margin-left: 47.5px;
 	overflow-y: auto;
-}
-.salesCont {
-	width: 927px;
-	height: 1138px;
-}
-.plus_btn {
-	display: inline-block;
-	vertical-align: middle;
-	width: 18px;
-	height: 18px;
-	background-image: url("resources/images/sales/plus.png");
-	background-size: 18px 18px;
-	float: right;
-	margin-right: 5px;
-    margin-top: 5.5px;
-}
-
-/* 끝 */
-.PQ_title {
-	position: relative;
-	font-size: 11pt;
-}
-.drop_btn_bot {
-	position: absolute;
-	top: 7px;
-	left: 909px;
-	width: 18px;
-	height: 18px;
-	background-image: url("resources/images/sales/downarrow.png");
-	background-size: 18px 18px;
-	float: right;
-}
-.drop_btn_bot:hover {
-	cursor: pointer;
-}
-.qtnBox {
-    width: 830px;
-    height: 60px;
-    font-size: 10pt;
-    border: 1px solid gray;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-    margin: 5px;
-    background-color: #F2F2F2;
-}
-pre {
-	font-family: "맑은 고딕";
-    margin-top: 3px;
-}
-.qtnDiv {
-	width: 100%;
-	height: 100%;
 }
 .popup_cont2 {
 	/* 내용 변경용 */
@@ -634,11 +605,19 @@ pre {
 	cursor: pointer;
 	text-decoration: underline;
 }
+/* 의견 목록 cont */
+#opCont {
+	width: 750px;
+    height: 20px;
+    border: none;
+    margin: 5px 0px;
+    background: #F2F2F2;
+    padding-left: 0;
+}
+/* 끝 */
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	reloadSgstnList();
-	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
 		
@@ -646,30 +625,16 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-	// 인쇄 버튼
-	//$("#printBtn")
-	
-	// 견적서 추가(수정) 버튼
+	// 수정 버튼
 	$("#updateBtn").on("click", function() {
-		var params = $("#addForm").serialize();
-		$.ajax({
-			type : "post",
-			url : "qtnAddAjax",
-			dataType : "json",
-			data : params,
-			success : function(res) {
-				$("#addForm").submit();
-			},
-			error : function(req) {
-				console.log(req.responseText);
-			}
-		});
-
+		
+		$("#actionForm").attr("action", "sales1Update");
+		$("#actionForm").submit();
 	});
 	
-	// 다음 단계로 전환하기 버튼 : 계약 등록 페이지
+	// 다음 단계로 전환하기 버튼 : 제안 등록 페이지
 	$("#nextStageBtn").on("click", function() {
-		$("#actionForm").attr("action", "sales4CntrctReg");
+		$("#actionForm").attr("action", "sales2SgstnReg");
 		$("#actionForm").submit();
 	});
 	
@@ -698,7 +663,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "salesMng3ActionAjax/failure",
+						url : "salesMng1ActionAjax/failure",
 						dataType : "json",
 						data : params,
 						success : function(res) {
@@ -718,11 +683,11 @@ $(document).ready(function() {
 					closePopup();
 				}
 			}, {
-				name : "취소"
+				name : "닫기"
 			}]
 		});
 	});
-
+	
 	
 	// 선택박스 초기값
 	$("#loanCauseNum").val(${data.LOAN_CAUSE_NUM}).prop("selected", true);
@@ -730,15 +695,6 @@ $(document).ready(function() {
 	$("#loanHopeTime").val(${data.LOAN_HOPE_TIME}).prop("selected", true);
 	$("#expctdBsnsType").val(${data.EXPCTD_BSNS_TYPE}).prop("selected", true);
 	
-	$("#sgstnloanCauseNum").val(${data2.SGSTN_LOAN_CAUSE_NUM}).prop("selected", true);
-	$("#sgstnloanType").val(${data2.SGSTN_LOAN_TYPE}).prop("selected", true);
-	
-	$("#mdType").val(${data3.MD_TYPE_NUM}).prop("selected", true);
-	$("#prdmptn_psbl_check").val(${data3.MID_RDMPTN_PSBL_CHECK}).prop("selected", true);
-	$("#srtx").val(${data3.SRTX}).prop("selected", true);
-	$("#prncpl_pymnt").val(${data3.PRNCPL_PYMNT_MTHD_NUM}).prop("selected", true);
-	$("#loanPrd").val(${data3.LOAN_PRD}).prop("selected", true);
-		
 	
 	/* 의견 목록 */
 	reloadOpList();
@@ -768,12 +724,12 @@ $(document).ready(function() {
 			});
 			("#tatacont").focus();
 		} else {
-			
+		
 			var params = $("#botOpActionForm").serialize();
 			
 			$.ajax({
 				type : "post",
-				url : "qtnBotActionAjax/insert",
+				url : "salesBotActionAjax/insert",
 				dataType : "json",
 				data : params,
 				success : function(res) {
@@ -817,7 +773,7 @@ $(document).ready(function() {
 					
 					$.ajax({
 						type : "post",
-						url : "qtnBotActionAjax/update",
+						url : "salesBotActionAjax/update",
 						dataType : "json",
 						data : params,
 						success : function(res) {
@@ -841,33 +797,6 @@ $(document).ready(function() {
 		});
 		
 	});
-	$(".salesCont").hide();
-	$(".sgstnCont").hide();
-	// 영업기회 탭 접기펼치기
-	$("#sales_btn").on("click", "#salesContBtn_h", function() {
-		$(".salesCont").hide();
-		html = "<div class=\"up_btn\" id=\"salesContBtn_s\"></div>";
-		$("#sales_btn").html(html);
-	});
-	
-	$("#sales_btn").on("click", "#salesContBtn_s", function() {
-		$(".salesCont").show();
-		html = "<div class=\"drop_btn\" id=\"salesContBtn_h\"></div>";
-		$("#sales_btn").html(html);
-	});
-	
-	// 제안 탭 접기펼치기
-	$("#sgstn_btn").on("click", "#sgstnContBtn_h", function() {
-		$(".sgstnCont").hide();
-		html = "<div class=\"up_btn\" id=\"sgstnContBtn_s\"></div>";
-		$("#sgstn_btn").html(html);
-	});
-	
-	$("#sgstn_btn").on("click", "#sgstnContBtn_s", function() {
-		$(".sgstnCont").show();
-		html = "<div class=\"drop_btn\" id=\"sgstnContBtn_h\"></div>";
-		$("#sgstn_btn").html(html);
-	});
 	
 	/* ***** 예정된 일정 접기 펼치기 ***** */
 	$(".schdl_title").on("click", ".drop_btn_bot", function() {
@@ -882,14 +811,14 @@ $(document).ready(function() {
 		$("#scListCnt_right").html(html);
 	});
 	
-	
 	// 예정된 일정 실행
-	reloadSScList();	
-
+	reloadSScList();
+	
 	/* 예정된 일정 등록 팝업 */
 	$(".schdl_title").on("click", ".plus_btn_bot", function() {
 		if(${data.MNGR_EMP_NUM eq sEmpNum}) {
-			
+		
+		
 			var html = "";
 			
 			html += "<form action=\"fileUploadAjax\" id=\"RegForm\" method=\"post\" enctype=\"multipart/form-data\">";
@@ -961,6 +890,7 @@ $(document).ready(function() {
 					$(".aff_btn").on("click", function() {
 						$("#att").click();
 					});
+					
 				},
 				width : 600,
 				height : 520,
@@ -993,7 +923,6 @@ $(document).ready(function() {
 								});
 							} else {					
 									
-									console.log(${sEmpNum});
 									var RegForm = $("#RegForm");
 											
 									RegForm.ajaxForm({
@@ -1315,6 +1244,8 @@ $(document).ready(function() {
 						$("#uploadBtn").html(html);
 					});
 					
+					
+					
 					$(".pop_rvn_txt").on("click", ".aff_btn", function() {
 						$("#att").click();
 					});
@@ -1326,29 +1257,27 @@ $(document).ready(function() {
 				buttons : [{
 					name : "수정",
 					func : function() {
-						
-						if(checkEmpty("#ssname")){
-							makeAlert("필수 정보 알림", popContOneLine("일정명을 입력하세요."), function() {
-								$("#ssname").focus();
-							});
-						} else if($("#ssactvtyclsfy").val() == 9){
-							makeAlert("필수 정보 알림", popContOneLine("활동분류를 입력하세요."), function() {
-								$("#ssactvtyclsfy").focus();
-							});
-						} else if(checkEmpty("#sdt")){
-							makeAlert("필수 정보 알림", popContOneLine("시작일을 입력하세요."), function() {
-								$("#sdt").focus();
-							});
-						} else if($("#sdt").val() > $("#edt").val()) {
-							makeAlert("알림", popContOneLine("종료일이 시작일보다 빠를 수 없습니다."), function() {
-								$("#edt").focus();
-							});
-						} else if(checkEmpty("#ssactvtycont")){
-							makeAlert("필수 정보 알림", popContOneLine("활동내용을 입력하세요."), function() {
-								$("#ssactvtycont").focus();
-							});
-						} else {					
-									
+							if(checkEmpty("#ssname")){
+								makeAlert("필수 정보 알림", popContOneLine("일정명을 입력하세요."), function() {
+									$("#ssname").focus();
+								});
+							} else if($("#ssactvtyclsfy").val() == 9){
+								makeAlert("필수 정보 알림", popContOneLine("활동분류를 입력하세요."), function() {
+									$("#ssactvtyclsfy").focus();
+								});
+							} else if(checkEmpty("#sdt")){
+								makeAlert("필수 정보 알림", popContOneLine("시작일을 입력하세요."), function() {
+									$("#sdt").focus();
+								});
+							} else if($("#sdt").val() > $("#edt").val()) {
+								makeAlert("알림", popContOneLine("종료일이 시작일보다 빠를 수 없습니다."), function() {
+									$("#edt").focus();
+								});
+							} else if(checkEmpty("#ssactvtycont")){
+								makeAlert("필수 정보 알림", popContOneLine("활동내용을 입력하세요."), function() {
+									$("#ssactvtycont").focus();
+								});
+							} else {					
 									var RegForm = $("#RegForm");
 											
 									RegForm.ajaxForm({
@@ -1451,9 +1380,7 @@ $(document).ready(function() {
 	}); // 일정 삭제 function end
 	
 	
-	
-	
-}); // document.ready End
+}); // document.ready end
 
 /* 의견 목록 Ajax */
 function reloadOpList() {
@@ -1461,7 +1388,7 @@ function reloadOpList() {
 	
 	$.ajax({
 		type : "post",
-		url : "qtnOpBotListAjax",
+		url : "salesOpBotListAjax",
 		data : params,
 		dataType : "json",
 		success : function(res) {
@@ -1490,7 +1417,7 @@ function drawOpList(list) {
 	for(var data of list) {
 		html += "<div class=\"OpinionBox\">";
 		html += "<div class=\"name\">" + data.EMP_NAME + "(" + data.DEPT_NAME + " / " + data.RANK_NAME + ")" + "</div>";
-		html += "<div class=\"txtOp\">" + data.CONT + "</div>";
+		html += "<div class=\"txtOp\"><textarea id=\"opCont\">" + data.CONT + "</textarea></div>";
 		html += "<div class=\"dt\">" + data.RGSTRTN_DATE + "</div>";
 		if(data.EMP_NUM == ${sEmpNum}) {
 			html += "<div class=\"del\">삭제";
@@ -1504,57 +1431,6 @@ function drawOpList(list) {
 	$(".opbx").html(html);
 	
 }
-
-//*************** 지난견적서 목록 Ajax *************** 
-function reloadSgstnList() {
-	var params = $("#pastQtnActionForm").serialize();
-	
-	$.ajax({
-		type : "post",
-		url : "PQListAjax",
-		dataType : "json",
-		data : params,
-		success : function(res) {
-			if(res.PQListCnt != 0) {
-				drawPQCnt(res.PQListCnt);
-				drawPQList(res.list);
-				$(".qtnDiv").show();
-			} else {
-				$(".qtnDiv").hide();
-			}
-		},
-		error : function(req) {
-			console.log(req.responseText);
-		}
-	});
-}
-
-/* 지난견적서 목록 개수 html */
-function drawPQCnt(PQListCnt) {
-	var html = "";
-	
-	html = "<h3>지난 견적서(" + PQListCnt + ")</h3><div class=\"drop_btn_bot\"></div>";
-	
-	$(".PQ_title").html(html);
-}
-
-/* 지난견적서 목록 html */
-function drawPQList(list) {
-	var html = "";
-	
-	for(var data of list) {
-		html +="<div class=\"qtnBox\">";
-		html +="<div class=\"name\">" + data.QTN_NAME + " (" + data.QTN_DATE +")</div>";
-		html +="<div class=\"txtOp\"><pre>" + data.MD_TYPE_NUM + "  " + data.MD_NAME + " " + data.INTRST_RATE + "%    " + data.LIMIT_AMNT + "원</pre></div>";
-		html +="</div>";
-	}
-	$(".qBox").html(html);
-}
-
-
-// *************** 지난견적서 목록 끝
-
-
 
 /* ******************** 예정된 일정 영역 ******************** */
 function reloadSScList(){
@@ -1578,7 +1454,7 @@ function reloadSScList(){
 function drawSScCnt(SScListCnt) {
 	var html = "";
 	
-	html = "<h3>예정된 일정(" + SScListCnt + ")</h3><div id=\"scListCnt_right\"><div class=\"drop_btn_bot\"></div><div class=\"plus_btn_bot\"></div>";
+		html = "<h3>예정된 일정(" + SScListCnt + ")</h3><div id=\"scListCnt_right\"><div class=\"drop_btn_bot\"></div><div class=\"plus_btn_bot\"></div>";
 	
 	$(".schdl_title").html(html);
 }
@@ -1587,7 +1463,7 @@ function drawSScList(list) {
 	var html = "";
 	
 	for(var data of list){
-		html += "<div class=\"OpinionBox\">";
+		html += "<div class=\"OpinionBox2\">";
 		html += "<div class=\"schdl_box_in\">";
 		html += "";
 		html += "";
@@ -1597,6 +1473,7 @@ function drawSScList(list) {
 			html +=	"<div class=\"txtOp sche\">담당자   :" + data.EMP_NAME + "</div><span class=\"sch_re\" >수정<input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"salesListNumber\" value=\"" + ${param.salesNum} + "\" /></span><span> | </span><span class=\"sch_del\" >삭제<input type=\"hidden\" id=\"schdlListNumber\" value=\"" + data.SCHDL_NUM + "\" /><input type=\"hidden\" id=\"salesListNumber\" value=\"" + ${param.salesNum} + "\" /></span>";
 		} else {
 			html +=	"<div class=\"txtOp sche\">담당자   :" + data.EMP_NAME + "</div>";
+			
 		}
 		html += "</div>";
 		html += "</div>";
@@ -1605,7 +1482,7 @@ function drawSScList(list) {
 	$(".sBox").html(html);
 }
 
-//일정 등록 파일명
+// 일정 등록 파일명
 function popuploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
@@ -1618,35 +1495,26 @@ function uploadName(e) {
 	var filename = files[0].name;
 	$("#fileName").val(filename);
 }
+
 </script>
 </head>
 <body>
 <form action="#" id="ssForm" method="post">
-	<input type="hidden" id="schdlNumber" name="schdlNum" />
-	<input type="hidden" id="salesNumber" name="salesNum" />
-</form>	
+	<input type="hidden" id="schdlNumber" name="schdlNum"  />
+	<input type="hidden" id="salesNumber" name="salesNum"  />
+</form>
 <form action="#" id="actionForm" method="post">
 	<input type="hidden" id="page" name="page" value="${page}" />
 	<input type="hidden" name="top" value="${param.top}" />
 	<input type="hidden" name="menuNum" value="${param.menuNum}" />
 	<input type="hidden" name="menuType" value="${param.menuType}" />
-	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업번호 -->
-	<input type="hidden" name="qtnNum" value="${param.qtnNum}" /> <!-- 견적 번호 -->
-	<input type="hidden" name="mdName" value="${param.mdName}" /> <!-- 상품 이름 -->
-	<input type="hidden" name="loanPrd" value="${data3.LOAN_PRD}" />
+	<input type="hidden" id="salesNum" name="salesNum" value="${param.salesNum}" /> <!-- 영업번호 -->
 	<input type="hidden" name="prgrsStage1" value="${param.prgrsStage1}" />
 	<input type="hidden" name="prgrsStage2" value="${param.prgrsStage2}" />
 	<input type="hidden" name="mngName" value="${param.mngName}" />
 	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
 	<input type="hidden" name="listSort" value="${param.listSort}" />
-</form>
-<form action="sales3QtnReg" id="addForm" method="post">
-	<input type="hidden" name="top" value="${param.top}" />
-	<input type="hidden" name="menuNum" value="${param.menuNum}" />
-	<input type="hidden" name="menuType" value="${param.menuType}" />
-	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업번호 -->
-	<input type="hidden" name="qtnNum" value="${data3.QTN_NUM}" />
 </form>
 	<!-- top & left -->
 	<c:import url="/topLeft">
@@ -1659,11 +1527,10 @@ function uploadName(e) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">영업관리 - 견적 상세보기</div>
+			<div class="page_title_text">영업관리 - 영업기회 상세보기</div>
 				<img alt="목록버튼" src="resources/images/sales/list.png" class="btnImg" id="listBtn" />
-				<!-- <img alt="인쇄버튼" src="resources/images/sales/printer.png" class="btnImg" id="printBtn" /> -->
 				<c:if test="${data.MNGR_EMP_NUM eq sEmpNum}">
-					<img alt="수정버튼" src="resources/images/sales/newAdd.png" class="btnImg" id="updateBtn" data-toggle="tooltip" title="견적서 추가하기" />
+					<img alt="수정버튼" src="resources/images/sales/pencil.png" class="btnImg" id="updateBtn" />
 				</c:if>
 			<!-- 검색영역 선택적 사항 -->
 		</div>
@@ -1681,10 +1548,8 @@ function uploadName(e) {
 						<input type="text" name="prgrsStsNum" value="${data.PRGRS_STS_NUM}" />
 						<input type="text" id="salesNum" name="salesNum" value="${data.SALES_NUM}" />
 				
-					<div class="bot_title">
-						<h3>영업기회<span id="sales_btn"><div class="up_btn" id="salesContBtn_s"></div></span></h3>
-					</div>
-				<div class="salesCont">
+					<div class="bot_title"><h3>영업기회</h3></div>
+					<hr class="hr_bot" color="white" width="925px">
 					<div class="page_cont_title_text">기본정보</div>
 					<hr class="hr_width">
 					<table>
@@ -1747,14 +1612,14 @@ function uploadName(e) {
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="예상 대출 규모"/></td>
-									<td colspan="3"><input type="text" class="txt" readonly="readonly" value="${data.EXPCTN_LOAN_SCALE}" /></td>								
+									<td colspan="3"><input type="text" class="txt" readonly="readonly" id="expctnLoanScale" value="${data.EXPCTN_LOAN_SCALE}" /></td>								
 							</tr>
 							<tr height="40">
 									<td><input type="button" class="btn" value="대출 희망 유형*" /></td>
 									<td colspan="3">
 										<select class="txt" id="loanHopeType" name="loanHopeType" disabled="disabled">
-											<option value="0" selected="selected">장기대출</option>
-											<option value="1" selected="selected">단기대출</option>
+											<option value="0">장기대출</option>
+											<option value="1">단기대출</option>
 										</select>
 									</td>
 							</tr>
@@ -1803,305 +1668,27 @@ function uploadName(e) {
 					</table>
 					<br/>
 					<!-- 첨부자료  -->
-					<c:set var="salesFileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
-					<c:set var="salesFileName" value="${fn:substring(data.ATT_FILE_NAME, 20, salesFileLength)}"></c:set>
+					<c:set var="fileLength" value="${fn:length(data.ATT_FILE_NAME)}"></c:set>
+					<c:set var="fileName" value="${fn:substring(data.ATT_FILE_NAME, 20, fileLength)}"></c:set>
 					<div class="spc">
 						<div class="adc_txt">
 							첨부자료
 						</div>
 						<div class="cntrct_box_in">
-							<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${salesFileName}">${salesFileName}</a>
+							<a href="resources/upload/${data.ATT_FILE_NAME}"  download="${fileName}">${fileName}</a>
 						</div> 
 					</div>
-				</div>
-					
-					<!-- *************** 영업기회 끝 **************** -->
-					
-					<hr class="hr_bot" color="#4B94F2" width="925px">
-					<!-- *************** 제안 부분 시작 **************** -->
-					
-						<div class="bot_title">
-							<h3>제안<span id="sgstn_btn"><div class="up_btn" id="sgstnContBtn_s"></div></span></h3>
-						</div>
-					<div class="sgstnCont">
-						<div class="page_cont_title_text">대출 상세정보</div>
-						<hr class="hr_width">
-						<table class="detailList">
-							<colgroup>
-								<col width="200" />
-								<col width="250" />
-								<col width="200" />
-								<col width="250" />
-							</colgroup>
-							<tbody>
-								<tr>
-									<td>
-										<input type="button" class="btn" value="대출 원인*"  />
-									</td>
-									<td colspan="3">
-										<select class="txt" id="sgstnloanCauseNum" name="sgstnloanCauseNum" disabled="disabled">
-											<option value="0">사업확장</option>
-											<option value="1">제품개발</option>
-											<option value="2">토지매매</option>
-											<option value="3">기타</option>
-										</select>
-									</td>
-								</tr>
-								<tr height="40">
-									<td>
-										<input type="button" class="btn" value="대출 규모*" />
-									</td>
-									<td colspan="3">
-										<input type="text" class="txt" id="sgstnLoanScale" name="sgstnLoanScale" value="${data2.SGSTN_LOAN_SCALE}" readonly="readonly" />
-									</td>
-								</tr>
-								<tr height="40">
-									<td>
-										<input type="button" class="btn" value="대출 유형*" />
-									</td>
-									<td colspan="3">
-										<select class="txt" id="sgstnloanType" name="sgstnloanType" disabled="disabled">
-											<option value="0">장기 대출</option>
-											<option value="1">단기 대출</option>
-										</select>
-									</td>
-								</tr>
-								<tr height="40">
-									<td>
-										<input type="button" class="btn" value="대출 시기*" />
-									</td>
-									<td colspan="3">
-										<input type="month" class="txt" id="sgstnloanTime" name="sgstnloanTime" value="${data2.SGSTN_LOAN_TIME}"  disabled="disabled" />
-									</td>
-								</tr>
-								<tr height="40">
-									<td>
-										<input type="button" class="btn" value="상환 시기*" />
-									</td>
-									<td colspan="3">
-										<input type="month" class="txt" id="sgstnRdmptnTime" name="sgstnRdmptnTime" value="${data2.SGSTN_RDMPTN_TIME}"  disabled="disabled" />
-									</td>
-								</tr>
-							</tbody>
-						</table>
-						<div class="page_cont_title_text">고객사 상세정보</div>
-						<hr class="hr_width">
-						<table class="detailList">
-							<colgroup>
-								<col width="200" />
-								<col width="250" />
-								<col width="200" />
-								<col width="250" />
-							</colgroup>
-							<tbody>
-								<tr height="40">
-									<td>
-										<input type="button" class="btn" value="자산 총액*" />
-									</td>
-									<td colspan="3">
-										<input type="text" class="txt" id="sgstnTotalAmnt" name="sgstnTotalAmnt" value="${data2.SGSTN_TOTAL_AMNT}"  disabled="disabled" />
-									</td>
-								</tr>
-								<tr height="40">
-									<td>
-										<input type="button" class="btn" value="부채액*" />
-									</td>
-									<td colspan="3">
-										<input type="text" class="txt" id="sgstnDebtAmnt" name="sgstnDebtAmnt" value="${data2.SGSTN_DEBT_AMNT}"  disabled="disabled" />
-									</td>
-								</tr>
-								<tr height="40">
-									<td>
-										<input type="button" class="btn" value="평균 매출액" />
-									</td>
-									<td colspan="3">
-										<input type="text" class="txt" id="sgstnAvgRvnAmnt" name="sgstnAvgRvnAmnt" value="${data2.SGSTN_AVG_RVN_AMNT}"  disabled="disabled" />
-									</td>
-								</tr>
-								<tr height="40">
-									<td>
-										<input type="button" class="btn" value="사원 수" />
-									</td>
-									<td colspan="3">
-										<input type="text" class="txt" id="sgstnEmpCount" name="sgstnEmpCount" value="${data2.SGSTN_EMP_COUNT}"  disabled="disabled" />
-									</td>
-								</tr>
-							</tbody>
-						</table>
-						<div class="page_cont_title_text">상세정보</div>
-						<hr class="hr_width">
-						<table class="detail_info_table">
-							<colgroup>
-								<col width="200" />
-								<col width="250" />
-								<col width="200" />
-								<col width="250" />
-							</colgroup>
-							<tbody>
-								<tr height="40">
-									<td>
-										<input type="button" class="btn" value="상세내용*" />
-									</td>
-									<td colspan="3">
-										<textarea rows="100" cols="50" class="txt_area" id="dtlCont" name="dtlCont" readonly="readonly">${data2.DTL_CONT}</textarea>
-									</td>
-								</tr>
-								<tr height="40">
-									<td>
-										<input type="button" class="btn" value="비고" />
-									</td>
-									<td colspan="3">
-										<input type="text" class="rmks" id="rmrks" name="rmrks" value="${data2.RMRKS}" readonly="readonly" />
-									</td>
-								</tr>
-								<tr height="10"></tr>
-							</tbody>
-						</table>
-						<!-- 첨부자료  -->
-						<c:set var="sgstnFileLength" value="${fn:length(data2.ATT_FILE_NAME)}"></c:set>
-						<c:set var="sgstnFileName" value="${fn:substring(data2.ATT_FILE_NAME, 20, sgstnFileLength)}"></c:set>
-						<div class="spc">
-							<div class="adc_txt">
-								첨부자료
-							</div>
-							<div class="cntrct_box_in">
-								<a href="resources/upload/${data2.ATT_FILE_NAME}"  download="${sgstnFileName}">${sgstnFileName}</a>
-							</div> 
-						</div>
-					</div>
-<!-- *************************************** 견적 시작 *************************************** -->			
-	<hr class="hr_bot" color="#4B94F2" width="925px">
-	<input type="hidden" name="salesNum" value="${param.salesNum}" /> <!-- 영업기회에서 가져온 영업번호 -->
-					<input type="hidden" id= "mdNum" name="mdNum" /> <!-- 영업기회에서 가져온 영업번호 -->
-					<div class="bot_title"><h3>견적</h3></div>
-					 <hr class="hr_bot" color="white" width="925px"> 
-					<div class="hr_bot"></div>
-					<table>
-						<colgroup>
-							<col width="200" />
-							<col width="250" />
-							<col width="200" />
-							<col width="250" />
-						</colgroup>
-						<tbody>
-							<tr height="40">
-								<td><input type="button" class="btn" value="견적명*" readonly="readonly" /></td>
-								<td colspan="3"><input type="text" class="txt" id="qtnName" name="qtnName" value="${data3.QTN_NAME}" readonly="readonly" /></td>		
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="상품유형" readonly="readonly" /></td>
-								<td colspan="3">
-									<select class="txt" id="mdType" name="mdType" disabled="disabled">
-								 		<option value="0">개인사업</option>
-								 		<option value="1">법인사업</option>
-								 		<option value="2">공공사업</option>
-									</select>
-								</td>
-							</tr>
-							<tr height="40">
-									<td><input type="button" class="btn" value="견적일*" readonly="readonly" /></td>
-									<td colspan="3"><input type="date" class="txt" id="qtnDate" name="qtnDate" value="${data3.QTN_DATE}" readonly="readonly" /></td>
-							</tr>
-							<tr height="40">
-									<td><input type="button" class="btn" value="대출금액*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" id="LoanAmnt" name="LoanAmnt" value="${data3.LOAN_AMNT}" readonly="readonly" /></td>		
-							</tr> 
-							<tr height="40">
-									<td><input type="button" class="btn" value="공급가액*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" id="splyPrice" name="sqlyPrice" value="${data3.SPLY_PRICE}" readonly="readonly" /></td>		
-							</tr> 
-							<tr height="40">
-									<td><input type="button" class="btn" value="세액*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" id="taxAmnt" name="taxAmnt" value="${data3.TAX_AMNT}" readonly="readonly" /></td>
-							</tr>
-							<tr height="40">
-									<td><input type="button" class="btn" value="합계액*" readonly="readonly" /></td>
-									<td colspan="3"><input type="text" class="txt" id="sumAmnt" name="sumAmnt" value="${data3.TOTAL}" readonly="readonly" /></td>
-							</tr>
-							<tr height="40">
-									<td><input type="button" class="btn" value="중도상환가능여부" readonly="readonly" /></td>
-									<td>
-										<select class="txt" id="prdmptn_psbl_check" name="prdmptnPsbl"  disabled="disabled">
-											<option value="0">가능</option>
-											<option value="1">불가능</option>
-										</select>
-									</td>
-									<td><input type="button" class="btn" value="부가세*" readonly="readonly" /></td>
-									<td>
-										<select class="txt" id="srtx" name="srtx" onchange="test(this);" disabled="disabled">
-							 				<option value="0">미포함</option>
-							 				<option value="1">포함</option>
-							 				<option value="2">면세</option>
-										</select>
-									</td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="대출기간" readonly="readonly" /></td>
-								<td>
-									<select class="txt" id="loanPrd" name="loanPrd" disabled="disabled">
-										<option value="0">6개월</option>
-										<option value="1">1년</option>
-										<option value="2">3년</option>
-										<option value="3">5년</option>
-									</select>	
-								</td>
-								
-								<td><input type="button" class="btn" value="원금상환방식" readonly="readonly" /></td>
-								<td colspan="2">
-									<select class="txt" id="prncpl_pymnt" name="prncplPymnt" disabled="disabled">
-										<option value="0">원금 균등 상환</option>
-										<option value="1">원리금 균등 상환</option>
-										<option value="2">만기 일시 상환</option>
-									</select>
-								</td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="이자율(%)" /></td>
-								<td><input type="text" class="txt" id="intrstRate" name="intrstRate" value="${data3.INTRST_RATE}" readonly="readonly" /></td>
-								<td><input type="button" class="btn" value="납부일*" readonly="readonly" /></td>
-								<td colspan="2"><input type="text" class="txt" id="pymntDate" name="pymntDate" value="${data3.PYMNT_DATE}" readonly="readonly" placeholder="매달    일" /></td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="비고" readonly="readonly"/></td>
-								<td colspan="3"><input type="text" class="rmks" name="rmksCont" value="${data3.RMKS}" readonly="readonly" /></td>
-							</tr>							
-						</tbody>
-					</table>
-					<!-- 첨부자료 -->
-					<c:set var="qtnFileLength" value="${fn:length(data3.ATT_FILE_NAME)}"></c:set>
-						<c:set var="qtnFileName" value="${fn:substring(data3.ATT_FILE_NAME, 20, qtnFileLength)}"></c:set>
-						<div class="spc">
-							<div class="adc_txt">
-								첨부자료
-							</div>
-							<div class="cntrct_box_in">
-								<a href="resources/upload/${data3.ATT_FILE_NAME}"  download="${qtnFileName}">${qtnFileName}</a>
-							</div> 
-						</div>		
-<!-- *************************************** 견적 끝 *************************************** -->						
 					<div class="next_bot">
 						<c:if test="${data.MNGR_EMP_NUM eq sEmpNum}">
 							<div class="cmn_btn nb" id="nextStageBtn">다음단계로 전환하기 ▶</div>
 						</c:if>
-					</div>
-				</form>	
-				<div class="qtnDiv">
-				<form action="#" id="pastQtnActionForm" method="post">
-					<input type="hidden" name="salesNum" value="${param.salesNum}" />
-					<input type="hidden" name="qtnNum" value="${param.qtnNum}" />
-					<!-- 지난 견적서 -->
-					<div class="mgtop"></div>
-					<div class="PQ_title"></div>
-					<hr color="#F2B705" width="925px">
-					<div class="qBox"></div>
-				</form>		
-				</div>		
-					<!-- ********* 견적 끝 ********* -->
+					</div>	
+				</form>				
+				<!-- ************* 의견 ************* -->
 				<form action="#" id="botOpActionForm" method="post">
-					<input type="hidden" name="qtnNum" value="${data3.QTN_NUM}" />
+					<input type="hidden" name="salesNum" value="${param.salesNum}" />
 					<input type="hidden" name="sEmpNum" value="${sEmpNum}" />
 					<input type="hidden" id="cmntNum" name="cmntNum" />
-					<!-- 의견 -->
 					<div class="mgtop"></div>
 					<div class="op_title"></div>
 					<hr color="#F2B705" width="925px">
@@ -2126,10 +1713,10 @@ function uploadName(e) {
 						<div class="salesOver_btn nb">영업 종료하기</div>
 					</c:if>
 					<!-- 끝 -->
-					</div>
 				</div>
 			</div>	
 		</div>
+	</div>
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
 </body>

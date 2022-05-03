@@ -490,7 +490,7 @@ $(document).ready(function() {
 		$("#startDate").val(yesterday);
 		var b = new Date();
 		var today = b.getFullYear() + "-" + lpad((b.getMonth() + 1), 2, 0) + "-" + lpad(b.getDate(), 2, 0);
-		$("#endDate").val(today);
+		$("#endDate").val(yesterday);
 	});
 	/* 검색 오늘버튼 */
 	$("#today").on("click", function() {
@@ -536,78 +536,6 @@ $(document).ready(function() {
 		$("#actionForm").attr("action", "leadReg")
 		$("#actionForm").submit();
 	});
-
-/* 리드 리스트 */
-function reloadList() {
-	var params = $("#actionForm").serialize();
-	
-	$.ajax({
-		type : "post",
-		url : "leadListAjax",
-		dataType : "json",
-		data : params,
-		success : function(res) {
-			drawTotal(res.cnt);
-			drawList(res.list);
-			drawPaging(res.pb, ".pgn_area");
-		},
-		error : function(req) {
-			console.log(req.responseText);
-		}
-	});	
-}
-//리스트
-function drawList(list) {
-	var html = "";
-	
-	html += "<colgroup>";
-	html += "<col width=\"70\">";
-	html += "<col width=\"100\">";
-	html += "<col width=\"290\">";
-	html += "<col width=\"80\">";
-	html += "</colgroup>";
-	html += "<thead>";
-	html += "<tr>";
-	html += "<th rowspan=\"3\">글번호</th>";
-	html += "<th>리드번호</th>";
-	html += "<th>고객사명 / 고객명</th>";
-	html += "<th></th>";
-	html += "</tr>";
-	html += "<tr>";
-	html += "<th>담당자</th>";
-	html += "<th>리드명</th>";
-	html += "<th>가능 여부</th>";
-	html += "</tr>";
-	html += "<tr>";
-	html += "<th>진행상태</th>";
-	html += "<th>등록일</th>";
-	html += "<th></th>";
-	html += "</tr>";
-	html += "</thead>";
-		
-	for(var data of list) {
-		html += "<tbody>";
-		html += "<tr>";
-		html += "<td rowspan=\"3\">" + data.LEAD_NUM + "</td>";
-		html += "<td> LD" + data.LEAD_NUM + "</td>";
-		html += "<td>" + data.CLNT_CMPNY_NAME + " / " + data.CLNT_NAME + "</td>";
-		html += "<td></td>";
-		html += "</tr>";
-		html += "<tr>";
-		html += "<td>" + data.EMP_NAME + "</td>";
-		html += "<td class=\"leadName\" leadNum=\"" + data.LEAD_NUM + "\">" + data.LEAD_NAME + "</td>";
-		html += "<td><span class=\"sales_psbl_btn\">" + data.PSBL_CHECK + "%</span></td>";
-		html += "</tr>";
-		html += "<tr>";
-		html += "<td>" + data.PSNUM + "</td>";		
-		html += "<td>" + data.RGSTRTN_DATE + "</td>";
-		html += "<td></td>";
-		html += "</tr>";
-		html += "</tbody>";
-	}
-		
-	$(".list_table").html(html);
-}
 
 /* 담당자 팝업  */
 	$(".userIcon").on("click", function() {
@@ -707,7 +635,78 @@ function drawList(list) {
 		});
 	});
 }); 
+/* 리드 리스트 */
+function reloadList() {
+	var params = $("#actionForm").serialize();
+	
+	$.ajax({
+		type : "post",
+		url : "leadListAjax",
+		dataType : "json",
+		data : params,
+		success : function(res) {
+			drawTotal(res.cnt);
+			drawList(res.list);
+			drawPaging(res.pb, ".pgn_area");
+		},
+		error : function(req) {
+			console.log(req.responseText);
+		}
+	});	
+}
 
+//리드 리스트
+function drawList(list) {
+	var html = "";
+	
+	html += "<colgroup>";
+	html += "<col width=\"70\">";
+	html += "<col width=\"100\">";
+	html += "<col width=\"290\">";
+	html += "<col width=\"80\">";
+	html += "</colgroup>";
+	html += "<thead>";
+	html += "<tr>";
+	html += "<th rowspan=\"3\">글번호</th>";
+	html += "<th>리드번호</th>";
+	html += "<th>고객사명 / 고객명</th>";
+	html += "<th></th>";
+	html += "</tr>";
+	html += "<tr>";
+	html += "<th>담당자</th>";
+	html += "<th>리드명</th>";
+	html += "<th>가능 여부</th>";
+	html += "</tr>";
+	html += "<tr>";
+	html += "<th>진행상태</th>";
+	html += "<th>등록일</th>";
+	html += "<th></th>";
+	html += "</tr>";
+	html += "</thead>";
+		
+	for(var data of list) {
+		html += "<tbody>";
+		html += "<tr>";
+		html += "<td rowspan=\"3\">" + data.LEAD_NUM + "</td>";
+		html += "<td> LD" + data.LEAD_NUM + "</td>";
+		html += "<td>" + data.CLNT_CMPNY_NAME + " / " + data.CLNT_NAME + "</td>";
+		html += "<td></td>";
+		html += "</tr>";
+		html += "<tr>";
+		html += "<td>" + data.EMP_NAME + "</td>";
+		html += "<td class=\"leadName\" leadNum=\"" + data.LEAD_NUM + "\">" + data.LEAD_NAME + "</td>";
+		html += "<td><span class=\"sales_psbl_btn\">" + data.PSBL_CHECK + "%</span></td>";
+		html += "</tr>";
+		html += "<tr>";
+		html += "<td>" + data.PSNUM + "</td>";		
+		html += "<td>" + data.RGSTRTN_DATE + "</td>";
+		html += "<td></td>";
+		html += "</tr>";
+		html += "</tbody>";
+	}
+		
+	$(".list_table").html(html);
+}
 /****************** 담당자 조회 팝업 *********************/
 function mngrList() {
 	var params = $("#popupMngrForm").serialize();
@@ -786,7 +785,7 @@ function drawPaging(pb, sel) {
 	$(sel).html(html);
 }
 
-/* 체크박스 */
+/* 가능여부 체크박스 */
 function checkOnly(chk) {
 	var obj = document.getElementsByName("sales_sts");
 	for(var i = 0; i<obj.length; i++) {

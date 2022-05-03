@@ -90,15 +90,30 @@ WHERE AL.EMP_NUM = #{employ_no}
 				WHERE AB.RNUM BETWEEN #{startCount} AND #{endCount} 
 </select>
 
-<select id = "aprvlResult" resultType="String">
+<select id = "aprvlResult" parameterType="hashmap" resultType="String">
+	SELECT CASE WHEN AL.ING > 0
+	            THEN 0
+	            WHEN AL.FA > 0
+	            THEN 2
+	            ELSE 1
+	       END AS RES
+	FROM (
+	        SELECT COUNT(*) AS CNT,
+	               COUNT(DECODE(APRVL_STS, 0, 1, NULL)) AS ING,
+	               COUNT(DECODE(APRVL_STS, 1, 1, NULL)) AS ED,
+	               COUNT(DECODE(APRVL_STS, 2, 1, NULL)) AS FA
+	        FROM APRVL_LINE
+	        WHERE APRVL_NUM = #{aprvl_num}
+	        ) AL 
+</select>
+<!-- <select id = "aprvlResult" resultType="String">
 	SELECT  DISTINCT CASE WHEN APRVL_STS = 0 THEN '결재진행중'
         				  WHEN APRVL_STS = 1 THEN '결재완료'
         				  WHEN APRVL_STS = 2 THEN '결재반려'
-    
     END AS  APRVL_STS
 	FROM APRVL_LINE
-	WHERE APRVL_NUM = #{aprvl_num}  
-</select>
+	WHERE APRVL_NUM = #{aprvl_num} 
+</select> -->
 
 <select id="tmpltCont" parameterType="hashmap" resultType="hashmap">
 SELECT *

@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP - 지출결의서 상세보기(관리자)</title>
+<title>카카오뱅크 ERP - 영업매출 상세보기</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
@@ -14,8 +14,8 @@
 .cont_wrap {
 	width: 900px;
 }
-
 /* 개인 작업 영역 */
+
 .expns_rsltn_dtl_view {
 	border-collapse: collapse;
 	font-size: 10.5pt;
@@ -72,14 +72,9 @@
 	cursor: pointer;
 }
 
-
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#previousBtn").on("click", function() {
-		$("#actionForm").attr("action", "expnsRsltnadmnstrEmpMnthlyList")
-		$("#actionForm").submit();
-	});	
 	
 	$("#previousBtn2").on("click", function() {
 		$("#top2").val("34");
@@ -91,8 +86,6 @@ $(document).ready(function() {
 	});
 	
 });
-
-
 </script>
 </head>
 <body>
@@ -120,7 +113,7 @@ $(document).ready(function() {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">지출결의서 상세보기(관리자)</div>
+			<div class="page_title_text">영업매출 상세보기</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
@@ -132,68 +125,70 @@ $(document).ready(function() {
 				</colgroup>
 				<tbody>
 					<tr>
-						<td>사원명</td>
+						<td>계약번호</td>
+						<td>${data.CNTRCT_NUM}</td>
+					</tr>
+					<tr>
+						<td>영업번호</td>
+						<td>${data.SALES_NUM}</td>
+					</tr>
+					<tr>
+						<td>담당사원</td>
 						<td>${data.EMP_NAME}</td>
 					</tr>
 					<tr>
-						<td>작성일자</td>
-						<td>${data.RGS_DATE}</td>
+						<td>계약일</td>
+						<td>${data.CNTRCT_DATE}</td>
 					</tr>
 					<tr>
-						<td>전표번호</td>
-						<td>${data.CHIT_NUM}</td>
+						<td>계약시작일</td>
+						<td>${data.CNTRCT_START_DATE}</td>
 					</tr>
 					<tr>
-						<td>계정명</td>
-						<td>${data.ACNT_NAME}</td>
+						<td>계약종료일</td>
+						<td>${data.CNTRCT_END_DATE}</td>
 					</tr>
 					<tr>
-						<td>지출처</td>
-						<td>${data.EXPNS}</td>
+						<td>입금은행</td>
+						<td>${data.BANK_NAME}</td>
 					</tr>
 					<tr>
-						<td>지출금액</td>
-						<td><b>${data.AMNT} 원</b></td>
+						<td>입금계좌번호</td>
+						<td>${data.DPST_ACNT_NUM}</td>
 					</tr>
 					<tr>
-						<td>지출일시</td>
-						<td>${data.DATE_D}</td>
+						<td>입금거래소유주명</td>
+						<td>${data.DPST_TRSC_OWNER_NAME}</td>
 					</tr>
 					<tr>
-						<td>지출유형</td>
-						<td>${data.EXPNS_TYPE}</td>
+						<td>납입계좌번호</td>
+						<td>${data.PYMT_ACNT_NUM}</td>
 					</tr>
 					<tr>
-						<td>비고</td>
-						<td>
-							<c:choose>
-								<c:when test="${data.RMRKS eq null}">-</c:when>
-								<c:otherwise>${data.RMRKS}</c:otherwise>
-							</c:choose>
-						</td>
+						<td>납입자명</td>
+						<td>${data.PAYER_NAME}</td>
 					</tr>
 					<tr>
-						<td>첨부파일</td>
-						<td>
-							<c:choose>
-								<c:when test="${data.ATT_FILE eq null}">-</c:when>
-								<c:otherwise>
-									<div class="atchd_file"></div>
-									<div class="file_name">${data.ATT_FILE}</div>
-								</c:otherwise>
-							</c:choose>
-						</td>
+						<td>갱신예정일</td>
+						<td>${data.RNWL_EXPCTD_DATE}</td>
+					</tr>
+					<tr>
+						<td>전환일</td>
+						<td>${data.PRCD_DATE}</td>
+					</tr>
+					<tr>
+						<td>월납부액</td>
+						<td>${data.MONTH_PYMNT_AMNT}원</td>
+					</tr>
+					<tr>
+						<td>월이자액</td>
+						<td>${data.MONTH_INTRST_AMNT}원</td>
 					</tr>
 				</tbody>
 			</table>
 
 			<div class="btn_wrap">
-				<c:if test="${empty param.back}">				
-					<div class="cmn_btn" id="previousBtn">사원별 월별 목록</div>
-				</c:if>
-				<c:if test="${!empty param.back}">
-					<div class="cmn_btn" id="previousBtn2">돌아가기</div>
-				</c:if>
+				<div class="cmn_btn" id="previousBtn2">돌아가기</div>
 			</div>
 		</div>
 	</div>

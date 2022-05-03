@@ -418,8 +418,8 @@
 
 .btnImg_in {
 	position: absolute;
-	left: 204px;
-	top: 9px;
+	left: 195px;
+	top: 5px;
 	width: 20px;
 	height: 20px;
 	cursor: pointer;
@@ -494,12 +494,13 @@ $(document).ready(function() {
 	/* 영업 일정 상세보기로 이동 */
 	$(".calendar_text").on("click", ".cal_text1", function() {
 		var tempSnum = $(this).children("#schln").val();
-		document.getElementById("schdlnum").value = tempSnum;
+		$("#schdlnum").attr("value", tempSnum);
+		
 		
 		var sdf = new Date($("#fullCalendarArea").fullCalendar("getDate"));
   		var dt = sdf.getFullYear() + "-" + lpad((sdf.getMonth() + 1), 2, 0);
   		
-  		document.getElementById("clndrDate").value = dt;
+  		$("#clndrDate").attr("value", dt);
 		
 		$("#actionForm").attr("action", "salesSchdlCont");
 		$("#actionForm").submit();
@@ -586,7 +587,8 @@ $(document).ready(function() {
 				
 				$(".popup_box").on("click", ".popup_box_in", function() {
 					var mgrNum = $(this).children("#mnum").val();
-					document.getElementById("usrsrchTxt").value = mgrNum;
+					$("#usrsrchTxt").attr("value", mgrNum);
+					
 					closePopup();
 					console.log(mgrNum);
 				 	
@@ -682,7 +684,7 @@ $(document).ready(function() {
   		var sdf = new Date($("#fullCalendarArea").fullCalendar("getDate"));
   		var dt = sdf.getFullYear() + "-" + lpad((sdf.getMonth() + 1), 2, 0);
   		
-  		document.getElementById("clndrDate").value = dt;
+  		$("#clndrDate").attr("value", dt);
   		
 		drawDayCalc();
 	});
@@ -698,7 +700,7 @@ $(document).ready(function() {
   		var sdf = new Date($("#fullCalendarArea").fullCalendar("getDate"));
   		var dt = sdf.getFullYear() + "-" + lpad((sdf.getMonth() + 1) , 2, 0);
   		
-  		document.getElementById("clndrDate").value = dt;
+  		$("#clndrDate").attr("value", dt);
   		
 		drawDayCalc();
 	});
@@ -719,7 +721,8 @@ $(document).ready(function() {
 		dayClick: function(date, js, view) { // 일자 클릭
 		  	  
 			var tdv = date.format();
-			document.getElementById("ctt").value = "      " + tdv;
+			$("#ctt").attr("value", "      " + tdv);
+			
 			
 			$(".cal_cont").show();
 			$("#ctt").show();
@@ -746,7 +749,9 @@ $(document).ready(function() {
 		if($("#clndrDate").val() == null || $("#clndrDate").val() == ""){
 			var sdf = new Date();
 	  		var dt = sdf.getFullYear() + "-" + lpad((sdf.getMonth() + 1) , 2, 0);
-	  		document.getElementById("clndrDate").value = dt;	
+	  		
+	  		$("#clndrDate").attr("value", dt);
+	  			
 		}
 		var params = $("#actionForm").serialize();
 		$.ajax({
@@ -813,8 +818,8 @@ $(document).ready(function() {
 					<div class="body">
 						<div class="bodyWrap">
 							<div class="sc_title">
-								<span class="marg"> 팀분류 <select class="boxsize"
-									id="deptS" name="deptS">
+								<span class="marg"> 팀분류
+								<select class="boxsize"id="deptS" name="deptS">
 										<option value="6">영업부</option>
 										<option value="7">영업1팀</option>
 										<option value="8">영업2팀</option>
