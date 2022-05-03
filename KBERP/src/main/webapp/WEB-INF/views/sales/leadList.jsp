@@ -490,7 +490,7 @@ $(document).ready(function() {
 		$("#startDate").val(yesterday);
 		var b = new Date();
 		var today = b.getFullYear() + "-" + lpad((b.getMonth() + 1), 2, 0) + "-" + lpad(b.getDate(), 2, 0);
-		$("#endDate").val(today);
+		$("#endDate").val(yesterday);
 	});
 	/* 검색 오늘버튼 */
 	$("#today").on("click", function() {
