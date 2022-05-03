@@ -273,26 +273,40 @@ $(document).ready(function() {
 	
 	$("#addBtn").on("click", function() {
 		if(checkEmpty("#spendDate")) {
-			alert("지출일자를 입력하세요.")
-			$("#spendDate").focus();
+			makeAlert("알림", "지출일자를 입력하세요.");
+			$("#popup1Btn1").on("click", function() {
+				$("#spendDate").focus();
+			});
 		} else if(checkEmpty("#acntCodeInput")) {
-			alert("계정명을 입력하세요.")
-			$("#acntCodeInput").focus();
+			makeAlert("알림", "계정명을 입력하세요.");
+			$("#popup1Btn1").on("click", function() {
+				$("#acntCodeInput").focus();				
+			});
 		} else if(checkEmpty("#expns")) {
-			alert("거래처를 입력하세요.")
-			$("#expns").focus();
+			makeAlert("알림", "거래처를 입력하세요.");
+			$("#popup1Btn1").on("click", function() {
+				$("#expns").focus();
+			});
 		} else if(checkEmpty("#item")) {
-			alert("품목명을 입력하세요.")
-			$("#item").focus();
+			makeAlert("알림", "품목명을 입력하세요.");
+			$("#popup1Btn1").on("click", function() {
+				$("#item").focus();
+			});
 		} else if(checkEmpty("#qunty")) {
-			alert("수량을 입력하세요. (수량 파악 어려우면 '1' 입력)")
-			$("#qunty").focus();
+			makeAlert("수량을 입력하세요. (수량 파악 어려우면 '1' 입력)");
+			$("#popup1Btn1").on("click", function() {
+				$("#qunty").focus();
+			});
 		} else if(checkEmpty("#unitPrice")) {
-			alert("단가를 입력하세요.")
-			$("#unitPrice").focus();
+			makeAlert("알림", "단가를 입력하세요.");
+			$("#popup1Btn1").on("click", function() {
+				$("#unitPrice").focus();
+			});
 		} else if(checkEmpty("#bsnsmnNum")) {
-			alert("사업자번호 입력하세요.")
-			$("#bsnsmnNum").focus();
+			makeAlert("알림", "사업자번호를 입력하세요.");
+			$("#popup1Btn1").on("click", function() {
+				$("#bsnsmnNum").focus();
+			});
 		} else {
 			
 			$("#sendAcntCode").val($("#acntCodeInput").attr("acntcode"));
