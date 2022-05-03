@@ -231,4 +231,31 @@ public class elctrncAprvlController {
 		return mapper.writeValueAsString(modelMap);
 		
 		}
+		
+		@RequestMapping(value = "/aprvlCmntAjax", method = RequestMethod.POST, produces = "test/json;charset=UTF-8")
+		@ResponseBody
+		public String aprvlCmntAjax(@RequestParam HashMap<String, String> params, HttpSession httpSession) throws Throwable {
+			
+		
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> modelMap = new HashMap<String, Object>();	
+		
+		int aprvlSts = ics.getIntData("elctrncAprvl.aprvlResult", params);
+		
+		System.out.println(aprvlSts); 
+			
+				
+		ics.updateData("elctrncAprvl.aprvlCmnt", params);
+		
+		
+		System.out.println("!@#$%^^&&*!@#%@^@&" + params);
+					
+		//modelMap.put("list", list);
+		
+		
+		return mapper.writeValueAsString(modelMap);
+		
+		}
+		
+		
 }

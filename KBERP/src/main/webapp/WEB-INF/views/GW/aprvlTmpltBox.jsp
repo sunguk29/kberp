@@ -153,7 +153,16 @@ function drawList(list) {
 		html += "<td>" + new Date(time).getFullYear()+'-'+(new Date(time).getMonth()+1)+'-'+ new Date(time).getDate() + "</td>";
 		time = data.STS_CHNG_DATE;
 		html += "<td>" + new Date(time).getFullYear()+'-'+(new Date(time).getMonth()+1)+'-'+ new Date(time).getDate() + "</td>";
-		html += "<td>" + data.APRVL_STS + "</td>";
+		  if(data.APRVL_STS == "0") {
+		     	 html += "<td>결재진행중</td>"           ;
+		      } else if(data.APRVL_STS == "1") {
+		     	 html += "<td style=\"color:#4B94F2;\">결재완료</td>"           ;
+		      } else if(data.APRVL_STS == "2") {
+		     	 html += "<td style=\"color:#ff6f60;\">결재반려</td>"           ;
+		      } else {
+		    	  html += "<td> - </td>"           ;
+		      }
+		
 		html += "<td class=\"view\">" + "..." + "</td>";
 	}
 	$("tbody").html(html);
@@ -212,7 +221,7 @@ function drawPaging(pb) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">프로젝트 관리</div>
+			<div class="page_title_text">결재함</div>
 			<!-- 검색영역 선택적 사항 -->
 		<div class="page_srch_area">
 			<form action="aprvlTmpltBoxAdd" id="actionForm" method="post">
@@ -225,7 +234,7 @@ function drawPaging(pb) {
 						<option value="0">결재번호</option>
 						<option value="1">제목</option>
 					</select>
-				<input type="button" id="nextgo" name="nextgo" value="버튼">
+				
 				<input type="text" name="searchTxt" id="searchTxt" value="${param.searchTxt}"/>
 				<div class="cmn_btn_ml" id="searchBtn">검색</div>
 			</form>

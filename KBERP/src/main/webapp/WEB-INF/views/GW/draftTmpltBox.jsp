@@ -77,7 +77,7 @@ $(document).ready(function() {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">프로젝트 관리</div>
+			<div class="page_title_text">기안함</div>
 			<!-- 검색영역 선택적 사항 -->
 		
 		</div>

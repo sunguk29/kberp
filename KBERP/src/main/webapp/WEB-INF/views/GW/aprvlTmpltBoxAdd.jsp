@@ -37,7 +37,7 @@
 }
 
 
-.hold {
+.save {
 	border: 1px solid #000;
 	font-size: 14px;
 	background-color: #F2B705;
@@ -187,12 +187,22 @@ h3 {
 	font-size: 18px;
 }
 
+#deleteBtn {
+	border: 1px solid #000;
+	font-size: 14px;
+	background-color: #F2B705;
+	text-align: center;
+	width: 50px;
+	height: 30px;
+	line-height: 2;
+	
+}
+
 /* 개인 작업 영역 */
 
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
 	reloadList();
 	$(".aprvl").on("click", function() {
 		
@@ -214,14 +224,20 @@ $(document).ready(function() {
 		html +=	"</div>";
 		*/
 		
-		 var html = "";
+		var html = "";
+		 		
+		/* html += "<form action=\"#\" id=\"saveForm\" method=\"post\">"; */
 		
+		html += "<input type=\"hidden\" id=\"top\" name=\"top\" value=\"${param.top}\" />";
+		html += "<input type=\"hidden\" id=\"menuNum\" name=\"menuNum\" value=\"${param.menuNum}\" />";
+		html += "<input type=\"hidden\" id=\"menuType\" name=\"menuType\" value=\"${param.menuType}\" />";
+		html += "<input type=\"hidden\" id=\"aprvlNum\" name=\"aprvlNum\"/>";
 		
 		
 		html += "<div style=\"margin-top: 20px; font-size: 14px;\">";
-		html += "<span>결재처리</span>";
-		html += "<input type = \"radio\" name=\"a\" id=\"r1\"/><label for = \"r1\" >승인</label>";
-		html += "<input type = \"radio\" name=\"a\" id=\"r2\"/><label for = \"r2\" >반려</label>";
+		html += "<span id = \"process\">결재처리</span>";
+		html += "<input type = \"radio\" name=\"a\" value=\"승인\" id=\"r1\"/><label for = \"r1\" >승인</label>";
+		html += "<input type = \"radio\" name=\"a\" value=\"반려\" id=\"r2\"/><label for = \"r2\" >반려</label>";
 		html += "</div>";
 		html += "<div>";
 		html += "<span>결재자</span>";
@@ -233,12 +249,15 @@ $(document).ready(function() {
 		html += "</div>";
 		html += "<div>";
 		html += "<span>결재일시</span>";
-		//html += "<input type=\"text\" name=\"aprvl_date\" id=\"aprvl_date\" value=\"" + data.STS_CHNG_DATE +"\">";
+		let time = new Date();
+		
+		html += "<input type=\"text\" name=\"aprvl_date\" id=\"aprvl_date\" value=\"" + new Date(time).getFullYear()+'-'+(new Date(time).getMonth()+1)+'-'+ new Date(time).getDate() + "\">";
 		html += "</div>";
 		html += "<div>";
 		html += "<span>의견</span>";
-		html += "<input type=\"text\" style=\"width: 200px; height: 100px; margin-left: 28px; margin-top: 20px;\">";
+		html += "<input type=\"text\" name=\"cmnt\" id=\"cmnt\" style=\"width: 200px; height: 100px; margin-left: 28px; margin-top: 20px;\">";
 		html += "</div>"; 
+		/* html += "</form>"; */
 		
 		
 	makePopup({
@@ -249,6 +268,7 @@ $(document).ready(function() {
 		title : "결재",
 		contents : html,
 		contentsEvent : function() {
+			$("#aprvlNum").val($("#aprvl_num").val());
 			console.log("????");
 			$.ajax({
 				type : "post",
@@ -266,21 +286,104 @@ $(document).ready(function() {
 		buttons : [{
 			name : "저장",
 			func:function() {
+												
+				let action = $('input[name="a"]:checked');
 				
-				/* 여기에 넣기 */
+				let time =$('input[name="aprvl_date"]').val();
+				
+				let cmnt =$('input[name="cmnt"]').val();
+				
+				let action_value = action.val();
+				console.log('value', action_value);
+				
+				let containers = $('.aprvl_cmnt tbody');
+				
+				let html = '';
+								
+				let sEmpName = "${sEmpName}";
+				let sDeptName = "${sDeptName}";
+				let test_tr = `<tr><td>\${action_value}</td><td>\${sEmpName}</td><td>\${sDeptName}</td><td>\${time}</td><td>\${cmnt}</td></tr>`;
+				html += test_tr;
+				
+				//console.log(test_tr);
+				
+				//var ab = test_tr;
+				
+				//console.log(ab);
+				
+				let samples = action_value +",${sEmpName},${sDeptName}," + time +"," + cmnt;
+				
+				$("#action_value").val(samples);
+				
+				//console.log("#action_value");
+				
+				//console.log(samples);
+								
+				containers.append(html);
+				
+				//$("#save").val(test_tr);
+				
+				//console.log(test_tr);
+				
+				//var x = test_tr.val();
+				
+				//console.log(x);
+				
+				$("#deleteBtn").on("click", function(){
+					console.log(test_tr);
+					
+						
+					
+					//셀렉터를 활용하면 remove를 할수있음
+					
+				})
+				
+		
 				
 				closePopup();
 			}
+		
 		},//버튼 저장 
 		{name : "닫기"
 		}] //버튼 닫기
 		
 		}); //팝업 
 
-	
+		
+		
+		}); // 결재클래스 클릭
+		
+$("#save").on("click", function(){
+		
+		
+		
+		var params = $("#saveForm").serialize();
+		console.log("@@@@@@@@@@@@@@###########" + params);
+		
+		
+		
+		$.ajax({
+			type : "post",
+			url : "aprvlCmntAjax",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				console.log(res);
+				$("#saveForm").attr("action", "aprvlTmpltBox");
+				$("#saveForm").submit();
+			},
+			error : function(req) {
+				console.log(req.responseText)	
+			}
 		});
+		
+		
+	});
+		
+	
 
 });
+
 
 function reloadList() { // 목록 조회용 + 페이징 조회용
 	  var params = $("#actionForm").serialize();
@@ -303,10 +406,13 @@ function reloadList() { // 목록 조회용 + 페이징 조회용
 	
 }
 
+
+
 function drawList(list){
 	var html = "";
 	
 	for(var data of list){
+	$("#aprvl_num").val(data.APRVL_NUM);
 		
 	let time = data.DRAFT_DATE;
 	
@@ -366,7 +472,7 @@ function drawList(list){
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">프로젝트 관리</div>
+			<div class="page_title_text">결재</div>
 			<!-- 검색영역 선택적 사항 -->
 	<form action="aprvlTmpltBox" id="actionForm" method="post">
 					<input type="hidden" id="top" name="top" value="${param.top}" />
@@ -382,7 +488,7 @@ function drawList(list){
 			<!-- 여기부터 쓰면 됨 -->
 						<div class="aprvl_btun">
 				<div class="aprvl" id = "aprvl">결재</div>
-				<span class="hold">보류</span>
+				<span class="save" id="save">저장</span>
 			</div>
 			<div>
 			<table class="aprvl_line">
@@ -422,7 +528,14 @@ function drawList(list){
 			<div class="container_1">
 				<div>
 					<h3>결재의견</h3>
+					<input type= "button" id="deleteBtn" value="삭제">
 				</div>
+				  <form action="#" id="saveForm" method="post">  
+				<input type="hidden" id="top" name="top" value="${param.top}" />
+				<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+				<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
+				<input type="hidden" id="aprvl_num" name="aprvl_num" value="" />
+				<input type="hidden" id="action_value" name="action_value" value="${action_value}">
 				<div>
 					<table class="aprvl_cmnt">
 						<colgroup>
@@ -442,16 +555,10 @@ function drawList(list){
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>승인</td>
-								<td>김팀장</td>
-								<td>그룹웨어</td>
-								<td>2021.12.24</td>
-								<td>관련서류 이상 없습니다.</td>
-							</tr>
 						</tbody>
 					</table>
 				</div>
+				  </form> 
 			</div>
 				
 			</div>                                                                                     
