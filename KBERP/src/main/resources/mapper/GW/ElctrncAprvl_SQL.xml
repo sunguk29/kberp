@@ -94,9 +94,10 @@ WHERE AL.EMP_NUM = #{employ_no}
 	SELECT  DISTINCT CASE WHEN APRVL_STS = 0 THEN '결재진행중'
         				  WHEN APRVL_STS = 1 THEN '결재완료'
         				  WHEN APRVL_STS = 2 THEN '결재반려'
+    
     END AS  APRVL_STS
 	FROM APRVL_LINE
-	WHERE APRVL_NUM = #{aprvl_num} 
+	WHERE APRVL_NUM = #{aprvl_num}  
 </select>
 
 <select id="tmpltCont" parameterType="hashmap" resultType="hashmap">
