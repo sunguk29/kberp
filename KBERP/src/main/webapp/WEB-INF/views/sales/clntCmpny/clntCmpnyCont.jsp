@@ -351,6 +351,8 @@ textarea {
 }
 .txtOp, .dt, .del {
 	padding-left: 20px;
+	word-break: break-all;
+	margin: 5px 0 5px 0;
 }
 .dt {
 	padding-right: 590px;
