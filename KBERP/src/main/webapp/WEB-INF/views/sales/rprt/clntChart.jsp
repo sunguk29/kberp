@@ -163,7 +163,7 @@
 }
 
 /********** div 큰 영역  **********/
-.new_sales_actvty {
+.new_sales_actvty, .new_sales_actvty1 {
 	display: inline-block;
 	vertical-align: top;
 	width: 430px;
@@ -299,7 +299,7 @@
 }
 select {
 	height: 24px;
-	width: 150px;
+	width: 185.98px;
 	font-size: 12px;
 }
 
@@ -310,7 +310,7 @@ select {
 td:nth-child(1), td:nth-child(3), td:nth-child(5) {
 	text-align: center;
 }
-.date {
+.tMonth {
 	width: 180px;
 	height: 20px;
 	font-family: "맑은 고딕";
@@ -457,10 +457,9 @@ $(document).ready(function() {
 	}
 
 		
-	// 검색 후 체크박스 유지 
-	/* if('${param.salesCheck}' == "1") {
-		$("[name='salesCheck']").prop("checked", true);
-	}  */
+	$("#tMonth").on("change", function() {
+		$(".cmn_btn").click();
+	});
 	
 	// 검색
 	$(".cmn_btn").on("click", function() {
@@ -599,8 +598,15 @@ function reloadList() {
 		data : params,
 		success : function(ccAll) {
 			var html = "";
-			
-			$.each(ccAll, function(month, data) {
+		
+				$.each(ccAll, function(month, data) {
+				
+				html += "<div class=\"sales_text\">";
+				html += "<div class=\"sales_text_top\">";
+				html += "<img class=\"img_rect\" alt=\"바\" src=\"resources/images/sales/rect.png\" />신규고객 (" + data.tMonth + ")";
+				html += "</div>";
+				html += "<div class=\"actvty_tLine1\"></div>";
+				html += "<div class=\"cc_text_bot\">";
 				html += "<div class=\"mhPos\">";
 				html += "<div class=\"mhTxt\"></div>";
 				html += "<div class=\"mhTxt\">전월</div>";
@@ -622,8 +628,10 @@ function reloadList() {
 				html += "<span class=\"ccMonth mon\">" + data.EC_AVG + "</span>";	
 				html += "<span class=\"ccMonth all\">" + data.EC_ALLCNT + "</span>";	
 				html += "</div>";
-			});
-			$(".cc_text_bot").html(html);
+				html += "</div>";
+				html += "</div>";
+				});
+			$(".new_sales_actvty1").html(html);
 		},
 		error : function(req) {
 			console.log(req.responseText);
@@ -891,10 +899,19 @@ function drawPaging(pb, sel) {
 							<col width="100" />
 							<col width="186" />
 							<col width="110" />
-							<col width="297" />
+							<col width="200" />
+							<col width="97" />
 						</colgroup>
 						<tbody>
 							<!-- col=4 -->
+							<tr>
+								<td>
+									<span class="srch_name">월별</span>
+								</td>
+								<td colspan="4">
+									<input type="month" class="tMonth" id="tMonth" name="tMonth" value="${tMonth}"/>
+								</td>
+							</tr>
 							<tr>
 								<td>
 									<span class="srch_name">부서</span>
@@ -922,16 +939,8 @@ function drawPaging(pb, sel) {
 									<input type="hidden" name="sEmpName" value="${sEmpName}">
 									<input type="hidden" name="sDeptName" value="${sDeptName}">
 								</td>
-								<td colspan="3">
-									<input type="checkbox" id="salesCheck" name="salesCheck"/>
-								</td>
-							</tr>
-							<tr>
 								<td>
-									<span class="srch_name">기간</span>
-								</td>
-								<td colspan="4">
-									<input type="date" class="date" id="startDate" name="startDate" value="${startDate}"/> ~ <input type="date" class="date" id="endDate" name="endDate"value="${endDate}" />
+									<input type="checkbox" id="salesCheck" name="salesCheck"/>
 								</td>
 								<td>
 									<span class="cmn_btn">검색</span>
@@ -940,16 +949,8 @@ function drawPaging(pb, sel) {
 						</tbody>
 					</table>
 					<div class="cont_right">
-						<div class="new_sales_actvty">
-							<div class="sales_text">
-								<div class="sales_text_top">
-									<img class="img_rect" alt="바" src="resources/images/sales/rect.png" />신규고객 (${tMonth})
-									<%-- <input type="hidden" id="tMonth" name="tMonth" value="${tMonth}"> --%>
-								</div>
-								<div class="actvty_tLine1"></div>
-							</div>
-							<div class="cc_text_bot"></div>
-					</div>
+						<div class="new_sales_actvty1">
+						</div>
 					<div class="new_sales_actvty">
 						<div class="sales_text">
 							<div class="sales_text_top">
