@@ -380,6 +380,9 @@ $(document).ready(function() {
 		} // if End
 	});
 	
+	var rvn = "${data.RVN}";
+	$("#rvn").val(rvn.split(",").join(""));
+	
 });
 
 // 카카오 주소

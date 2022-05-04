@@ -396,7 +396,7 @@ hr {
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	$(".opbx").slimScroll({height: '305px' , width: '860px'});
+	$(".opbx").slimScroll({height: '305px'}, {width: '860px'});
 	
 	// 목록
 	$("#listBtn").on("click", function() {
