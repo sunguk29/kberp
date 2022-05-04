@@ -12,7 +12,7 @@
 	
 	<select id="getIntrnlCostMngList" resultType="hashmap" parameterType="hashmap">
 		SELECT DATE_MON, AMNT_SUM
-		FROM (  SELECT TO_CHAR(DATE_HR, 'YYYY-MM') AS DATE_MON, SUM(AMNT) AS AMNT_SUM,
+		FROM (  SELECT TO_CHAR(DATE_HR, 'YYYY-MM') AS DATE_MON, TO_CHAR(SUM(AMNT), '999,999,999,999') AS AMNT_SUM,
 		               ROW_NUMBER() OVER(ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
 		        FROM INTRNL_COST_MNG
 		        WHERE TO_CHAR(DATE_HR, 'YYYY') = #{year}

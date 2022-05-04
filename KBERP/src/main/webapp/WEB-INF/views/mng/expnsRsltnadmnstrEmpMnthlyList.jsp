@@ -156,24 +156,24 @@ function drawPaging(pb) {
 	
 	html += "<div class=\"page_btn page_first\" page=\"1\">first</div>";
 	
-	if($("#page").val() == "1") {
+	if($("#page2").val() == "1") {
 		html += "<div class=\"page_btn page_prev\" page=1>prev</div>";
 	} else {
-		html += "<div class=\"page_btn page_prev\" page=\"" + ($("#page").val() * 1 - 1) + "\">prev</div>";		
+		html += "<div class=\"page_btn page_prev\" page=\"" + ($("#page2").val() * 1 - 1) + "\">prev</div>";		
 	}
 	
 	for(var i = pb.startPcount; i <= pb.endPcount; i++) {
-		if($("#page").val() == i) {
+		if($("#page2").val() == i) {
 			html += "<div class=\"page_btn_on\" page=\"" + i + "\">" + i + "</div>";
 		} else {
 			html += "<div class=\"page_btn\" page=\"" + i + "\">" + i + "</div>";
 		}
 	}
 	
-	if($("#page").val() == pb.maxPcount) {
+	if($("#page2").val() == pb.maxPcount) {
 		html += "<div class=\"page_btn page_next\" page=\"" + pb.maxPcount + "\">next</div>";		
 	} else {
-		html += "<div class=\"page_btn page_next\" page=\"" + ($("#page").val() * 1 + 1) + "\">next</div>";				
+		html += "<div class=\"page_btn page_next\" page=\"" + ($("#page2").val() * 1 + 1) + "\">next</div>";				
 	}
 	
 	html += "<div class=\"page_btn page_last\" page=\"" + pb.maxPcount + "\">last</div>";
