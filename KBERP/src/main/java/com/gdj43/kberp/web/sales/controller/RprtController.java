@@ -43,14 +43,16 @@ public class RprtController {
 		
 		Date mon = new Date();
 		
-		SimpleDateFormat month = new SimpleDateFormat("yyyy.MM");
+		SimpleDateFormat month = new SimpleDateFormat("yyyy-MM");
 	
 		String  tMonth = month.format(mon);
-		params.put("tMonth", tMonth);
+		if(params.get("tMonth") == null || params.get("tMonth") == "") {
+			params.put("tMonth", tMonth);			
+		}
 		
 		mav.addObject("tMonth", params.get("tMonth"));
-
 		mav.setViewName("sales/rprt/clntChart");
+		
 		return mav;
 		
 	}
@@ -63,10 +65,14 @@ public class RprtController {
 		ObjectMapper mapper = new ObjectMapper();
 
 		Map<String, Object> modelMap = new HashMap<String, Object>();
-		
+				
 		HashMap<String, String> ccAll = iCommonService.getData("clntRprt.allCnt", params);
+		System.out.println(params.get("tMonth"));
+		
+		ccAll.put("tMonth", params.get("tMonth"));
 		
 		modelMap.put("ccAll", ccAll);
+		
 		return mapper.writeValueAsString(modelMap);
 	}
 	
@@ -211,25 +217,25 @@ public class RprtController {
 	// 당월 매출 실적
 	@RequestMapping(value = "/salesRvnAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String salesRvnAjax(HttpServletRequest request, @RequestParam HashMap<String, Object> params) throws Throwable {
+	public String salesRvnAjax(HttpServletRequest request, @RequestParam HashMap<String, String> params) throws Throwable {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		int rvnSize = iSchdlService.getIntData("salesRprt.getSalesRvnCnt", params); // 당월 매출 실적
+		int rvnSize = iCommonService.getIntData("salesRprt.getSalesRvnCnt", params); // 당월 매출 실적
 		
 //		int rvnSize = Integer.parseInt(request.getParameter("rvnSize"));
 		
 		ArrayList<HashMap<String, Object>> salesRvnlist = new ArrayList<HashMap<String, Object>>();
 		
-		HashMap<String, Object> rvn = iSchdlService.getData("salesRprt.getSalesRvn", params);
+		List<HashMap<String, String>> rvn = iCommonService.getDataList("salesRprt.getSalesRvn", params);
 		
 		for(int i = 0 ; i < rvnSize ; i++) {
 			HashMap<String, Object> temp = new HashMap<String, Object>();
 			
-			temp.put("name", rvn.get("NAME"));
-			temp.put("y", Integer.parseInt(String.valueOf(rvn.get("RVN"))));
+			temp.put("name", rvn.get(i).get("NAME"));
+			temp.put("y", Integer.parseInt(String.valueOf(rvn.get(i).get("RVN"))));
 			
 			salesRvnlist.add(temp);
 		}

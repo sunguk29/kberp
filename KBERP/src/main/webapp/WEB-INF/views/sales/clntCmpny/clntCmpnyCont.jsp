@@ -334,7 +334,6 @@ textarea {
 }
 .OpinionBox {
 	width: 830px;
-	height: 70px;
 	font-size: 10pt;
 	border: 1px solid gray;
 	border-top-left-radius: 12px;
@@ -352,6 +351,8 @@ textarea {
 }
 .txtOp, .dt, .del {
 	padding-left: 20px;
+	word-break: break-all;
+	margin: 5px 0 5px 0;
 }
 .dt {
 	padding-right: 590px;
