@@ -331,7 +331,6 @@ td:nth-child(1), td:nth-child(3) {
 	width: 860px;
 	height: 305px;
 	margin-left: 47.5px;
-	overflow-y: auto;
 }
 .opBox {
 	width: 860px;
@@ -374,6 +373,8 @@ textarea {
 }
 .txtOp, .dt, .del {
 	padding-left: 20px;
+	word-break: break-all;
+	margin: 5px 0 5px 0;
 }
 .dt {
 	padding-right: 590px;
@@ -394,6 +395,8 @@ hr {
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
+	
+	$(".opbx").slimScroll({height: '305px' , width: '860px'});
 	
 	// 목록
 	$("#listBtn").on("click", function() {
