@@ -14,12 +14,12 @@
 				                                 ON ICM.ACNT_NUM = AC.SUB_CTGR_ACNT_CODE
 				                                AND AC.MAIN_CTGR_ACNT_CODE = 1 
 				UNION
-				SELECT S.SALES_NUM AS CHIT_NUM, L.LEAD_NAME AS ACNT_NAME, TO_NUMBER('') AS DEVIT_AMNT, C.MONTH_INTRST_AMNT AS CREDIT_AMNT, '-' AS RMRKS, TO_CHAR(SYSDATE, 'YYYY-MM') AS MONTH
+				SELECT S.SALES_NUM AS CHIT_NUM, L.LEAD_NAME AS ACNT_NAME, TO_NUMBER('') AS DEVIT_AMNT, C.MONTH_INTRST_AMNT AS CREDIT_AMNT, '-' AS RMRKS, #{mon} AS MONTH
 				FROM CNTRCT C INNER JOIN SALES S
 				                      ON C.SALES_NUM = S.SALES_NUM
 				              INNER JOIN LEAD L
 				                      ON S.LEAD_NUM = L.LEAD_NUM  
-				WHERE TO_CHAR(CNTRCT_END_DATE, 'YYYY-MM') >= TO_CHAR(SYSDATE, 'YYYY-MM')  )
+				WHERE TO_CHAR(CNTRCT_END_DATE, 'YYYY-MM') >= #{mon} AND #{mon} > TO_CHAR(CNTRCT_START_DATE, 'YYYY-MM')  )
         WHERE MONTH = #{mon}
 	</select>
 	
@@ -37,12 +37,12 @@
 						                                 ON ICM.ACNT_NUM = AC.SUB_CTGR_ACNT_CODE
 						                                AND AC.MAIN_CTGR_ACNT_CODE = 1 
 						UNION
-						SELECT S.SALES_NUM AS CHIT_NUM, L.LEAD_NAME AS ACNT_NAME, TO_NUMBER('') AS DEVIT_AMNT, C.MONTH_INTRST_AMNT AS CREDIT_AMNT, '-' AS RMRKS, TO_CHAR(SYSDATE, 'YYYY-MM') AS MONTH
+						SELECT S.SALES_NUM AS CHIT_NUM, L.LEAD_NAME AS ACNT_NAME, TO_NUMBER('') AS DEVIT_AMNT, C.MONTH_INTRST_AMNT AS CREDIT_AMNT, '-' AS RMRKS, #{mon} AS MONTH
 						FROM CNTRCT C INNER JOIN SALES S
 						                      ON C.SALES_NUM = S.SALES_NUM
 						              INNER JOIN LEAD L
 						                      ON S.LEAD_NUM = L.LEAD_NUM  
-						WHERE TO_CHAR(CNTRCT_END_DATE, 'YYYY-MM') >= TO_CHAR(SYSDATE, 'YYYY-MM')  )
+						WHERE TO_CHAR(CNTRCT_END_DATE, 'YYYY-MM') >= #{mon} AND #{mon} > TO_CHAR(CNTRCT_START_DATE, 'YYYY-MM')  )
 				WHERE MONTH = #{mon}  ) C
 		WHERE C.RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
@@ -60,11 +60,12 @@
 		                                         ON ICM.ACNT_NUM = AC.SUB_CTGR_ACNT_CODE
 		                                        AND AC.MAIN_CTGR_ACNT_CODE = 1
 		        UNION
-		        SELECT S.SALES_NUM AS CHIT_NUM, TO_NUMBER('') AS DEVIT_AMNT, C.MONTH_INTRST_AMNT AS CREDIT_AMNT, TO_CHAR(SYSDATE, 'YYYY-MM') AS MONTH
+		        SELECT S.SALES_NUM AS CHIT_NUM, TO_NUMBER('') AS DEVIT_AMNT, C.MONTH_INTRST_AMNT AS CREDIT_AMNT, #{mon} AS MONTH
 		        FROM CNTRCT C INNER JOIN SALES S
 		                              ON C.SALES_NUM = S.SALES_NUM
 		                      INNER JOIN LEAD L
-		                              ON S.LEAD_NUM = L.LEAD_NUM  )
+		                              ON S.LEAD_NUM = L.LEAD_NUM
+		        WHERE TO_CHAR(CNTRCT_END_DATE, 'YYYY-MM') >= #{mon} AND #{mon} > TO_CHAR(CNTRCT_START_DATE, 'YYYY-MM')  )
 		WHERE MONTH = #{mon}
 	</select>
 	

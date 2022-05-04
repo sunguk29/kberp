@@ -204,7 +204,13 @@ public class IndvdlClntController {
 			
 			switch(gbn) {
 			case "i":
-				iCommonService.insertData("cl.signUp", params);
+				
+				int cnt = iCommonService.getIntData("cl.checkid",params);
+				if(cnt!=0) {
+					modelMap.put("chc","falied");
+				}else {
+					iCommonService.insertData("cl.signUp", params);
+				}
 				break;
 			case "u":
 				iCommonService.updateData("cl.inqryRspndUp", params);

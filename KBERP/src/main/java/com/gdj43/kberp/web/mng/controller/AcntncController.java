@@ -273,6 +273,7 @@ public class AcntncController {
 		modelMap.put("list", list); 
 		modelMap.put("pb", pb); 
 		modelMap.put("data", data); 
+		modelMap.put("monCheck", params.get("mon"));
 		
 		return mapper.writeValueAsString(modelMap);
 		
