@@ -207,7 +207,7 @@
 	<update id="rntlMdfy" parameterType="hashmap">
 		UPDATE ASSET_USE SET END_DATE = #{endDt},
               	   	 RMRKS = #{rmrks}
-		WHERE ASSET_NUM = #{num}
+		WHERE ASSET_USE_NUM = #{unum}
 	</update>
 	
 	<insert id="assetRntlRgstrtn" parameterType="hashmap">

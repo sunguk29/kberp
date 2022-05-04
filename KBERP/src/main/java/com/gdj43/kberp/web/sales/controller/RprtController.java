@@ -2,7 +2,6 @@ package com.gdj43.kberp.web.sales.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,7 +22,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
 import com.gdj43.kberp.web.common.service.ICommonService;
-import com.gdj43.kberp.web.sales.service.IClntRprtService;
 import com.gdj43.kberp.web.sales.service.ISchdlService;
 
 
@@ -37,65 +34,58 @@ public class RprtController {
 	public IPagingService iPagingService;
 	
 	@Autowired
-	public ISchdlService iSchdlService; 
+	public ISchdlService iSchdlService; 	
 	
-	@Autowired
-	public IClntRprtService iClntRprtService;
-	
-	
-	//고객 보고서
+	//고객차트 보고서
 	@RequestMapping(value = "/clntChart")
 	public ModelAndView clntList(@RequestParam HashMap<String, String> params, 
 								 ModelAndView mav) throws Throwable {
 		
-		Date dt = new Date();
 		Date mon = new Date();
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat month = new SimpleDateFormat("yyyy.MM");
-		
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(dt);
-		cal.add(Calendar.DATE, -60);
-		
-		String startDate = sdf.format(cal.getTime());
-		String endDate = sdf.format(dt);
-		String  tMonth = month.format(mon);
-		
-		// 고객사 개수
-		HashMap<String, String> ccAll = iCommonService.getData("clntRprt.allCnt", params);
 	
-		if(params.get("startDate") == null || params.get("startDate") == "") {
-			params.put("startDate", startDate); 
-			params.put("endDate", endDate); // 넘어오는게 없으면 현재날짜뽑아온거를 추가.
-		}
+		String  tMonth = month.format(mon);
 		params.put("tMonth", tMonth);
 		
 		mav.addObject("tMonth", params.get("tMonth"));
-		mav.addObject("startDate", params.get("startDate"));
-		mav.addObject("endDate", params.get("endDate"));
 
-		mav.addObject("ccAll", ccAll);		
-		
 		mav.setViewName("sales/rprt/clntChart");
 		return mav;
 		
-	} 
-	//고객등급 차트가져오기
-	@RequestMapping(value = "/clntRprtDataAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8" )
+	}
+	// 신규고객, 부서별 차트
+	@RequestMapping(value = "/clntRprtAjax", method=RequestMethod.POST, 
+					produces = "text/json;chartset=UTF-8")
+	@ResponseBody
+	public String clntRprtAjax(@RequestParam HashMap<String, String> params) throws Throwable {
+		
+		ObjectMapper mapper = new ObjectMapper();
+
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		HashMap<String, String> ccAll = iCommonService.getData("clntRprt.allCnt", params);
+		
+		modelMap.put("ccAll", ccAll);
+		return mapper.writeValueAsString(modelMap);
+	}
+	
+	//고객등급 원형차트
+	@RequestMapping(value = "/clntRprtDataAjax", method = RequestMethod.POST, 
+					produces = "text/json;charset=UTF-8" )
 	@ResponseBody
 	public String clntRprtDataAjax(HttpServletRequest request, @RequestParam HashMap<String, Object> params) throws Throwable{
-	
+		
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
-		
+			
 		int clntsize = Integer.parseInt(request.getParameter("clntsize"));
-		
+			
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		
-		HashMap<String, Object> clntList = iClntRprtService.getData("clntRprt.allCnt", params);
-			
+		HashMap<String, Object> clntList = iSchdlService.getData("clntRprt.allCnt", params);
+				
 		for(int i = 0 ; i < clntsize ; i++) {
 			HashMap<String, Object> temp = new HashMap<String, Object>();
 			
@@ -111,15 +101,14 @@ public class RprtController {
 				temp.put("name", "D등급");
 			}
 			temp.put("y", Integer.parseInt(String.valueOf(clntList.get("GRADENUM"+i))));
-			
+				
 			list.add(temp);
 		}
-
 		modelMap.put("list", list);
-		
+			
 		return mapper.writeValueAsString(modelMap);		
 	}
-	
+
 	/* 영업 차트 */
 	@RequestMapping(value = "/salesChart")
 	public ModelAndView salesChart(ModelAndView mav) throws Throwable{
@@ -174,17 +163,12 @@ public class RprtController {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		
 		HashMap<String, Object> bsnList = iSchdlService.getData("salesRprt.getSalesBsnChart", params);
+		HashMap<String, Object> bsnName = iSchdlService.getData("salesRprt.getSalesBsnName");
 		
 		for(int i = 0 ; i < size ; i++) {
 			HashMap<String, Object> temp = new HashMap<String, Object>();
 			
-			if(i == 0) {
-				temp.put("name", "민수");
-			} else if(i == 1) {
-				temp.put("name", "관공");
-			} else {
-				temp.put("name", "기타");
-			}
+			temp.put("name", String.valueOf(bsnName.get("COL"+i)));
 			temp.put("y", Integer.parseInt(String.valueOf(bsnList.get("BSNTYPE"+i))));
 			
 			list.add(temp);

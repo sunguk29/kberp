@@ -490,7 +490,7 @@ $(document).ready(function() {
 		$("#startDate").val(yesterday);
 		var b = new Date();
 		var today = b.getFullYear() + "-" + lpad((b.getMonth() + 1), 2, 0) + "-" + lpad(b.getDate(), 2, 0);
-		$("#endDate").val(today);
+		$("#endDate").val(yesterday);
 	});
 	/* 검색 오늘버튼 */
 	$("#today").on("click", function() {
@@ -785,7 +785,7 @@ function drawPaging(pb, sel) {
 	$(sel).html(html);
 }
 
-/* 체크박스 */
+/* 가능여부 체크박스 */
 function checkOnly(chk) {
 	var obj = document.getElementsByName("sales_sts");
 	for(var i = 0; i<obj.length; i++) {

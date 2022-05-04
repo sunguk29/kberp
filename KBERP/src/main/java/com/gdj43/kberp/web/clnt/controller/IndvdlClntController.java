@@ -154,11 +154,10 @@ public class IndvdlClntController {
 	
 	//아이디 찾기 Ajax
 	
-	@RequestMapping(value="/findIdAjax/{gbn}", method=RequestMethod.POST, 
+	@RequestMapping(value="/findIdAjax", method=RequestMethod.POST, 
 			produces="text/json;charset=UTF-8")
 	@ResponseBody // View로 인식 시킴
-	public String findIdAjax(@RequestParam HashMap<String,String> params,
-							@PathVariable String gbn) throws Throwable {
+	public String findIdAjax(@RequestParam HashMap<String,String> params) throws Throwable {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String,Object> modelMap = new HashMap<String,Object>();
@@ -205,7 +204,13 @@ public class IndvdlClntController {
 			
 			switch(gbn) {
 			case "i":
-				iCommonService.insertData("cl.signUp", params);
+				
+				int cnt = iCommonService.getIntData("cl.checkid",params);
+				if(cnt!=0) {
+					modelMap.put("chc","falied");
+				}else {
+					iCommonService.insertData("cl.signUp", params);
+				}
 				break;
 			case "u":
 				iCommonService.updateData("cl.inqryRspndUp", params);
