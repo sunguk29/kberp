@@ -451,10 +451,6 @@ $(document).ready(function() {
 	/* 검색버튼 누를 시  */
 	$("#searchBtn").on("click", function() {
 		
-		//검색어 유지
-		$("#oldSearchTeam").val($("#deptS").val());
-		$("#oldSearchMngrTxt").val($("#usrsrchTxt").val());
-		
 		
  		//기존 이벤트 제거
  		$("#fullCalendarArea").fullCalendar("removeEventSources");

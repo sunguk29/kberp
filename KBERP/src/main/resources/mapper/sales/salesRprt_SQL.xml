@@ -71,8 +71,8 @@
 				                         INNER JOIN DEPT D
 				                                 ON A.DEPT_NUM = D.DEPT_NUM
 				WHERE EBI.EXPCTD_BSNS_TYPE = 0				                                 
-		       	<if test="mngNum != null and mngNum != ''">
-			       AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
+		       <if test="mngName != null and mngName != ''">
+		       		AND E.EMP_NAME = #{mngName}		       			       	
 		       	</if>
 		       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
 			       AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
@@ -92,8 +92,8 @@
 										                        INNER JOIN DEPT D
 										                                ON A.DEPT_NUM = D.DEPT_NUM
 									  WHERE EBI.EXPCTD_BSNS_TYPE = 1   
-								       	<if test="mngNum != null and mngNum != ''">
-									       AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
+							       	 	<if test="mngName != null and mngName != ''">
+								       		AND E.EMP_NAME = #{mngName}		       			       	
 								       	</if>
 								       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
 									       AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
@@ -115,8 +115,8 @@
 										                        INNER JOIN DEPT D
 										                                ON A.DEPT_NUM = D.DEPT_NUM
 									  WHERE EBI.EXPCTD_BSNS_TYPE = 2   
-								       	<if test="mngNum != null and mngNum != ''">
-									       AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
+							        	<if test="mngName != null and mngName != ''">
+									       AND E.EMP_NAME = #{mngName}		       			       	
 								       	</if>
 								       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
 									       AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
@@ -208,9 +208,9 @@
 		             INNER JOIN DEPT D
 		                     ON A.DEPT_NUM = D.DEPT_NUM
 		WHERE SUBSTR(PRGRS_STS_NUM, 2, 1) = 6
-		<if test="mngNum != null and mngNum != ''">
-        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
-      	</if>
+	 	<if test="mngName != null and mngName != ''">
+	       AND E.EMP_NAME = #{mngName}		       			       	
+       	</if>
       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
         	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
       	</if>
@@ -232,9 +232,9 @@
 		             INNER JOIN DEPT D
 		                     ON A.DEPT_NUM = D.DEPT_NUM
 		WHERE SUBSTR(PRGRS_STS_NUM, 2, 1) = 5
-		<if test="mngNum != null and mngNum != ''">
-        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
-      	</if>
+		<if test="mngName != null and mngName != ''">
+	       AND E.EMP_NAME = #{mngName}		       			       	
+       	</if>
       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
         	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
       	</if>
@@ -256,9 +256,9 @@
 		             INNER JOIN DEPT D
 		                     ON A.DEPT_NUM = D.DEPT_NUM
 		WHERE SUBSTR(PRGRS_STS_NUM, 2, 1) = 7
-		<if test="mngNum != null and mngNum != ''">
-        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
-      	</if>
+		<if test="mngName != null and mngName != ''">
+	       AND E.EMP_NAME = #{mngName}		       			       	
+       	</if>
       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
         	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
       	</if>
@@ -339,9 +339,9 @@
 		             INNER JOIN DEPT D
 		                     ON A.DEPT_NUM = D.DEPT_NUM
 		WHERE S.PRGRS_STS_NUM = 17
-		<if test="mngNum != null and mngNum != ''">
-        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
-      	</if>
+		<if test="mngName != null and mngName != ''">
+	       AND E.EMP_NAME = #{mngName}		       			       	
+       	</if>
       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
         	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
       	</if>
@@ -363,9 +363,9 @@
 		             INNER JOIN DEPT D
 		                     ON A.DEPT_NUM = D.DEPT_NUM
 		WHERE S.PRGRS_STS_NUM = 27
-		<if test="mngNum != null and mngNum != ''">
-        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
-      	</if>
+		<if test="mngName != null and mngName != ''">
+	       AND E.EMP_NAME = #{mngName}		       			       	
+       	</if>
       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
         	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
       	</if>
@@ -387,9 +387,9 @@
 		             INNER JOIN DEPT D
 		                     ON A.DEPT_NUM = D.DEPT_NUM
 		WHERE S.PRGRS_STS_NUM = 37
-		<if test="mngNum != null and mngNum != ''">
-        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
-      	</if>
+		<if test="mngName != null and mngName != ''">
+	       AND E.EMP_NAME = #{mngName}		       			       	
+       	</if>
       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
         	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
       	</if>
@@ -411,9 +411,9 @@
 		             INNER JOIN DEPT D
 		                     ON A.DEPT_NUM = D.DEPT_NUM
 		WHERE S.PRGRS_STS_NUM = 47
-		<if test="mngNum != null and mngNum != ''">
-        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
-      	</if>
+		<if test="mngName != null and mngName != ''">
+	       AND E.EMP_NAME = #{mngName}		       			       	
+       	</if>
       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
         	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
       	</if>
