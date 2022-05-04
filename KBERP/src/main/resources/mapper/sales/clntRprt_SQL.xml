@@ -5,9 +5,9 @@
 		SELECT CC.CC_LAST, CC.CC_THAT, ROUND((CC.CC_ALLCNT / 3), 1) AS CC_AVG, CC.CC_ALLCNT, CC.CC_DEPTCNT, CC.CC_DEPTCNT1, CC.CC_DEPTCNT2, 
 		       CC.GRADENUM0, CC.GRADENUM1, CC.GRADENUM2, CC.GRADENUM3, CC.GRADENUM4,
 		       EC.EC_LAST, EC.EC_THAT, EC.EC_AVG, EC.EC_ALLCNT, EC.EC_CNT, EC.EC_CNT1, EC.EC_CNT2
-				FROM (SELECT COUNT(CASE WHEN TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM') THEN 1 END) CC_LAST,
-						     COUNT(CASE WHEN TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM') THEN 1 END) CC_THAT,
-						     COUNT(CASE WHEN RGSTRTN_DATE BETWEEN ADD_MONTHS(SYSDATE,-3) AND SYSDATE THEN 1 END) CC_AVG,
+				FROM (SELECT COUNT(CASE WHEN TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(TO_DATE(#{tMonth}, 'YYYY-MM'), -1), 'YYYY-MM') THEN 1 END) CC_LAST,
+						     COUNT(CASE WHEN TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(TO_DATE(#{tMonth}, 'YYYY-MM'), 'YYYY-MM') THEN 1 END) CC_THAT,
+						     COUNT(CASE WHEN RGSTRTN_DATE BETWEEN ADD_MONTHS(TO_DATE(#{tMonth}, 'YYYY-MM'),-3) AND SYSDATE THEN 1 END) CC_AVG,
 						     COUNT(*) AS CC_ALLCNT,
 		                     COUNT(A.DEPT_NUM) CC_DEPTCNT,
 		                     COUNT(CASE WHEN A.DEPT_NUM = 7 THEN 1 END) CC_DEPTCNT1,
@@ -34,9 +34,6 @@
 						</when>
 					</choose>
 				</if>
-				<if test="startDate != null and startDate != '' and endDate != null and endDate != ''" >		       	
-			       AND TO_CHAR(CC.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
-		       	</if>
 				<choose>
 					<when test="mngEmp != null and mngEmp != ''"> <!-- 담당자텍스트 박스 -->
 						AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'
@@ -50,9 +47,9 @@
 				</choose>) CC 
 		        INNER JOIN 
 		       (SELECT EC.EC_LAST, EC.EC_THAT, ROUND((EC.EC_ALLCNT / 3), 1) AS EC_AVG, EC.EC_ALLCNT, EC.EC_CNT, EC.EC_CNT1, EC.EC_CNT2
-				FROM (SELECT COUNT(CASE WHEN TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM') THEN 1 END) EC_LAST,
-				      		 COUNT(CASE WHEN TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM') THEN 1 END) EC_THAT,
-				       		 COUNT(CASE WHEN RGSTRTN_DATE BETWEEN ADD_MONTHS(SYSDATE,-3) AND SYSDATE THEN 1 END) EC_AVG,
+				FROM (SELECT COUNT(CASE WHEN TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(ADD_MONTHS(TO_DATE(#{tMonth}, 'YYYY-MM'), -1), 'YYYY-MM') THEN 1 END) EC_LAST,
+				      		 COUNT(CASE WHEN TO_CHAR(RGSTRTN_DATE, 'YYYY-MM') = TO_CHAR(TO_DATE(#{tMonth}, 'YYYY-MM'), 'YYYY-MM') THEN 1 END) EC_THAT,
+				       		 COUNT(CASE WHEN RGSTRTN_DATE BETWEEN ADD_MONTHS(TO_DATE(#{tMonth}, 'YYYY-MM'),-3) AND SYSDATE THEN 1 END) EC_AVG,
 				       		 COUNT(*) AS EC_ALLCNT,
 		                     COUNT(A.DEPT_NUM) EC_CNT,
 		                     COUNT(CASE WHEN A.DEPT_NUM = 7 THEN 1 END) EC_CNT1,
@@ -74,9 +71,6 @@
 						</when>
 					</choose>
 				</if>
-				<if test="startDate != null and startDate != '' and endDate != null and endDate != ''" >		       	
-			       AND TO_CHAR(EC.RGSTRTN_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
-		       	</if>
 				<choose>
 					<when test="mngEmp != null and mngEmp != ''"> <!-- 담당자텍스트 박스 -->
 						AND E.EMP_NAME LIKE '%' || #{mngEmp} || '%'

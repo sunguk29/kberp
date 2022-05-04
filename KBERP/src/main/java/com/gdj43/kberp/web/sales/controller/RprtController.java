@@ -43,14 +43,16 @@ public class RprtController {
 		
 		Date mon = new Date();
 		
-		SimpleDateFormat month = new SimpleDateFormat("yyyy.MM");
+		SimpleDateFormat month = new SimpleDateFormat("yyyy-MM");
 	
 		String  tMonth = month.format(mon);
-		params.put("tMonth", tMonth);
+		if(params.get("tMonth") == null || params.get("tMonth") == "") {
+			params.put("tMonth", tMonth);			
+		}
 		
 		mav.addObject("tMonth", params.get("tMonth"));
-
 		mav.setViewName("sales/rprt/clntChart");
+		
 		return mav;
 		
 	}
@@ -63,10 +65,14 @@ public class RprtController {
 		ObjectMapper mapper = new ObjectMapper();
 
 		Map<String, Object> modelMap = new HashMap<String, Object>();
-		
+				
 		HashMap<String, String> ccAll = iCommonService.getData("clntRprt.allCnt", params);
+		System.out.println(params.get("tMonth"));
+		
+		ccAll.put("tMonth", params.get("tMonth"));
 		
 		modelMap.put("ccAll", ccAll);
+		
 		return mapper.writeValueAsString(modelMap);
 	}
 	
