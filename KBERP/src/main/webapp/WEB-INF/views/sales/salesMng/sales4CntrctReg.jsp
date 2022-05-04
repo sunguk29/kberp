@@ -1715,8 +1715,10 @@ $(document).ready(function() {
 	
 	$(".qtnDiv").hide();
  	
+	var loanAmntE = "${data3.LOAN_AMNT}";
+	
  	//대출금액
-	var loanAmnt = ${data3.LOAN_AMNT};
+	var loanAmnt = loanAmntE.split(',').join("");
 	//대출기간
 	var loanPrd
 	if(${data3.LOAN_PRD eq 0} == 0) {
@@ -1890,31 +1892,6 @@ function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
 	$("#fileName").val(filename);
-}
-
-function test(t) {
-	//대출금액
-	var price = $("#LoanAmnt").val();
-	
-	if(t.value != -1) {	
-		if(t.value == 0) { // 부가세 포함
-			//공급가액
-			$("#splyPrice").val(Math.trunc(price / 1.1)); 
-			//세액
-			$("#taxAmnt").val(Math.trunc(price - $("#splyPrice").val() * 1));
-			//합계
-			$("#sumAmnt").val(($("#splyPrice").val() * 1) + ($("#taxAmnt").val() * 1));
-		} else if(t.value == 1) { // 부가세 미포함
-			$("#splyPrice").val(price); 
-			$("#taxAmnt").val(Math.trunc($("#splyPrice").val() * 0.1));
-			$("#sumAmnt").val(($("#splyPrice").val() * 1) + ($("#taxAmnt").val() * 1));
-		} else if(t.value == 2) { // 부가세 면세
-			$("#splyPrice").val(price); 
-			$("#taxAmnt").val('0');
-			$("#sumAmnt").val(price);
-		}
-	} // if(t.value != -1) end
-	
 }
 
 </script>

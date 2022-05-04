@@ -667,15 +667,6 @@ pre {
 <script type="text/javascript">
 $(document).ready(function() {
 
-	console.log(${param.salesNum});
-	console.log(${param.qtnNum});
-	console.log(rmComma($("#LoanAmnt").val()));
-	console.log(isNaN(loanAmnt));
-	console.log(isNaN($("#LoanAmnt").val()));
-	console.log($("#monthPymntAmnt").val());
-	console.log($("#monthIntrstAmnt").val());
-	
-	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
 		
@@ -1488,55 +1479,6 @@ $(document).ready(function() {
 			}]
 		});
 	}); // 일정 삭제 function end
-	
-	
- 	//대출금액
- 	var loanAmnt = $("#LoanAmnt").attr('value', rmComma($("#LoanAmnt").val()));
-
-	//대출기간
-	var loanPrd
-	if(${data3.LOAN_PRD eq 0}) {
-		loanPrd = 6;
-	} else if(${data3.LOAN_PRD eq 1}) {
-		loanPrd = 12;
-	} else if(${data3.LOAN_PRD eq 2}) {
-		loanPrd = 36;
-	} else if(${data3.LOAN_PRD eq 3}) {
-		loanPrd = 60;
-	}
-	//이자율
-	var intrstRate = ${data3.INTRST_RATE} * 0.01;
-	//이자율(월)
-	var mIntrstRate = (intrstRate / 12);
-	
-	//월 납부액
-	if(${data3.PRNCPL_PYMNT_MTHD_NUM eq 0}) { // 원금 균등 상환
-		var mpa = $("#monthPymntAmnt").attr('value', rmComma($("#monthPymntAmnt").val()));
-		mpa = Math.round(loanAmnt / loanPrd);
-		/* $("#monthPymntAmnt").val(Math.round(loanAmnt / loanPrd)); */
-		$("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate));
-	}
-	if(${data3.PRNCPL_PYMNT_MTHD_NUM eq 1}) { // 원리금 균등 상환
-		var temp1 = Math.pow(1 + mIntrstRate, loanPrd) - 1;
-		var temp2 = loanAmnt * mIntrstRate * Math.pow(1 + mIntrstRate, loanPrd);
-		
-		var mpa = $("#monthPymntAmnt").attr('value', rmComma($("#monthPymntAmnt").val()));
-		mpa = Math.round(temp2 / temp1);
-		var mia = $("#monthIntrstAmnt").attr('value', rmComma($("#monthIntrstAmnt").val()));
-		mia = Math.round(loanAmnt * mIntrstRate);
-		/* $("#monthPymntAmnt").val(Math.round(temp2 / temp1)); */
-		/* $("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate)); */
-	}
-	if(${data3.PRNCPL_PYMNT_MTHD_NUM eq 2}) { // 만기 일시 상환
-		if(${data3.INTRST_PYMNT_MTHD_NUM ne 2}) {
-			$("#monthPymntAmnt").val("0");
-			var mia = $("#monthIntrstAmnt").attr('value', rmComma($("#monthIntrstAmnt").val()));
-			mia = Math.round(loanAmnt * mIntrstRate);
-			/* $("#monthIntrstAmnt").val(Math.round(loanAmnt * mIntrstRate)); */
-		}
-	
-	}
-	
 	
 }); // document.ready End
 
