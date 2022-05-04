@@ -589,6 +589,9 @@ function salesRvnChart(list) {
 			    format: '{value:,.0f}'
 			}
 		} ],
+		credits: {
+	    	enabled: false
+	    }, 
 		series : [ {
 			name : '매출',
 			data : list
@@ -745,7 +748,7 @@ function drawMngPaging(mngPb) {
 		<div class="page_title_bar">
 			<div class="page_title_text">종합차트</div>
 			<!-- 검색영역 선택적 사항 -->
-			<div class="page_srch_area">
+		<!-- 	<div class="page_srch_area">
 				<select class="srch_sel">
 					<option>제목</option>
 					<option>내용</option>
@@ -755,7 +758,7 @@ function drawMngPaging(mngPb) {
 					<input type="text" />
 				</div>
 				<div class="cmn_btn_ml">검색</div>
-			</div>
+			</div> -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">

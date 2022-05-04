@@ -334,7 +334,6 @@ textarea {
 }
 .OpinionBox {
 	width: 830px;
-	height: 70px;
 	font-size: 10pt;
 	border: 1px solid gray;
 	border-top-left-radius: 12px;

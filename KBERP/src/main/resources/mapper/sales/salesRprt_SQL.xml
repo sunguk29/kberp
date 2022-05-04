@@ -171,7 +171,7 @@
 		             INNER JOIN EMP E
 		                     ON S.MNGR_EMP_NUM = E.EMP_NUM
 		             INNER JOIN APNTM A
-		                             ON E.EMP_NUM = A.EMP_NUM
+		                     ON E.EMP_NUM = A.EMP_NUM
                      INNER JOIN DEPT D
                              ON A.DEPT_NUM = D.DEPT_NUM        
 		WHERE 1 = 1
