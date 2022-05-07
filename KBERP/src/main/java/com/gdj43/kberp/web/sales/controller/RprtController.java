@@ -159,7 +159,7 @@ public class RprtController {
 	/* 영업 차트 데이터 가져오기 */
 	@RequestMapping(value = "/salesgetChartDataAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String salesgetChartDataAjax(@RequestParam HashMap<String, Object> params, HttpServletRequest request) throws Throwable{
+	public String salesgetChartDataAjax(@RequestParam HashMap<String, String> params, HttpServletRequest request) throws Throwable{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -168,8 +168,8 @@ public class RprtController {
 		
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		
-		HashMap<String, Object> bsnList = iSchdlService.getData("salesRprt.getSalesBsnChart", params);
-		HashMap<String, Object> bsnName = iSchdlService.getData("salesRprt.getSalesBsnName");
+		HashMap<String, String> bsnList = iCommonService.getData("salesRprt.getSalesBsnChart", params);
+		HashMap<String, String> bsnName = iCommonService.getData("salesRprt.getSalesBsnName");
 		
 		for(int i = 0 ; i < size ; i++) {
 			HashMap<String, Object> temp = new HashMap<String, Object>();
@@ -251,19 +251,19 @@ public class RprtController {
 	// 영업 차트 진행상태 개수
 	@RequestMapping(value = "/prgrsChartAjax", method=RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String prgrsChartAjax(@RequestParam HashMap<String, Object> params, ModelAndView mav) throws Throwable{
+	public String prgrsChartAjax(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		//영업 전체 개수
-		int totalCnt = iSchdlService.getIntData("salesRprt.getTotalCnt", params);
+		int totalCnt = iCommonService.getIntData("salesRprt.getTotalCnt", params);
 		//영업 종료(실패)개수
-		int failCnt = iSchdlService.getIntData("salesRprt.getFailCnt", params);
+		int failCnt = iCommonService.getIntData("salesRprt.getFailCnt", params);
 		//영업 종료(성공)개수
-		int endCnt = iSchdlService.getIntData("salesRprt.getEndCnt", params);
+		int endCnt = iCommonService.getIntData("salesRprt.getEndCnt", params);
 		//영업 진행중 개수
-		int ingCnt = iSchdlService.getIntData("salesRprt.getIngCnt", params);
+		int ingCnt = iCommonService.getIntData("salesRprt.getIngCnt", params);
 		
 		modelMap.put("totalCnt", totalCnt);
 		modelMap.put("failCnt", failCnt);
@@ -276,19 +276,19 @@ public class RprtController {
 	// 영업 차트 진행단계 개수
 	@RequestMapping(value = "/prgrsStepAjax", method=RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String prgrsStepAjax(@RequestParam HashMap<String, Object> params, ModelAndView mav) throws Throwable{
+	public String prgrsStepAjax(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		//영업기회 개수
-		int salesChncCnt = iSchdlService.getIntData("salesRprt.getSalesChncCnt", params);
+		int salesChncCnt = iCommonService.getIntData("salesRprt.getSalesChncCnt", params);
 		//제안 개수
-		int sgstnCnt = iSchdlService.getIntData("salesRprt.getSgstnCnt", params);
+		int sgstnCnt = iCommonService.getIntData("salesRprt.getSgstnCnt", params);
 		//견적 개수
-		int qtnCnt = iSchdlService.getIntData("salesRprt.getQtnCnt", params);
+		int qtnCnt = iCommonService.getIntData("salesRprt.getQtnCnt", params);
 		//계약 개수
-		int cntrctCnt = iSchdlService.getIntData("salesRprt.getCntrctCnt", params);
+		int cntrctCnt = iCommonService.getIntData("salesRprt.getCntrctCnt", params);
 		
 		modelMap.put("salesChncCnt", salesChncCnt);
 		modelMap.put("sgstnCnt", sgstnCnt);
