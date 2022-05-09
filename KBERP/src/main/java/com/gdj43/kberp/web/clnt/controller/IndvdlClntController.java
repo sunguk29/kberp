@@ -181,6 +181,48 @@ public class IndvdlClntController {
 		return mav;
 	}
 	
+	// 비밀번호 체크
+	@RequestMapping(value="/pwCheckAjax", method=RequestMethod.POST, 
+			produces="text/json;charset=UTF-8")
+	@ResponseBody // View로 인식 시킴
+	public String pwCheckAjax(@RequestParam HashMap<String,String> params) throws Throwable {
+	
+		ObjectMapper mapper = new ObjectMapper();
+		
+		//데이터를 담을 객체
+		Map<String,Object> modelMap = new HashMap<String,Object>();
+				
+		int cnt = iCommonService.getIntData("cl.pwCheck",params);
+		
+		modelMap.put("cnt",cnt);
+		
+		return mapper.writeValueAsString(modelMap); 
+	}
+	
+	
+	// 비밀번호 찾기 Ajax
+	
+	@RequestMapping(value="/findPwAjax", method=RequestMethod.POST, 
+			produces="text/json;charset=UTF-8")
+	@ResponseBody // View로 인식 시킴
+	public String findPwAjax(@RequestParam HashMap<String,String> params) throws Throwable {
+		
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String,Object> modelMap = new HashMap<String,Object>();
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("cl.findPw",params);
+		int cnt = iCommonService.getIntData("cl.pwCheck",params);
+		modelMap.put("list",list);
+		modelMap.put("cnt",cnt);
+		// 정보 없을시
+		if(cnt==0) {
+			modelMap.put("res", "failed");
+		}
+		return mapper.writeValueAsString(modelMap);
+	}
+	
 	// 회원가입
 	@RequestMapping(value = "/signUp")
 	public ModelAndView signUp(ModelAndView mav) {
@@ -200,23 +242,26 @@ public class IndvdlClntController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		try {
-			params.put("signup_pw", Utils.encryptAES128(params.get("signup_pw")));
 			
 			switch(gbn) {
 			case "i":
-				
 				int cnt = iCommonService.getIntData("cl.checkid",params);
 				if(cnt!=0) {
 					modelMap.put("chc","falied");
 				}else {
+					params.put("pw", Utils.encryptAES128(params.get("pw")));
 					iCommonService.insertData("cl.signUp", params);
 				}
 				break;
+			case "m":
+				iCommonService.updateData("cl.mdfyPw", params);
+				break;
 			case "u":
-				iCommonService.updateData("cl.inqryRspndUp", params);
+				params.put("pw", Utils.encryptAES128(params.get("pw")));
+				iCommonService.updateData("cl.updateClnt", params);
 				break;
 			case "d":
-				iCommonService.updateData("cl.inqryRspndDel", params);
+				iCommonService.updateData("cl.delClnt", params);
 				break;
 			}
 			modelMap.put("res", "success");

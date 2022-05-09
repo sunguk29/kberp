@@ -130,7 +130,7 @@ body {
 	display: inline-block;
 }
 
-.login_Btn {
+.find_Btn {
 	display: block;
     width: 420px;
     height: 50px;
@@ -149,6 +149,20 @@ body {
 	user-select:none;
 }
 
+/* 비밀번호 찾기 팝업 */
+.findpw {
+	text-align: center;
+}
+
+.pw_textBox {
+	width: 400px;
+   	line-height: 30px;
+    margin-bottom: 10px;
+}
+
+#random_Pw {
+	color: #2E83F2;
+}
 
 </style>
 <!-- jQuery js 파일 -->
@@ -160,53 +174,167 @@ body {
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	$(".login_Btn").on("click", function() {
-		if(checkEmpty("#loginId")) {
-			makeAlert("로그인 안내", "아이디를 입력해 주세요.", function() {
-				$("#loginId").focus();
-			});
-		} else if(checkEmpty("#loginPw")) {
-			makeAlert("로그인 안내", "비밀번호를 입력해 주세요.", function() {
-				$("#loginPw").focus();
-			});
-		} else {
-			var params = $("#loginForm").serialize();
+	$("#findpwForm").on("keypress", "input", function(event) {
+		if(event.keyCode == 13) {
+			$(".find_Btn").click();
+			$(this).blur();
+			return false;
+		}
+	});
+	
+	$(".find_Btn").on("click", function() {
+		
+		if(checkEmpty("#id")) {
+			alert("아이디를 입력해주세요");
+				$("#id").focus();
+		} else if(checkEmpty("#name")) {
+			alert("이름을 입력해주세요");
+			$("#name").focus();
+		} else if(checkEmpty("#phone_num1")) {
+			alert("핸드폰 번호를 입력해주세요");
+			$("#phone_num1").focus();
+		} else if($("#phone_num1").val().includes("-")) {
+			alert("- (하이픈)을 제외하고 입력해주세요.");
+			$("#phone_num1").focus();
+		} else if($("#phone_num1").val().length!=11) {
+			alert("핸드폰 번호 11자리를 입력해주세요");
+			$("#phone_num1").val("");
+			$("#phone_num1").focus();
+	 	} else {
+			var html ="";
 			
-			$.ajax({
-				type : "post",
-				url : "indvdlLoginAjax",
-				dataType : "json",
-				data : params,
-				success : function(result) {
-					if(result.res == "SUCCESS") {
-						location.href = "cmbnInfo";
-					} else if(result.res == "FAILED") {
-						makeAlert("로그인 실패", "아이디나 비밀번호가 틀렸습니다.");
-					} else {
-						makeAlert("로그인 경고", "로그인 중 문제가 발생하였습니다.");
-					}
+			html += "<div class=\"findpw\">";
+			html += "	<div class=\"pw_textBox\">회원님의 임시 비밀번호를 발급해드립니다.</div>";
+			html += "	<div class=\"pw_textBox\">로그인 후 비밀번호를 변경해주세요.</div>";
+			html += "	<table class=\"board_table\" id=\"guide_table\">";
+			html += "		<thead>";
+			html += "			<tr>";
+			html += "				<th>임시 비밀번호</th>";
+			html += "			</tr>";
+			html += "		</thead>";
+			html += "<tbody>";
+			html += "			<tr>";
+			html += "				<td id=\"random_Pw\"></td>";
+			html += "			</tr>";
+			html += "</tbody>";
+			html += "		</table>";
+			html += "</div>";
+	 		
+			makePopup({
+				depth : 1,
+				bg : true,
+				width : 400,
+				height : 250,
+				contents:html,
+				title:"비밀번호 찾기",
+				contentsEvent:function(){
+					
+					var params= $("#findpwForm").serialize();
+					
+					$.ajax({
+						type: "post", // 전송형태
+						url : "findPwAjax" , //통신 주소
+						dataType : "json", //받을 데이터 형태
+						data : params, //보낼 데이터. 보낼 것이 없으면 안씀
+						success : function(res){ // 성공 시 실행 함수. 인자는 받아온 데이터
+						//받아온 데이터중의 list를 그리겠다.
+						if(res.res=="failed"){
+							users();
+						}
+						else{
+							console.log(res);
+							drawList(res.list);
+						}
+							
+						},
+						error: function(request, status, error){ // 문제 발생 시 실행 함수
+							console.log(request.responseText); //결과텍스트. 스프링 실행 결과
+						}
+					});
+					
 				},
-				error : function(request, status, error) {
-					console.log("status : " + request.status);
-					console.log("text : " + request.responseText);
-					console.log("error : " + error);
+				buttons : {
+					name : "닫기",
+					func:function() {
+						console.log("One!");
+						closePopup();
+					}
 				}
 			});
 			
 		}
-	}); // login_Btn END
+	}); // find_Btn END
 	
-		$("#sign").on("click", function() {
-			$("#signForm").attr("action", "signUp");
-			$("#signForm").submit();
-		});
+	function drawList(list){
+		var html ="";
 		
-		$("#center").on("click", function() {
-			$("#centerForm").attr("action", "clientCenter");
-			$("#centerForm").submit();
-		});
+		var ranValue1 = ['1','2','3','4','5','6','7','8','9','0'];
+		var ranValue2 = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+		var ranValue3 = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+		var ranValue4 = ['!','@','#','$','%','&','*'];
+		
+		var temp_pw = "";
+		
+		for(i=0 ; i<3; i++) {
+			var ranPick1 = Math.floor(Math.random() * ranValue1.length);
+			var ranPick2 = Math.floor(Math.random() * ranValue2.length);
+			var ranPick3 = Math.floor(Math.random() * ranValue3.length);
+			var ranPick4 = Math.floor(Math.random() * ranValue4.length);
+			temp_pw = temp_pw + ranValue1[ranPick1] + ranValue2[ranPick2] + ranValue3[ranPick3] + ranValue4[ranPick4];
+		}
+		
+		var pw = temp_pw;
+		// of: list 하나씩 꺼내오는 for문
+		for(var data of list){
+			html += "<form action=\"#\" id=\"mdfyForm\" method=\"post\">";
+			html += "	<input type=\"hidden\" id=\"clnt_num\" name=\"clnt_num\" value=\""+ data.CLNT_NUM + "\">";
+			html += "	<input type=\"hidden\" id=\"pw\" name=\"pw\" value=\""+ pw + "\">";
+			html += pw;
+			html += "</form>";
+		}
+		console.log(html);
+		$("#random_Pw").html(html);
+		
+		var params= $("#mdfyForm").serialize();
+		console.log(params);
+		$.ajax({
+			type : "post",
+			url : "signUpActionAjax/m",
+			dataType : "json",
+			data : params,
+			success : function(res) {
+				if(res.res == "success") {
+				} else {
+					alert("작성중 문제가 발생하였습니다.");
+				}
+
+			},
+			error : function(request, status, error) {
+				console.log(request.responseText);
+
+			}
+		}); // ajax end
+	}
+	
+	function users(){
+		var html="";
+			html+="회원정보가 없습니다";
+			$(".popup_cont").css("text-align","center");
+			$(".popup_cont").css("line-height","150px");
+		$(".popup_cont").html(html);
+	} 
+	
 		
 }); // document.ready END
+
+function checkEmpty(sel) {
+	if($.trim($(sel).val()) == "") {
+		return true;
+	} else {
+		return false;
+	}
+
+}
 </script>
 </head>
 <body>
@@ -216,20 +344,22 @@ $(document).ready(function() {
 			<div id="findHead">
 	            <div class="findPwLogo"></div>
 		    </div>
+		    <form action="#" id="findpwForm" method="post">
 			<div class="login_area">
 				<div class="input_id">
-					<input type="text" placeholder="아이디">
-					<input type="text" placeholder="이름">
+					<input type="text" id="id" name="id" placeholder="아이디">
+					<input type="text" id="name" name="name" placeholder="이름">
 					<div class="country_code">
 						<select id="internationalCode" name="internationalCode" title="국가코드" class="country_sel" >
 							<option value="" selected disabled hidden>+82</option>
 					  	 	<option value="82">대한민국 +82</option>
 						</select>
-							<input type="text" id="phone_num1" placeholder="핸드폰번호">
+							<input type="text" id="phone_num1" name="phone_num1" placeholder="핸드폰번호">
 					</div>
 				</div>
-				<div class="login_Btn">비밀번호 찾기</div>
+				<div class="find_Btn">비밀번호 찾기</div>
 			</div>
+			</form>
 		</div>
 		<div class="login_logo">
 			<div class="kabang_icon">
