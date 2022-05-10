@@ -9,7 +9,19 @@
 		AND ID = #{id}
 		AND PW = #{pw}
 	</select>
-	
+	<!-- Top Menu -->
+	<select id="getTopMenu" parameterType="String" resultType="hashmap">
+		SELECT M.MENU_NUM, M.MENU_NAME, CASE WHEN M.MENU_NUM = 68
+		                                     THEN 'board'
+		                                     ELSE M2.ADRS
+		                                END AS ADRS, CASE WHEN M.MENU_NUM = 68
+		                                     THEN 1
+		                                     ELSE M.ADD_PRMTR
+		                                END AS ADD_PRMTR
+		FROM MENU M INNER JOIN MENU M2
+		                    ON M.ADD_PRMTR = M2.MENU_NUM
+		WHERE M.MENU_NAME = '고객지원'
+	</select>
 	<!-- 회원가입 -->
 	<insert id="signUp" parameterType="hashmap">
 		INSERT INTO INDVDL_CLNT(CLNT_NUM, ID, PW, CLNT_NAME, PHONE_NUM_1, ADRS, DTL_ADRS)
