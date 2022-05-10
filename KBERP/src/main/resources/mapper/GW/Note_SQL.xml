@@ -167,5 +167,4 @@
 		UPDATE NOTE_RCPNT_EMP SET READ_CHECK = 1
 		WHERE NOTE_NUM = #{no}
 	</update>
-	
 </mapper>
