@@ -254,6 +254,7 @@ public class IndvdlClntController {
 				}
 				break;
 			case "m":
+				params.put("pw", Utils.encryptAES128(params.get("pw")));
 				iCommonService.updateData("cl.mdfyPw", params);
 				break;
 			case "u":
