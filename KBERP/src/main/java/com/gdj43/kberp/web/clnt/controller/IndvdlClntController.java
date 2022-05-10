@@ -40,29 +40,41 @@ public class IndvdlClntController {
 		return mav; 
 	}
 	
-	// LeftMenu
-	@RequestMapping(value = "/cLeft")
-	public ModelAndView cLeft(@RequestParam HashMap<String, String> params, 
+	// TopMenu
+	@RequestMapping(value = "/cTop")
+	public ModelAndView cTop(@RequestParam HashMap<String, String> params, 
 								HttpSession session, ModelAndView mav) throws Throwable {
 		
-		mav.setViewName("CS/clnt/cLeft");
+		try {
+			List<HashMap<String, String>> topMenu = iCommonService.getDataList("common.getTopMenu", params);
+			
+			mav.addObject("topMenu", topMenu);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		mav.setViewName("CS/clnt/cTop");
 		
 		return mav;
 	}
 	
-	// LeftMenu Ajax
-	@RequestMapping(value = "/cLeftAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
-	@ResponseBody
-	public String cLeftAjax(@RequestParam HashMap<String, String> params, HttpSession session) throws Throwable {
-		ObjectMapper mapper = new ObjectMapper();
-		Map<String, Object> modelMap = new HashMap<String, Object>();
-		
-		List<HashMap<String, String>> leftMenu = iCommonService.getDataList("common.getLeftMenu", params);
-		
-		modelMap.put("leftMenu", leftMenu);
-		
-		return mapper.writeValueAsString(modelMap);
-	}
+	/*
+	 * // LeftMenu Ajax
+	 * 
+	 * @RequestMapping(value = "/cTopAjax", method = RequestMethod.POST, produces =
+	 * "text/json;charset=UTF-8")
+	 * 
+	 * @ResponseBody public String cTopAjax(@RequestParam HashMap<String, String>
+	 * params, HttpSession session) throws Throwable { ObjectMapper mapper = new
+	 * ObjectMapper(); Map<String, Object> modelMap = new HashMap<String, Object>();
+	 * 
+	 * List<HashMap<String, String>> leftMenu =
+	 * iCommonService.getDataList("common.getLeftMenu", params);
+	 * 
+	 * modelMap.put("leftMenu", leftMenu);
+	 * 
+	 * return mapper.writeValueAsString(modelMap); }
+	 */
 	
 	// 로그인
 	@RequestMapping(value = "/indvdlLogin")
