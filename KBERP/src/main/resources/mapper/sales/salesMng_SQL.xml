@@ -671,26 +671,7 @@
 		SELECT C.SALES_NUM, C.CNTRCT_NUM, C.DPST_BANK_NUM,
 		       TO_CHAR(C.CNTRCT_DATE, 'YYYY-MM-dd') AS CNTRCT_DATE,
 		       TO_CHAR(C.CNTRCT_START_DATE, 'YYYY-MM-dd') AS CNTRCT_START_DATE,
-		       TO_CHAR(C.CNTRCT_END_DATE, 'YYYY-MM-dd') AS CNTRCT_END_DATE,
-		       <choose>
-					<when test="DPST_BANK_NUM == 0">
-				               AND REGEXP_REPLACE(C.DPST_ACNT_NUM, '(.{4})(.{2})(.{7})', '\1-\2-\3') = #{dbNum}
-				    </when>
-				    <when test="DPST_BANK_NUM == 1">
-				               AND REGEXP_REPLACE(C.DPST_ACNT_NUM, '(.{6})(.{2})(.{6})', '\1-\2-\3') = #{dbNum}
-				    </when>
-				    <when test="DPST_BANK_NUM == 2">
-				                AND REGEXP_REPLACE(C.DPST_ACNT_NUM, '(.{3})(.{4})(.{4})(.{2})', '\1-\2-\3-\4') = #{dbNum}
-				    </when>
-				    <when test="DPST_BANK_NUM == 3">
-				                AND REGEXP_REPLACE(C.DPST_ACNT_NUM, '(.{3})(.{3})(.{6})', '\1-\2-\3') = #{dbNum}
-				    </when>
-				    <when test="DPST_BANK_NUM == 4">
-				                AND REGEXP_REPLACE(C.DPST_ACNT_NUM, '(.{3})(.{6})(.{2})(.{3})', '\1-\2-\3-\4') = #{dbNum}
-				    </when>
-				</choose>
-		       
-		       ,
+		       TO_CHAR(C.CNTRCT_END_DATE, 'YYYY-MM-dd') AS CNTRCT_END_DATE, C.DPST_ACNT_NUM,
 		       C.DPST_TRSC_OWNER_NAME, PYMT_ACNT_NUM, C.PAYER_NAME,
 		       TO_CHAR(C.RNWL_EXPCTD_DATE, 'YYYY-MM-dd') AS RNWL_EXPCTD_DATE,
 		       TRIM(TO_CHAR(C.MONTH_PYMNT_AMNT, '999,999,999,999,999')) AS MONTH_PYMNT_AMNT,

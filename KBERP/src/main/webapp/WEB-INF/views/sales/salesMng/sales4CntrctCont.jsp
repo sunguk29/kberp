@@ -750,9 +750,21 @@ $(document).ready(function() {
 	$("#loanPrd").val(${data3.LOAN_PRD}).prop("selected", true);
 	
 	$("#dbNum").val(${data4.DPST_BANK_NUM}).prop("selected", true);
-		
 	
-	
+	if("${data4.DPST_BANK_NUM}" == 0) {
+		var daNum = "${data4.DPST_ACNT_NUM}";
+		$("#daNum").val(daNum);
+// 	   	REGEXP_REPLACE(C.DPST_ACNT_NUM, '(.{4})(.{2})(.{7})', '\1-\2-\3')
+	} else if("${data4.DPST_BANK_NUM}" == "1") {
+// 	   	REGEXP_REPLACE(C.DPST_ACNT_NUM, '(.{6})(.{2})(.{6})', '\1-\2-\3')
+	} else if("${data4.DPST_BANK_NUM}" == "2") {
+// 		REGEXP_REPLACE(C.DPST_ACNT_NUM, '(.{3})(.{4})(.{4})(.{2})', '\1-\2-\3-\4')
+	} else if("${data4.DPST_BANK_NUM}" == "3") {
+// 		REGEXP_REPLACE(C.DPST_ACNT_NUM, '(.{3})(.{3})(.{6})', '\1-\2-\3')
+	} else if("${data4.DPST_BANK_NUM}" == "4") {
+// 		REGEXP_REPLACE(C.DPST_ACNT_NUM, '(.{3})(.{6})(.{2})(.{3})', '\1-\2-\3-\4')
+	}
+
 	
 	/* 의견 목록 */
 	reloadOpList();
