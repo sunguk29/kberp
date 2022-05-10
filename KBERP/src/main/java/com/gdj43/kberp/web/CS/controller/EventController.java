@@ -1,4 +1,4 @@
-package com.gdj43.kberp.web.CS.controller;
+package com.gdj43.kberp.web.CS.controller; 
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +22,7 @@ import com.gdj43.kberp.web.common.service.ICommonService;
 //@RequestMapping("/event")	
 public class EventController {
 	@Autowired
-	public ICommonService iCommonService;
+	public ICommonService iCommonService; 
 	
 	@Autowired
 	public IPagingService ips;
@@ -31,16 +31,16 @@ public class EventController {
 	 현재 진행중인 event 목록글 보여주는 페이지
 	 * */
 	
-	@RequestMapping(value = "/prgrsEvent")
+	@RequestMapping(value = "/prgrsEvent") // 어노테이션(@) 사용
 	public ModelAndView eventList(@RequestParam HashMap<String, String> params,
 								ModelAndView mav) {
 		if(params.get("page") == null || params.get("page") == "") {
-			params.put("page", "1");
+			params.put("page", "1"); // 페이징 기능 
 		}
 		
 		mav.addObject("page", params.get("page"));
 		
-		mav.setViewName("CS/eventList");
+		mav.setViewName("CS/eventList"); // 폴더(CS)에 있는 목록 페이지(eventList) 연결
 		
 		return mav;
 	}
@@ -55,12 +55,12 @@ public class EventController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		// 총 게시글 수
-		int cnt= iCommonService.getIntData("ev.getEventCnt",params);
-		//
+		int cnt= iCommonService.getIntData("ev.getEventCnt",params); 
+		// 페이지 총 갯 수
 		PagingBean pb = ips.getPagingBean(Integer.parseInt(params.get("page")), cnt, 10, 5);
 		
 		params.put("startCount", Integer.toString(pb.getStartCount()));
-		params.put("endCount", Integer.toString(pb.getEndCount()));
+		params.put("endCount", Integer.toString(pb.getEndCount())); //
 		
 		List<HashMap<String, String>> list = iCommonService.getDataList("ev.getEventList", params);
 
