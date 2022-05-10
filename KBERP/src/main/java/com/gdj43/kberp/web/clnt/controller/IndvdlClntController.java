@@ -46,7 +46,7 @@ public class IndvdlClntController {
 								HttpSession session, ModelAndView mav) throws Throwable {
 		
 		try {
-			List<HashMap<String, String>> topMenu = iCommonService.getDataList("common.getTopMenu", params);
+			List<HashMap<String, String>> topMenu = iCommonService.getDataList("cl.getTopMenu", params);
 			
 			mav.addObject("topMenu", topMenu);
 		} catch (Exception e) {
@@ -57,24 +57,6 @@ public class IndvdlClntController {
 		
 		return mav;
 	}
-	
-	/*
-	 * // LeftMenu Ajax
-	 * 
-	 * @RequestMapping(value = "/cTopAjax", method = RequestMethod.POST, produces =
-	 * "text/json;charset=UTF-8")
-	 * 
-	 * @ResponseBody public String cTopAjax(@RequestParam HashMap<String, String>
-	 * params, HttpSession session) throws Throwable { ObjectMapper mapper = new
-	 * ObjectMapper(); Map<String, Object> modelMap = new HashMap<String, Object>();
-	 * 
-	 * List<HashMap<String, String>> leftMenu =
-	 * iCommonService.getDataList("common.getLeftMenu", params);
-	 * 
-	 * modelMap.put("leftMenu", leftMenu);
-	 * 
-	 * return mapper.writeValueAsString(modelMap); }
-	 */
 	
 	// 로그인
 	@RequestMapping(value = "/indvdlLogin")
@@ -132,6 +114,18 @@ public class IndvdlClntController {
 	public ModelAndView cmbnInfo(ModelAndView mav) {
 		
 		mav.setViewName("CS/clnt/cmbnInfo");
+		
+		return mav;
+	}
+	
+	// 로그인 뷰 고정
+	@RequestMapping(value = "/cLoc")
+	public ModelAndView cLoc(HttpSession session, ModelAndView mav) {
+		if(session.getAttribute("sClntNum") != null) {
+			mav.setViewName("CS/clnt/cLoc");
+		} else {
+			mav.setViewName("redirect:clntLogin");
+		}
 		
 		return mav;
 	}

@@ -10,7 +10,7 @@
 </form>
 <!-- Top Bar -->
 <div class="top_area">
-	<div class="logo"></div>
+	<div class="logo">고객센터</div>
 	<div class="menu_depth1_wrap">
 		<c:forEach var="menu" items="${topMenu}">
 			<c:choose>

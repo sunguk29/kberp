@@ -27,34 +27,9 @@ $(document).ready(function() {
 	$(".logo").on("click", function() {
 		$("#top").val(68);
 		
-		$("#menuNum").val(1);
-		
-		$("#menuType").val("B");
-		
-		$("#locationForm").attr("action", "board");
+		$("#locationForm").attr("action", "clnt");
 		
 		$("#locationForm").submit();
-	});
-	
-	//Left Menu Location Event
-	$(".left_area").on("click", ".menu_depth2_area, .menu_depth2_single_area,  .menu_depth3", function() {
-		if($(this).is("[adrs]")) {
-			$("#menuNum").val($(this).attr("menunum"));
-			
-			if($(this).attr("adrs") == "board") {
-				$("#menuType").val("B");
-			} else {
-				$("#menuType").val("M");
-			}
-			
-			$("#locationForm").attr("action", $(this).attr("adrs"));
-			
-			$("#locationForm").submit();
-		} else {
-			$(".menu_depth2_on").attr("class", "menu_depth2");
-			
-			$(this).parent().attr("class", "menu_depth2_on");
-		}
 	});
 	
 	//Top Menu Location Event
@@ -62,12 +37,6 @@ $(document).ready(function() {
 		$("#top").val($(this).attr("topnum"));
 		
 		$("#menuNum").val($(this).attr("menunum"));
-		
-		if($(this).attr("adrs") == "board") {
-			$("#menuType").val("B");
-		} else {
-			$("#menuType").val("M");
-		}
 		
 		$("#locationForm").attr("action", $(this).attr("adrs"));
 		
