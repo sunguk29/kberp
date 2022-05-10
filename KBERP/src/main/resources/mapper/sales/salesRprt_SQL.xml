@@ -80,7 +80,7 @@
 		       	<if test="deptS != 9">
 		       	 	AND D.DEPT_NUM = #{deptS}
 		       	</if>
-		       	<if test="salesCheck == 1">
+		       	<if test="salesCheck != 0">
 		       		AND S.MNGR_EMP_NUM = #{sEmpNum}	
 		       	</if>) A INNER JOIN ( SELECT COUNT(*) AS CNT
 									  FROM EXPCTD_BSNS_INFO EBI INNER JOIN SALES S
@@ -101,7 +101,7 @@
 								       	<if test="deptS != 9">
 								       	 	AND D.DEPT_NUM = #{deptS}
 								       	</if>
-								       	<if test="salesCheck == 1">
+								       	<if test="salesCheck != 0">
 								       		AND S.MNGR_EMP_NUM = #{sEmpNum}	
 								       	</if>) B
                                   ON 1 = 1    
@@ -124,7 +124,7 @@
 								       	<if test="deptS != 9">
 								       	 	AND D.DEPT_NUM = #{deptS}
 								       	</if>
-								       	<if test="salesCheck == 1">
+								       	<if test="salesCheck != 0">
 								       		AND S.MNGR_EMP_NUM = #{sEmpNum}	
 								       	</if>) C
                         		   ON 1 = 1
@@ -217,7 +217,7 @@
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
-      	<if test="salesCheck == 1">
+      	<if test="salesCheck != 0">
 			AND S.MNGR_EMP_NUM = #{sEmpNum}	
 		</if> 
 	</select>
@@ -241,7 +241,7 @@
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
-      	<if test="salesCheck == 1">
+      	<if test="salesCheck != 0">
 			AND S.MNGR_EMP_NUM = #{sEmpNum}	
 		</if> 
 	</select>
@@ -265,7 +265,7 @@
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
-      	<if test="salesCheck == 1">
+      	<if test="salesCheck != 0">
 			AND S.MNGR_EMP_NUM = #{sEmpNum}	
 		</if> 
 	</select>
@@ -348,7 +348,7 @@
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
-      	<if test="salesCheck == 1">
+      	<if test="salesCheck != 0">
 			AND S.MNGR_EMP_NUM = #{sEmpNum}	
 		</if>
 	    </select>
@@ -372,7 +372,7 @@
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
-      	<if test="salesCheck == 1">
+      	<if test="salesCheck != 0">
 			AND S.MNGR_EMP_NUM = #{sEmpNum}	
 		</if>
 	</select>
@@ -396,7 +396,7 @@
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
-      	<if test="salesCheck == 1">
+      	<if test="salesCheck != 0">
 			AND S.MNGR_EMP_NUM = #{sEmpNum}	
 		</if>
 	</select>
@@ -420,7 +420,7 @@
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
-      	<if test="salesCheck == 1">
+      	<if test="salesCheck != 0">
 			AND S.MNGR_EMP_NUM = #{sEmpNum}	
 		</if>
 	</select>

@@ -3,7 +3,7 @@
 <mapper namespace="cl">
 	<!-- 로그인 -->
 	<select id="icloginCheck" parameterType="hashmap" resultType="hashmap">
-		SELECT CLNT_NUM, ID, PW, CLNT_NAME, PHONE_NUM_1, PHONE_NUM_2, ZIP_CODE, ADRS, DTL_ADRS
+		SELECT COUNT(*) AS CNT
 		FROM INDVDL_CLNT
 		WHERE DEL_CHECK = '1'
 		AND ID = #{id}
@@ -36,7 +36,15 @@
 		AND CLNT_NAME= #{name}
 		AND PHONE_NUM_1=#{phone_num1}
 	</select>
-	
+	<!-- 비밀번호 찾기 -->
+	<select id="findPw" parameterType="hashmap" resultType="hashmap">
+		SELECT ID, CLNT_NUM, CLNT_NAME, PHONE_NUM_1
+		FROM INDVDL_CLNT
+		WHERE DEL_CHECK='1'
+        AND ID = #{id}
+		AND CLNT_NAME = #{name}
+		AND PHONE_NUM_1 = #{phone_num1}
+	</select>
 	<!-- 비밀번호 체크  -->
 	<select id="pwCheck" parameterType="hashmap" resultType="Integer">
 		SELECT COUNT(*) AS CNT
@@ -46,4 +54,9 @@
 		AND CLNT_NAME = #{name}
 		AND PHONE_NUM_1 = #{phone_num1}
 	</select>
+	<!-- 임시 비밀번호 업데이트 -->
+	<update id="mdfyPw" parameterType="hashmap">
+		UPDATE INDVDL_CLNT SET PW = #{pw}
+		WHERE CLNT_NUM = #{clnt_num}
+	</update>
 </mapper>

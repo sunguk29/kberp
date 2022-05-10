@@ -24,6 +24,7 @@ td:nth-child(2):hover {
 	color: #4B94F2;
 	text-decoration: underline;
 }
+
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -93,7 +94,7 @@ $(document).ready(function() {
 	
 });
 
-function reloadList() { // 목록 조회용 + 페이징 조회용
+function reloadList() { // 목록 + 페이징 조회용
 	var params = $("#actionForm").serialize();
 	
 	$.ajax({

@@ -1185,6 +1185,7 @@ $(document).ready(function() {
 
 function reloadList() {
 	var params = $("#actionForm").serialize();
+	console.log("achtionForm을 serialize :" + params);
 	
 	$.ajax({
 		type : "post",
@@ -1192,6 +1193,7 @@ function reloadList() {
 		dataType : "json",
 		data : params,
 		success : function(res) {
+			console.log("res :" + res);
 			
 			drawList(res.list);
 			drawPaging(res.pb);
