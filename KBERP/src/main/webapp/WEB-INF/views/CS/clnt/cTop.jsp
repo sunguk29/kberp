@@ -16,7 +16,7 @@
 			<c:choose>
 				<c:when test="${menu.MENU_NUM eq param.top}">
 					<%-- _on 달린 것이 활성화 상태 --%>
-					<div class="top_menu_on" topnum="${menu.MENU_NUM}" menunum="${menu.ADD_PRMTR}" adrs="sample">
+					<div class="top_menu_on" topnum="${menu.MENU_NUM}" menunum="${menu.ADD_PRMTR}" adrs="cont">
 					<%-- 
 					<div class="top_menu_on" topnum="${menu.MENU_NUM}" menunum="${menu.ADD_PRMTR}" adrs="${menu.ADRS}">
 					 --%>

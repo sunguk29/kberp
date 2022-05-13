@@ -24,18 +24,24 @@
 }
 </style>
 <script type="text/javascript">
-
+$(function(){
+    $('.menu>li').mouseover(function(){
+        $(this).children('.sub').stop().slideDown();
+    }).mouseout(function(){
+        $('.sub').stop().slideUp();
+    });
+ });
 </script>
 </head>
 <body>
-	<!-- top & left -->
+	<!-- top -->
 	<c:import url="/cTop">
 		<c:param name="top">${param.top}</c:param>
 		<c:param name="menuNum">${param.menuNum}</c:param>
 	</c:import>
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">1:1 문의</div>
+			<div class="page_title_text">통합정보</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
 				<form action="#" id="actionForm" method="post">
@@ -44,6 +50,7 @@
 					<input type="hidden" id="emp_name" name="emp_name" value="${data.EMP_NAME}" />
 					<input type="hidden" id="top" name="top" value="${param.top}"/>
 					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
+					<input type="hidden" id="menuName" name="menuName" value="${param.menuName}"/>
 					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
 						<select class="srch_sel" id="searchGbn" name="searchGbn">
 							<option value="0">제목</option>
@@ -86,5 +93,7 @@
 			</div>
 		</div>
 	</div>
+	<!-- bottom -->
+	<c:import url="/cBottom"></c:import>
 </body>
 </html>
