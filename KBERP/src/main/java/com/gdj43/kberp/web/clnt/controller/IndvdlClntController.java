@@ -280,4 +280,11 @@ public class IndvdlClntController {
 		
 		return mapper.writeValueAsString(modelMap);
 	}
+	
+	@RequestMapping(value = "/cont")
+	public ModelAndView cont(ModelAndView mav) {
+		mav.setViewName("CS/clnt/cont");
+		
+		return mav;
+	}
 }

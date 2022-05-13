@@ -14,8 +14,9 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-<form action="clnt" id="locationForm" method="post">
+<form action="cont" id="locationForm" method="post">
 	<input type="hidden" id="top" name="top" value="69" />
+	<input type="hidden" id="menuNum" name="menuNum" value="1" />
 </form>
 </body>
 </html>
