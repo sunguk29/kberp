@@ -98,7 +98,7 @@ public class ClntMngController {
 	@ResponseBody 
 	public String clntCmpnyListAjax(@RequestParam HashMap<String, String> params) throws Throwable {
 		
-		ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper	 = new ObjectMapper();
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
