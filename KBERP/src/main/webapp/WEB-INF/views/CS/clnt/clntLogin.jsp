@@ -45,6 +45,7 @@ body {
 
 .kabang_icon {
 	display: inline-block;
+	cursor: pointer;
 }
 
 .kabang_icon img {
@@ -57,6 +58,7 @@ body {
 
 .kabang_black{
 	display: inline-block;
+	cursor: pointer;
 }
 
 .kabang_black img {
@@ -147,6 +149,17 @@ form {
 <script type="text/javascript" src="resources/script/common/util.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+	
+	$(".kabang_icon").on("click", function() {
+		$("#loginForm").attr("action", "indvdlLogin");
+		$("#loginForm").submit();
+	});
+	
+	$(".kabang_black").on("click", function() {
+		$("#loginForm").attr("action", "indvdlLogin");
+		$("#loginForm").submit();
+	});
+	
 	
 	$("#loginForm").on("keypress", "input", function(event) {
 		if(event.keyCode == 13) {

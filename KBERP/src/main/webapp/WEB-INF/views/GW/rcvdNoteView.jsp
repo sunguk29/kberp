@@ -112,6 +112,7 @@
 $(document).ready(function() {
 	
 	$("#replyBtn").on("click", function() {
+		$("#actionForm #menuNum").val("26");
 		$("#actionForm").attr("action", "writeNote");
 		$("#actionForm").submit();
 	});

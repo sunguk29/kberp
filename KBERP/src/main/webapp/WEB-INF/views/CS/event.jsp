@@ -112,6 +112,7 @@
 	background-color: #F2CB05;
 	font-size: 15px;
 	font-weight:bold;
+	
 
 }
 
@@ -130,7 +131,6 @@
 	
 	border-style: 1px solid #F2CB05;
 	background-color: #F2CB05;
-	
 	
 }
 
@@ -498,7 +498,7 @@ $(document).ready(function() {
 			</div>
 			<div class="wrap_comment">
 				<div id="comment_header">
-					댓글 개
+					댓글 1개
 				</div>
 					
 				<div id="comment_header2">

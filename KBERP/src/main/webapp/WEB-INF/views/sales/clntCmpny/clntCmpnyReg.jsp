@@ -504,7 +504,7 @@ function uploadName(e) {
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="사업자번호" /></td>
-								<td><input type="number" class="txt" id="brNum" name="brNum" placeholder="&quot; - &quot; 제외한 숫자만 입력하세요" /></td>
+								<td><input type="text" class="txt" id="brNum" name="brNum" placeholder="&quot; - &quot; 제외한 숫자만 입력하세요" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="대표 *" /></td>
@@ -512,11 +512,11 @@ function uploadName(e) {
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="유선번호" /></td>
-								<td><input type="number" class="txt" id="phoneNum" name="phoneNum" placeholder="&quot; - &quot; 제외한 숫자만 입력하세요" /></td>
+								<td><input type="text" class="txt" id="phoneNum" name="phoneNum" placeholder="&quot; - &quot; 제외한 숫자만 입력하세요" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="팩스번호" /></td>
-								<td><input type="number" class="txt" id="fax" name="fax" placeholder="&quot; - &quot; 제외한 숫자만 입력하세요" /></td>
+								<td><input type="text" class="txt" id="fax" name="fax" placeholder="&quot; - &quot; 제외한 숫자만 입력하세요" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="웹사이트" /></td>
@@ -524,7 +524,7 @@ function uploadName(e) {
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="우편번호" /></td>
-								<td><input type="number" class="txt" id="zipCodeNum" name="zipCodeNum" /></td>
+								<td><input type="text" class="txt" id="zipCodeNum" name="zipCodeNum" /></td>
 							</tr>
 							<tr height="40">
 								<td rowspan="2"><input type="button" class="address" value="주소 *" /></td>
@@ -536,7 +536,7 @@ function uploadName(e) {
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="매출(년)*" /></td>
-								<td><input type="number" class="txt" id="rvn" name="rvn" /></td>
+								<td><input type="text" class="txt" id="rvn" name="rvn" /></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="인지경로"></td>

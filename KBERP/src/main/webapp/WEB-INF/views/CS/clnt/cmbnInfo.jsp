@@ -140,7 +140,7 @@ function drawPaging(pb){
 </head>
 <body>
 	<!-- top & left -->
-	<c:import url="cLeft">
+	<c:import url="cTop">
 		<c:param name="menuNum">${param.menuNum}</c:param>
 	</c:import>
 	<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}" />

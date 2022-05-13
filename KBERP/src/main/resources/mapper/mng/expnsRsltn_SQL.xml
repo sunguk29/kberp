@@ -8,9 +8,9 @@
 		     	SUM(DECODE(EXPNS_TYPE, '개인', AMNT)) AS IND, SUM(AMNT) AS TOTAL,ROW_NUMBER()OVER( ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
 				FROM EXPNS_RSLTN
 				WHERE EMP_NUM = #{sesEmpNum}
-				<if test="searchMonth != null and searchMonth != ''">
-					AND TO_CHAR(DATE_HR, 'YYYY-MM') = #{searchMonth}	
-				</if>
+				
+					AND TO_CHAR(DATE_HR, 'YYYY') = #{year}	
+				
 				GROUP BY TO_CHAR(DATE_HR, 'YYYY-MM'),EMP_NUM
 			 ) S
              )
@@ -22,9 +22,9 @@
 		     		   SUM(DECODE(EXPNS_TYPE, '개인', AMNT)) AS IND, SUM(AMNT) AS TOTAL,ROW_NUMBER()OVER( ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
 				FROM EXPNS_RSLTN 
 				WHERE EMP_NUM = #{sesEmpNum}
-				<if test="searchMonth != null and searchMonth != ''">
-					AND TO_CHAR(DATE_HR, 'YYYY-MM') = #{searchMonth}	
-				</if>
+			
+					AND TO_CHAR(DATE_HR, 'YYYY') = #{year}	
+				
 				GROUP BY TO_CHAR(DATE_HR, 'YYYY-MM'),EMP_NUM
 			 ) S
 			 WHERE S.RNUM BETWEEN #{startCount} AND #{endCount}
