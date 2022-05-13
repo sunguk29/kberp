@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
@@ -18,7 +18,7 @@
 /* 개인 작업 영역 */
 .note {
 	display: inline-block;
-	vertical-align : top;
+	vertical-align: top;
 	width: 900px;
 	height: 500px;
 	border: 1px solid #000;
@@ -106,7 +106,7 @@
 }
 
 .srch_mid {
-	display : inline-block;
+	display: inline-block;
 	width: 480px;
 	height: 60px;
 	margin-bottom: 15px;
@@ -116,18 +116,18 @@ table {
 	border-collapse: collapse;
 	width: auto;
 	margin-top: 15px;
-	border-top: 1px solid #5555; 
+	border-top: 1px solid #5555;
 }
 
 thead {
-	display : inline-block;
+	display: inline-block;
 	font-size: 14px;
 	border-collapse: collapse;
 	border-bottom: 1px solid #5555;
 }
 
 tbody {
-	display :inline-block;
+	display: inline-block;
 	height: 40px;
 	font-size: 13px;
 	color: black;
@@ -141,23 +141,23 @@ th:nth-child(1), th:nth-child(2) {
 	width: 120px;
 	height: 39.5px;
 	text-align: center;
-	border-right: 1px solid #5555; 
+	border-right: 1px solid #5555;
 }
 
 th:nth-child(3) {
 	width: 120px;
-	text-align: center; 
+	text-align: center;
 	border-right: 1px solid #5555;
 }
 
 th:nth-child(4) {
 	width: 120px;
-	text-align: center; 
+	text-align: center;
 }
 
 td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 	text-align: center;
-	font-size: 12pt; 
+	font-size: 12pt;
 	width: 120px;
 	height: 39.5px;
 }
@@ -166,7 +166,7 @@ td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 $(document).ready(function() {
 	
 	// 답장할때 보낸사람을 받는사람으로 표기
-	if($("#senum").val() == ""){
+	if($("#senum").val() == "") {
 		$("#rcpnt_name").val(""); // 보낸사람이 없으면 받는사람 text를 공백으로 둠.
 	} else {
 		$("#rcpnt_name").val($("#senum").val() + "(" + $("#sename").val() + ")" ); // 보낸사람이 있으면 받는사람 text에 사원번호(이름)을 표기
@@ -209,7 +209,7 @@ $(document).ready(function() {
 		});
 	}); */
 	
-	$(".rcpnt_btn").on("click", function() {
+	$(".rcpnt_btn, #rcpnt_name").on("click", function() {
 				
 		var html = "";
 		
@@ -239,8 +239,7 @@ $(document).ready(function() {
 			height : 500,
 			contents : html,
 			contentsEvent : function() {
-				// Ajax태우고
-				// list받아서 팝업 테이블에 내용 추가 id추가
+				// Ajax태우고, list받아서 팝업 테이블에 내용 추가 id추가
 				$.ajax({
 					type : "post",
 					url : "NoteOrgnztChartAjax",
@@ -274,12 +273,6 @@ $(document).ready(function() {
 	});
 	
 	$("#sendBtn").on("click", function() {
-		
-		// 받는사람을 수기로 직접 작성할 때, rcpnt의 값이 비어있으면 넣어줌
-		if($("#rcpnt").val() == ""){
-			$("#rcpnt").val($("#rcpnt_name").val());
-		}
-		
 		if(checkEmpty("#rcpnt_name")) {
 			alert("받는사람을 입력하세요.");
 			$("#rcpnt_name").focus();
@@ -288,14 +281,14 @@ $(document).ready(function() {
 			$("#cnt").focus();
 		} else {
 			var sendForm = $("#sendForm");
-			
+				
 			sendForm.ajaxForm({
 				success : function(res) {
 					// 물리파일명 보관
 					if(res.fileName.length > 0) {
 						$("#attFile").val(res.fileName[0]);
 					}
-			
+				
 					// 글 저장
 					var params = $("#sendForm").serialize();
 					
@@ -306,7 +299,9 @@ $(document).ready(function() {
 						data : params,
 						success : function(res) {
 							if(res.res == "success") {
-								$("#actionForm").attr("action", "sentNoteBox");
+								// 셀렉터를 사용해서 폼의 메뉴넘만 28로 바꿔서 넘겨줌.
+								$("#actionForm #menuNum").val("28");
+							    $("#actionForm").attr("action", "sentNoteBox");
 								$("#actionForm").submit();
 							} else {
 								alert("작성중 문제가 발생하였습니다.");
@@ -315,18 +310,18 @@ $(document).ready(function() {
 						error : function(result, status, error) {
 							console.log(result, responseText);
 						}
-					});
-				},
-				error : function() {
-					console.log(req.responseText);
-				}
-			});
-			
-			sendForm.submit();
-		}
+				   });
+		       },
+		       error : function() {
+		    	   console.log(req.responseText);
+			   }
+		  });
+	      sendForm.submit();
+	    }
 	});
 	
 	$("#cnlBtn").on("click", function() {
+		$("#actionForm #menuNum").val("27");
 		$("#actionForm").attr("action", "rcvdNoteBox");
 		$("#actionForm").submit();
 	});
@@ -336,14 +331,15 @@ function drawList(list) {
 	
 	var html = "";
 	
-		for(var data of list) {
-			html +=	"<tr no =\"" + data.EMP_NAME +"\">";
-			html +=	"<td>" + data.DEPT_NAME + "</td>";
-			html +=	"<td>" + data.RANK_NAME + "</td>";
-			html +=	"<td>" + data.EMP_NAME + "</td>";
-			html +=	"<td><input type =\"radio\" id = \"srch_check\" name = \"srch_check\" value = \"" + data.EMP_NUM + "(" + data.EMP_NAME + ")" + "\"><label for=\"srch_check\"></label></td> ";
-			html +=	"</tr>";
-		}	
+	for(var data of list) {
+		html +=	"<tr no =\"" + data.EMP_NAME +"\">";
+		html +=	"<td>" + data.DEPT_NAME + "</td>";
+		html +=	"<td>" + data.RANK_NAME + "</td>";
+		html +=	"<td>" + data.EMP_NAME + "</td>";
+		html +=	"<td><input type =\"radio\" id = \"srch_check\" name = \"srch_check\" value = \"" + data.EMP_NUM + "(" + data.EMP_NAME + ")" + "\"><label for=\"srch_check\"></label></td> ";
+		html +=	"</tr>";
+	}	
+	
 	$("tbody").html(html);
 }
 
@@ -364,38 +360,44 @@ function checkEmpty(sel) {
 		<%-- board로 이동하는 경우 B 나머지는 M --%>
 		<c:param name="menuType">${param.menuType}</c:param>
 	</c:import>
-	
+
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
 			<div class="page_title_text">쪽지쓰기</div>
 			<form action="#" id="actionForm" method="post">
-				<input type="hidden" id="top" name="top" value="${param.top}" />
-				<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
-				<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
-				<input type="hidden" id="no" name="no" value="${param.no}"/>
+				<input type="hidden" id="top" name="top" value="${param.top}" /> <input
+					type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+				<input type="hidden" id="menuType" name="menuType"
+					value="${param.menuType}" /> <input type="hidden" id="no"
+					name="no" value="${param.no}" />
 				<!-- 받은편지에서 보낸사람의 이름을 나타냄 -->
-				<input type="hidden" id="sename" name="sename" value="${param.sename}"/>
+				<input type="hidden" id="sename" name="sename"
+					value="${param.sename}" />
 				<!-- 받은편지에서 보낸사람의 사원번호를 나타냄-->
-				<input type="hidden" id="senum" name="senum" value="${param.senum}"/>
+				<input type="hidden" id="senum" name="senum" value="${param.senum}" />
 			</form>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			<div class="note">
-				<div class="title">쪽지쓰기
+				<div class="title">
+					쪽지쓰기
 					<div class="title_bar"></div>
 				</div>
-				<div class="guide">※ 받는 사람은 직접 입력이 가능합니다.<br/>
-								  (단, 입력 시 '사원번호'로 입력을 해야 하며, 받는사람 버튼에서 단일 선택을 허용합니다.)
+				<div class="guide">
+					※ 받는 사람은 직접 입력이 가능합니다.<br /> (단, 입력 시 '사원번호'로 입력을 해야 하며, 받는사람 버튼에서
+					단일 선택을 허용합니다.)
 				</div>
-				<form action="fileUploadAjax" id="sendForm" method="post" enctype="multipart/form-data">
+				<form action="fileUploadAjax" id="sendForm" method="post"
+					enctype="multipart/form-data">
 					<div class="cont">
 						<div class="rcpnt_emp">받는사람</div>
 						<div class="emp">
-							<!-- 단순히 사원번호(이름)의 형태를 띄게하기 위해서 존재 -->
-							<input type="text" size="95" id="rcpnt_name" name="rcpnt_name" />
+							<!-- 단순히 사원번호(이름)의 형태를 띄우게하기 위해서 존재 -->
+							<input type="text" size="95" id="rcpnt_name" name="rcpnt_name"
+								readonly="readonly" />
 						</div>
 						<div class="rcpnt_btn">
 							<input type="button" value="받는사람">
@@ -404,16 +406,15 @@ function checkEmpty(sel) {
 					<textarea placeholder="내용을 입력하세요." id="cnt" name="cnt"></textarea>
 					<div class="atchmnt">
 						<div class="file">
-							<input type = "file" id="att" name="att"/>
+							<input type="file" id="att" name="att" />
 						</div>
 					</div>
 					<!-- SQL로 데이터를 보내기 위해서 실제로 사용되어지는 id는 rcpnt(사원번호를 담음) -->
 					<input type="hidden" id="rcpnt" name="rcpnt" />
 					<!-- 보낸편지와 받는편지를 동시에 생성하기 위함. -->
-					<input type="hidden" id="sndr" name="sndr" value="${sEmpNum}"/>
-					<input type="hidden" id="notesq" name="notesq" value="${notesq}"/>
-					
-					<input type="hidden" id="attFile" name="attFile" />
+					<input type="hidden" id="sndr" name="sndr" value="${sEmpNum}" /> <input
+						type="hidden" id="notesq" name="notesq" value="${notesq}" /> <input
+						type="hidden" id="attFile" name="attFile" />
 					<div class="note_bottom">
 						<div class="cmn_btn_ml" id="sendBtn">보내기</div>
 						<div class="cmn_btn_ml" id="cnlBtn">취소</div>

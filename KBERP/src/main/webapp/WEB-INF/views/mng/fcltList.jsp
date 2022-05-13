@@ -156,7 +156,7 @@ function drawPaging(pb) {
 	<input type="hidden" id="no" name="no" value="${no}" />
 	<input type="hidden" id="oldSearchGbn" value="${param.searchGbn}"/>
 	<input type="hidden" id="oldSearchTxt" value="${param.searchTxt}"/>
-				<select class="srch_sel" name="searchGbn">
+				<select class="srch_sel" id="searchGbn" name="searchGbn">
 					<option value="0">시설물명</option>
 					<option value="1">시설물위치</option>
 				</select>

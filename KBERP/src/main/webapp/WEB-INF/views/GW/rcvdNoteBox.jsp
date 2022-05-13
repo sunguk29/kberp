@@ -271,7 +271,7 @@ function drawPaging(pb) {
 	
 	
 	$(".pgn_area").html(html);
-} 
+}
 
 </script>
 </head>

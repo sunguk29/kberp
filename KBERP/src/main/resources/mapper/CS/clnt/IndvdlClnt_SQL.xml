@@ -9,7 +9,12 @@
 		AND ID = #{id}
 		AND PW = #{pw}
 	</select>
-	
+	<!-- Top Menu -->
+	<select id="getTopMenu" parameterType="String" resultType="hashmap">
+		SELECT MENU_NUM, MENU_NAME
+		FROM MENU
+		WHERE MENU_NUM BETWEEN '69' AND '80'
+	</select>
 	<!-- 회원가입 -->
 	<insert id="signUp" parameterType="hashmap">
 		INSERT INTO INDVDL_CLNT(CLNT_NUM, ID, PW, CLNT_NAME, PHONE_NUM_1, ADRS, DTL_ADRS)
