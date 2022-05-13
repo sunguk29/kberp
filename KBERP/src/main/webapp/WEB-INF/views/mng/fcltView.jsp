@@ -72,11 +72,6 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	if('${param.searchGbn}' != '') {
-		$("#searchGbn").val('${param.searchGbn}');
-	} else {
-		$("#searchGbn").val("0");
-	}
 	
 	//시설물예약 리스트 조회
 	reloadList();
@@ -92,7 +87,6 @@ $(document).ready(function() {
 	$("#searchBtn").on("click",function(){	
 		$("#page").val("1");
 		
-		$("#fOldSearchGbn").val($("#fSearchGbn").val());
 		$("#fOldSearchTxt").val($("#fSearchTxt").val());
 		
 		reloadList();
@@ -102,7 +96,6 @@ $(document).ready(function() {
 	$(".pgn_area").on("click","div",function(){
 		$("#page").val($(this).attr("page"));
 		
-		$("#fSearchGbn").val($("#fOldSearchGbn").val());
 		$("#fSearchTxt").val($("#fOldSearchTxt").val());
 		reloadList();
 	});
@@ -285,8 +278,8 @@ function drawPaging(pb) {
 	<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 	<input type="hidden" name="page" value="${param.page}" />
 	<input type="hidden" name="searchTxt" value="${param.searchTxt}" />
+	<input type="hidden" name="searchGbn" value="${param.searchGbn}" />
 </form>
-					
 					
 <div class="page_srch_area">
 	<form action="#" id="actionForm" method="post">
@@ -295,7 +288,6 @@ function drawPaging(pb) {
 		<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 		<input type="hidden" id="page" name="page" value="1" />
 		<input type="hidden" id="no" name="no" value="${param.no}" />
-		<input type="hidden" id="fOldSearchGbn" value="${param.fSearchGbn}"/>
 		<input type="hidden" id="fOldSearchTxt" value="${param.fSearchTxt}"/>
 		<select class="srch_sel" id="fSearchGbn" name="fSearchGbn">
 			<option value="0">신청자명</option>
