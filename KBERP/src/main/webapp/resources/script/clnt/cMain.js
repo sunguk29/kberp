@@ -25,9 +25,11 @@ $(document).ready(function() {
 	
 	//Logo Event
 	$(".logo").on("click", function() {
-		$("#top").val(68);
+		$("#top").val(69);
 		
-		$("#locationForm").attr("action", "clnt");
+		$("#menuNum").val(1);
+		
+		$("#locationForm").attr("action", "cont");
 		
 		$("#locationForm").submit();
 	});
