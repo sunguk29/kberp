@@ -19,7 +19,7 @@ $(document).ready(function() {
 	});
 	
 	//Logout Button
-	$("#logoutBtn").on("click", function() {
+	$("#cLogoutBtn").on("click", function() {
 		location.href = "cLogout";
 	});
 	

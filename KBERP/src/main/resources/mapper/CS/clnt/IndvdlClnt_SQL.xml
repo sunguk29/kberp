@@ -3,7 +3,7 @@
 <mapper namespace="cl">
 	<!-- 로그인 -->
 	<select id="icloginCheck" parameterType="hashmap" resultType="hashmap">
-		SELECT COUNT(*) AS CNT
+		SELECT ID, CLNT_NAME
 		FROM INDVDL_CLNT
 		WHERE DEL_CHECK = '1'
 		AND ID = #{id}
