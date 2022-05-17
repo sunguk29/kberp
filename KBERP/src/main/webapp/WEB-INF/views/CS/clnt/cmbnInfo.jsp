@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>내용</title>
+<title>카카오뱅크 고객센터</title>
 <!-- 헤더추가 -->
 <c:import url="/cHeader"></c:import>
 <style type="text/css">
@@ -24,13 +24,6 @@
 }
 </style>
 <script type="text/javascript">
-$(function(){
-    $('.menu>li').mouseover(function(){
-        $(this).children('.sub').stop().slideDown();
-    }).mouseout(function(){
-        $('.sub').stop().slideUp();
-    });
- });
 </script>
 </head>
 <body>

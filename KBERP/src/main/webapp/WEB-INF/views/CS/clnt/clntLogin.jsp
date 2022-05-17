@@ -140,6 +140,11 @@ form {
 	letter-spacing: 0px;
 }
 
+.popup_cont {
+	text-align: center;
+	line-height: 100px;
+}
+
 </style>
 <!-- jQuery js 파일 -->
 <script type="text/javascript" src="resources/script/jquery/jquery-1.12.4.min.js"></script>
@@ -219,9 +224,27 @@ $(document).ready(function() {
 			$("#findPwForm").attr("action", "findPw");
 			$("#findPwForm").submit();
 		});
+		
+		$("#gdj").on("click", function() {
+			makePopup({
+				depth : 1,
+				bg : true,
+				width : 300,
+				height : 200,
+				title : "카카오뱅크 ERP 외부용",
+				contents : "GDJ43의 팀 프로젝트입니다.",
+				buttons : {
+					name : "확인",
+					func:function() {
+						console.log("One!");
+						closePopup();
+					}
+				}
+			});
+		});
 	
 		$("#center").on("click", function() {
-			$("#centerForm").attr("action", "clientCenter");
+			$("#centerForm").attr("action", "cmbnInfo");
 			$("#centerForm").submit();
 		});
 		

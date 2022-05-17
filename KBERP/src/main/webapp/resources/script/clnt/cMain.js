@@ -23,6 +23,11 @@ $(document).ready(function() {
 		location.href = "cLogout";
 	});
 	
+	//Login Button
+	$("#cLogInBtn").on("click", function() {
+		location.href = "indvdlLogin";
+	});
+	
 	//Logo Event
 	$(".logo").on("click", function() {
 		$("#top").val(69);
