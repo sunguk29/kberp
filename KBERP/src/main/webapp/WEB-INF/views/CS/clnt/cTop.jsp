@@ -2,6 +2,9 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <style type="text/css">
+.logo_erp_text {
+}
+
 .menu_depth1_wrap {
     display: inline-block;
     vertical-align: top;
@@ -10,10 +13,23 @@
     height: 100px;
 }
 
-.top_right_area, .clnt_info {
+.top_menu, .top_menu_on {
+	width: 170px;
+}
+
+.top_menu_on .sub_menu, .top_menu:hover .sub_menu {
+	display: none;
+	width: 170px;
+	background-color: #f6f6f6;
+	font-size: 10pt;
+	font-weight: bold;
+	text-align: center;
+}
+
+.top_right_area, .clnt_info, .clnt_info_area {
 	display: inline-block;
 	width: calc(100% - 1500px);
-    min-width: 300px;
+    min-width: 450px;
 	height: 100px;
 	font-size: 12pt;
 	line-height: 100px;
@@ -24,6 +40,7 @@
 	display: inline-block;
  	text-align: center;
  	line-height: 100px;
+ 	position: relative;
 }
 
 .clnt_image_wrap img {
@@ -35,11 +52,14 @@
 .clnt_name_wrap {
 	display: inline-block;
 	vertical-align: middle;
-	width: 200px;
+	width: 400px;
+	height: 100px;
+	position: absolute;
 }
 
 .clnt_name_txt {
-	width: 200px;
+	display: inline-block;
+	width: 400px;
 	font-size: 14pt;
 	color: #4B94F2;
 	font-weight: bold;
@@ -59,9 +79,39 @@
 	margin-left: 15px;
 	cursor: pointer;
 }
+
+.log_out_area {
+	display: inline-block;
+	width: 80px;
+	height: 100px;
+	position: absolute;
+	margin-left: 150px;
+
+}
+
+.clnt_login_btn {
+	display: inline-block;
+	width: 75px;
+	height: 30px;
+	line-height: 30px;
+	background-color: #4B94F2;
+	cursor: pointer;
+	font-size: 11pt;
+	font-family: 나눔스퀘어OTF;
+	font-weight: bold;
+	color: #fff;
+	border-radius: 10px;
+}
 </style>
 <script type="text/javascript">
-
+	$(document).ready(function() {
+		$(".top_menu_text").hover(function() {
+			$(".sub_menu").stop().slideToggle(300);
+		});
+		
+		$(".clnt_opt_btn").hover(function() {
+		});
+	});
 </script>
 <form action="#" id="locationForm" method="post">
 	<input type="hidden" id="top" name="top" value="${param.top}" />
@@ -81,6 +131,12 @@
 					 --%>
 						<div class="top_menu_text">${menu.MENU_NAME}</div>
 						<div class="top_menu_bar"></div>
+						<c:if test="${menu.MENU_NUM == '78'}">
+							<div class="sub_menu">
+								<div>진행중 이벤트</div>
+								<div>종료된 이벤트</div>
+							</div>
+						</c:if>
 					</div>
 				</c:when>
 				<c:otherwise>
@@ -94,21 +150,30 @@
 				</c:otherwise>
 			</c:choose>			
 		</c:forEach>
-	</div>
+	</div> <!-- menu_depth1_wrap end -->
 	<div class="top_right_area">
 		<div class="clnt_info">
 			<div class="clnt_info_area">
-				<div class="clnt_image_wrap">
-					<img alt="고객기본이미지" src="resources/images/clnt/account.png"/>
-				</div>
-				<div class="clnt_name_wrap">
-					<div class="clnt_name_txt">${sClntName} 님<div class="clnt_opt_btn"></div></div>
-				</div>
-				<div class="emp_menu_last" id="cLogoutBtn">로그아웃</div>
+				<c:choose>
+					<c:when test="${!empty sClntName}">
+						<div class="clnt_image_wrap">
+							<img alt="고객기본이미지" src="resources/images/clnt/account.png"/>
+						</div>
+						<div class="clnt_name_wrap">
+							<div class="clnt_name_txt">${sClntName} 님<div class="clnt_opt_btn"></div></div>
+						</div>
+						<div class="log_out_area">
+							<div class="clnt_login_btn" id="cLogoutBtn">로그아웃</div>
+						</div>
+					</c:when>
+					<c:otherwise>
+						<div class="clnt_login_btn" id="cLogInBtn">로그인</div>
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</div>
-	</div>
-</div>
+	</div> <!-- top_right_area end -->
+</div> <!-- top_area end -->
 	<!-- Contents -->
 	<div class="right_area">
 		<div class="right_area_wrap">
