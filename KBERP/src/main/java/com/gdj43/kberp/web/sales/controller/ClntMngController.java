@@ -127,11 +127,11 @@ public class ClntMngController {
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		int cnt = iCommonService.getIntData("clntCmpnyMng.ccNameCnt", params);
 		
 		try {
 			switch(gbn) {
 			case "insert" :
+				int cnt = iCommonService.getIntData("clntCmpnyMng.ccNameCnt", params);
 				if(cnt == 0) {
 					String seq = iCommonService.getStringData("clntCmpnyMng.clntCmpnySeq"); // 고객 시퀀스 가져오기
 					params.put("ccs", seq); // 고객사 시퀀스 넣어주기
@@ -218,7 +218,7 @@ public class ClntMngController {
 	@RequestMapping(value = "/clntUpdate")
 	public ModelAndView clntUpdate(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 		
-		HashMap<String, String> data = iCommonService.getData("clntCmpnyMng.clntCont", params);
+		HashMap<String, String> data = iCommonService.getData("clntCmpnyMng.clntUpdateCont", params);
 		
 		mav.addObject("data", data);
 		
@@ -255,8 +255,8 @@ public class ClntMngController {
 				iCommonService.getData("clntCmpnyMng.clntAttAdd", params);
 				break;
 			case "update" :
-				iCommonService.updateData("clntCmpnyMng.clntUpdate", params); // 첨부파일저장
-				iCommonService.updateData("clntCmpnyMng.clntAttUpdate", params); // 글저장
+				iCommonService.updateData("clntCmpnyMng.clntAttUpdate", params); // 첨부파일 저장
+				iCommonService.updateData("clntCmpnyMng.clntUpdate", params); // 저장
 				break;
 			case "delete" :
 				iCommonService.updateData("clntCmpnyMng.clntDelete", params); // 글삭제

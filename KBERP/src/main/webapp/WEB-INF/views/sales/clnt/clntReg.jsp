@@ -485,8 +485,8 @@ $(document).ready(function() {
 				$(".popup_box_mng").on("click", ".popup_mng_box_in", function() {
 					var mng = $(this).children("#mng").val();
 					var mge = $(this).children("#mge").val();
-					document.getElementById("mngEmp").value = mng;
-					document.getElementById("mngNum").value = mge;
+					$("#mngEmp").val(mng);
+					$("#mngNum").val(mge);
 					closePopup();
 				});
 				

@@ -901,7 +901,6 @@ $(document).ready(function() {
 						buttons : {
 							name : "닫기",
 							func:function() {
-								console.log("One!");
 								closePopup(2);
 							}
 						}
@@ -1065,6 +1064,9 @@ $(document).ready(function() {
 		});
 	});
 
+	console.log($("#cmNum").val());
+	console.log("aaaaa");
+	
 });
 
 // 의견 ajax

@@ -225,17 +225,7 @@ public class RprtController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		List<HashMap<String, String>> rvn = iCommonService.getDataList("salesRprt.getSalesRvn", params);
-		
-		/*
-		for(int i = 0 ; i < rvnSize ; i++) {
-			HashMap<String, Object> temp = new HashMap<String, Object>();
-			
-			temp.put("name", rvn.get(i).get("NAME"));
-			temp.put("y", Integer.parseInt(String.valueOf(rvn.get(i).get("RVN"))));
-			
-			salesRvnlist.add(temp);
-		}
-		*/
+
 		rvn = Utils.toLowerListMapKey(rvn);
 		
 		modelMap.put("rvn", rvn);

@@ -588,23 +588,24 @@ function salesRvnChart(list) {
 			text : ''
 		},
 		xAxis : {
-			categories : ['매출']
+			categories: ['']
 		},
 		yAxis : {
-		    lineWidth: 1,
+		    lineWidth: 2,
 			title : false,
 			labels : {
-			    format: '{value:,.0f}'
-			},
-			breaks : [{
-		        from: 130000,
-		        to: 30000000
-		    }]
+			    format: '{value:,0f}'
+			}
 		},
-		credits: {
-	    	enabled: false
-	    }, 
-		series : list
+		plotOptions: {
+		    column: {
+		        dataLabels: {
+		            enabled: true,
+		            crop: false
+		        }
+		    }
+		},
+		series: list
 	});
 }
 

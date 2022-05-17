@@ -527,6 +527,8 @@ $(document).ready(function() {
 		
 	});
 	
+	console.log($("[name='cn']").val());
+	
 });
 
 //의견 ajax

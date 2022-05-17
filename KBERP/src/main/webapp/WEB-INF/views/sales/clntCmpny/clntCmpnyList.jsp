@@ -400,7 +400,7 @@ function drawList(list) {
 	// 상세보기
 	$(".list_table tbody").on("click", "tr:nth-child(2) td:nth-child(2)", function() {
 		$("#ccn").val($(this).attr("ccn"));
-
+		
 		$("#actionForm").attr("action", "clntCmpnyCont");
 		$("#actionForm").submit();
 	});

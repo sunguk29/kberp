@@ -523,7 +523,7 @@ function uploadName(e) {
 								<td><input type="text" class="txt" id="hmpg" name="hmpg" placeholder="홈페이지 주소" /></td>
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="우편번호" /></td>
+								<td><input type="button" class="btn" value="우편번호 *" /></td>
 								<td><input type="text" class="txt" id="zipCodeNum" name="zipCodeNum" /></td>
 							</tr>
 							<tr height="40">
@@ -535,11 +535,11 @@ function uploadName(e) {
 								<td><input type="text" class="txt" placeholder="상세주소" id="dtlAdrs" name="dtlAdrs"/></td>
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="매출(년)*" /></td>
+								<td><input type="button" class="btn" value="매출(년) *" /></td>
 								<td><input type="text" class="txt" id="rvn" name="rvn" /></td>
 							</tr>
 							<tr height="40">
-								<td><input type="button" class="btn" value="인지경로"></td>
+								<td><input type="button" class="btn" value="인지경로 *"></td>
 								<td>
 									<select class="txt" id="rp" name="rp">
 											<option value="9">선택하세요</option>
