@@ -7,5 +7,7 @@ public interface IEventService {
 
 	public List<HashMap<String, String>> getEventList(HashMap<String, String> params) throws Throwable;
 
+	public List<HashMap<String, String>> getEndEventList(HashMap<String, String> params) throws Throwable;
+
 	public HashMap<String, String> getEvent(HashMap<String, String> params) throws Throwable;
 }

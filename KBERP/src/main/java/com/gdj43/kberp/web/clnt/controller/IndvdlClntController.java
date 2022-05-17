@@ -85,7 +85,7 @@ public class IndvdlClntController {
 			HashMap<String, String> data = iCommonService.getData("cl.icloginCheck", params);
 
 			if (data != null && !data.isEmpty()) {
-				session.setAttribute("sClntNum", data.get("CLNT_NUM"));
+				session.setAttribute("sId", data.get("ID"));
 				session.setAttribute("sClntName", data.get("CLNT_NAME"));
 
 				modelMap.put("res", CommonProperties.RESULT_SUCCESS);
@@ -279,5 +279,12 @@ public class IndvdlClntController {
 		}
 		
 		return mapper.writeValueAsString(modelMap);
+	}
+	
+	@RequestMapping(value = "/cont")
+	public ModelAndView cont(ModelAndView mav) {
+		mav.setViewName("CS/clnt/cont");
+		
+		return mav;
 	}
 }

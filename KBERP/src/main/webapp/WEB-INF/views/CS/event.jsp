@@ -483,6 +483,11 @@ $(document).ready(function() {
 						<div class="writer">${data.EMP_NAME}</div>
 						<div class="date">${data.WRITE_DATE}</div>
 					</div>
+					<div class="write_info">
+						<div class="writer">이벤트 날짜</div>
+						<div class="date">${data.START_DATE}</div> ~
+						<div class="date">${data.END_DATE}</div>
+					</div>
 				</div>
 			</div>
 			<div class="contents">

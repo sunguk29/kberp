@@ -22,4 +22,10 @@ public class EventService implements IEventService {
 	public HashMap<String, String> getEvent(HashMap<String, String> params) throws Throwable {
 		return iEventDao.getEvent(params);
 	}
+	
+	@Override
+	public List<HashMap<String, String>> getEndEventList(HashMap<String, String> params) throws Throwable {
+		return iEventDao.getEndEventList(params);
+	}
+
 }

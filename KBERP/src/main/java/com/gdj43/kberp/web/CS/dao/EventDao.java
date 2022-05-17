@@ -48,5 +48,16 @@ public class EventDao implements IEventDao {
 		return 0;
 	}
 	
+	@Override
+	public List<HashMap<String, String>> getEndEventList(HashMap<String, String> params) throws Throwable {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("ev.getEndEventList", params);
+	}
+	
+	@Override
+	public int getEndEventCnt(HashMap<String, String> params) throws Throwable {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

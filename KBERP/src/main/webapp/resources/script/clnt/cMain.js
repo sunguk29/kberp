@@ -19,15 +19,17 @@ $(document).ready(function() {
 	});
 	
 	//Logout Button
-	$("#logoutBtn").on("click", function() {
+	$("#cLogoutBtn").on("click", function() {
 		location.href = "cLogout";
 	});
 	
 	//Logo Event
 	$(".logo").on("click", function() {
-		$("#top").val(68);
+		$("#top").val(69);
 		
-		$("#locationForm").attr("action", "clnt");
+		$("#menuNum").val(1);
+		
+		$("#locationForm").attr("action", "cont");
 		
 		$("#locationForm").submit();
 	});
@@ -43,4 +45,3 @@ $(document).ready(function() {
 		$("#locationForm").submit();
 	});
 });
-	
