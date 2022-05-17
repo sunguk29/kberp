@@ -132,13 +132,13 @@
 
 	<!-- 당월 매출 실적 차트(내용) -->	
 	<select id="getSalesRvn" resultType="hashmap">
-		SELECT E.EMP_NAME AS NAME, C.MONTH_INTRST_AMNT AS RVN
+		SELECT E.EMP_NAME AS NAME, C.MONTH_INTRST_AMNT AS DATA
 		FROM SALES S INNER JOIN CNTRCT C
 		                     ON S.SALES_NUM = C.SALES_NUM
 		             INNER JOIN EMP E
 		                     ON S.MNGR_EMP_NUM = E.EMP_NUM
 		             INNER JOIN APNTM A
-		                             ON E.EMP_NUM = A.EMP_NUM
+		                     ON E.EMP_NUM = A.EMP_NUM
                      INNER JOIN DEPT D
                              ON A.DEPT_NUM = D.DEPT_NUM        
 		WHERE 1 = 1
