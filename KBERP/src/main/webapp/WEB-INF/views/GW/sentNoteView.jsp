@@ -110,7 +110,6 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
 	$("#listBtn").on("click", function() {
 		$("#actionForm").attr("action", "sentNoteBox");
 		$("#actionForm").submit();
