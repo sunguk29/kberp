@@ -137,7 +137,6 @@ $(document).ready(function() {
 	});
 	
 	$("#searchBtn").on("click", function() {
-		
 		$("#page").val("1");
 			
 		reloadList();
