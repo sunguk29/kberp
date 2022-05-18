@@ -85,7 +85,7 @@
 	width: 80px;
 	height: 100px;
 	position: absolute;
-	margin-left: 150px;
+	margin-left: 160px;
 
 }
 
@@ -102,10 +102,15 @@
 	color: #fff;
 	border-radius: 10px;
 }
+
+.right_area {
+	width: calc(100% - 100px);
+}
+
 </style>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$(".top_menu_text").hover(function() {
+		$(".top_menu_text").val("이벤트").hover(function() {
 			$(".sub_menu").stop().slideToggle(300);
 		});
 		

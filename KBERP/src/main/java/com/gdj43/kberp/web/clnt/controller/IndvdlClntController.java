@@ -104,7 +104,7 @@ public class IndvdlClntController {
 	public ModelAndView cLogout(HttpSession session, ModelAndView mav) {
 		session.invalidate();
 
-		mav.setViewName("redirect:indvdlLogin");
+		mav.setViewName("redirect:cmbnInfo");
 
 		return mav;
 	}
