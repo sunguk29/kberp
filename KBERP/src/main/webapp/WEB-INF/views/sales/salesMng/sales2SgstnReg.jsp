@@ -412,8 +412,6 @@ hr { /* 구분선 */
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	console.log(${param.salesNum});
-	
 	// 목록 버튼
 	$("#listBtn").on("click", function() {
 		
@@ -594,10 +592,10 @@ $(document).ready(function() {
 	});
 	
 	// 선택박스 초기값
-	$("#loanCauseNum").val(${data.LOAN_CAUSE_NUM}).prop("selected", true);
-	$("#loanHopeType").val(${data.LOAN_HOPE_TYPE}).prop("selected", true);
-	$("#loanHopeTime").val(${data.LOAN_HOPE_TIME}).prop("selected", true);
-	$("#expctdBsnsType").val(${data.EXPCTD_BSNS_TYPE}).prop("selected", true);	
+	$("#loanCauseNum").val(${loan.LOAN_CAUSE_NUM}).prop("selected", true);
+	$("#loanHopeType").val(${loan.LOAN_HOPE_TYPE}).prop("selected", true);
+	$("#loanHopeTime").val(${loan.LOAN_HOPE_TIME}).prop("selected", true);
+	$("#expctdBsnsType").val(${bsns.EXPCTD_BSNS_TYPE}).prop("selected", true);	
 	
 	
 	$(".salesCont").hide();

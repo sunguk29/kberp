@@ -301,7 +301,7 @@
 	
 	<!-- 고객 상세보기 -->
 	<select id="clntCont" parameterType="hashmap" resultType="hashmap">
-		SELECT EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, EC.DEPT, EC.DUTY, EC.MBL, EC.EMAIL,
+		SELECT EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, EC.DEPT, EC.DUTY, REGEXP_REPLACE(EC.MBL, '(.{3})(.+)(.{4})', '\1-\2-\3') AS MBL, EC.EMAIL,
 		       E.EMP_NAME, CAF.ATT_FILE_NAME, EC.RGSTRTN_EMP_NUM, EC.MNGR_EMP_NUM, EC.CLNT_CMPNY_NUM
 		FROM ENTRPRS_CLNT EC INNER JOIN CLNT_CMPNY CC
 		                             ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
@@ -311,9 +311,10 @@
 		                             ON EC.CLNT_NUM = CAF.CLNT_NUM 
 		WHERE EC.CLNT_NUM = #{cn}
 	</select>
+	
 	<!-- 고객 수정화면 -->
 	<select id="clntUpdateCont" parameterType="hashmap" resultType="hashmap">
-		SELECT EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, EC.DEPT, EC.DUTY, REGEXP_REPLACE(EC.MBL, '(.{3})(.+)(.{4})', '\1-\2-\3') AS MBL, EC.EMAIL,
+		SELECT EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, EC.DEPT, EC.DUTY, EC.MBL, EC.EMAIL,
 		       E.EMP_NAME, CAF.ATT_FILE_NAME, EC.RGSTRTN_EMP_NUM, EC.MNGR_EMP_NUM, EC.CLNT_CMPNY_NUM
 		FROM ENTRPRS_CLNT EC INNER JOIN CLNT_CMPNY CC
 		                             ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM

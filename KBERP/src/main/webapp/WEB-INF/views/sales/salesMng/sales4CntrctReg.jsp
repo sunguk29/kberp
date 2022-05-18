@@ -1019,10 +1019,6 @@ $(document).ready(function() {
 				$("#paNum").val("");
 				$("#paNum").focus();
 			});
-		} else if(checkEmpty("#reDate")) {
-			makeAlert("필수 정보 알림", popContOneLine("갱신 예정일을 입력하세요."), function() {
-				$("#reDate").focus();
-			});
 		} else {
 			var html = "";
 			
@@ -2430,10 +2426,6 @@ function uploadName(e) {
 									<td><input type="text" class="txt" id="payerName" name="payerName" /></td>
 									<td><input type="button" class="btn" value="납입 계좌번호*" /></td>
 									<td><input type="text" class="txt" id="paNum" name="paNum" placeholder="'-'을 뺴고 입력해주세요"/></td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="갱신예정일*" /></td>
-								<td colspan="3"><input type="date" class="txt"  id="reDate" name="reDate"/></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>

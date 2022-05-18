@@ -588,7 +588,7 @@ function salesRvnChart(list) {
 			text : ''
 		},
 		xAxis : {
-			categories: ['']
+			categories: ['매출']
 		},
 		yAxis : {
 		    lineWidth: 2,
