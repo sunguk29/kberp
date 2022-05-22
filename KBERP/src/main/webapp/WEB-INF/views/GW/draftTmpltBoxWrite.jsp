@@ -472,16 +472,14 @@ $(document).ready(function() {
 	})
 	
 function drawList(list) {
-	
 	var html = "";
-	
-		for(var data of list) {
-			html +=	"				<tr id = \"srchEmpNum\" no = " + data.EMP_NUM + "\>";  
-			html +=	"					<td id = \"srchDept\"> " + data.DEPT_NAME + "\</td>";
-			html +=	"					<td id = \"srchRank\"> " + data.RANK_NAME + "\</td>";
-			html +=	"					<td id = \"srchName\"> " + data.EMP_NAME + "\</td>";
-			html +=	"					<td><input type =\"checkbox\" id = \"srch_check\" name=\"humans\" value=\"" + data.EMP_NUM + "\" emp_name=\"" + data.EMP_NAME + " " + data.RANK_NAME + "\" /></td> ";
-			html +=	"				</tr>                                                       ";
+	for(var data of list) {
+		html +=	"<tr id = \"srchEmpNum\" no = " + data.EMP_NUM + "\>";  
+		html +=	"<td id = \"srchDept\"> " + data.DEPT_NAME + "\</td>";
+		html +=	"<td id = \"srchRank\"> " + data.RANK_NAME + "\</td>";
+		html +=	"<td id = \"srchName\"> " + data.EMP_NAME + "\</td>";
+		html +=	"<td><input type =\"checkbox\" id = \"srch_check\" name=\"humans\" value=\"" + data.EMP_NUM + "\" emp_name=\"" + data.EMP_NAME + "" + data.RANK_NAME + "\" /></td> ";
+		html +=	"</tr>";
 		}	
 	$("tbody.og").html(html);
 	
@@ -490,14 +488,11 @@ function drawList(list) {
 			$(this).prop("checked", true);
 		}
 	});
-}	
-	
-	
+}			
 	function drawEmp(list) {
-		
 		var html = "";
 		
-			for(var data of list) {
+		for(var data of list) {
 				html +=	"				<tr id = \"srchEmpNum\" no = " + data.EMP_NUM + "\>";  
 				html +=	"					<td id = \"srchDept\"> " + data.DEPT_NAME + "\</td>";
 				html +=	"					<td id = \"srchRank\"> " + data.RANK_NAME + "\</td>";
@@ -509,6 +504,7 @@ function drawList(list) {
 		
 		//each(반복해서 뽑음 for같은것)
 		//indexOf(뽑아오는것)
+		//prop (속성값 추가) -> this: check
 		$(".og input[type='checkbox']").each(function() {
 			if(rfrncEmpNumList.indexOf($(this).val()) >= 0) {
 				$(this).prop("checked", true);
@@ -520,7 +516,7 @@ function drawList(list) {
 	
 
 });
-
+// 어떤원리인지 알면 좋을거같음 (arr, val) splice(i, 1)은 삭제임 근데 1은 뭐지..
 function removeValToArray(arr, val) {
 	for(var i = 0 ; i < arr.length ; i++) {
 		if(arr[i] == val) {

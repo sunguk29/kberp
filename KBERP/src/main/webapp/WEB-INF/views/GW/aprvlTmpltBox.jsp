@@ -110,13 +110,39 @@
 
 </style>
 <script type="text/javascript">
+/* $(document).ready(function() {
+	
+	reloadList();
+		
+}); */
+
+
 $(document).ready(function() {
 	
 	reloadList();
 	
+	$(".pgn_area").on("click", "div", function(){
+		
+		$("#page").val($(this).attr("page"));
+		
+		$("#searchGbn").val($("#oldSearchGbn").val());
+		$("#searchTxt").val($("#oldSearchTxt").val());
+		
+		reloadList();
+	});
 	
-	
+	$("tbody").on("click", "tr", function() {
+		
+		$("#no").val($(this).attr("no"));
+		$("#title").val($(this).attr("title"));
+		
+		
+		$("#actionForm").attr("action","aprvlTmpltBoxAdd");
+		$("#actionForm").submit();
+	})
+		
 });
+
 
 function reloadList() { // 목록 조회용 + 페이징 조회용
 	  var params = $("#actionForm").serialize();
@@ -166,13 +192,8 @@ function drawList(list) {
 		html += "<td class=\"view\">" + "..." + "</td>";
 	}
 	$("tbody").html(html);
-	$("tbody").on("click", "tr", function() {
-		
-		$("#no").val($(this).attr("no"));
-		
-		$("#actionForm").attr("action","aprvlTmpltBoxAdd");
-		$("#actionForm").submit();
-	})
+	
+	
 	
 }
 
@@ -204,7 +225,12 @@ function drawPaging(pb) {
 	html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
 		
 	$(".pgn_area").html(html);
+	
+		
+	
 }
+
+
 
 
 
@@ -224,12 +250,13 @@ function drawPaging(pb) {
 			<div class="page_title_text">결재함</div>
 			<!-- 검색영역 선택적 사항 -->
 		<div class="page_srch_area">
-			<form action="aprvlTmpltBoxAdd" id="actionForm" method="post">
+			<form action="#" id="actionForm" method="post">
 					<input type="hidden" id="top" name="top" value="${param.top}" />
 					<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
 					<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" />
 					<input type="hidden" id="no" name="no"/>
 					<input type="hidden" id="page" name="page" value="${page}"/>
+					<input type="hidden" id="title" name="title" value="${lists.TITLE}"/>
 					<select id="searchGbn" name="searchGbn">
 						<option value="0">결재번호</option>
 						<option value="1">제목</option>
@@ -282,15 +309,7 @@ function drawPaging(pb) {
 	
 	<!-- bottom -->
 	<c:import url="/bottom"></c:import>
-	<script>
-	$("#nextgo").on("click", function(){
-		
-		$("#actionForm").attr("action","aprvlTmpltBoxAdd");
-		$("#actionForm").submit();
-	});
-	
-	
-	</script>
+
 
 </body>
 </html>
