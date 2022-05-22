@@ -40,28 +40,22 @@ public class IndvdlClntController {
 		return mav; 
 	}
 	
-	// LeftMenu
-	@RequestMapping(value = "/cLeft")
-	public ModelAndView cLeft(@RequestParam HashMap<String, String> params, 
+	// TopMenu
+	@RequestMapping(value = "/cTop")
+	public ModelAndView cTop(@RequestParam HashMap<String, String> params, 
 								HttpSession session, ModelAndView mav) throws Throwable {
 		
-		mav.setViewName("CS/clnt/cLeft");
+		try {
+			List<HashMap<String, String>> topMenu = iCommonService.getDataList("cl.getTopMenu", params);
+			
+			mav.addObject("topMenu", topMenu);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		mav.setViewName("CS/clnt/cTop");
 		
 		return mav;
-	}
-	
-	// LeftMenu Ajax
-	@RequestMapping(value = "/cLeftAjax", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
-	@ResponseBody
-	public String cLeftAjax(@RequestParam HashMap<String, String> params, HttpSession session) throws Throwable {
-		ObjectMapper mapper = new ObjectMapper();
-		Map<String, Object> modelMap = new HashMap<String, Object>();
-		
-		List<HashMap<String, String>> leftMenu = iCommonService.getDataList("common.getLeftMenu", params);
-		
-		modelMap.put("leftMenu", leftMenu);
-		
-		return mapper.writeValueAsString(modelMap);
 	}
 	
 	// 로그인
@@ -91,7 +85,7 @@ public class IndvdlClntController {
 			HashMap<String, String> data = iCommonService.getData("cl.icloginCheck", params);
 
 			if (data != null && !data.isEmpty()) {
-				session.setAttribute("sClntNum", data.get("CLNT_NUM"));
+				session.setAttribute("sId", data.get("ID"));
 				session.setAttribute("sClntName", data.get("CLNT_NAME"));
 
 				modelMap.put("res", CommonProperties.RESULT_SUCCESS);
@@ -110,7 +104,7 @@ public class IndvdlClntController {
 	public ModelAndView cLogout(HttpSession session, ModelAndView mav) {
 		session.invalidate();
 
-		mav.setViewName("redirect:clntLogin");
+		mav.setViewName("redirect:cmbnInfo");
 
 		return mav;
 	}
@@ -120,6 +114,18 @@ public class IndvdlClntController {
 	public ModelAndView cmbnInfo(ModelAndView mav) {
 		
 		mav.setViewName("CS/clnt/cmbnInfo");
+		
+		return mav;
+	}
+	
+	// 로그인 뷰 고정
+	@RequestMapping(value = "/cLoc")
+	public ModelAndView cLoc(HttpSession session, ModelAndView mav) {
+		if(session.getAttribute("sClntNum") != null) {
+			mav.setViewName("CS/clnt/cLoc");
+		} else {
+			mav.setViewName("redirect:clntLogin");
+		}
 		
 		return mav;
 	}
@@ -181,6 +187,48 @@ public class IndvdlClntController {
 		return mav;
 	}
 	
+	// 비밀번호 체크
+	@RequestMapping(value="/pwCheckAjax", method=RequestMethod.POST, 
+			produces="text/json;charset=UTF-8")
+	@ResponseBody // View로 인식 시킴
+	public String pwCheckAjax(@RequestParam HashMap<String,String> params) throws Throwable {
+	
+		ObjectMapper mapper = new ObjectMapper();
+		
+		//데이터를 담을 객체
+		Map<String,Object> modelMap = new HashMap<String,Object>();
+				
+		int cnt = iCommonService.getIntData("cl.pwCheck",params);
+		
+		modelMap.put("cnt",cnt);
+		
+		return mapper.writeValueAsString(modelMap); 
+	}
+	
+	
+	// 비밀번호 찾기 Ajax
+	
+	@RequestMapping(value="/findPwAjax", method=RequestMethod.POST, 
+			produces="text/json;charset=UTF-8")
+	@ResponseBody // View로 인식 시킴
+	public String findPwAjax(@RequestParam HashMap<String,String> params) throws Throwable {
+		
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String,Object> modelMap = new HashMap<String,Object>();
+		
+		List<HashMap<String, String>> list = iCommonService.getDataList("cl.findPw",params);
+		int cnt = iCommonService.getIntData("cl.pwCheck",params);
+		modelMap.put("list",list);
+		modelMap.put("cnt",cnt);
+		// 정보 없을시
+		if(cnt==0) {
+			modelMap.put("res", "failed");
+		}
+		return mapper.writeValueAsString(modelMap);
+	}
+	
 	// 회원가입
 	@RequestMapping(value = "/signUp")
 	public ModelAndView signUp(ModelAndView mav) {
@@ -200,17 +248,27 @@ public class IndvdlClntController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
 		try {
-			params.put("signup_pw", Utils.encryptAES128(params.get("signup_pw")));
 			
 			switch(gbn) {
 			case "i":
-				iCommonService.insertData("cl.signUp", params);
+				int cnt = iCommonService.getIntData("cl.checkid",params);
+				if(cnt == 0) {
+					params.put("signup_pw", Utils.encryptAES128(params.get("signup_pw")));
+					iCommonService.insertData("cl.signUp", params);
+				} else {
+					modelMap.put("chc","falied");
+				}
+				break;
+			case "m":
+				params.put("pw", Utils.encryptAES128(params.get("pw")));
+				iCommonService.updateData("cl.mdfyPw", params);
 				break;
 			case "u":
-				iCommonService.updateData("cl.inqryRspndUp", params);
+				params.put("pw", Utils.encryptAES128(params.get("pw")));
+				iCommonService.updateData("cl.updateClnt", params);
 				break;
 			case "d":
-				iCommonService.updateData("cl.inqryRspndDel", params);
+				iCommonService.updateData("cl.delClnt", params);
 				break;
 			}
 			modelMap.put("res", "success");
@@ -221,5 +279,12 @@ public class IndvdlClntController {
 		}
 		
 		return mapper.writeValueAsString(modelMap);
+	}
+	
+	@RequestMapping(value = "/cont")
+	public ModelAndView cont(ModelAndView mav) {
+		mav.setViewName("CS/clnt/cont");
+		
+		return mav;
 	}
 }

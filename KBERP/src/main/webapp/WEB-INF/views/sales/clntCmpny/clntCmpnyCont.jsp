@@ -334,7 +334,6 @@ textarea {
 }
 .OpinionBox {
 	width: 830px;
-	height: 70px;
 	font-size: 10pt;
 	border: 1px solid gray;
 	border-top-left-radius: 12px;
@@ -352,6 +351,8 @@ textarea {
 }
 .txtOp, .dt, .del {
 	padding-left: 20px;
+	word-break: break-all;
+	margin: 5px 0 5px 0;
 }
 .dt {
 	padding-right: 590px;
@@ -900,7 +901,6 @@ $(document).ready(function() {
 						buttons : {
 							name : "닫기",
 							func:function() {
-								console.log("One!");
 								closePopup(2);
 							}
 						}
@@ -1064,6 +1064,9 @@ $(document).ready(function() {
 		});
 	});
 
+	console.log($("#cmNum").val());
+	console.log("aaaaa");
+	
 });
 
 // 의견 ajax

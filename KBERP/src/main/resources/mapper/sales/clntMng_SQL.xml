@@ -311,6 +311,19 @@
 		                             ON EC.CLNT_NUM = CAF.CLNT_NUM 
 		WHERE EC.CLNT_NUM = #{cn}
 	</select>
+	
+	<!-- 고객 수정화면 -->
+	<select id="clntUpdateCont" parameterType="hashmap" resultType="hashmap">
+		SELECT EC.CLNT_NAME, CC.CLNT_CMPNY_NAME, EC.DEPT, EC.DUTY, EC.MBL, EC.EMAIL,
+		       E.EMP_NAME, CAF.ATT_FILE_NAME, EC.RGSTRTN_EMP_NUM, EC.MNGR_EMP_NUM, EC.CLNT_CMPNY_NUM
+		FROM ENTRPRS_CLNT EC INNER JOIN CLNT_CMPNY CC
+		                             ON EC.CLNT_CMPNY_NUM = CC.CLNT_CMPNY_NUM
+		                     INNER JOIN EMP E
+		                             ON EC.MNGR_EMP_NUM = E.EMP_NUM
+		                LEFT OUTER JOIN CLNT_ATT_FILE CAF
+		                             ON EC.CLNT_NUM = CAF.CLNT_NUM 
+		WHERE EC.CLNT_NUM = #{cn}
+	</select>
 
 	<!-- 고객사 삭제 -->
 	<update id="ccDelete" parameterType="hashmap">

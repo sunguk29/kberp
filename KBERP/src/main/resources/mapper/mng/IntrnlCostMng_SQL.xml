@@ -4,26 +4,20 @@
 
 	<select id="getIntrnlCostMngCnt" resultType="Integer" parameterType="hashmap">
 		SELECT COUNT(*) AS CNT
-		FROM ( SELECT ROW_NUMBER() OVER(ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
-			   FROM INTRNL_COST_MNG
-			   WHERE 1 = 1
-			   <if test="year != null and year != ''">
-				   AND TO_CHAR(DATE_HR, 'YYYY') = #{year}
-			   </if>
-			   GROUP BY TO_CHAR(DATE_HR, 'YYYY') )
+		FROM (  SELECT TO_CHAR(DATE_HR, 'YYYY-MM') AS DATE_MON
+		        FROM INTRNL_COST_MNG
+		        WHERE TO_CHAR(DATE_HR, 'YYYY') = #{year}
+		        GROUP BY TO_CHAR(DATE_HR, 'YYYY-MM')  )
 	</select>
 	
 	<select id="getIntrnlCostMngList" resultType="hashmap" parameterType="hashmap">
-		SELECT DATE_MON, TO_CHAR(AMNT_SUM, '999,999,999,999') AS AMNT_SUM
-		FROM (  SELECT TO_CHAR(DATE_HR, 'YYYY-MM') AS DATE_MON, SUM(AMNT) AS AMNT_SUM, 
-					   ROW_NUMBER() OVER(ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
-				FROM INTRNL_COST_MNG
-				WHERE 1 = 1
-				<if test="year != null and year != ''">
-					AND TO_CHAR(DATE_HR, 'YYYY') = #{year}
-				</if>
-				GROUP BY TO_CHAR(DATE_HR, 'YYYY-MM')  ) I
-		WHERE I.RNUM BETWEEN #{startCount} AND #{endCount}
+		SELECT DATE_MON, AMNT_SUM
+		FROM (  SELECT TO_CHAR(DATE_HR, 'YYYY-MM') AS DATE_MON, TO_CHAR(SUM(AMNT), '999,999,999,999') AS AMNT_SUM,
+		               ROW_NUMBER() OVER(ORDER BY TO_CHAR(DATE_HR, 'YYYY-MM') DESC) AS RNUM
+		        FROM INTRNL_COST_MNG
+		        WHERE TO_CHAR(DATE_HR, 'YYYY') = #{year}
+		        GROUP BY TO_CHAR(DATE_HR, 'YYYY-MM')  )
+		WHERE RNUM BETWEEN #{startCount} AND #{endCount}
 	</select>
 	
 	<select id="intrnlCostMngMnthlyCnt" resultType="Integer" parameterType="hashmap">

@@ -71,6 +71,7 @@ $(document).ready(function() {
 	
 	$("#srchMonth").on("change", function() {
 		$("#searchMonth").val($("#srchMonth").val());
+		$("#page").val("1");
 		reloadList();
 	});
 	

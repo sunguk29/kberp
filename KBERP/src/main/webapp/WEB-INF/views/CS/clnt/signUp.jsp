@@ -272,8 +272,13 @@ $(document).ready(function() {
 							dataType : "json", //받을 데이터 형태
 							data : params, //보낼 데이터. 보낼 것이 없으면 안씀
 							success : function(res){ // 성공 시 실행 함수. 인자는 받아온 데이터
+								
 								if(res.res=="success"){
+									if(res.chc=="falied"){
+										alert("아이디가 중복되었습니다");
+									}else{
 									location.href = "indvdlLogin";
+									}
 								}else{
 									alert("작성중 문제가 발생하였습니다");
 								}

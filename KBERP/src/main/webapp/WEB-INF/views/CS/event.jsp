@@ -112,6 +112,7 @@
 	background-color: #F2CB05;
 	font-size: 15px;
 	font-weight:bold;
+	
 
 }
 
@@ -130,7 +131,6 @@
 	
 	border-style: 1px solid #F2CB05;
 	background-color: #F2CB05;
-	
 	
 }
 
@@ -483,6 +483,11 @@ $(document).ready(function() {
 						<div class="writer">${data.EMP_NAME}</div>
 						<div class="date">${data.WRITE_DATE}</div>
 					</div>
+					<div class="write_info">
+						<div class="writer">이벤트 날짜</div>
+						<div class="date">${data.START_DATE}</div> ~
+						<div class="date">${data.END_DATE}</div>
+					</div>
 				</div>
 			</div>
 			<div class="contents">
@@ -498,7 +503,7 @@ $(document).ready(function() {
 			</div>
 			<div class="wrap_comment">
 				<div id="comment_header">
-					댓글 개
+					댓글 1개
 				</div>
 					
 				<div id="comment_header2">

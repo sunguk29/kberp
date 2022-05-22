@@ -488,8 +488,8 @@ $(document).ready(function() {
 				$(".popup_box_mng").on("click", ".popup_mng_box_in", function() {
 					var mng = $(this).children("#mng").val();
 					var mge = $(this).children("#mge").val();
-					document.getElementById("mngEmp").value = mng;
-					document.getElementById("mngNum").value = mge;
+					$("#mngEmp").val(mng);
+					$("#mngNum").val(mge);
 					closePopup();
 				});
 				
@@ -595,7 +595,10 @@ $(document).ready(function() {
 				
 		}
 	});
-});
+	
+	console.log($("[name='cn']").val());
+	
+}); // jQuery function end
 
 // (팝업)고객사 ajax
 function drawCcList() {

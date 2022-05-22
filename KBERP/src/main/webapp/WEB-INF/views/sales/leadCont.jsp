@@ -1468,7 +1468,7 @@ function reloadSCList(){
 function drawScCnt(scListCnt) {
 	var html = "";
 	
-	html += "<h3>예정된 일정(" + scListCnt + ")</h3><div id=\"scListCnt_right\"><div class=\"drop_btn_bot\">";
+	html += "<h3>예정된 일정(" + scListCnt + ")</h3><div id=\"scListCnt_right\"><div class=\"drop_btn_bot\"></div><div class=\"plus_btn_bot\"></div>";
 	if($("#psNum").val() == 1) {
 		html += "</div><div class=\"plus_btn_bot\" id=\"plus_btn_bot\"></div>";
 	} else {

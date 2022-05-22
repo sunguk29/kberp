@@ -561,7 +561,7 @@ function getData() {
 		dataType : "json",
 		data : params,
 		success : function(res) {
-			salesRvnChart(res.salesRvnlist);
+			salesRvnChart(res.rvn);
 		},
 		error : function(request, status, error) {
 			console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -571,6 +571,15 @@ function getData() {
 
 // 당월 매출 실적 차트
 function salesRvnChart(list) {
+	console.table(list);
+	
+	for(var i = 0 ; i < list.length ; i++) {
+		var d = new Array();
+		
+		d.push(list[i].data * 1);
+		list[i].data = d;
+	}
+	
 	$('#sales_rvn_chart').highcharts({
 		chart : {
 			type : 'column'
@@ -579,20 +588,24 @@ function salesRvnChart(list) {
 			text : ''
 		},
 		xAxis : {
-			categories : [ list.name ],
+			categories: ['매출']
 		},
-		yAxis : [ {
-			title : {
-				text : ''
-			},
-			labels: {
-			    format: '{value:,.0f}'
+		yAxis : {
+		    lineWidth: 2,
+			title : false,
+			labels : {
+			    format: '{value:,0f}'
 			}
-		} ],
-		series : [ {
-			name : '매출',
-			data : list
-		} ]
+		},
+		plotOptions: {
+		    column: {
+		        dataLabels: {
+		            enabled: true,
+		            crop: false
+		        }
+		    }
+		},
+		series: list
 	});
 }
 
@@ -745,7 +758,7 @@ function drawMngPaging(mngPb) {
 		<div class="page_title_bar">
 			<div class="page_title_text">종합차트</div>
 			<!-- 검색영역 선택적 사항 -->
-			<div class="page_srch_area">
+		<!-- 	<div class="page_srch_area">
 				<select class="srch_sel">
 					<option>제목</option>
 					<option>내용</option>
@@ -755,7 +768,7 @@ function drawMngPaging(mngPb) {
 					<input type="text" />
 				</div>
 				<div class="cmn_btn_ml">검색</div>
-			</div>
+			</div> -->
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->
 		<div class="cont_area">

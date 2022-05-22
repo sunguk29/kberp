@@ -71,8 +71,8 @@
 				                         INNER JOIN DEPT D
 				                                 ON A.DEPT_NUM = D.DEPT_NUM
 				WHERE EBI.EXPCTD_BSNS_TYPE = 0				                                 
-		       	<if test="mngNum != null and mngNum != ''">
-			       AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
+		       <if test="mngName != null and mngName != ''">
+		       		AND E.EMP_NAME = #{mngName}		       			       	
 		       	</if>
 		       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
 			       AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
@@ -80,7 +80,7 @@
 		       	<if test="deptS != 9">
 		       	 	AND D.DEPT_NUM = #{deptS}
 		       	</if>
-		       	<if test="salesCheck == 1">
+		       	<if test="salesCheck != 0">
 		       		AND S.MNGR_EMP_NUM = #{sEmpNum}	
 		       	</if>) A INNER JOIN ( SELECT COUNT(*) AS CNT
 									  FROM EXPCTD_BSNS_INFO EBI INNER JOIN SALES S
@@ -92,8 +92,8 @@
 										                        INNER JOIN DEPT D
 										                                ON A.DEPT_NUM = D.DEPT_NUM
 									  WHERE EBI.EXPCTD_BSNS_TYPE = 1   
-								       	<if test="mngNum != null and mngNum != ''">
-									       AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
+							       	 	<if test="mngName != null and mngName != ''">
+								       		AND E.EMP_NAME = #{mngName}		       			       	
 								       	</if>
 								       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
 									       AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
@@ -101,7 +101,7 @@
 								       	<if test="deptS != 9">
 								       	 	AND D.DEPT_NUM = #{deptS}
 								       	</if>
-								       	<if test="salesCheck == 1">
+								       	<if test="salesCheck != 0">
 								       		AND S.MNGR_EMP_NUM = #{sEmpNum}	
 								       	</if>) B
                                   ON 1 = 1    
@@ -115,8 +115,8 @@
 										                        INNER JOIN DEPT D
 										                                ON A.DEPT_NUM = D.DEPT_NUM
 									  WHERE EBI.EXPCTD_BSNS_TYPE = 2   
-								       	<if test="mngNum != null and mngNum != ''">
-									       AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
+							        	<if test="mngName != null and mngName != ''">
+									       AND E.EMP_NAME = #{mngName}		       			       	
 								       	</if>
 								       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
 									       AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
@@ -124,7 +124,7 @@
 								       	<if test="deptS != 9">
 								       	 	AND D.DEPT_NUM = #{deptS}
 								       	</if>
-								       	<if test="salesCheck == 1">
+								       	<if test="salesCheck != 0">
 								       		AND S.MNGR_EMP_NUM = #{sEmpNum}	
 								       	</if>) C
                         		   ON 1 = 1
@@ -132,13 +132,13 @@
 
 	<!-- 당월 매출 실적 차트(내용) -->	
 	<select id="getSalesRvn" resultType="hashmap">
-		SELECT E.EMP_NAME AS NAME, C.MONTH_INTRST_AMNT AS RVN
+		SELECT E.EMP_NAME AS NAME, C.MONTH_INTRST_AMNT AS DATA
 		FROM SALES S INNER JOIN CNTRCT C
 		                     ON S.SALES_NUM = C.SALES_NUM
 		             INNER JOIN EMP E
 		                     ON S.MNGR_EMP_NUM = E.EMP_NUM
 		             INNER JOIN APNTM A
-		                             ON E.EMP_NUM = A.EMP_NUM
+		                     ON E.EMP_NUM = A.EMP_NUM
                      INNER JOIN DEPT D
                              ON A.DEPT_NUM = D.DEPT_NUM        
 		WHERE 1 = 1
@@ -180,7 +180,7 @@
 		             INNER JOIN EMP E
 		                     ON S.MNGR_EMP_NUM = E.EMP_NUM
 		             INNER JOIN APNTM A
-		                             ON E.EMP_NUM = A.EMP_NUM
+		                     ON E.EMP_NUM = A.EMP_NUM
                      INNER JOIN DEPT D
                              ON A.DEPT_NUM = D.DEPT_NUM        
 		WHERE 1 = 1
@@ -208,16 +208,16 @@
 		             INNER JOIN DEPT D
 		                     ON A.DEPT_NUM = D.DEPT_NUM
 		WHERE SUBSTR(PRGRS_STS_NUM, 2, 1) = 6
-		<if test="mngNum != null and mngNum != ''">
-        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
-      	</if>
+	 	<if test="mngName != null and mngName != ''">
+	       AND E.EMP_NAME = #{mngName}		       			       	
+       	</if>
       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
         	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
       	</if>
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
-      	<if test="salesCheck == 1">
+      	<if test="salesCheck != 0">
 			AND S.MNGR_EMP_NUM = #{sEmpNum}	
 		</if> 
 	</select>
@@ -232,16 +232,16 @@
 		             INNER JOIN DEPT D
 		                     ON A.DEPT_NUM = D.DEPT_NUM
 		WHERE SUBSTR(PRGRS_STS_NUM, 2, 1) = 5
-		<if test="mngNum != null and mngNum != ''">
-        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
-      	</if>
+		<if test="mngName != null and mngName != ''">
+	       AND E.EMP_NAME = #{mngName}		       			       	
+       	</if>
       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
         	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
       	</if>
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
-      	<if test="salesCheck == 1">
+      	<if test="salesCheck != 0">
 			AND S.MNGR_EMP_NUM = #{sEmpNum}	
 		</if> 
 	</select>
@@ -256,16 +256,16 @@
 		             INNER JOIN DEPT D
 		                     ON A.DEPT_NUM = D.DEPT_NUM
 		WHERE SUBSTR(PRGRS_STS_NUM, 2, 1) = 7
-		<if test="mngNum != null and mngNum != ''">
-        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
-      	</if>
+		<if test="mngName != null and mngName != ''">
+	       AND E.EMP_NAME = #{mngName}		       			       	
+       	</if>
       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
         	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
       	</if>
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
-      	<if test="salesCheck == 1">
+      	<if test="salesCheck != 0">
 			AND S.MNGR_EMP_NUM = #{sEmpNum}	
 		</if> 
 	</select>
@@ -339,16 +339,16 @@
 		             INNER JOIN DEPT D
 		                     ON A.DEPT_NUM = D.DEPT_NUM
 		WHERE S.PRGRS_STS_NUM = 17
-		<if test="mngNum != null and mngNum != ''">
-        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
-      	</if>
+		<if test="mngName != null and mngName != ''">
+	       AND E.EMP_NAME = #{mngName}		       			       	
+       	</if>
       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
         	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
       	</if>
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
-      	<if test="salesCheck == 1">
+      	<if test="salesCheck != 0">
 			AND S.MNGR_EMP_NUM = #{sEmpNum}	
 		</if>
 	    </select>
@@ -363,16 +363,16 @@
 		             INNER JOIN DEPT D
 		                     ON A.DEPT_NUM = D.DEPT_NUM
 		WHERE S.PRGRS_STS_NUM = 27
-		<if test="mngNum != null and mngNum != ''">
-        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
-      	</if>
+		<if test="mngName != null and mngName != ''">
+	       AND E.EMP_NAME = #{mngName}		       			       	
+       	</if>
       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
         	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
       	</if>
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
-      	<if test="salesCheck == 1">
+      	<if test="salesCheck != 0">
 			AND S.MNGR_EMP_NUM = #{sEmpNum}	
 		</if>
 	</select>
@@ -387,16 +387,16 @@
 		             INNER JOIN DEPT D
 		                     ON A.DEPT_NUM = D.DEPT_NUM
 		WHERE S.PRGRS_STS_NUM = 37
-		<if test="mngNum != null and mngNum != ''">
-        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
-      	</if>
+		<if test="mngName != null and mngName != ''">
+	       AND E.EMP_NAME = #{mngName}		       			       	
+       	</if>
       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
         	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
       	</if>
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
-      	<if test="salesCheck == 1">
+      	<if test="salesCheck != 0">
 			AND S.MNGR_EMP_NUM = #{sEmpNum}	
 		</if>
 	</select>
@@ -411,16 +411,16 @@
 		             INNER JOIN DEPT D
 		                     ON A.DEPT_NUM = D.DEPT_NUM
 		WHERE S.PRGRS_STS_NUM = 47
-		<if test="mngNum != null and mngNum != ''">
-        	AND S.MNGR_EMP_NUM = #{mngNum}		       			       	
-      	</if>
+		<if test="mngName != null and mngName != ''">
+	       AND E.EMP_NAME = #{mngName}		       			       	
+       	</if>
       	<if test="sdate != null and sdate != '' and edate != null and edate != ''" >		       	
         	AND TO_CHAR(S.START_DATE, 'YYYY-MM-DD') BETWEEN #{sdate} AND #{edate}
       	</if>
       	<if test="deptS != 9">
       	 	AND D.DEPT_NUM = #{deptS}
       	</if>
-      	<if test="salesCheck == 1">
+      	<if test="salesCheck != 0">
 			AND S.MNGR_EMP_NUM = #{sEmpNum}	
 		</if>
 	</select>

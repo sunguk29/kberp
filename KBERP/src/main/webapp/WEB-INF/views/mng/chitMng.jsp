@@ -327,6 +327,8 @@ display: inline-block;
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	
+	
 	$("#alertBtn").on("click", function() {
 		makeAlert("하이", "내용임");
 	});
@@ -1183,6 +1185,7 @@ $(document).ready(function() {
 
 function reloadList() {
 	var params = $("#actionForm").serialize();
+	console.log("achtionForm을 serialize :" + params);
 	
 	$.ajax({
 		type : "post",
@@ -1190,11 +1193,21 @@ function reloadList() {
 		dataType : "json",
 		data : params,
 		success : function(res) {
-			console.log(res);
+			console.log("res :" + res);
+			
 			drawList(res.list);
 			drawPaging(res.pb);
 			drawSum(res.data);
 			drawAprvlSts(res.aprvlSts, res.list);
+			
+			var today = new Date();
+			var todayMonth = today.getFullYear() + "-" + lpad((today.getMonth() + 1), 2, 0);
+			
+			if(todayMonth < res.monCheck) {
+				$("#aprvlRqst").css('display', 'none');
+				$("#aprvlAgainRqst").css('display', 'none');
+			}
+			
 		},
 		error : function(request, status, error) {
 			console.log(request.responseText);

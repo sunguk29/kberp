@@ -150,7 +150,6 @@ $(document).ready(function() {
 								
 								// 글 저장
 								var params =  $("#writeForm").serialize();
-						
 								$.ajax({
 									type : "post",
 									url : "eventAction/insert",
@@ -244,6 +243,10 @@ function checkEmpty(sel) {
 							<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
 				<p id="emp_line">작성자</p>
 				<input type="text" id="emp_name" value="${sEmpName}">
+				<p id="emp_line">이벤트 시작일</p>
+				<input type="text" name="start_date" id="start_date">
+				<p id="emp_line">이벤트 종료일</p>
+				<input type="text" name="end_date" id="end_date">
 				<p id="subject_line">제목</p>
 				<input type="text" name="title" id="title" placeholder="제목을 입력하세요">
 				<p id="content_line">글내용</p>

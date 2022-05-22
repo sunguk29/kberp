@@ -24,16 +24,21 @@
 	background-color: #F2F2F2;
 }
 
-.srch_month {
-	display: inline-block;
-	vertical-align: top;
-	height: 27px;
+.srch_year {
+	width: 120px;
+	height: 30px;
 }
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	
+	drawOption();
 	reloadList();
+	
+	$("#srchYear").on("change", function() {
+		$("#page").val("1");
+		$("#year").val($("#srchYear").val());
+		reloadList();
+	});
 	
 	$("#pgn_area").on("click", "div", function() {
 		$("#Page").val($(this).attr("Page"));
@@ -47,16 +52,14 @@ $(document).ready(function() {
 		$("#actionForm").submit();
 	});
 	
-	$("#srchMonth").on("change", function() {
-		$("#searchMonth").val($("#srchMonth").val());
-		reloadList();
-	});
+	
 	$("#WriteBtn").on("click", function() {
 		
 		$("#mon").val($(this).attr("mon"));
 		$("#actionForm").attr("action", "expnsRsltnEmpMnthlyWrite");
 		$("#actionForm").submit();
 	});
+});
 	
 	
 	
@@ -142,7 +145,27 @@ $(document).ready(function() {
 		$("#pgn_area").html(html);
 		
 	}
-});
+	
+
+function drawOption() {
+	var now = new Date();
+	var nyear = now.getFullYear();
+	
+	for(var sy = 2010; sy <= nyear; sy++) {
+		$("#srchYear").append("<option value=\"" + sy + "\">" + sy + "년</option>");
+	}
+	
+	if("${param.year}" != "") {
+		$("#srchYear").val("${param.year}");
+		$("#year").val("${param.year}");
+		
+	} else {
+		$("#srchYear").val(nyear);
+		$("#year").val(nyear);
+		
+	}
+	
+}
 </script>
 </head>
 <body>
@@ -151,6 +174,7 @@ $(document).ready(function() {
 	<input type="hidden" name="top" value="${param.top}">
 	<input type="hidden" name="menuNum" value="${param.menuNum}">
 	<input type="hidden" name="menuType" value="${param.menuType}">
+	<input type="hidden" id="year" name="year">
 	<input type="hidden" id="mon" name="mon" value="${param.mon}">
 	<input type="hidden" id="searchMonth" name="searchMonth" value="${param.searchMonth}">
 	<input type="hidden" name ="backCheck" value="0">
@@ -168,7 +192,7 @@ $(document).ready(function() {
 			<div class="page_title_text">지출 결의서</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
-					<input type="month" class="srch_month" id="srchMonth" value="${param.searchMonth}">
+					<select id="srchYear" class="srch_year" name="srchYear"></select>
 			</div>
 		</div>
 		<!-- 해당 내용에 작업을 진행하시오. -->

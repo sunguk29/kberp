@@ -45,6 +45,7 @@ body {
 
 .kabang_icon {
 	display: inline-block;
+	cursor: pointer;
 }
 
 .kabang_icon img {
@@ -57,6 +58,7 @@ body {
 
 .kabang_black{
 	display: inline-block;
+	cursor: pointer;
 }
 
 .kabang_black img {
@@ -138,6 +140,11 @@ form {
 	letter-spacing: 0px;
 }
 
+.popup_cont {
+	text-align: center;
+	line-height: 100px;
+}
+
 </style>
 <!-- jQuery js 파일 -->
 <script type="text/javascript" src="resources/script/jquery/jquery-1.12.4.min.js"></script>
@@ -147,6 +154,17 @@ form {
 <script type="text/javascript" src="resources/script/common/util.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+	
+	$(".kabang_icon").on("click", function() {
+		$("#loginForm").attr("action", "indvdlLogin");
+		$("#loginForm").submit();
+	});
+	
+	$(".kabang_black").on("click", function() {
+		$("#loginForm").attr("action", "indvdlLogin");
+		$("#loginForm").submit();
+	});
+	
 	
 	$("#loginForm").on("keypress", "input", function(event) {
 		if(event.keyCode == 13) {
@@ -206,9 +224,27 @@ $(document).ready(function() {
 			$("#findPwForm").attr("action", "findPw");
 			$("#findPwForm").submit();
 		});
+		
+		$("#gdj").on("click", function() {
+			makePopup({
+				depth : 1,
+				bg : true,
+				width : 300,
+				height : 200,
+				title : "카카오뱅크 ERP 외부용",
+				contents : "GDJ43의 팀 프로젝트입니다.",
+				buttons : {
+					name : "확인",
+					func:function() {
+						console.log("One!");
+						closePopup();
+					}
+				}
+			});
+		});
 	
 		$("#center").on("click", function() {
-			$("#centerForm").attr("action", "clientCenter");
+			$("#centerForm").attr("action", "cmbnInfo");
 			$("#centerForm").submit();
 		});
 		

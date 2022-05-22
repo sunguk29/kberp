@@ -1019,10 +1019,6 @@ $(document).ready(function() {
 				$("#paNum").val("");
 				$("#paNum").focus();
 			});
-		} else if(checkEmpty("#reDate")) {
-			makeAlert("필수 정보 알림", popContOneLine("갱신 예정일을 입력하세요."), function() {
-				$("#reDate").focus();
-			});
 		} else {
 			var html = "";
 			
@@ -1715,8 +1711,10 @@ $(document).ready(function() {
 	
 	$(".qtnDiv").hide();
  	
+	var loanAmntE = "${data3.LOAN_AMNT}";
+	
  	//대출금액
-	var loanAmnt = ${data3.LOAN_AMNT};
+	var loanAmnt = loanAmntE.split(',').join("");
 	//대출기간
 	var loanPrd
 	if(${data3.LOAN_PRD eq 0} == 0) {
@@ -1890,31 +1888,6 @@ function uploadName(e) {
 	var files = e.files;
 	var filename = files[0].name;
 	$("#fileName").val(filename);
-}
-
-function test(t) {
-	//대출금액
-	var price = $("#LoanAmnt").val();
-	
-	if(t.value != -1) {	
-		if(t.value == 0) { // 부가세 포함
-			//공급가액
-			$("#splyPrice").val(Math.trunc(price / 1.1)); 
-			//세액
-			$("#taxAmnt").val(Math.trunc(price - $("#splyPrice").val() * 1));
-			//합계
-			$("#sumAmnt").val(($("#splyPrice").val() * 1) + ($("#taxAmnt").val() * 1));
-		} else if(t.value == 1) { // 부가세 미포함
-			$("#splyPrice").val(price); 
-			$("#taxAmnt").val(Math.trunc($("#splyPrice").val() * 0.1));
-			$("#sumAmnt").val(($("#splyPrice").val() * 1) + ($("#taxAmnt").val() * 1));
-		} else if(t.value == 2) { // 부가세 면세
-			$("#splyPrice").val(price); 
-			$("#taxAmnt").val('0');
-			$("#sumAmnt").val(price);
-		}
-	} // if(t.value != -1) end
-	
 }
 
 </script>
@@ -2453,10 +2426,6 @@ function test(t) {
 									<td><input type="text" class="txt" id="payerName" name="payerName" /></td>
 									<td><input type="button" class="btn" value="납입 계좌번호*" /></td>
 									<td><input type="text" class="txt" id="paNum" name="paNum" placeholder="'-'을 뺴고 입력해주세요"/></td>
-							</tr>
-							<tr height="40">
-								<td><input type="button" class="btn" value="갱신예정일*" /></td>
-								<td colspan="3"><input type="date" class="txt"  id="reDate" name="reDate"/></td>
 							</tr>
 							<tr height="40">
 								<td><input type="button" class="btn" value="월 납부액" readonly="readonly" /></td>

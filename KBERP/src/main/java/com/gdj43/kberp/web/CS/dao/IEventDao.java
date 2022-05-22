@@ -15,5 +15,9 @@ public interface IEventDao {
 	public int EventUpdate(HashMap<String, String> params) throws Throwable;
 
 	public int EventDelete(HashMap<String, String> params) throws Throwable;
+	
+	public List<HashMap<String, String>> getEndEventList(HashMap<String, String> params) throws Throwable;
+	
+	public int getEndEventCnt(HashMap<String, String> params) throws Throwable;
 
 }

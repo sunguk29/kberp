@@ -5,13 +5,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카카오뱅크 ERP - 고객센터 > 이벤트 > 진행중 이벤트 목록</title>
+<title>카카오뱅크 ERP - 고객센터 > 이벤트 > 종료된 이벤트 목록</title>
 <!-- 헤더추가 -->
 <c:import url="/header"></c:import>
 <style type="text/css">
 /* 가로 사이즈 조정용 */
 .cont_wrap {
-	width: 900px; 
+	width: 900px;
 }
 
 td:nth-child(2) {
@@ -61,7 +61,7 @@ $(document).ready(function() {
 		$("#searchGbn").val($("#oldSearchGbn").val());
 		$("#searchTxt").val($("#oldSearchTxt").val());
 		
-		$("#actionForm").attr("action", "event");
+		$("#actionForm").attr("action", "endEvent");
 		$("#actionForm").submit();
 		
 	});
@@ -84,13 +84,6 @@ $(document).ready(function() {
 		reloadList();
 	});
 	
-	$("#writeBtn").on("click", function() {
-		$("#searchGbn").val($("#oldSearchGbn").val());
-		$("#searchTxt").val($("#oldSearchTxt").val());
-		
-		$("#actionForm").attr("action", "eventAdd");
-		$("#actionForm").submit();
-	});	
 	
 });
 
@@ -99,7 +92,7 @@ function reloadList() { // 목록 + 페이징 조회용
 	
 	$.ajax({
 		type : "post", 
-		url : "eventListAjax", 
+		url : "endEventListAjax", 
 		dataType : "json", 
 		data : params, 
 		success : function(res) { 
@@ -173,7 +166,7 @@ function drawPaging(pb) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">진행중 이벤트</div>
+			<div class="page_title_text">종료된 이벤트</div>
 			<!-- 검색영역 선택적 사항 -->
 			<div class="page_srch_area">
 				<form action="#" id="actionForm" method="post">
@@ -219,7 +212,6 @@ function drawPaging(pb) {
 			</table>
 			<div class="board_bottom">
 				<div class="pgn_area" id="pgn_area"></div>
-				<div class="cmn_btn_ml" id="writeBtn">글쓰기</div>
 			</div>
 		</div>
 	</div>
