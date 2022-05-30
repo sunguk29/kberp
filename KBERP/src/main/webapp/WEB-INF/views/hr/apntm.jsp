@@ -657,13 +657,11 @@ thead {
     /* border: 1px solid #d7d7d7; */
     padding: 10px;
 }
-}
 
 .aprvl_title_wrap {
 	display: block;
 	width: 450px;
     height: 50px;
-    border: 1px solid #d7d7d7;
     text-align: left;
 }
 
@@ -1107,7 +1105,7 @@ $(document).ready(function() {
   	});// 발령추가 끝
   	
   	
-  	//발령취소 버튼이벤트 
+  	//발령취소 버튼이벤트
   	$("body").on("click","#aprvlDelBtn", function() {
   		makePopup({
 			bg : false,
@@ -1180,6 +1178,12 @@ $(document).ready(function() {
 			title : "결재요청",
 			contents : html, 
 			contentsEvent : function() {
+				
+				/* 입력칸 클릭 시 버튼 클릭 */
+				$("#aprvlerInput").on("click", function() {
+					$("#aprvlerBtn").click();
+				});
+				
 				$("#aprvlerBtn").on("click", function() {
 					var html2 = "";
 					html2 += "<form action=\"#\" id=\"inqryForm\" method=\"post\">" ;
@@ -1230,7 +1234,6 @@ $(document).ready(function() {
 						contents : html2, 
 						contentsEvent : function() {
 							var params = $("#inqryForm").serialize();	
-							
 					 		$.ajax({
 							      type : "post",
 							      url : "apntmListAjax/inqryList",
@@ -1244,8 +1247,7 @@ $(document).ready(function() {
 							         console.log(req.responseText);
 							      }
 						   });
-					 		
-				   	   	   // 사원조회 버튼이벤트
+				   	   	   // 사원조회
 					 	   $("#inqryTxt").on("keypress", function(event) { // 엔터 시 클릭이벤트
 				 			  if(event.keyCode == 13) {
 				 				  $("#inqryBtn").click();
@@ -1272,9 +1274,14 @@ $(document).ready(function() {
 					   	   });
 					   	   // tr 선택시 체크박스 선택처리
 					   	   $("#aprvlerInqry_tbody").on("click","tr",function(){
-					   		var checkbox = $(this).find("td:first-child :checkbox");
-					   		checkbox.attr("checked", !checkbox.is(":checked"));
-					   	   });
+					   		 var checkbox = $(this).find("td:first-child :checkbox");
+					   		 
+					   	 	 if(checkbox.prop("checked")) {
+					   		 	checkbox.prop("checked", false);
+					   	 	 } else {
+					   	 		checkbox.prop("checked", true);
+					   	 	 }
+						 });
 					   	   
 						},
 						draggable : true,
@@ -1311,6 +1318,9 @@ $(document).ready(function() {
 				}); // 결재권자선택버튼 클릭이벤트 끝
 				
 				// 참조자선택버튼 클릭이벤트
+				$("#rfrncInput").on("click", function() {
+					$("#rfrncBtn").click();
+				});
 				$("#rfrncBtn").on("click", function() {
 					var html2 = "";
 					html2 += "<form action=\"#\" id=\"inqryForm\" method=\"post\">" ;
@@ -1402,9 +1412,14 @@ $(document).ready(function() {
 					   	   });
 					   	   // tr 선택시 체크박스 선택처리
 					   	   $("#aprvlerInqry_tbody").on("click","tr",function(){
-					   		var checkbox = $(this).find("td:first-child :checkbox");
-					   		checkbox.attr("checked", !checkbox.is(":checked"));
-					   	   });
+					   		 var checkbox = $(this).find("td:first-child :checkbox");
+					   		 
+					   	 	 if(checkbox.prop("checked")) {
+					   		 	checkbox.prop("checked", false);
+					   	 	 } else {
+					   	 		checkbox.prop("checked", true);
+					   	 	 }
+						 });
 					   	   
 						},
 						draggable : true,
@@ -1571,7 +1586,7 @@ function reloadCont() {
    
 }
 
-// 발령 리스트 생성
+// 발령 리스트 그리기
 function drawList(list) {
    var html = "";
    

@@ -538,9 +538,6 @@ $(document).ready(function() {
 									$("#mdfySuperDeptNum").val($("#superDeptSelect option:selected").attr("odeptNum"));
 									}
 									$("#mdfyDeptLevel").val($("#superDeptSelect option:selected").attr("odeptLevel"));
-									console.log("수정 - 상위부서번호 : " + $("#mdfySuperDeptNum").val())
-									console.log("수정 - 부서명 : " + $("#deptName").val())
-									console.log("수정 - 부서레벨 : " + $("#mdfyDeptLevel").val())
 									var params = $("#actionForm").serialize();
 									$.ajax({
 									       type : "post",
@@ -638,7 +635,6 @@ $(document).ready(function() {
 					$(".orgnzt_depth1").css({"color":"black", "font-weight":""});
 				}
 			}); 
-			
 		} else {
 			e.stopPropagation(); // 버블링 방지
 			$(this).children(".orgnzt_depth" + (depth * 1 + 1) + "_wrap").toggle("fast", function() { 
@@ -647,12 +643,9 @@ $(document).ready(function() {
 						$(".orgnzt_area .orgnzt_depth3_area").css({"color":"black", "font-weight":""});
 					} else if(depth == "3") {
 						$(".orgnzt_area .orgnzt_depth2_area").css({"color":"black", "font-weight":""});
-						
 						obj.parent().parent().children(".orgnzt_depth2_area").css({"color":"#2E83F2", "font-weight":"bold"});
 					}
-					
 					$(".orgnzt_area .orgnzt_depth" + depth + "_area").css({"color":"black", "font-weight":""});
-					
 					obj.children(".orgnzt_depth" + depth + "_area").css({"color":"#2E83F2", "font-weight":"bold"});
 				} else {
 					$(".orgnzt_area .orgnzt_depth" + depth + "_area").css({"color":"black", "font-weight":""});
@@ -661,6 +654,7 @@ $(document).ready(function() {
 		}
 		
 	});
+	
 });
 
 
@@ -683,7 +677,6 @@ function reloadTree() {
 
 // 1뎁스 부서 생성
 function drawTree(dept){
-	
 	for(var data of dept) {                              
 		if(data.SUPER_DEPT_NUM == null) {
 			var html = "";
@@ -754,13 +747,13 @@ function reloadEmpInfo() {
    });
    
 }
-// 사원 상세정보 생성
+// 사원 상세정보 그리기
 function drawEmpInfo(empInfo){
     var html = "";
     
     html +=   " <div class=\"orgnzt_emp_info_box\">                                     ";
 	html += "	<div class=\"orgnzt_empp_info_box_left\">                               ";
-	html += "		<div class=\"orgnzt_emp_img_wrap\"><img id=\"orgnzt_emp_img\" src=\"resources/upload/" + empInfo.EMP_PCTR_FILE + "\" /></div>                           ";
+	html += "		<div class=\"orgnzt_emp_img_wrap\"><img id=\"orgnzt_emp_img\" src=\"resources/upload/" + empInfo.EMP_PCTR_FILE + "\" /></div>   ";
 	html += "		<div class=\"orgnzt_emp_name\" id=\"orgnztEmpName\" >" + empInfo.EMP_NAME + "</div>   ";
 	html += "	</div>                                                                  ";
 	html += "	<div class=\"orgnzt_emp_info_box_right\">                               ";
