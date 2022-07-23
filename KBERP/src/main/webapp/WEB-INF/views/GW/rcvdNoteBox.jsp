@@ -145,14 +145,12 @@ $(document).ready(function() {
 	});
 	
 	$("#searchBtn").on("click", function() {
-		
 		$("#page").val("1");
 			
 		reloadList();
 	});
 
 	$("tbody").on("click", "td:nth-child(2), td:nth-child(3), td:nth-child(4), td:nth-child(5), td:nth-child(6)", function() {
-		
 		$("#no").val($(this).parent().attr("no")); 
 		
 		$("#actionForm").attr("action", "rcvdNoteView");
@@ -268,7 +266,6 @@ function drawPaging(pb) {
 	}
 	
 	html += "<div page=\"" + pb.maxPcount + "\" class=\"page_btn page_last\">last</div>";
-	
 	
 	$(".pgn_area").html(html);
 }

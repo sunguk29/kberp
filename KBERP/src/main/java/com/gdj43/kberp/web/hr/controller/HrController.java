@@ -63,42 +63,42 @@ public class HrController {
 		
 	    try {
 		       switch(gbn) {
-		       case "list" :
+		       case "list" : // 발령목록
 		    	   List<HashMap<String, String>> list = iCommonService.getDataList("hr.getApntmList", params);
 		    	   modelMap.put("list", list);
 		          break;
-		       case "cont" :
+		       case "cont" : // 발령목록 > 선택사원 발령상세
 		    	   HashMap<String, String> cont = iCommonService.getData("hr.getApntmCont", params);
 		    	   HashMap<String, String> emp = iCommonService.getData("hr.getEmpCont", params);
 		    	   modelMap.put("cont", cont);
 		    	   modelMap.put("emp", emp);
 		          break;
-		       case "inqryList" :
+		       case "inqryList" : // 발령등록 > 사원조회 리스트
 		    	   List<HashMap<String, String>> inqryList = iCommonService.getDataList("hr.getInqryList", params);
 		    	   modelMap.put("inqryList", inqryList);
 		          break;
-		       case "inqryEmp" :
+		       case "inqryEmp" : // 발령등록 > 선택사원 정보
 		    	   HashMap<String, String> inqryEmp = iCommonService.getData("hr.getInqryEmp", params);
 		    	   modelMap.put("inqryEmp", inqryEmp);
 		    	   break;
-		       case "addApntm" :
+		       case "addApntm" : // 발령등록 > 발령부서, 발령직급 리스트
 		    	   List<HashMap<String, String>> dept = iCommonService.getDataList("hr.getDeptList", params);
 		    	   List<HashMap<String, String>> rank = iCommonService.getDataList("hr.getRankList", params);
 		    	   modelMap.put("dept", dept);
 		    	   modelMap.put("rank", rank);
 		    	   break;
-		       case "insertApntm" :
+		       case "insertApntm" : // 발령등록
 		    	   iCommonService.insertData("hr.insertApntm", params);
 		    	   break;
-		       case "updateApntm" :
+		       case "updateApntm" : // 발령등록 (퇴사)
 		    	   iCommonService.updateData("hr.updateApntm", params);
 		    	   break;
-		       case "deleteApntm" :
+		       case "deleteApntm" : // 발령삭제
 		    	   iCommonService.deleteData("hr.deleteApntm", params);
 		    	   break;
-		       case "aprvl" :
-		    	   String[] aprvler = null;
-		    	   String[] rfrnc = null;
+		       case "aprvl" : // 결재요청
+		    	   String[] aprvler = null; // 결재권자 배열객체
+		    	   String[] rfrnc = null; // 참조인 배열객체
 		    	   List<String> aprvlerList = null;
 		    	   List<String> rfrncList = null;
 		    	   if(params.get("aprvlerList") != null && !params.get("aprvlerList").equals("") ) {
@@ -109,10 +109,10 @@ public class HrController {
 		    		   rfrnc = params.get("rfrncList").split(",");
 		    		   rfrncList = Arrays.asList(rfrnc);
 		    	   }
+		    	   // 그룹웨어 결재서비스에 결재라인 데이터 넘긴 후 결재번호 리턴받기
 		    	   String aprvl_num = iAprvlService.aprvlAdd(params.get("emp_num"), params.get("title"), params.get("cont"), aprvlerList, rfrncList, null );
 		    	   modelMap.put("aNum", aprvl_num);
 		    	   System.out.println("결재번호 : " + aprvl_num);
-		    	   
 		    	   break;
 		       case "aprvlSuccess" :
 		    	   iCommonService.updateData("hr.aprvlSuccess", params);
@@ -134,10 +134,9 @@ public class HrController {
 	public ModelAndView cmnCode(@RequestParam HashMap<String, String> params, HttpSession session, ModelAndView mav) throws Throwable {
 		try {
 			if(session.getAttribute("sEmpNum") != null) {
-				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
-				// HashMap<String, String> emp = iCommonService.getData("hr.getEmpInfo", params);
-				List<HashMap<String, String>> rList = iCommonService.getDataList("hr.getAdminRqstList", params);
-				List<HashMap<String, String>> iList = iCommonService.getDataList("hr.getAdminIssueList", params);
+				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum"))); // 세션 사용자정보 
+				List<HashMap<String, String>> rList = iCommonService.getDataList("hr.getAdminRqstList", params); // 증명서 요청목록
+				List<HashMap<String, String>> iList = iCommonService.getDataList("hr.getAdminIssueList", params); // 중명서 발급목록
 				
 				mav.addObject("rList", rList);
 				mav.addObject("iList", iList);
@@ -186,7 +185,6 @@ public class HrController {
 		try {
 			if(session.getAttribute("sEmpNum") != null) {
 				params.put("sEmpNum", String.valueOf(session.getAttribute("sEmpNum")));
-				// HashMap<String, String> emp = iCommonService.getData("hr.getEmpInfo", params);
 				List<HashMap<String, String>> list = iCommonService.getDataList("hr.getUserRqstList", params);
 				
 				mav.addObject("list", list);

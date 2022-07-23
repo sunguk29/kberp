@@ -561,7 +561,7 @@ function getData() {
 		dataType : "json",
 		data : params,
 		success : function(res) {
-			salesRvnChart(res.salesRvnlist);
+			salesRvnChart(res.rvn);
 		},
 		error : function(request, status, error) {
 			console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -571,6 +571,15 @@ function getData() {
 
 // 당월 매출 실적 차트
 function salesRvnChart(list) {
+	console.table(list);
+	
+	for(var i = 0 ; i < list.length ; i++) {
+		var d = new Array();
+		
+		d.push(list[i].data * 1);
+		list[i].data = d;
+	}
+	
 	$('#sales_rvn_chart').highcharts({
 		chart : {
 			type : 'column'
@@ -579,23 +588,24 @@ function salesRvnChart(list) {
 			text : ''
 		},
 		xAxis : {
-			categories : [ list.name ],
+			categories: ['매출']
 		},
-		yAxis : [ {
-			title : {
-				text : ''
-			},
-			labels: {
-			    format: '{value:,.0f}'
+		yAxis : {
+		    lineWidth: 2,
+			title : false,
+			labels : {
+			    format: '{value:,0f}'
 			}
-		} ],
-		credits: {
-	    	enabled: false
-	    }, 
-		series : [ {
-			name : '매출',
-			data : list
-		} ]
+		},
+		plotOptions: {
+		    column: {
+		        dataLabels: {
+		            enabled: true,
+		            crop: false
+		        }
+		    }
+		},
+		series: list
 	});
 }
 

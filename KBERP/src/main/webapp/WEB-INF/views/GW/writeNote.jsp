@@ -227,11 +227,10 @@ $(document).ready(function() {
 		html +=	"				<tbody>                                                     ";
 		html +=	"				</tbody>					                                ";
 		html +=	"			</table>                                                        ";
-		html +=	"		</div>                                                                  ";
+		html +=	"		</div>                                                              ";
 		html +=	"	</div>                                                                  ";
-
 		
-		makePopup({
+	makePopup({
 			bg : true,
 			bgClose : false,
 			title : "받는사람",
@@ -366,14 +365,12 @@ function checkEmpty(sel) {
 		<div class="page_title_bar">
 			<div class="page_title_text">쪽지쓰기</div>
 			<form action="#" id="actionForm" method="post">
-				<input type="hidden" id="top" name="top" value="${param.top}" /> <input
-					type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
-				<input type="hidden" id="menuType" name="menuType"
-					value="${param.menuType}" /> <input type="hidden" id="no"
-					name="no" value="${param.no}" />
+				<input type="hidden" id="top" name="top" value="${param.top}" /> 
+				<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}" />
+				<input type="hidden" id="menuType" name="menuType" value="${param.menuType}" /> 
+				<input type="hidden" id="no" name="no" value="${param.no}" />
 				<!-- 받은편지에서 보낸사람의 이름을 나타냄 -->
-				<input type="hidden" id="sename" name="sename"
-					value="${param.sename}" />
+				<input type="hidden" id="sename" name="sename" value="${param.sename}" />
 				<!-- 받은편지에서 보낸사람의 사원번호를 나타냄-->
 				<input type="hidden" id="senum" name="senum" value="${param.senum}" />
 			</form>
@@ -390,17 +387,15 @@ function checkEmpty(sel) {
 					※ 받는 사람은 직접 입력이 가능합니다.<br /> (단, 입력 시 '사원번호'로 입력을 해야 하며, 받는사람 버튼에서
 					단일 선택을 허용합니다.)
 				</div>
-				<form action="fileUploadAjax" id="sendForm" method="post"
-					enctype="multipart/form-data">
+				<form action="fileUploadAjax" id="sendForm" method="post" enctype="multipart/form-data">
 					<div class="cont">
 						<div class="rcpnt_emp">받는사람</div>
 						<div class="emp">
 							<!-- 단순히 사원번호(이름)의 형태를 띄우게하기 위해서 존재 -->
-							<input type="text" size="95" id="rcpnt_name" name="rcpnt_name"
-								readonly="readonly" />
+							<input type="text" size="95" id="rcpnt_name" name="rcpnt_name" readonly="readonly" />
 						</div>
 						<div class="rcpnt_btn">
-							<input type="button" value="받는사람">
+							<input type="button" value="받는사람" />
 						</div>
 					</div>
 					<textarea placeholder="내용을 입력하세요." id="cnt" name="cnt"></textarea>
@@ -412,9 +407,9 @@ function checkEmpty(sel) {
 					<!-- SQL로 데이터를 보내기 위해서 실제로 사용되어지는 id는 rcpnt(사원번호를 담음) -->
 					<input type="hidden" id="rcpnt" name="rcpnt" />
 					<!-- 보낸편지와 받는편지를 동시에 생성하기 위함. -->
-					<input type="hidden" id="sndr" name="sndr" value="${sEmpNum}" /> <input
-						type="hidden" id="notesq" name="notesq" value="${notesq}" /> <input
-						type="hidden" id="attFile" name="attFile" />
+					<input type="hidden" id="sndr" name="sndr" value="${sEmpNum}" /> 
+					<input type="hidden" id="notesq" name="notesq" value="${notesq}" /> 
+					<input type="hidden" id="attFile" name="attFile" />
 					<div class="note_bottom">
 						<div class="cmn_btn_ml" id="sendBtn">보내기</div>
 						<div class="cmn_btn_ml" id="cnlBtn">취소</div>

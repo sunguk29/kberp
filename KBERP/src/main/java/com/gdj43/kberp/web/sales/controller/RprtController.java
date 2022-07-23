@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdj43.kberp.common.bean.PagingBean;
 import com.gdj43.kberp.common.service.IPagingService;
+import com.gdj43.kberp.util.Utils;
 import com.gdj43.kberp.web.common.service.ICommonService;
 import com.gdj43.kberp.web.sales.service.ISchdlService;
 
@@ -223,24 +224,11 @@ public class RprtController {
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		
-		int rvnSize = iCommonService.getIntData("salesRprt.getSalesRvnCnt", params); // 당월 매출 실적
-		
-//		int rvnSize = Integer.parseInt(request.getParameter("rvnSize"));
-		
-		ArrayList<HashMap<String, Object>> salesRvnlist = new ArrayList<HashMap<String, Object>>();
-		
 		List<HashMap<String, String>> rvn = iCommonService.getDataList("salesRprt.getSalesRvn", params);
+
+		rvn = Utils.toLowerListMapKey(rvn);
 		
-		for(int i = 0 ; i < rvnSize ; i++) {
-			HashMap<String, Object> temp = new HashMap<String, Object>();
-			
-			temp.put("name", rvn.get(i).get("NAME"));
-			temp.put("y", Integer.parseInt(String.valueOf(rvn.get(i).get("RVN"))));
-			
-			salesRvnlist.add(temp);
-		}
-		
-		modelMap.put("salesRvnlist", salesRvnlist);
+		modelMap.put("rvn", rvn);
 		
         return mapper.writeValueAsString(modelMap);
 	}

@@ -19,8 +19,13 @@ $(document).ready(function() {
 	});
 	
 	//Logout Button
-	$("#logoutBtn").on("click", function() {
+	$("#cLogoutBtn").on("click", function() {
 		location.href = "cLogout";
+	});
+	
+	//Login Button
+	$("#cLogInBtn").on("click", function() {
+		location.href = "indvdlLogin";
 	});
 	
 	//Logo Event
@@ -29,7 +34,7 @@ $(document).ready(function() {
 		
 		$("#menuNum").val(1);
 		
-		$("#locationForm").attr("action", "cont");
+		$("#locationForm").attr("action", "cmbnInfo");
 		
 		$("#locationForm").submit();
 	});

@@ -551,8 +551,6 @@ $(document).ready(function() {
 		         console.log(req.responseText);
 		      }
 	   });  
-	  //printDraw(); 
-	  // $(".pArea").hide();
    });
    
 });

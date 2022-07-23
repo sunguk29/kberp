@@ -241,17 +241,15 @@ $(document).ready(function() {
 	$(".srch").on("click", function() {
 		
 		var html = "";
-		
-		
+				
 			html+= "	<div>																																	";
-			html+= "	<div style= \"border:1px solid #000; width:50px;\" >";
-			html+= "<input type=\"text\" id=\"checkEmpNum\" />";
-			html+= "<div style = \"border: 1px solid #000; width: 300px;\" id=\"checkEmpName\"></div>";
+			html+= "	<div>";
+			html+= "<input type=\"text\" id=\"checkEmpNum\" style=\"border: 1px solid #000; width: 400px;\" />";
+			html+= "<div style = \"border: 1px solid #000; width: 404px;\" id=\"checkEmpName\"></div>";
 			html+= "</div>";
 			html+= "	</div>                                                                                                                                  ";
 			html+= "	<div style=\"display:inline-block; height: 400px; margin-top: 1opx;\">                                                                  ";
-			html+= "	<div class=\"orgnzt_chart\"> ";
-			
+			html+= "	<div class=\"orgnzt_chart\"> ";			
 			html+= "	<table class=\"orgnzt_chart1\">";
 			html+= "	<colgroup>                                                                                                                      		";
 			html+= "	<col width=\"100\">                                                                                                           		    ";
@@ -264,17 +262,12 @@ $(document).ready(function() {
 			html+= "	<th>부서</th>";
 			html+= "	<th>직급</th>";
 			html+= "	<th>성명</th>";
-			html+= "	<th>확인</th>";
-			
-			
+			html+= "	<th>확인</th>";					
 			html+= "	</tr>";
 			html+= "	</thead>";
-			html+= "	<tbody class=\"og\">";
-			
-			html+= "	</tbody>";
-			
-			html+= "	</table>";
-			
+			html+= "	<tbody class=\"og\">";			
+			html+= "	</tbody>";			
+			html+= "	</table>";			
 			html+= "	</div>";
 			html+= "	</div>                                                                                                                            	    ";
 			
@@ -286,6 +279,7 @@ $(document).ready(function() {
 			title : "결재라인",
 			contents : html,
 			contentsEvent : function() {
+				//  결재라인 값 넣기
 				if($("#aprvl_line_emp_num").val() != "") {
 					aprvlEmpNumList = $("#aprvl_line_emp_num").val().split(",");
 					aprvlEmpNameList = $("#aprvl_line_emp_name").val().split(",");
@@ -307,6 +301,7 @@ $(document).ready(function() {
 				});
 				$(".orgnzt_chart").slimScroll({height: "450px"});
 				
+				//체크박스 선택 및 해제
 				$(".og").on("click", "input[type='checkbox']", function() {
 					if($(this).is(":checked")) {
 						aprvlEmpNumList.push($(this).val());
@@ -323,7 +318,7 @@ $(document).ready(function() {
 				name : "저장",
 				func:function() {
 					
-					/* 여기에 넣기 */
+					// 저장 클릭시 결재자 사원번호 및 이름 
 					$("#aprvl_line_emp_num").val(aprvlEmpNumList.toString());
 					$("#aprvl_line_emp_name").val(aprvlEmpNameList.toString());
 					
@@ -337,8 +332,7 @@ $(document).ready(function() {
 	
 	
 	
-	$(".srch_1").on("click", function() {
-		
+	$(".srch_1").on("click", function() {		
 		
 		var html = "";
 		
@@ -349,8 +343,7 @@ $(document).ready(function() {
 		html+= "</div>";
 		html+= "	</div>                                                                                                                                  ";
 		html+= "	<div style=\"display:inline-block; height: 400px; margin-top: 1opx;\">                                                                  ";
-		html+= "	<div class=\"orgnzt_chart\"> ";
-		
+		html+= "	<div class=\"orgnzt_chart\"> ";		
 		html+= "	<table class=\"orgnzt_chart1\">";
 		html+= "	<colgroup>                                                                                                                      		";
 		html+= "	<col width=\"100\">                                                                                                           		    ";
@@ -363,17 +356,12 @@ $(document).ready(function() {
 		html+= "	<th>부서</th>";
 		html+= "	<th>직급</th>";
 		html+= "	<th>성명</th>";
-		html+= "	<th>확인</th>";
-		
-		
+		html+= "	<th>확인</th>";				
 		html+= "	</tr>";
 		html+= "	</thead>";
-		html+= "	<tbody class=\"og\">";
-		
-		html+= "	</tbody>";
-		
-		html+= "	</table>";
-		
+		html+= "	<tbody class=\"og\">";		
+		html+= "	</tbody>";		
+		html+= "	</table>";		
 		html+= "	</div>";
 		html+= "	</div>                                                                                                                            	    ";
 		
@@ -473,7 +461,7 @@ $(document).ready(function() {
 				success : function(res) {
 					console.log(res);
 					$("#writeForm").attr("action", "aprvlTmpltBox");
-					$("#writenForm").submit();
+					$("#writeForm").submit();
 				},
 				error : function(req) {
 					console.log(req.responseText)	
@@ -484,16 +472,14 @@ $(document).ready(function() {
 	})
 	
 function drawList(list) {
-	
 	var html = "";
-	
-		for(var data of list) {
-			html +=	"				<tr id = \"srchEmpNum\" no = " + data.EMP_NUM + "\>";  
-			html +=	"					<td id = \"srchDept\"> " + data.DEPT_NAME + "\</td>";
-			html +=	"					<td id = \"srchRank\"> " + data.RANK_NAME + "\</td>";
-			html +=	"					<td id = \"srchName\"> " + data.EMP_NAME + "\</td>";
-			html +=	"					<td><input type =\"checkbox\" id = \"srch_check\" name=\"humans\" value=\"" + data.EMP_NUM + "\" emp_name=\"" + data.EMP_NAME + " " + data.RANK_NAME + "\" /></td> ";
-			html +=	"				</tr>                                                       ";
+	for(var data of list) {
+		html +=	"<tr id = \"srchEmpNum\" no = " + data.EMP_NUM + "\>";  
+		html +=	"<td id = \"srchDept\"> " + data.DEPT_NAME + "\</td>";
+		html +=	"<td id = \"srchRank\"> " + data.RANK_NAME + "\</td>";
+		html +=	"<td id = \"srchName\"> " + data.EMP_NAME + "\</td>";
+		html +=	"<td><input type =\"checkbox\" id = \"srch_check\" name=\"humans\" value=\"" + data.EMP_NUM + "\" emp_name=\"" + data.EMP_NAME + "" + data.RANK_NAME + "\" /></td> ";
+		html +=	"</tr>";
 		}	
 	$("tbody.og").html(html);
 	
@@ -502,23 +488,23 @@ function drawList(list) {
 			$(this).prop("checked", true);
 		}
 	});
-}	
-	
-	
+}			
 	function drawEmp(list) {
-		
 		var html = "";
 		
-			for(var data of list) {
+		for(var data of list) {
 				html +=	"				<tr id = \"srchEmpNum\" no = " + data.EMP_NUM + "\>";  
 				html +=	"					<td id = \"srchDept\"> " + data.DEPT_NAME + "\</td>";
 				html +=	"					<td id = \"srchRank\"> " + data.RANK_NAME + "\</td>";
 				html +=	"					<td id = \"srchName\"> " + data.EMP_NAME + "\</td>";
-				html +=	"					<td><input type =\"checkbox\" id = \"srch_check\" name=\"humans\" value=\"" + data.EMP_NUM + "\" emp_name=\"" + data.EMP_NAME + " " + data.RANK_NAME + "\" /></td> ";
+				html +=	"					<td><input type =\"checkbox\" id = \"srch_check\" name=\"srch_check\" value=\"" + data.EMP_NUM + "\" emp_name=\"" + data.EMP_NAME + " " + data.RANK_NAME + "\" /></td> ";
 				html +=	"				</tr>                                                       ";
 			}	
 		$("tbody.og").html(html);
 		
+		//each(반복해서 뽑음 for같은것)
+		//indexOf(뽑아오는것)
+		//prop (속성값 추가) -> this: check
 		$(".og input[type='checkbox']").each(function() {
 			if(rfrncEmpNumList.indexOf($(this).val()) >= 0) {
 				$(this).prop("checked", true);
@@ -530,7 +516,7 @@ function drawList(list) {
 	
 
 });
-
+// 어떤원리인지 알면 좋을거같음 (arr, val) splice(i, 1)은 삭제임 근데 1은 뭐지..
 function removeValToArray(arr, val) {
 	for(var i = 0 ; i < arr.length ; i++) {
 		if(arr[i] == val) {
@@ -564,7 +550,7 @@ function removeAllValToArray(arr, val) {
 	<!-- 내용영역 -->
 	<div class="cont_wrap">
 		<div class="page_title_bar">
-			<div class="page_title_text">프로젝트 관리</div>
+			<div class="page_title_text">기안서 작성</div>
 			<!-- 검색영역 선택적 사항 -->
 		
 		</div>
@@ -573,7 +559,10 @@ function removeAllValToArray(arr, val) {
 		<div class="cont_area">
 			<!-- 여기부터 쓰면 됨 -->
 			
-			<form action="#" id="writeForm" method="post">
+			<form action="aprvlTmpltBox" id="writeForm" method="post">
+				<input type="hidden" id="top" name="top" value="${param.top}"/>
+				<input type="hidden" id="menuNum" name="menuNum" value="${param.menuNum}"/>
+				<input type="hidden" id="menuType" name="menuType" value="${param.menuType}"/>
 			<div class="board_a">
 				<input type="button" id="writeBtn" value="저장"> 
 				<input type="button" id="cancelBtn" value="취소">

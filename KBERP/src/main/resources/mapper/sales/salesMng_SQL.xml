@@ -648,7 +648,7 @@
 		INSERT INTO CNTRCT (CNTRCT_NUM, SALES_NUM, DPST_BANK_NUM, CNTRCT_END_DATE,
                     DPST_ACNT_NUM, DPST_TRSC_OWNER_NAME, PYMT_ACNT_NUM, PAYER_NAME, RNWL_EXPCTD_DATE, MONTH_PYMNT_AMNT, MONTH_INTRST_AMNT)
 		VALUES(CNTRCT_SEQ.NEXTVAL,  #{salesNum}, #{dbNum}, #{cntrctEdt}, #{daNum}, #{daoName},
-        		#{paNum}, #{payerName}, #{reDate}, #{monthPymntAmnt}, #{monthIntrstAmnt})
+        		#{paNum}, #{payerName}, #{cntrctEdt}, #{monthPymntAmnt}, #{monthIntrstAmnt})
 	</insert>
 	
 	<!-- 계약 첨부파일 등록 -->

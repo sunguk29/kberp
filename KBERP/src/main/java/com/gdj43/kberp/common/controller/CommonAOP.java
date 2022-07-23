@@ -44,19 +44,7 @@ public class CommonAOP {
 		
 		if(session.getAttribute("sEmpNum") != null) {
 			try {
-				/* 초반 권한 문제로 페이지가 안뜰 것을 예상하여 보류
-				HashMap<String, String> params = new HashMap<String, String>();
-				
-				params.put("athrtyNum", String.valueOf(session.getAttribute("sAthrtyNum")));
-				params.put("menuNum", String.valueOf(request.getParameter("menuNum")));
-				
-				String athrtyTypeNum = iCommonService.getStringData("common.menuAthrtyCheck", params);
-				if(athrtyTypeNum == null || athrtyTypeNum.equals("0")) {
-					mav.setViewName("redirect:loc");
-				} else {
-					mav = (ModelAndView) joinPoint.proceed(); //기존 이벤트 처리 행위를 이어서 진행
-				}
-				*/
+			
 				mav = (ModelAndView) joinPoint.proceed(); //기존 이벤트 처리 행위를 이어서 진행
 			} catch (Exception e) {
 				e.printStackTrace();

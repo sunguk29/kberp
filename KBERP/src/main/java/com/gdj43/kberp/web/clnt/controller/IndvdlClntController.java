@@ -85,7 +85,7 @@ public class IndvdlClntController {
 			HashMap<String, String> data = iCommonService.getData("cl.icloginCheck", params);
 
 			if (data != null && !data.isEmpty()) {
-				session.setAttribute("sClntNum", data.get("CLNT_NUM"));
+				session.setAttribute("sId", data.get("ID"));
 				session.setAttribute("sClntName", data.get("CLNT_NAME"));
 
 				modelMap.put("res", CommonProperties.RESULT_SUCCESS);
@@ -104,7 +104,7 @@ public class IndvdlClntController {
 	public ModelAndView cLogout(HttpSession session, ModelAndView mav) {
 		session.invalidate();
 
-		mav.setViewName("redirect:clntLogin");
+		mav.setViewName("redirect:cmbnInfo");
 
 		return mav;
 	}
@@ -252,11 +252,11 @@ public class IndvdlClntController {
 			switch(gbn) {
 			case "i":
 				int cnt = iCommonService.getIntData("cl.checkid",params);
-				if(cnt!=0) {
-					modelMap.put("chc","falied");
-				}else {
-					params.put("pw", Utils.encryptAES128(params.get("pw")));
+				if(cnt == 0) {
+					params.put("signup_pw", Utils.encryptAES128(params.get("signup_pw")));
 					iCommonService.insertData("cl.signUp", params);
+				} else {
+					modelMap.put("chc","falied");
 				}
 				break;
 			case "m":

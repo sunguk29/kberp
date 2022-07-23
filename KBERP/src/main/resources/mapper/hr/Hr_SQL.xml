@@ -2,14 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hr">
 	<!--    인사발령 쿼리    -->
-	<select id="getApntmList" resultType="hashmap" parameterType="hashmap"><!-- 발령목록 -->
+	<select id="getApntmList" resultType="hashmap" parameterType="hashmap"><!--  발령 조회 리스트  -->
 		SELECT ROWNUM, A4.APNTM_NUM, A4.EMP_NAME, A4.EMP_NUM, A4.APNTM_DVSN_NUM, A4.DEPT_NAME, A4.RANK_NAME, A4.STS_NUM, A4.START_DATE, A4.APRVL_STS 
-		FROM(SELECT AAA.APNTM_NUM, AAA.EMP_NAME, AAA.EMP_NUM, AAA.APNTM_DVSN_NUM, AAA.DEPT_NAME, AAA.RANK_NAME, AAA.STS_NUM, AAA.START_DATE, AAA.APRVL_STS 
+		FROM( SELECT AAA.APNTM_NUM, AAA.EMP_NAME, AAA.EMP_NUM, AAA.APNTM_DVSN_NUM, AAA.DEPT_NAME, AAA.RANK_NAME, AAA.STS_NUM, AAA.START_DATE, AAA.APRVL_STS 
 		FROM( SELECT AA.APNTM_NUM, AA.EMP_NAME, AA.EMP_NUM, AA.APNTM_DVSN_NUM, AA.DEPT_NAME, AA.RANK_NAME, AA.STS_NUM, AA.START_DATE, AA.APRVL_STS
 				FROM( SELECT A.APNTM_NUM, E.EMP_NUM, E.EMP_NAME, A.APNTM_DVSN_NUM, D.DEPT_NAME, R.RANK_NAME, A.STS_NUM, A.START_DATE, AP.APRVL_STS
-						FROM ( SELECT APNTM_NUM, APNTM_DVSN_NUM, EMP_NUM, DEPT_NUM, RANK_NUM, STS_NUM,
-						              TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE , APRVL_NUM
-						       FROM APNTM )  A INNER JOIN EMP E
+						FROM( SELECT APNTM_NUM, APNTM_DVSN_NUM, EMP_NUM, DEPT_NUM, RANK_NUM, STS_NUM, TO_CHAR(START_DATE,'YYYY-MM-DD') AS START_DATE, APRVL_NUM
+						        FROM APNTM )  A INNER JOIN EMP E
 						                        	 ON A.EMP_NUM = E.EMP_NUM
 						                       INNER JOIN DEPT D
 						                       		 ON A.DEPT_NUM = D.DEPT_NUM
@@ -132,7 +131,7 @@
 										                                                                                     ON AA.EMP_NUM = EE.EMP_NUM
 		WHERE EE.EMP_NUM = #{inqryNo}
 	</select>
-	<select id="getDeptList" resultType="hashmap" ><!-- 발령등록 <select> 부서목록  -->
+	<select id="getDeptList" resultType="hashmap" ><!-- 발령등록 부서선택 옵션 리스트  -->
 		SELECT DD.DEPT_NUM, DD.DEL_CHECK, DD.DEPT_NAME, DD.SUPER_DEPT_NUM, DD.DEPT_LEVEL, DD.LEAF
         FROM( SELECT D.DEPT_NUM, D.DEL_CHECK, D.DEPT_NAME, D.SUPER_DEPT_NUM, D.DEPT_LEVEL, CONNECT_BY_ISLEAF AS LEAF
        		    FROM ( SELECT DEPT_NUM,DEL_CHECK, DEPT_NAME, SUPER_DEPT_NUM, DEPT_LEVEL
@@ -222,7 +221,7 @@
                                         					                   ON CC.RANK_NUM = R.RANK_NUM 
 	</select>	
 	
-	<insert id="addCrtfct" parameterType="hashmap"><!--  증명서발급(사용자) 산청 insert -->
+	<insert id="addCrtfct" parameterType="hashmap"><!--  증명서발급(사용자) 신청  -->
 		INSERT INTO CRTFCT (CRTFCT_NUM, RQST_EMP_NUM, CRTFCT_KIND, ISSUE_COUNT, USE)
 		VALUES (CRTFCT_SEQ.NEXTVAL, #{sEmpNum}, #{kind}, #{issueCount}, #{use})
 	</insert>
@@ -236,14 +235,14 @@
 	</update>
 	
 	<!-- 조직도 쿼리 -->
-	 <select id="getOrgnztDeptList" resultType="hashmap" parameterType="hashmap">
+	 <select id="getOrgnztDeptList" resultType="hashmap" parameterType="hashmap"><!--  부서목록 트리구조 -->
 		SELECT DEPT_NUM, DEPT_NAME, SUPER_DEPT_NUM, DEPT_LEVEL
 	    FROM DEPT
         WHERE DEL_CHECK = '1' 
 	    START WITH SUPER_DEPT_NUM IS NULL
 	    CONNECT BY PRIOR DEPT_NUM = SUPER_DEPT_NUM
 	 </select>
-	 <select id="getOrgnztEmpList" resultType="hashmap" parameterType="hashmap">
+	 <select id="getOrgnztEmpList" resultType="hashmap" parameterType="hashmap"><!--  부서별 사원목록 -->
 		SELECT D.DEPT_NUM, D.DEPT_NAME, D.SUPER_DEPT_NUM, D.DEPT_LEVEL, A.EMP_NUM, A.RANK_NUM, E.EMP_NAME
 		FROM(SELECT DEPT_NUM, DEPT_NAME, SUPER_DEPT_NUM, DEPT_LEVEL, DEL_CHECK
 		       FROM DEPT
@@ -293,6 +292,7 @@
 		                                           ON B.BNFT_LIST_NUM = BL.BNFT_LIST_NUM   
 		WHERE  B.STNDR_YEAR_MONTH = TO_CHAR(SYSDATE, 'YYYY-MM')          
 	</select>
+	<!-- 총 수당 -->
 	<select id="getTotalBnft" resultType="hashmap" parameterType="hashmap">
 		SELECT EMP_NUM, AMNT
 		FROM ( SELECT EMP_NUM, SUM(AMNT)AS AMNT
@@ -300,6 +300,7 @@
 				GROUP BY EMP_NUM)
 				WHERE EMP_NUM=#{eNum}  
 	</select>
+	<!-- 기본급  -->
 	<select id="getSlry" resultType="hashmap" parameterType="hashmap">
 	SELECT A.EMP_NUM, ROUND(A.ANL_SAL/12,0) AS ANL_SAL , STNDR_YEAR, TO_CHAR(SYSDATE,'YYYY-MM') AS SYSMON
 	FROM( SELECT EMP_NUM, NVL(ANL_SAL, 0) AS ANL_SAL , TO_CHAR(STNDR_YEAR, 'YYYY') AS STNDR_YEAR
@@ -307,7 +308,8 @@
 	       WHERE EMP_NUM = #{eNum})A
 	WHERE STNDR_YEAR = TO_CHAR(SYSDATE, 'YYYY')
 	</select>
-<!-- 	<select id="getTotalSlry" resultType="hashmap" parameterType="hashmap">
+	<!-- 총 월급(기본급 + 수당) -->
+	<select id="getTotalSlry" resultType="hashmap" parameterType="hashmap">
 	SELECT TO_CHAR(NVL(SUM(AMNT + ANL_SAL),0), '999,999,999,999') AS TOTAL_SLRY, TO_CHAR(SYSDATE,'YYYY-MM')AS SYSMON
 	FROM (SELECT EMP_NUM, SUM(AMNT) AS AMNT
 		    FROM (SELECT EMP_NUM, BNFT_LIST_NUM, AMNT, TO_CHAR(STNDR_YEAR_MONTH, 'YYYY-MM') AS STNDR_YEAR_MONTH
@@ -320,5 +322,5 @@
 	                                               WHERE EMP_NUM =  #{eNum})A
 	                                        WHERE STNDR_YEAR = TO_CHAR(SYSDATE, 'YYYY')) S
                                  ON B.EMP_NUM = S.EMP_NUM 
-	</select> -->
+	</select>
 </mapper>

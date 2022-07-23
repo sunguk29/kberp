@@ -183,7 +183,16 @@ public class elctrncAprvlController {
 	  @RequestMapping(value="/aprvlTmpltBoxAdd")
 	  public ModelAndView aprvlTmpltBoxAdd(@RequestParam HashMap<String, String> params, ModelAndView mav) throws Throwable {
 	  
+	 
 	  	  	  
+	  HashMap<String, String> lists = ics.getData("elctrncAprvl.aprvlAdds", params);
+	  
+	  System.out.println("@@@test@@@test" + params.toString());
+	  	    
+	 
+	  
+	  mav.addObject("lists", lists);
+	  
 	  
 	  mav.setViewName("GW/aprvlTmpltBoxAdd");
 	  
@@ -192,23 +201,27 @@ public class elctrncAprvlController {
 	}
 	  
 
-		@RequestMapping(value = "/aprvlListsAjax", method = RequestMethod.POST, produces = "test/json;charset=UTF-8")
-		@ResponseBody
-		public String aprvlListsAjax(@RequestParam HashMap<String, String> params, HttpSession httpSession) throws Throwable {
-			
-		ObjectMapper mapper = new ObjectMapper();
-		Map<String, Object> modelMap = new HashMap<String, Object>();	
-		System.out.println("@@@@@@@@@@@@@@@@" + params);
-		
-		params.put("employ_no", httpSession.getAttribute("sEmpNum").toString());
-		
-		List<HashMap<String, String>> lists = ics.getDataList("elctrncAprvl.aprvlList", params);
-					
-		modelMap.put("list", lists);
-		
-		return mapper.writeValueAsString(modelMap);
-		
-		}
+	
+	  @RequestMapping(value = "/aprvlListsAjax", method = RequestMethod.POST,
+	  produces = "test/json;charset=UTF-8")
+	  
+	  @ResponseBody public String aprvlListsAjax(@RequestParam HashMap<String,
+	  String> params, HttpSession httpSession) throws Throwable {
+	  
+	  ObjectMapper mapper = new ObjectMapper(); Map<String, Object> modelMap = new
+	  HashMap<String, Object>(); System.out.println("@@@@@@@@@@@@@@@@" + params);
+	  
+	  params.put("employ_no", httpSession.getAttribute("sEmpNum").toString());
+	  params.put("employ_dept", httpSession.getAttribute("sDeptName").toString());
+	  
+	  List<HashMap<String, String>> lists = ics.getDataList("elctrncAprvl.aprvlList", params);
+	  
+	  modelMap.put("list", lists);
+	  
+	  return mapper.writeValueAsString(modelMap);
+	  
+	  }
+	 
 		
 		@RequestMapping(value = "/aprvlProcessAjax", method = RequestMethod.POST, produces = "test/json;charset=UTF-8")
 		@ResponseBody
@@ -231,4 +244,78 @@ public class elctrncAprvlController {
 		return mapper.writeValueAsString(modelMap);
 		
 		}
+		
+		@RequestMapping(value = "/aprvlCmntAjax", method = RequestMethod.POST, produces = "test/json;charset=UTF-8")
+		@ResponseBody
+		public String aprvlCmntAjax(@RequestParam HashMap<String, String> params, HttpSession httpSession) throws Throwable {
+			
+		
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> modelMap = new HashMap<String, Object>();	
+		
+		int aprvlSts = ics.getIntData("elctrncAprvl.aprvlResult", params);
+		
+		System.out.println(aprvlSts); 
+			
+				
+		ics.updateData("elctrncAprvl.aprvlCmnt", params);
+		
+		
+		System.out.println("!@#$%^^&&*!@#%@^@&" + params);
+					
+		//modelMap.put("list", list);
+		
+		
+		return mapper.writeValueAsString(modelMap);
+		
+		}
+		
+		@RequestMapping(value = "/aprvlStsAjax", method = RequestMethod.POST,
+		produces = "test/json;charset=UTF-8")
+				  
+		 @ResponseBody public String aprvlStsAjax(@RequestParam HashMap<String,
+		 String> params, HttpSession httpSession) throws Throwable {
+				  
+		 ObjectMapper mapper = new ObjectMapper(); Map<String, Object> modelMap = new
+		 HashMap<String, Object>(); System.out.println("@@@@@@@@@@@@@@@@" + params);
+				  
+		 params.put("employ_no", httpSession.getAttribute("sEmpNum").toString());
+		 params.put("employ_dept", httpSession.getAttribute("sDeptName").toString());
+				  
+		 List<HashMap<String, String>> lists = ics.getDataList("elctrncAprvl.aprvlSts", params);
+				  
+		 modelMap.put("list", lists);
+			 
+		 return mapper.writeValueAsString(modelMap);
+				 
+		}
+		
+		@RequestMapping(value ="/aprvlAction/{gbn}", method = RequestMethod.POST, 
+				produces = "text/json;charset=UTF-8") 
+		@ResponseBody
+		public String aprvlActionAjax(@RequestParam HashMap<String, String> params, HttpSession httpSession,
+								@PathVariable String gbn) throws Throwable {
+
+			ObjectMapper mapper = new ObjectMapper();
+			
+			params.put("employ_no", httpSession.getAttribute("sEmpNum").toString());
+			
+			Map<String, Object> modelMap = new HashMap<String,Object>();
+			try {
+			switch(gbn) {
+			
+			case "update":
+				ics.updateData("elctrncAprvl.aprvlUpdate",params);
+				break;
+			}
+				modelMap.put("res", "success");
+			} catch (Throwable e) {
+				e.printStackTrace();
+				modelMap.put("res", "failed");
+			}
+		
+			return mapper.writeValueAsString(modelMap);
+		}
+		
+		
 }
